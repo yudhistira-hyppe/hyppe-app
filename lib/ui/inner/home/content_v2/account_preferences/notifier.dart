@@ -1,0 +1,608 @@
+import 'package:dio/dio.dart';
+import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
+import 'package:hyppe/core/arguments/progress_upload_argument.dart';
+import 'package:hyppe/core/bloc/user_v2/bloc.dart';
+import 'package:hyppe/core/bloc/user_v2/state.dart';
+import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
+import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/event_service.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/constant/widget/show_overlay_loading.dart';
+import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_complete_profile.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
+import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
+
+class AccountPreferencesNotifier extends ChangeNotifier {
+  final _eventService = EventService();
+
+  CancelToken? _dioCancelToken;
+
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
+
+  late AccountPreferenceScreenArgument _argument;
+
+  notifyNotifier() => notifyListeners();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController areaController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
+  String _progress = "0%";
+  bool _hold = false;
+  int _initialIndex = 0;
+  OverlayEntry? uploadProgress;
+
+  String get progress => _progress;
+  bool get hold => _hold;
+  int get initialIndex => _initialIndex;
+
+  set initialIndex(int val) {
+    _initialIndex = val;
+    notifyListeners();
+  }
+
+  set hold(bool val) {
+    _hold = val;
+    notifyListeners();
+  }
+
+  set progress(String val) {
+    _progress = val;
+    notifyListeners();
+  }
+
+  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6!.copyWith(color: kHyppePrimary);
+  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1!;
+  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor);
+
+  void onInitial(BuildContext context, AccountPreferenceScreenArgument argument) {
+    _argument = argument;
+    initialIndex = 0;
+    _clearTxt();
+    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    userNameController.text = notifierData.user.profile?.username ?? "";
+    fullNameController.text = notifierData.user.profile?.fullName ?? "";
+    emailController.text = notifierData.user.profile?.email ?? SharedPreference().readStorage(SpKeys.email) ?? "";
+    bioController.text = notifierData.user.profile?.bio ?? "";
+    countryController.text = notifierData.user.profile?.country ?? "";
+    areaController.text = notifierData.user.profile?.area ?? "";
+    cityController.text = notifierData.user.profile?.city ?? "";
+    genderController.text = notifierData.user.profile?.gender ?? "";
+    dobController.text = notifierData.user.profile?.dob ?? "";
+    mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
+  }
+
+  DateTime initialDateTime() {
+    if (dobController.text != "") {
+      return DateTime(
+        int.parse(dobController.text.substring(0, 4)),
+        int.parse(dobController.text.substring(5, 7)),
+        int.parse(dobController.text.substring(8, 10)),
+      );
+    } else {
+      return DateTime.now();
+    }
+  }
+
+  Function()? genderOnTap(BuildContext context) => () {
+        ShowBottomSheet.onShowOptionGender(
+          context,
+          onSave: () {
+            Routing().moveBack();
+            Provider.of<AccountPreferencesNotifier>(context, listen: false).genderController.text = genderController.text;
+            notifyListeners();
+          },
+          onCancel: () {
+            Routing().moveBack();
+            FocusScope.of(context).unfocus();
+          },
+          onChange: (value) {
+            genderController.text = value;
+            notifyListeners();
+          },
+          value: genderController.text,
+          initFuture: UtilsBlocV2().getGenderBloc(context),
+        );
+      };
+
+  void _clearTxt() {
+    userNameController.clear();
+    fullNameController.clear();
+    emailController.clear();
+    bioController.clear();
+    countryController.clear();
+    areaController.clear();
+    cityController.clear();
+    genderController.clear();
+    dobController.clear();
+    mobileController.clear();
+  }
+
+  Future<bool> onWillPop() async {
+    if (hold) {
+      return Future.value(false);
+    } else {
+      if (_dioCancelToken?.isCancelled ?? true) {
+        return Future.value(true);
+      } else {
+        _resetDioCancelToken();
+        return Future.value(false);
+      }
+    }
+  }
+
+  bool somethingChanged(BuildContext context) {
+    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    return (userNameController.text != notifierData.user.profile?.username ||
+            fullNameController.text != notifierData.user.profile?.fullName ||
+            emailController.text != notifierData.user.profile?.email ||
+            bioController.text != notifierData.user.profile?.bio ||
+            countryController.text != notifierData.user.profile?.country ||
+            areaController.text != notifierData.user.profile?.area ||
+            cityController.text != notifierData.user.profile?.city ||
+            genderController.text != notifierData.user.profile?.gender ||
+            dobController.text != notifierData.user.profile?.dob ||
+            mobileController.text != notifierData.user.profile?.mobileNumber) &&
+        fullNameController.text.isNotEmpty;
+  }
+
+  void cancelRequest({String? reason}) {
+    _dioCancelToken?.cancel(reason ?? 'Request Canceled');
+    _resetDioCancelToken();
+    uploadProgress?.remove();
+    try {
+      _eventService.notifyUploadCancel(
+        DioError(
+          error: reason,
+          requestOptions: _dioCancelToken!.requestOptions!,
+        ),
+      );
+    } catch (e) {
+      e.logger();
+    }
+  }
+
+  void _assignDioCancelToken() {
+    _dioCancelToken = CancelToken();
+  }
+
+  void _resetDioCancelToken() {
+    _dioCancelToken = null;
+  }
+
+  Future onClickChangeImageProfile(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      bool _isPermissionGranted = await System().requestPermission(context, permissions: [
+        Permission.storage,
+        Permission.mediaLibrary,
+        Permission.photos,
+      ]);
+      if (_isPermissionGranted) {
+        try {
+          final _file = await System().getLocalMedia(context: context);
+          uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+          _assignDioCancelToken();
+
+          if (_file.values.single != null) {
+            progress = "0%";
+
+            Overlay.of(context)?.insert(uploadProgress!);
+
+            final notifier = UserBloc();
+
+            await notifier.uploadProfilePictureBlocV2(
+              context,
+              verifyID: false,
+              cancelToken: _dioCancelToken,
+              file: _file.values.single!.single.path,
+              email: SharedPreference().readStorage(SpKeys.email),
+              onSendProgress: (received, total) {
+                _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+              },
+            );
+
+            final fetch = notifier.userFetch;
+            if (fetch.userState == UserState.uploadProfilePictureSuccess) {
+              hold = true;
+              progress = "${language.finishingUp}...";
+
+              context.read<MainNotifier>().initMain(context, onUpdateProfile: true).then((_) {
+                hold = false;
+                ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
+                notifyListeners();
+              }).whenComplete(() {
+                _eventService.notifyUploadSuccess(fetch.data);
+              });
+            } else {
+              ShowBottomSheet()
+                  .onShowColouredSheet(context, language.failedUpdatedYourProfilePicture ?? '', color: Theme.of(context).colorScheme.error);
+              _eventService.notifyUploadFailed(
+                DioError(
+                  requestOptions: RequestOptions(
+                    path: UrlConstants.uploadProfilePictureV2,
+                  ),
+                  error: language.failedUpdatedYourProfilePicture ?? '',
+                ),
+              );
+            }
+          }
+        } catch (e) {
+          _eventService.notifyUploadFailed(
+            DioError(
+              requestOptions: RequestOptions(
+                path: UrlConstants.uploadProfilePictureV2,
+              ),
+              error: e,
+            ),
+          );
+          'e'.logger();
+        } finally {
+          _resetDioCancelToken();
+
+          if (uploadProgress != null) {
+            uploadProgress?.remove();
+          }
+        }
+      } else {
+        ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage!);
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onClickChangeImageProfile(context);
+      });
+    }
+  }
+
+  Future onClickSaveProfile(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      if (somethingChanged(context)) {
+        try {
+          progress = "0%";
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+
+          Overlay.of(context)?.insert(uploadProgress!);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+
+          SignUpCompleteProfiles _dataBio = SignUpCompleteProfiles(
+            email: emailController.text,
+            bio: bioController.text,
+            fullName: fullNameController.text,
+            username: userNameController.text,
+          );
+
+          SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
+            email: emailController.text,
+            country: countryController.text,
+            area: areaController.text,
+            city: cityController.text,
+            mobileNumber: mobileController.text,
+            gender: genderController.text,
+            dateOfBirth: dobController.text,
+            username: userNameController.text,
+            langIso: SharedPreference().readStorage(SpKeys.isoCode) ?? 'en',
+          );
+
+          final notifier = UserBloc();
+          final notifier2 = UserBloc();
+
+          await notifier.updateProfileBlocV2(context, data: _dataBio.toUpdateBioJson());
+          await notifier2.updateProfileBlocV2(context, data: _dataPersonalInfo.toUpdateProfileJson());
+
+          final fetch = notifier.userFetch;
+          final fetch2 = notifier2.userFetch;
+
+          if (fetch.userState == UserState.postBioSuccess) {}
+          if (fetch.userState == UserState.postBioError) {}
+
+          if (fetch2.userState == UserState.completeProfileSuccess) {
+            hold = true;
+            progress = "${language.finishingUp}...";
+
+            if (_argument.fromSignUpFlow) {
+              hold = false;
+              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+              notifyListeners();
+              Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+            } else {
+              final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+              await _mainNotifier.initMain(context, onUpdateProfile: true);
+              hold = false;
+              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+              notifyListeners();
+            }
+          }
+        } catch (e) {
+          e.logger();
+        } finally {
+          if (uploadProgress != null) {
+            uploadProgress?.remove();
+          }
+        }
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onClickSaveProfile(context);
+      });
+    }
+  }
+
+  Future onClickSaveInterests(BuildContext context, List<String> interests) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        progress = "0%";
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+        Overlay.of(context)?.insert(uploadProgress!);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+
+        SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
+          email: SharedPreference().readStorage(SpKeys.email),
+          interests: interests,
+        );
+
+        final notifier = UserBloc();
+        await notifier.updateInterestBloc(context, data: _dataPersonalInfo.toUpdateProfileJson());
+        final fetch = notifier.userFetch;
+        if (fetch.userState == UserState.updateInterestSuccess) {
+          hold = true;
+          progress = "${language.finishingUp}...";
+          await Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true);
+          hold = false;
+          ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!).whenComplete(() => Routing().moveBack());
+          notifyListeners();
+        }
+      } catch (e) {
+        e.logger();
+      } finally {
+        if (uploadProgress != null) {
+          uploadProgress?.remove();
+        }
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onClickSaveProfile(context);
+      });
+    }
+  }
+
+  // TODO: Need to refactor this, wait for the new API
+  Future takeSelfie(BuildContext context) async {
+    final _statusPermission = await System().requestPrimaryPermission(context);
+    final _makeContentNotifier = Provider.of<MakeContentNotifier>(context, listen: false);
+    if (_statusPermission) {
+      _makeContentNotifier.featureType = null;
+      _makeContentNotifier.isVideo = false;
+      Routing().move(Routes.makeContent);
+    } else {
+      return ShowGeneralDialog.permanentlyDeniedPermission(context);
+    }
+  }
+
+  Future onUploadProofPicture(BuildContext context, String? picture) async {
+    try {
+      // await System().getLocalMedia(featureType: FeatureType.pic, context: context).then((value) async {
+      //   Future.delayed(const Duration(milliseconds: 1000), () async {
+      //     try {
+      //       if (value.values.single != null) {
+      //         uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+      //         _assignDioCancelToken();
+
+      //         progress = "0%";
+      //         Overlay.of(context)?.insert(uploadProgress!);
+
+      //         final notifier = UserBloc();
+      //         await notifier.uploadProfilePictureBlocV2(
+      //           context,
+      //           verifyID: true,
+      //           cancelToken: _dioCancelToken,
+      //           file: value.values.single!.files.single.path!,
+      //           email: SharedPreference().readStorage(SpKeys.email),
+      //           onSendProgress: (received, total) {
+      //             _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+      //           },
+      //         );
+
+      //         final fetch = notifier.userFetch;
+      //         if (fetch.userState == UserState.uploadProfilePictureSuccess) {
+      //           hold = true;
+      //           progress = "${language.finishingUp}...";
+      //           Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true).then((value) {
+      //             hold = false;
+      //             ShowBottomSheet().onShowColouredSheet(context, language.successUploadId!);
+      //             _determineIdProofStatusUser(context);
+      //             notifyListeners();
+      //           }).whenComplete(() {
+      //             _eventService.notifyUploadSuccess(fetch.data);
+      //           });
+      //         }
+
+      //         if (fetch.userState == UserState.uploadProfilePictureError) {
+      //           ShowBottomSheet().onShowColouredSheet(
+      //             context,
+      //             language.failedUploadId!,
+      //             color: Theme.of(context).colorScheme.error,
+      //             iconSvg: "${AssetPath.vectorPath}remove.svg",
+      //           );
+
+      //           _eventService.notifyUploadFailed(
+      //             DioError(
+      //               requestOptions: RequestOptions(
+      //                 path: APIs.uploadProfilePictureV2,
+      //               ),
+      //               error: language.failedUploadId ?? '',
+      //             ),
+      //           );
+      //         }
+      //       } else {
+      //         if (value.keys.single.isNotEmpty) {
+      //           ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
+      //         }
+      //       }
+      //     } catch (e) {
+      //       _eventService.notifyUploadFailed(
+      //         DioError(
+      //           requestOptions: RequestOptions(
+      //             path: APIs.uploadProfilePictureV2,
+      //           ),
+      //           error: e,
+      //         ),
+      //       );
+      //       'e'.logger();
+      //     } finally {
+      //       _resetDioCancelToken();
+
+      //       if (uploadProgress != null) {
+      //         uploadProgress?.remove();
+      //       }
+      //     }
+      //   });
+      // });
+      try {
+        if (picture != null) {
+          uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+          _assignDioCancelToken();
+
+          progress = "0%";
+          Overlay.of(context)?.insert(uploadProgress!);
+
+          final notifier = UserBloc();
+          await notifier.uploadProfilePictureBlocV2(
+            context,
+            file: picture,
+            verifyID: true,
+            cancelToken: _dioCancelToken,
+            email: SharedPreference().readStorage(SpKeys.email),
+            onSendProgress: (received, total) {
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+            },
+          );
+
+          final fetch = notifier.userFetch;
+          if (fetch.userState == UserState.uploadProfilePictureSuccess) {
+            hold = true;
+            progress = "${language.finishingUp}...";
+            Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true).then((value) async {
+              hold = false;
+              await ShowBottomSheet().onShowColouredSheet(context, language.successUploadId!);
+              _determineIdProofStatusUser(context);
+              Routing().moveBack();
+              Routing().moveBack();
+              notifyListeners();
+            }).whenComplete(() {
+              _eventService.notifyUploadSuccess(fetch.data);
+            });
+          }
+
+          if (fetch.userState == UserState.uploadProfilePictureError) {
+            ShowBottomSheet().onShowColouredSheet(
+              context,
+              language.failedUploadId!,
+              color: Theme.of(context).colorScheme.error,
+              iconSvg: "${AssetPath.vectorPath}remove.svg",
+            );
+
+            _eventService.notifyUploadFailed(
+              DioError(
+                requestOptions: RequestOptions(
+                  path: UrlConstants.uploadProfilePictureV2,
+                ),
+                error: language.failedUploadId ?? '',
+              ),
+            );
+          }
+        } else {
+          ShowGeneralDialog.pickFileErrorAlert(context, language.somethingWentWrong ?? "");
+        }
+      } catch (e) {
+        _eventService.notifyUploadFailed(
+          DioError(
+            requestOptions: RequestOptions(
+              path: UrlConstants.uploadProfilePictureV2,
+            ),
+            error: e,
+          ),
+        );
+        'e'.logger();
+      } finally {
+        _resetDioCancelToken();
+
+        if (uploadProgress != null) {
+          uploadProgress?.remove();
+        }
+      }
+    } catch (e) {
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+    }
+  }
+
+  dateOfBirthSelected(String date) {
+    dobController.text = date;
+    notifyListeners();
+  }
+
+  locationCountryListSelected(String data) {
+    if (countryController.text != data) {
+      areaController.clear();
+      cityController.clear();
+    }
+    countryController.text = data;
+    notifyListeners();
+    Routing().moveBack();
+  }
+
+  locationProvinceListSelected(String data) {
+    if (areaController.text != data) {
+      cityController.clear();
+    }
+    areaController.text = data;
+    notifyListeners();
+    Routing().moveBack();
+  }
+
+  locationCityListSelected(String data) {
+    cityController.text = data;
+    notifyListeners();
+    Routing().moveBack();
+  }
+
+  void _determineIdProofStatusUser(BuildContext context) {
+    final _selfNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    _selfNotifier.setIdProofStatusUser(_selfNotifier.user.profile?.idProofStatus);
+  }
+}

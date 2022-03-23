@@ -1,0 +1,3 @@
+const DIARYTHUMB75x135 = '75x135.jpeg';
+const DIARYTHUMB150x270 = '150x270.jpeg';
+const DIARYTHUMB300x540 = '300x540.jpeg';

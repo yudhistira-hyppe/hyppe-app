@@ -1,0 +1,1 @@
+const STORYTHUMB150x150 = '150x150.jpeg';

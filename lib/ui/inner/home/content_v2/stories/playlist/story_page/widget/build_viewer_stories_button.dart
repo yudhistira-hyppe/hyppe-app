@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+// import 'package:provider/provider.dart';
+
+import 'package:hyppe/core/services/system.dart';
+
+import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+// import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+// import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
+
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:provider/provider.dart';
+
+class ViewerStoriesButton extends StatelessWidget {
+  final int? currentStory;
+  final ContentData? data;
+  const ViewerStoriesButton({
+    Key? key,
+    required this.data,
+    required this.currentStory,
+  }) : super(key: key);
+
+  static final _system = System();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final _language = context.watch<TranslateNotifierV2>().translate;
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: CustomElevatedButton(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CustomIconWidget(
+                  defaultColor: false,
+                  iconData: "${AssetPath.vectorPath}stories-viewer.svg",
+                  color: kHyppeLightButtonText,
+                ),
+                eightPx,
+                CustomTextWidget(
+                  textToDisplay: '${_language.seenBy} ${_system.formatterNumber(data?.insight?.views ?? 0)}',
+                  textStyle: theme.textTheme.bodyText1!.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: kHyppeLightButtonText,
+                  ),
+                )
+              ],
+            ),
+            width: 150,
+            height: 30,
+            function: () {
+              // context.read<StoriesPlaylistNotifier>().forceStop = true;
+              // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory!].storyID);
+            },
+            buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.transparent,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

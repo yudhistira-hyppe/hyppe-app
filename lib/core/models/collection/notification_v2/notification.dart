@@ -1,0 +1,186 @@
+import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/models/collection/notification_v2/notification_sender_or_receiver.dart';
+
+class NotificationModel {
+  bool? active;
+  bool? flowIsDone;
+  String? actionButtons;
+  String? eventType;
+  String? title;
+  String? body;
+  List<Content> content = [];
+  String? createdAt;
+  NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo;
+  String? mate;
+  String? notificationID;
+  String? event;
+  String? email;
+  String? updatedAt;
+  bool? isRead;
+
+  NotificationModel({
+    this.active,
+    this.flowIsDone,
+    this.actionButtons,
+    this.eventType,
+    this.title,
+    this.body,
+    this.content = const [],
+    this.createdAt,
+    this.senderOrReceiverInfo,
+    this.mate,
+    this.notificationID,
+    this.event,
+    this.email,
+    this.updatedAt,
+    this.isRead,
+  });
+
+  NotificationModel.fromJson(Map<String, dynamic> json) {
+    active = json['active'];
+    flowIsDone = json['flowIsDone'];
+    actionButtons = json['actionButtons'];
+    eventType = json['eventType'];
+    title = json['title'];
+    body = json['body'];
+    if (json['content'] != null) {
+      json['content'].forEach((v) {
+        content.add(Content.fromJson(v));
+      });
+    }
+    createdAt = json['createdAt'];
+    senderOrReceiverInfo = json['senderOrReceiverInfo'] != null ? NotificationSenderOrReceiverInfoModel.fromJson(json['senderOrReceiverInfo']) : null;
+    mate = json['mate'];
+    notificationID = json['notificationID'];
+    event = json['event'];
+    email = json['email'];
+    updatedAt = json['updatedAt'];
+    isRead = json['isRead'] ?? false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['active'] = active;
+    data['flowIsDone'] = flowIsDone;
+    data['actionButtons'] = actionButtons;
+    data['eventType'] = eventType;
+    data['title'] = title;
+    data['body'] = body;
+    data['content'] = content.map((v) => v.toJson()).toList();
+    data['createdAt'] = createdAt;
+    if (senderOrReceiverInfo != null) {
+      data['senderOrReceiverInfo'] = senderOrReceiverInfo?.toJson();
+    }
+    data['mate'] = mate;
+    data['notificationID'] = notificationID;
+    data['event'] = event;
+    data['email'] = email;
+    data['updatedAt'] = updatedAt;
+    data['isRead'] = isRead;
+    return data;
+  }
+
+  NotificationModel copyWith({
+    bool? active,
+    bool? flowIsDone,
+    String? actionButtons,
+    String? eventType,
+    String? title,
+    String? body,
+    List<Content>? content,
+    String? createdAt,
+    NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo,
+    String? mate,
+    String? notificationID,
+    String? event,
+    String? email,
+    String? updatedAt,
+    bool? isRead,
+  }) {
+    return NotificationModel(
+      active: active ?? this.active,
+      flowIsDone: flowIsDone ?? this.flowIsDone,
+      actionButtons: actionButtons ?? this.actionButtons,
+      eventType: eventType ?? this.eventType,
+      title: title ?? this.title,
+      body: body ?? this.body,
+      content: content ?? this.content,
+      createdAt: createdAt ?? this.createdAt,
+      senderOrReceiverInfo: senderOrReceiverInfo ?? this.senderOrReceiverInfo,
+      mate: mate ?? this.mate,
+      notificationID: notificationID ?? this.notificationID,
+      event: event ?? this.event,
+      email: email ?? this.email,
+      updatedAt: updatedAt ?? this.updatedAt,
+      isRead: isRead ?? this.isRead,
+    );
+  }
+}
+
+class Content {
+  String? createdAt;
+  String? mediaBasePath;
+  String? postType;
+  String? mediaUri;
+  String? mediaThumbUri;
+  String? description;
+  bool? active;
+  String? mediaType;
+  String? mediaThumbEndpoint;
+  String? postID;
+  String? mediaEndpoint;
+  String? fullThumbPath;
+
+  Content({
+    this.createdAt,
+    this.mediaBasePath,
+    this.postType,
+    this.mediaUri,
+    this.mediaThumbUri,
+    this.description,
+    this.active,
+    this.mediaType,
+    this.mediaThumbEndpoint,
+    this.postID,
+    this.mediaEndpoint,
+  });
+
+  Content.fromJson(Map<String, dynamic> json) {
+    createdAt = json['createdAt'];
+    mediaBasePath = json['mediaBasePath'];
+    postType = json['postType'];
+    mediaUri = json['mediaUri'];
+    mediaThumbUri = json['mediaThumbUri'];
+    description = json['description'];
+    active = json['active'];
+    mediaType = json['mediaType'];
+    mediaThumbEndpoint = json['mediaThumbEndpoint'];
+    postID = json['postID'];
+    mediaEndpoint = json['mediaEndpoint'];
+    fullThumbPath = concatThumbUri();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['createdAt'] = createdAt;
+    data['mediaBasePath'] = mediaBasePath;
+    data['postType'] = postType;
+    data['mediaUri'] = mediaUri;
+    data['mediaThumbUri'] = mediaThumbUri;
+    data['description'] = description;
+    data['active'] = active;
+    data['mediaType'] = mediaType;
+    data['mediaThumbEndpoint'] = mediaThumbEndpoint;
+    data['postID'] = postID;
+    data['mediaEndpoint'] = mediaEndpoint;
+    return data;
+  }
+
+  String? concatThumbUri() {
+    return Env.data.baseUrl +
+        (mediaThumbEndpoint ?? mediaEndpoint ?? '') +
+        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+  }
+}

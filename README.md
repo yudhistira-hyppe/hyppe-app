@@ -1,45 +1,125 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Hyppe
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+## Getting Started
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+## Android
 
----
+To generate key (only needed to release to Play Store):
 
-## Edit a file
+    cd android
+    keytool -genkey -alias key -keyalg RSA -keystore keystore.jks -dname "CN=Hyppe, OU=Hyppe, O=Hyppe Indonesia, L=DKI Jakarta, S=Jakarta, C=ID" -storepass CHANGE_ME -keypass CHANGE_ME
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+After `keystore.jks` is created, create `key.properties` with the following contents:
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+    keyAlias=key
+    keyPassword=CHANGE_ME
+    storeFile=../keystore.jks
+    storePassword=CHANGE_ME
 
----
+Since `key.properties` contains secret, do NOT commit the file.
 
-## Create a file
+To generate list fingerprint:
 
-Next, you’ll add a new file to this repository.
+    keytool -list -v -keystore "path > to > keystore.jks" -alias key -storepass CHANGE_ME -keypass CHANGE_ME
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+## Run
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+Via launch.json:
 
----
+```
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "development",
+        "program": "lib/main_dev.dart",
+        "request": "launch",
+        "type": "dart"
+      },
+      {
+        "name": "profiling",
+        "program": "lib/main_dev.dart",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "profile"
+      },
+      {
+        "name": "production",
+        "program": "lib/main_prod.dart",
+        "request": "launch",
+        "type": "dart",
+        "flutterMode": "release"
+      }
+    ]
+  }
+```
 
-## Clone a repository
+## Releasing
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+### Android
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+Test flavor (APK):
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+    flutter build apk -t lib/main_dev.dart
+
+Prod flavor (APK):
+
+    flutter build apk -t lib/main_prod.dart --obfuscate --split-debug-info=<path-to-store-debug-info> --release
+
+Prod flavor (App Bundle):
+
+    flutter build appbundle -t lib/main_prod.dart --release
+
+### iOS
+
+Test flavor:
+
+    flutter build ios -t lib/main_dev.dart
+
+    flutter build ipa -t lib/main_dev.dart
+
+Prod flavor:
+
+    flutter build ios -t lib/main_prod.dart --release
+
+    flutter build ipa -t lib/main_prod.dart --release
+
+## Contribution Rules
+ 1. create branch always from develop
+ 2. naming sub folder branch
+    ```
+    a. feature for creating new feature
+    b. bugfix for fixing issue
+    c. refactor for refactoring code
+    d. hotfix for fixing quikly for deploy the library 
+    ```
+    ```
+    example: 
+        - feature/branchNaming
+        - bugfix/branchNaming
+        - hotfix/branchNaming
+        - refactor/branchNaming
+    ```
+ 3. give the prefix for commit message header and always give sub message for the changes commit
+    ```
+    a. feat for new feature
+    b. fix for fixing any issue 
+    c. refactor for refactoring code 
+    d. deploy for deploy new version
+    ```
+    ```
+    example: 
+        - feat: backend integration
+          - Integration API Backend
+          - Create logic for sign up
+          - Create ui home
+        - fix: backend integration
+          - fixing null pointer 
+        - refactor: backend integration
+          - cleaning code 
+        - deploy: backend integration
+          - increase version
+    ```
+ 4. for version please follow for semantic version 
+ 5. for merge to production or staging please request merge request to maintain our quality code 
+
