@@ -50,11 +50,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  int peopleItemCount(dynamic error) => _peopleStoriesData == null && error == null
-      ? 10
-      : peopleContentsQuery.hasNext
-          ? (_peopleStoriesData?.length ?? 0) + 1
-          : (_peopleStoriesData?.length ?? 0) + 1;
+  int peopleItemCount(dynamic error) =>
+      _peopleStoriesData == null && error == null
+          ? 10
+          : peopleContentsQuery.hasNext
+              ? (_peopleStoriesData?.length ?? 0) + 1
+              : (_peopleStoriesData?.length ?? 0) + 1;
 
   bool get hasNext => peopleContentsQuery.hasNext;
 
@@ -103,7 +104,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
           curve: Curves.easeIn,
         );
       } else {
-        peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
+        peopleStoriesData =
+            [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
       }
 
       if (peopleStoriesData != null) {
@@ -132,7 +134,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
         ),
       );
     } else {
-      System().actionReqiredIdCard(context, action: () => uploadStories(context));
+      // System().actionReqiredIdCard(context, action: () => uploadStories(context));
+      uploadStories(context);
     }
   }
 

@@ -441,7 +441,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     : CustomTextWidget(
                         textToDisplay: widget.arguments.onEdit
                             ? notifier.language.save!
-                            : notifier.language.post!,
+                            : notifier.language.confirm!,
                         textStyle: textTheme.button
                             ?.copyWith(color: kHyppeLightButtonText),
                       ),

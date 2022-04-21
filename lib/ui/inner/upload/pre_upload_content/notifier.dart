@@ -156,6 +156,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     selectedLocation = '';
     allowComment = true;
+    registerOwnership = false;
     captionController.clear();
     tagsController.clear();
   }

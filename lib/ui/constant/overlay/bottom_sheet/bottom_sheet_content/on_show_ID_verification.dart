@@ -12,39 +12,51 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OnShowIDVerificationBottomSheet extends StatelessWidget {
+  const OnShowIDVerificationBottomSheet({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
+            Image.asset("assets/png/verification-idcard.png"),
             CustomTextWidget(
-              textToDisplay: notifier.translate.idVerification!,
-              textStyle: Theme.of(context).textTheme.headline6,
+              textToDisplay: notifier.translate.needVerifyId!,
+              textStyle: Theme.of(context).textTheme.subtitle1,
             ),
             CustomTextWidget(
-              textToDisplay: notifier.translate.pleaseVerifyYourIdToUseHyppeFeatures!,
-              textStyle: Theme.of(context).textTheme.bodyText1,
+              textToDisplay: notifier.translate.needVerifyIdDescriptions!,
+              textStyle: Theme.of(context).textTheme.caption,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.verify!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .button!
+                    .copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () {
-                Provider.of<AccountPreferencesNotifier>(context, listen: false).initialIndex = 1;
+                Provider.of<AccountPreferencesNotifier>(context, listen: false)
+                    .initialIndex = 1;
                 Routing().moveAndPop(Routes.accountPreferences);
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
@@ -55,7 +67,9 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
             )
           ],
         ),

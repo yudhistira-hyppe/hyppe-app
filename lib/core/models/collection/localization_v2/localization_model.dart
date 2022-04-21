@@ -457,6 +457,9 @@ class LocalizationModelV2 {
   String? pleaseVerifyYourIdToUseHyppeFeatures;
   String? verifyYourAccount;
   String? unfortunately;
+  String? needVerifyId;
+  String? needVerifyIdDescriptions;
+  String? confirm;
 
   LocalizationModelV2(
       {this.login,
@@ -915,7 +918,10 @@ class LocalizationModelV2 {
       this.pleaseCompleteProfileToContinue,
       this.pleaseVerifyYourIdToUseHyppeFeatures,
       this.verifyYourAccount,
-      this.unfortunately});
+      this.unfortunately,
+      this.needVerifyId,
+      this.needVerifyIdDescriptions,
+      this.confirm});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1423,5 +1429,8 @@ class LocalizationModelV2 {
         json["pleaseVerifyYourIdToUseHyppeFeatures"];
     verifyYourAccount = json["verifyYourAccount"];
     unfortunately = json['unfortunately'];
+    needVerifyId = json['needVerifyId'];
+    needVerifyIdDescriptions = json['needVerifyIdDescriptions'];
+    confirm = json['confirm'];
   }
 }

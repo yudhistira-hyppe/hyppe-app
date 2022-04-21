@@ -455,5 +455,8 @@
   "pleaseCompleteProfileToContinue": "Lengkapi data diri untuk melanjutkan",
   "pleaseVerifyYourIdToUseHyppeFeatures": "Mohon verifikasi identitas anda untuk menggunakan Fitur Hyppe",
   "verifyYourAccount": "Verifikasi Akun Anda",
-  "unfortunately": "Sangat di sayangkan"
+  "unfortunately": "Sangat di sayangkan",
+  "needVerifyId": "We need to verify your ID",
+  "needVerifyIdDescriptions": "To register your content, you are required to verify your identification. The Verification process will take a few minutes. This process can help to protect your content and your payment within app.",
+  "confirm": "Konfirmasi"
 }

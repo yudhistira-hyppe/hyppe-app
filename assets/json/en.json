@@ -455,5 +455,8 @@
   "pleaseCompleteProfileToContinue": "Please complete profile to continue",
   "pleaseVerifyYourIdToUseHyppeFeatures": "Please verify your ID to use Hyppe Features",
   "verifyYourAccount": "Verify Your Account",
-  "unfortunately": "Unfortunately"
+  "unfortunately": "Unfortunately",
+  "needVerifyId": "We need to verify your ID",
+  "needVerifyIdDescriptions": "To register your content, you are required to verify your identification. The Verification process will take a few minutes. This process can help to protect your content and your payment within app.",
+  "confirm": "Confirm"
 }
