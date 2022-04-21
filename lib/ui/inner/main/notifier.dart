@@ -40,7 +40,6 @@ class MainNotifier with ChangeNotifier {
 
   Reaction? get reactionData => _reactionData;
 
-
   set reactionData(Reaction? val) {
     _reactionData = val;
     notifyListeners();
@@ -68,7 +67,8 @@ class MainNotifier with ChangeNotifier {
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-      Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
+      Provider.of<SelfProfileNotifier>(context, listen: false).user.profile =
+          usersFetch.data;
       notifyListeners();
     }
   }
@@ -83,7 +83,12 @@ class MainNotifier with ChangeNotifier {
   }
 
   Widget mainScreen(BuildContext context) {
-    List pages = [const HomeScreen(), SearchScreen(), NotificationScreen(), MessageScreen()];
+    List pages = [
+      const HomeScreen(),
+      SearchScreen(),
+      NotificationScreen(),
+      MessageScreen()
+    ];
     late Widget screen;
     switch (pageIndex) {
       case 0:
@@ -114,7 +119,9 @@ class MainNotifier with ChangeNotifier {
   void setNotification() => FcmService().setHaveNotification(false);
 
   void onShowPostContent(BuildContext context) {
-    System().actionReqiredIdCard(context, action: () => ShowBottomSheet.onUploadContent(context));
+    // System().actionReqiredIdCard(context,
+    //    action: () => ShowBottomSheet.onUploadContent(context));
+    ShowBottomSheet.onUploadContent(context);
   }
 
   void _connectAndListenToSocket() async {

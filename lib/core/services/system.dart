@@ -7,7 +7,8 @@ import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
+    as v2;
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
@@ -76,7 +77,8 @@ class System {
     }
   }
 
-  String capitalizeFirstLetter(String letter) => letter[0].toUpperCase() + letter.substring(1).toLowerCase();
+  String capitalizeFirstLetter(String letter) =>
+      letter[0].toUpperCase() + letter.substring(1).toLowerCase();
 
   bool validateUrl(String url) {
     try {
@@ -95,25 +97,33 @@ class System {
 
   validateUsername(String username, {bool withCapitalUtility = false}) {
     if (!withCapitalUtility) {
-      return username.contains(RegExp(r"^(?!.\.\.)(?!.\.$)[^\W][\w.]{4,29}$", caseSensitive: false, multiLine: true)) ? true : false;
+      return username.contains(RegExp(r"^(?!.\.\.)(?!.\.$)[^\W][\w.]{4,29}$",
+              caseSensitive: false, multiLine: true))
+          ? true
+          : false;
     } else {
       return username.contains(RegExp(r"[A-Z]"))
           ? false
-          : username.contains(RegExp(r"^(?!.\.\.)(?!.\.$)[^\W][\w.]{4,29}$", caseSensitive: false, multiLine: true))
+          : username.contains(RegExp(r"^(?!.\.\.)(?!.\.$)[^\W][\w.]{4,29}$",
+                  caseSensitive: false, multiLine: true))
               ? true
               : false;
     }
   }
 
   validatePhoneNumber(String phoneNumber) {
-    return phoneNumber.contains(RegExp(r"(^(?:[+0]9)?[0-9]{10,20}$)")) ? true : false;
+    return phoneNumber.contains(RegExp(r"(^(?:[+0]9)?[0-9]{10,20}$)"))
+        ? true
+        : false;
   }
 
   Future openSetting() async {
-    openAppSettings().then((bool hasOpened) => debugPrint('App Settings opened: ' + hasOpened.toString()));
+    openAppSettings().then((bool hasOpened) =>
+        debugPrint('App Settings opened: ' + hasOpened.toString()));
   }
 
-  Future<PermissionStatus> checkPermission({required Permission permission}) async {
+  Future<PermissionStatus> checkPermission(
+      {required Permission permission}) async {
     PermissionStatus _status = await permission.status;
     return _status;
   }
@@ -216,7 +226,8 @@ class System {
     } else if (displayOption == 1) {
       value = DateFormat('hh:mm a').format(DateTime.parse(dateParams));
     } else if (displayOption == 2) {
-      value = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(dateParams));
+      value =
+          DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -233,7 +244,8 @@ class System {
     return info;
   }
 
-  Future<void> shareText({required String dynamicLink, required BuildContext context}) async {
+  Future<void> shareText(
+      {required String dynamicLink, required BuildContext context}) async {
     await Share.share(dynamicLink);
   }
 
@@ -349,7 +361,8 @@ class System {
   }) async {
     final ImagePicker _imagePicker = ImagePicker();
 
-    final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final notifier =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     Duration _duration;
     String _errorMsg = '';
     List<File>? _filePickerResult;
@@ -364,7 +377,8 @@ class System {
 
     if (featureType == null) {
       // used for change profile picture only
-      final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+      final _pickerResult =
+          await _imagePicker.pickImage(source: ImageSource.gallery);
 
       if (_pickerResult != null) {
         _filePickerResult = [File(_pickerResult.path)];
@@ -372,19 +386,24 @@ class System {
     } else {
       // used for picking content posts
       if (featureType == FeatureType.vid) {
-        await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
+        await FilePicker.platform
+            .pickFiles(type: FileType.video, allowCompression: false)
+            .then((result) {
           if (result != null) {
-            if (result.files.single.extension!.toLowerCase() == MP4 || result.files.single.extension!.toLowerCase() == MOV) {
+            if (result.files.single.extension!.toLowerCase() == MP4 ||
+                result.files.single.extension!.toLowerCase() == MOV) {
               _filePickerResult = [File(result.files.single.path!)];
             } else {
-              _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat!} ${result.names.single}';
+              _errorMsg =
+                  '${notifier.weCurrentlySupportOnlyMP4andMOVformat!} ${result.names.single}';
             }
           }
         });
       }
 
       if (featureType == FeatureType.pic) {
-        final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+        final _pickerResult =
+            await _imagePicker.pickImage(source: ImageSource.gallery);
 
         if (_pickerResult != null) {
           // TODO: Future implementation, user will be able to select multiple images
@@ -393,7 +412,8 @@ class System {
       }
 
       if (featureType == FeatureType.diary) {
-        final _pickerResult = await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false);
+        final _pickerResult = await FilePicker.platform
+            .pickFiles(type: FileType.video, allowCompression: false);
 
         // validasi durasi
         if (_pickerResult != null) {
@@ -402,14 +422,23 @@ class System {
 
           // validasi count post
           if (_validateCountPost(_pickerResult.files.length) == false) {
-            for (int element = 0; element < _pickerResult.files.length; element++) {
-              if (_pickerResult.files[element].extension!.toLowerCase() == MP4 || _pickerResult.files[element].extension!.toLowerCase() == MOV) {
-                await getVideoMetadata(_pickerResult.files[element].path!).then((value) {
-                  _duration = Duration(milliseconds: int.parse(value!.duration!.toInt().toString()));
+            for (int element = 0;
+                element < _pickerResult.files.length;
+                element++) {
+              if (_pickerResult.files[element].extension!.toLowerCase() ==
+                      MP4 ||
+                  _pickerResult.files[element].extension!.toLowerCase() ==
+                      MOV) {
+                await getVideoMetadata(_pickerResult.files[element].path!)
+                    .then((value) {
+                  _duration = Duration(
+                      milliseconds:
+                          int.parse(value!.duration!.toInt().toString()));
 
                   // hapus file yang durasinya lebih dari 60 detik
                   if (_duration.inSeconds > 60) {
-                    _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    _failFile =
+                        '$_failFile, ${_pickerResult.files[element].name}\n';
                     _pickerResult.files.removeAt(element);
                   }
                 });
@@ -418,18 +447,21 @@ class System {
 
             // show toast if there is fail file
             if (_failFile.isNotEmpty) {
-              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature!} :\n$_failFile';
+              _errorMsg =
+                  '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature!} :\n$_failFile';
             }
 
             if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path!)).toList();
+              _filePickerResult =
+                  _pickerResult.files.map((file) => File(file.path!)).toList();
             }
           }
         }
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.media, allowCompression: false);
+        final _pickerResult = await FilePicker.platform.pickFiles(
+            allowMultiple: true, type: FileType.media, allowCompression: false);
 
         // validasi durasi
         if (_pickerResult != null) {
@@ -438,15 +470,24 @@ class System {
 
           // validasi count post
           if (_validateCountPost(_pickerResult.files.length) == false) {
-            for (int element = 0; element < _pickerResult.files.length; element++) {
+            for (int element = 0;
+                element < _pickerResult.files.length;
+                element++) {
               // validasi content type
-              if (_pickerResult.files[element].extension!.toLowerCase() == MP4 || _pickerResult.files[element].extension!.toLowerCase() == MOV) {
-                await getVideoMetadata(_pickerResult.files[element].path!).then((value) {
-                  _duration = Duration(milliseconds: int.parse(value!.duration!.toInt().toString()));
+              if (_pickerResult.files[element].extension!.toLowerCase() ==
+                      MP4 ||
+                  _pickerResult.files[element].extension!.toLowerCase() ==
+                      MOV) {
+                await getVideoMetadata(_pickerResult.files[element].path!)
+                    .then((value) {
+                  _duration = Duration(
+                      milliseconds:
+                          int.parse(value!.duration!.toInt().toString()));
 
                   // hapus file yang durasinya lebih dari 15 detik
                   if (_duration.inSeconds > 15) {
-                    _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                    _failFile =
+                        '$_failFile, ${_pickerResult.files[element].name}\n';
                     _pickerResult.files.removeAt(element);
                   }
                 });
@@ -455,11 +496,13 @@ class System {
 
             // show toast if there is fail file
             if (_failFile.isNotEmpty) {
-              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature!} :\n$_failFile';
+              _errorMsg =
+                  '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature!} :\n$_failFile';
             }
 
             if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path!)).toList();
+              _filePickerResult =
+                  _pickerResult.files.map((file) => File(file.path!)).toList();
             }
           }
         }
@@ -486,6 +529,8 @@ class System {
     } else {
       final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
       if (notifier.user.profile != null) {
+        // debugPrint(notifier.user.profile!.isComplete.toString());
+        // debugPrint(notifier.user.profile!.isIdVerified.toString());
         if (!notifier.user.profile!.isComplete!) {
           ShowBottomSheet.onShowCompleteProfile(context);
         } else if (!notifier.user.profile!.isIdVerified!) {
@@ -499,12 +544,17 @@ class System {
     }
   }
 
-  Future<bool> requestPermission(BuildContext context, {required List<Permission> permissions}) async {
+  Future<bool> requestPermission(BuildContext context,
+      {required List<Permission> permissions}) async {
     // request permission
     final permissionsStatus = await permissions.request();
 
-    return !permissionsStatus.values.toList().contains(PermissionStatus.denied) &&
-        !permissionsStatus.values.toList().contains(PermissionStatus.permanentlyDenied);
+    return !permissionsStatus.values
+            .toList()
+            .contains(PermissionStatus.denied) &&
+        !permissionsStatus.values
+            .toList()
+            .contains(PermissionStatus.permanentlyDenied);
   }
 
   Future<bool> requestPrimaryPermission(BuildContext context) async {
@@ -519,10 +569,14 @@ class System {
 
     // check permission
     var cameraPermission = await checkPermission(permission: Permission.camera);
-    var microphonePermission = await checkPermission(permission: Permission.microphone);
-    var storagePermission = await checkPermission(permission: Permission.storage);
+    var microphonePermission =
+        await checkPermission(permission: Permission.microphone);
+    var storagePermission =
+        await checkPermission(permission: Permission.storage);
 
-    return cameraPermission.isGranted && microphonePermission.isGranted && storagePermission.isGranted;
+    return cameraPermission.isGranted &&
+        microphonePermission.isGranted &&
+        storagePermission.isGranted;
   }
 
   String searchCategory(SearchCategory searchCategory) {
@@ -587,7 +641,8 @@ class System {
     }
   }
 
-  readTimestamp(int timestamp, BuildContext context, {required bool fullCaption}) {
+  readTimestamp(int timestamp, BuildContext context,
+      {required bool fullCaption}) {
     final translate = context.read<TranslateNotifierV2>().translate;
     String time = '';
     int seconds = (DateTime.now().millisecondsSinceEpoch - timestamp) ~/ 1000;
@@ -637,7 +692,8 @@ class System {
   }) async {
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: Env.data.deeplinkBaseUrl,
-      link: Uri.parse('${Env.data.deeplinkBaseUrl}${dynamicLinkData.routes}?postID=${dynamicLinkData.postID}&sender_email=${dynamicLinkData.email}'),
+      link: Uri.parse(
+          '${Env.data.deeplinkBaseUrl}${dynamicLinkData.routes}?postID=${dynamicLinkData.postID}&sender_email=${dynamicLinkData.email}'),
       androidParameters: AndroidParameters(
         minimumVersion: 0,
         packageName: Env.data.appID,
@@ -654,20 +710,23 @@ class System {
       ),
     );
 
-    var _linkResult = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+    var _linkResult =
+        await FirebaseDynamicLinks.instance.buildShortLink(parameters);
 
     if (copiedToClipboard) {
       copyToClipboard(_linkResult.shortUrl.toString());
     }
 
     if (shareImmediately && !copiedToClipboard) {
-      await shareText(dynamicLink: _linkResult.shortUrl.toString(), context: context);
+      await shareText(
+          dynamicLink: _linkResult.shortUrl.toString(), context: context);
     }
 
     return _linkResult.shortUrl;
   }
 
-  Future copyToClipboard(String data) async => await Clipboard.setData(ClipboardData(text: data));
+  Future copyToClipboard(String data) async =>
+      await Clipboard.setData(ClipboardData(text: data));
 
   String formatDuration(int positionInMs) {
     final ms = positionInMs;
@@ -695,16 +754,20 @@ class System {
             ? '00'
             : '0$seconds';
 
-    final formattedTime = '${hoursString == '00' ? '' : '$hoursString:'}$minutesString:$secondsString';
+    final formattedTime =
+        '${hoursString == '00' ? '' : '$hoursString:'}$minutesString:$secondsString';
     return formattedTime;
   }
 
   Future<String> convertWidgetToImage(GlobalKey globalKey) async {
-    RenderRepaintBoundary repaintBoundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    RenderRepaintBoundary repaintBoundary =
+        globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image boxImage = await repaintBoundary.toImage(pixelRatio: 3);
-    ByteData? byteData = await boxImage.toByteData(format: ui.ImageByteFormat.png);
+    ByteData? byteData =
+        await boxImage.toByteData(format: ui.ImageByteFormat.png);
     Uint8List uint8list = byteData!.buffer.asUint8List();
-    final String _pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
+    final String _pathFile = path.join(await getSystemPath(params: 'editedImg'),
+        '${DateTime.now().toIso8601String()}.png');
     File imgFile = File(_pathFile);
     await imgFile.writeAsBytes(uint8list);
     return imgFile.absolute.path;
@@ -712,7 +775,8 @@ class System {
 
   Future<String> getSystemPath({String params = ''}) async {
     var _directory = await getTemporaryDirectory();
-    var _result = await Directory('${_directory.path}/$params').create(recursive: true);
+    var _result =
+        await Directory('${_directory.path}/$params').create(recursive: true);
     return _result.absolute.path;
   }
 
@@ -723,7 +787,9 @@ class System {
 
   String generateUUID() => const Uuid().v4();
 
-  String formatterNumber(int? number, {String? locale}) => NumberFormat.compact(locale: locale ?? Platform.localeName).format(number ?? 0);
+  String formatterNumber(int? number, {String? locale}) =>
+      NumberFormat.compact(locale: locale ?? Platform.localeName)
+          .format(number ?? 0);
 
   bool mustNotContainYourNameOrEmail({
     required String text,
@@ -741,7 +807,8 @@ class System {
     return text.length > 1 && text.contains(RegExp(r'[0-9]'));
   }
 
-  bool passwordMatch({required String password, required String confirmPassword}) {
+  bool passwordMatch(
+      {required String password, required String confirmPassword}) {
     return password == confirmPassword;
   }
 
@@ -749,30 +816,39 @@ class System {
     return SharedPreference().readStorage(SpKeys.email) == email;
   }
 
-  Future<void> increaseViewCount(BuildContext context, v2.ContentData data) async {
+  Future<void> increaseViewCount(
+      BuildContext context, v2.ContentData data) async {
     final notifier = ViewBloc();
-    await notifier.viewPostUserBloc(context, postId: data.postID!, emailOwner: data.email!);
+    await notifier.viewPostUserBloc(context,
+        postId: data.postID!, emailOwner: data.email!);
     final fetch = notifier.viewFetch;
     if (fetch.viewState == ViewState.viewUserPostSuccess) {
       data.insight?.views = (data.insight?.views ?? 0) + 1;
     }
   }
 
-  Future<void> navigateToProfile(BuildContext context, String email, {StoryController? storyController}) async {
+  Future<void> navigateToProfile(BuildContext context, String email,
+      {StoryController? storyController}) async {
     final connect = await checkConnections();
     if (connect) {
       String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
       if (email != myEmail) {
-        context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
+        context
+            .read<OtherProfileNotifier>()
+            .checkFollowingToUser(context, email);
         if (storyController != null) {
           storyController.pause();
-          Routing().move(Routes.otherProfile).whenComplete(() => storyController.play());
+          Routing()
+              .move(Routes.otherProfile)
+              .whenComplete(() => storyController.play());
         } else {
           Routing().move(Routes.otherProfile);
         }
       } else {
         storyController != null
-            ? context.read<HomeNotifier>().navigateToProfilePage(context, whenComplete: true, onWhenComplete: () => storyController.play())
+            ? context.read<HomeNotifier>().navigateToProfilePage(context,
+                whenComplete: true,
+                onWhenComplete: () => storyController.play())
             : context.read<HomeNotifier>().navigateToProfilePage(context);
       }
     } else {
@@ -800,7 +876,8 @@ class System {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: theme ? Brightness.light : Brightness.dark,
       statusBarColor: theme ? kHyppeSurface : kHyppeLightSurface,
-      systemNavigationBarIconBrightness: theme ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness:
+          theme ? Brightness.light : Brightness.dark,
       systemNavigationBarColor: theme ? kHyppeSurface : kHyppeLightSurface,
     ));
   }

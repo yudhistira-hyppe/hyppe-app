@@ -1,6 +1,8 @@
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
@@ -21,7 +23,8 @@ import 'package:provider/provider.dart';
 class PreUploadContentScreen extends StatefulWidget {
   final UpdateContentsArgument arguments;
 
-  const PreUploadContentScreen({Key? key, required this.arguments}) : super(key: key);
+  const PreUploadContentScreen({Key? key, required this.arguments})
+      : super(key: key);
 
   @override
   _PreUploadContentScreenState createState() => _PreUploadContentScreenState();
@@ -50,8 +53,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 iconData: "${AssetPath.vectorPath}back-arrow.svg",
               ),
               title: CustomTextWidget(
-                textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost!,
-                textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
+                textToDisplay: widget.arguments.onEdit
+                    ? "${notifier.language.edit} ${notifier.language.post}"
+                    : notifier.language.newPost!,
+                textStyle:
+                    textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
             body: SingleChildScrollView(
@@ -70,8 +76,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                           selector: (_, select) => select.user.profile,
                           builder: (_, notifier, __) {
                             return CustomCacheImage(
-                              imageUrl: '${System().showUserPicture(notifier?.avatar?.mediaEndpoint)}',
-                              imageBuilder: (context, imageProvider) => Container(
+                              imageUrl:
+                                  '${System().showUserPicture(notifier?.avatar?.mediaEndpoint)}',
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
                                 height: 42 * SizeConfig.scaleDiagonal,
                                 width: 42 * SizeConfig.scaleDiagonal,
                                 decoration: BoxDecoration(
@@ -87,7 +95,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 width: 42 * SizeConfig.scaleDiagonal,
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}profile-error.png'),
                                     fit: BoxFit.cover,
                                   ),
                                   shape: BoxShape.circle,
@@ -113,7 +122,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             cursorColor: const Color(0xff8A3181),
                             controller: notifier.captionController,
                             textInputAction: TextInputAction.newline,
-                            style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                            style: textTheme.bodyText2
+                                ?.copyWith(fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               errorBorder: InputBorder.none,
                               hintStyle: textTheme.bodyText2,
@@ -128,7 +138,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         ),
                         Expanded(
                           flex: 2,
-                          child: ValidateType(editContent: widget.arguments.onEdit),
+                          child: ValidateType(
+                              editContent: widget.arguments.onEdit),
                         )
                       ],
                     ),
@@ -217,21 +228,25 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       controller: notifier.tagsController,
                       keyboardAppearance: Brightness.dark,
                       cursorColor: const Color(0xff8A3181),
-                      style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                      style: textTheme.bodyText2
+                          ?.copyWith(fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         hintText: "hashtag...",
                         hintStyle: textTheme.bodyText2,
                         border: UnderlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(color: Color(0xff252627), width: 0.5),
+                          borderSide: const BorderSide(
+                              color: Color(0xff252627), width: 0.5),
                         ),
                         enabledBorder: UnderlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(color: Color(0xff252627), width: 0.5),
+                          borderSide: const BorderSide(
+                              color: Color(0xff252627), width: 0.5),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(color: Color(0xff252627), width: 0.5),
+                          borderSide: const BorderSide(
+                              color: Color(0xff252627), width: 0.5),
                         ),
                         contentPadding: const EdgeInsets.all(5),
                       ),
@@ -248,32 +263,65 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                           children: [
                             CustomTextWidget(
                               textToDisplay: notifier.language.advanceSettings!,
-                              textStyle: textTheme.bodyText2?.copyWith(color: kHyppeSecondary),
+                              textStyle: textTheme.bodyText2
+                                  ?.copyWith(color: kHyppeSecondary),
                             ),
                             SizedBox(height: 10 * SizeConfig.scaleDiagonal),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
-                                  width: 276 * SizeConfig.scaleDiagonal,
-                                  child: CustomRichTextWidget(
-                                    textAlign: TextAlign.start,
-                                    textOverflow: TextOverflow.clip,
-                                    textSpan: TextSpan(
-                                      text: notifier.language.allowComment! + "\n",
-                                      style: Theme.of(context).textTheme.bodyText2,
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: notifier.language.youCanChangeThisLaterOnTheMenu!,
-                                          style: Theme.of(context).textTheme.caption,
+                                Column(
+                                  children: [
+                                    Text(
+                                      notifier.language.turnOffCommenting!,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    Row(
+                                      children: [
+                                        const Text("• "),
+                                        SizedBox(
+                                          width: 276 * SizeConfig.scaleDiagonal,
+                                          child: CustomRichTextWidget(
+                                            textAlign: TextAlign.start,
+                                            textOverflow: TextOverflow.clip,
+                                            textSpan: TextSpan(
+                                              text: notifier.language
+                                                  .turnOffCommentingExplain1!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ),
+                                    Row(
+                                      children: [
+                                        const Text("• "),
+                                        SizedBox(
+                                          width: 276 * SizeConfig.scaleDiagonal,
+                                          child: CustomRichTextWidget(
+                                            textAlign: TextAlign.start,
+                                            textOverflow: TextOverflow.clip,
+                                            textSpan: TextSpan(
+                                              text: notifier.language
+                                                  .turnOffCommentingExplain1!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
                                 ),
                                 CustomSwitchButton(
-                                  value: notifier.allowComment,
-                                  onChanged: (value) => notifier.allowComment = value,
+                                  value: !notifier.allowComment,
+                                  onChanged: (value) =>
+                                      notifier.allowComment = !value,
                                 ),
                               ],
                             ),
@@ -290,28 +338,43 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               child: CustomElevatedButton(
                 width: 375.0 * SizeConfig.scaleDiagonal,
                 height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () => notifier.onClickPost(
-                  context,
-                  onEdit: widget.arguments.onEdit,
-                  data: widget.arguments.contentData,
-                  content: widget.arguments.content,
-                ),
+                // function: () => notifier.onClickPost(
+                //   context,
+                //   onEdit: widget.arguments.onEdit,
+                //   data: widget.arguments.contentData,
+                //   content: widget.arguments.content,
+                // ),
+                function: () => System().actionReqiredIdCard(context,
+                    action: () => notifier.onClickPost(
+                          context,
+                          onEdit: widget.arguments.onEdit,
+                          data: widget.arguments.contentData,
+                          content: widget.arguments.content,
+                        )),
                 child: widget.arguments.onEdit && notifier.updateContent
                     ? const CustomLoading()
                     : CustomTextWidget(
-                        textToDisplay: widget.arguments.onEdit ? notifier.language.save! : notifier.language.post!,
-                        textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                        textToDisplay: widget.arguments.onEdit
+                            ? notifier.language.save!
+                            : notifier.language.post!,
+                        textStyle: textTheme.button
+                            ?.copyWith(color: kHyppeLightButtonText),
                       ),
                 buttonStyle: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all<Color>(kHyppeUploadIcon),
-                  shadowColor: MaterialStateProperty.all<Color>(kHyppeUploadIcon),
-                  overlayColor: MaterialStateProperty.all<Color>(kHyppeUploadIcon),
-                  backgroundColor: MaterialStateProperty.all<Color>(kHyppeUploadIcon),
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
+                  shadowColor:
+                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
+                  overlayColor:
+                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
                 ),
               ),
             ),
             backgroundColor: Theme.of(context).backgroundColor,
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
           ),
         ),
       ),

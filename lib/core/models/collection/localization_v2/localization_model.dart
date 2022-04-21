@@ -153,8 +153,13 @@ class LocalizationModelV2 {
   String? seeMore;
   String? advancedSettings;
   String? allowComment;
+  String? turnOffCommenting;
+  String? turnOffCommentingExplain1;
+  String? turnOffCommentingExplain2;
   String? youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost;
   String? registerContentOwnership;
+  String? registerContentOwnershipExplain1;
+  String? registerContentOwnershipExplain2;
   String? protectYourContent;
   String? processUpload;
   String? cancelPost;
@@ -223,7 +228,8 @@ class LocalizationModelV2 {
   String? inbox;
   String? toMe;
   String? resetYourPassword;
-  String? weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp;
+  String?
+      weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp;
   String? thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone;
   String? problemOrQuestion;
   String? callUsAt;
@@ -607,8 +613,13 @@ class LocalizationModelV2 {
       this.seeMore,
       this.advancedSettings,
       this.allowComment,
+      this.turnOffCommenting,
+      this.turnOffCommentingExplain1,
+      this.turnOffCommentingExplain2,
       this.youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost,
       this.registerContentOwnership,
+      this.registerContentOwnershipExplain1,
+      this.registerContentOwnershipExplain2,
       this.protectYourContent,
       this.processUpload,
       this.cancelPost,
@@ -920,11 +931,14 @@ class LocalizationModelV2 {
     notAValidEmailAddress = json['notAValidEmailAddress'];
     incorrectPassword = json['incorrectPassword'];
     reset = json['reset'];
-    wellEmailYourCodeToResetYourPassword = json['wellEmailYourCodeToResetYourPassword'];
+    wellEmailYourCodeToResetYourPassword =
+        json['wellEmailYourCodeToResetYourPassword'];
     checkYourEmail = json['checkYourEmail'];
-    weHaveSentAVerificationCodeToYourEmail = json['weHaveSentAVerificationCodeToYourEmail'];
+    weHaveSentAVerificationCodeToYourEmail =
+        json['weHaveSentAVerificationCodeToYourEmail'];
     verificationCode = json['verificationCode'];
-    toConfimYourEmailKindlyInput4DigitsCodeHasBeenSentViaEmailTo = json['toConfimYourEmailKindlyInput4DigitsCodeHasBeenSentViaEmailTo'];
+    toConfimYourEmailKindlyInput4DigitsCodeHasBeenSentViaEmailTo =
+        json['toConfimYourEmailKindlyInput4DigitsCodeHasBeenSentViaEmailTo'];
     didntReceiveTheCode = json['didntReceiveTheCode'];
     pleaseWaitFor = json['pleaseWaitFor'];
     verify = json['verify'];
@@ -933,21 +947,26 @@ class LocalizationModelV2 {
     yourIdentityHasBeenVerified = json['yourIdentityHasBeenVerified'];
     incorrectCode = json['incorrectCode'];
     sessionExpired = json['sessionExpired'];
-    yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest = json['yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest'];
+    yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest = json[
+        'yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest'];
     backToRegisterPage = json['backToRegisterPage'];
     tooManyFailedAttempts = json['tooManyFailedAttempts'];
-    unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes = json['unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes'];
+    unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes = json[
+        'unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes'];
     createNewPassword = json['createNewPassword'];
-    yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword = json['yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword'];
+    yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword =
+        json['yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword'];
     reTypePassword = json['reTypePassword'];
     mustNotContainYourNameOrEmail = json['mustNotContainYourNameOrEmail'];
     atLeast8Characters = json['atLeast8Characters'];
-    atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
+    atLeastContain1CharacterAnd1Number =
+        json['atLeastContain1CharacterAnd1Number'];
     next = json['next'];
     submit = json['submit'];
     passwordDoesntMatch = json['passwordDoesntMatch'];
     register = json['register'];
-    joinTheCommunityCreateOrWatchAndGetMoney = json['joinTheCommunityCreateOrWatchAndGetMoney'];
+    joinTheCommunityCreateOrWatchAndGetMoney =
+        json['joinTheCommunityCreateOrWatchAndGetMoney'];
     byRegisteringYouAgreeToHyppe = json['byRegisteringYouAgreeToHyppe'];
     privacyPolicy = json['privacyPolicy'];
     and = json['and'];
@@ -976,9 +995,11 @@ class LocalizationModelV2 {
     preferNotToSay = json['preferNotToSay'];
     save = json['save'];
     cancel = json['cancel'];
-    byTappingAgreeAndContinueYouAgreeToOur = json['byTappingAgreeAndContinueYouAgreeToOur'];
+    byTappingAgreeAndContinueYouAgreeToOur =
+        json['byTappingAgreeAndContinueYouAgreeToOur'];
     andAcknowledgeThatYouHaveReadOur = json['andAcknowledgeThatYouHaveReadOur'];
-    toLearnAboutHowWeCollectUseAndShareYourData = json['toLearnAboutHowWeCollectUseAndShareYourData'];
+    toLearnAboutHowWeCollectUseAndShareYourData =
+        json['toLearnAboutHowWeCollectUseAndShareYourData'];
     agreeAndContinue = json['agreeAndContinue'];
     whatIsYourInterest = json['whatIsYourInterest'];
     andWeKnowWhatToGive = json['andWeKnowWhatToGive'];
@@ -1006,7 +1027,8 @@ class LocalizationModelV2 {
     postTo = json['postTo'];
     longVideo = json['longVideo'];
     imageOrVideoMax60seconds = json['imageOrVideoMax60seconds'];
-    imageOrVideoMax60secondsOnlyFor24Hours = json['imageOrVideoMax60secondsOnlyFor24Hours'];
+    imageOrVideoMax60secondsOnlyFor24Hours =
+        json['imageOrVideoMax60secondsOnlyFor24Hours'];
     onlyImage = json['onlyImage'];
     flash = json['flash'];
     filters = json['filters'];
@@ -1036,7 +1058,8 @@ class LocalizationModelV2 {
     willBePermanentlyDeleted = json['willBePermanentlyDeleted'];
     delete = json['delete'];
     dontDelete = json['dontDelete'];
-    yourContentHadSuccessfullyDeleted = json['yourContentHadSuccessfullyDeleted'];
+    yourContentHadSuccessfullyDeleted =
+        json['yourContentHadSuccessfullyDeleted'];
     views = json['views'];
     likes = json['likes'];
     share = json['share'];
@@ -1061,8 +1084,14 @@ class LocalizationModelV2 {
     seeMore = json['seeMore'];
     advancedSettings = json['advancedSettings'];
     allowComment = json['allowComment'];
-    youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost = json['youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost'];
+    turnOffCommenting = json['turnOffCommenting'];
+    turnOffCommentingExplain1 = json['turnOffCommentingExplain1'];
+    turnOffCommentingExplain2 = json['turnOffCommentingExplain2'];
+    youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost =
+        json['youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost'];
     registerContentOwnership = json['registerContentOwnership'];
+    registerContentOwnershipExplain1 = json['registerContentOwnershipExplain1'];
+    registerContentOwnershipExplain2 = json['registerContentOwnershipExplain2'];
     protectYourContent = json['protectYourContent'];
     processUpload = json['processUpload'];
     cancelPost = json['cancelPost'];
@@ -1106,7 +1135,8 @@ class LocalizationModelV2 {
     finishingUp = json['finishingUp'];
     permissionStorage = json['permissionStorage'];
     failedUpdatedYourProfilePicture = json['failedUpdatedYourProfilePicture'];
-    successfullyUpdatedYourProfilePicture = json['successfullyUpdatedYourProfilePicture'];
+    successfullyUpdatedYourProfilePicture =
+        json['successfullyUpdatedYourProfilePicture'];
     failedUpdatePersonalInformation = json['failedUpdatePersonalInformation'];
     successUpdatePersonalInformation = json['successUpdatePersonalInformation'];
     loadMore = json['loadMore'];
@@ -1132,20 +1162,23 @@ class LocalizationModelV2 {
     toMe = json['toMe'];
     resetYourPassword = json['resetYourPassword'];
     weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp =
-        json['weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp'];
-    thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone =
-        json['thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone'];
+        json[
+            'weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp'];
+    thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone = json[
+        'thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone'];
     problemOrQuestion = json['problemOrQuestion'];
     callUsAt = json['callUsAt'];
     orEmail = json['or email'];
-    toResetYourPasswordKindlyInput4DigitsCodeHasBeenSentViaEmailTo = json['toResetYourPasswordKindlyInput4DigitsCodeHasBeenSentViaEmailTo'];
+    toResetYourPasswordKindlyInput4DigitsCodeHasBeenSentViaEmailTo =
+        json['toResetYourPasswordKindlyInput4DigitsCodeHasBeenSentViaEmailTo'];
     didntReceiveTheCodePleaseWaitFor = json['didntReceiveTheCodePleaseWaitFor'];
     didntReceiveTheCodeResendNewCode = json['didntReceiveTheCodeResendNewCode'];
     yourResetCodeHasBeenVerified = json['yourResetCodeHasBeenVerified'];
     mustFilledFirst = json['mustFilledFirst'];
     passwordMustMeetAllRequirements = json['passwordMustMeetAllRequirements'];
     passwordDoesNotMatch = json['passwordDoesNotMatch'];
-    passwordAreCaseSensitiveAndMustBeAtLeast8Characters = json['passwordAreCaseSensitiveAndMustBeAtLeast8Characters'];
+    passwordAreCaseSensitiveAndMustBeAtLeast8Characters =
+        json['passwordAreCaseSensitiveAndMustBeAtLeast8Characters'];
     signUpHere = json['signUpHere'];
     alreadyExist = json['alreadyExist'];
     alreadyHaveAnAccount = json['alreadyHaveAnAccount'];
@@ -1196,7 +1229,8 @@ class LocalizationModelV2 {
     sync = json['sync'];
     library = json['library'];
     privateAccount = json['privateAccount'];
-    followThisAccountToSeeTheirContents = json['followThisAccountToSeeTheirContents'];
+    followThisAccountToSeeTheirContents =
+        json['followThisAccountToSeeTheirContents'];
     hyppeStoryCaption = json['hyppeStoryCaption'];
     hyppeVidCaption = json['hyppeVidCaption'];
     hyppeDiaryCaption = json['hyppeDiaryCaption'];
@@ -1234,7 +1268,8 @@ class LocalizationModelV2 {
     whenWereYouAreBorn = json['whenWereYouAreBorn'];
     soWeCanCelebrateTogether = json['soWeCanCelebrateTogether'];
     whereDoYouLive = json['whereDoYouLive'];
-    soYouCanConnectEasierWithPeopleNearby = json['soYouCanConnectEasierWithPeopleNearby'];
+    soYouCanConnectEasierWithPeopleNearby =
+        json['soYouCanConnectEasierWithPeopleNearby'];
     whatIsYourPhoneNumber = json['whatIsYourPhoneNumber'];
     soWeAndFriendsCanContactYou = json['soWeAndFriendsCanContactYou'];
     selectYourPreferredLanguage = json['selectYourPreferredLanguage'];
@@ -1243,13 +1278,16 @@ class LocalizationModelV2 {
     someDataAlreadyRegistered = json['someDataAlreadyRegistered'];
     pleaseTryAnotherUsernameOrEmail = json['pleaseTryAnotherUsernameOrEmail'];
     passwordHasBeenSend = json['passwordHasBeenSend'];
-    pleaseCheckYourEmailToGetAPassword = json['pleaseCheckYourEmailToGetAPassword'];
+    pleaseCheckYourEmailToGetAPassword =
+        json['pleaseCheckYourEmailToGetAPassword'];
     fillInYourPassword = json['fillInYourPassword'];
     passwordVerifiedSuccessfully = json['passwordVerifiedSuccessfully'];
-    checkCarefullyPasswordAndReTypePassword = json['checkCarefullyPasswordAndReTypePassword'];
+    checkCarefullyPasswordAndReTypePassword =
+        json['checkCarefullyPasswordAndReTypePassword'];
     completeLaterLoginAsGuest = json['completeLaterLoginAsGuest'];
     whatIsYourIdNumbers = json['whatIsYourIdNumbers'];
-    chooseIdentityAndFillTheFormWithYoursIdNumbers = json['chooseIdentityAndFillTheFormWithYoursIdNumbers'];
+    chooseIdentityAndFillTheFormWithYoursIdNumbers =
+        json['chooseIdentityAndFillTheFormWithYoursIdNumbers'];
     whatGenderAreYou = json['whatGenderAreYou'];
     soWeAndFriendsKnowAboutYou = json['soWeAndFriendsKnowAboutYou'];
     enjoyAllHyppeFeatures = json['enjoyAllHyppeFeatures'];
@@ -1259,7 +1297,8 @@ class LocalizationModelV2 {
     areYouSure = json['areYouSure'];
     yesCancelPost = json['yesCancelPost'];
     keepEditing = json['keepEditing'];
-    descriptionCanOnlyWithMin5Characters = json['descriptionCanOnlyWithMin5Characters'];
+    descriptionCanOnlyWithMin5Characters =
+        json['descriptionCanOnlyWithMin5Characters'];
     internalServerError = json['internalServerError'];
     postCanceled = json['postCanceled'];
     postCreatedSuccessfully = json['postCreatedSuccessfully'];
@@ -1267,47 +1306,62 @@ class LocalizationModelV2 {
     storyCreatedSuccessfully = json['storyCreatedSuccessfully'];
     noData = json['noData'];
     iDontWantToSeeThis = json['iDontWantToSeeThis'];
-    letUsKnowWhyYouDontWantToSeeThisPost = json['letUsKnowWhyYouDontWantToSeeThisPost'];
+    letUsKnowWhyYouDontWantToSeeThisPost =
+        json['letUsKnowWhyYouDontWantToSeeThisPost'];
     reportThisPost = json['reportThisPost'];
-    thisPostIsOffensiveOrTheAccountIsHacked = json['thisPostIsOffensiveOrTheAccountIsHacked'];
+    thisPostIsOffensiveOrTheAccountIsHacked =
+        json['thisPostIsOffensiveOrTheAccountIsHacked'];
     dontWantToSeeThis = json['dontWantToSeeThis'];
     whyAreYouReportingThis = json['whyAreYouReportingThis'];
     tellUsWhyYouDontWantToSeeThis = json['tellUsWhyYouDontWantToSeeThis'];
-    yourFeedbackWillHelpUsToImproveYourExperience = json['yourFeedbackWillHelpUsToImproveYourExperience'];
-    reportToContentOnThisProfileOrThatThisAccount = json['reportToContentOnThisProfileOrThatThisAccount'];
-    noteToReportActivityByThisMemberGoToTheSpecific = json['noteToReportActivityByThisMemberGoToTheSpecific'];
+    yourFeedbackWillHelpUsToImproveYourExperience =
+        json['yourFeedbackWillHelpUsToImproveYourExperience'];
+    reportToContentOnThisProfileOrThatThisAccount =
+        json['reportToContentOnThisProfileOrThatThisAccount'];
+    noteToReportActivityByThisMemberGoToTheSpecific =
+        json['noteToReportActivityByThisMemberGoToTheSpecific'];
     tellUsALittleMore = json['tellUsALittleMore'];
-    ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies = json['ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies'];
+    ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies =
+        json['ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies'];
     noInternetConnection = json['noInternetConnection'];
-    pleaseCheckYourInternetConnectionAgain = json['pleaseCheckYourInternetConnectionAgain'];
+    pleaseCheckYourInternetConnectionAgain =
+        json['pleaseCheckYourInternetConnectionAgain'];
     back = json['back'];
     tryAgain = json['tryAgain'];
     somethingWentWrong = json['somethingWentWrong'];
-    ourSystemIsCurrentlyExperiencingTechnicalIssues = json['ourSystemIsCurrentlyExperiencingTechnicalIssues'];
+    ourSystemIsCurrentlyExperiencingTechnicalIssues =
+        json['ourSystemIsCurrentlyExperiencingTechnicalIssues'];
     idVerification = json['idVerification'];
-    pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures = json['pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures'];
+    pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures =
+        json['pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures'];
     yesCompleteProfile = json['yesCompleteProfile'];
     noLater = json['noLater'];
     keepSignIn = json['keepSignIn'];
     yesSure = json['yesSure'];
     noLogout = json['noLogout'];
     comingSoon = json['Coming Soon'];
-    weWillNotifyYouOnceThisFeaturedIsReady = json['weWillNotifyYouOnceThisFeaturedIsReady'];
-    hyppeDoesNotHaveAccessToYourPermission = json['hyppeDoesNotHaveAccessToYourPermission'];
+    weWillNotifyYouOnceThisFeaturedIsReady =
+        json['weWillNotifyYouOnceThisFeaturedIsReady'];
+    hyppeDoesNotHaveAccessToYourPermission =
+        json['hyppeDoesNotHaveAccessToYourPermission'];
     pageNotFound = json['pageNotFound'];
-    sorryThePageWasNotFoundPleaseReturnToTheHomePage = json['sorryThePageWasNotFoundPleaseReturnToTheHomePage'];
+    sorryThePageWasNotFoundPleaseReturnToTheHomePage =
+        json['sorryThePageWasNotFoundPleaseReturnToTheHomePage'];
     backToHome = json['backToHome'];
     emailNotAvailable = json['emailNotAvailable'];
     formAccountDoesNotContainEmail = json['formAccountDoesNotContainEmail'];
-    ifYouWantToResetPasswordFillTheFormAccountWithYourEmail = json['ifYouWantToResetPasswordFillTheFormAccountWithYourEmail'];
-    weHaveSentANewPasswordToYourEmail = json['weHaveSentANewPasswordToYourEmail'];
+    ifYouWantToResetPasswordFillTheFormAccountWithYourEmail =
+        json['ifYouWantToResetPasswordFillTheFormAccountWithYourEmail'];
+    weHaveSentANewPasswordToYourEmail =
+        json['weHaveSentANewPasswordToYourEmail'];
     changePassword = json['changePassword'];
     currentPassword = json['currentPassword'];
     typeYourCurrentPassword = json['typeYourCurrentPassword'];
     typeYourNewPassword = json['typeYourNewPassword'];
     retypeYourNewPassword = json['retypeYourNewPassword'];
     pleaseEnterYourEmailAddress = json['pleaseEnterYourEmailAddress'];
-    useThisEmailOrKindlyChangeIfThisEmailNotYourEmail = json['useThisEmailOrKindlyChangeIfThisEmailNotYourEmail'];
+    useThisEmailOrKindlyChangeIfThisEmailNotYourEmail =
+        json['useThisEmailOrKindlyChangeIfThisEmailNotYourEmail'];
     profilePhoto = json['profilePhoto'];
     retake = json['retake'];
     close = json['close'];
@@ -1323,19 +1377,25 @@ class LocalizationModelV2 {
     newContentLetsRefresh = json['newContentLetsRefresh'];
     pleaseCompleteYourProfile = json['pleaseCompleteYourProfile'];
     pleaseSelectMax10Items = json['pleaseSelectMax10Items'];
-    weCurrentlySupportOnlyMP4andMOVformat = json['weCurrentlySupportOnlyMP4andMOVformat'];
-    theFileDurationExceedsTheMaximumLimitForThisFeature = json['theFileDurationExceedsTheMaximumLimitForThisFeature'];
-    pleaseWaitUntilTheProcessUploadDone = json['pleaseWaitUntilTheProcessUploadDone'];
+    weCurrentlySupportOnlyMP4andMOVformat =
+        json['weCurrentlySupportOnlyMP4andMOVformat'];
+    theFileDurationExceedsTheMaximumLimitForThisFeature =
+        json['theFileDurationExceedsTheMaximumLimitForThisFeature'];
+    pleaseWaitUntilTheProcessUploadDone =
+        json['pleaseWaitUntilTheProcessUploadDone'];
     likeB = json['likeB'];
     likeM = json['likeM'];
     likeK = json['likeK'];
     pinTopText = json['pinTopText'];
     yourEmailHasBeenVerified = json['yourEmailHasBeenVerified'];
-    hiYouHaveNewContentPleasePullDownToRefresh = json['hiYouHaveNewContentPleasePullDownToRefresh'];
+    hiYouHaveNewContentPleasePullDownToRefresh =
+        json['hiYouHaveNewContentPleasePullDownToRefresh'];
     sorryUnexpectedError = json['sorryUnexpectedError'];
-    weAreWorkingOnFixingTheProblemBeBackSoon = json['weAreWorkingOnFixingTheProblemBeBackSoon'];
+    weAreWorkingOnFixingTheProblemBeBackSoon =
+        json['weAreWorkingOnFixingTheProblemBeBackSoon'];
     emptyNotification = json['emptyNotification'];
-    whenThereIsNewNotificationItWillGoesHere = json['whenThereIsNewNotificationItWillGoesHere'];
+    whenThereIsNewNotificationItWillGoesHere =
+        json['whenThereIsNewNotificationItWillGoesHere'];
     createAccount = json['createAccount'];
     createAccountAndConnect = json['createAccountAndConnect'];
     passwordChangedSuccessfully = json['passwordChangedSuccessfully'];
@@ -1346,7 +1406,8 @@ class LocalizationModelV2 {
     support = json['support'];
     about = json['about'];
     sorryTheresNothingHere = json['sorryTheresNothingHere'];
-    theContentMayHaveBeenRemovedOrTheLinkMayBeBroken = json['theContentMayHaveBeenRemovedOrTheLinkMayBeBroken'];
+    theContentMayHaveBeenRemovedOrTheLinkMayBeBroken =
+        json['theContentMayHaveBeenRemovedOrTheLinkMayBeBroken'];
     endUserLicenseAgreement = json["endUserLicenseAgreement"];
     trends = json["trends"];
     contentCreatedSuccessfully = json["contentCreatedSuccessfully"];
@@ -1358,7 +1419,8 @@ class LocalizationModelV2 {
     dark = json["dark"];
     light = json["light"];
     pleaseCompleteProfileToContinue = json["pleaseCompleteProfileToContinue"];
-    pleaseVerifyYourIdToUseHyppeFeatures = json["pleaseVerifyYourIdToUseHyppeFeatures"];
+    pleaseVerifyYourIdToUseHyppeFeatures =
+        json["pleaseVerifyYourIdToUseHyppeFeatures"];
     verifyYourAccount = json["verifyYourAccount"];
     unfortunately = json['unfortunately'];
   }
