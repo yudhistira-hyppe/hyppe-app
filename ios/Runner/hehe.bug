@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>556132544246-ilcavqc4n07ncqevijgrhmmri8nqft4g.apps.googleusercontent.com</string>
+	<string>590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.556132544246-ilcavqc4n07ncqevijgrhmmri8nqft4g</string>
+	<string>com.googleusercontent.apps.590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>556132544246-ob4smas779h680antc682u15qek7gfde.apps.googleusercontent.com</string>
+	<string>590985523606-7flb010dksrq94km52g4atu14vh8qu9u.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDLlfox--7h-nwv55jY4HD1evIpRE45l9k</string>
+	<string>AIzaSyBB2yRgyOVZH0O34kIWwTwkw5AqZqqy-Rg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>556132544246</string>
+	<string>590985523606</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.hyppe.hyppeapp</string>
 	<key>PROJECT_ID</key>
-	<string>hyppe-9ce4e</string>
+	<string>hyppeapp-297310</string>
 	<key>STORAGE_BUCKET</key>
-	<string>hyppe-9ce4e.appspot.com</string>
+	<string>hyppeapp-297310.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:556132544246:ios:53f501ebfcc01344e9c6d7</string>
+	<string>1:590985523606:ios:049b5ff1f1907858a92db7</string>
+	<key>DATABASE_URL</key>
+	<string>https://hyppeapp-297310.firebaseio.com</string>
 </dict>
 </plist>
