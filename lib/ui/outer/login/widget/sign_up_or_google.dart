@@ -27,7 +27,8 @@ class SignUpOrGoogle extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primaryVariant,
                       ),
                 ),
-              )
+              ),
+             
             ],
           ),
           // twelvePx,
