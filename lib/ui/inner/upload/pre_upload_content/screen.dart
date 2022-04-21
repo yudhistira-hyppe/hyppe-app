@@ -272,13 +272,18 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       notifier.language.turnOffCommenting!,
                                       style:
                                           Theme.of(context).textTheme.bodyText1,
                                     ),
+                                    SizedBox(
+                                        height: 10 * SizeConfig.scaleDiagonal),
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Text("• "),
                                         SizedBox(
@@ -297,7 +302,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(
+                                        height: 10 * SizeConfig.scaleDiagonal),
                                     Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Text("• "),
                                         SizedBox(
@@ -307,7 +316,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                             textOverflow: TextOverflow.clip,
                                             textSpan: TextSpan(
                                               text: notifier.language
-                                                  .turnOffCommentingExplain1!,
+                                                  .turnOffCommentingExplain2!,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .caption,
@@ -322,6 +331,75 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   value: !notifier.allowComment,
                                   onChanged: (value) =>
                                       notifier.allowComment = !value,
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20 * SizeConfig.scaleDiagonal),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      notifier
+                                          .language.registerContentOwnership!,
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    SizedBox(
+                                        height: 10 * SizeConfig.scaleDiagonal),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("• "),
+                                        SizedBox(
+                                          width: 276 * SizeConfig.scaleDiagonal,
+                                          child: CustomRichTextWidget(
+                                            textAlign: TextAlign.start,
+                                            textOverflow: TextOverflow.clip,
+                                            textSpan: TextSpan(
+                                              text: notifier.language
+                                                  .registerContentOwnershipExplain1!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                        height: 10 * SizeConfig.scaleDiagonal),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("• "),
+                                        SizedBox(
+                                          width: 276 * SizeConfig.scaleDiagonal,
+                                          child: CustomRichTextWidget(
+                                            textAlign: TextAlign.start,
+                                            textOverflow: TextOverflow.clip,
+                                            textSpan: TextSpan(
+                                              text: notifier.language
+                                                  .registerContentOwnershipExplain2!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                CustomSwitchButton(
+                                  value: notifier.registerOwnership,
+                                  onChanged: (value) =>
+                                      notifier.registerOwnership = value,
                                 ),
                               ],
                             ),
@@ -344,13 +422,20 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 //   data: widget.arguments.contentData,
                 //   content: widget.arguments.content,
                 // ),
-                function: () => System().actionReqiredIdCard(context,
-                    action: () => notifier.onClickPost(
-                          context,
-                          onEdit: widget.arguments.onEdit,
-                          data: widget.arguments.contentData,
-                          content: widget.arguments.content,
-                        )),
+                function: () => notifier.registerOwnership
+                    ? System().actionReqiredIdCard(context,
+                        action: () => notifier.onClickPost(
+                              context,
+                              onEdit: widget.arguments.onEdit,
+                              data: widget.arguments.contentData,
+                              content: widget.arguments.content,
+                            ))
+                    : notifier.onClickPost(
+                        context,
+                        onEdit: widget.arguments.onEdit,
+                        data: widget.arguments.contentData,
+                        content: widget.arguments.content,
+                      ),
                 child: widget.arguments.onEdit && notifier.updateContent
                     ? const CustomLoading()
                     : CustomTextWidget(

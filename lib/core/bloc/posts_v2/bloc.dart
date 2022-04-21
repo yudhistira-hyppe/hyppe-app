@@ -125,7 +125,8 @@ class PostsBloc {
     formData.fields.add(MapEntry('location', location));
     formData.fields
         .add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
-    print(formData);
+    debugPrint("FORM_POST => " + allowComment.toString());
+    debugPrint(formData.toString());
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
