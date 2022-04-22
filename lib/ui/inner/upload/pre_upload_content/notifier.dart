@@ -48,6 +48,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String?>? _fileContent;
   String _selectedLocation = '';
   bool _allowComment = true;
+  bool _certified = false;
   dynamic _uploadSuccess;
   List<String>? _tags;
   String _visibility = "PUBLIC";
@@ -58,6 +59,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String?>? get fileContent => _fileContent;
   String get selectedLocation => _selectedLocation;
   bool get allowComment => _allowComment;
+  bool get certified => _certified;
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
@@ -87,6 +89,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set certified(bool val) {
+    _certified = val;
+    notifyListeners();
+  }
+
   set selectedLocation(String val) {
     _selectedLocation = val;
     notifyListeners();
@@ -102,7 +109,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onWillPop(BuildContext context) => ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
+  void onWillPop(BuildContext context) =>
+      ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
 
   void handleTapOnLocation(String value) => selectedLocation = value;
 
@@ -148,6 +156,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     selectedLocation = '';
     allowComment = true;
+    certified = false;
     captionController.clear();
     tagsController.clear();
   }
@@ -165,21 +174,24 @@ class PreUploadContentNotifier with ChangeNotifier {
         visibility: visibility,
         tags: tagsController.text,
         allowComment: allowComment,
+        certified: certified,
         fileContents: fileContent!,
         description: captionController.text,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         onReceiveProgress: (count, total) {
-          _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+          _eventService.notifyUploadReceiveProgress(
+              ProgressUploadArgument(count: count, total: total));
         },
         onSendProgress: (received, total) {
-          _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+          _eventService.notifyUploadSendProgress(
+              ProgressUploadArgument(count: received, total: total));
         },
       ).then((value) {
         _uploadSuccess = value;
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         _eventService.notifyUploadSuccess(_uploadSuccess);
       });
-      _clearUpAndBackToHome(context);
+      clearUpAndBackToHome(context);
     } catch (e) {
       _eventService.notifyUploadFailed(
         DioError(
@@ -195,7 +207,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future _updatePostContentV2(BuildContext context, {required String postID, required String content}) async {
+  Future _updatePostContentV2(BuildContext context,
+      {required String postID, required String content}) async {
     updateContent = true;
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
@@ -205,6 +218,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       visibility: visibility,
       tags: tagsController.text,
       allowComment: allowComment,
+      certified: certified,
       description: captionController.text,
     );
     final fetch = notifier.postsFetch;
@@ -215,6 +229,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             content: content,
             visibility: visibility,
             allowComment: allowComment,
+            certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
           );
@@ -225,6 +240,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             content: content,
             visibility: visibility,
             allowComment: allowComment,
+            certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
           );
@@ -265,7 +281,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void _clearUpAndBackToHome(BuildContext context) {
+  void clearUpAndBackToHome(BuildContext context) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
     _selectedLocation = '';
     context.read<CameraNotifier>().orientation = null;
@@ -273,14 +289,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
   }
 
-  Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {
+  Future<void> onClickPost(BuildContext context,
+      {required bool onEdit, ContentData? data, String? content}) async {
     checkKeyboardFocus(context);
     final connection = await System().checkConnections();
     if (_validateDescription()) {
       if (connection) {
         checkKeyboardFocus(context);
         if (onEdit) {
-          _updatePostContentV2(context, postID: data!.postID!, content: content!);
+          _updatePostContentV2(context,
+              postID: data!.postID!, content: content!);
         } else {
           _createPostContentV2();
         }
@@ -304,7 +322,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     Uint8List? _thumbnails = await VideoThumbnail.thumbnailData(
       video: fileContent![0]!,
       imageFormat: ImageFormat.JPEG,
-      maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      maxWidth:
+          128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
       quality: 25,
     );
 

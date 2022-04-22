@@ -15,10 +15,7 @@ dependencies:
   lottie: ^1.2.1
 
   better_player: # Better player
-    path: /Users/muhammadrijal/RijalDev/hyppe-better-player
-    # git:
-    #     url: https://XuluSupport@bitbucket.org/XuluSupport/xulu_better_player.git
-    #     ref: 41d0f95e0a176f50536da4313a1a23fa3b2a2c56
+    path: /home/jay/Documents/project/hyppe/hyppe-better-player
 
 dev_dependencies:
   flutter_test:

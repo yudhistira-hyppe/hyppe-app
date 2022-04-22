@@ -102,7 +102,8 @@ class Repos {
   }
 
   Future reposPost(
-    @Deprecated('This implementation is deprecated. Will be remove in future update.') BuildContext context,
+    @Deprecated('This implementation is deprecated. Will be remove in future update.')
+        BuildContext context,
     Function(Response onResult) logic,
     Function(DioError errorData) onDioError, {
     dynamic data,
@@ -119,10 +120,12 @@ class Repos {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final _language =
+        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     bool? connection;
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     'User Token = $token'.logger();
+    'Send data $data'.logger();
     if (withCheckConnection) connection = await System().checkConnections();
 
     try {
@@ -130,9 +133,11 @@ class Repos {
       if (connection != null && !connection) {
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType, _language.noInternetConnection!);
+          context.read<ErrorService>().addErrorObject(
+              errorServiceType, _language.noInternetConnection!);
         }
-        return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
+        return ShowBottomSheet.onNoInternetConnection(context,
+            tryAgainButton: onNoInternet);
       }
 
       /// communicate with backend
@@ -151,12 +156,16 @@ class Repos {
       /// log statusCode from backend
       if (verbose) 'Actual response data ${_response.data}'.logger();
       'StatusCode from dio ${_response.statusCode}'.logger();
-      if (methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty) {
-        'StatusCode from backend ${_response.data?['statusCode'] ?? _response.data?['status']}'.logger();
+      if (methodType != MethodType.download &&
+          _response.data != null &&
+          _response.data.isNotEmpty) {
+        'StatusCode from backend ${_response.data?['statusCode'] ?? _response.data?['status']}'
+            .logger();
       }
 
       /// check if token is valid or not, if not, force logOut
-      if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
+      if (_response.statusCode == HTTP_UNAUTHORIZED ||
+          _response.statusCode == HTTP_FORBIDDEN) {
         await SharedPreference().logOutStorage();
         _routing.moveAndRemoveUntil(Routes.login, Routes.root);
         return;
@@ -174,17 +183,22 @@ class Repos {
 
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong!);
+          context.read<ErrorService>().addErrorObject(errorServiceType,
+              _errorData.message ?? _language.somethingWentWrong!);
         }
 
         if (withAlertMessage) {
-          _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+          _showSnackBar(kHyppeDanger, _language.unfortunately!,
+              "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
         }
       } else {
-        final _statusCodeFromBackend = methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty
+        final _statusCodeFromBackend = methodType != MethodType.download &&
+                _response.data != null &&
+                _response.data.isNotEmpty
             ? _response.data['statusCode'] ?? _response.data['status']
             : null;
-        if (_statusCodeFromBackend != null && _statusCodeFromBackend > HTTP_CODE) {
+        if (_statusCodeFromBackend != null &&
+            _statusCodeFromBackend > HTTP_CODE) {
           'Error communicate with host $host'.logger();
 
           /// serialize error data from backend
@@ -192,38 +206,48 @@ class Repos {
 
           /// connect with ErrorService if property [errorService] not null
           if (errorServiceType != null) {
-            context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong!);
+            context.read<ErrorService>().addErrorObject(errorServiceType,
+                _errorData.message ?? _language.somethingWentWrong!);
           }
 
           if (withAlertMessage) {
-            _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+            _showSnackBar(kHyppeDanger, _language.unfortunately!,
+                "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
         } else {
-          'Success with message in host $host with status code ${_response.statusCode}'.logger();
+          'Success with message in host $host with status code ${_response.statusCode}'
+              .logger();
         }
       }
     } on DioError catch (e) {
       /// connect with ErrorService if property [errorService] not null
       if (errorServiceType != null) {
-        context.read<ErrorService>().addErrorObject(errorServiceType, e.message);
+        context
+            .read<ErrorService>()
+            .addErrorObject(errorServiceType, e.message);
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        _showSnackBar(kHyppeDanger, _language.unfortunately!,
+            "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
-      'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'.logger();
+      'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'
+          .logger();
       onDioError(e);
     } catch (e) {
       e.toString().logger();
       try {
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType, e.toString());
+          context
+              .read<ErrorService>()
+              .addErrorObject(errorServiceType, e.toString());
         }
       } catch (eIn) {
         eIn.toString().logger();
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        _showSnackBar(kHyppeDanger, _language.unfortunately!,
+            "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       } else {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }

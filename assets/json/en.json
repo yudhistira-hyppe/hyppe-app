@@ -153,8 +153,13 @@
   "seeMore": "See more",
   "advancedSettings": "Advanced Settings",
   "allowComment": "Allow Comment",
+  "turnOffCommenting": "Turn off commenting",
+  "turnOffCommentingExplain1": "By turn off the commenting your content won't be able to be commented",
+  "turnOffCommentingExplain2": "You can change this later by going the menu options at the top right of your post",
   "youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost": "You can change this later by going the menu options at the top your post",
   "registerContentOwnership": "Register Content Ownership",
+  "registerContentOwnershipExplain1": "Register your content to be fully protected from piracy and duplication(this action cannot be undone)",
+  "registerContentOwnershipExplain2": "By registering your content, you are fully responsible for the validity of the content, and are willing to follow any legal process that may occur",
   "protectYourContent": "Protect your content",
   "processUpload": "Process upload",
   "cancelPost": "Cancel Post",
@@ -450,5 +455,8 @@
   "pleaseCompleteProfileToContinue": "Please complete profile to continue",
   "pleaseVerifyYourIdToUseHyppeFeatures": "Please verify your ID to use Hyppe Features",
   "verifyYourAccount": "Verify Your Account",
-  "unfortunately": "Unfortunately"
+  "unfortunately": "Unfortunately",
+  "needVerifyId": "We need to verify your ID",
+  "needVerifyIdDescriptions": "To register your content, you are required to verify your identification. The Verification process will take a few minutes. This process can help to protect your content and your payment within app.",
+  "confirm": "Confirm"
 }

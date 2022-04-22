@@ -18,68 +18,85 @@ class ProofPicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<AccountPreferencesNotifier>(context);
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomTextWidget(
-            textToDisplay: notifier.language.idVerification!,
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
-          ),
-          eightPx,
-          CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: "${notifier.language.pleaseVerifyYourIdToUseHyppeFeatures}",
-          ),
-          eightPx,
-          Selector<SelfProfileNotifier, UserInfoModel>(
-            selector: (context, user) => user.user,
-            builder: (context, user, child) {
-              if (user.profile?.idProofStatus == null ||
-                  user.profile?.idProofStatus == IdProofStatus.initial ||
-                  user.profile?.idProofStatus == IdProofStatus.revoke) {
-                return InkWell(
-                  onTap: () => notifier.takeSelfie(context),
-                  child: CustomTextWidget(
-                    textToDisplay: "${notifier.language.verifyYourAccount}",
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primaryVariant,
-                        ),
-                  ),
-                );
-              } else if (user.profile?.idProofStatus == IdProofStatus.inProgress) {
-                return InkWell(
-                  onTap: () => notifier.takeSelfie(context),
-                  child: CustomTextWidget(
-                    textToDisplay: "Veriyfing...",
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primaryVariant,
-                        ),
-                  ),
-                );
-              } else {
-                return Row(
+    return Selector<SelfProfileNotifier, UserInfoModel>(
+      selector: (context, user) => user.user,
+      builder: (context, user, child) {
+        return user.profile?.idProofStatus == IdProofStatus.complete
+            ? SizedBox(
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomIconWidget(
-                      defaultColor: false,
-                      iconData: "${AssetPath.vectorPath}celebrity.svg",
+                    twelvePx,
+                    CustomTextWidget(
+                      textToDisplay: notifier.language.idVerification!,
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(fontWeight: FontWeight.bold),
                     ),
                     eightPx,
                     CustomTextWidget(
-                      textToDisplay: "${notifier.language.verified}",
-                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                      textStyle: Theme.of(context).textTheme.bodyText2,
+                      textToDisplay:
+                          "${notifier.language.pleaseVerifyYourIdToUseHyppeFeatures}",
                     ),
+                    eightPx,
+                    Row(
+                      children: [
+                        const CustomIconWidget(
+                          defaultColor: false,
+                          iconData: "${AssetPath.vectorPath}celebrity.svg",
+                        ),
+                        eightPx,
+                        CustomTextWidget(
+                          textToDisplay: "${notifier.language.verified}",
+                          textStyle: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    )
                   ],
-                );
-              }
-            },
-          ),
-        ],
-      ),
+                ),
+              )
+            : Container();
+      },
     );
   }
+
+  // verifyMessage(BuildContext context, UserInfoModel user,
+  //     AccountPreferencesNotifier notifier) {
+  //   if (user.profile?.idProofStatus == IdProofStatus.inProgress) {
+  //     return InkWell(
+  //       onTap: () => notifier.takeSelfie(context),
+  //       child: CustomTextWidget(
+  //         textToDisplay: "Veriyfing...",
+  //         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+  //               fontWeight: FontWeight.bold,
+  //               color: Theme.of(context).colorScheme.primaryVariant,
+  //             ),
+  //       ),
+  //     );
+  //   } else if (user.profile?.idProofStatus == IdProofStatus.complete) {
+  //     return Row(
+  //       children: [
+  //         const CustomIconWidget(
+  //           defaultColor: false,
+  //           iconData: "${AssetPath.vectorPath}celebrity.svg",
+  //         ),
+  //         eightPx,
+  //         CustomTextWidget(
+  //           textToDisplay: "${notifier.language.verified}",
+  //           textStyle: Theme.of(context)
+  //               .textTheme
+  //               .bodyText2
+  //               ?.copyWith(fontWeight: FontWeight.bold),
+  //         ),
+  //       ],
+  //     );
+  //   }
+  // }
 }

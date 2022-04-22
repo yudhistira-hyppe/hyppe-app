@@ -2,60 +2,88 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OnShowIDVerificationBottomSheet extends StatelessWidget {
+  const OnShowIDVerificationBottomSheet({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<TranslateNotifierV2>(
+    return Consumer<PreUploadContentNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(
+            vertical: 8 * SizeConfig.scaleDiagonal,
+            horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}handler.svg"),
+            Image.asset("assets/png/verification-idcard.png"),
             CustomTextWidget(
-              textToDisplay: notifier.translate.idVerification!,
-              textStyle: Theme.of(context).textTheme.headline6,
+              textToDisplay: notifier.language.needVerifyId!,
+              textStyle: Theme.of(context).textTheme.subtitle1,
             ),
             CustomTextWidget(
-              textToDisplay: notifier.translate.pleaseVerifyYourIdToUseHyppeFeatures!,
-              textStyle: Theme.of(context).textTheme.bodyText1,
+              textToDisplay: notifier.language.needVerifyIdDescriptions!,
+              textStyle: Theme.of(context).textTheme.caption,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.verify!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textToDisplay: notifier.language.verify!,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .button!
+                    .copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () {
-                Provider.of<AccountPreferencesNotifier>(context, listen: false).initialIndex = 1;
-                Routing().moveAndPop(Routes.accountPreferences);
+                // var notifAccount = Provider.of<AccountPreferencesNotifier>(
+                //     context,
+                //     listen: false);
+                // notifAccount.initialIndex = 0;
+                // notifAccount.openValidationIDCamera = true;
+                // context.read<PreviewContentNotifier>().clearAdditionalItem();
+                // context.read<CameraNotifier>().orientation = null;
+                // context.read<PreviewContentNotifier>().isForcePaused = false;
+                // Routing().moveAndPop(Routes.accountPreferences);
+                Provider.of<MainNotifier>(
+                    context,
+                    listen: false).openValidationIDCamera = true;
+                notifier.clearUpAndBackToHome(context);
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.noLater!,
+                textToDisplay: notifier.language.noLater!,
                 textStyle: Theme.of(context).textTheme.button,
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                  backgroundColor:
+                      MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
             )
           ],
         ),

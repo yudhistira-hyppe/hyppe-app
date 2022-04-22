@@ -20,7 +20,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
-import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -74,18 +73,27 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6!.copyWith(color: kHyppePrimary);
-  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1!;
-  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor);
+  TextStyle label(BuildContext context) =>
+      Theme.of(context).textTheme.headline6!.copyWith(color: kHyppePrimary);
+  TextStyle text(BuildContext context) =>
+      Theme.of(context).textTheme.bodyText1!;
+  TextStyle hint(BuildContext context) => Theme.of(context)
+      .textTheme
+      .bodyText1!
+      .copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor);
 
-  void onInitial(BuildContext context, AccountPreferenceScreenArgument argument) {
+  void onInitial(
+      BuildContext context, AccountPreferenceScreenArgument argument) {
     _argument = argument;
     initialIndex = 0;
     _clearTxt();
-    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifierData =
+        Provider.of<SelfProfileNotifier>(context, listen: false);
     userNameController.text = notifierData.user.profile?.username ?? "";
     fullNameController.text = notifierData.user.profile?.fullName ?? "";
-    emailController.text = notifierData.user.profile?.email ?? SharedPreference().readStorage(SpKeys.email) ?? "";
+    emailController.text = notifierData.user.profile?.email ??
+        SharedPreference().readStorage(SpKeys.email) ??
+        "";
     bioController.text = notifierData.user.profile?.bio ?? "";
     countryController.text = notifierData.user.profile?.country ?? "";
     areaController.text = notifierData.user.profile?.area ?? "";
@@ -112,7 +120,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           context,
           onSave: () {
             Routing().moveBack();
-            Provider.of<AccountPreferencesNotifier>(context, listen: false).genderController.text = genderController.text;
+            Provider.of<AccountPreferencesNotifier>(context, listen: false)
+                .genderController
+                .text = genderController.text;
             notifyListeners();
           },
           onCancel: () {
@@ -155,7 +165,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   }
 
   bool somethingChanged(BuildContext context) {
-    final notifierData = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifierData =
+        Provider.of<SelfProfileNotifier>(context, listen: false);
     return (userNameController.text != notifierData.user.profile?.username ||
             fullNameController.text != notifierData.user.profile?.fullName ||
             emailController.text != notifierData.user.profile?.email ||
@@ -196,7 +207,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   Future onClickChangeImageProfile(BuildContext context) async {
     bool connect = await System().checkConnections();
     if (connect) {
-      bool _isPermissionGranted = await System().requestPermission(context, permissions: [
+      bool _isPermissionGranted =
+          await System().requestPermission(context, permissions: [
         Permission.storage,
         Permission.mediaLibrary,
         Permission.photos,
@@ -221,7 +233,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               file: _file.values.single!.single.path,
               email: SharedPreference().readStorage(SpKeys.email),
               onSendProgress: (received, total) {
-                _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+                _eventService.notifyUploadSendProgress(
+                    ProgressUploadArgument(count: received, total: total));
               },
             );
 
@@ -230,16 +243,21 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               hold = true;
               progress = "${language.finishingUp}...";
 
-              context.read<MainNotifier>().initMain(context, onUpdateProfile: true).then((_) {
+              context
+                  .read<MainNotifier>()
+                  .initMain(context, onUpdateProfile: true)
+                  .then((_) {
                 hold = false;
-                ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
+                ShowBottomSheet().onShowColouredSheet(context,
+                    language.successfullyUpdatedYourProfilePicture ?? '');
                 notifyListeners();
               }).whenComplete(() {
                 _eventService.notifyUploadSuccess(fetch.data);
               });
             } else {
-              ShowBottomSheet()
-                  .onShowColouredSheet(context, language.failedUpdatedYourProfilePicture ?? '', color: Theme.of(context).colorScheme.error);
+              ShowBottomSheet().onShowColouredSheet(
+                  context, language.failedUpdatedYourProfilePicture ?? '',
+                  color: Theme.of(context).colorScheme.error);
               _eventService.notifyUploadFailed(
                 DioError(
                   requestOptions: RequestOptions(
@@ -268,7 +286,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           }
         }
       } else {
-        ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage!);
+        ShowGeneralDialog.permanentlyDeniedPermission(context,
+            permissions: language.permissionStorage!);
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -316,8 +335,10 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           final notifier = UserBloc();
           final notifier2 = UserBloc();
 
-          await notifier.updateProfileBlocV2(context, data: _dataBio.toUpdateBioJson());
-          await notifier2.updateProfileBlocV2(context, data: _dataPersonalInfo.toUpdateProfileJson());
+          await notifier.updateProfileBlocV2(context,
+              data: _dataBio.toUpdateBioJson());
+          await notifier2.updateProfileBlocV2(context,
+              data: _dataPersonalInfo.toUpdateProfileJson());
 
           final fetch = notifier.userFetch;
           final fetch2 = notifier2.userFetch;
@@ -331,14 +352,17 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
             if (_argument.fromSignUpFlow) {
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+              ShowBottomSheet().onShowColouredSheet(
+                  context, language.successUpdatePersonalInformation!);
               notifyListeners();
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else {
-              final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
+              final _mainNotifier =
+                  Provider.of<MainNotifier>(context, listen: false);
               await _mainNotifier.initMain(context, onUpdateProfile: true);
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+              ShowBottomSheet().onShowColouredSheet(
+                  context, language.successUpdatePersonalInformation!);
               notifyListeners();
             }
           }
@@ -358,7 +382,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     }
   }
 
-  Future onClickSaveInterests(BuildContext context, List<String> interests) async {
+  Future onClickSaveInterests(
+      BuildContext context, List<String> interests) async {
     bool connect = await System().checkConnections();
     if (connect) {
       try {
@@ -376,14 +401,19 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         );
 
         final notifier = UserBloc();
-        await notifier.updateInterestBloc(context, data: _dataPersonalInfo.toUpdateProfileJson());
+        await notifier.updateInterestBloc(context,
+            data: _dataPersonalInfo.toUpdateProfileJson());
         final fetch = notifier.userFetch;
         if (fetch.userState == UserState.updateInterestSuccess) {
           hold = true;
           progress = "${language.finishingUp}...";
-          await Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true);
+          await Provider.of<MainNotifier>(context, listen: false)
+              .initMain(context, onUpdateProfile: true);
           hold = false;
-          ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!).whenComplete(() => Routing().moveBack());
+          ShowBottomSheet()
+              .onShowColouredSheet(
+                  context, language.successUpdatePersonalInformation!)
+              .whenComplete(() => Routing().moveBack());
           notifyListeners();
         }
       } catch (e) {
@@ -398,19 +428,6 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         Routing().moveBack();
         onClickSaveProfile(context);
       });
-    }
-  }
-
-  // TODO: Need to refactor this, wait for the new API
-  Future takeSelfie(BuildContext context) async {
-    final _statusPermission = await System().requestPrimaryPermission(context);
-    final _makeContentNotifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    if (_statusPermission) {
-      _makeContentNotifier.featureType = null;
-      _makeContentNotifier.isVideo = false;
-      Routing().move(Routes.makeContent);
-    } else {
-      return ShowGeneralDialog.permanentlyDeniedPermission(context);
     }
   }
 
@@ -509,7 +526,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             cancelToken: _dioCancelToken,
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+              _eventService.notifyUploadSendProgress(
+                  ProgressUploadArgument(count: received, total: total));
             },
           );
 
@@ -517,9 +535,12 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (fetch.userState == UserState.uploadProfilePictureSuccess) {
             hold = true;
             progress = "${language.finishingUp}...";
-            Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true).then((value) async {
+            Provider.of<MainNotifier>(context, listen: false)
+                .initMain(context, onUpdateProfile: true)
+                .then((value) async {
               hold = false;
-              await ShowBottomSheet().onShowColouredSheet(context, language.successUploadId!);
+              await ShowBottomSheet()
+                  .onShowColouredSheet(context, language.successUploadId!);
               _determineIdProofStatusUser(context);
               Routing().moveBack();
               Routing().moveBack();
@@ -547,7 +568,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             );
           }
         } else {
-          ShowGeneralDialog.pickFileErrorAlert(context, language.somethingWentWrong ?? "");
+          ShowGeneralDialog.pickFileErrorAlert(
+              context, language.somethingWentWrong ?? "");
         }
       } catch (e) {
         _eventService.notifyUploadFailed(
@@ -567,7 +589,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         }
       }
     } catch (e) {
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(
+          context, language.sorryUnexpectedErrorHasOccurred!);
     }
   }
 
@@ -602,7 +625,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   }
 
   void _determineIdProofStatusUser(BuildContext context) {
-    final _selfNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
-    _selfNotifier.setIdProofStatusUser(_selfNotifier.user.profile?.idProofStatus);
+    final _selfNotifier =
+        Provider.of<SelfProfileNotifier>(context, listen: false);
+    _selfNotifier
+        .setIdProofStatusUser(_selfNotifier.user.profile?.idProofStatus);
   }
 }
