@@ -1,6 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+// ignore: unused_import
 import 'package:hyppe/ui/constant/widget/custom_hovered_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
@@ -32,7 +32,6 @@ class SignUpOrGoogle extends StatelessWidget {
                       ),
                 ),
               ),
-             
             ],
           ),
           twelvePx,
@@ -67,10 +66,7 @@ class SignUpOrGoogle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: (){
-                   final loginSign=Provider.of<LoginNotifier>(context,listen: false);
-                  loginSign.loginGoogleSignIn(context);
-                },
+                onTap: () => notifier.loginGoogleSignIn(context),
                 child: Container(
                   width: 48,
                   height: 48,
@@ -84,16 +80,20 @@ class SignUpOrGoogle extends StatelessWidget {
                 ),
               ),
               twelvePx,
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary),
-                  borderRadius: BorderRadius.circular(24),
+              GestureDetector(
+                onTap: () => notifier.FacebookSignin(),
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Image(
+                      image:
+                          AssetImage('${AssetPath.pngPath}logo_facebook.png')),
                 ),
-                child: const Image(
-                    image: AssetImage('${AssetPath.pngPath}logo_facebook.png')),
               ),
               twelvePx,
               Container(

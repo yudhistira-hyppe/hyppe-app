@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -7,6 +8,7 @@ import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -43,6 +45,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool _incorrect = false;
   GoogleSignInAccount? _userGoogleSignIn;
   String? googleSignInError;
+  AccessToken? _accessToken;
+  FacebookSignIn? _currentUser;
 
   String get email => _email;
   String get password => _password;
@@ -264,5 +268,26 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   void setLoading(bool val, {bool setState = true, Object? loadingObject}) {
     super.setLoading(val, loadingObject: loadingObject);
     if (setState) notifyListeners();
+  }
+
+  Future<void> FacebookSignin() async {
+    final LoginResult loginResult = await FacebookAuth.i.login();
+    if (loginResult.status == LoginStatus.success) {
+      _accessToken = loginResult.accessToken;
+
+      final data = await FacebookAuth.i.getUserData();
+
+      FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
+      debugPrint("FB_USER_ID => ${_accessToken?.userId}");
+      debugPrint("FB_TOKEN => ${_accessToken?.token}");
+      debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
+      debugPrint("FB_APPID => ${_accessToken?.applicationId}");
+      debugPrint("FB_ID => ${fbUser.id}");
+      debugPrint("FB_EMAIL => ${fbUser.email}");
+      debugPrint("FB_NAME => ${fbUser.name}");
+      debugPrint("FB_PIC => ${fbUser.picture?.url}");
+
+      _currentUser = fbUser;
+    }
   }
 }
