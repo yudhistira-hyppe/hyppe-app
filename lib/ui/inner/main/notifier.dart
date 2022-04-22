@@ -7,7 +7,6 @@ import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
-import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
@@ -20,6 +19,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/socket_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/screen.dart';
@@ -27,6 +27,9 @@ import 'package:hyppe/ui/inner/message_v2/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/search_v2/screen.dart';
+import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -39,6 +42,14 @@ class MainNotifier with ChangeNotifier {
   Reaction? _reactionData;
 
   Reaction? get reactionData => _reactionData;
+
+  bool _openValidationIDCamera = false;
+  bool get openValidationIDCamera => _openValidationIDCamera;
+
+  set openValidationIDCamera(bool val) {
+    _openValidationIDCamera = val;
+    notifyListeners();
+  }
 
   set reactionData(Reaction? val) {
     _reactionData = val;
@@ -168,5 +179,19 @@ class MainNotifier with ChangeNotifier {
           .disableAutoConnect()
           .build(),
     );
+  }
+
+  Future takeSelfie(BuildContext context) async {
+    _openValidationIDCamera = false;
+    final _statusPermission = await System().requestPrimaryPermission(context);
+    final _makeContentNotifier =
+        Provider.of<MakeContentNotifier>(context, listen: false);
+    if (_statusPermission) {
+      _makeContentNotifier.featureType = null;
+      _makeContentNotifier.isVideo = false;
+      Routing().move(Routes.makeContent);
+    } else {
+      return ShowGeneralDialog.permanentlyDeniedPermission(context);
+    }
   }
 }

@@ -25,6 +25,10 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
     _mainNotifier.initMain(context);
+
+    if (_mainNotifier.openValidationIDCamera) {
+      Future.delayed(Duration.zero, () => _mainNotifier.takeSelfie(context));
+    }
     super.initState();
   }
 
@@ -44,7 +48,8 @@ class _MainScreenState extends State<MainScreen> {
             bottomNavigationBar: BottomNavigationBar(
               elevation: 0.5,
               onTap: (int index) {
-                if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+                if (context.read<OverlayHandlerProvider>().overlayActive)
+                  context.read<OverlayHandlerProvider>().removeOverlay(context);
                 setState(() {
                   if (index != 2) {
                     notifier.pageIndex = index;
@@ -59,59 +64,69 @@ class _MainScreenState extends State<MainScreen> {
                 BottomNavigationBarItem(
                   icon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.unselectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}home.svg'),
                   activeIcon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.unselectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}home-active.svg'),
                   label: '',
                 ),
                 BottomNavigationBarItem(
                   icon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.unselectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}search-nav.svg'),
                   label: '',
                   activeIcon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.unselectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}search-active.svg'),
                 ),
                 BottomNavigationBarItem(
                   icon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.selectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.selectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}upload.svg'),
                   label: '',
                   activeIcon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.selectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.selectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}upload.svg'),
                 ),
                 BottomNavigationBarItem(
                   icon: Stack(children: [
                     CustomIconWidget(
                         defaultColor: false,
-                        color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                        color: _themes.bottomNavigationBarTheme
+                            .unselectedIconTheme?.color,
                         iconData: '${AssetPath.vectorPath}notification.svg'),
                     const NotificationCircle()
                   ]),
                   label: '',
                   activeIcon: CustomIconWidget(
                     defaultColor: false,
-                    color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                    color: _themes
+                        .bottomNavigationBarTheme.unselectedIconTheme?.color,
                     iconData: '${AssetPath.vectorPath}notification-active.svg',
                   ),
                 ),
                 BottomNavigationBarItem(
                   icon: CustomIconWidget(
                       defaultColor: false,
-                      color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                      color: _themes
+                          .bottomNavigationBarTheme.unselectedIconTheme?.color,
                       iconData: '${AssetPath.vectorPath}message.svg'),
                   activeIcon: CustomIconWidget(
                     defaultColor: false,
-                    color: _themes.bottomNavigationBarTheme.unselectedIconTheme?.color,
+                    color: _themes
+                        .bottomNavigationBarTheme.unselectedIconTheme?.color,
                     iconData: '${AssetPath.vectorPath}message-active.svg',
                   ),
                   label: '',

@@ -191,7 +191,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         _eventService.notifyUploadSuccess(_uploadSuccess);
       });
-      _clearUpAndBackToHome(context);
+      clearUpAndBackToHome(context);
     } catch (e) {
       _eventService.notifyUploadFailed(
         DioError(
@@ -281,7 +281,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void _clearUpAndBackToHome(BuildContext context) {
+  void clearUpAndBackToHome(BuildContext context) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
     _selectedLocation = '';
     context.read<CameraNotifier>().orientation = null;
