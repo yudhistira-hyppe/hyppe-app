@@ -1,34 +1,59 @@
 {
   "project_info": {
-    "project_number": "556132544246",
-    "project_id": "hyppe-9ce4e",
-    "storage_bucket": "hyppe-9ce4e.appspot.com"
+    "project_number": "590985523606",
+    "firebase_url": "https://hyppeapp-297310.firebaseio.com",
+    "project_id": "hyppeapp-297310",
+    "storage_bucket": "hyppeapp-297310.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:556132544246:android:a7f46e567602442ce9c6d7",
+        "mobilesdk_app_id": "1:590985523606:android:8131427f19f46a74a92db7",
         "android_client_info": {
           "package_name": "com.hyppe.hyppeapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "556132544246-99qakob8814t1ji8eqtajmccph4pav76.apps.googleusercontent.com",
+          "client_id": "590985523606-7flb010dksrq94km52g4atu14vh8qu9u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hyppe.hyppeapp",
+            "certificate_hash": "d74277f17a08da744589e35426519e21c726ead4"
+          }
+        },
+        {
+          "client_id": "590985523606-kukqqg2r99nte4q1cuemjqe72o9scqvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hyppe.hyppeapp",
+            "certificate_hash": "78f41b48ac3ba94fed7eff9c0141810c3af11471"
+          }
+        },
+        {
+          "client_id": "590985523606-e3ucvumk8s85r2fvhpkpddlcu2044fua.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAtTrrBVdWYq7ibidg4Nnw2asE0p_9pDNE"
+          "current_key": "AIzaSyCdDXmkb4LyPu7s2LfIuUW5srrQ6vB_Yns"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "556132544246-99qakob8814t1ji8eqtajmccph4pav76.apps.googleusercontent.com",
+              "client_id": "117302808340259138720",
               "client_type": 3
+            },
+            {
+              "client_id": "590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hyppe.hyppeapp",
+                "app_store_id": "1545595684"
+              }
             }
           ]
         }
