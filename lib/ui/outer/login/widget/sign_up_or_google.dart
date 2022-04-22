@@ -96,16 +96,22 @@ class SignUpOrGoogle extends StatelessWidget {
                 ),
               ),
               twelvePx,
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary),
-                  borderRadius: BorderRadius.circular(24),
+              GestureDetector(
+                onTap: (){
+                   final loginTwitter=Provider.of<LoginNotifier>(context,listen: false);
+                  loginTwitter.loginTwitter();
+                },
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Image(
+                      image: AssetImage('${AssetPath.pngPath}logo_twitter.png')),
                 ),
-                child: const Image(
-                    image: AssetImage('${AssetPath.pngPath}logo_twitter.png')),
               ),
               twelvePx,
               Container(

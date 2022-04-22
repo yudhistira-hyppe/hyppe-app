@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -262,6 +263,26 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     notifyListeners();
     print('helos ${userCredential?.user?.providerData[0].uid}');
     return userCredential;
+  }
+
+  Future loginTwitter() async {
+    UserCredential? userCredential;
+    final result =  TwitterLogin(
+        apiKey: '4Ao5xrjpnloquL4iNK4ZEhDlc',
+        apiSecretKey: 'H4MiLAf2uib1VL12urwCdfrxDdcF2nrKR5du2UNpvIzl9yj50A',
+        redirectURI: 'flutter-twitter-login://');
+        print('helo ${result.apiKey}');
+
+    await result.login().then((value) async {
+      print('halo ${value.errorMessage}');
+      print('halo ${value.status}');
+      final credential = TwitterAuthProvider.credential(
+          accessToken: value.authToken!, secret: value.authTokenSecret!);
+   
+      userCredential= await FirebaseAuth.instance.signInWithCredential(credential);
+      print('wadaw ${userCredential?.user?.displayName}');
+      notifyListeners();
+    });
   }
 
   @override
