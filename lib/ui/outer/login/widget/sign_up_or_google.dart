@@ -31,7 +31,8 @@ class SignUpOrGoogle extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primaryVariant,
                       ),
                 ),
-              )
+              ),
+             
             ],
           ),
           twelvePx,
@@ -65,16 +66,22 @@ class SignUpOrGoogle extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary),
-                  borderRadius: BorderRadius.circular(24),
+              InkWell(
+                onTap: (){
+                   final loginSign=Provider.of<LoginNotifier>(context,listen: false);
+                  loginSign.loginGoogleSignIn();
+                },
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.secondary),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Image(
+                      image: AssetImage('${AssetPath.pngPath}logo_google.png')),
                 ),
-                child: const Image(
-                    image: AssetImage('${AssetPath.pngPath}logo_google.png')),
               ),
               twelvePx,
               Container(

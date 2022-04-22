@@ -31,6 +31,14 @@
 				<string>com.googleusercontent.apps.590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv</string>
 			</array>
 		</dict>
+		<dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>com.googleusercontent.apps.556132544246-ilcavqc4n07ncqevijgrhmmri8nqft4g</string>
+        </array>
+    </dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -92,5 +100,6 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>media</string>
+	
 </dict>
 </plist>

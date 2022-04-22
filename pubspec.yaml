@@ -18,6 +18,7 @@ dependencies:
   firebase_dynamic_links: ^4.0.5 # For using dynamic link feature
   firebase_messaging: ^11.2.6 # A Flutter plugin to use the Firebase Cloud Messaging (FCM) API
   google_sign_in: ^5.2.4 # A secure authentication system for signing in with a Google account on Android and iOS.
+  firebase_auth: ^3.3.14
 
   cached_network_image: ^3.2.0 # Untuk keperluan cache image
   camera: ^0.9.4+14 # Accessing camera feature
@@ -60,9 +61,7 @@ dependencies:
         ref: e6ece410e1abcb536ed9a599cbff17f20a81669c
 
   better_player: # Better player
-    git:
-        url: https://XuluSupport@bitbucket.org/XuluSupport/xulu_better_player.git
-        ref: 41d0f95e0a176f50536da4313a1a23fa3b2a2c56
+    path: /Users/muhammadrijal/RijalDev/hyppe-better-player
 
   story_view: # Story viewer
     path: packages/story_view
