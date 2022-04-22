@@ -48,7 +48,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String?>? _fileContent;
   String _selectedLocation = '';
   bool _allowComment = true;
-  bool _registerOwnership = false;
+  bool _certified = false;
   dynamic _uploadSuccess;
   List<String>? _tags;
   String _visibility = "PUBLIC";
@@ -59,7 +59,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String?>? get fileContent => _fileContent;
   String get selectedLocation => _selectedLocation;
   bool get allowComment => _allowComment;
-  bool get registerOwnership => _registerOwnership;
+  bool get certified => _certified;
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
@@ -89,8 +89,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set registerOwnership(bool val) {
-    _registerOwnership = val;
+  set certified(bool val) {
+    _certified = val;
     notifyListeners();
   }
 
@@ -156,7 +156,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     selectedLocation = '';
     allowComment = true;
-    registerOwnership = false;
+    certified = false;
     captionController.clear();
     tagsController.clear();
   }
@@ -174,6 +174,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         visibility: visibility,
         tags: tagsController.text,
         allowComment: allowComment,
+        certified: certified,
         fileContents: fileContent!,
         description: captionController.text,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
@@ -217,6 +218,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       visibility: visibility,
       tags: tagsController.text,
       allowComment: allowComment,
+      certified: certified,
       description: captionController.text,
     );
     final fetch = notifier.postsFetch;
@@ -227,6 +229,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             content: content,
             visibility: visibility,
             allowComment: allowComment,
+            certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
           );
@@ -237,6 +240,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             content: content,
             visibility: visibility,
             allowComment: allowComment,
+            certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
           );

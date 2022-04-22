@@ -397,9 +397,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   ],
                                 ),
                                 CustomSwitchButton(
-                                  value: notifier.registerOwnership,
+                                  value: notifier.certified,
                                   onChanged: (value) =>
-                                      notifier.registerOwnership = value,
+                                      notifier.certified = value,
                                 ),
                               ],
                             ),
@@ -422,7 +422,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 //   data: widget.arguments.contentData,
                 //   content: widget.arguments.content,
                 // ),
-                function: () => notifier.registerOwnership
+                function: () => notifier.certified
                     ? System().actionReqiredIdCard(context,
                         action: () => notifier.onClickPost(
                               context,

@@ -90,6 +90,7 @@ class PostsBloc {
     String? tags,
     required FeatureType type,
     required bool allowComment,
+    required bool certified,
     required String description,
     required String visibility,
     String location = "Indonesia",
@@ -122,11 +123,12 @@ class PostsBloc {
     formData.fields.add(MapEntry('tags', tags ?? ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
+    formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(MapEntry('location', location));
     formData.fields
         .add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
     debugPrint("FORM_POST => " + allowComment.toString());
-    debugPrint(formData.toString());
+    debugPrint(formData.fields.join(" - "));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
@@ -199,6 +201,7 @@ class PostsBloc {
     String? tags,
     String visibility = "PUBLIC",
     required bool allowComment,
+    required bool certified,
     required FeatureType type,
   }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
@@ -209,6 +212,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('tags', tags ?? ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
+    formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(const MapEntry('active', 'true'));
     formData.fields
         .add(MapEntry('postType', System().validatePostTypeV2(type)));
