@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
@@ -11,6 +13,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -38,6 +41,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   String? _passwordValidation;
   bool _hide = true;
   bool _incorrect = false;
+  GoogleSignInAccount? _userGoogleSignIn;
+  String? googleSignInError;
 
   String get email => _email;
   String get password => _password;
@@ -45,6 +50,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   String? get passwordValidation => _passwordValidation;
   bool get hide => _hide;
   bool get incorrect => _incorrect;
+  GoogleSignInAccount? get userGoogleSignIn => _userGoogleSignIn;
 
   set email(String val) {
     _email = val;
@@ -79,9 +85,12 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   static const loadingForgotPasswordKey = 'loadingForgotPasswordKey';
   static const loadingLoginGoogleKey = 'loadingLoginGoogleKey';
 
-  String? emailValidator(String v) => System().validateEmail(v) ? null : "Not a valid email address";
-  String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
-  bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
+  String? emailValidator(String v) =>
+      System().validateEmail(v) ? null : "Not a valid email address";
+  String? passwordValidator(String v) =>
+      v.length > 4 ? null : "Incorrect Password";
+  bool buttonDisable() =>
+      email.isNotEmpty && password.isNotEmpty ? true : false;
 
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);
@@ -116,7 +125,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         }
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+      ShowBottomSheet.onNoInternetConnection(context,
+          tryAgainButton: () => Routing().moveBack());
     }
   }
 
@@ -140,7 +150,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         final fetch = notifier.userFetch;
         if (fetch.userState == UserState.LoginGoogleSuccess) {
           hide = true;
-          final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+          final UserProfileModel _result =
+              UserProfileModel.fromJson(fetch.data);
           _validateUserData(context, _result);
 
           // TODO: handle google auth error
@@ -148,7 +159,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         }
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+      ShowBottomSheet.onNoInternetConnection(context,
+          tryAgainButton: () => Routing().moveBack());
     }
   }
 
@@ -163,7 +175,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       DeviceBloc().activityAwake(context);
       Routing().moveReplacement(Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
-      final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+      final signUpPinNotifier =
+          Provider.of<SignUpPinNotifier>(context, listen: false);
 
       await ShowBottomSheet().onShowColouredSheet(
         context,
@@ -183,7 +196,11 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       signUpPinNotifier.userToken = signData.token!;
       // signUpPinNotifier.userID = signData.profileID!;
-      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin)).whenComplete(() {
+      Routing()
+          .move(Routes.signUpPin,
+              argument:
+                  VerifyPageArgument(redirect: VerifyPageRedirection.toLogin))
+          .whenComplete(() {
         clearTextController();
       });
     }
@@ -200,6 +217,47 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   unFocusController() {
     emailFocus.unfocus();
     passwordFocus.unfocus();
+  }
+
+  Future<UserCredential?> loginGoogleSignIn(BuildContext context) async {
+    UserCredential? userCredential;
+    // final googleUser = await googleSignIn.signIn();
+    // if (googleUser == null) return;
+    // _userGoogleSignIn = googleUser;
+
+    // final googleAuth = await googleUser.authentication;
+
+    // final credential = GoogleAuthProvider.credential(
+    //     accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+    // await FirebaseAuth.instance.signInWithCredential(credential);
+    //  print('haloo ${googleUser.displayName}');
+    try {
+      _userGoogleSignIn = await GoogleSignIn().signIn();
+
+      // Obtain the auth details from the request
+      final GoogleSignInAuthentication? googleAuth =
+          await _userGoogleSignIn?.authentication;
+      print('helo ${_userGoogleSignIn?.id}');
+
+      // Create a new credential
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      googleSignInError = e.toString();
+    }
+    if (userCredential?.user != null) {
+      notifyListeners();
+      Navigator.pushNamed(context, Routes.userInterest);
+    }
+    notifyListeners();
+    print('helos ${userCredential?.user?.providerData[0].uid}');
+    return userCredential;
   }
 
   @override

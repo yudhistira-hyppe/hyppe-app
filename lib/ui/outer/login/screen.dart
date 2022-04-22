@@ -18,13 +18,15 @@ class LoginScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: Stack(
                 children: [
-                  Align(alignment: const Alignment(0.0, -0.85), child: SignInText()),
+                  Align(
+                      alignment: const Alignment(0.0, -0.85),
+                      child: SignInText()),
                   Transform.translate(
                     offset: Offset(0.0, SizeConfig.screenHeight! / 3.5),
                     child: SignInForm(),
                   ),
                   Transform.translate(
-                    offset: Offset(0.0, SizeConfig.screenHeight! / 1.25),
+                    offset: Offset(0.0, SizeConfig.screenHeight! / 1.4),
                     child: const SignUpOrGoogle(),
                   ),
                 ],
@@ -50,7 +52,8 @@ class LoginScreen extends StatelessWidget {
         //     selector: (_, selector) => selector.baseEnv),
       ),
       onTap: () {
-        if (!FocusScope.of(context).hasPrimaryFocus) FocusScope.of(context).unfocus();
+        if (!FocusScope.of(context).hasPrimaryFocus)
+          FocusScope.of(context).unfocus();
       },
     );
   }
