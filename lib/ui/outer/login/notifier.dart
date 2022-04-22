@@ -13,6 +13,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -40,8 +41,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   String? _passwordValidation;
   bool _hide = true;
   bool _incorrect = false;
-  final googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _userGoogleSignIn;
+  String? googleSignInError;
 
   String get email => _email;
   String get password => _password;
@@ -218,11 +219,11 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     passwordFocus.unfocus();
   }
 
-  Future loginGoogleSignIn() async {
+  Future<UserCredential?> loginGoogleSignIn(BuildContext context) async {
+    UserCredential? userCredential;
     // final googleUser = await googleSignIn.signIn();
     // if (googleUser == null) return;
     // _userGoogleSignIn = googleUser;
-   
 
     // final googleAuth = await googleUser.authentication;
 
@@ -230,13 +231,14 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     //     accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
     // await FirebaseAuth.instance.signInWithCredential(credential);
     //  print('haloo ${googleUser.displayName}');
-      try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    try {
+      _userGoogleSignIn = await GoogleSignIn().signIn();
 
       // Obtain the auth details from the request
       final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
-      print('haloo ${googleUser?.displayName}');
+          await _userGoogleSignIn?.authentication;
+      print('helo ${_userGoogleSignIn?.id}');
+
       // Create a new credential
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
@@ -244,11 +246,18 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       );
 
       // Once signed in, return the UserCredential
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
-      print('halo 2 ${e.toString()}');
+      googleSignInError = e.toString();
+    }
+    if (userCredential?.user != null) {
+      notifyListeners();
+      Navigator.pushNamed(context, Routes.userInterest);
     }
     notifyListeners();
+    print('helos ${userCredential?.user?.providerData[0].uid}');
+    return userCredential;
   }
 
   @override

@@ -66,10 +66,10 @@ class SignUpOrGoogle extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(
+              GestureDetector(
                 onTap: (){
                    final loginSign=Provider.of<LoginNotifier>(context,listen: false);
-                  loginSign.loginGoogleSignIn();
+                  loginSign.loginGoogleSignIn(context);
                 },
                 child: Container(
                   width: 48,
