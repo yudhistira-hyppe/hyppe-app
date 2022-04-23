@@ -81,50 +81,50 @@ class SignUpOrGoogle extends StatelessWidget {
                       image: AssetImage('${AssetPath.pngPath}logo_google.png')),
                 ),
               ),
-              twelvePx,
-              GestureDetector(
-                onTap: () => notifier.FacebookSignin(),
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const Image(
-                      image:
-                          AssetImage('${AssetPath.pngPath}logo_facebook.png')),
-                ),
-              ),
-              twelvePx,
-              GestureDetector(
-                onTap: () => notifier.loginTwitter(),
-                child: Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const Image(
-                      image:
-                          AssetImage('${AssetPath.pngPath}logo_twitter.png')),
-                ),
-              ),
-              twelvePx,
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: const Image(
-                    image: AssetImage('${AssetPath.pngPath}logo_apple.png')),
-              )
+              // twelvePx,
+              // GestureDetector(
+              //   onTap: () => notifier.FacebookSignin(),
+              //   child: Container(
+              //     width: 48,
+              //     height: 48,
+              //     decoration: BoxDecoration(
+              //       border: Border.all(
+              //           color: Theme.of(context).colorScheme.secondary),
+              //       borderRadius: BorderRadius.circular(24),
+              //     ),
+              //     child: const Image(
+              //         image:
+              //             AssetImage('${AssetPath.pngPath}logo_facebook.png')),
+              //   ),
+              // ),
+              // twelvePx,
+              // GestureDetector(
+              //   onTap: () => notifier.loginTwitter(),
+              //   child: Container(
+              //     width: 48,
+              //     height: 48,
+              //     decoration: BoxDecoration(
+              //       border: Border.all(
+              //           color: Theme.of(context).colorScheme.secondary),
+              //       borderRadius: BorderRadius.circular(24),
+              //     ),
+              //     child: const Image(
+              //         image:
+              //             AssetImage('${AssetPath.pngPath}logo_twitter.png')),
+              //   ),
+              // ),
+              // twelvePx,
+              // Container(
+              //   width: 48,
+              //   height: 48,
+              //   decoration: BoxDecoration(
+              //     border: Border.all(
+              //         color: Theme.of(context).colorScheme.secondary),
+              //     borderRadius: BorderRadius.circular(24),
+              //   ),
+              //   child: const Image(
+              //       image: AssetImage('${AssetPath.pngPath}logo_apple.png')),
+              // )
             ],
           )
           // CustomHoveredButton(
