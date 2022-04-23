@@ -1,111 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTDPLIST1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>Hyppe</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>flutter-twitter-login</string>
-				<string>fb1593269821044647</string>
-				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-				<string>com.googleusercontent.apps.590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv</string>
-			</array>
-		</dict>
-	</array>
-	<key>FacebookAppID</key>
-	<string>1593269821044647</string>
-	<key>FacebookClientToken</key>
-	<string>95cc7d7aa9b8dac672ae974556bdb64c</string>
-	<key>FacebookDisplayName</key>
-	<string>rijal</string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fb-messenger-share-api</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-	</array>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>FirebaseDynamicLinksCustomDomains</key>
-	<array>
-		<string>https://share.hyppe.app</string>
-	</array>
-	<key>LSRequiresIPhoneOS</key>
-	<string>NSAppTransportSecurity</string>
-	<key>NSAllowsArbitraryLoads</key>
-	<true/>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>To select sound from your library, allow us to access your music</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the permissions-handler library, which references this permission in its code.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the permissions-handler library.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>This will let you take photos and record videos.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Your current location will be displayed on the map and used for locations, nearby search results.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your current location will be displayed on the map and used for locations, nearby search results.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Your current location will be displayed on the map and used for locations, nearby search results.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>We need your location is used to show your position on the map and improve search results.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This app requires access to the microphone to capture your voice and save as recordings.</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Hyppe needs access to motion data to display steps.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This will allows you to share photos and videos from your library and save photos and videos to your camera roll.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
-	<key>UILaunchStoryboardName</key>
-	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>io.flutter.embedded_views_preview</key>
-	<true/>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>media</string>
-</dict>
+    <dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>$(DEVELOPMENT_LANGUAGE)</string>
+        <key>CFBundleExecutable</key>
+        <string>$(EXECUTABLE_NAME)</string>
+        <key>CFBundleIdentifier</key>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleName</key>
+        <string>Hyppe</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleShortVersionString</key>
+        <string>$(MARKETING_VERSION)</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+        <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLName</key>
+                <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+                </array>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLName</key>
+                <string></string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>com.googleusercontent.apps.590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv</string>
+                </array>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLName</key>
+                <string></string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>fb1593269821044647</string>
+                </array>
+            </dict>
+            <dict>
+                <key>CFBundleTypeRole</key>
+                <string>Editor</string>
+                <key>CFBundleURLName</key>
+                <string></string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>flutter-twitter-login</string>
+                </array>
+            </dict>
+        </array>
+        <key>FacebookAppID</key>
+        <string>1593269821044647</string>
+        <key>FacebookClientToken</key>
+        <string>95cc7d7aa9b8dac672ae974556bdb64c</string>
+        <key>FacebookDisplayName</key>
+        <string>rijal</string>
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>fbapi</string>
+            <string>fb-messenger-share-api</string>
+            <string>fbauth2</string>
+            <string>fbshareextension</string>
+        </array>
+        <key>CFBundleVersion</key>
+        <string>$(CURRENT_PROJECT_VERSION)</string>
+        <key>FirebaseDynamicLinksCustomDomains</key>
+        <array>
+            <string>https://share.hyppe.app</string>
+        </array>
+        <key>LSRequiresIPhoneOS</key>
+        <string>NSAppTransportSecurity</string>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+        <key>NSAppleMusicUsageDescription</key>
+        <string>To select sound from your library, allow us to access your music</string>
+        <key>NSBluetoothAlwaysUsageDescription</key>
+        <string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the permissions-handler library, which references this permission in its code.</string>
+        <key>NSBluetoothPeripheralUsageDescription</key>
+        <string>Our app does not request this permission or utilize this functionality but it is included in our info.plist since our app utilizes the permissions-handler library.</string>
+        <key>NSCameraUsageDescription</key>
+        <string>This will let you take photos and record videos.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>Your current location will be displayed on the map and used for locations, nearby search results.</string>
+        <key>NSLocationAlwaysUsageDescription</key>
+        <string>Your current location will be displayed on the map and used for locations, nearby search results.</string>
+        <key>NSLocationUsageDescription</key>
+        <string>Your current location will be displayed on the map and used for locations, nearby search results.</string>
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>We need your location is used to show your position on the map and improve search results.</string>
+        <key>NSMicrophoneUsageDescription</key>
+        <string>This app requires access to the microphone to capture your voice and save as recordings.</string>
+        <key>NSMotionUsageDescription</key>
+        <string>Hyppe needs access to motion data to display steps.</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>This will allows you to share photos and videos from your library and save photos and videos to your camera roll.</string>
+        <key>UIBackgroundModes</key>
+        <array>
+            <string>fetch</string>
+            <string>remote-notification</string>
+        </array>
+        <key>UILaunchStoryboardName</key>
+        <string>LaunchScreen</string>
+        <key>UIMainStoryboardFile</key>
+        <string>Main</string>
+        <key>UISupportedInterfaceOrientations</key>
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+            <string>UIInterfaceOrientationLandscapeLeft</string>
+            <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
+        <key>UISupportedInterfaceOrientations~ipad</key>
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+            <string>UIInterfaceOrientationPortraitUpsideDown</string>
+            <string>UIInterfaceOrientationLandscapeLeft</string>
+            <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
+        <key>UIViewControllerBasedStatusBarAppearance</key>
+        <false/>
+        <key>io.flutter.embedded_views_preview</key>
+        <true/>
+        <key>kTCCServiceMediaLibrary</key>
+        <string>media</string>
+    </dict>
 </plist>
