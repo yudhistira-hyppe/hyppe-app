@@ -125,7 +125,7 @@ class UrlConstants {
   static const String login = "$userRoute/login";
 
   /// post login with google
-  static const String loginGoogle = "$userRoute/login-google";
+  static const String loginGoogle = "$userRoute/signup/socmed";
 
   /// post change_password => To change password.
   static const String changePassword = "$userRoute/changepassword";

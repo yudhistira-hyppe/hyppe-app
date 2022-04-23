@@ -24,19 +24,23 @@ class UserBloc {
   UserFetch get userFetch => _userFetch;
   setUserFetch(UserFetch val) => _userFetch = val;
 
-  Future recoverPasswordBloc(BuildContext context, {required String email}) async {
+  Future recoverPasswordBloc(BuildContext context,
+      {required String email}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.RecoverError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.RecoverError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.RecoverSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.RecoverSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.RecoverError));
         Dio().close(force: true);
       },
@@ -56,19 +60,23 @@ class UserBloc {
     );
   }
 
-  Future recoverPasswordOTPBloc(BuildContext context, {required String email, required String otp}) async {
+  Future recoverPasswordOTPBloc(BuildContext context,
+      {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.RecoverError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.RecoverError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.RecoverSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.RecoverSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.RecoverError));
         Dio().close(force: true);
       },
@@ -89,7 +97,47 @@ class UserBloc {
     );
   }
 
-  Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password}) async {
+  Future googleSignInBlocV2(BuildContext context,
+      {required Function() function, required String email}) async {
+    setUserFetch(UserFetch(UserState.loading));
+    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    await Repos().reposPost(
+      context,
+      (onResult) {
+       
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUserFetch(UserFetch(UserState.LoginError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setUserFetch(UserFetch(UserState.LoginSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        print('eeeee  ${errorData}');
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
+          Routing().moveBack();
+          function();
+        });
+        setUserFetch(UserFetch(UserState.LoginError));
+      },
+      methodType: MethodType.post,
+      withCheckConnection: false,
+      withAlertMessage: true,
+      host: UrlConstants.loginGoogle,
+      data: {
+        'email': email.toLowerCase(),
+        "socmedSource": "GMAIL",
+        "deviceId": deviceID,
+        "langIso": "en"
+      },
+    );
+  }
+
+  Future signInBlocV2(BuildContext context,
+      {required Function() function,
+      required String email,
+      required String password}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
 
@@ -97,9 +145,11 @@ class UserBloc {
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.LoginSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -125,19 +175,23 @@ class UserBloc {
     );
   }
 
-  Future signUpBlocV2(BuildContext context, {required SignUpDataArgument data}) async {
+  Future signUpBlocV2(BuildContext context,
+      {required SignUpDataArgument data}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.signUpError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.signUpError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.signUpSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.signUpSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.signUpError));
         Dio().close(force: true);
       },
@@ -149,7 +203,8 @@ class UserBloc {
     );
   }
 
-  Future updateProfileBlocV2(BuildContext context, {required Map<String, dynamic> data}) async {
+  Future updateProfileBlocV2(BuildContext context,
+      {required Map<String, dynamic> data}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
@@ -157,11 +212,13 @@ class UserBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.completeProfileError));
         } else {
-          setUserFetch(UserFetch(UserState.completeProfileSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.completeProfileSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.completeProfileError));
         Dio().close(force: true);
       },
@@ -176,7 +233,8 @@ class UserBloc {
     );
   }
 
-  Future updateInterestBloc(BuildContext context, {required Map<String, dynamic> data}) async {
+  Future updateInterestBloc(BuildContext context,
+      {required Map<String, dynamic> data}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
@@ -184,11 +242,13 @@ class UserBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.updateInterestError));
         } else {
-          setUserFetch(UserFetch(UserState.updateInterestSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.updateInterestSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.updateInterestError));
         Dio().close(force: true);
       },
@@ -278,14 +338,16 @@ class UserBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.uploadProfilePictureError));
         } else {
-          setUserFetch(UserFetch(UserState.uploadProfilePictureSuccess, data: onResult));
+          setUserFetch(
+              UserFetch(UserState.uploadProfilePictureSuccess, data: onResult));
         }
       },
       (errorData) {
         if (errorData.type == DioErrorType.cancel) {
           print("You canceled change picture photo");
         } else {
-          ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+          ShowBottomSheet.onInternalServerError(context,
+              tryAgainButton: () => Routing().moveBack());
         }
       },
       data: formData,
@@ -301,19 +363,23 @@ class UserBloc {
     );
   }
 
-  Future changePasswordBloc(BuildContext context, {required String oldPass, required String newPass}) async {
+  Future changePasswordBloc(BuildContext context,
+      {required String oldPass, required String newPass}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.changePasswordError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.changePasswordError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.changePasswordSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.changePasswordSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.changePasswordError));
         Dio().close(force: true);
       },
@@ -339,19 +405,24 @@ class UserBloc {
   }) async {
     setUserFetch(UserFetch(UserState.loading));
     var formData = FormData();
-    formData.fields.add(MapEntry('search', search ?? SharedPreference().readStorage(SpKeys.email)));
+    formData.fields.add(MapEntry(
+        'search', search ?? SharedPreference().readStorage(SpKeys.email)));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.statusCode != 202) {
           setUserFetch(UserFetch(UserState.getUserProfilesError));
         } else {
-          UserProfileModel _result = UserProfileModel.fromJson(onResult.data["data"][0]);
-          setUserFetch(UserFetch(UserState.getUserProfilesSuccess, data: _result));
+          UserProfileModel _result =
+              UserProfileModel.fromJson(onResult.data["data"][0]);
+          setUserFetch(
+              UserFetch(UserState.getUserProfilesSuccess, data: _result));
         }
       },
       (errorData) {
-        context.read<ErrorService>().addErrorObject(ErrorType.gGetUserDetail, errorData.message);
+        context
+            .read<ErrorService>()
+            .addErrorObject(ErrorType.gGetUserDetail, errorData.message);
         setUserFetch(UserFetch(UserState.getUserProfilesError));
       },
       data: formData,
@@ -399,7 +470,8 @@ class UserBloc {
     );
   }
 
-  Future verifyAccountBlocV2(BuildContext context, {required String email, required String otp}) async {
+  Future verifyAccountBlocV2(BuildContext context,
+      {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
 
@@ -407,9 +479,11 @@ class UserBloc {
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.verifyAccountError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.verifyAccountError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.verifyAccountSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.verifyAccountSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -433,22 +507,27 @@ class UserBloc {
     );
   }
 
-  Future resendOTPBloc(BuildContext context, {required Function function, required String username}) async {
+  Future resendOTPBloc(BuildContext context,
+      {required Function function, required String username}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.data['status'] != null) {
           if (onResult.data['status'] > HTTP_CODE) {
-            setUserFetch(UserFetch(UserState.resendOTPError, data: GenericResponse.fromJson(onResult.data).responseData));
+            setUserFetch(UserFetch(UserState.resendOTPError,
+                data: GenericResponse.fromJson(onResult.data).responseData));
           } else {
-            setUserFetch(UserFetch(UserState.resendOTPSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+            setUserFetch(UserFetch(UserState.resendOTPSuccess,
+                data: GenericResponse.fromJson(onResult.data).responseData));
           }
         } else {
           if (onResult.statusCode! > HTTP_CODE) {
-            setUserFetch(UserFetch(UserState.resendOTPError, data: GenericResponse.fromJson(onResult.data).responseData));
+            setUserFetch(UserFetch(UserState.resendOTPError,
+                data: GenericResponse.fromJson(onResult.data).responseData));
           } else {
-            setUserFetch(UserFetch(UserState.resendOTPSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+            setUserFetch(UserFetch(UserState.resendOTPSuccess,
+                data: GenericResponse.fromJson(onResult.data).responseData));
           }
         }
       },
@@ -470,19 +549,22 @@ class UserBloc {
     );
   }
 
-  Future signInWithGoogleBloc(BuildContext context, {required GoogleSignInAccount? userAccount}) async {
+  Future signInWithGoogleBloc(BuildContext context,
+      {required GoogleSignInAccount? userAccount}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if (onResult.statusCode != HTTP_OK) {
-          setUserFetch(UserFetch(UserState.LoginGoogleError, data: onResult.data));
+          setUserFetch(
+              UserFetch(UserState.LoginGoogleError, data: onResult.data));
         } else {
           setUserFetch(UserFetch(UserState.LoginGoogleSuccess, data: onResult));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
         setUserFetch(UserFetch(UserState.LoginGoogleError));
       },
       methodType: MethodType.post,
