@@ -5,6 +5,7 @@ import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
+import 'package:hyppe/core/config/sosmed_contants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -288,15 +289,15 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   Future loginTwitter() async {
     final twitterLogin = TwitterLogin(
       /// Consumer API keys
-      apiKey: 'eFfVUIo1WXCQMwhQ4PixJH65g',
+      apiKey: SosmedConstants.twitterApiKey,
 
       /// Consumer API Secret keys
-      apiSecretKey: 'oaX8Aa8WTsh3K5sIl8y4jstgsuHdpoc6FxV8GuYTqs4u1xwlm7',
+      apiSecretKey: SosmedConstants.twitterApiSecretKey,
 
       /// Registered Callback URLs in TwitterApp
       /// Android is a deeplink
       /// iOS is a URLScheme
-      redirectURI: 'flutter-twitter-login://',
+      redirectURI: SosmedConstants.twitterRedirectURI,
     );
 
     /// Forces the user to enter their credentials
