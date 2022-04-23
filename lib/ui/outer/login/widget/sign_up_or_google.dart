@@ -97,10 +97,7 @@ class SignUpOrGoogle extends StatelessWidget {
               ),
               twelvePx,
               GestureDetector(
-                onTap: (){
-                   final loginTwitter=Provider.of<LoginNotifier>(context,listen: false);
-                  loginTwitter.loginTwitter();
-                },
+                onTap: () => notifier.loginTwitter(),
                 child: Container(
                   width: 48,
                   height: 48,

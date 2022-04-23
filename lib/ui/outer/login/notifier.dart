@@ -15,7 +15,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -265,24 +264,67 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     return userCredential;
   }
 
-  Future loginTwitter() async {
-    UserCredential? userCredential;
-    final result =  TwitterLogin(
-        apiKey: '4Ao5xrjpnloquL4iNK4ZEhDlc',
-        apiSecretKey: 'H4MiLAf2uib1VL12urwCdfrxDdcF2nrKR5du2UNpvIzl9yj50A',
-        redirectURI: 'flutter-twitter-login://');
-        print('helo ${result.apiKey}');
+  // Future loginTwitter() async {
+  //   UserCredential? userCredential;
+  //   final result = TwitterLogin(
+  //       apiKey: '4Ao5xrjpnloquL4iNK4ZEhDlc',
+  //       apiSecretKey: 'H4MiLAf2uib1VL12urwCdfrxDdcF2nrKR5du2UNpvIzl9yj50A',
+  //       redirectURI: 'flutter-twitter-login://');
+  //   print('helo ${result.apiKey}');
 
-    await result.login().then((value) async {
-      print('halo ${value.errorMessage}');
-      print('halo ${value.status}');
-      final credential = TwitterAuthProvider.credential(
-          accessToken: value.authToken!, secret: value.authTokenSecret!);
-   
-      userCredential= await FirebaseAuth.instance.signInWithCredential(credential);
-      print('wadaw ${userCredential?.user?.displayName}');
-      notifyListeners();
-    });
+  //   await result.login().then((value) async {
+  //     print('halo ${value.errorMessage}');
+  //     print('halo ${value.status}');
+  //     final credential = TwitterAuthProvider.credential(
+  //         accessToken: value.authToken!, secret: value.authTokenSecret!);
+
+  //     userCredential =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //     print('wadaw ${userCredential?.user?.displayName}');
+  //     notifyListeners();
+  //   });
+  // }
+
+  Future loginTwitter() async {
+    final twitterLogin = TwitterLogin(
+      /// Consumer API keys
+      apiKey: 'eFfVUIo1WXCQMwhQ4PixJH65g',
+
+      /// Consumer API Secret keys
+      apiSecretKey: 'oaX8Aa8WTsh3K5sIl8y4jstgsuHdpoc6FxV8GuYTqs4u1xwlm7',
+
+      /// Registered Callback URLs in TwitterApp
+      /// Android is a deeplink
+      /// iOS is a URLScheme
+      redirectURI: 'flutter-twitter-login://',
+    );
+
+    /// Forces the user to enter their credentials
+    /// to ensure the correct users account is authorized.
+    /// If you want to implement Twitter account switching, set [force_login] to true
+    /// login(forceLogin: true);
+    final authResult = await twitterLogin.loginV2();
+    switch (authResult.status) {
+      case TwitterLoginStatus.loggedIn:
+        // success
+        print('====== Login success ======');
+        print("TWITTER_TOKEN => ${authResult.authToken}");
+        print("TWITTER_USER_ID => ${authResult.user?.id}");
+        print("TWITTER_USER_NAME => ${authResult.user?.name}");
+        print("TWITTER_USER_SCREEN_NAME => ${authResult.user?.screenName}");
+        print("TWITTER_USER_THUMB => ${authResult.user?.thumbnailImage}");
+
+        break;
+      case TwitterLoginStatus.cancelledByUser:
+        // cancel
+        print('====== Login cancel ======');
+        break;
+      case TwitterLoginStatus.error:
+      case null:
+        // error
+        print('====== Login error ======');
+        break;
+    }
   }
 
   @override
