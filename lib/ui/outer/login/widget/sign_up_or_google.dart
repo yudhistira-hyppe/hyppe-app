@@ -66,7 +66,9 @@ class SignUpOrGoogle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: () => notifier.loginGoogleSignIn(context),
+                onTap: () {
+                  notifier.loginGoogleSign(context);
+                },
                 child: Container(
                   width: 48,
                   height: 48,
@@ -107,7 +109,8 @@ class SignUpOrGoogle extends StatelessWidget {
                     borderRadius: BorderRadius.circular(24),
                   ),
                   child: const Image(
-                      image: AssetImage('${AssetPath.pngPath}logo_twitter.png')),
+                      image:
+                          AssetImage('${AssetPath.pngPath}logo_twitter.png')),
                 ),
               ),
               twelvePx,

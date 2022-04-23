@@ -3,6 +3,7 @@ import 'package:hyppe/core/services/stream_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -66,6 +67,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     context.read<HomeNotifier>().resetSessionID();
     _eventService.cleanUp();
     _streamService.reset();
+    context.read<LoginNotifier>().signOutGoogle.handleSignOut();
   }
 
   @override
