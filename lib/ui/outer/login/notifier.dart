@@ -335,6 +335,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future<void> FacebookSignin() async {
     final LoginResult loginResult = await FacebookAuth.i.login();
+    print('halo ${loginResult.accessToken}');
     if (loginResult.status == LoginStatus.success) {
       _accessToken = loginResult.accessToken;
 

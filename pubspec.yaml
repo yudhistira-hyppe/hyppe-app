@@ -62,7 +62,7 @@ dependencies:
         ref: e6ece410e1abcb536ed9a599cbff17f20a81669c
 
   better_player: # Better player
-    path: /home/jay/Documents/project/hyppe/hyppe-better-player
+    path: /Users/muhammadrijal/RijalDev/hyppe-better-player
 
   story_view: # Story viewer
     path: packages/story_view

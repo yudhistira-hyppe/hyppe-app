@@ -27,18 +27,25 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>flutter-twitter-login</string>
+				<string>fb1593269821044647</string>
 				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 				<string>com.googleusercontent.apps.590985523606-cp9mhs1a7g18i8bapo8cuujjnet4f0pv</string>
 			</array>
 		</dict>
-		<dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-            <string>com.googleusercontent.apps.556132544246-ilcavqc4n07ncqevijgrhmmri8nqft4g</string>
-        </array>
-    </dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>1593269821044647</string>
+	<key>FacebookClientToken</key>
+	<string>95cc7d7aa9b8dac672ae974556bdb64c</string>
+	<key>FacebookDisplayName</key>
+	<string>rijal</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -100,6 +107,5 @@
 	<true/>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>media</string>
-	
 </dict>
 </plist>
