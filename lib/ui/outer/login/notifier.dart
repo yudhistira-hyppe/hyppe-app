@@ -340,18 +340,19 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       _accessToken = loginResult.accessToken;
 
       final data = await FacebookAuth.i.getUserData();
+      print('datanya $data');
 
-      FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
-      debugPrint("FB_USER_ID => ${_accessToken?.userId}");
-      debugPrint("FB_TOKEN => ${_accessToken?.token}");
-      debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
-      debugPrint("FB_APPID => ${_accessToken?.applicationId}");
-      debugPrint("FB_ID => ${fbUser.id}");
-      debugPrint("FB_EMAIL => ${fbUser.email}");
-      debugPrint("FB_NAME => ${fbUser.name}");
-      debugPrint("FB_PIC => ${fbUser.picture?.url}");
+      // FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
+      // debugPrint("FB_USER_ID => ${_accessToken?.userId}");
+      // debugPrint("FB_TOKEN => ${_accessToken?.token}");
+      // debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
+      // debugPrint("FB_APPID => ${_accessToken?.applicationId}");
+      // debugPrint("FB_ID => ${fbUser.id}");
+      // debugPrint("FB_EMAIL => ${fbUser.email}");
+      // debugPrint("FB_NAME => ${fbUser.name}");
+      // debugPrint("FB_PIC => ${fbUser.picture?.picture}");
 
-      _currentUser = fbUser;
+      // _currentUser = fbUser;
     }
   }
 }
