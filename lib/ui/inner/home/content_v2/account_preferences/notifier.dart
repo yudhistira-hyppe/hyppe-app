@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
@@ -611,6 +612,10 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
               final userNotifier =
                   Provider.of<SelfProfileNotifier>(context, listen: false);
+
+              // force complete id proof status (KTP terverifikasi)
+              userNotifier.setIdProofStatusUser(IdProofStatus.complete);
+
               debugPrint(
                   "PROFILE STATE => ${userNotifier.user.profile!.isComplete!}");
               if (userNotifier.user.profile != null) {

@@ -306,6 +306,10 @@ class SelfProfileNotifier with ChangeNotifier {
       case IdProofStatus.revoke:
         user.profile?.idProofStatus = IdProofStatus.inProgress;
         break;
+      case IdProofStatus.complete:
+        user.profile?.idProofStatus = IdProofStatus.complete;
+        user.profile?.isIdVerified = true;
+        break;
       default:
         break;
     }

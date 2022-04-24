@@ -23,14 +23,6 @@
           }
         },
         {
-          "client_id": "590985523606-i15ugv12suirccjnbi7h260v8hf8fnpu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hyppe.hyppeapp",
-            "certificate_hash": "d6fb1607a5dce647680b8fd34020c7192beb9d74"
-          }
-        },
-        {
           "client_id": "590985523606-kukqqg2r99nte4q1cuemjqe72o9scqvq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
