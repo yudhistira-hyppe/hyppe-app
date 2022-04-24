@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/utils/language/language_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -132,6 +133,8 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<ChangePasswordNotifier>().translate(translate);
     context.read<SearchNotifier>().translate(translate);
     context.read<NotificationNotifier>().translate(translate);
+    context.read<ProfileCompletionNotifier>().translate(translate);
+    
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {
       _listIndex = 0;
