@@ -382,6 +382,72 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     }
   }
 
+  Future onClickCompletionProfile(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      if (somethingChanged(context)) {
+        try {
+          progress = "0%";
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+
+          Overlay.of(context)?.insert(uploadProgress!);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+
+          SignUpCompleteProfiles _dataPersonalInfo = SignUpCompleteProfiles(
+            email: emailController.text,
+            fullName: fullNameController.text,
+            country: countryController.text,
+            area: areaController.text,
+            city: cityController.text,
+            mobileNumber: mobileController.text,
+            gender: genderController.text,
+            dateOfBirth: dobController.text,
+            username: userNameController.text,
+            langIso: SharedPreference().readStorage(SpKeys.isoCode) ?? 'en',
+          );
+
+          final notifier2 = UserBloc();
+
+          await notifier2.updateProfileBlocV2(context,
+              data: _dataPersonalInfo.toUpdateProfileJson());
+
+          final fetch2 = notifier2.userFetch;
+
+          if (fetch2.userState == UserState.completeProfileSuccess) {
+            hold = true;
+            progress = "${language.finishingUp}...";
+
+            final _mainNotifier =
+                Provider.of<MainNotifier>(context, listen: false);
+            await _mainNotifier.initMain(context, onUpdateProfile: true);
+            hold = false;
+            ShowBottomSheet().onShowColouredSheet(
+                context, language.successUpdatePersonalInformation!);
+            notifyListeners();
+
+            Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+          }
+        } catch (e) {
+          e.logger();
+        } finally {
+          if (uploadProgress != null) {
+            uploadProgress?.remove();
+          }
+        }
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onClickSaveProfile(context);
+      });
+    }
+  }
+
   Future onClickSaveInterests(
       BuildContext context, List<String> interests) async {
     bool connect = await System().checkConnections();
@@ -542,8 +608,19 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               await ShowBottomSheet()
                   .onShowColouredSheet(context, language.successUploadId!);
               _determineIdProofStatusUser(context);
-              Routing().moveBack();
-              Routing().moveBack();
+
+              final userNotifier =
+                  Provider.of<SelfProfileNotifier>(context, listen: false);
+              debugPrint(
+                  "PROFILE STATE => ${userNotifier.user.profile!.isComplete!}");
+              if (userNotifier.user.profile != null) {
+                if (!userNotifier.user.profile!.isComplete!) {
+                  Routing().moveAndPop(Routes.completeProfile);
+                } else {
+                  Routing().moveAndPop(Routes.lobby);
+                }
+              }
+
               notifyListeners();
             }).whenComplete(() {
               _eventService.notifyUploadSuccess(fetch.data);

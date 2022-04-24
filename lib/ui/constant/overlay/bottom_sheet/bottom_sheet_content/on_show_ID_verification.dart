@@ -61,10 +61,7 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                 // context.read<CameraNotifier>().orientation = null;
                 // context.read<PreviewContentNotifier>().isForcePaused = false;
                 // Routing().moveAndPop(Routes.accountPreferences);
-                Provider.of<MainNotifier>(
-                    context,
-                    listen: false).openValidationIDCamera = true;
-                notifier.clearUpAndBackToHome(context);
+                notifier.validateIdCard();
               },
               buttonStyle: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(

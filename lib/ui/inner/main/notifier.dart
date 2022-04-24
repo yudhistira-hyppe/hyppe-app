@@ -82,6 +82,12 @@ class MainNotifier with ChangeNotifier {
           usersFetch.data;
       notifyListeners();
     }
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_openValidationIDCamera) {
+        takeSelfie(context);
+      }
+    });
   }
 
   Future getReaction(BuildContext context) async {

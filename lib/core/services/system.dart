@@ -531,14 +531,14 @@ class System {
       if (notifier.user.profile != null) {
         // debugPrint(notifier.user.profile!.isComplete.toString());
         // debugPrint(notifier.user.profile!.isIdVerified.toString());
-        if (!notifier.user.profile!.isComplete!) {
-          ShowBottomSheet.onShowCompleteProfile(context);
-        } else if (!notifier.user.profile!.isIdVerified!) {
+        // if (!notifier.user.profile!.isComplete!) {
+        //   ShowBottomSheet.onShowCompleteProfile(context);
+        // } else if (!notifier.user.profile!.isIdVerified!) {
+        if (!notifier.user.profile!.isIdVerified!) {
           ShowBottomSheet.onShowIDVerification(context);
         } else {
           action();
         }
-        //ShowBottomSheet.onShowIDVerification(context);
       } else {
         ShowBottomSheet.onShowSomethingWhenWrong(context);
       }
