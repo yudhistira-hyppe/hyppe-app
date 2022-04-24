@@ -25,10 +25,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
     _mainNotifier.initMain(context);
-
-    if (_mainNotifier.openValidationIDCamera) {
-      Future.delayed(Duration.zero, () => _mainNotifier.takeSelfie(context));
-    }
     super.initState();
   }
 

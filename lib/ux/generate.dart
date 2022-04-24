@@ -17,6 +17,7 @@ import 'package:hyppe/ui/constant/page_not_found.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -149,6 +150,9 @@ class Generate {
 
       case Routes.imagePreviewScreen:
         return MaterialPageRoute(builder: (_) => ImagePreviewView(argument: settings.arguments as ImagePreviewArgument));
+
+case Routes.completeProfile:
+        return MaterialPageRoute(builder: (_) => const ProfileCompletion());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

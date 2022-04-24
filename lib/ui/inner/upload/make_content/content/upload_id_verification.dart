@@ -25,7 +25,8 @@ class UploadIDVerification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CameraPage(
-      onCameraNotifierUpdate: (cameraNotifier) => notifier?.cameraNotifier = cameraNotifier,
+      onCameraNotifierUpdate: (cameraNotifier) =>
+          notifier?.cameraNotifier = cameraNotifier,
       additionalViews: <Widget>[
         Align(
           alignment: Alignment.topCenter,
@@ -58,14 +59,20 @@ class UploadIDVerification extends StatelessWidget {
                 CustomTextButton(
                     onPressed: !notifier!.isRecordingVideo
                         ? () async {
+                            debugPrint("DONE_BACK");
                             notifier!.isVideo = false;
                             Routing().moveBack();
                           }
                         : null,
-                    child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
+                    child: const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}close.svg",
+                        defaultColor: false)),
                 CustomTextWidget(
                   textToDisplay: "ID Card",
-                  textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.white),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .subtitle1
+                      ?.copyWith(color: Colors.white),
                 ),
               ],
             ),

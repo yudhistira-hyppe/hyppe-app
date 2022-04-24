@@ -18,6 +18,7 @@ class Routes {
   static const String moderatedContent = '/moderated-content';
   static const String wallet = '/wallet';
   static const String walletWebView = 'wallet-web-view';
+  static const String completeProfile = '/required-complete-profile';
 
 // Sign up
   static const String signUpPin = '/sign-up-pin';

@@ -44,7 +44,7 @@ class _SignInFormState extends State<SignInForm> {
                       color: notifier.incorrect
                           ? Theme.of(context).colorScheme.error
                           : notifier.emailFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primary
+                              ? Theme.of(context).colorScheme.primaryVariant
                               : null),
                   prefixIconConstraints: BoxConstraints(
                       minWidth: SizeWidget().calculateSize(30.0,
@@ -70,7 +70,7 @@ class _SignInFormState extends State<SignInForm> {
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: notifier.emailFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primary
+                              ? Theme.of(context).colorScheme.primaryVariant
                               : Theme.of(context).colorScheme.secondary)),
                 ),
                 readOnly: notifier.isLoading
@@ -101,7 +101,7 @@ class _SignInFormState extends State<SignInForm> {
                       color: notifier.incorrect
                           ? Theme.of(context).colorScheme.error
                           : notifier.passwordFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primary
+                              ? Theme.of(context).colorScheme.primaryVariant
                               : null),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: SizeWidget().calculateSize(
@@ -150,7 +150,7 @@ class _SignInFormState extends State<SignInForm> {
                   focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: notifier.passwordFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primary
+                              ? Theme.of(context).colorScheme.primaryVariant
                               : Theme.of(context).colorScheme.secondary)),
                 ),
                 readOnly: notifier.isLoading
@@ -186,7 +186,7 @@ class _SignInFormState extends State<SignInForm> {
                 notifier.isLoading
                     ? Theme.of(context).colorScheme.secondary
                     : notifier.buttonDisable()
-                        ? Theme.of(context).colorScheme.primary
+                        ? Theme.of(context).colorScheme.primaryVariant
                         : Theme.of(context).colorScheme.secondary,
               ),
               overlayColor: MaterialStateProperty.all(Colors.transparent),

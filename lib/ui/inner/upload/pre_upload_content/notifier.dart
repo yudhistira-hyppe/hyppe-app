@@ -9,7 +9,10 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/main/notifier.dart';
+import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ux/path.dart';
@@ -328,5 +331,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
 
     return _thumbnails;
+  }
+
+  validateIdCard() async {
+    _onExit();
+
+    final BuildContext context = Routing.navigatorKey.currentContext!;
+    Provider.of<MainNotifier>(context, listen: false).openValidationIDCamera =
+        true;
+    notifyListeners();
+    clearUpAndBackToHome(context);
   }
 }

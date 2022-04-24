@@ -542,8 +542,19 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               await ShowBottomSheet()
                   .onShowColouredSheet(context, language.successUploadId!);
               _determineIdProofStatusUser(context);
-              Routing().moveBack();
-              Routing().moveBack();
+
+              final userNotifier =
+                  Provider.of<SelfProfileNotifier>(context, listen: false);
+              debugPrint(
+                  "PROFILE STATE => ${userNotifier.user.profile!.isComplete!}");
+              if (userNotifier.user.profile != null) {
+                if (!userNotifier.user.profile!.isComplete!) {
+                  Routing().moveAndPop(Routes.completeProfile);
+                } else {
+                  Routing().moveAndPop(Routes.lobby);
+                }
+              }
+
               notifyListeners();
             }).whenComplete(() {
               _eventService.notifyUploadSuccess(fetch.data);

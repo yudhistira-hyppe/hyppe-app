@@ -1,0 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
+
+class ProfileCompletionNotifier with ChangeNotifier {
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
+}

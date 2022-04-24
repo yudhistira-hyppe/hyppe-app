@@ -36,7 +36,7 @@ class PreviewIDVerification extends StatelessWidget {
             width: double.infinity,
             height: SizeConfig.screenHeight! * 0.07,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.primaryVariant,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
