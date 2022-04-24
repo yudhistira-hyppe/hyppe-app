@@ -193,7 +193,10 @@ class _PicDetailState extends State<PicDetail> {
                       child: Container(
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
                         child: SingleChildScrollView(
-                          child: ReadMoreText(
+                          child:Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                             ReadMoreText(
                             "${widget.arguments?.description}",
                             trimLines: 5,
                             trimMode: TrimMode.Line,
@@ -205,6 +208,21 @@ class _PicDetailState extends State<PicDetail> {
                             moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),
+                         for (var i = 0; i < widget.arguments!.tags!.length; i++) 
+                           ReadMoreText(
+                            "#${widget.arguments?.tags?[i].replaceAll('#', '')}",
+                            trimLines: 5,
+                            trimMode: TrimMode.Line,
+                            textAlign: TextAlign.left,
+                            trimExpandedText: 'Show less',
+                            trimCollapsedText: 'Show more',
+                            colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                            moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          ),
+                          ],
+                          )
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
