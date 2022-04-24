@@ -151,8 +151,12 @@ class Generate {
       case Routes.imagePreviewScreen:
         return MaterialPageRoute(builder: (_) => ImagePreviewView(argument: settings.arguments as ImagePreviewArgument));
 
-case Routes.completeProfile:
-        return MaterialPageRoute(builder: (_) => const ProfileCompletion());
+
+        case Routes.completeProfile:
+        return MaterialPageRoute(
+            builder: (_) => ProfileCompletion(
+                argument: AccountPreferenceScreenArgument(fromSignUpFlow: false)
+                    ));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }
