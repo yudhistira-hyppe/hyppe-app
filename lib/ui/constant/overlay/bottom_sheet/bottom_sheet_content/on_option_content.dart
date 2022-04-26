@@ -37,7 +37,8 @@ class OnShowOptionContent extends StatefulWidget {
   State<OnShowOptionContent> createState() => _OnShowOptionContentState();
 }
 
-class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralMixin {
+class _OnShowOptionContentState extends State<OnShowOptionContent>
+    with GeneralMixin {
   final _routing = Routing();
   final _system = System();
   final _language = TranslateNotifierV2();
@@ -59,7 +60,10 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
     _showMessage('${_language.translate.yourContentHadSuccessfullyDeleted}');
   }
 
-  void _handleLink(BuildContext context, {required bool copiedToClipboard, required String description, required ContentData data}) async {
+  void _handleLink(BuildContext context,
+      {required bool copiedToClipboard,
+      required String description,
+      required ContentData data}) async {
     late String _routes;
 
     if (description == hyppeVid) {
@@ -123,12 +127,16 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+              const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}handler.svg"),
               sixteenPx,
               CustomTextWidget(
                 textToDisplay: widget.captionTitle,
                 // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .headline6!
+                    .copyWith(fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -140,31 +148,47 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 moveBack: true,
                 caption: '${TranslateNotifierV2().translate.copyLink}',
                 icon: 'copy-link.svg',
-                onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
+                onTap: () => _handleLink(context,
+                    copiedToClipboard: true,
+                    description: widget.captionTitle,
+                    data: widget.contentData),
               ),
               _tileComponent(
                 moveBack: false,
                 caption: '${TranslateNotifierV2().translate.share}',
                 icon: 'share.svg',
-                onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
+                onTap: () => _handleLink(context,
+                    copiedToClipboard: false,
+                    description: widget.captionTitle,
+                    data: widget.contentData),
               ),
-              if (_system.getFeatureTypeV2(widget.contentData.postType!) != FeatureType.story) ...[
+              if (_system.getFeatureTypeV2(widget.contentData.postType!) !=
+                  FeatureType.story) ...[
                 _tileComponent(
                   moveBack: false,
                   caption: '${TranslateNotifierV2().translate.edit}',
                   icon: 'edit-content.svg',
                   onTap: () {
-                    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
-                    notifier.captionController.text = widget.contentData.description ?? "";
-                    notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType!);
+                    final notifier = Provider.of<PreUploadContentNotifier>(
+                        context,
+                        listen: false);
+                    notifier.captionController.text =
+                        widget.contentData.description ?? "";
+                    notifier.tagsController.text =
+                        widget.contentData.tags!.join(",");
+                    notifier.featureType =
+                        _system.getFeatureTypeV2(widget.contentData.postType!);
                     notifier.thumbNail = widget.contentData.fullThumbPath;
+                    notifier.allowComment =
+                        widget.contentData.allowComments ?? false;
+                    notifier.certified = widget.contentData.certified ?? false;
                     _routing
                         .move(Routes.preUploadContent,
-                        argument: UpdateContentsArgument(
-                          onEdit: true,
-                          contentData: widget.contentData,
-                          content: widget.captionTitle,
-                        ))
+                            argument: UpdateContentsArgument(
+                              onEdit: true,
+                              contentData: widget.contentData,
+                              content: widget.captionTitle,
+                            ))
                         .whenComplete(() => _routing.moveBack());
                   },
                 ),
@@ -174,8 +198,13 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 caption: '${TranslateNotifierV2().translate.delete}',
                 icon: 'delete.svg',
                 onTap: () async {
-                  ShowGeneralDialog.deleteContentDialog(context, widget.captionTitle.replaceAll('Hyppe', ''), () async {
-                    await deletePostByID(context, postID: widget.contentData.postID!, postType: widget.contentData.postType!).then((value) {
+                  ShowGeneralDialog.deleteContentDialog(
+                      context, widget.captionTitle.replaceAll('Hyppe', ''),
+                      () async {
+                    await deletePostByID(context,
+                            postID: widget.contentData.postID!,
+                            postType: widget.contentData.postType!)
+                        .then((value) {
                       if (value) _handleDelete(context);
                     });
                   });

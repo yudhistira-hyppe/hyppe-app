@@ -21,6 +21,7 @@ class ContentData {
   String? title;
   List<String>? tags;
   bool? allowComments;
+  bool? certified;
   String? createdAt;
   ContentDataInsight? insight;
   String? mediaThumbUri;
@@ -47,6 +48,7 @@ class ContentData {
     this.title,
     this.tags = const [],
     this.allowComments,
+    this.certified,
     this.createdAt,
     this.insight,
     this.mediaThumbUri,
@@ -61,21 +63,26 @@ class ContentData {
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
-    metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
+    metadata =
+        json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
     mediaBasePath = json['mediaBasePath'];
     postType = json['postType'];
     mediaUri = json['mediaUri'];
     description = json['description'] ?? '';
     active = json['active'];
-    privacy = json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
+    privacy =
+        json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
     mediaType = json['mediaType'];
     mediaThumbEndPoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     title = json['title'];
     tags = json['tags'] != null ? json['tags'].cast<String>() : [];
-    allowComments = json['allowComments'];
+    allowComments = json['allowComments'] ?? false;
+    certified = json['certified'] ?? false;
     createdAt = json['createdAt'];
-    insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight']) : null;
+    insight = json['insight'] != null
+        ? ContentDataInsight.fromJson(json['insight'])
+        : null;
     mediaThumbUri = json['mediaThumbUri'];
     mediaEndpoint = json['mediaEndpoint'];
     email = json['email'];
@@ -84,7 +91,9 @@ class ContentData {
     fullThumbPath = concatThumbUri();
     fullContentPath = concatContentUri();
     contentType = _translateType(mediaType);
-    avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
+    avatar = json['avatar'] != null
+        ? UserProfileAvatarModel.fromJson(json['avatar'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -106,6 +115,7 @@ class ContentData {
     data['title'] = title;
     data['tags'] = tags;
     data['allowComments'] = allowComments;
+    data['certified'] = certified;
     data['createdAt'] = createdAt;
     if (insight != null) {
       data['insight'] = insight?.toJson();
@@ -137,6 +147,7 @@ class ContentData {
     } else if (type == "image") {
       return ContentType.image;
     }
+    return null;
   }
 }
 

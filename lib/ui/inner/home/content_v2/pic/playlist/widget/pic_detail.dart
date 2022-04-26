@@ -30,7 +30,8 @@ class PicDetail extends StatefulWidget {
 }
 
 class _PicDetailState extends State<PicDetail> {
-  final TransformationController transformationController = TransformationController();
+  final TransformationController transformationController =
+      TransformationController();
 
   void resetZooming() {
     if (transformationController.value != Matrix4.identity()) {
@@ -67,7 +68,8 @@ class _PicDetailState extends State<PicDetail> {
                   imageBuilder: (_, imageProvider) {
                     return Container(
                       decoration: BoxDecoration(
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.contain),
                       ),
                     );
                   },
@@ -76,7 +78,8 @@ class _PicDetailState extends State<PicDetail> {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          image: AssetImage(
+                              '${AssetPath.pngPath}content-error.png'),
                         ),
                       ),
                     );
@@ -114,14 +117,17 @@ class _PicDetailState extends State<PicDetail> {
                       following: true,
                       onFollow: () {},
                       haveStory: false,
-                      onTapOnProfileImage: () => System().navigateToProfile(context, widget.arguments!.email!),
+                      onTapOnProfileImage: () => System()
+                          .navigateToProfile(context, widget.arguments!.email!),
                       spaceProfileAndId: eightPx,
                       featureType: FeatureType.pic,
                       username: widget.arguments?.username,
                       isCelebrity: widget.arguments?.privacy?.isCelebrity,
-                      imageUrl: '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
+                      imageUrl:
+                          '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
                       createdAt: '${System().readTimestamp(
-                        DateTime.parse(widget.arguments!.createdAt!).millisecondsSinceEpoch,
+                        DateTime.parse(widget.arguments!.createdAt!)
+                            .millisecondsSinceEpoch,
                         context,
                         fullCaption: true,
                       )}',
@@ -164,16 +170,25 @@ class _PicDetailState extends State<PicDetail> {
                         Consumer<LikeNotifier>(
                           builder: (context, notifier, child) => _buildButtonV2(
                             context: context,
-                            colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                            iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            function: () => notifier.likePost(context, widget.arguments!),
+                            colorIcon:
+                                (widget.arguments?.insight?.isPostLiked ??
+                                        false)
+                                    ? kHyppePrimary
+                                    : kHyppeLightButtonText,
+                            iconData:
+                                '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            function: () =>
+                                notifier.likePost(context, widget.arguments!),
                           ),
                         ),
                         _buildButtonV2(
                           context: context,
                           iconData: '${AssetPath.vectorPath}share.svg',
                           function: widget.arguments != null
-                              ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments)
+                              ? () => context
+                                  .read<PicDetailNotifier>()
+                                  .createdDynamicLink(context,
+                                      data: widget.arguments)
                               : () {},
                         ),
                         // _buildButtonV2(
@@ -191,39 +206,43 @@ class _PicDetailState extends State<PicDetail> {
                     ),
                     Padding(
                       child: Container(
-                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                        constraints: BoxConstraints(
+                            maxHeight:
+                                MediaQuery.of(context).size.height * 0.5),
                         child: SingleChildScrollView(
-                          child:Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                             ReadMoreText(
-                            "${widget.arguments?.description}",
-                            trimLines: 5,
-                            trimMode: TrimMode.Line,
-                            textAlign: TextAlign.left,
-                            trimExpandedText: 'Show less',
-                            trimCollapsedText: 'Show more',
-                            colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                            moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                            lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          ),
-                         for (var i = 0; i < widget.arguments!.tags!.length; i++) 
-                           ReadMoreText(
-                            "#${widget.arguments?.tags?[i].replaceAll('#', '')}",
-                            trimLines: 5,
-                            trimMode: TrimMode.Line,
-                            textAlign: TextAlign.left,
-                            trimExpandedText: 'Show less',
-                            trimCollapsedText: 'Show more',
-                            colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                            style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                            moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                            lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          ),
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ReadMoreText(
+                              "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(",")}",
+                              trimLines: 5,
+                              trimMode: TrimMode.Line,
+                              textAlign: TextAlign.left,
+                              trimExpandedText: 'Show less',
+                              trimCollapsedText: 'Show more',
+                              colorClickableText:
+                                  Theme.of(context).colorScheme.primaryVariant,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(color: kHyppeLightButtonText),
+                              moreStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryVariant),
+                              lessStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryVariant),
+                            ),
                           ],
-                          )
-                        ),
+                        )),
                       ),
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     )
