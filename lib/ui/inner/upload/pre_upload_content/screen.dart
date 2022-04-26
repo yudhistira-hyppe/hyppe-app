@@ -274,8 +274,16 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   children: [
                                     Text(
                                       notifier.language.turnOffCommenting!,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                              color: const Color.fromRGBO(
+                                            63,
+                                            63,
+                                            63,
+                                            1,
+                                          )),
                                     ),
                                     SizedBox(
                                         height: 10 * SizeConfig.scaleDiagonal),
@@ -290,12 +298,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                             textAlign: TextAlign.start,
                                             textOverflow: TextOverflow.clip,
                                             textSpan: TextSpan(
-                                              text: notifier.language
-                                                  .turnOffCommentingExplain1!,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .caption,
-                                            ),
+                                                text: notifier.language
+                                                    .turnOffCommentingExplain1!,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .caption),
                                           ),
                                         ),
                                       ],
@@ -343,8 +350,16 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                     Text(
                                       notifier
                                           .language.registerContentOwnership!,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                              color: const Color.fromRGBO(
+                                            63,
+                                            63,
+                                            63,
+                                            1,
+                                          )),
                                     ),
                                     SizedBox(
                                         height: 10 * SizeConfig.scaleDiagonal),

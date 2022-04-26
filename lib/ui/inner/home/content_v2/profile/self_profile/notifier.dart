@@ -252,19 +252,22 @@ class SelfProfileNotifier with ChangeNotifier {
     ContentData? _updatedData;
     switch (content) {
       case hyppeVid:
-        if (user.vids != null)
+        if (user.vids != null) {
           _updatedData = user.vids!
               .firstWhereOrNull((element) => element.postID == postID);
+        }
         break;
       case hyppeDiary:
-        if (user.diaries != null)
+        if (user.diaries != null) {
           _updatedData = user.diaries!
               .firstWhereOrNull((element) => element.postID == postID);
+        }
         break;
       case hyppePic:
-        if (user.pics != null)
+        if (user.pics != null) {
           _updatedData = user.pics!
               .firstWhereOrNull((element) => element.postID == postID);
+        }
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -275,6 +278,7 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.tags = tags;
       _updatedData.description = description;
       _updatedData.allowComments = allowComment;
+      _updatedData.certified = certified;
     }
 
     notifyListeners();

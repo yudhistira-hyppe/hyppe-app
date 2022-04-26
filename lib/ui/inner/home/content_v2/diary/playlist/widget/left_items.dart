@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 class LeftItems extends StatefulWidget {
   final String? userName;
   final String? description;
+  final String? tags;
   final String? musicName;
   final String? authorName;
 
@@ -14,6 +15,7 @@ class LeftItems extends StatefulWidget {
     Key? key,
     this.userName,
     this.description,
+    this.tags,
     this.musicName,
     this.authorName,
   }) : super(key: key);
@@ -22,7 +24,8 @@ class LeftItems extends StatefulWidget {
   _LeftItemsState createState() => _LeftItemsState();
 }
 
-class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMixin {
+class _LeftItemsState extends State<LeftItems>
+    with SingleTickerProviderStateMixin {
   // AnimationController? _controller;
   // Animation<Offset>? _offsetAnimation;
 
@@ -57,19 +60,26 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.5),
             child: SingleChildScrollView(
               child: ReadMoreText(
-                "${widget.description}",
+                "${widget.description} ${widget.tags}",
                 trimLines: 5,
                 trimMode: TrimMode.Line,
                 textAlign: TextAlign.left,
                 trimExpandedText: 'Show less',
                 trimCollapsedText: 'Show more',
-                colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                colorClickableText:
+                    Theme.of(context).colorScheme.primaryVariant,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: kHyppeLightButtonText),
+                moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: Theme.of(context).colorScheme.primaryVariant),
+                lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: Theme.of(context).colorScheme.primaryVariant),
               ),
             ),
           ),

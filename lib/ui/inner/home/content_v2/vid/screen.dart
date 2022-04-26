@@ -48,7 +48,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final vidNotifier = context.watch<PreviewVidNotifier>();
-    final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
+    final error =
+        context.select((ErrorService value) => value.getError(ErrorType.vid));
 
     return SizedBox(
       width: SizeConfig.screenWidth,
@@ -56,15 +57,20 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
         children: [
           CustomHeaderFeature(
             onPressed: () => vidNotifier.navigateToSeeAll(context),
-            title: context.read<TranslateNotifierV2>().translate.latestVidsForYou!,
+            title:
+                context.read<TranslateNotifierV2>().translate.latestVidsForYou!,
           ),
           twelvePx,
-          context.read<ErrorService>().isInitialError(error, vidNotifier.vidData)
+          context
+                  .read<ErrorService>()
+                  .isInitialError(error, vidNotifier.vidData)
               ? AspectRatio(
                   aspectRatio: 16 / 9,
                   child: CustomErrorWidget(
                     errorType: ErrorType.vid,
-                    function: () => context.read<PreviewVidNotifier>().initialVid(context, reload: true),
+                    function: () => context
+                        .read<PreviewVidNotifier>()
+                        .initialVid(context, reload: true),
                   ),
                 )
               : vidNotifier.vidData != null
@@ -73,7 +79,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                       child: NotificationListener<ScrollNotification>(
                         onNotification: (ScrollNotification scrollInfo) {
                           if (scrollInfo is ScrollStartNotification) {
-                            Future.delayed(const Duration(milliseconds: 100), () {
+                            Future.delayed(const Duration(milliseconds: 100),
+                                () {
                               vidNotifier.initialVid(context);
                             });
                           }
@@ -88,7 +95,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                           },
                           itemCount: vidNotifier.itemCount,
                           itemBuilder: (BuildContext context, int index) {
-                            if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
+                            if (index == vidNotifier.vidData?.length &&
+                                vidNotifier.hasNext) {
                               return const CustomLoading(size: 5);
                             }
 
@@ -97,10 +105,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Consumer<FollowRequestUnfollowNotifier>(
                                         builder: (context, value, child) {
@@ -111,11 +122,19 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                             haveStory: false,
                                             username: vidData?.username,
                                             featureType: FeatureType.vid,
-                                            isCelebrity: vidData?.privacy?.isCelebrity,
-                                            imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                            onTapOnProfileImage: () => System().navigateToProfile(context, vidData!.email!),
-                                            createdAt: '${System().readTimestamp(
-                                              DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                                            isCelebrity:
+                                                vidData?.privacy?.isCelebrity,
+                                            imageUrl:
+                                                '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
+                                            onTapOnProfileImage: () => System()
+                                                .navigateToProfile(
+                                                    context, vidData!.email!),
+                                            createdAt:
+                                                '${System().readTimestamp(
+                                              DateTime.parse(vidData
+                                                          ?.createdAt ??
+                                                      DateTime.now().toString())
+                                                  .millisecondsSinceEpoch,
                                               context,
                                               fullCaption: true,
                                             )}',
@@ -133,29 +152,38 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                 ),
                                 twelvePx,
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
                                   child: AspectRatio(
                                     aspectRatio: 16 / 9,
                                     child: VideoPlayerPage(
                                       onDetail: false,
                                       videoData: vidNotifier.vidData?[index],
                                       key: ValueKey(vidNotifier.vidPostState),
-                                      afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
+                                      afterView: () => System()
+                                          .increaseViewCount(context,
+                                              vidNotifier.vidData![index]),
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 16)
+                                          .copyWith(top: 12.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
                                         width: 240,
                                         child: CustomTextWidget(
                                           maxLines: 2,
                                           textAlign: TextAlign.left,
-                                          textToDisplay: vidData!.description ?? '',
-                                          textStyle: Theme.of(context).textTheme.caption,
+                                          textToDisplay:
+                                              "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(",")}",
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .caption,
                                         ),
                                       ),
                                       Consumer<LikeNotifier>(
@@ -165,10 +193,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                             child: InkWell(
                                               child: CustomIconWidget(
                                                 defaultColor: false,
-                                                color: (vidData.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
-                                                iconData: '${AssetPath.vectorPath}${(vidData.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                color: (vidData?.insight
+                                                            ?.isPostLiked ??
+                                                        false)
+                                                    ? kHyppePrimary
+                                                    : Theme.of(context)
+                                                        .iconTheme
+                                                        .color,
+                                                iconData:
+                                                    '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                               ),
-                                              onTap: () => notifier.likePost(context, vidData),
+                                              onTap: () => notifier.likePost(
+                                                  context, vidData!),
                                             ),
                                           );
                                         },
