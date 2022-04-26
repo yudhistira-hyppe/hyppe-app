@@ -108,7 +108,7 @@ class _DiaryPageState extends State<DiaryPage> {
             description: widget.data?.description,
             tags: widget.data?.tags
                 ?.map((e) => "#${e.replaceFirst('#', '')}")
-                .join(","),
+                .join(" "),
             musicName: "Dangdut koplo remix",
             authorName: widget.data?.username,
             userName: widget.data?.username,

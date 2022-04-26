@@ -80,7 +80,7 @@ class VidDetailBottom extends StatelessWidget {
                       textAlign: TextAlign.left,
                       textStyle: Theme.of(context).textTheme.bodyText2,
                       textToDisplay:
-                          "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(",")}",
+                          "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                     )
                   : const CustomShimmer(height: 16, radius: 4),
             ),

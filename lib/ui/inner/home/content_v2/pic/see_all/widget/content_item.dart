@@ -110,7 +110,7 @@ class ContentItem extends StatelessWidget {
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
                                 textToDisplay:
-                                    "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(",")}",
+                                    "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                                 textStyle: Theme.of(context).textTheme.caption,
                               ),
                             ),
