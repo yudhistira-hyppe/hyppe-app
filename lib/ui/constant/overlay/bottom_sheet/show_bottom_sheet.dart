@@ -266,11 +266,13 @@ class ShowBottomSheet {
     required String? postID,
     DisqusLogs? parentComment,
   }) {
-    System().actionReqiredIdCard(
-      _,
-      uploadContentAction: false,
-      action: () {
-        Scaffold.of(_)
+
+
+    // System().actionReqiredIdCard(
+    //   _,
+    //   uploadContentAction: false,
+    //   action: () {
+       Scaffold.of(_)
             .showBottomSheet(
               (context) {
                 return Container(
@@ -303,8 +305,9 @@ class ShowBottomSheet {
               }
               // Provider.of<CommentNotifier>(_, listen: false).onCommentExit();
             });
-      },
-    );
+    //    ;
+    //   },
+    // );
   }
 
   static onShowPlaylist(BuildContext _,

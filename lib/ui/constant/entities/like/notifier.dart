@@ -18,45 +18,50 @@ class LikeNotifier with ChangeNotifier {
   Future<void> likePost(BuildContext context, ContentData postData) async {
     final notifier = LikeBloc();
     try {
-      System().actionReqiredIdCard(
-        context,
-        uploadContentAction: false,
-        action: () async {
-          if (postData.email == SharedPreference().readStorage(SpKeys.email)) {
-            // Prevent user from liking his own post
-            return;
-          }
+      // System().actionReqiredIdCard(
+      //   context,
+      //   uploadContentAction: false,
+      //   action: () async {
 
-          if (!(postData.insight?.isPostLiked ?? false)) {
-            postData.insight?.isPostLiked = !(postData.insight?.isPostLiked ?? false);
-            if (postData.insight?.isPostLiked ?? false) {
-              postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-            }
-            notifyListeners();
-          }
+      if (postData.email == SharedPreference().readStorage(SpKeys.email)) {
+        // Prevent user from liking his own post
+        return;
+      }
 
-          // TODO: Future implementation
-          // postData.insight?.isPostLiked = !(postData.insight?.isPostLiked ?? false);
-          // if (postData.insight?.isPostLiked ?? false) {
-          //   postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-          // } else {
-          //   if ((postData.insight?.likes ?? 0) > 0) {
-          //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
-          //   }
-          // }
-          await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!);
-          final fetch = notifier.likeFetch;
-          if (fetch.likeState == LikeState.likeUserPostSuccess) {
-            "Like post success".logger();
-          }
-        },
-      );
+      if (!(postData.insight?.isPostLiked ?? false)) {
+        postData.insight?.isPostLiked =
+            !(postData.insight?.isPostLiked ?? false);
+        if (postData.insight?.isPostLiked ?? false) {
+          postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
+        }
+        notifyListeners();
+      }
+
+      // TODO: Future implementation
+      // postData.insight?.isPostLiked = !(postData.insight?.isPostLiked ?? false);
+      // if (postData.insight?.isPostLiked ?? false) {
+      //   postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
+      // } else {
+      //   if ((postData.insight?.likes ?? 0) > 0) {
+      //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
+      //   }
+      // }
+      await notifier.likePostUserBloc(context,
+          postId: postData.postID!, emailOwner: postData.email!);
+      final fetch = notifier.likeFetch;
+      if (fetch.likeState == LikeState.likeUserPostSuccess) {
+        "Like post success".logger();
+      }
+
+      //   },
+      // );
     } catch (e) {
       e.logger();
     }
   }
 
-  onLikeComment(BuildContext context, {required Comments comment, required ReactionInteractive rData}) async {
+  onLikeComment(BuildContext context,
+      {required Comments comment, required ReactionInteractive rData}) async {
     final notifier = ReactionBloc();
     await notifier.addReactOnCommentBloc(
       context,
@@ -75,9 +80,11 @@ class LikeNotifier with ChangeNotifier {
     final fetch = notifier.reactionFetch;
     if (fetch.reactionState == ReactionState.addReactOnCommentBlocSuccess) {
       notifyListeners();
-      await notifier.getCommentReactionsBloc(context, postID: comment.postID, commentID: comment.commentID);
+      await notifier.getCommentReactionsBloc(context,
+          postID: comment.postID, commentID: comment.commentID);
       final fetch2 = notifier.reactionFetch;
-      if (fetch2.reactionState == ReactionState.getCommentReactionsBlocSuccess) {
+      if (fetch2.reactionState ==
+          ReactionState.getCommentReactionsBlocSuccess) {
         UpdateCommentReaction _result = fetch2.data;
         comment.isReacted = true;
         comment.count = _result.count;
