@@ -214,7 +214,7 @@ class _PicDetailState extends State<PicDetail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ReadMoreText(
-                              "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(",")}",
+                              "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                               trimLines: 5,
                               trimMode: TrimMode.Line,
                               textAlign: TextAlign.left,

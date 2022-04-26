@@ -84,7 +84,7 @@ class PicDetailBottom extends StatelessWidget {
                       textAlign: TextAlign.left,
                       textStyle: Theme.of(context).textTheme.subtitle2,
                       textToDisplay:
-                          "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(",")}",
+                          "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                     )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
