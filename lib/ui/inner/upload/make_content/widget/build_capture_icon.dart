@@ -15,7 +15,7 @@ class BuildCaptureIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MakeContentNotifier>(
       builder: (context, notifier, child) => SizedBox(
-        height: 100 * SizeConfig.scaleDiagonal,
+        height: 105 * SizeConfig.scaleDiagonal,
         child: CustomIconButtonWidget(
           onPressed: () {
             if (notifier.isRecordingVideo) {
