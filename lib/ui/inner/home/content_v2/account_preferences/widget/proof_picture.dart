@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -21,7 +20,8 @@ class ProofPicture extends StatelessWidget {
     return Selector<SelfProfileNotifier, UserInfoModel>(
       selector: (context, user) => user.user,
       builder: (context, user, child) {
-        return user.profile?.idProofStatus == IdProofStatus.complete
+        bool isIDVerified = user.profile?.isIdVerified ?? false;
+        return isIDVerified
             ? SizedBox(
                 width: double.infinity,
                 child: Column(
