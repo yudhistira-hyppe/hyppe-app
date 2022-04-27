@@ -222,9 +222,9 @@ class OtherProfileNotifier with ChangeNotifier {
 
   Future followUser(BuildContext context) async {
     try {
-      _system.actionReqiredIdCard(
-        context,
-        action: () async {
+      // _system.actionReqiredIdCard(
+      //   context,
+      //   action: () async {
           statusFollowing = StatusFollowing.requested;
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(
@@ -240,9 +240,9 @@ class OtherProfileNotifier with ChangeNotifier {
           } else {
             statusFollowing = StatusFollowing.none;
           }
-        },
-        uploadContentAction: false,
-      );
+      //   },
+      //   uploadContentAction: false,
+      // );
     } catch (e) {
       print(e);
       statusFollowing = StatusFollowing.none;
