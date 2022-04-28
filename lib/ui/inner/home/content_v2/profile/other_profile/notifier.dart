@@ -293,9 +293,9 @@ class OtherProfileNotifier with ChangeNotifier {
 
   Future createDiscussion(BuildContext context) async {
     try {
-      _system.actionReqiredIdCard(
-        context,
-        action: () {
+      // _system.actionReqiredIdCard(
+      //   context,
+      //   action: () {
           // get email sender
           final emailSender = SharedPreference().readStorage(SpKeys.email);
 
@@ -321,9 +321,9 @@ class OtherProfileNotifier with ChangeNotifier {
                     photoReceiver: displayPhotoProfile() ?? '',
                   ))
               .then((value) {});
-        },
-        uploadContentAction: false,
-      );
+      //   },
+      //   uploadContentAction: false,
+      // );
     } catch (e) {
       e.toString().logger();
     }

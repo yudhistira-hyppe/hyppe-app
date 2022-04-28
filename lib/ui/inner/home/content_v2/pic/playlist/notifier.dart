@@ -82,9 +82,9 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   Future followUser(BuildContext context, {bool checkIdCard = true}) async {
     try {
       if (checkIdCard) {
-        System().actionReqiredIdCard(
-          context,
-          action: () async {
+        // System().actionReqiredIdCard(
+        //   context,
+        //   action: () async {
             statusFollowing = StatusFollowing.requested;
             final notifier = FollowBloc();
             await notifier.followUserBlocV2(
@@ -100,9 +100,9 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
             } else {
               statusFollowing = StatusFollowing.none;
             }
-          },
-          uploadContentAction: false,
-        );
+        //   },
+        //   uploadContentAction: false,
+        // );
       } else {
         statusFollowing = StatusFollowing.requested;
         final notifier = FollowBloc();

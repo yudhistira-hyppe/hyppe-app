@@ -76,9 +76,9 @@ class FollowerNotifier extends ChangeNotifier {
     required FollowUserArgument argument,
   }) async {
     try {
-      System().actionReqiredIdCard(
-        context,
-        action: () async {
+      // System().actionReqiredIdCard(
+      //   context,
+      //   action: () async {
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(context, data: argument);
           final fetch = notifier.followFetch;
@@ -99,9 +99,9 @@ class FollowerNotifier extends ChangeNotifier {
 
             notifyListeners();
           }
-        },
-        uploadContentAction: false,
-      );
+      //   },
+      //   uploadContentAction: false,
+      // );
     } catch (e) {
       print(e);
     }

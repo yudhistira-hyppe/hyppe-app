@@ -262,9 +262,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     AnimationController? animationController,
   ) async {
     storyController.pause();
-    _system.actionReqiredIdCard(
-      context,
-      action: () async {
+    // _system.actionReqiredIdCard(
+    //   context,
+    //   action: () async {
         checkIfKeyboardIsFocus(context);
         Reaction? _data;
         _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
@@ -335,9 +335,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             },
           ).whenComplete(() => Future.delayed(const Duration(seconds: 6), () => isReactAction = false));
         }
-      },
-      uploadContentAction: false,
-    );
+    //   },
+    //   uploadContentAction: false,
+    // );
   }
 
   Future<void> createdDynamicLink(
@@ -362,9 +362,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void sendMessage(BuildContext context, ContentData? data) async {
-    _system.actionReqiredIdCard(
-      context,
-      action: () async {
+    // _system.actionReqiredIdCard(
+    //   context,
+    //   action: () async {
         if (_textEditingController.text.isNotEmpty) {
           try {
             textEditingController.text.logger();
@@ -388,9 +388,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             }
           }
         }
-      },
-      uploadContentAction: false,
-    );
+    //   },
+    //   uploadContentAction: false,
+    // );
   }
 
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';

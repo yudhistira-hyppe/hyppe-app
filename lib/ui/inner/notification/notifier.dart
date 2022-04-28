@@ -156,9 +156,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     required FollowUserArgument argument,
   }) async {
     try {
-      System().actionReqiredIdCard(
-        context,
-        action: () async {
+      // System().actionReqiredIdCard(
+      //   context,
+      //   action: () async {
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(context, data: argument);
           final fetch = notifier.followFetch;
@@ -166,9 +166,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
             _data?.removeWhere((element) => element.notificationID == data?.notificationID);
             notifyListeners();
           }
-        },
-        uploadContentAction: false,
-      );
+      //   },
+      //   uploadContentAction: false,
+      // );
     } catch (e) {
       print(e);
     }
