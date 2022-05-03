@@ -80,7 +80,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     if (index == null && _isoCodeCache != null) {
       langIso = _isoCodeCache == "en" ? "en" : "id";
     } else {
-      langIso = index != null && _listLanguage.isNotEmpty ? _listLanguage[index].langIso ?? "en" : "en";
+      langIso = index != null && _listLanguage.isNotEmpty ? _listLanguage[index].langIso ?? "en" : "id";
     }
 
     SharedPreference().writeStorage(SpKeys.isoCode, langIso);
