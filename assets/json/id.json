@@ -158,8 +158,8 @@
   "turnOffCommentingExplain2": "Anda dapat mengubahnya nanti dengan membuka opsi menu di bagian atas postingan Anda",
   "youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost": "Anda dapat mengubahnya nanti dengan membuka opsi menu di bagian atas postingan Anda",
   "registerContentOwnership": "Daftarkan kepemilikan konten",
-  "registerContentOwnershipExplain1": "Register your content to be fully protected from piracy and duplication(this action cannot be undone)",
-  "registerContentOwnershipExplain2": "By registering your content, you are fully responsible for the validity of the content, and are willing to follow any legal process that may occur",
+  "registerContentOwnershipExplain1": "Daftarkan konten Anda agar sepenuhnya terlindungi dari pembajakan dan duplikasi (tindakan ini tidak dapat dibatalkan)",
+  "registerContentOwnershipExplain2": "Dengan mendaftarkan konten Anda, Anda bertanggung jawab penuh atas validitas konten, dan bersedia mengikuti segala proses hukum yang mungkin terjadi",
   "protectYourContent": "Lindungi konten Anda",
   "processUpload": "Proses diunggah",
   "cancelPost": "Batalkan kirim",
@@ -456,7 +456,7 @@
   "pleaseVerifyYourIdToUseHyppeFeatures": "Mohon verifikasi identitas anda untuk menggunakan Fitur Hyppe",
   "verifyYourAccount": "Verifikasi Akun Anda",
   "unfortunately": "Sangat di sayangkan",
-  "needVerifyId": "We need to verify your ID",
-  "needVerifyIdDescriptions": "To register your content, you are required to verify your identification. The Verification process will take a few minutes. This process can help to protect your content and your payment within app.",
+  "needVerifyId": "Kami perlu memverifikasi ID Anda",
+  "needVerifyIdDescriptions": "Untuk mendaftarkan konten Anda, Anda harus memverifikasi identitas Anda. Proses Verifikasi akan memakan waktu beberapa menit. Proses ini dapat membantu melindungi konten dan pembayaran Anda dalam aplikasi.",
   "confirm": "Konfirmasi"
 }
