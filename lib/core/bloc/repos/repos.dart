@@ -185,11 +185,15 @@ class Repos {
         if (errorServiceType != null) {
           context.read<ErrorService>().addErrorObject(errorServiceType,
               _errorData.message ?? _language.somethingWentWrong!);
-        }
 
-        if (withAlertMessage) {
-          _showSnackBar(kHyppeDanger, _language.unfortunately!,
-              "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+          if (withAlertMessage) {
+            _showSnackBar(kHyppeDanger, _errorData.message!,"");
+          }
+        } else {
+          if (withAlertMessage) {
+            _showSnackBar(kHyppeDanger, _language.unfortunately!,
+                "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+          }
         }
       } else {
         final _statusCodeFromBackend = methodType != MethodType.download &&

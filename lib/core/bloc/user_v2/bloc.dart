@@ -200,6 +200,8 @@ class UserBloc {
       methodType: MethodType.post,
       withAlertMessage: true,
       withCheckConnection: false,
+      errorServiceType: ErrorType.register,
+      verbose: true
     );
   }
 

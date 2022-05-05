@@ -40,6 +40,7 @@ enum ErrorType {
   getWelcomeNotes,
   getLanguage,
   unknown,
+  register
 }
 enum VideoOrientation { landscape, portrait }
 enum WalletEventEnum { miniDana, acquiring }
