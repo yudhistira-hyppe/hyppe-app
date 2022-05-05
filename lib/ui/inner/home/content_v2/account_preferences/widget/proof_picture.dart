@@ -36,12 +36,12 @@ class ProofPicture extends StatelessWidget {
                           .bodyText1!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
-                    eightPx,
-                    CustomTextWidget(
-                      textStyle: Theme.of(context).textTheme.bodyText2,
-                      textToDisplay:
-                          "${notifier.language.pleaseVerifyYourIdToUseHyppeFeatures}",
-                    ),
+                    // eightPx,
+                    // CustomTextWidget(
+                    //   textStyle: Theme.of(context).textTheme.bodyText2,
+                    //   textToDisplay:
+                    //       "${notifier.language.pleaseVerifyYourIdToUseHyppeFeatures}",
+                    // ),
                     eightPx,
                     Row(
                       children: [

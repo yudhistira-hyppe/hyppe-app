@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -30,10 +31,58 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
               textToDisplay: notifier.language.needVerifyId!,
               textStyle: Theme.of(context).textTheme.subtitle1,
             ),
-            CustomTextWidget(
-              textToDisplay: notifier.language.needVerifyIdDescriptions!,
-              textStyle: Theme.of(context).textTheme.caption,
-              textOverflow: TextOverflow.clip,
+            // CustomTextWidget(
+            //   textToDisplay: notifier.language.needVerifyIdDescriptions!,
+            //   textStyle: Theme.of(context).textTheme.caption,
+            //   textOverflow: TextOverflow.clip,
+            // ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
+                  children: [
+                    const Text("• "),
+                    SizedBox(
+                      width: 330 * SizeConfig.scaleDiagonal,
+                      child: CustomRichTextWidget(
+                        textAlign: TextAlign.start,
+                        textOverflow: TextOverflow.clip,
+                        textSpan: TextSpan(
+                            text: notifier.language
+                                .needVerifyIdDescriptions!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption!.copyWith(height: 1.6)),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                    height: 10 * SizeConfig.scaleDiagonal),
+                Row(
+                  crossAxisAlignment:
+                  CrossAxisAlignment.start,
+                  children: [
+                    const Text("• "),
+                    SizedBox(
+                      width: 330 * SizeConfig.scaleDiagonal,
+                      child: CustomRichTextWidget(
+                        textAlign: TextAlign.start,
+                        textOverflow: TextOverflow.clip,
+                        textSpan: TextSpan(
+                          text: notifier.language
+                              .needVerifyIdDescriptions2!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption!.copyWith(height: 1.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
             CustomElevatedButton(
               child: CustomTextWidget(

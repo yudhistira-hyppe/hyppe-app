@@ -382,7 +382,7 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-            height: MediaQuery.of(_).size.height / 2,
+            height: MediaQuery.of(_).size.height / 1.8,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
