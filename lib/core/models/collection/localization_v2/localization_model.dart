@@ -459,6 +459,7 @@ class LocalizationModelV2 {
   String? unfortunately;
   String? needVerifyId;
   String? needVerifyIdDescriptions;
+  String? needVerifyIdDescriptions2;
   String? confirm;
 
   LocalizationModelV2(
@@ -921,6 +922,7 @@ class LocalizationModelV2 {
       this.unfortunately,
       this.needVerifyId,
       this.needVerifyIdDescriptions,
+        this.needVerifyIdDescriptions2,
       this.confirm});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1431,6 +1433,7 @@ class LocalizationModelV2 {
     unfortunately = json['unfortunately'];
     needVerifyId = json['needVerifyId'];
     needVerifyIdDescriptions = json['needVerifyIdDescriptions'];
+    needVerifyIdDescriptions2 = json['needVerifyIdDescriptions2'];
     confirm = json['confirm'];
   }
 }
