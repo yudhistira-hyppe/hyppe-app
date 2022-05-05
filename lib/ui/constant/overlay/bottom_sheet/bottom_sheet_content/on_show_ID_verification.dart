@@ -54,7 +54,7 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                                 .needVerifyIdDescriptions!,
                             style: Theme.of(context)
                                 .textTheme
-                                .caption),
+                                .caption!.copyWith(height: 1.6)),
                       ),
                     ),
                   ],
@@ -76,7 +76,7 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                               .needVerifyIdDescriptions2!,
                           style: Theme.of(context)
                               .textTheme
-                              .caption,
+                              .caption!.copyWith(height: 1.6),
                         ),
                       ),
                     ),

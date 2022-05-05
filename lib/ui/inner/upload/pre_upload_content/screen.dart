@@ -302,7 +302,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                     .turnOffCommentingExplain1!,
                                                 style: Theme.of(context)
                                                     .textTheme
-                                                    .caption),
+                                                    .caption!.copyWith(height: 1.5),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -324,7 +325,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                   .turnOffCommentingExplain2!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .caption,
+                                                  .caption!.copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
@@ -378,7 +379,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                   .registerContentOwnershipExplain1!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .caption,
+                                                  .caption!.copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
@@ -401,7 +402,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                   .registerContentOwnershipExplain2!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .caption,
+                                                  .caption!.copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
