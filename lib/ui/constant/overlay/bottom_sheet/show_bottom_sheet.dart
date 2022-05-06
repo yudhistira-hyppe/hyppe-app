@@ -27,6 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
+import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
 import 'bottom_sheet_content/on_coloured_sheet.dart';
@@ -392,6 +393,29 @@ class ShowBottomSheet {
             ),
             padding: const EdgeInsets.all(0),
             child: const OnShowIDVerificationBottomSheet());
+      },
+    );
+  }
+
+  static onShowSuccessPostContentOwnership(_) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: _,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+            height: MediaQuery.of(_).size.height / 2.5,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: const OnShowSuccessPostContentOwnershipBottomSheet());
       },
     );
   }

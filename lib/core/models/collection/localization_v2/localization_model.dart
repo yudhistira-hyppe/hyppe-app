@@ -461,6 +461,8 @@ class LocalizationModelV2 {
   String? needVerifyIdDescriptions;
   String? needVerifyIdDescriptions2;
   String? confirm;
+  String? congrats;
+  String? contentOwnershipSuccessInfo;
 
   LocalizationModelV2(
       {this.login,
@@ -923,7 +925,9 @@ class LocalizationModelV2 {
       this.needVerifyId,
       this.needVerifyIdDescriptions,
         this.needVerifyIdDescriptions2,
-      this.confirm});
+      this.confirm,
+      this.congrats,
+      this.contentOwnershipSuccessInfo,});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1435,5 +1439,7 @@ class LocalizationModelV2 {
     needVerifyIdDescriptions = json['needVerifyIdDescriptions'];
     needVerifyIdDescriptions2 = json['needVerifyIdDescriptions2'];
     confirm = json['confirm'];
+    congrats = json['congrats'];
+    contentOwnershipSuccessInfo = json['contentOwnershipSuccessInfo'];
   }
 }

@@ -139,6 +139,7 @@ class MainNotifier with ChangeNotifier {
     // System().actionReqiredIdCard(context,
     //    action: () => ShowBottomSheet.onUploadContent(context));
     ShowBottomSheet.onUploadContent(context);
+    //ShowBottomSheet.onShowSuccessPostContentOwnership(context);
   }
 
   void _connectAndListenToSocket() async {

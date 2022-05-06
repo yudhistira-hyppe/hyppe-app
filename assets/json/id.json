@@ -459,5 +459,7 @@
   "needVerifyId": "Kami perlu memverifikasi ID Anda",
   "needVerifyIdDescriptions": "Untuk mendaftarkan konten Anda, Anda harus memverifikasi identitas Anda. Proses Verifikasi akan memakan waktu beberapa menit. Proses ini dapat membantu melindungi konten dan pembayaran Anda dalam aplikasi.",
   "needVerifyIdDescriptions2": "Dengan mendaftarkan ID Anda, proses upload konten akan dibatalkan dan Anda akan diarahkan kembali ke Beranda Anda. Jangan khawatir, Anda masih bisa mengupload ulang postingan Anda setelah proses ini selesai.",
-  "confirm": "Konfirmasi"
+  "confirm": "Konfirmasi",
+  "congrats": "Selamat!",
+  "contentOwnershipSuccessInfo": "Kepemilikan Konten Anda telah terdaftar, kami akan mengirimkan sertifikat konten Anda ke email terdaftar Anda, proses ini akan memakan waktu beberapa menit. *Silakan periksa spam dan junk mail Anda jika Anda tidak mendapatkan sertifikat*"
 }

@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -27,10 +29,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   final TranslateNotifierV2 _language = TranslateNotifierV2();
 
   late UploadNotifier _uploadNotifier;
+  late PreUploadContentNotifier _preUploadContentNotifier;
 
   @override
   void initState() {
     _uploadNotifier = Provider.of<UploadNotifier>(context, listen: false);
+    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
     _eventService.addUploadHandler(EventKey.uploadEventKey, this);
     super.initState();
   }
@@ -63,8 +67,20 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Success with message ${response.statusMessage}'.logger();
     _uploadNotifier.message = "${_language.translate.contentCreatedSuccessfully}";
-    _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
     _uploadNotifier.reset();
+
+    //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
+    bool isCheckedOwnership = _preUploadContentNotifier.certified;// 3. Get the last value in the Stream.
+
+    'Upload Success with certified checked $isCheckedOwnership'.logger();
+
+    if(isCheckedOwnership) {
+      _preUploadContentNotifier.certified = false;
+      ShowBottomSheet.onShowSuccessPostContentOwnership(context);
+    } else {
+      _preUploadContentNotifier.certified = false;
+      _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
+    }
   }
 
   @override
