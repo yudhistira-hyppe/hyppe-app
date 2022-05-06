@@ -23,7 +23,7 @@ import 'package:flutter/services.dart';
 //   System().systemUIOverlayTheme();
 //   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 //   runApp(Hyppe());
-  
+
 //   FirebaseCrashlytics.instance.crash();
 //   if (kDebugMode) {
 //   // Force disable Crashlytics collection while doing every day development.
@@ -36,9 +36,6 @@ import 'package:flutter/services.dart';
 // }
 // }
 
-
-
-
 void mainApp(EnvType env) async {
   WidgetsFlutterBinding.ensureInitialized();
   Env.init(env);
@@ -49,21 +46,18 @@ void mainApp(EnvType env) async {
   System().systemUIOverlayTheme();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 //  FirebaseCrashlytics.instance.crash();
-  runZonedGuarded(()async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-   runApp(Hyppe());
- if (kDebugMode) {
-  // Force disable Crashlytics collection while doing every day development.
-  // Temporarily toggle this to true if you want to test crash reporting in your app.
-  await FirebaseCrashlytics.instance
-      .setCrashlyticsCollectionEnabled(true);
-} else {
-  // Handle Crashlytics enabled status when not in Debug,
-  // e.g. allow your users to opt-in to crash reporting.
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    runApp(Hyppe());
+    if (kDebugMode) {
+      // Force disable Crashlytics collection while doing every day development.
+      // Temporarily toggle this to true if you want to test crash reporting in your app.
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    } else {
+      // Handle Crashlytics enabled status when not in Debug,
+      // e.g. allow your users to opt-in to crash reporting.
+    }
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+  }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
-   FlutterError.onError=FirebaseCrashlytics.instance.recordFlutterError;
- }, (error,stack)=>FirebaseCrashlytics.instance.recordError(error, stack));
- 
-}
-

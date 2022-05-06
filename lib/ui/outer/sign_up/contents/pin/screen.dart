@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/widget/sign_up_pin_top.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
@@ -50,10 +52,10 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            // leading: GestureDetector(
-            //   onTap: () => notifier.onBackVerifiedEmail(),
-            //   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
-            // ),
+            leading: GestureDetector(
+              onTap: () => notifier.onBackVerifiedEmail(),
+              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+            ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
               textToDisplay: notifier.language.verificationCode!,

@@ -188,6 +188,7 @@ class SignUpPinNotifier with ChangeNotifier {
     inCorrectCode = false;
     if (indicateBack) {
       unFocusingNode();
+      SharedPreference().removeValue(SpKeys.isUserInOTP);
       Routing().moveAndRemoveUntil(Routes.login, Routes.root);
     }
   }
