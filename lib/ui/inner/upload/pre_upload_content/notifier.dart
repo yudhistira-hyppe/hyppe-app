@@ -157,7 +157,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     selectedLocation = '';
     allowComment = true;
-    certified = false;
     captionController.clear();
     tagsController.clear();
   }
@@ -189,6 +188,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
       ).then((value) {
         _uploadSuccess = value;
+        'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         _eventService.notifyUploadSuccess(_uploadSuccess);
       });

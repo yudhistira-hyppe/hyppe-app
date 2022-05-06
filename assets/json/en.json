@@ -459,5 +459,7 @@
   "needVerifyId": "We need to verify your ID",
   "needVerifyIdDescriptions": "To register your content, you are required to verify your identification. The Verification process will take a few minutes. This process can help to protect your content and your payment within app.",
   "needVerifyIdDescriptions2": "By registering your ID, the content upload process will be canceled and you will be redirected back to your Homepage. Don’t worry, you can still re-upload your post after this process complete.",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "congrats": "Congratulation!",
+  "contentOwnershipSuccessInfo": "Your Content Ownership has been registered, we will send your content certificate to your registered email, this process will take a few minutes. *Please check your spam and junk mail if you did not get the certificate*"
 }
