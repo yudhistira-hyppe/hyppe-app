@@ -187,7 +187,15 @@ class Repos {
               _errorData.message ?? _language.somethingWentWrong!);
 
           if (withAlertMessage) {
-            _showSnackBar(kHyppeDanger, _errorData.message!,"");
+            // TO DO : Nunggu backend support multi language, sementara di hardcode
+            final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+            String alertMessage = _errorData.message ?? _language.somethingWentWrong!;
+            if(_isoCodeCache == "id") {
+              if(alertMessage == "Sorry! This email already registered") {
+                alertMessage = _language.alreadyRegistered!;
+              }
+            }
+            _showSnackBar(kHyppeDanger, alertMessage,"");
           }
         } else {
           if (withAlertMessage) {

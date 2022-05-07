@@ -244,6 +244,7 @@
   "signUpHere": "Sign Up Here",
   "alreadyExist": "Already exist",
   "alreadyHaveAnAccount": "Already have an account?",
+  "alreadyRegistered": "Sorry! This email already registered",
   "backToLogin": "Back to log in",
   "badConnectionMessage": "Turn on data or Wi-Fi in Settings",
   "badConnectionTitle": "No internet connection!",

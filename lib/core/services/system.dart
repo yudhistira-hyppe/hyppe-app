@@ -882,4 +882,12 @@ class System {
       systemNavigationBarColor: theme ? kHyppeSurface : kHyppeLightSurface,
     ));
   }
+
+  String? bodyMultiLang({required String? bodyEn, required String? bodyId}) {
+    final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+    if (_isoCodeCache == "id") {
+      return bodyId ?? bodyEn;
+    }
+    return bodyEn;
+  }
 }
