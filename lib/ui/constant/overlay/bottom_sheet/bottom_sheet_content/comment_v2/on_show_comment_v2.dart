@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -107,7 +108,7 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                                     notifier.showTextInput = true;
                                   }
                                 },
-                                child: const CustomTextWidget(textToDisplay: "Be the first to comment!"),
+                                child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment!),
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
                               ),
                             ),
