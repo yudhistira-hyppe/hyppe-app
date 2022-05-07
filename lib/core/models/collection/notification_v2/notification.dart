@@ -10,6 +10,7 @@ class NotificationModel {
   String? eventType;
   String? title;
   String? body;
+  String? bodyId;
   List<Content> content = [];
   String? createdAt;
   NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo;
@@ -27,6 +28,7 @@ class NotificationModel {
     this.eventType,
     this.title,
     this.body,
+    this.bodyId,
     this.content = const [],
     this.createdAt,
     this.senderOrReceiverInfo,
@@ -45,6 +47,7 @@ class NotificationModel {
     eventType = json['eventType'];
     title = json['title'];
     body = json['body'];
+    bodyId = json['bodyId'];
     if (json['content'] != null) {
       json['content'].forEach((v) {
         content.add(Content.fromJson(v));
@@ -68,6 +71,7 @@ class NotificationModel {
     data['eventType'] = eventType;
     data['title'] = title;
     data['body'] = body;
+    data['bodyId'] = bodyId;
     data['content'] = content.map((v) => v.toJson()).toList();
     data['createdAt'] = createdAt;
     if (senderOrReceiverInfo != null) {
@@ -89,6 +93,7 @@ class NotificationModel {
     String? eventType,
     String? title,
     String? body,
+    String? bodyId,
     List<Content>? content,
     String? createdAt,
     NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo,
@@ -106,6 +111,7 @@ class NotificationModel {
       eventType: eventType ?? this.eventType,
       title: title ?? this.title,
       body: body ?? this.body,
+      bodyId: bodyId ?? this.bodyId,
       content: content ?? this.content,
       createdAt: createdAt ?? this.createdAt,
       senderOrReceiverInfo: senderOrReceiverInfo ?? this.senderOrReceiverInfo,

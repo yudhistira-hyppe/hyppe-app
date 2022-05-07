@@ -245,6 +245,7 @@ class LocalizationModelV2 {
   String? signUpHere;
   String? alreadyExist;
   String? alreadyHaveAnAccount;
+  String? alreadyRegistered;
   String? backToLogin;
   String? badConnectionMessage;
   String? badConnectionTitle;
@@ -710,6 +711,7 @@ class LocalizationModelV2 {
       this.signUpHere,
       this.alreadyExist,
       this.alreadyHaveAnAccount,
+        this.alreadyRegistered,
       this.backToLogin,
       this.badConnectionMessage,
       this.badConnectionTitle,
@@ -1194,6 +1196,7 @@ class LocalizationModelV2 {
     signUpHere = json['signUpHere'];
     alreadyExist = json['alreadyExist'];
     alreadyHaveAnAccount = json['alreadyHaveAnAccount'];
+    alreadyRegistered = json['alreadyRegistered'];
     backToLogin = json['backToLogin'];
     badConnectionMessage = json['badConnectionMessage'];
     badConnectionTitle = json['badConnectionTitle'];
