@@ -267,45 +267,43 @@ class ShowBottomSheet {
     required String? postID,
     DisqusLogs? parentComment,
   }) {
-
-
     // System().actionReqiredIdCard(
     //   _,
     //   uploadContentAction: false,
     //   action: () {
-       Scaffold.of(_)
-            .showBottomSheet(
-              (context) {
-                return Container(
-                  height: SizeConfig.screenHeight! -
-                      (28 + (SizeConfig.screenWidth! / 1.78)),
-                  decoration: BoxDecoration(
-                    color: Theme.of(_).colorScheme.background,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(0),
-                  child: OnShowCommentBottomSheetV2(
-                    postID: postID,
-                    fromFront: false,
-                    parentComment: parentComment,
-                  ),
-                );
-              },
-            )
-            .closed
-            .whenComplete(() {
-              try {
-                if (_.read<DiariesPlaylistNotifier>().forcePause) {
-                  _.read<DiariesPlaylistNotifier>().forcePause = false;
-                }
-              } catch (e) {
-                e.logger();
-              }
-              // Provider.of<CommentNotifier>(_, listen: false).onCommentExit();
-            });
+    Scaffold.of(_)
+        .showBottomSheet(
+          (context) {
+            return Container(
+              height: SizeConfig.screenHeight! -
+                  (28 + (SizeConfig.screenWidth! / 1.78)),
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.background,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.all(0),
+              child: OnShowCommentBottomSheetV2(
+                postID: postID,
+                fromFront: false,
+                parentComment: parentComment,
+              ),
+            );
+          },
+        )
+        .closed
+        .whenComplete(() {
+          try {
+            if (_.read<DiariesPlaylistNotifier>().forcePause) {
+              _.read<DiariesPlaylistNotifier>().forcePause = false;
+            }
+          } catch (e) {
+            e.logger();
+          }
+          // Provider.of<CommentNotifier>(_, listen: false).onCommentExit();
+        });
     //    ;
     //   },
     // );
@@ -406,7 +404,7 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-            height: MediaQuery.of(_).size.height / 2.5,
+            height: 300,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
