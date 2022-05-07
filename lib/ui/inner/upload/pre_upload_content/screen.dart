@@ -70,40 +70,40 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Selector<SelfProfileNotifier, UserProfileModel?>(
-                          selector: (_, select) => select.user.profile,
-                          builder: (_, notifier, __) {
-                            return CustomCacheImage(
-                              imageUrl:
-                                  '${System().showUserPicture(notifier?.avatar?.mediaEndpoint)}',
-                              imageBuilder: (context, imageProvider) =>
-                                  Container(
-                                height: 42 * SizeConfig.scaleDiagonal,
-                                width: 42 * SizeConfig.scaleDiagonal,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                height: 42 * SizeConfig.scaleDiagonal,
-                                width: 42 * SizeConfig.scaleDiagonal,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image: AssetImage(
-                                        '${AssetPath.pngPath}profile-error.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        SizedBox(width: 16 * SizeConfig.scaleDiagonal),
+                        // Selector<SelfProfileNotifier, UserProfileModel?>(
+                        //   selector: (_, select) => select.user.profile,
+                        //   builder: (_, notifier, __) {
+                        //     return CustomCacheImage(
+                        //       imageUrl:
+                        //           '${System().showUserPicture(notifier?.avatar?.mediaEndpoint)}',
+                        //       imageBuilder: (context, imageProvider) =>
+                        //           Container(
+                        //         height: 42 * SizeConfig.scaleDiagonal,
+                        //         width: 42 * SizeConfig.scaleDiagonal,
+                        //         decoration: BoxDecoration(
+                        //           shape: BoxShape.circle,
+                        //           image: DecorationImage(
+                        //             image: imageProvider,
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       errorWidget: (context, url, error) => Container(
+                        //         height: 42 * SizeConfig.scaleDiagonal,
+                        //         width: 42 * SizeConfig.scaleDiagonal,
+                        //         decoration: const BoxDecoration(
+                        //           image: DecorationImage(
+                        //             image: AssetImage(
+                        //                 '${AssetPath.pngPath}profile-error.png'),
+                        //             fit: BoxFit.cover,
+                        //           ),
+                        //           shape: BoxShape.circle,
+                        //         ),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // SizedBox(width: 16 * SizeConfig.scaleDiagonal),
                         Expanded(
                           flex: 8,
                           child: TextFormField(
@@ -229,23 +229,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       style: textTheme.bodyText2
                           ?.copyWith(fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
-                        hintText: "hashtag...",
+                        hintText: "Hashtag",
                         hintStyle: textTheme.bodyText2,
-                        border: UnderlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                              color: Color(0xff252627), width: 0.5),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                              color: Color(0xff252627), width: 0.5),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          borderSide: const BorderSide(
-                              color: Color(0xff252627), width: 0.5),
-                        ),
+                        errorBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        focusedErrorBorder: InputBorder.none,
                         contentPadding: const EdgeInsets.all(5),
                       ),
                     ),
@@ -298,11 +288,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                             textAlign: TextAlign.start,
                                             textOverflow: TextOverflow.clip,
                                             textSpan: TextSpan(
-                                                text: notifier.language
-                                                    .turnOffCommentingExplain1!,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .caption!.copyWith(height: 1.5),
+                                              text: notifier.language
+                                                  .turnOffCommentingExplain1!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .caption!
+                                                  .copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
@@ -325,7 +316,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                   .turnOffCommentingExplain2!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .caption!.copyWith(height: 1.5),
+                                                  .caption!
+                                                  .copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
@@ -379,7 +371,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                   .registerContentOwnershipExplain1!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .caption!.copyWith(height: 1.5),
+                                                  .caption!
+                                                  .copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
@@ -402,7 +395,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                                   .registerContentOwnershipExplain2!,
                                               style: Theme.of(context)
                                                   .textTheme
-                                                  .caption!.copyWith(height: 1.5),
+                                                  .caption!
+                                                  .copyWith(height: 1.5),
                                             ),
                                           ),
                                         ),
@@ -460,14 +454,14 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             ?.copyWith(color: kHyppeLightButtonText),
                       ),
                 buttonStyle: ButtonStyle(
-                  foregroundColor:
-                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
-                  shadowColor:
-                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
-                  overlayColor:
-                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
-                  backgroundColor:
-                      MaterialStateProperty.all<Color>(kHyppeUploadIcon),
+                  foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  shadowColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
                 ),
               ),
             ),
