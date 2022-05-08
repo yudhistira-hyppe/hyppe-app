@@ -50,6 +50,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   String _selectedLocation = '';
   bool _allowComment = true;
   bool _certified = false;
+  bool _certifiedTmp = false;
   dynamic _uploadSuccess;
   List<String>? _tags;
   String _visibility = "PUBLIC";
@@ -61,6 +62,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   String get selectedLocation => _selectedLocation;
   bool get allowComment => _allowComment;
   bool get certified => _certified;
+  bool get certifiedTmp => _certifiedTmp;
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
@@ -92,6 +94,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set certified(bool val) {
     _certified = val;
+    notifyListeners();
+  }
+
+  set certifiedTmp(bool val) {
+    _certifiedTmp = val;
     notifyListeners();
   }
 
@@ -157,6 +164,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     selectedLocation = '';
     allowComment = true;
+    certified = false;
     captionController.clear();
     tagsController.clear();
   }
@@ -164,6 +172,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future _createPostContentV2() async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
     final _orientation = context.read<CameraNotifier>().orientation;
+    certifiedTmp = _certified;
 
     try {
       _connectAndListenToSocket(context);
@@ -211,6 +220,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future _updatePostContentV2(BuildContext context,
       {required String postID, required String content}) async {
     updateContent = true;
+    certifiedTmp = false;
+
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
       context,
