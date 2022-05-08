@@ -381,7 +381,7 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-            height: MediaQuery.of(_).size.height / 1.8,
+            height: 450,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -649,8 +649,7 @@ class ShowBottomSheet {
       builder: (builder) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.35),
+          constraints: const BoxConstraints(maxHeight: 270),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),

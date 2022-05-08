@@ -17,13 +17,15 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 
 class ProcessUploadComponent extends StatefulWidget {
   final double topMargin;
-  const ProcessUploadComponent({Key? key, this.topMargin = 10.0}) : super(key: key);
+  const ProcessUploadComponent({Key? key, this.topMargin = 10.0})
+      : super(key: key);
 
   @override
   State<ProcessUploadComponent> createState() => _ProcessUploadComponentState();
 }
 
-class _ProcessUploadComponentState extends State<ProcessUploadComponent> with UploadEventHandler {
+class _ProcessUploadComponentState extends State<ProcessUploadComponent>
+    with UploadEventHandler {
   final Routing _routing = Routing();
   final EventService _eventService = EventService();
   final TranslateNotifierV2 _language = TranslateNotifierV2();
@@ -34,7 +36,8 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   @override
   void initState() {
     _uploadNotifier = Provider.of<UploadNotifier>(context, listen: false);
-    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    _preUploadContentNotifier =
+        Provider.of<PreUploadContentNotifier>(context, listen: false);
     _eventService.addUploadHandler(EventKey.uploadEventKey, this);
     super.initState();
   }
@@ -66,19 +69,19 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   void onUploadSuccess(dio.Response response) {
     _uploadNotifier.isUploading = false;
     'Upload Success with message ${response.statusMessage}'.logger();
-    _uploadNotifier.message = "${_language.translate.contentCreatedSuccessfully}";
+    _uploadNotifier.message =
+        "${_language.translate.contentCreatedSuccessfully}";
     _uploadNotifier.reset();
 
     //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
-    bool isCheckedOwnership = _preUploadContentNotifier.certified;// 3. Get the last value in the Stream.
+    bool isCheckedOwnership =
+        _preUploadContentNotifier.certifiedTmp; // get certified status
 
     'Upload Success with certified checked $isCheckedOwnership'.logger();
 
-    if(isCheckedOwnership) {
-      _preUploadContentNotifier.certified = false;
+    if (isCheckedOwnership) {
       ShowBottomSheet.onShowSuccessPostContentOwnership(context);
     } else {
-      _preUploadContentNotifier.certified = false;
       _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
     }
   }
@@ -87,8 +90,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   void onUploadFailed(dio.DioError message) {
     _uploadNotifier.isUploading = false;
     'Upload Failed with message ${message.message}'.logger();
-    _uploadNotifier.message = '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
-    _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
+    _uploadNotifier.message =
+        '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
+    _showSnackBar(
+        color: kHyppeDanger,
+        message: _uploadNotifier.message,
+        icon: 'close.svg');
     _uploadNotifier.reset();
   }
 
@@ -205,8 +212,10 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               borderRadius: BorderRadius.circular(40.0),
               child: LinearProgressIndicator(
                 value: notifier.progress,
-                backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
-                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
+                backgroundColor:
+                    Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Theme.of(context).colorScheme.primaryVariant),
               ),
             )
           ],
