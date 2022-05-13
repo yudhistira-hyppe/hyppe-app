@@ -1,3 +1,4 @@
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -11,7 +12,8 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_s
 import 'package:provider/provider.dart';
 
 class OtherProfileScreen extends StatefulWidget {
-  const OtherProfileScreen({Key? key}) : super(key: key);
+  final OtherProfileArgument arguments;
+  const OtherProfileScreen({Key? key, required this.arguments}) : super(key: key);
 
   @override
   _OtherProfileScreenState createState() => _OtherProfileScreenState();
@@ -19,13 +21,18 @@ class OtherProfileScreen extends StatefulWidget {
 
 class _OtherProfileScreenState extends State<OtherProfileScreen> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _globalKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
-    Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context));
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    Future.delayed(
+        Duration.zero,
+        () =>
+            notifier.initialOtherProfile(context, argument: widget.arguments));
+    _scrollController.addListener(
+        () => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -56,7 +63,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                     children: [
                       IconButton(
                         onPressed: () => notifier.onExit(),
-                        icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                        icon: const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                       ),
                       CustomTextWidget(
                         textToDisplay: notifier.displayUserName(),
@@ -108,7 +116,8 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                   automaticallyImplyLeading: false,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
-                if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
+                if (notifier.user.profile != null &&
+                    notifier.statusFollowing == StatusFollowing.following)
                   notifier.optionButton()
                 // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
                 //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))

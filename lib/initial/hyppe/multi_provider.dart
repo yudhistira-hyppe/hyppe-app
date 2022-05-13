@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -187,6 +188,9 @@ class AppDependencies {
         ),
 
         ChangeNotifierProvider<ProfileCompletionNotifier>(
-            create: (context) => ProfileCompletionNotifier())
+            create: (context) => ProfileCompletionNotifier()),
+
+        ChangeNotifierProvider<ReferralNotifier>(
+            create: (context) => ReferralNotifier())
       ];
 }

@@ -462,5 +462,11 @@
   "needVerifyIdDescriptions2": "Dengan mendaftarkan ID Anda, proses upload konten akan dibatalkan dan Anda akan diarahkan kembali ke Beranda Anda. Jangan khawatir, Anda masih bisa mengupload ulang postingan Anda setelah proses ini selesai.",
   "confirm": "Konfirmasi",
   "congrats": "Selamat!",
-  "contentOwnershipSuccessInfo": "Kepemilikan Konten Anda telah terdaftar, kami akan mengirimkan sertifikat konten Anda ke email terdaftar Anda, proses ini akan memakan waktu beberapa menit. *Silakan periksa spam dan junk mail Anda jika Anda tidak mendapatkan sertifikat*"
+  "contentOwnershipSuccessInfo": "Kepemilikan Konten Anda telah terdaftar, kami akan mengirimkan sertifikat konten Anda ke email terdaftar Anda, proses ini akan memakan waktu beberapa menit. *Silakan periksa spam dan junk mail Anda jika Anda tidak mendapatkan sertifikat*",
+  "referralID": "ID Referral",
+  "downloadQRCode": "Unduh Kode QR",
+  "shareStatus": "Status Bagikan",
+  "hasUsed": "Telah digunakan",
+  "linkYourReferral": "Tautan Referral Kamu",
+  "shareYourQR": "Bagikan kode ini ke temanmu"
 }

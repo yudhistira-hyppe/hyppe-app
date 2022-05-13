@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 
 import 'shared_preference.dart';
 import 'package:hyppe/ux/path.dart';
@@ -42,7 +44,8 @@ class DynamicLinkService {
     }
 
     // Get the initial dynamic link if the app is opened with a dynamic link
-    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? data =
+        await FirebaseDynamicLinks.instance.getInitialLink();
 
     // Set [_pendingDynamicLinkData] to the initial dynamic link
     _pendingDynamicLinkData ??= data;
@@ -71,7 +74,6 @@ class DynamicLinkService {
 
       final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
       if (_userToken != null) {
-        
         // Auto follow user if app is install from a dynamic link
         try {
           followSender(Routing.navigatorKey.currentContext!);
@@ -84,25 +86,37 @@ class DynamicLinkService {
           case Routes.storyDetail:
             _routing.moveReplacement(
               _path,
-              argument: StoryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: StoryDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID'],
             );
             break;
           case Routes.vidDetail:
             _routing.moveReplacement(
               _path,
-              argument: VidDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: VidDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID'],
             );
             break;
           case Routes.diaryDetail:
             _routing.moveReplacement(
               _path,
-              argument: DiaryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: DiaryDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID'],
             );
             break;
           case Routes.picDetail:
             _routing.moveReplacement(
               _path,
-              argument: PicDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: PicDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID'],
+            );
+            break;
+          // TO DO: If register from referral link, then hit to backend
+          case Routes.otherProfile:
+            _routing.moveReplacement(
+              _path,
+              argument: OtherProfileArgument()
+                ..senderEmail = deepLink.queryParameters['sender_email'],
             );
             break;
         }
@@ -120,7 +134,8 @@ class DynamicLinkService {
 
   static Future followSender(BuildContext context) async {
     try {
-      final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      final _receiverParty =
+          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
       'Link | followSender | receiverParty: $_receiverParty'.logger();
 
