@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/sign_in/sign_in.dart';
+import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -194,7 +195,11 @@ class SignUpPinNotifier with ChangeNotifier {
   }
 
   Color verifyButtonColor(BuildContext context) {
-    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty && !loading) {
+    if (tec1.value.text.isNotEmpty &&
+        tec2.value.text.isNotEmpty &&
+        tec3.value.text.isNotEmpty &&
+        tec4.value.text.isNotEmpty &&
+        !loading) {
       return Theme.of(context).colorScheme.primaryVariant;
     } else {
       return Theme.of(context).colorScheme.surface;
@@ -202,8 +207,14 @@ class SignUpPinNotifier with ChangeNotifier {
   }
 
   TextStyle verifyTextColor(BuildContext context) {
-    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+    if (tec1.value.text.isNotEmpty &&
+        tec2.value.text.isNotEmpty &&
+        tec3.value.text.isNotEmpty &&
+        tec4.value.text.isNotEmpty) {
+      return Theme.of(context)
+          .textTheme
+          .button!
+          .copyWith(color: kHyppeLightButtonText);
     } else {
       return Theme.of(context).primaryTextTheme.button!;
     }
@@ -247,14 +258,24 @@ class SignUpPinNotifier with ChangeNotifier {
 
   TextStyle resendStyle(BuildContext context) {
     if (_timer != "00:00") {
-      return Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant);
+      return Theme.of(context)
+          .textTheme
+          .caption!
+          .copyWith(color: Theme.of(context).colorScheme.secondaryVariant);
     } else {
-      return Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.primaryVariant);
+      return Theme.of(context)
+          .textTheme
+          .caption!
+          .copyWith(color: Theme.of(context).colorScheme.primaryVariant);
     }
   }
 
-  Function? onVerifyButton(BuildContext context, {required VerifyPageArgument argument}) {
-    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
+  Function? onVerifyButton(BuildContext context,
+      {required VerifyPageArgument argument}) {
+    if (tec1.value.text.isNotEmpty &&
+        tec2.value.text.isNotEmpty &&
+        tec3.value.text.isNotEmpty &&
+        tec4.value.text.isNotEmpty) {
       return () async {
         bool connection = await System().checkConnections();
         if (connection) {
@@ -291,15 +312,21 @@ class SignUpPinNotifier with ChangeNotifier {
               notifyListeners();
             }
           } else {
-            await notifier.verifyAccountBlocV2(context, email: email, otp: _verifyCode);
+            await notifier.verifyAccountBlocV2(context,
+                email: email, otp: _verifyCode);
 
             final fetch = notifier.userFetch;
             if (fetch.userState == UserState.verifyAccountSuccess) {
               _accountResponse = SignIn.fromJson(fetch.data);
-              SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
-              SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
-              SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
+              SharedPreference()
+                  .writeStorage(SpKeys.email, _accountResponse.data?.email);
+              SharedPreference()
+                  .writeStorage(SpKeys.userID, _accountResponse.data?.userId);
+              SharedPreference()
+                  .writeStorage(SpKeys.userToken, _accountResponse.data?.token);
               SharedPreference().removeValue(SpKeys.isUserInOTP);
+
+              DynamicLinkService.hitReferralBackend(context);
 
               _handleVerifyAction(
                 context: context,
@@ -331,7 +358,9 @@ class SignUpPinNotifier with ChangeNotifier {
     required VerifyPageArgument verifyPageArgument,
   }) async {
     loading = false;
-    await ShowBottomSheet().onShowColouredSheet(context, language.verified!, subCaption: message).whenComplete(() async {
+    await ShowBottomSheet()
+        .onShowColouredSheet(context, language.verified!, subCaption: message)
+        .whenComplete(() async {
       switch (verifyPageArgument.redirect) {
         case VerifyPageRedirection.toLogin:
           Routing().moveAndRemoveUntil(Routes.login, Routes.root);
@@ -340,7 +369,8 @@ class SignUpPinNotifier with ChangeNotifier {
           Routing().moveAndRemoveUntil(
             Routes.signUpVerified,
             Routes.root,
-            argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome),
+            argument:
+                VerifyPageArgument(redirect: VerifyPageRedirection.toHome),
           );
           break;
         // TODO: Changed sign up rules
@@ -349,7 +379,9 @@ class SignUpPinNotifier with ChangeNotifier {
         //   break;
         case VerifyPageRedirection.toSignUpV2:
           _setUserCompleteData(context);
-          Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument(fromSetting: false, userInterested: []));
+          Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+              argument: UserInterestScreenArgument(
+                  fromSetting: false, userInterested: []));
           break;
         // END TODO
         case VerifyPageRedirection.none:
@@ -381,7 +413,8 @@ class SignUpPinNotifier with ChangeNotifier {
     bool connection = await System().checkConnections();
     if (connection) {
       final notifier = UserBloc();
-      await notifier.resendOTPBloc(context, username: username, function: () => resendCode(context));
+      await notifier.resendOTPBloc(context,
+          username: username, function: () => resendCode(context));
       final fetch = notifier.userFetch;
       if (fetch.userState == UserState.resendOTPSuccess) {
         print('Resend code success');

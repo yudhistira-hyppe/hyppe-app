@@ -12,6 +12,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -265,9 +266,16 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         _googleSignInService.handleSignOut();
         ShowBottomSheet.onShowSomethingWhenWrong(context);
       } else {
+        String? referralEmail = DynamicLinkService
+                    .pendingDynamicLinkData?.link.queryParameters['referral'] ==
+                '1'
+            ? DynamicLinkService
+                .pendingDynamicLinkData?.link.queryParameters['sender_email']
+            : '';
         await notifier.googleSignInBlocV2(
           context,
           email: userCredential.user!.email!,
+          referralEmail: referralEmail ?? '',
           function: () => loginGoogleSign(context),
         );
 

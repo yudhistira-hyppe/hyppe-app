@@ -67,6 +67,7 @@ dependencies:
 
   story_view: # Story viewer
     path: packages/story_view
+  qr_flutter: ^4.0.0
 
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability

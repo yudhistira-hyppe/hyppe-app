@@ -462,5 +462,11 @@
   "needVerifyIdDescriptions2": "By registering your ID, the content upload process will be canceled and you will be redirected back to your Homepage. Don’t worry, you can still re-upload your post after this process complete.",
   "confirm": "Confirm",
   "congrats": "Congratulation!",
-  "contentOwnershipSuccessInfo": "Your Content Ownership has been registered, we will send your content certificate to your registered email, this process will take a few minutes. *Please check your spam and junk mail if you did not get the certificate*"
+  "contentOwnershipSuccessInfo": "Your Content Ownership has been registered, we will send your content certificate to your registered email, this process will take a few minutes. *Please check your spam and junk mail if you did not get the certificate*",
+  "referralID": "Referral ID",
+  "downloadQRCode": "Download QR Code",
+  "shareStatus": "Share Status",
+  "hasUsed": "Has used",
+  "linkYourReferral": "Link your Referral",
+  "shareYourQR": "Share this code to your friends"
 }
