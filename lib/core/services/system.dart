@@ -748,6 +748,34 @@ class System {
     return _linkResult.shortUrl;
   }
 
+  Future<Uri> createdReferralLink(BuildContext context) async {
+    final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final DynamicLinkParameters parameters = DynamicLinkParameters(
+      uriPrefix: Env.data.deeplinkBaseUrl,
+      link: Uri.parse(
+          '${Env.data.deeplinkBaseUrl}${Routes.otherProfile}?referral=1&sender_email=${notifier.user.profile!.email}'),
+      androidParameters: AndroidParameters(
+        minimumVersion: 0,
+        packageName: Env.data.appID,
+      ),
+      iosParameters: IOSParameters(
+        bundleId: Env.data.appID,
+        minimumVersion: '1.0.0',
+        appStoreId: Env.data.appStoreID,
+      ),
+      socialMetaTagParameters: SocialMetaTagParameters(
+        description: "Referral",
+        imageUrl: Uri.parse('${notifier.user.profile!.avatar}'),
+        title: 'Hyppe App | ${notifier.user.profile!.fullName}',
+      ),
+    );
+
+    var _linkResult =
+        await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+
+    return _linkResult.shortUrl;
+  }
+
   Future copyToClipboard(String data) async =>
       await Clipboard.setData(ClipboardData(text: data));
 
@@ -862,10 +890,10 @@ class System {
         if (storyController != null) {
           storyController.pause();
           Routing()
-              .move(Routes.otherProfile)
+              .move(Routes.otherProfile,argument: OtherProfileArgument(senderEmail: email))
               .whenComplete(() => storyController.play());
         } else {
-          Routing().move(Routes.otherProfile);
+          Routing().move(Routes.otherProfile,argument: OtherProfileArgument(senderEmail: email));
         }
       } else {
         storyController != null

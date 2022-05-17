@@ -4,6 +4,7 @@ import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 // import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 // import 'package:hyppe/core/bloc/message_v2/bloc.dart';
@@ -35,7 +36,11 @@ import 'package:provider/provider.dart';
 class OtherProfileNotifier with ChangeNotifier {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
-    ..withEvents = [InteractiveEvent.initial, InteractiveEvent.accept, InteractiveEvent.request];
+    ..withEvents = [
+      InteractiveEvent.initial,
+      InteractiveEvent.accept,
+      InteractiveEvent.request
+    ];
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -118,15 +123,24 @@ class OtherProfileNotifier with ChangeNotifier {
           ? "@" + username!
           : "";
 
-  String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+  String? displayPhotoProfile() =>
+      _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
 
-  String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber((user.profile?.insight?.posts ?? 0).toInt()) : "0";
+  String displayPostsCount() => user.profile?.insight != null
+      ? _system.formatterNumber((user.profile?.insight?.posts ?? 0).toInt())
+      : "0";
 
-  String displayFollowers() => user.profile?.insight != null ? _system.formatterNumber((user.profile?.insight?.followers ?? 0).toInt()) : "0";
+  String displayFollowers() => user.profile?.insight != null
+      ? _system.formatterNumber((user.profile?.insight?.followers ?? 0).toInt())
+      : "0";
 
-  String displayFollowing() => user.profile?.insight != null ? _system.formatterNumber((user.profile?.insight?.followings ?? 0).toInt()) : "0";
+  String displayFollowing() => user.profile?.insight != null
+      ? _system
+          .formatterNumber((user.profile?.insight?.followings ?? 0).toInt())
+      : "0";
 
-  String? displayFullName() => user.profile != null ? user.profile!.fullName ?? "" : "";
+  String? displayFullName() =>
+      user.profile != null ? user.profile!.fullName ?? "" : "";
 
   String displayBio() => user.profile != null
       ? user.profile?.bio != null
@@ -144,8 +158,10 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  onScrollListener(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  onScrollListener(
+      BuildContext context, ScrollController scrollController) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
       switch (pageIndex) {
         case 0:
           {
@@ -163,7 +179,8 @@ class OtherProfileNotifier with ChangeNotifier {
         case 1:
           {
             if (!diaryContentsQuery.loading && diaryHasNext) {
-              List<ContentData> _res = await diaryContentsQuery.loadNext(context);
+              List<ContentData> _res =
+                  await diaryContentsQuery.loadNext(context);
               if (_res.isNotEmpty) {
                 user.diaries = [...user.diaries!, ..._res];
               } else {
@@ -190,8 +207,12 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  initialOtherProfile(BuildContext context) async {
+  initialOtherProfile(BuildContext context, {OtherProfileArgument? argument}) async {
     user = UserInfoModel();
+
+    if (argument?.senderEmail != null) {
+      userEmail = argument?.senderEmail;
+    }
 
     vidContentsQuery.featureType = FeatureType.vid;
     diaryContentsQuery.featureType = FeatureType.diary;
@@ -206,7 +227,8 @@ class OtherProfileNotifier with ChangeNotifier {
     picContentsQuery.searchText = userEmail!;
 
     final usersNotifier = UserBloc();
-    await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
+    await usersNotifier.getUserProfilesBloc(context,
+        search: userEmail, withAlertMessage: true);
     final usersFetch = usersNotifier.userFetch;
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
@@ -225,21 +247,21 @@ class OtherProfileNotifier with ChangeNotifier {
       // _system.actionReqiredIdCard(
       //   context,
       //   action: () async {
-          statusFollowing = StatusFollowing.requested;
-          final notifier = FollowBloc();
-          await notifier.followUserBlocV2(
-            context,
-            data: FollowUserArgument(
-              receiverParty: _userEmail ?? '',
-              eventType: InteractiveEventType.following,
-            ),
-          );
-          final fetch = notifier.followFetch;
-          if (fetch.followState == FollowState.followUserSuccess) {
-            statusFollowing = StatusFollowing.requested;
-          } else {
-            statusFollowing = StatusFollowing.none;
-          }
+      statusFollowing = StatusFollowing.requested;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: _userEmail ?? '',
+          eventType: InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        statusFollowing = StatusFollowing.requested;
+      } else {
+        statusFollowing = StatusFollowing.none;
+      }
       //   },
       //   uploadContentAction: false,
       // );
@@ -251,16 +273,27 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   Widget optionButton() {
-    List pages = [const OtherProfileVids(), const OtherProfileDiaries(), const OtherProfilePics()];
+    List pages = [
+      const OtherProfileVids(),
+      const OtherProfileDiaries(),
+      const OtherProfilePics()
+    ];
     return pages[pageIndex];
   }
 
   navigateToSeeAllScreen(BuildContext context, int index) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble()));
-      if (pageIndex == 2) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: user.pics?[index]));
+      if (pageIndex == 0)
+        _routing.move(Routes.vidDetail,
+            argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      if (pageIndex == 1)
+        _routing.move(Routes.diaryDetail,
+            argument: DiaryDetailScreenArgument(
+                diaryData: user.diaries, index: index.toDouble()));
+      if (pageIndex == 2)
+        _routing.move(Routes.picDetail,
+            argument: PicDetailScreenArgument(picData: user.pics?[index]));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
@@ -296,31 +329,34 @@ class OtherProfileNotifier with ChangeNotifier {
       // _system.actionReqiredIdCard(
       //   context,
       //   action: () {
-          // get email sender
-          final emailSender = SharedPreference().readStorage(SpKeys.email);
+      // get email sender
+      final emailSender = SharedPreference().readStorage(SpKeys.email);
 
-          // get self profile data
-          final _selfProfile = Provider.of<SelfProfileNotifier>(context, listen: false);
-          Routing()
-              .move(Routes.messageDetail,
-                  argument: MessageDetailArgument(
-                    mate: Mate(
-                      email: emailSender,
-                      fullName: _selfProfile.user.profile?.fullName,
-                      username: _selfProfile.user.profile?.username,
-                      avatar: Avatar(
-                        mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
-                        mediaType: _selfProfile.user.profile?.avatar?.mediaType,
-                        mediaEndpoint: _selfProfile.user.profile?.avatar?.mediaEndpoint,
-                        mediaBasePath: _selfProfile.user.profile?.avatar?.mediaBasePath,
-                      ),
-                    ),
-                    emailReceiver: userEmail ?? '',
-                    usernameReceiver: displayUserName(),
-                    fullnameReceiver: displayFullName() ?? '',
-                    photoReceiver: displayPhotoProfile() ?? '',
-                  ))
-              .then((value) {});
+      // get self profile data
+      final _selfProfile =
+          Provider.of<SelfProfileNotifier>(context, listen: false);
+      Routing()
+          .move(Routes.messageDetail,
+              argument: MessageDetailArgument(
+                mate: Mate(
+                  email: emailSender,
+                  fullName: _selfProfile.user.profile?.fullName,
+                  username: _selfProfile.user.profile?.username,
+                  avatar: Avatar(
+                    mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
+                    mediaType: _selfProfile.user.profile?.avatar?.mediaType,
+                    mediaEndpoint:
+                        _selfProfile.user.profile?.avatar?.mediaEndpoint,
+                    mediaBasePath:
+                        _selfProfile.user.profile?.avatar?.mediaBasePath,
+                  ),
+                ),
+                emailReceiver: userEmail ?? '',
+                usernameReceiver: displayUserName(),
+                fullnameReceiver: displayFullName() ?? '',
+                photoReceiver: displayPhotoProfile() ?? '',
+              ))
+          .then((value) {});
       //   },
       //   uploadContentAction: false,
       // );
@@ -339,9 +375,11 @@ class OtherProfileNotifier with ChangeNotifier {
       final _resRequest = await _resFuture;
 
       if (_resRequest.isNotEmpty) {
-        if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+        if (_resRequest
+            .any((element) => element.event == InteractiveEvent.accept)) {
           statusFollowing = StatusFollowing.following;
-        } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+        } else if (_resRequest
+            .any((element) => element.event == InteractiveEvent.initial)) {
           statusFollowing = StatusFollowing.requested;
         }
       }

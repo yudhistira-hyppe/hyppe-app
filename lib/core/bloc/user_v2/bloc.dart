@@ -99,10 +99,20 @@ class UserBloc {
   }
 
   Future googleSignInBlocV2(BuildContext context,
-      {required Function() function, required String email}) async {
+      {required Function() function,
+      required String email,
+      String? referralEmail}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    String realDeviceId = await System().getDeviceIdentifier();
+    dynamic payload = {
+      'email': email.toLowerCase(),
+      "socmedSource": "GMAIL",
+      "deviceId": deviceID,
+      "langIso": "en",
+      "referral": referralEmail
+    };
+    'Payload in social login referralPayload $payload'.logger();
+
     await Repos().reposPost(
       context,
       (onResult) {
@@ -125,13 +135,7 @@ class UserBloc {
       withCheckConnection: false,
       withAlertMessage: true,
       host: UrlConstants.loginGoogle,
-      data: {
-        'email': email.toLowerCase(),
-        "socmedSource": "GMAIL",
-        "deviceId": deviceID,
-        "imei": realDeviceId,
-        "langIso": "en"
-      },
+      data: payload,
     );
   }
 

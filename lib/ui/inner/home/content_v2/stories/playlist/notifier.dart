@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/post_reaction_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
@@ -221,7 +222,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email!;
     storyController.pause();
-    _routing.move(Routes.otherProfile).whenComplete(() => storyController.play());
+    _routing.move(Routes.otherProfile,argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
   }
 
   void initState(BuildContext context, StoryDetailScreenArgument routeArgument) {

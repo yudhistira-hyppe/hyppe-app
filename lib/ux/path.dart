@@ -19,6 +19,7 @@ class Routes {
   static const String wallet = '/wallet';
   static const String walletWebView = 'wallet-web-view';
   static const String completeProfile = '/required-complete-profile';
+  static const String referralScreen = '/referral-screen';
 
 // Sign up
   static const String signUpPin = '/sign-up-pin';
