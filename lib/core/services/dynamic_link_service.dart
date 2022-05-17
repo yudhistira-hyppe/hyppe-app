@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
+import 'package:hyppe/core/arguments/referral_argument.dart';
+import 'package:hyppe/core/bloc/referral/bloc.dart';
+import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/screen.dart';
 
 import 'shared_preference.dart';
 import 'package:hyppe/ux/path.dart';
@@ -35,7 +37,7 @@ class DynamicLinkService {
   // To prevent dynamic link from being called multiple times
   static bool _linkProcessed = false;
 
-  static PendingDynamicLinkData? _pendingDynamicLinkData;
+  static PendingDynamicLinkData? pendingDynamicLinkData;
 
   static Future handleDynamicLinks() async {
     if (_linkProcessed) {
@@ -47,8 +49,8 @@ class DynamicLinkService {
     final PendingDynamicLinkData? data =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
-    // Set [_pendingDynamicLinkData] to the initial dynamic link
-    _pendingDynamicLinkData ??= data;
+    // Set [pendingDynamicLinkData] to the initial dynamic link
+    pendingDynamicLinkData ??= data;
 
     // handle link that has been retrieved
     _handleDeepLink(data);
@@ -69,17 +71,27 @@ class DynamicLinkService {
   static void _handleDeepLink(PendingDynamicLinkData? data) async {
     Uri? deepLink = data?.link;
     if (deepLink != null) {
-      // Set [_pendingDynamicLinkData] to the initial dynamic link
-      _pendingDynamicLinkData ??= data;
+      // Set [pendingDynamicLinkData] to the initial dynamic link
+      pendingDynamicLinkData ??= data;
 
       final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
       if (_userToken != null) {
         // Auto follow user if app is install from a dynamic link
-        try {
-          followSender(Routing.navigatorKey.currentContext!);
-        } catch (e) {
-          'Error in followSender $e'.logger();
+        if (deepLink.queryParameters['referral'] != '1') {
+          try {
+            followSender(Routing.navigatorKey.currentContext!);
+          } catch (e) {
+            'Error in followSender $e'.logger();
+          }
         }
+
+        // if (deepLink.queryParameters['referral'] == '1') {
+        //   try {
+        //     hitReferralBackend(Routing.navigatorKey.currentContext!);
+        //   } catch (e) {
+        //     'Error in hit referral backend $e'.logger();
+        //   }
+        // }
 
         final _path = deepLink.path;
         switch (_path) {
@@ -112,13 +124,13 @@ class DynamicLinkService {
             );
             break;
           // TO DO: If register from referral link, then hit to backend
-          case Routes.otherProfile:
-            _routing.moveReplacement(
-              _path,
-              argument: OtherProfileArgument()
-                ..senderEmail = deepLink.queryParameters['sender_email'],
-            );
-            break;
+          // case Routes.otherProfile:
+          //   _routing.moveReplacement(
+          //     _path,
+          //     argument: OtherProfileArgument()
+          //       ..senderEmail = deepLink.queryParameters['sender_email'],
+          //   );
+          //   break;
         }
 
         // Set [_linkProcessed] to true
@@ -126,6 +138,7 @@ class DynamicLinkService {
         '_handleDeepLink | deeplink: $deepLink'.logger();
       } else {
         '_handleDeepLink | userToken is null'.logger();
+        '_handleDeepLink | deeplink: $deepLink'.logger();
       }
     } else {
       'App open not from dynamic link'.logger();
@@ -134,8 +147,12 @@ class DynamicLinkService {
 
   static Future followSender(BuildContext context) async {
     try {
+      if (pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
+        return;
+      }
+
       final _receiverParty =
-          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+          pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
       'Link | followSender | receiverParty: $_receiverParty'.logger();
 
@@ -155,9 +172,44 @@ class DynamicLinkService {
         } else {
           'followUser | followUserFailed'.logger();
         }
-        _pendingDynamicLinkData = null;
+        pendingDynamicLinkData = null;
       } else {
         'followUser | _receiverParty is null'.logger();
+      }
+    } catch (e) {
+      'follow user: ERROR: $e'.logger();
+    }
+  }
+
+  static Future hitReferralBackend(BuildContext context) async {
+    try {
+      if (pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
+        return;
+      }
+
+      final _receiverParty =
+          pendingDynamicLinkData?.link.queryParameters['sender_email'];
+
+      'Link | referralSender | receiverParty: $_receiverParty'.logger();
+
+      if (_receiverParty != null) {
+        final notifier = ReferralBloc();
+        await notifier.referralUserBloc(
+          context,
+          withAlertConnection: false,
+          data: ReferralUserArgument(
+            email: _receiverParty,
+          ),
+        );
+        final fetch = notifier.referralFetch;
+        if (fetch.referralState == ReferralState.referralUserSuccess) {
+          'referralUser | referralUserSuccess'.logger();
+        } else {
+          'referralUser | referralUserFailed'.logger();
+        }
+        pendingDynamicLinkData = null;
+      } else {
+        'referralUser | _receiverParty is null'.logger();
       }
     } catch (e) {
       'follow user: ERROR: $e'.logger();

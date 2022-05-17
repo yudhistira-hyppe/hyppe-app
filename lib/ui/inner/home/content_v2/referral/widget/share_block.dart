@@ -28,7 +28,6 @@ class _ShareBlockState extends State<ShareBlock> {
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 16),
-                  width: 375.0 * SizeConfig.scaleDiagonal,
                   height: 44.0 * SizeConfig.scaleDiagonal,
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
@@ -64,7 +63,6 @@ class _ShareBlockState extends State<ShareBlock> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   margin: const EdgeInsets.symmetric(vertical: 16),
-                  width: 375.0 * SizeConfig.scaleDiagonal,
                   height: 44.0 * SizeConfig.scaleDiagonal,
                   decoration: BoxDecoration(
                     color: kHyppeLightSurface,

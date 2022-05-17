@@ -22,13 +22,12 @@ class Referral extends StatefulWidget {
 class _ReferralState extends State<Referral> {
   @override
   void initState() {
-    final notifier =
-        Provider.of<ReferralNotifier>(context, listen: false);
-    Future.delayed(
-        Duration.zero, () => notifier.onInitial(context));
+    final notifier = Provider.of<ReferralNotifier>(context, listen: false);
+    Future.delayed(Duration.zero, () => notifier.onInitial(context));
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
