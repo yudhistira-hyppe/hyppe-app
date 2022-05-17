@@ -4,6 +4,7 @@ import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/error_service.dart';
@@ -101,10 +102,10 @@ class UserBloc {
       {required Function() function, required String email}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    String realDeviceId = await System().getDeviceIdentifier();
     await Repos().reposPost(
       context,
       (onResult) {
-       
         if (onResult.statusCode! > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError,
               data: GenericResponse.fromJson(onResult.data).responseData));
@@ -114,7 +115,6 @@ class UserBloc {
         }
       },
       (errorData) {
-        print('eeeee  ${errorData}');
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           Routing().moveBack();
           function();
@@ -129,6 +129,7 @@ class UserBloc {
         'email': email.toLowerCase(),
         "socmedSource": "GMAIL",
         "deviceId": deviceID,
+        "imei": realDeviceId,
         "langIso": "en"
       },
     );
@@ -140,6 +141,18 @@ class UserBloc {
       required String password}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    String realDeviceID = await System().getDeviceIdentifier();
+    dynamic payload = {
+      'email': email.toLowerCase(),
+      "password": password,
+      "deviceId": deviceID,
+      "imei": realDeviceID,
+      "location": {
+        "longitude": "${double.parse("0.0")}",
+        "latitude": "${double.parse("0.0")}",
+      },
+    };
+    'Login payload => $payload'.logger();
 
     await Repos().reposPost(
       context,
@@ -163,46 +176,34 @@ class UserBloc {
       withCheckConnection: false,
       withAlertMessage: true,
       host: UrlConstants.login,
-      data: {
-        'email': email.toLowerCase(),
-        "password": password,
-        "deviceId": deviceID,
-        "location": {
-          "longitude": "${double.parse("0.0")}",
-          "latitude": "${double.parse("0.0")}",
-        },
-      },
+      data: payload,
     );
   }
 
   Future signUpBlocV2(BuildContext context,
       {required SignUpDataArgument data}) async {
     setUserFetch(UserFetch(UserState.loading));
-    await Repos().reposPost(
-      context,
-      (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.signUpError,
-              data: GenericResponse.fromJson(onResult.data).responseData));
-        } else {
-          setUserFetch(UserFetch(UserState.signUpSuccess,
-              data: GenericResponse.fromJson(onResult.data).responseData));
-        }
-      },
-      (errorData) {
-        ShowBottomSheet.onInternalServerError(context,
-            tryAgainButton: () => Routing().moveBack());
-        setUserFetch(UserFetch(UserState.signUpError));
-        Dio().close(force: true);
-      },
-      host: UrlConstants.signUp,
-      data: data.toJson(),
-      methodType: MethodType.post,
-      withAlertMessage: true,
-      withCheckConnection: false,
-      errorServiceType: ErrorType.register,
-      verbose: true
-    );
+    await Repos().reposPost(context, (onResult) {
+      if (onResult.statusCode! > HTTP_CODE) {
+        setUserFetch(UserFetch(UserState.signUpError,
+            data: GenericResponse.fromJson(onResult.data).responseData));
+      } else {
+        setUserFetch(UserFetch(UserState.signUpSuccess,
+            data: GenericResponse.fromJson(onResult.data).responseData));
+      }
+    }, (errorData) {
+      ShowBottomSheet.onInternalServerError(context,
+          tryAgainButton: () => Routing().moveBack());
+      setUserFetch(UserFetch(UserState.signUpError));
+      Dio().close(force: true);
+    },
+        host: UrlConstants.signUp,
+        data: data.toJson(),
+        methodType: MethodType.post,
+        withAlertMessage: true,
+        withCheckConnection: false,
+        errorServiceType: ErrorType.register,
+        verbose: true);
   }
 
   Future updateProfileBlocV2(BuildContext context,

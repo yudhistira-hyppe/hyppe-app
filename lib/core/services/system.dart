@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
@@ -230,6 +231,27 @@ class System {
           DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(dateParams));
     }
     return value;
+  }
+
+  Future<String> getDeviceIdentifier() async {
+    String deviceIdentifier = "unknown";
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      deviceIdentifier = androidInfo.androidId ?? 'unknown';
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceIdentifier = iosInfo.identifierForVendor ?? 'unknown';
+    } else if (kIsWeb) {
+      // The web doesnt have a device UID, so use a combination fingerprint as an example
+      WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
+      deviceIdentifier = (webInfo.vendor ?? '') + (webInfo.userAgent ?? '') + webInfo.hardwareConcurrency.toString();
+    } else if (Platform.isLinux) {
+      LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
+      deviceIdentifier = linuxInfo.machineId ?? 'unknown';
+    }
+    return deviceIdentifier;
   }
 
   Future<IosDeviceInfo> getIosInfo() async {
