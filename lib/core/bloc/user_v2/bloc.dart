@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/response/generic_response.dart';
+import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -99,17 +100,23 @@ class UserBloc {
   }
 
   Future googleSignInBlocV2(BuildContext context,
-      {required Function() function,
-      required String email,
-      String? referralEmail}) async {
+      {required Function() function, required String email}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    String realDeviceId = await System().getDeviceIdentifier();
+    String? referralEmail = DynamicLinkService
+                .pendingDynamicLinkData?.link.queryParameters['referral'] ==
+            '1'
+        ? DynamicLinkService
+            .pendingDynamicLinkData?.link.queryParameters['sender_email']
+        : '';
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "GMAIL",
       "deviceId": deviceID,
       "langIso": "en",
-      "referral": referralEmail
+      "referral": referralEmail,
+      "imei": realDeviceId,
     };
     'Payload in social login referralPayload $payload'.logger();
 
