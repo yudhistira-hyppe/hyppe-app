@@ -199,6 +199,8 @@ class RegisterNotifier with ChangeNotifier {
             // update loading state
             loading = true;
 
+            String realDeviceId = await System().getDeviceIdentifier();
+
             final notifier = UserBloc();
             await notifier.signUpBlocV2(
               context,
@@ -206,6 +208,7 @@ class RegisterNotifier with ChangeNotifier {
                 email: email,
                 password: password,
                 deviceId: SharedPreference().readStorage(SpKeys.fcmToken),
+                imei: realDeviceId
               ),
             );
             final fetch = notifier.userFetch;

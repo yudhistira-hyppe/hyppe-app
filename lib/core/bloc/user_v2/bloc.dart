@@ -145,6 +145,18 @@ class UserBloc {
       required String password}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    String realDeviceID = await System().getDeviceIdentifier();
+    dynamic payload = {
+      'email': email.toLowerCase(),
+      "password": password,
+      "deviceId": deviceID,
+      "imei": realDeviceID,
+      "location": {
+        "longitude": "${double.parse("0.0")}",
+        "latitude": "${double.parse("0.0")}",
+      },
+    };
+    'Login payload => $payload'.logger();
 
     await Repos().reposPost(
       context,
@@ -168,15 +180,7 @@ class UserBloc {
       withCheckConnection: false,
       withAlertMessage: true,
       host: UrlConstants.login,
-      data: {
-        'email': email.toLowerCase(),
-        "password": password,
-        "deviceId": deviceID,
-        "location": {
-          "longitude": "${double.parse("0.0")}",
-          "latitude": "${double.parse("0.0")}",
-        },
-      },
+      data: payload,
     );
   }
 
