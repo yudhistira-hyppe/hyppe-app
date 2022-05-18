@@ -196,6 +196,7 @@ class DynamicLinkService {
         } else {
           'referralUser | referralUserFailed'.logger();
         }
+        _pendingDynamicLinkData = null;
       } else {
         'referralUser | _receiverParty is null'.logger();
       }
@@ -206,12 +207,17 @@ class DynamicLinkService {
 
   static String getPendingReferralEmailDynamicLinks() {
     try {
+      if (_pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
+        return "";
+      }
+
       final _referralEmail =
           _pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
       'Link | referralSender | _referralEmail: $_referralEmail'.logger();
 
       if (_referralEmail != null) {
+        _pendingDynamicLinkData = null;
         return _referralEmail;
       } else {
         'referralUser | _referralEmail is null'.logger();
