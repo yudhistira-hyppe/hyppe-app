@@ -3,6 +3,8 @@ enum ReferralState {
   loading,
   referralUserSuccess,
   referralUserError,
+  getReferralUserSuccess,
+  getReferralUserError,
 }
 
 class ReferralFetch {

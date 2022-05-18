@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/referral/bloc.dart';
+import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/system.dart';
 
@@ -11,8 +13,15 @@ class ReferralNotifier with ChangeNotifier {
 
   String _referralLink = "";
   String _referralLinkText = "";
+  String _referralCount = "0";
   String get referralLink => _referralLink;
   String get referralLinkText => _referralLinkText;
+  String get referralCount => _referralCount;
+
+  set referralCount(val) {
+    _referralCount = val.toString();
+    notifyListeners();
+  }
 
   set referralLink(val) {
     _referralLink = val;
@@ -25,5 +34,13 @@ class ReferralNotifier with ChangeNotifier {
     var _result = await System().createdReferralLink(context);
     debugPrint("REFERRAL => " + _result.toString());
     referralLink = _result.toString();
+
+    final referralBloc = ReferralBloc();
+    await referralBloc.getReferralCount(context);
+    final referralFetch = referralBloc.referralFetch;
+
+    if (referralFetch.referralState == ReferralState.getReferralUserSuccess) {
+      referralCount = referralFetch.data;
+    }
   }
 }

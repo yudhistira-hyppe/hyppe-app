@@ -183,6 +183,9 @@ class UrlConstants {
   /// user => Referral
   static const String referral = "$userRoute/referral";
 
+  /// user => Referral Count
+  static const String referralCount = "$userRoute/referral-count";
+
   ///---------------------------------------------------------------------------------------------------------///
 
   /* APIs Playlist */

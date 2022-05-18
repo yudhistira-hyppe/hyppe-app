@@ -35,8 +35,7 @@ class DynamicLinkService {
 
   // To prevent dynamic link from being called multiple times
   static bool _linkProcessed = false;
-
-  static PendingDynamicLinkData? pendingDynamicLinkData;
+  static PendingDynamicLinkData? _pendingDynamicLinkData;
 
   static Future handleDynamicLinks() async {
     if (_linkProcessed) {
@@ -48,8 +47,8 @@ class DynamicLinkService {
     final PendingDynamicLinkData? data =
         await FirebaseDynamicLinks.instance.getInitialLink();
 
-    // Set [pendingDynamicLinkData] to the initial dynamic link
-    pendingDynamicLinkData ??= data;
+    // Set [_pendingDynamicLinkData] to the initial dynamic link
+    _pendingDynamicLinkData ??= data;
 
     // handle link that has been retrieved
     _handleDeepLink(data);
@@ -71,8 +70,7 @@ class DynamicLinkService {
     Uri? deepLink = data?.link;
     if (deepLink != null) {
       // Set [pendingDynamicLinkData] to the initial dynamic link
-      pendingDynamicLinkData ??= data;
-
+      _pendingDynamicLinkData ??= data;
       final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
       if (_userToken != null) {
         // Auto follow user if app is install from a dynamic link
@@ -83,14 +81,6 @@ class DynamicLinkService {
             'Error in followSender $e'.logger();
           }
         }
-
-        // if (deepLink.queryParameters['referral'] == '1') {
-        //   try {
-        //     hitReferralBackend(Routing.navigatorKey.currentContext!);
-        //   } catch (e) {
-        //     'Error in hit referral backend $e'.logger();
-        //   }
-        // }
 
         final _path = deepLink.path;
         switch (_path) {
@@ -146,12 +136,12 @@ class DynamicLinkService {
 
   static Future followSender(BuildContext context) async {
     try {
-      if (pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
+      if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
         return;
       }
 
       final _receiverParty =
-          pendingDynamicLinkData?.link.queryParameters['sender_email'];
+          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
       'Link | followSender | receiverParty: $_receiverParty'.logger();
 
@@ -171,7 +161,7 @@ class DynamicLinkService {
         } else {
           'followUser | followUserFailed'.logger();
         }
-        pendingDynamicLinkData = null;
+        _pendingDynamicLinkData = null;
       } else {
         'followUser | _receiverParty is null'.logger();
       }
@@ -182,22 +172,22 @@ class DynamicLinkService {
 
   static Future hitReferralBackend(BuildContext context) async {
     try {
-      if (pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
+      if (_pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
         return;
       }
 
-      final _receiverParty =
-          pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      final _referralEmail =
+          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
-      'Link | referralSender | receiverParty: $_receiverParty'.logger();
+      'Link | referralSender | receiverParty: $_referralEmail'.logger();
 
-      if (_receiverParty != null) {
+      if (_referralEmail != null) {
         final notifier = ReferralBloc();
         await notifier.referralUserBloc(
           context,
           withAlertConnection: false,
           data: ReferralUserArgument(
-            email: _receiverParty,
+            email: _referralEmail,
           ),
         );
         final fetch = notifier.referralFetch;
@@ -206,13 +196,30 @@ class DynamicLinkService {
         } else {
           'referralUser | referralUserFailed'.logger();
         }
-        pendingDynamicLinkData = null;
       } else {
         'referralUser | _receiverParty is null'.logger();
       }
     } catch (e) {
+      'referral user: ERROR: $e'.logger();
+    }
+  }
+
+  static String getPendingReferralEmailDynamicLinks() {
+    try {
+      final _referralEmail =
+          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+
+      'Link | referralSender | _referralEmail: $_referralEmail'.logger();
+
+      if (_referralEmail != null) {
+        return _referralEmail;
+      } else {
+        'referralUser | _referralEmail is null'.logger();
+      }
+    } catch (e) {
       'follow user: ERROR: $e'.logger();
     }
+    return "";
   }
 }
 

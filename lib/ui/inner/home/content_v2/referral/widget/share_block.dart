@@ -45,7 +45,7 @@ class _ShareBlockState extends State<ShareBlock> {
                                 ),
                       ),
                       CustomTextWidget(
-                        textToDisplay: "184",
+                        textToDisplay: notifier.referralCount,
                         textStyle: Theme.of(context).textTheme.button?.copyWith(
                               color:
                                   Theme.of(context).colorScheme.primaryVariant,

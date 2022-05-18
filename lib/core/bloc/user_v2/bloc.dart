@@ -104,12 +104,8 @@ class UserBloc {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     String realDeviceId = await System().getDeviceIdentifier();
-    String? referralEmail = DynamicLinkService
-                .pendingDynamicLinkData?.link.queryParameters['referral'] ==
-            '1'
-        ? DynamicLinkService
-            .pendingDynamicLinkData?.link.queryParameters['sender_email']
-        : '';
+    String referralEmail =
+        DynamicLinkService.getPendingReferralEmailDynamicLinks();
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "GMAIL",
