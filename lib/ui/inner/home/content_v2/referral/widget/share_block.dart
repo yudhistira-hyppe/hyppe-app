@@ -84,7 +84,7 @@ class _ShareBlockState extends State<ShareBlock> {
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
                           onTap: () => System().shareText(
-                              dynamicLink: notifier.referralLink,
+                              dynamicLink: notifier.referralLinkText,
                               context: context),
                           child: Container(
                             width: 93,

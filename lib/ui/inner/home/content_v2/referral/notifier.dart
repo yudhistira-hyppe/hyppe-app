@@ -10,11 +10,14 @@ class ReferralNotifier with ChangeNotifier {
   }
 
   String _referralLink = "";
-
+  String _referralLinkText = "";
   String get referralLink => _referralLink;
+  String get referralLinkText => _referralLinkText;
 
   set referralLink(val) {
     _referralLink = val;
+    _referralLinkText =
+        "Hei, Ayo bergabung dan berkreasi di Hyppe!\nJelajahi Dan Tuangkan Ide Kreatifmu Di Mobile Hyppe App Sekarang!\n\n$val";
     notifyListeners();
   }
 
