@@ -52,31 +52,33 @@ class _ReferralState extends State<Referral> {
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const ShareBlock(),
-              const QRBlock(),
-              CustomElevatedButton(
-                width: 375.0 * SizeConfig.scaleDiagonal,
-                height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () => null,
-                child: CustomTextWidget(
-                  textToDisplay: notifier.language.downloadQRCode!,
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .button
-                      ?.copyWith(color: kHyppeLightButtonText),
-                ),
-                buttonStyle: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  shadowColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                ),
-              ),
+            children: const [
+              ShareBlock(),
+              Spacer(),
+              QRBlock(),
+              Spacer()
+              // CustomElevatedButton(
+              //   width: 375.0 * SizeConfig.scaleDiagonal,
+              //   height: 44.0 * SizeConfig.scaleDiagonal,
+              //   function: () => null,
+              //   child: CustomTextWidget(
+              //     textToDisplay: notifier.language.downloadQRCode!,
+              //     textStyle: Theme.of(context)
+              //         .textTheme
+              //         .button
+              //         ?.copyWith(color: kHyppeLightButtonText),
+              //   ),
+              //   buttonStyle: ButtonStyle(
+              //     foregroundColor: MaterialStateProperty.all(
+              //         Theme.of(context).colorScheme.primaryVariant),
+              //     shadowColor: MaterialStateProperty.all(
+              //         Theme.of(context).colorScheme.primaryVariant),
+              //     overlayColor: MaterialStateProperty.all(
+              //         Theme.of(context).colorScheme.primaryVariant),
+              //     backgroundColor: MaterialStateProperty.all(
+              //         Theme.of(context).colorScheme.primaryVariant),
+              //   ),
+              // ),
             ],
           ),
         ),
