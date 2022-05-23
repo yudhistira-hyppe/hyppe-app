@@ -38,12 +38,13 @@ class PeopleFrameStory extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 4.5),
           child: StoryColorValidator(
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
-            haveStory: index.isEven,
+            haveStory:context.read<PreviewStoriesNotifier>().clickStories,
             child: CustomProfileImage(
               following: true,
               width: SizeWidget.circleDiameterOutside,
               height: SizeWidget.circleDiameterOutside,
               onTap: () {
+                context.read<PreviewStoriesNotifier>().changeBorderColor(false);
                 // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
                 context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
               },

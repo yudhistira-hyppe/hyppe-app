@@ -48,5 +48,6 @@ class SharedPreference {
     await _preferences!.remove(SpKeys.email);
     await _preferences!.remove(SpKeys.userID);
     await _preferences!.remove(SpKeys.fcmToken);
+  
   }
 }

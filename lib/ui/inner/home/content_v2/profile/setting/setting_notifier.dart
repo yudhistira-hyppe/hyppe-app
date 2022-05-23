@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/stream_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
@@ -36,9 +37,11 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     if (!isLoading) {
       setLoading(true);
       final notifier = UserBloc();
+     _resetData(context);
       await notifier.logOut(context, withAlertMessage: true);
       setLoading(false);
-      _resetData(context);
+  
+
       // final fetch = notifier.userFetch;
       // if (fetch.userState == UserState.logoutSuccess) {
       //   _resetData(context);
@@ -48,6 +51,8 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
 
   void _resetData(BuildContext context) async {
     _routing.moveAndRemoveUntil(Routes.login, Routes.lobby);
+ 
+    
     await _googleSignInService.handleSignOut();
     await SharedPreference().logOutStorage();
 

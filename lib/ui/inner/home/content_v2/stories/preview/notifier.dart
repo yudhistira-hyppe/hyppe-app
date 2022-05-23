@@ -29,11 +29,21 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   int _totalViews = 0;
 
+  bool _clickStories=true;
+  
+
   List<ContentData>? get peopleStoriesData => _peopleStoriesData;
 
   List<ContentData>? get myStoriesData => _myStoriesData;
 
   int get totalViews => _totalViews;
+
+  changeBorderColor(bool value){
+    notifyListeners();
+    _clickStories=value;
+  }
+
+  bool get clickStories =>_clickStories;
 
   set peopleStoriesData(List<ContentData>? val) {
     _peopleStoriesData = val;
