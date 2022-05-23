@@ -42,6 +42,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             return Future.value(true);
           },
           child: Scaffold(
+            resizeToAvoidBottomInset:false,
             appBar: AppBar(
               elevation: 0,
               centerTitle: false,

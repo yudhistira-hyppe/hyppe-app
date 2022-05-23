@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 // import 'package:hyppe/core/arguments/message_detail_argument.dart';
 // import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 // import 'package:hyppe/core/services/system.dart';
@@ -97,8 +99,11 @@ class NotificationService {
   }
 
   // show notification
+
   Future showNotification(RemoteMessage message) async {
-    if (message.notification != null) {
+      String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    if(deviceID!=null){
+      if (message.notification != null) {
       await flutterLocalNotificationsPlugin.show(
         message.hashCode,
         message.notification?.title ?? '',
@@ -106,6 +111,7 @@ class NotificationService {
         platformChannelSpecifics,
         payload: jsonEncode(message.data),
       );
+    }
     }
   }
 }
