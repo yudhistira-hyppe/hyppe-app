@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -39,12 +40,14 @@ class PeopleFrameStory extends StatelessWidget {
           child: StoryColorValidator(
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
             haveStory:index.isEven,
+            contentData: data,
             child: CustomProfileImage(
               following: true,
               width: SizeWidget.circleDiameterOutside,
               height: SizeWidget.circleDiameterOutside,
               onTap: () {
-                context.read<PreviewStoriesNotifier>().changeBorderColor(false);
+                context.read<PreviewStoriesNotifier>().changeBorderColor(data!);
+                context.read<ViewerStoriesNotifier>().postViewer(context, data!.postID!);
                 // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
                 context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
               },
