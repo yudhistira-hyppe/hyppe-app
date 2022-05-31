@@ -19,6 +19,7 @@ class ContentData {
   String? mediaThumbEndPoint;
   String? postID;
   String? title;
+  bool? isViewed;
   List<String>? tags;
   bool? allowComments;
   bool? certified;
@@ -46,6 +47,7 @@ class ContentData {
     this.mediaThumbEndPoint,
     this.postID,
     this.title,
+    this.isViewed,
     this.tags = const [],
     this.allowComments,
     this.certified,
@@ -76,6 +78,7 @@ class ContentData {
     mediaThumbEndPoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     title = json['title'];
+    isViewed = json['isViewed'];
     tags = json['tags'] != null ? json['tags'].cast<String>() : [];
     allowComments = json['allowComments'] ?? false;
     certified = json['certified'] ?? false;
@@ -113,6 +116,7 @@ class ContentData {
     data['mediaThumbEndpoint'] = mediaThumbEndPoint;
     data['postID'] = postID;
     data['title'] = title;
+    data['isViewed'] = isViewed;
     data['tags'] = tags;
     data['allowComments'] = allowComments;
     data['certified'] = certified;

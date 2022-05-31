@@ -351,6 +351,9 @@ class UrlConstants {
   /// post => Update Contents
   static const String updatepost = "$postRouteV2/updatepost";
 
+  /// post => post to change value key isViewed
+  static const String postViewer = "$postRouteV2/postviewer";
+
   /// post => Post Device Activity
   static const String deviceactivity = "$userRoute/deviceactivity";
 
