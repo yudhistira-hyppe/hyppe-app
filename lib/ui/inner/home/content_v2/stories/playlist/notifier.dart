@@ -222,7 +222,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email!;
     storyController.pause();
-    _routing.move(Routes.otherProfile,argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
+    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
   }
 
   void initState(BuildContext context, StoryDetailScreenArgument routeArgument) {
@@ -266,76 +266,76 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {
-        checkIfKeyboardIsFocus(context);
-        Reaction? _data;
-        _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
+    checkIfKeyboardIsFocus(context);
+    Reaction? _data;
+    _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
 
-        if (_data == null) {
-          var _popupDialog = _system.createPopupDialog(
-            Container(
-              alignment: Alignment.center,
-              color: const Color(0xff1D2124).withOpacity(0.8),
-              child: const UnconstrainedBox(child: CustomLoading()),
-            ),
-          );
-          Overlay.of(context)!.insert(_popupDialog);
-          await context.read<MainNotifier>().getReaction(context).whenComplete(() {
-            _data = context.read<MainNotifier>().reactionData;
-            _popupDialog.remove();
-          });
-        }
+    if (_data == null) {
+      var _popupDialog = _system.createPopupDialog(
+        Container(
+          alignment: Alignment.center,
+          color: const Color(0xff1D2124).withOpacity(0.8),
+          child: const UnconstrainedBox(child: CustomLoading()),
+        ),
+      );
+      Overlay.of(context)!.insert(_popupDialog);
+      await context.read<MainNotifier>().getReaction(context).whenComplete(() {
+        _data = context.read<MainNotifier>().reactionData;
+        _popupDialog.remove();
+      });
+    }
 
-        // flag reaction action
-        _isReactAction = true;
+    // flag reaction action
+    _isReactAction = true;
 
-        if (_data != null) {
-          storyController.pause();
-          showGeneralDialog(
-            barrierLabel: "Barrier",
-            barrierDismissible: false,
-            barrierColor: Colors.black.withOpacity(0.5),
-            transitionDuration: const Duration(milliseconds: 500),
-            context: context,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return ShowReactionsIcon(
-                  onTap: () => _routing.moveBack(),
-                  crossAxisCount: 3,
-                  data: _data!.data,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () async {
-                        reaction = _data?.data[index].icon;
-                        _routing.moveBack();
-                        makeItems(animationController!);
-                        Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                        Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
-                        try {
-                          await sendMessageReaction(
-                            context,
-                            contentData: data,
-                            reaction: _data?.data[index],
-                          );
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      child: Material(
-                        color: Colors.transparent,
-                        child: CustomTextWidget(
-                          textToDisplay: _data!.data[index].icon!,
-                          textStyle: Theme.of(context).textTheme.headline4!.apply(color: null),
-                        ),
-                      ),
-                    );
-                  });
-            },
-            transitionBuilder: (context, animation, secondaryAnimation, child) {
-              animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+    if (_data != null) {
+      storyController.pause();
+      showGeneralDialog(
+        barrierLabel: "Barrier",
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: const Duration(milliseconds: 500),
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return ShowReactionsIcon(
+              onTap: () => _routing.moveBack(),
+              crossAxisCount: 3,
+              data: _data!.data,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () async {
+                    reaction = _data?.data[index].icon;
+                    _routing.moveBack();
+                    makeItems(animationController!);
+                    Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
+                    Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
+                    try {
+                      await sendMessageReaction(
+                        context,
+                        contentData: data,
+                        reaction: _data?.data[index],
+                      );
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
+                  child: Material(
+                    color: Colors.transparent,
+                    child: CustomTextWidget(
+                      textToDisplay: _data!.data[index].icon!,
+                      textStyle: Theme.of(context).textTheme.headline4!.apply(color: null),
+                    ),
+                  ),
+                );
+              });
+        },
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
 
-              return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
-            },
-          ).whenComplete(() => Future.delayed(const Duration(seconds: 6), () => isReactAction = false));
-        }
+          return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+        },
+      ).whenComplete(() => Future.delayed(const Duration(seconds: 6), () => isReactAction = false));
+    }
     //   },
     //   uploadContentAction: false,
     // );
@@ -366,29 +366,30 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {
-        if (_textEditingController.text.isNotEmpty) {
-          try {
-            textEditingController.text.logger();
+    if (_textEditingController.text.isNotEmpty) {
+      try {
+        textEditingController.text.logger();
 
-            final param = DiscussArgument(
-              receiverParty: data?.email ?? '',
-              email: _sharedPrefs.readStorage(SpKeys.email),
-            )
-              ..postID = data?.postID ?? ''
-              ..txtMessages = textEditingController.text;
+        final param = DiscussArgument(
+          receiverParty: data?.email ?? '',
+          email: _sharedPrefs.readStorage(SpKeys.email),
+        )
+          ..postID = data?.postID ?? ''
+          ..txtMessages = textEditingController.text;
 
-            final notifier = MessageBlocV2();
-            await notifier.createDiscussionBloc(context, disqusArgument: param).then((value) {
-              'Your message was sent'.logger();
-            });
-          } finally {
-            _textEditingController.clear();
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          }
+        final notifier = MessageBlocV2();
+        await notifier.createDiscussionBloc(context, disqusArgument: param).then((value) {
+          'Your message was sent'.logger();
+        });
+      } finally {
+        _textEditingController.clear();
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+          _forceStop = false;
         }
+      }
+    }
     //   },
     //   uploadContentAction: false,
     // );

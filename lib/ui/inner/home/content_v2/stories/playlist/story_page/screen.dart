@@ -72,10 +72,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     if (widget.isScrolling!) {
       _storyController.pause();
     } else {
-      if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause &&
-          !notifier.isKeyboardActive &&
-          !notifier.isShareAction &&
-          !notifier.isReactAction) {
+      if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction && !notifier.isReactAction) {
         _storyController.play();
       }
       // if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction) {
