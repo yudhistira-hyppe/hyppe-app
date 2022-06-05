@@ -30,6 +30,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
     super.initState();
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));
+    notifier.pageController!.addListener(() => notifier.initialCurrentPage(_pageController.page));
   }
 
   @override
@@ -74,6 +75,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
+                              controller: _pageController,
                             ),
                           );
                         } else if (notifier.currentPage!.floor() + 1 == index) {
@@ -89,6 +91,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
+                              controller: _pageController,
                             ),
                           );
                         }
@@ -97,6 +100,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                           storyParentIndex: notifier.storyParentIndex,
                           data: notifier.dataUserStories[index],
                           onNextPage: () => notifier.nextPage(),
+                          controller: _pageController,
                         );
                       },
                     )

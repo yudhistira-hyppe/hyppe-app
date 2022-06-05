@@ -18,12 +18,14 @@ class StoryPage extends StatefulWidget {
   final int? storyParentIndex;
   final bool? isScrolling;
   final Function? onNextPage;
+  final PageController? controller;
 
   const StoryPage({
     this.onNextPage,
     this.data,
     this.isScrolling,
     this.storyParentIndex,
+    this.controller,
   });
   @override
   _StoryPageState createState() => _StoryPageState();
@@ -38,6 +40,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
   @override
   void initState() {
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
+
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _storyItems = notifier.initializeData(context, _storyController, widget.data!);
     });
@@ -126,12 +129,24 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
           },
           onComplete: () {
+            widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+            final currentIndex = notifier.dataUserStories.length - 1;
+            final isLastPage = currentIndex == widget.controller!.page;
+            // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+            // notifier.pageController =
+
             Timer(const Duration(seconds: 1), () {
-              notifier.onCloseStory(mounted);
+              // widget.onNextPage!();
+              // notifier.onCloseStory(mounted);
+              // notifier.nextPage();
+              // _storyController.next();
               System().increaseViewCount(context, widget.data!).whenComplete(() {
                 setState(() {});
               });
             });
+            if (isLastPage) {
+              notifier.onCloseStory(mounted);
+            }
           },
           onVerticalSwipeComplete: (v) {
             // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);

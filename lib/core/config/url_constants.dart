@@ -16,7 +16,8 @@ class UrlConstants {
   static const String productionBaseApi = "https://prod.hyppe.app";
 
   /// Staging v2 Base url
-  static const String stagingBaseApi = "https://staging.hyppe.id";
+  static const String stagingBaseApi = "https://prod.hyppe.app";
+  // static const String stagingBaseApi = "https://staging.hyppe.id";
 
   /// Prod Deeplink Base url
   static const String prodDeeplinkUrl = "https://share.hyppe.app";

@@ -68,7 +68,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   double? _currentPage = 0;
   Timer? _searchOnStoppedTyping;
   Color? _sendButtonColor;
-  PageController? _pageController;
+  PageController? _pageController = PageController(initialPage: 0);
   List<ContentData> _dataUserStories = [];
   final TextEditingController _textEditingController = TextEditingController();
 
@@ -139,10 +139,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   setIsKeyboardActive(bool val) => _isKeyboardActive = val;
 
   nextPage() {
-    if (pageController!.page == dataUserStories.length - 1) {
+    if (_pageController!.page == dataUserStories.length - 1) {
       return;
     }
-    pageController!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _pageController!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   degreeToRadian(double deg) {

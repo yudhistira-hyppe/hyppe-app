@@ -78,8 +78,7 @@ class MainNotifier with ChangeNotifier {
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-      Provider.of<SelfProfileNotifier>(context, listen: false).user.profile =
-          usersFetch.data;
+      Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
       notifyListeners();
     }
 
@@ -100,12 +99,7 @@ class MainNotifier with ChangeNotifier {
   }
 
   Widget mainScreen(BuildContext context) {
-    List pages = [
-      const HomeScreen(),
-      SearchScreen(),
-      NotificationScreen(),
-      MessageScreen()
-    ];
+    List pages = [const HomeScreen(), SearchScreen(), NotificationScreen(), MessageScreen()];
     late Widget screen;
     switch (pageIndex) {
       case 0:
@@ -191,8 +185,7 @@ class MainNotifier with ChangeNotifier {
   Future takeSelfie(BuildContext context) async {
     _openValidationIDCamera = false;
     final _statusPermission = await System().requestPrimaryPermission(context);
-    final _makeContentNotifier =
-        Provider.of<MakeContentNotifier>(context, listen: false);
+    final _makeContentNotifier = Provider.of<MakeContentNotifier>(context, listen: false);
     if (_statusPermission) {
       _makeContentNotifier.featureType = null;
       _makeContentNotifier.isVideo = false;
