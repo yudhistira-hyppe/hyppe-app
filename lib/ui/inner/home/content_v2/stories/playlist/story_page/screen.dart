@@ -33,6 +33,7 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMixin {
   String _when = "";
+  int currentStory = 0;
   List<StoryItem> _storyItems = [];
   AnimationController? _animationController;
   final StoryController _storyController = StoryController();
@@ -126,6 +127,17 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 )}';
               });
             }
+
+            _storyController.playbackNotifier.listen((value) {
+              if (value == PlaybackState.previous) {
+                if (widget.controller!.page == 0) {
+                  notifier.onCloseStory(mounted);
+                } else {
+                  widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                }
+              }
+            });
+
             // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
           },
           onComplete: () {
