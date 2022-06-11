@@ -16,6 +16,10 @@ buildscript {
 
 allprojects {
     repositories {
+        maven {
+            url = uri("https://maven.aliyun.com/nexus/content/repositories/releases")
+            allowInsecureProtocol = true
+        }
         google()
         jcenter()
     }
