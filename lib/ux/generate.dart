@@ -18,13 +18,13 @@ import 'package:hyppe/ui/constant/page_not_found.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/test_aliplayer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
-import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart'
-    as message_detail_v2;
+import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
@@ -73,9 +73,7 @@ class Generate {
       case Routes.selfProfile:
         return MaterialPageRoute(builder: (_) => SelfProfileScreen());
       case Routes.otherProfile:
-        return MaterialPageRoute(
-            builder: (_) => OtherProfileScreen(
-                arguments: settings.arguments as OtherProfileArgument));
+        return MaterialPageRoute(builder: (_) => OtherProfileScreen(arguments: settings.arguments as OtherProfileArgument));
       case Routes.homePageSignInSecurity:
         return MaterialPageRoute(builder: (_) => HyppeHomeSignAndSecurity());
       case Routes.makeContent:
@@ -83,42 +81,29 @@ class Generate {
       case Routes.previewContent:
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
       case Routes.preUploadContent:
-        return MaterialPageRoute(
-            builder: (_) => PreUploadContentScreen(
-                arguments: settings.arguments as UpdateContentsArgument));
+        return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => HyppeChangePassword());
       case Routes.accountPreferences:
         return MaterialPageRoute(
-            builder: (_) => HyppeAccountPreferences(
-                argument: settings.arguments == null
-                    ? AccountPreferenceScreenArgument(fromSignUpFlow: false)
-                    : settings.arguments as AccountPreferenceScreenArgument));
-      case Routes.signUpPin:
-        return MaterialPageRoute(
             builder: (_) =>
-                SignUpPin(arguments: settings.arguments as VerifyPageArgument));
+                HyppeAccountPreferences(argument: settings.arguments == null ? AccountPreferenceScreenArgument(fromSignUpFlow: false) : settings.arguments as AccountPreferenceScreenArgument));
+      case Routes.signUpPin:
+        return MaterialPageRoute(builder: (_) => SignUpPin(arguments: settings.arguments as VerifyPageArgument));
       case Routes.signUpWelcome:
         return MaterialPageRoute(builder: (_) => SignUpWelcome());
       case Routes.messageDetail:
-        return MaterialPageRoute(
-            builder: (_) => message_detail_v2.MessageDetailScreen(
-                argument: settings.arguments as MessageDetailArgument));
+        return MaterialPageRoute(builder: (_) => message_detail_v2.MessageDetailScreen(argument: settings.arguments as MessageDetailArgument));
       case Routes.report:
         return MaterialPageRoute(builder: (_) => HyppeReport());
       case Routes.noInternetConnection:
-        return MaterialPageRoute(
-            builder: (_) => const PageNoInternetConnection());
+        return MaterialPageRoute(builder: (_) => const PageNoInternetConnection());
       case Routes.moderatedContent:
-        return MaterialPageRoute(
-            builder: (_) =>
-                ModeratedContent(arguments: settings.arguments as ContentData));
+        return MaterialPageRoute(builder: (_) => ModeratedContent(arguments: settings.arguments as ContentData));
       // case Routes.wallet:
       //   return MaterialPageRoute(builder: (_) => Wallet());
       case Routes.walletWebView:
-        return MaterialPageRoute(
-            builder: (_) =>
-                WalletWebView(arguments: settings.arguments as String));
+        return MaterialPageRoute(builder: (_) => WalletWebView(arguments: settings.arguments as String));
 
       // ------------------------------------------------------------ //
       case Routes.forgotPassword:
@@ -126,30 +111,20 @@ class Generate {
       case Routes.register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case Routes.userInterest:
-        return MaterialPageRoute(
-            builder: (_) => UserInterestScreen(
-                arguments: settings.arguments as UserInterestScreenArgument));
+        return MaterialPageRoute(builder: (_) => UserInterestScreen(arguments: settings.arguments as UserInterestScreenArgument));
       case Routes.userAgreement:
         return MaterialPageRoute(builder: (_) => const UserAgreementScreen());
 
       case Routes.picDetail:
-        return MaterialPageRoute(
-            builder: (_) => PicDetailScreen(
-                arguments: settings.arguments as PicDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => PicDetailScreen(arguments: settings.arguments as PicDetailScreenArgument));
       case Routes.picDetailPreview:
-        return MaterialPageRoute(
-            builder: (_) =>
-                PicDetail(arguments: settings.arguments as ContentData));
+        return MaterialPageRoute(builder: (_) => PicDetail(arguments: settings.arguments as ContentData));
 
       case Routes.diaryDetail:
-        return MaterialPageRoute(
-            builder: (_) => HyppePlaylistDiaries(
-                argument: settings.arguments as DiaryDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => HyppePlaylistDiaries(argument: settings.arguments as DiaryDetailScreenArgument));
 
       case Routes.storyDetail:
-        return MaterialPageRoute(
-            builder: (_) => HyppePlaylistStories(
-                argument: settings.arguments as StoryDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
 
       case Routes.appSettings:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
@@ -158,14 +133,10 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const ThemeScreen());
 
       case Routes.followerScreen:
-        return MaterialPageRoute(
-            builder: (_) => FollowerScreen(
-                argument: settings.arguments as FollowerScreenArgument));
+        return MaterialPageRoute(builder: (_) => FollowerScreen(argument: settings.arguments as FollowerScreenArgument));
 
       case Routes.userOtpScreen:
-        return MaterialPageRoute(
-            builder: (_) => UserOtpScreen(
-                argument: settings.arguments as UserOtpScreenArgument));
+        return MaterialPageRoute(builder: (_) => UserOtpScreen(argument: settings.arguments as UserOtpScreenArgument));
 
       case Routes.diarySeeAllScreen:
         return MaterialPageRoute(builder: (_) => const DiarySeeAllScreen());
@@ -174,25 +145,21 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PicSeeAllScreen());
 
       case Routes.vidDetail:
-        return MaterialPageRoute(
-            builder: (_) => VidDetailScreen(
-                arguments: settings.arguments as VidDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => VidDetailScreen(arguments: settings.arguments as VidDetailScreenArgument));
       case Routes.vidSeeAllScreen:
         return MaterialPageRoute(builder: (_) => const VidSeeAllScreen());
 
       case Routes.imagePreviewScreen:
-        return MaterialPageRoute(
-            builder: (_) => ImagePreviewView(
-                argument: settings.arguments as ImagePreviewArgument));
+        return MaterialPageRoute(builder: (_) => ImagePreviewView(argument: settings.arguments as ImagePreviewArgument));
 
       case Routes.completeProfile:
-        return MaterialPageRoute(
-            builder: (_) => ProfileCompletion(
-                argument:
-                    AccountPreferenceScreenArgument(fromSignUpFlow: false)));
+        return MaterialPageRoute(builder: (_) => ProfileCompletion(argument: AccountPreferenceScreenArgument(fromSignUpFlow: false)));
 
       case Routes.referralScreen:
         return MaterialPageRoute(builder: (_) => const Referral());
+
+      case Routes.testAliPlayer:
+        return MaterialPageRoute(builder: (_) => TestAliPlayer());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

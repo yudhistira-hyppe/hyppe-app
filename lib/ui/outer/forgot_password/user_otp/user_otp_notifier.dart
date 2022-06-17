@@ -96,8 +96,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state != AppLifecycleState.resumed) {
-      _sharedPrefs.writeStorage(
-          SpKeys.lastTimeStampReachMaxAttempRecoverPassword, DateTime.now().subtract(const Duration(minutes: 31)).millisecondsSinceEpoch);
+      _sharedPrefs.writeStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword, DateTime.now().subtract(const Duration(minutes: 31)).millisecondsSinceEpoch);
     }
     super.didChangeAppLifecycleState(state);
   }
@@ -246,8 +245,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     if (message?.toLowerCase().trim() == _excededMessage.toLowerCase().trim()) {
       final lts = _sharedPrefs.readStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
       if (lts == null) {
-        _sharedPrefs.writeStorage(
-            SpKeys.lastTimeStampReachMaxAttempRecoverPassword, DateTime.now().subtract(const Duration(minutes: 31)).millisecondsSinceEpoch);
+        _sharedPrefs.writeStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword, DateTime.now().subtract(const Duration(minutes: 31)).millisecondsSinceEpoch);
       }
       notifyListeners();
     }

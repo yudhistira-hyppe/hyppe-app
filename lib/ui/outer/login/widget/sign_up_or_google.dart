@@ -42,21 +42,17 @@ class SignUpOrGoogle extends StatelessWidget {
                 width: 50,
                 height: 1,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary),
+                  border: Border.all(color: Theme.of(context).colorScheme.secondary),
                 ),
               ),
               twelvePx,
-              CustomTextWidget(
-                  textToDisplay: notifier.language.or!,
-                  textStyle: Theme.of(context).textTheme.bodyText2),
+              CustomTextWidget(textToDisplay: notifier.language.or!, textStyle: Theme.of(context).textTheme.bodyText2),
               twelvePx,
               Container(
                 width: 50,
                 height: 1,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.secondary),
+                  border: Border.all(color: Theme.of(context).colorScheme.secondary),
                 ),
               ),
             ],
@@ -73,12 +69,10 @@ class SignUpOrGoogle extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary),
+                    border: Border.all(color: Theme.of(context).colorScheme.secondary),
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Image(
-                      image: AssetImage('${AssetPath.pngPath}logo_google.png')),
+                  child: const Image(image: AssetImage('${AssetPath.pngPath}logo_google.png')),
                 ),
               ),
               // twelvePx,

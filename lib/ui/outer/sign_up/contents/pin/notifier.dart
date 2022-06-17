@@ -45,6 +45,7 @@ class SignUpPinNotifier with ChangeNotifier {
   String _userToken = "";
   Timer? _myTimer;
   RawKeyEvent? _rawKeyEvent;
+  bool _resendPilih = false;
 
   String get input1 => _input1;
   String get input2 => _input2;
@@ -57,6 +58,7 @@ class SignUpPinNotifier with ChangeNotifier {
   String get userID => _userID;
   String get userToken => _userToken;
   RawKeyEvent? get rawKeyEvent => _rawKeyEvent;
+  bool get resendPilih => _resendPilih;
 
   set input1(String val) {
     _input1 = val;
@@ -115,6 +117,11 @@ class SignUpPinNotifier with ChangeNotifier {
 
   set rawKeyEvent(RawKeyEvent? val) {
     _rawKeyEvent = val;
+    notifyListeners();
+  }
+
+  set resendPilih(bool val) {
+    _resendPilih = val;
     notifyListeners();
   }
 
@@ -195,11 +202,7 @@ class SignUpPinNotifier with ChangeNotifier {
   }
 
   Color verifyButtonColor(BuildContext context) {
-    if (tec1.value.text.isNotEmpty &&
-        tec2.value.text.isNotEmpty &&
-        tec3.value.text.isNotEmpty &&
-        tec4.value.text.isNotEmpty &&
-        !loading) {
+    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty && !loading) {
       return Theme.of(context).colorScheme.primaryVariant;
     } else {
       return Theme.of(context).colorScheme.surface;
@@ -207,14 +210,8 @@ class SignUpPinNotifier with ChangeNotifier {
   }
 
   TextStyle verifyTextColor(BuildContext context) {
-    if (tec1.value.text.isNotEmpty &&
-        tec2.value.text.isNotEmpty &&
-        tec3.value.text.isNotEmpty &&
-        tec4.value.text.isNotEmpty) {
-      return Theme.of(context)
-          .textTheme
-          .button!
-          .copyWith(color: kHyppeLightButtonText);
+    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
+      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
     } else {
       return Theme.of(context).primaryTextTheme.button!;
     }
@@ -222,25 +219,27 @@ class SignUpPinNotifier with ChangeNotifier {
 
   startTimer() {
     int _start = 60;
-    _myTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (Timer t) {
-        if (_start != 0) {
-          _start--;
-          if (_start.toString().length == 2) {
-            timer = "00:${_start.toString()}";
+    if (_timer != "00:00") {
+      _myTimer = Timer.periodic(
+        const Duration(seconds: 1),
+        (Timer t) {
+          if (_start != 0) {
+            _start--;
+            if (_start.toString().length == 2) {
+              timer = "00:${_start.toString()}";
+            } else {
+              timer = "00:0${_start.toString()}";
+            }
+            notifyListeners();
           } else {
-            timer = "00:0${_start.toString()}";
+            t.cancel();
+            _myTimer?.cancel();
+            timer = "00:00";
+            notifyListeners();
           }
-          notifyListeners();
-        } else {
-          t.cancel();
-          _myTimer?.cancel();
-          timer = "00:00";
-          notifyListeners();
-        }
-      },
-    );
+        },
+      );
+    }
   }
 
   resetTimer() {
@@ -258,24 +257,14 @@ class SignUpPinNotifier with ChangeNotifier {
 
   TextStyle resendStyle(BuildContext context) {
     if (_timer != "00:00") {
-      return Theme.of(context)
-          .textTheme
-          .caption!
-          .copyWith(color: Theme.of(context).colorScheme.secondaryVariant);
+      return Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant);
     } else {
-      return Theme.of(context)
-          .textTheme
-          .caption!
-          .copyWith(color: Theme.of(context).colorScheme.primaryVariant);
+      return Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.primaryVariant);
     }
   }
 
-  Function? onVerifyButton(BuildContext context,
-      {required VerifyPageArgument argument}) {
-    if (tec1.value.text.isNotEmpty &&
-        tec2.value.text.isNotEmpty &&
-        tec3.value.text.isNotEmpty &&
-        tec4.value.text.isNotEmpty) {
+  Function? onVerifyButton(BuildContext context, {required VerifyPageArgument argument}) {
+    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
       return () async {
         bool connection = await System().checkConnections();
         if (connection) {
@@ -312,18 +301,14 @@ class SignUpPinNotifier with ChangeNotifier {
               notifyListeners();
             }
           } else {
-            await notifier.verifyAccountBlocV2(context,
-                email: email, otp: _verifyCode);
+            await notifier.verifyAccountBlocV2(context, email: email, otp: _verifyCode);
 
             final fetch = notifier.userFetch;
             if (fetch.userState == UserState.verifyAccountSuccess) {
               _accountResponse = SignIn.fromJson(fetch.data);
-              SharedPreference()
-                  .writeStorage(SpKeys.email, _accountResponse.data?.email);
-              SharedPreference()
-                  .writeStorage(SpKeys.userID, _accountResponse.data?.userId);
-              SharedPreference()
-                  .writeStorage(SpKeys.userToken, _accountResponse.data?.token);
+              SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
+              SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
+              SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
               SharedPreference().removeValue(SpKeys.isUserInOTP);
 
               DynamicLinkService.hitReferralBackend(context);
@@ -358,9 +343,7 @@ class SignUpPinNotifier with ChangeNotifier {
     required VerifyPageArgument verifyPageArgument,
   }) async {
     loading = false;
-    await ShowBottomSheet()
-        .onShowColouredSheet(context, language.verified!, subCaption: message)
-        .whenComplete(() async {
+    await ShowBottomSheet().onShowColouredSheet(context, language.verified!, subCaption: message).whenComplete(() async {
       switch (verifyPageArgument.redirect) {
         case VerifyPageRedirection.toLogin:
           Routing().moveAndRemoveUntil(Routes.login, Routes.root);
@@ -369,8 +352,7 @@ class SignUpPinNotifier with ChangeNotifier {
           Routing().moveAndRemoveUntil(
             Routes.signUpVerified,
             Routes.root,
-            argument:
-                VerifyPageArgument(redirect: VerifyPageRedirection.toHome),
+            argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome),
           );
           break;
         // TODO: Changed sign up rules
@@ -379,9 +361,7 @@ class SignUpPinNotifier with ChangeNotifier {
         //   break;
         case VerifyPageRedirection.toSignUpV2:
           _setUserCompleteData(context);
-          Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-              argument: UserInterestScreenArgument(
-                  fromSetting: false, userInterested: []));
+          Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument(fromSetting: false, userInterested: []));
           break;
         // END TODO
         case VerifyPageRedirection.none:
@@ -398,6 +378,8 @@ class SignUpPinNotifier with ChangeNotifier {
 
   Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
     if (_timer != "00:00") {
+      // ignore: avoid_print
+      print('resendCode');
       return null;
     } else {
       return () async {
@@ -413,11 +395,17 @@ class SignUpPinNotifier with ChangeNotifier {
     bool connection = await System().checkConnections();
     if (connection) {
       final notifier = UserBloc();
-      await notifier.resendOTPBloc(context,
-          username: username, function: () => resendCode(context));
+      await notifier.resendOTPBloc(context, email: email, function: () => resendCode(context));
       final fetch = notifier.userFetch;
       if (fetch.userState == UserState.resendOTPSuccess) {
         print('Resend code success');
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.checkYourEmail!,
+          subCaption: language.weHaveSentAVerificationCodeToYourEmail!,
+        );
+        _timer = '';
+        startTimer();
         return true;
       } else {
         print('Resend code failed');
