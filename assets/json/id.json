@@ -125,7 +125,7 @@
   "today": "Hari ini",
   "deleteThis": "Hapuskan",
   "afterThatThis": "Setelah itu,",
-  "willBePermanentlyDeleted": "akan terhapus secara permanenSetelahnya",
+  "willBePermanentlyDeleted": "akan terhapus secara permanen Setelahnya",
   "delete": "Hapus",
   "dontDelete": "Jangan Hapus",
   "yourContentHadSuccessfullyDeleted": "Konten Anda telah berhasil dihapus",
@@ -467,6 +467,6 @@
   "downloadQRCode": "Unduh Kode QR",
   "shareStatus": "Status Bagikan",
   "hasUsed": "Telah digunakan",
-  "linkYourReferral": "Tautan Referral Kamu",
+  "linkYourReferral": "Tautan Referal Kamu",
   "shareYourQR": "Bagikan kode ini ke temanmu"
 }

@@ -58,12 +58,13 @@ class RightItems extends StatelessWidget {
                   Consumer<LikeNotifier>(
                     builder: (context, notifier, child) => _customIcon2(
                       context,
-                      '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                      '${AssetPath.vectorPath}${data.isLiked == true? 'liked.svg' : 'none-like.svg'}',
                       (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like!,
-                      colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                      colorIcon: data.isLiked == true ? kHyppePrimary : kHyppeLightButtonText,
                       onTap: () {
-                        context.read<DiariesPlaylistNotifier>().forcePause = true;
+                        context.read<DiariesPlaylistNotifier>().forcePause = false;
                         notifier.likePost(context, data);
+                        
                       },
                     ),
                   ),

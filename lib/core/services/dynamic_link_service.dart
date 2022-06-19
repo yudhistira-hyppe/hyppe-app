@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/services/system.dart';
 
 import 'shared_preference.dart';
 import 'package:hyppe/ux/path.dart';
@@ -178,8 +179,11 @@ class DynamicLinkService {
 
       final _referralEmail =
           _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+          print('ini apa ya $_referralEmail');
 
       'Link | referralSender | receiverParty: $_referralEmail'.logger();
+          String realDeviceID = await System().getDeviceIdentifier();
+          
 
       if (_referralEmail != null) {
         final notifier = ReferralBloc();
@@ -188,6 +192,7 @@ class DynamicLinkService {
           withAlertConnection: false,
           data: ReferralUserArgument(
             email: _referralEmail,
+            imei: realDeviceID
           ),
         );
         final fetch = notifier.referralFetch;

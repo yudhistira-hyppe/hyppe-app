@@ -80,42 +80,11 @@ class ViewerStoriesNotifier extends LoadingNotifier with ChangeNotifier {
   Future<void> postViewer(BuildContext context,String postID) async {
     final notifier = PostViewerBloc();
     try {
-      // System().actionReqiredIdCard(
-      //   context,
-      //   uploadContentAction: false,
-      //   action: () async {
-
-      // if (postData.email == SharedPreference().readStorage(SpKeys.email)) {
-      //   // Prevent user from liking his own post
-      //   return;
-      // }
-
-      // if (!(postData.insight?.isPostLiked ?? false)) {
-      //   postData.insight?.isPostLiked =
-      //       !(postData.insight?.isPostLiked ?? false);
-      //   if (postData.insight?.isPostLiked ?? false) {
-      //     postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-      //   }
-      //   notifyListeners();
-      // }
-
-      // TODO: Future implementation
-      // postData.insight?.isPostLiked = !(postData.insight?.isPostLiked ?? false);
-      // if (postData.insight?.isPostLiked ?? false) {
-      //   postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-      // } else {
-      //   if ((postData.insight?.likes ?? 0) > 0) {
-      //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
-      //   }
-      // }
       await notifier.postViewerBloc(context,postID:postID);
       final fetch = notifier.postViewerFetch;
       if (fetch.postViewerState == PostViewerState.postViewerUserSuccess) {
         "lihat story success".logger();
       }
-
-      //   },
-      // );
     } catch (e) {
       e.logger();
     }

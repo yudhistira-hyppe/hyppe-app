@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hyppe/core/arguments/sign_up_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
@@ -200,6 +202,8 @@ class RegisterNotifier with ChangeNotifier {
             loading = true;
 
             String realDeviceId = await System().getDeviceIdentifier();
+             String platForm = Platform.isAndroid ? "android" : "ios";
+            
 
             final notifier = UserBloc();
             await notifier.signUpBlocV2(
@@ -208,7 +212,8 @@ class RegisterNotifier with ChangeNotifier {
                 email: email,
                 password: password,
                 deviceId: SharedPreference().readStorage(SpKeys.fcmToken),
-                imei: realDeviceId
+                imei: realDeviceId,
+                platForm: platForm
               ),
             );
             final fetch = notifier.userFetch;
