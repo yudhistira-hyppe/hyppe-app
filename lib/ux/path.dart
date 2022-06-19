@@ -54,4 +54,6 @@ class Routes {
   static const String userOtpScreen = '/user-otp-screen';
 
   static const String imagePreviewScreen = '/image-preview-screen';
+
+  static const String testAliPlayer = '/test-ali-player';
 }

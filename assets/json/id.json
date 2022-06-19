@@ -467,6 +467,8 @@
   "downloadQRCode": "Unduh Kode QR",
   "shareStatus": "Status Bagikan",
   "hasUsed": "Telah digunakan",
-  "linkYourReferral": "Tautan Referal Kamu",
-  "shareYourQR": "Bagikan kode ini ke temanmu"
+  "linkYourReferral": "Tautan Referral Kamu",
+  "shareYourQR": "Bagikan kode ini ke temanmu",
+  "notReceivingOTP" : "Tidak Menerima OTP?",
+  "resendOTP" : "Kirim Ulang OTP"
 }

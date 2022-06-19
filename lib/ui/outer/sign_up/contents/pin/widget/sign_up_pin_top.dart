@@ -25,25 +25,27 @@ class SignUpPinTop extends StatelessWidget {
           ),
           fortyTwoPx,
           CustomRectangleInput(),
-          // twelvePx,
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     CustomTextWidget(
-          //       textStyle: Theme.of(context).textTheme.caption,
-          //       textToDisplay: notifier.language.didntReceiveTheCode ?? '',
-          //     ),
-          //     fourPx,
-          //     InkWell(
-          //       onTap: notifier.resendCode(context),
-          //       child: CustomTextWidget(
-          //         textOverflow: TextOverflow.visible,
-          //         textToDisplay: notifier.resendString(),
-          //         textStyle: notifier.resendStyle(context),
-          //       ),
-          //     ),
-          //   ],
-          // )
+          twelvePx,
+          notifier.resendPilih
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomTextWidget(
+                      textStyle: Theme.of(context).textTheme.caption,
+                      textToDisplay: notifier.language.didntReceiveTheCode ?? '',
+                    ),
+                    fourPx,
+                    InkWell(
+                      onTap: notifier.resendCode(context),
+                      child: CustomTextWidget(
+                        textOverflow: TextOverflow.visible,
+                        textToDisplay: notifier.resendString(),
+                        textStyle: notifier.resendStyle(context),
+                      ),
+                    )
+                  ],
+                )
+              : Stack(),
         ],
       ),
     );

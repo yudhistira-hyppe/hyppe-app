@@ -16,7 +16,9 @@ class UrlConstants {
   static const String productionBaseApi = "https://prod.hyppe.app";
 
   /// Staging v2 Base url
+  // static const String stagingBaseApi = "https://prod.hyppe.app";
   static const String stagingBaseApi = "https://staging.hyppe.id";
+  // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 
   /// Prod Deeplink Base url
   static const String prodDeeplinkUrl = "https://share.hyppe.app";
@@ -68,8 +70,7 @@ class UrlConstants {
 
   /* APIs In App Notification */
   /// get => Get Users notification.
-  static const String getUsersNotification =
-      "$notificationRoute/getAllUsersnotification";
+  static const String getUsersNotification = "$notificationRoute/getAllUsersnotification";
 
   /// post => Read notification.
   static const String readNotification = "$notificationRoute/readNotification";
@@ -99,8 +100,7 @@ class UrlConstants {
   static const String addPostComment = "$postRoute/comments/commentOnPost";
 
   /// post => Add Post Comment On Comment.
-  static const String addPostCommentOnComment =
-      "$postRoute/comments/commentOnComment";
+  static const String addPostCommentOnComment = "$postRoute/comments/commentOnComment";
 
   /// get => Get More Comments.
   static const String getMoreComments = "$postRoute/comments/viewMoreComments";
@@ -175,7 +175,7 @@ class UrlConstants {
   static const String verifyAccount = "$userRoute/verifyaccount";
 
   /// post => Resend OTP
-  static const String resendOTP = "$userRoute/resendOTP";
+  static const String resendOTP = "$userRoute/resendotp";
 
   /// get => Get user profile picture
   static const String profilePic = "$userRoute/profilePic";
@@ -238,15 +238,13 @@ class UrlConstants {
   static const String addPostReaction = "$postRoute/reactions/reactOnPost";
 
   /// get => Get Post Reactions Count.
-  static const String getPostReactionsCount =
-      "$postRoute/reactions/getPostReactionsCounts";
+  static const String getPostReactionsCount = "$postRoute/reactions/getPostReactionsCounts";
 
   /// post Add Reaction to comment.
   static const String addReactOnComment = "$postRoute/reactions/reactOnComment";
 
   /// post get Comment from Post.
-  static const String getCommentReactions =
-      "$postRoute/reactions/getCommentReactions";
+  static const String getCommentReactions = "$postRoute/reactions/getCommentReactions";
 
   ///---------------------------------------------------------------------------------------------------------///
 
@@ -328,6 +326,9 @@ class UrlConstants {
 
   /// get => Get Report Options.
   static const String getReportOptions = "$utilsRoute/getReportOption";
+
+  /// get => Get Report Options.
+  static const String postLogDevice = "$utilsRoute/logdevice";
 
   ///---------------------------------------------------------------------------------------------------------///
 

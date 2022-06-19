@@ -52,8 +52,7 @@ class HomeNotifier with ChangeNotifier {
       final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-      final stories =
-          Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
       // Refresh profile
       try {
@@ -91,8 +90,7 @@ class HomeNotifier with ChangeNotifier {
     // isHaveSomethingNew = false;
   }
 
-  void onDeleteSelfPostContent(BuildContext context,
-      {required String postID, required String content}) {
+  void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -108,8 +106,7 @@ class HomeNotifier with ChangeNotifier {
         pic.pic!.removeWhere((element) => element.postID == postID);
         break;
       case hyppeStory:
-        stories.myStoriesData!
-            .removeWhere((element) => element.postID == postID);
+        stories.myStoriesData!.removeWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -136,20 +133,16 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData!
-            .firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData!
-            .firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData =
-            pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData!
-            .firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -165,13 +158,9 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future navigateToProfilePage(BuildContext context,
-      {bool whenComplete = false, Function? onWhenComplete}) async {
-    if (context.read<OverlayHandlerProvider>().overlayActive)
-      context.read<OverlayHandlerProvider>().removeOverlay(context);
-    whenComplete
-        ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete)
-        : Routing().move(Routes.selfProfile);
+  Future navigateToProfilePage(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
+    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    whenComplete ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete) : Routing().move(Routes.selfProfile);
   }
 
   Future navigateToWallet(BuildContext context) async {
@@ -185,5 +174,11 @@ class HomeNotifier with ChangeNotifier {
     } else {
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     }
+  }
+
+  //untuk test aliplayer
+  Future navigateToTestAliPlayer(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
+    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    whenComplete ? Routing().move(Routes.testAliPlayer).whenComplete(() => onWhenComplete) : Routing().move(Routes.testAliPlayer);
   }
 }

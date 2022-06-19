@@ -52,6 +52,8 @@ class HyppeNotifier with ChangeNotifier {
       _routing.moveReplacement(Routes.userOtpScreen, argument: UserOtpScreenArgument(email: email));
       return;
     } else if (isUserInOTP) {
+      // print('pasti kesini');
+      // print(isUserInOTP);
       context.read<SignUpPinNotifier>().email = email ?? "";
       _routing.moveReplacement(
         Routes.signUpPin,
