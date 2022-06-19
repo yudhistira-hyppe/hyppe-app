@@ -57,6 +57,9 @@ dependencies:
   flutter_facebook_auth: ^4.3.0
   twitter_login: ^4.2.2
 
+  pull_to_refresh: ^2.0.0
+  fluttertoast: ^8.0.9
+
   dynamic_widget: # Dynamic widget builder
     git:
         url: https://github.com/dengyin2000/dynamic_widget.git
@@ -67,6 +70,10 @@ dependencies:
 
   story_view: # Story viewer
     path: packages/story_view
+
+  flutter_aliplayer: 
+    path: packages/flutter_aliplayer
+    
   qr_flutter: ^4.0.0
 
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms

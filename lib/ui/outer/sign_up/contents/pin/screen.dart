@@ -31,6 +31,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
   void initState() {
     final notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
     notifier.startTimer();
+    print(notifier.email);
     super.initState();
   }
 
@@ -56,8 +57,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
           appBar: AppBar(
             leading: GestureDetector(
               onTap: () => notifier.onBackVerifiedEmail(),
-              child: const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
@@ -85,8 +85,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
                     caption: notifier.language.verify!,
                     buttonColor: notifier.verifyButtonColor(context),
                     textStyle: notifier.verifyTextColor(context),
-                    onTap: notifier.onVerifyButton(context,
-                        argument: widget.arguments),
+                    onTap: notifier.onVerifyButton(context, argument: widget.arguments),
                   ),
                 ),
               ],

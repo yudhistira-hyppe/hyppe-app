@@ -468,5 +468,7 @@
   "shareStatus": "Status Bagikan",
   "hasUsed": "Telah digunakan",
   "linkYourReferral": "Tautan Referral Kamu",
-  "shareYourQR": "Bagikan kode ini ke temanmu"
+  "shareYourQR": "Bagikan kode ini ke temanmu",
+  "notReceivingOTP" : "Tidak Menerima OTP?",
+  "resendOTP" : "Kirim Ulang OTP"
 }

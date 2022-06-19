@@ -468,5 +468,7 @@
   "shareStatus": "Share Status",
   "hasUsed": "Has used",
   "linkYourReferral": "Link your Referral",
-  "shareYourQR": "Share this code to your friends"
+  "shareYourQR": "Share this code to your friends",
+  "notReceivingOTP" : "Not Receiving OTP?",
+  "resendOTP" : "Resend OTP"
 }

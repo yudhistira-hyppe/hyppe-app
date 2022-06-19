@@ -74,6 +74,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
+                              controller: _pageController,
                             ),
                           );
                         } else if (notifier.currentPage!.floor() + 1 == index) {
@@ -89,6 +90,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
+                              controller: _pageController,
                             ),
                           );
                         }
@@ -97,6 +99,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                           storyParentIndex: notifier.storyParentIndex,
                           data: notifier.dataUserStories[index],
                           onNextPage: () => notifier.nextPage(),
+                          controller: _pageController,
                         );
                       },
                     )

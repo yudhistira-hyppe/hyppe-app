@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ux/path.dart';
@@ -102,8 +105,7 @@ class Repos {
   }
 
   Future reposPost(
-    @Deprecated('This implementation is deprecated. Will be remove in future update.')
-        BuildContext context,
+    @Deprecated('This implementation is deprecated. Will be remove in future update.') BuildContext context,
     Function(Response onResult) logic,
     Function(DioError errorData) onDioError, {
     dynamic data,
@@ -120,10 +122,10 @@ class Repos {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    final _language =
-        Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final _language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     bool? connection;
     String? token = SharedPreference().readStorage(SpKeys.userToken);
+    dynamic dataError = {"type": "ERROR"};
     'User Token = $token'.logger();
     'Send data $data'.logger();
     if (withCheckConnection) connection = await System().checkConnections();
@@ -133,11 +135,9 @@ class Repos {
       if (connection != null && !connection) {
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(
-              errorServiceType, _language.noInternetConnection!);
+          context.read<ErrorService>().addErrorObject(errorServiceType, _language.noInternetConnection!);
         }
-        return ShowBottomSheet.onNoInternetConnection(context,
-            tryAgainButton: onNoInternet);
+        return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
       }
 
       /// communicate with backend
@@ -156,16 +156,12 @@ class Repos {
       /// log statusCode from backend
       if (verbose) 'Actual response data ${_response.data}'.logger();
       'StatusCode from dio ${_response.statusCode}'.logger();
-      if (methodType != MethodType.download &&
-          _response.data != null &&
-          _response.data.isNotEmpty) {
-        'StatusCode from backend ${_response.data?['statusCode'] ?? _response.data?['status']}'
-            .logger();
+      if (methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty) {
+        'StatusCode from backend ${_response.data?['statusCode'] ?? _response.data?['status']}'.logger();
       }
 
       /// check if token is valid or not, if not, force logOut
-      if (_response.statusCode == HTTP_UNAUTHORIZED ||
-          _response.statusCode == HTTP_FORBIDDEN) {
+      if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
         await SharedPreference().logOutStorage();
         _routing.moveAndRemoveUntil(Routes.login, Routes.root);
         return;
@@ -180,37 +176,38 @@ class Repos {
 
         /// serialize error data from backend
         final _errorData = ErrorModel.fromJson(_response.data);
+        'Error data ${_errorData.message}'.logger();
 
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType,
-              _errorData.message ?? _language.somethingWentWrong!);
+          context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong!);
 
           if (withAlertMessage) {
             // TO DO : Nunggu backend support multi language, sementara di hardcode
             final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
             String alertMessage = _errorData.message ?? _language.somethingWentWrong!;
-            if(_isoCodeCache == "id") {
-              if(alertMessage == "Sorry! This email already registered") {
+            if (_isoCodeCache == "id") {
+              if (alertMessage == "Sorry! This email already registered") {
                 alertMessage = _language.alreadyRegistered!;
               }
             }
-            _showSnackBar(kHyppeDanger, alertMessage,"");
+            _showSnackBar(kHyppeDanger, alertMessage, "");
           }
         } else {
+          print('dadasdasd');
           if (withAlertMessage) {
-            _showSnackBar(kHyppeDanger, _language.unfortunately!,
-                "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+            // _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_errorData.message}");
+            _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
+          dataError['log'] = _errorData.message;
+          'Error data ddddd' + dataError.logger();
+
+          final responError = await postLogError(dataError, headers, onReceiveProgress);
+          'Actual response error data ${responError.data}'.logger();
         }
       } else {
-        final _statusCodeFromBackend = methodType != MethodType.download &&
-                _response.data != null &&
-                _response.data.isNotEmpty
-            ? _response.data['statusCode'] ?? _response.data['status']
-            : null;
-        if (_statusCodeFromBackend != null &&
-            _statusCodeFromBackend > HTTP_CODE) {
+        final _statusCodeFromBackend = methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty ? _response.data['statusCode'] ?? _response.data['status'] : null;
+        if (_statusCodeFromBackend != null && _statusCodeFromBackend > HTTP_CODE) {
           'Error communicate with host $host'.logger();
 
           /// serialize error data from backend
@@ -218,55 +215,66 @@ class Repos {
 
           /// connect with ErrorService if property [errorService] not null
           if (errorServiceType != null) {
-            context.read<ErrorService>().addErrorObject(errorServiceType,
-                _errorData.message ?? _language.somethingWentWrong!);
+            context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong!);
           }
 
           if (withAlertMessage) {
-            _showSnackBar(kHyppeDanger, _language.unfortunately!,
-                "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+            _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
         } else {
-          'Success with message in host $host with status code ${_response.statusCode}'
-              .logger();
+          'Success with message in host $host with status code ${_response.statusCode}'.logger();
         }
       }
+      // final responError = await postLogError(dataError, headers, onReceiveProgress);
+      // 'Actual response error data ${responError.data}'.logger();
     } on DioError catch (e) {
       /// connect with ErrorService if property [errorService] not null
       if (errorServiceType != null) {
-        context
-            .read<ErrorService>()
-            .addErrorObject(errorServiceType, e.message);
+        context.read<ErrorService>().addErrorObject(errorServiceType, e.message);
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately!,
-            "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
-      'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'
-          .logger();
+      'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'.logger();
+      dataError['log'] = 'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host';
+      final responError = await postLogError(dataError, headers, onReceiveProgress);
+      'Actual response error data ${responError.data}'.logger();
       onDioError(e);
     } catch (e) {
       e.toString().logger();
       try {
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context
-              .read<ErrorService>()
-              .addErrorObject(errorServiceType, e.toString());
+          context.read<ErrorService>().addErrorObject(errorServiceType, e.toString());
         }
       } catch (eIn) {
         eIn.toString().logger();
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately!,
-            "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       } else {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
+      dataError['log'] = 'Error detail with no alertMessage ${e.toString()} and host $host';
+      final responError = await postLogError(dataError, headers, onReceiveProgress);
+      'Actual response error data ${responError.data}'.logger();
     }
   }
 
-  void _showSnackBar(Color color, String message, String desc) {
+  Future postLogError(data, headers, onReceiveProgress) async {
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? realDeviceId = await System().getDeviceIdentifier();
+    data['imei'] = realDeviceId;
+    return _apiAction.post(
+      UrlConstants.postLogDevice,
+      data: data,
+      token: token,
+      headers: headers,
+      onReceiveProgress: onReceiveProgress,
+    );
+  }
+
+  void _showSnackBar(Color color, String message, String desc, {Function? function}) {
     _routing.showSnackBar(
       snackBar: SnackBar(
         margin: EdgeInsets.zero,
@@ -281,6 +289,7 @@ class Repos {
               subCaption: desc,
               fromSnackBar: true,
               iconSvg: "${AssetPath.vectorPath}remove.svg",
+              function: function,
             ),
           ),
         ),

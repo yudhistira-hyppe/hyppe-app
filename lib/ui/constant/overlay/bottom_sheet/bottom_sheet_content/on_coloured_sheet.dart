@@ -104,7 +104,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                         textToDisplay: widget.subCaption!,
                         textOverflow: TextOverflow.visible,
                         textAlign: TextAlign.left,
-                        textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
                       ),
                     ),
                   )
