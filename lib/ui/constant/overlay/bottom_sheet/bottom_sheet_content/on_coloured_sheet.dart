@@ -59,86 +59,83 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Padding(
-      padding: EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  sixteenPx,
-                  CustomIconWidget(
-                    iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
-                    defaultColor: false,
-                    height: widget.sizeIcon,
-                    width: widget.sizeIcon,
-                    color: widget.iconColor,
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                sixteenPx,
+                CustomIconWidget(
+                  iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
+                  defaultColor: false,
+                  height: widget.sizeIcon,
+                  width: widget.sizeIcon,
+                  color: widget.iconColor,
+                ),
+                eightPx,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
+                  child: CustomTextWidget(
+                    maxLines: widget.maxLines,
+                    textOverflow: widget.textOverflow,
+                    textToDisplay: widget.caption,
+                    textAlign: TextAlign.left,
+                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
                   ),
-                  eightPx,
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
-                    child: CustomTextWidget(
-                      maxLines: widget.maxLines,
-                      textOverflow: widget.textOverflow,
-                      textToDisplay: widget.caption,
-                      textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                )
+              ],
+            ),
+            widget.subCaption != null
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 40),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
+                      child: CustomTextWidget(
+                        maxLines: widget.maxLines,
+                        textToDisplay: widget.subCaption!,
+                        textOverflow: TextOverflow.visible,
+                        textAlign: TextAlign.left,
+                        textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                      ),
                     ),
                   )
-                ],
-              ),
-              widget.subCaption != null
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 40),
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
-                        child: CustomTextWidget(
-                          maxLines: widget.maxLines,
-                          textToDisplay: widget.subCaption!,
-                          textOverflow: TextOverflow.visible,
-                          textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-            ],
-          ),
-          widget.subCaption != null
-              ? const SizedBox.shrink()
-              : SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: CustomTextButton(
-                    onPressed: () => _conditionalFunction(),
-                    child: ValueListenableBuilder<bool>(
-                      valueListenable: _loading,
-                      builder: (_, value, __) {
-                        if (value) {
-                          return const SizedBox(height: 40, width: 40, child: CustomLoading());
-                        }
+                : const SizedBox.shrink(),
+          ],
+        ),
+        widget.subCaption != null
+            ? const SizedBox.shrink()
+            : SizedBox(
+                width: 50,
+                height: 50,
+                child: CustomTextButton(
+                  onPressed: () => _conditionalFunction(),
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _loading,
+                    builder: (_, value, __) {
+                      if (value) {
+                        return const SizedBox(height: 40, width: 40, child: CustomLoading());
+                      }
     
-                        return CustomTextWidget(
-                          maxLines: 1,
-                          textToDisplay: 'Ok',
-                          textAlign: TextAlign.right,
-                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                        );
-                      },
-                    ),
+                      return CustomTextWidget(
+                        maxLines: 1,
+                        textToDisplay: 'Ok',
+                        textAlign: TextAlign.right,
+                        textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                      );
+                    },
                   ),
                 ),
-        ],
-      ),
+              ),
+      ],
     );
   }
 }

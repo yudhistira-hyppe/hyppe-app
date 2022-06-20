@@ -62,33 +62,45 @@ class _ReferralState extends State<Referral> {
                     const Spacer(),
                     const QRBlock(),
                     const Spacer(),
-                    notifier.modelReferral?.parent != null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Diundang oleh: ',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: kHyppeTextLightPrimary),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: kHyppeLightSurface),
-                                child: Text(
-                                  '${notifier.modelReferral?.parent}',
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : GestureDetector(
+                     notifier.modelReferral?.parent == null
+                            ? GestureDetector(
+                                onTap: () {
+                                  Routing().move(Routes.insertReferral);
+                                },
+                                child: const Text('Masukkan Referral',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: kHyppePrimary)),
+                              )
+                            : notifier.modelReferral?.parent != null
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        'Diundang oleh: ',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            color: kHyppeTextLightPrimary),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            color: kHyppeLightSurface),
+                                        child: Text(
+                                          '${notifier.modelReferral?.parent}',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                :GestureDetector(
                             onTap: () {
                               Routing().move(Routes.insertReferral);
                             },
@@ -97,7 +109,8 @@ class _ReferralState extends State<Referral> {
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: kHyppePrimary)),
-                          ),
+                          )
+
                     // CustomElevatedButton(
                     //   width: 375.0 * SizeConfig.scaleDiagonal,
                     //   height: 44.0 * SizeConfig.scaleDiagonal,

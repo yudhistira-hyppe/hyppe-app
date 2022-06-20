@@ -57,7 +57,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onInitial(BuildContext context) async {
+  Future onInitial(BuildContext context) async {
     var _result = await System().createdReferralLink(context);
     debugPrint("REFERRAL => " + _result.toString());
     referralLink = _result.toString();
@@ -116,8 +116,9 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
 
       final fetch = notifier.referralFetch;
       if (fetch.referralState == ReferralState.referralUserSuccess) {
-           onInitial(context);
-         _showSnackBar(kHyppeTextSuccess, 'success', 'username referal berhasil digunakan');
+           await onInitial(context);
+           Routing().moveBack();
+         _showSnackBar(kHyppeTextSuccess, 'Success', 'username referal berhasil digunakan');
       }
       if (fetch.referralState == ReferralState.referralUserError) {
         _showSnackBar(kHyppeDanger, 'Gagal', 'Username Referal tidak ditemukan');
