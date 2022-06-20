@@ -15,10 +15,12 @@ class LikeBloc {
 
   final _repos = Repos();
 
-  Future likePostUserBloc(BuildContext context, {required String postId, required String emailOwner}) async {
+  Future likePostUserBloc(BuildContext context, {required String postId, required String emailOwner ,required bool isLike}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
+    
+     
     final Map<String, String> _data = {
-      "eventType" : "LIKE",
+      "eventType" : isLike ? "LIKE": "UNLIKE",
       "postID": postId,
       "receiverParty": emailOwner
     };
@@ -41,7 +43,7 @@ class LikeBloc {
       data: _data,
       host: UrlConstants.interactive,
       methodType: MethodType.post,
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
     );
   }

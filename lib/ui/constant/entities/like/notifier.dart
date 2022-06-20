@@ -15,6 +15,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
 
 class LikeNotifier with ChangeNotifier {
+  bool? change;
   Future<void> likePost(BuildContext context, ContentData postData) async {
     final notifier = LikeBloc();
     try {
@@ -27,14 +28,59 @@ class LikeNotifier with ChangeNotifier {
         // Prevent user from liking his own post
         return;
       }
+      print('rijal ${postData.insight?.isPostLiked}');
 
-      if (!(postData.insight?.isPostLiked ?? false)) {
-        postData.insight?.isPostLiked =
-            !(postData.insight?.isPostLiked ?? false);
-        if (postData.insight?.isPostLiked ?? false) {
-          postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-        }
+      // if (!(postData.insight?.isPostLiked ?? false)) {
+      //   postData.insight?.isPostLiked =
+      //       !(postData.insight?.isPostLiked ?? false);
+      //       print(('rijals ${postData.insight?.isPostLiked}'));
+      //   if (postData.insight?.isPostLiked ?? false) {
+      //     postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
+      //   }
+      //   notifyListeners();
+      // }
+
+      if (postData.isLiked == true) {
+           postData.isLiked = false;
+          
+        await notifier.likePostUserBloc(context,
+            postId: postData.postID!,
+            emailOwner: postData.email!,
+            isLike: postData.isLiked!);
+        final fetch = notifier.likeFetch;
+
+       
+
         notifyListeners();
+        if (fetch.likeState == LikeState.likeUserPostSuccess) {
+          "Like post success".logger();
+
+          if (postData.isLiked == false) {
+            postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
+          }
+          notifyListeners();
+        }
+      } else if (postData.isLiked == false) {
+       
+             postData.isLiked = true;
+           
+        print('ini false ${postData.isLiked}');
+        await notifier.likePostUserBloc(context,
+            postId: postData.postID!,
+            emailOwner: postData.email!,
+            isLike: postData.isLiked!);
+        print('ini false');
+        final fetch = notifier.likeFetch;
+       
+        notifyListeners();
+        if (fetch.likeState == LikeState.likeUserPostSuccess) {
+          "Like post success".logger();
+
+          if (postData.isLiked == true) {
+            postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
+          }
+          notifyListeners();
+        }
       }
 
       // TODO: Future implementation
@@ -47,7 +93,9 @@ class LikeNotifier with ChangeNotifier {
       //   }
       // }
       await notifier.likePostUserBloc(context,
-          postId: postData.postID!, emailOwner: postData.email!);
+          postId: postData.postID!,
+          emailOwner: postData.email!,
+          isLike: postData.isLiked!);
       final fetch = notifier.likeFetch;
       if (fetch.likeState == LikeState.likeUserPostSuccess) {
         "Like post success".logger();

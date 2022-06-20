@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/bloc/delete_comment/bloc.dart';
+import 'package:hyppe/core/bloc/delete_comment/state.dart';
+import 'package:hyppe/core/bloc/postviewer/bloc.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/query_request/comment_data_query.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/widget/sub_comment_list_tile.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:hyppe/ux/routing.dart';
 
 class CommentNotifierV2 with ChangeNotifier {
   String? postID;
@@ -86,7 +90,8 @@ class CommentNotifierV2 with ChangeNotifier {
       if (reload) {
         commentData = res.firstOrNull()?.disqusLogs ?? [];
       } else {
-        commentData = [...(commentData ?? [] as List<CommentsLogs>)] + res.firstOrNull()!.disqusLogs!;
+        commentData = [...(commentData ?? [] as List<CommentsLogs>)] +
+            res.firstOrNull()!.disqusLogs!;
       }
     } catch (e) {
       'load comments list: ERROR: $e'.logger();
@@ -115,11 +120,13 @@ class CommentNotifierV2 with ChangeNotifier {
         if (parentID == null) {
           _commentData?.insert(0, res);
         } else {
-          final _parentIndex = _commentData?.indexWhere((element) => element.comment?.lineID == parentID);
+          final _parentIndex = _commentData
+              ?.indexWhere((element) => element.comment?.lineID == parentID);
           _commentData?[_parentIndex!].replies.insert(0, res.comment!);
           repliesComments[parentID]?.insertAll(0, [
             const SizedBox(height: 16),
-            SubCommentListTile(data: res.comment, parentID: parentID, fromFront: fromFront),
+            SubCommentListTile(
+                data: res.comment, parentID: parentID, fromFront: fromFront),
           ]);
         }
 
@@ -152,8 +159,10 @@ class CommentNotifierV2 with ChangeNotifier {
     parentID = parentCommentID;
 
     FocusScope.of(context).requestFocus(_inputNode);
-    if (commentController.text.isNotEmpty && !commentController.text.contains('@')) {
-      String _tmpString = '@${comment?.senderInfo?.username ?? '' ' ' + commentController.text}';
+    if (commentController.text.isNotEmpty &&
+        !commentController.text.contains('@')) {
+      String _tmpString =
+          '@${comment?.senderInfo?.username ?? '' ' ' + commentController.text}';
       commentController.clear();
       commentController.text = _tmpString;
     } else {
@@ -201,7 +210,26 @@ class CommentNotifierV2 with ChangeNotifier {
   }
 
   onChangeHandler(String v) {
-    v.isNotEmpty ? sendButtonColor = const Color(0xff822E6E) : sendButtonColor = null;
+    v.isNotEmpty
+        ? sendButtonColor = const Color(0xff822E6E)
+        : sendButtonColor = null;
     notifyListeners();
+  }
+
+  Future<void> deleteComment(BuildContext context, String lineID) async {
+    final _routing = Routing();
+    final notifier = DeleteCommentBloc();
+    try {
+      await notifier.postDeleteCommentBloc(context,
+          lineID: lineID, withAlertConnection: true);
+      final fetch = notifier.deletCommentFetch;
+      if (fetch.deleteCommentState == DeleteCommentState.deleteCommentSuccess) {
+        getComment(context, reload: true);
+        _routing.moveBack();
+      }
+    } catch (e) {
+      _routing.moveBack();
+      e.logger();
+    }
   }
 }

@@ -104,7 +104,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                         textToDisplay: widget.subCaption!,
                         textOverflow: TextOverflow.visible,
                         textAlign: TextAlign.left,
-                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                        textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
                       ),
                     ),
                   )
@@ -124,7 +124,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                       if (value) {
                         return const SizedBox(height: 40, width: 40, child: CustomLoading());
                       }
-
+    
                       return CustomTextWidget(
                         maxLines: 1,
                         textToDisplay: 'Ok',

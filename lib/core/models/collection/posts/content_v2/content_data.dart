@@ -12,6 +12,7 @@ class ContentData {
   String? mediaBasePath;
   String? postType;
   String? mediaUri;
+  bool? isLiked;
   String? description;
   bool? active;
   Privacy? privacy;
@@ -40,6 +41,7 @@ class ContentData {
     this.mediaBasePath,
     this.postType,
     this.mediaUri,
+    this.isLiked,
     this.description,
     this.active,
     this.privacy,
@@ -70,6 +72,7 @@ class ContentData {
     mediaBasePath = json['mediaBasePath'];
     postType = json['postType'];
     mediaUri = json['mediaUri'];
+    isLiked = json['isLiked'];
     description = json['description'] ?? '';
     active = json['active'];
     privacy =
@@ -107,6 +110,7 @@ class ContentData {
     data['mediaBasePath'] = mediaBasePath;
     data['postType'] = postType;
     data['mediaUri'] = mediaUri;
+    data['isLiked'] = isLiked;
     data['description'] = description;
     data['active'] = active;
     if (privacy != null) {

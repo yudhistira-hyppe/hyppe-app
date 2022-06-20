@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:hyppe/core/arguments/sign_up_argument.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -96,7 +99,9 @@ class UserBloc {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     String realDeviceId = await System().getDeviceIdentifier();
-    String referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    String referralEmail =
+        DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    String platForm = Platform.isAndroid ? "android" : "ios";
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "GMAIL",
@@ -104,6 +109,7 @@ class UserBloc {
       "langIso": "en",
       "referral": referralEmail,
       "imei": realDeviceId,
+      "regSrc": platForm
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -135,11 +141,14 @@ class UserBloc {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     String realDeviceID = await System().getDeviceIdentifier();
+    String platForm = Platform.isAndroid ? "android" : "ios";
+    print('ini plat $platForm');
     dynamic payload = {
       'email': email.toLowerCase(),
       "password": password,
       "deviceId": deviceID,
       "imei": realDeviceID,
+      "regSrc": platForm,
       "location": {
         "longitude": "${double.parse("0.0")}",
         "latitude": "${double.parse("0.0")}",

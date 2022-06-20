@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
+import 'package:hyppe/core/arguments/register_referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -27,7 +28,7 @@ class ReferralBloc {
           setReferralFetch(ReferralFetch(ReferralState.getReferralUserError));
         } else {
           setReferralFetch(ReferralFetch(ReferralState.getReferralUserSuccess,
-              data: onResult.data["data"]));
+              data: onResult.data));
         }
       },
       (errorData) {
@@ -47,11 +48,11 @@ class ReferralBloc {
     );
   }
 
-  Future referralUserBloc(
-    BuildContext context, {
-    bool withAlertConnection = true,
-    required ReferralUserArgument data,
-  }) async {
+  Future referralUserBloc(BuildContext context,
+      {bool withAlertConnection = true,
+      required ReferralUserArgument data,
+}) async {
+        print('ini email sapa ${data.email} ${data.imei}');
     setReferralFetch(ReferralFetch(ReferralState.loading));
     await Repos().reposPost(
       context,
@@ -71,6 +72,7 @@ class ReferralBloc {
       headers: {
         "x-auth-user": SharedPreference().readStorage(SpKeys.email),
       },
+      
       data: data.toJson(),
       host: UrlConstants.referral,
       withCheckConnection: true,
@@ -78,4 +80,39 @@ class ReferralBloc {
       withAlertMessage: withAlertConnection,
     );
   }
+
+
+  Future registerReferral(BuildContext context,
+      {bool withAlertConnection = true,
+      required RegisterReferralArgument data,
+}) async {
+        
+    setReferralFetch(ReferralFetch(ReferralState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! == 406 ||  onResult.statusCode! > HTTP_CODE) {
+          setReferralFetch(ReferralFetch(ReferralState.referralUserError));
+        } else {
+          setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess,
+              data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        ShowBottomSheet.onInternalServerError(context,
+            tryAgainButton: () => Routing().moveBack());
+        setReferralFetch(ReferralFetch(ReferralState.referralUserError));
+      },
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      
+      data: data.toJson(),
+      host: UrlConstants.referral,
+      withCheckConnection: true,
+      methodType: MethodType.post,
+      withAlertMessage: withAlertConnection,
+    );
+  }
+  
 }

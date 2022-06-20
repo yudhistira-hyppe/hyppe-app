@@ -8,9 +8,11 @@ import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
+import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/core/models/collection/referral/model_referral.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
@@ -18,8 +20,9 @@ import 'package:hyppe/ui/constant/page_not_found.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/test_aliplayer/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
@@ -158,8 +161,12 @@ class Generate {
       case Routes.referralScreen:
         return MaterialPageRoute(builder: (_) => const Referral());
 
-      case Routes.testAliPlayer:
-        return MaterialPageRoute(builder: (_) => TestAliPlayer());
+      case Routes.listReferral:
+        return MaterialPageRoute(
+            builder: (_) => ListReferralUser(
+                arguments: settings.arguments as ReferralListUserArgument));
+      case Routes.insertReferral:
+        return MaterialPageRoute(builder: (_) => InsertReferral());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

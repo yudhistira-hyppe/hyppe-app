@@ -20,6 +20,8 @@ class Routes {
   static const String walletWebView = 'wallet-web-view';
   static const String completeProfile = '/required-complete-profile';
   static const String referralScreen = '/referral-screen';
+  static const String listReferral = '/list-referral';
+  static const String insertReferral = '/insert-referral';
 
 // Sign up
   static const String signUpPin = '/sign-up-pin';
