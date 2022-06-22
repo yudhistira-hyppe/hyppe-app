@@ -79,6 +79,9 @@ dependencies:
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
 
+dependency_overrides:
+  camera: <=0.9.7
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
