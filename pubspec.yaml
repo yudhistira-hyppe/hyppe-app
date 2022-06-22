@@ -4,7 +4,7 @@ homepage: https://www.hyppe.id
 
 publish_to: 'none'
 
-version: 1.0.10+58
+version: 1.0.10+14
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -71,8 +71,8 @@ dependencies:
   story_view: # Story viewer
     path: packages/story_view
 
-  flutter_aliplayer: 
-    path: packages/flutter_aliplayer
+  # flutter_aliplayer: 
+  #   path: packages/flutter_aliplayer
     
   qr_flutter: ^4.0.0
 

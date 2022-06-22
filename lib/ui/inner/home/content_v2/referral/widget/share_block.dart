@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../../ux/routing.dart';
 
 class ShareBlock extends StatefulWidget {
   const ShareBlock({Key? key}) : super(key: key);
@@ -37,19 +41,29 @@ class _ShareBlockState extends State<ShareBlock> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomTextWidget(
-                        textToDisplay: notifier.language.hasUsed!,
-                        textStyle:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: kHyppeLightSecondary,
-                                ),
+                      GestureDetector(
+                        onTap: (){
+                         Routing().move(Routes.listReferral,argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
+                        },
+                        child: CustomTextWidget(
+                          textToDisplay: notifier.language.hasUsed!,
+                          textStyle:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: kHyppeLightSecondary,
+                                  ),
+                        ),
                       ),
-                      CustomTextWidget(
-                        textToDisplay: notifier.referralCount,
-                        textStyle: Theme.of(context).textTheme.button?.copyWith(
-                              color:
-                                  Theme.of(context).colorScheme.primaryVariant,
-                            ),
+                      GestureDetector(
+                        onTap: (){
+                           Routing().move(Routes.listReferral,argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
+                        },
+                        child: CustomTextWidget(
+                          textToDisplay:  notifier.modelReferral?.data != null ? '${notifier.modelReferral?.data}':'0',
+                          textStyle: Theme.of(context).textTheme.button?.copyWith(
+                                color:
+                                    Theme.of(context).colorScheme.primaryVariant,
+                              ),
+                        ),
                       ),
                     ],
                   ),

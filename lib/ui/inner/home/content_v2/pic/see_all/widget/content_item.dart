@@ -120,11 +120,11 @@ class ContentItem extends StatelessWidget {
                                 builder: (context, notifier, child) => InkWell(
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    color: (data.insight?.isPostLiked ?? false)
+                                    color: data.isLiked==true 
                                         ? kHyppePrimary
                                         : Theme.of(context).iconTheme.color,
                                     iconData:
-                                        '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                        '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
                                   ),
                                   onTap: () => notifier.likePost(context, data),
                                 ),

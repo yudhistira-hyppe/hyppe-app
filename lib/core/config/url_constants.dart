@@ -355,6 +355,9 @@ class UrlConstants {
   /// post => post to change value key isViewed
   static const String postViewer = "$postRouteV2/postviewer";
 
+ /// post lineID to delete comment 
+  static const String removeComment = "$postRouteV2/removecomment";
+
   /// post => Post Device Activity
   static const String deviceactivity = "$userRoute/deviceactivity";
 
