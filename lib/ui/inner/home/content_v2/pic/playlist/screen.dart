@@ -20,7 +20,8 @@ class PicDetailScreen extends StatefulWidget {
   _PicDetailScreenState createState() => _PicDetailScreenState();
 }
 
-class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayoutMixin {
+class _PicDetailScreenState extends State<PicDetailScreen>
+    with AfterFirstLayoutMixin {
   final _notifier = PicDetailNotifier();
 
   @override
@@ -44,9 +45,12 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _notifier.data != null ? PicDetailSlider(picData: _notifier.data) : PicDetailShimmer(),
+                      _notifier.data != null
+                          ? PicDetailSlider(picData: _notifier.data)
+                          : PicDetailShimmer(),
                       PicDetailBottom(data: notifier.data),
-                      _notifier.data != null && (_notifier.data?.allowComments ?? false)
+                      _notifier.data != null &&
+                              (_notifier.data?.allowComments ?? false)
                           ? Expanded(
                               child: OnShowCommentBottomSheetV2(
                               fromFront: true,

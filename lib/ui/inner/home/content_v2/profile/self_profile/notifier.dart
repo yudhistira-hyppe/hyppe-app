@@ -39,13 +39,17 @@ class SelfProfileNotifier with ChangeNotifier {
   String? _username;
   int _limit = 10;
   int _pageIndex = 0;
+  int _maxLine = 2;
+  bool _descTextShowFlag = false;
 
   UserInfoModel get user => _user;
   Routing get routing => _routing;
 
   int get limit => _limit;
   int get pageIndex => _pageIndex;
+  int get maxLine => _maxLine;
   String? get username => _username;
+  bool get descTextShowFlag => _descTextShowFlag;
 
   int get vidCount => user.vids?.length ?? 0;
   bool get vidHasNext => vidContentsQuery.hasNext;
@@ -68,6 +72,16 @@ class SelfProfileNotifier with ChangeNotifier {
 
   set pageIndex(int val) {
     _pageIndex = val;
+    notifyListeners();
+  }
+
+  set descTextShowFlag(bool val) {
+    _descTextShowFlag = val;
+    notifyListeners();
+  }
+
+  set maxLine(int val) {
+    _maxLine = val;
     notifyListeners();
   }
 

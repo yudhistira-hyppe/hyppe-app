@@ -17,13 +17,15 @@ class SelfProfileScreen extends StatefulWidget {
 
 class _SelfProfileScreenState extends State<SelfProfileScreen> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _globalKey =
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
     notifier.initialSelfProfile(context);
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    _scrollController.addListener(
+        () => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -54,7 +56,8 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
                     children: [
                       IconButton(
                         onPressed: () => notifier.routing.moveBack(),
-                        icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                        icon: const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                       ),
                       CustomTextWidget(
                         textToDisplay: notifier.displayUserName(),
@@ -86,17 +89,27 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
               scrollDirection: Axis.vertical,
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
-                SliverAppBar(
-                  pinned: false,
-                  stretch: false,
-                  elevation: 0.0,
-                  floating: false,
-                  automaticallyImplyLeading: false,
-                  expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: EdgeInsets.zero, background: notifier.user.profile != null ? SelfProfileTop() : BothProfileTopShimmer()),
+                // SliverAppBar(
+                //   pinned: false,
+                //   stretch: false,
+                //   elevation: 0.0,
+                //   floating: false,
+                //   automaticallyImplyLeading: false,
+                //   expandedHeight: (400 * SizeConfig.scaleDiagonal) + 46,
+                //   backgroundColor: Theme.of(context).colorScheme.background,
+                //   flexibleSpace: FlexibleSpaceBar(
+                //       titlePadding: EdgeInsets.zero,
+                //       background: notifier.user.profile != null
+                //           ? SelfProfileTop()
+                //           : BothProfileTopShimmer()),
+                // ),
+                SliverToBoxAdapter(
+                  child: Container(
+                      child: notifier.user.profile != null
+                          ? SelfProfileTop()
+                          : BothProfileTopShimmer()),
                 ),
+
                 SliverAppBar(
                   pinned: true,
                   flexibleSpace: SelfProfileBottom(),

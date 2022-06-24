@@ -93,9 +93,12 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   static const loadingForgotPasswordKey = 'loadingForgotPasswordKey';
   static const loadingLoginGoogleKey = 'loadingLoginGoogleKey';
 
-  String? emailValidator(String v) => System().validateEmail(v) ? null : "Not a valid email address";
-  String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
-  bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
+  String? emailValidator(String v) =>
+      System().validateEmail(v) ? null : "Not a valid email address";
+  String? passwordValidator(String v) =>
+      v.length > 4 ? null : "Incorrect Password";
+  bool buttonDisable() =>
+      email.isNotEmpty && password.isNotEmpty ? true : false;
 
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);
@@ -121,7 +124,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       if (fetch.userState == UserState.LoginSuccess) {
         // String realDeviceID = await System().getDeviceIdentifier();
         // print('wee $realDeviceID');
-          DynamicLinkService.hitReferralBackend(context);
+        DynamicLinkService.hitReferralBackend(context);
         hide = true;
         final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
         _validateUserData(context, _result, false);
@@ -133,7 +136,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         }
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+      ShowBottomSheet.onNoInternetConnection(context,
+          tryAgainButton: () => Routing().moveBack());
     }
   }
 
@@ -171,14 +175,16 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin) async {
+  _validateUserData(BuildContext context, UserProfileModel signData,
+      bool isSociaMediaLogin) async {
     if (isSociaMediaLogin) {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       DeviceBloc().activityAwake(context);
       if (signData.interest!.isEmpty) {
-        Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
+        Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+            argument: UserInterestScreenArgument());
       } else {
         Routing().moveReplacement(Routes.lobby);
       }
@@ -195,7 +201,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       Routing().moveReplacement(Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
       print('apa2 ${signData.userType?.index}');
-      final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+      final signUpPinNotifier =
+          Provider.of<SignUpPinNotifier>(context, listen: false);
 
       await ShowBottomSheet().onShowColouredSheet(
         context,
@@ -217,7 +224,11 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       signUpPinNotifier.userToken = signData.token!;
       // signUpPinNotifier.userID = signData.profileID!;
-      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin)).whenComplete(() {
+      Routing()
+          .move(Routes.signUpPin,
+              argument:
+                  VerifyPageArgument(redirect: VerifyPageRedirection.toLogin))
+          .whenComplete(() {
         clearTextController();
       });
     }
@@ -241,12 +252,14 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     if (connection) {
       UserCredential? userCredential;
       _userGoogleSignIn = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await _userGoogleSignIn?.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       unFocusController();
       setLoading(true);
       incorrect = false;
@@ -268,7 +281,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         final fetch = notifier.userFetch;
         if (fetch.userState == UserState.LoginSuccess) {
           hide = true;
-          final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+          final UserProfileModel _result =
+              UserProfileModel.fromJson(fetch.data);
           _validateUserData(context, _result, true);
         }
         if (fetch.userState == UserState.LoginError) {
@@ -286,7 +300,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       // }
 
     } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+      ShowBottomSheet.onNoInternetConnection(context,
+          tryAgainButton: () => Routing().moveBack());
     }
   }
 

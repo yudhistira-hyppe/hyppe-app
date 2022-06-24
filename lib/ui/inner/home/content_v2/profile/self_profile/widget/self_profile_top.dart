@@ -23,8 +23,9 @@ class SelfProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // SelectableText("${notifier.displayPhotoProfile()}"),
             Row(
-              children: [
+              children: <Widget>[
                 StoryColorValidator(
                   haveStory: notifier.checkHaveStory(context),
                   featureType: FeatureType.other,
@@ -36,10 +37,10 @@ class SelfProfileTop extends StatelessWidget {
                     onTap: () => notifier.viewStory(context),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                Expanded(
                   child: Row(
-                    children: [
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
                       Column(
                         children: [
                           CustomTextWidget(
@@ -49,38 +50,35 @@ class SelfProfileTop extends StatelessWidget {
                           SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                           CustomTextWidget(
                             textToDisplay: notifier.language.posts!,
-                            textStyle:
-                                Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .apply(
+                                    color: Theme.of(context)
+                                        .bottomNavigationBarTheme
+                                        .unselectedItemColor),
                           )
                         ],
                       ),
-                      SizedBox(width: 35 * SizeConfig.scaleDiagonal),
-                      InkWell(
-                        onTap: () {
-                          Routing().move(
-                            Routes.followerScreen,
-                            argument: FollowerScreenArgument(
-                              username: notifier.displayUserName(),
-                              eventType: InteractiveEventType.follower,
-                            ),
-                          );
-                        },
-                        child: Column(
-                          children: [
-                            CustomTextWidget(
-                              textToDisplay: notifier.displayFollowers(),
-                              textStyle: Theme.of(context).textTheme.subtitle1,
-                            ),
-                            SizedBox(height: 8 * SizeConfig.scaleDiagonal),
-                            CustomTextWidget(
-                              textToDisplay: notifier.language.followers!,
-                              textStyle:
-                                  Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
-                            )
-                          ],
-                        ),
+                      Column(
+                        children: [
+                          CustomTextWidget(
+                            textToDisplay: notifier.displayPostsCount(),
+                            textStyle: Theme.of(context).textTheme.subtitle1,
+                          ),
+                          SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+                          CustomTextWidget(
+                            textToDisplay: notifier.language.posts!,
+                            textStyle: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .apply(
+                                    color: Theme.of(context)
+                                        .bottomNavigationBarTheme
+                                        .unselectedItemColor),
+                          )
+                        ],
                       ),
-                      SizedBox(width: 35 * SizeConfig.scaleDiagonal),
                       InkWell(
                         onTap: () {
                           Routing().move(
@@ -100,8 +98,13 @@ class SelfProfileTop extends StatelessWidget {
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
                               textToDisplay: notifier.language.following!,
-                              textStyle:
-                                  Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .apply(
+                                      color: Theme.of(context)
+                                          .bottomNavigationBarTheme
+                                          .unselectedItemColor),
                             )
                           ],
                         ),
@@ -111,6 +114,117 @@ class SelfProfileTop extends StatelessWidget {
                 ),
               ],
             ),
+            // Row(
+            //   mainAxisSize: MainAxisSize.max,
+            //   children: [
+            //     StoryColorValidator(
+            //       haveStory: notifier.checkHaveStory(context),
+            //       featureType: FeatureType.other,
+            //       child: CustomProfileImage(
+            //         following: true,
+            //         width: 80 * SizeConfig.scaleDiagonal,
+            //         height: 80 * SizeConfig.scaleDiagonal,
+            //         imageUrl: notifier.displayPhotoProfile(),
+            //         onTap: () => notifier.viewStory(context),
+            //       ),
+            //     ),
+            //     Padding(
+            //       padding: const EdgeInsets.only(left: 20),
+            //       child: Expanded(
+            //         child: Row(
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisSize: MainAxisSize.min,
+            //           children: [
+            //             Column(
+            //               children: [
+            //                 CustomTextWidget(
+            //                   textToDisplay: notifier.displayPostsCount(),
+            //                   textStyle: Theme.of(context).textTheme.subtitle1,
+            //                 ),
+            //                 SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+            //                 CustomTextWidget(
+            //                   textToDisplay: notifier.language.posts!,
+            //                   textStyle: Theme.of(context)
+            //                       .textTheme
+            //                       .bodyText2!
+            //                       .apply(
+            //                           color: Theme.of(context)
+            //                               .bottomNavigationBarTheme
+            //                               .unselectedItemColor),
+            //                 )
+            //               ],
+            //             ),
+            //             SizedBox(width: 35 * SizeConfig.scaleDiagonal),
+            //             InkWell(
+            //               onTap: () {
+            //                 Routing().move(
+            //                   Routes.followerScreen,
+            //                   argument: FollowerScreenArgument(
+            //                     username: notifier.displayUserName(),
+            //                     eventType: InteractiveEventType.follower,
+            //                   ),
+            //                 );
+            //               },
+            //               child: Column(
+            //                 children: [
+            //                   CustomTextWidget(
+            //                     textToDisplay: notifier.displayFollowers(),
+            //                     textStyle:
+            //                         Theme.of(context).textTheme.subtitle1,
+            //                   ),
+            //                   SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+            //                   CustomTextWidget(
+            //                     textToDisplay: notifier.language.followers!,
+            //                     textStyle: Theme.of(context)
+            //                         .textTheme
+            //                         .bodyText2!
+            //                         .apply(
+            //                             color: Theme.of(context)
+            //                                 .bottomNavigationBarTheme
+            //                                 .unselectedItemColor),
+            //                   )
+            //                 ],
+            //               ),
+            //             ),
+            //             SizedBox(width: 35 * SizeConfig.scaleDiagonal),
+            //             InkWell(
+            //               onTap: () {
+            //                 Routing().move(
+            //                   Routes.followerScreen,
+            //                   argument: FollowerScreenArgument(
+            //                     username: notifier.displayUserName(),
+            //                     eventType: InteractiveEventType.following,
+            //                   ),
+            //                 );
+            //               },
+            //               child: Column(
+            //                 children: [
+            //                   CustomTextWidget(
+            //                     textToDisplay: notifier.displayFollowing(),
+            //                     textStyle:
+            //                         Theme.of(context).textTheme.subtitle1,
+            //                   ),
+            //                   SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+            //                   CustomTextWidget(
+            //                     textToDisplay: notifier.language.following!,
+            //                     textStyle: Theme.of(context)
+            //                         .textTheme
+            //                         .bodyText2!
+            //                         .apply(
+            //                             color: Theme.of(context)
+            //                                 .bottomNavigationBarTheme
+            //                                 .unselectedItemColor),
+            //                   )
+            //                 ],
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Padding(
               padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
               child: CustomTextWidget(
@@ -126,12 +240,14 @@ class SelfProfileTop extends StatelessWidget {
                       textToDisplay: notifier.displayBio(),
                       textAlign: TextAlign.start,
                       textStyle: Theme.of(context).textTheme.bodyText2,
+                      // maxLines: notifier.maxLine,
                     ),
                   )
                 : const SizedBox.shrink(),
             notifier.displayPlace() != null
                 ? Padding(
-                    padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
+                    padding:
+                        EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
                     child: Row(
                       children: [
                         const CustomIconWidget(
@@ -161,7 +277,8 @@ class SelfProfileTop extends StatelessWidget {
                         ),
                         width: null,
                         height: 42 * SizeConfig.scaleDiagonal,
-                        buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                        buttonStyle:
+                            Theme.of(context).elevatedButtonTheme.style,
                         function: () => notifier.navigateToEditProfile(),
                       ),
                     ),

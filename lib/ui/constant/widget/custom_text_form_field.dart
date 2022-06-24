@@ -23,6 +23,8 @@ class CustomTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final double? cursorHeight;
   final int? maxLength;
+  final int? minLines;
+  final int? maxLines;
 
   const CustomTextFormField(
       {Key? key,
@@ -46,7 +48,9 @@ class CustomTextFormField extends StatelessWidget {
       this.obscuringCharacter = '•',
       this.focusNode,
       this.maxLength,
-      this.cursorHeight})
+      this.cursorHeight,
+      this.minLines,
+      this.maxLines})
       : super(key: key);
 
   @override
@@ -55,23 +59,26 @@ class CustomTextFormField extends StatelessWidget {
         width: inputAreaWidth,
         height: inputAreaHeight,
         child: TextFormField(
-            autovalidateMode: autovalidateMode,
-            style: style,
-            cursorHeight: cursorHeight,
-            onTap: onTap,
-            maxLength: maxLength,
-            onSaved: onSaved as void Function(String?)?,
-            readOnly: readOnly,
-            focusNode: focusNode,
-            textAlign: textAlign,
-            validator: validator,
-            onChanged: onChanged,
-            obscureText: obscureText,
-            decoration: inputDecoration,
-            keyboardType: textInputType,
-            inputFormatters: inputFormatter,
-            textInputAction: textInputAction,
-            controller: textEditingController,
-            obscuringCharacter: obscuringCharacter));
+          autovalidateMode: autovalidateMode,
+          style: style,
+          cursorHeight: cursorHeight,
+          onTap: onTap,
+          maxLength: maxLength,
+          onSaved: onSaved as void Function(String?)?,
+          readOnly: readOnly,
+          focusNode: focusNode,
+          textAlign: textAlign,
+          validator: validator,
+          onChanged: onChanged,
+          obscureText: obscureText,
+          decoration: inputDecoration,
+          keyboardType: textInputType,
+          inputFormatters: inputFormatter,
+          textInputAction: textInputAction,
+          controller: textEditingController,
+          obscuringCharacter: obscuringCharacter,
+          minLines: minLines,
+          maxLines: maxLines,
+        ));
   }
 }

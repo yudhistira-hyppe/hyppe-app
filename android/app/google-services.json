@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "590985523606-ehk7piboj4chps2078d69l4td6cg7klm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hyppe.hyppeapp",
+            "certificate_hash": "6d5e36668865ed90a962abd6031228ffa2060871"
+          }
+        },
+        {
           "client_id": "590985523606-i15ugv12suirccjnbi7h260v8hf8fnpu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -44,6 +52,14 @@
           "android_info": {
             "package_name": "com.hyppe.hyppeapp",
             "certificate_hash": "a88c639dabe046f4da79404cfc6f52097f693b73"
+          }
+        },
+        {
+          "client_id": "590985523606-n3unf2unngcl5bvnu2fu219hc2bujc68.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hyppe.hyppeapp",
+            "certificate_hash": "549547288876c1f1ebc0565b4e6bd8b1f1ca7a24"
           }
         },
         {
