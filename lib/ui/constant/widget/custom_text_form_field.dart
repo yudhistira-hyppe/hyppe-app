@@ -78,7 +78,7 @@ class CustomTextFormField extends StatelessWidget {
           controller: textEditingController,
           obscuringCharacter: obscuringCharacter,
           minLines: minLines,
-          maxLines: maxLines,
+          maxLines: maxLines ?? 1,
         ));
   }
 }

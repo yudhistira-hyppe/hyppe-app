@@ -29,17 +29,21 @@ class OnShowCommentBottomSheetV2 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _OnShowCommentBottomSheetV2State createState() => _OnShowCommentBottomSheetV2State();
+  _OnShowCommentBottomSheetV2State createState() =>
+      _OnShowCommentBottomSheetV2State();
 }
 
-class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2> {
+class _OnShowCommentBottomSheetV2State
+    extends State<OnShowCommentBottomSheetV2> {
   final _notifier = CommentNotifierV2();
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    _notifier.initState(context, widget.postID, widget.fromFront, widget.parentComment);
-    _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
+    _notifier.initState(
+        context, widget.postID, widget.fromFront, widget.parentComment);
+    _scrollController.addListener(
+        () => _notifier.scrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -75,27 +79,34 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                       ),
                     Expanded(
                       child: !notifier.isCommentEmpty
-                          ? ListView.separated(
+                          ? ListView.builder(
                               itemCount: notifier.itemCount,
                               controller: _scrollController,
                               scrollDirection: Axis.vertical,
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.only(bottom: 10),
-                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                              separatorBuilder: (context, index) => const Divider(
-                                thickness: 0.95,
-                                color: Color(0xff2E3338),
-                              ),
+                              keyboardDismissBehavior:
+                                  ScrollViewKeyboardDismissBehavior.onDrag,
+                              // separatorBuilder: (context, index) =>
+                              //     const Divider(
+                              //   thickness: 0.95,
+                              //   color: Color(0xfffffffff),
+                              // ),
                               itemBuilder: (context, index) {
-                                if (index == notifier.commentData?.length && notifier.hasNext) {
+                                if (index == notifier.commentData?.length &&
+                                    notifier.hasNext) {
                                   return const CustomLoading();
                                 }
 
                                 final comments = notifier.commentData?[index];
 
-                                return CommentListTile(
-                                  data: comments,
-                                  fromFront: widget.fromFront,
+                                return Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                                  child: CommentListTile(
+                                    data: comments,
+                                    fromFront: widget.fromFront,
+                                  ),
                                 );
                               },
                             )
@@ -103,13 +114,22 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                               child: CustomTextButton(
                                 onPressed: () {
                                   if (widget.fromFront) {
-                                    ShowBottomSheet.onShowCommentV2(context, postID: notifier.postID);
+                                    ShowBottomSheet.onShowCommentV2(context,
+                                        postID: notifier.postID);
                                   } else {
                                     notifier.showTextInput = true;
                                   }
                                 },
-                                child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment!),
-                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                                child: CustomTextWidget(
+                                    textToDisplay: context
+                                        .read<TranslateNotifierV2>()
+                                        .translate
+                                        .beTheFirstToComment!),
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .primaryVariant)),
                               ),
                             ),
                     ),

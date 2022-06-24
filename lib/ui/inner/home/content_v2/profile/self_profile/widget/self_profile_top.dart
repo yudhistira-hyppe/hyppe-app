@@ -60,24 +60,35 @@ class SelfProfileTop extends StatelessWidget {
                           )
                         ],
                       ),
-                      Column(
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay: notifier.displayPostsCount(),
-                            textStyle: Theme.of(context).textTheme.subtitle1,
-                          ),
-                          SizedBox(height: 8 * SizeConfig.scaleDiagonal),
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.posts!,
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .apply(
-                                    color: Theme.of(context)
-                                        .bottomNavigationBarTheme
-                                        .unselectedItemColor),
-                          )
-                        ],
+                      InkWell(
+                        onTap: () {
+                          Routing().move(
+                            Routes.followerScreen,
+                            argument: FollowerScreenArgument(
+                              username: notifier.displayUserName(),
+                              eventType: InteractiveEventType.follower,
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: notifier.displayFollowers(),
+                              textStyle: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.followers!,
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .apply(
+                                      color: Theme.of(context)
+                                          .bottomNavigationBarTheme
+                                          .unselectedItemColor),
+                            )
+                          ],
+                        ),
                       ),
                       InkWell(
                         onTap: () {
