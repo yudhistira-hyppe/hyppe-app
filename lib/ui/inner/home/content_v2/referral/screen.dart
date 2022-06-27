@@ -72,10 +72,7 @@ class _ReferralState extends State<Referral> {
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
-                                    'Diundang oleh: ',
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: kHyppeTextLightPrimary),
-                                  ),
+                                  Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
                                   Container(
                                     padding: const EdgeInsets.all(5),
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),

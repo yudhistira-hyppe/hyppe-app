@@ -65,7 +65,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
     final referralFetch = referralBloc.referralFetch;
 
     if (referralFetch.referralState == ReferralState.getReferralUserSuccess) {
-      referralCount = referralFetch.data['data'];
+      referralCount = referralFetch;
       modelReferral = ModelReferral.fromJson(referralFetch.data);
       print('heheh ${modelReferral?.data}');
     }
@@ -95,11 +95,18 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
     );
   }
 
+  @override
+  void setLoading(bool val, {bool setState = true, Object? loadingObject}) {
+    super.setLoading(val, loadingObject: loadingObject);
+    if (setState) notifyListeners();
+  }
+
   Future registerReferral(BuildContext context) async {
+    setLoading(true);
     bool connection = await System().checkConnections();
     if (connection) {
       // unFocusController();
-      setLoading(true);
+
       // incorrect = false;
       String realDeviceID = await System().getDeviceIdentifier();
       final notifier = ReferralBloc();
@@ -122,6 +129,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
         _showSnackBar(kHyppeDanger, 'Gagal', '${errorData.message}');
       }
     } else {
+      setLoading(false);
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
     }
   }

@@ -85,11 +85,9 @@ class ReferralBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        print('dasdasd');
         if (onResult.statusCode! == 406 || onResult.statusCode! > HTTP_CODE) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError));
         } else if (onResult.statusCode! == 200) {
-          print('Kesini');
           setReferralFetch(ReferralFetch(ReferralState.referralUserError, data: (onResult.data)));
         } else {
           setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
