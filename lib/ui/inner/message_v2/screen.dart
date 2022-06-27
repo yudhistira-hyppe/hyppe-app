@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -118,7 +119,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                         onTap: () => notifier.onClickUser(context, discussData),
                                         // onLongPress: () {
                                         //   ShowBottomSheet.onLongPressTileUserMessage(context);
-                                        //   notifier.onLongPressUser(context, index);
+                                        //   notifier.onLongPressUser(context, discussData);
                                         // },
                                         child: ListTile(
                                           leading: StoryColorValidator(
@@ -169,9 +170,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 iconData: "${AssetPath.vectorPath}unread.svg",
                                                 defaultColor: false,
                                                 color: DateTime.now().millisecondsSinceEpoch >
-                                                        DateTime.parse(discussData.updatedAt ?? DateTime.now().toString())
-                                                            .add(const Duration(minutes: 10))
-                                                            .millisecondsSinceEpoch
+                                                        DateTime.parse(discussData.updatedAt ?? DateTime.now().toString()).add(const Duration(minutes: 10)).millisecondsSinceEpoch
                                                     ? kHyppeLightIcon
                                                     : null,
                                               ),

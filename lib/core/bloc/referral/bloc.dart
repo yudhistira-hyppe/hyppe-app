@@ -27,14 +27,11 @@ class ReferralBloc {
         if (onResult.statusCode != 202) {
           setReferralFetch(ReferralFetch(ReferralState.getReferralUserError));
         } else {
-          setReferralFetch(ReferralFetch(ReferralState.getReferralUserSuccess,
-              data: onResult.data));
+          setReferralFetch(ReferralFetch(ReferralState.getReferralUserSuccess, data: onResult.data));
         }
       },
       (errorData) {
-        context
-            .read<ErrorService>()
-            .addErrorObject(ErrorType.unknown, errorData.message);
+        context.read<ErrorService>().addErrorObject(ErrorType.unknown, errorData.message);
         setReferralFetch(ReferralFetch(ReferralState.getReferralUserError));
       },
       data: null,
@@ -48,11 +45,12 @@ class ReferralBloc {
     );
   }
 
-  Future referralUserBloc(BuildContext context,
-      {bool withAlertConnection = true,
-      required ReferralUserArgument data,
-}) async {
-        print('ini email sapa ${data.email} ${data.imei}');
+  Future referralUserBloc(
+    BuildContext context, {
+    bool withAlertConnection = true,
+    required ReferralUserArgument data,
+  }) async {
+    print('ini email sapa ${data.email} ${data.imei}');
     setReferralFetch(ReferralFetch(ReferralState.loading));
     await Repos().reposPost(
       context,
@@ -60,19 +58,16 @@ class ReferralBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError));
         } else {
-          setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess,
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context,
-            tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setReferralFetch(ReferralFetch(ReferralState.referralUserError));
       },
       headers: {
         "x-auth-user": SharedPreference().readStorage(SpKeys.email),
       },
-      
       data: data.toJson(),
       host: UrlConstants.referral,
       withCheckConnection: true,
@@ -81,32 +76,32 @@ class ReferralBloc {
     );
   }
 
-
-  Future registerReferral(BuildContext context,
-      {bool withAlertConnection = true,
-      required RegisterReferralArgument data,
-}) async {
-        
+  Future registerReferral(
+    BuildContext context, {
+    bool withAlertConnection = true,
+    required RegisterReferralArgument data,
+  }) async {
     setReferralFetch(ReferralFetch(ReferralState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! == 406 ||  onResult.statusCode! > HTTP_CODE) {
+        print('dasdasd');
+        if (onResult.statusCode! == 406 || onResult.statusCode! > HTTP_CODE) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError));
+        } else if (onResult.statusCode! == 200) {
+          print('Kesini');
+          setReferralFetch(ReferralFetch(ReferralState.referralUserError, data: (onResult.data)));
         } else {
-          setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess,
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context,
-            tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setReferralFetch(ReferralFetch(ReferralState.referralUserError));
       },
       headers: {
         "x-auth-user": SharedPreference().readStorage(SpKeys.email),
       },
-      
       data: data.toJson(),
       host: UrlConstants.referral,
       withCheckConnection: true,
@@ -114,5 +109,4 @@ class ReferralBloc {
       withAlertMessage: withAlertConnection,
     );
   }
-  
 }

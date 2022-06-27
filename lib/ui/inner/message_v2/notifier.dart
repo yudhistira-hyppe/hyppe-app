@@ -60,10 +60,7 @@ class MessageNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context, ScrollController scrollController) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !discussQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !discussQuery.loading && hasNext) {
       getDiscussion(context);
     }
   }
@@ -95,5 +92,9 @@ class MessageNotifier extends ChangeNotifier {
         photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
       ),
     );
+  }
+
+  void onLongPressUser(BuildContext context, index) {
+    print(index);
   }
 }
