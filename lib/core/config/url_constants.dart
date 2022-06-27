@@ -14,6 +14,7 @@ class UrlConstants {
 
   /// Production Base url
   static const String productionBaseApi = "https://prod.hyppe.app";
+  // static const String productionBaseApi = "https://staging.hyppe.id";
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
@@ -355,7 +356,7 @@ class UrlConstants {
   /// post => post to change value key isViewed
   static const String postViewer = "$postRouteV2/postviewer";
 
- /// post lineID to delete comment 
+  /// post lineID to delete comment
   static const String removeComment = "$postRouteV2/removecomment";
 
   /// post => Post Device Activity
