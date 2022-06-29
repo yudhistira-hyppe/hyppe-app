@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,6 +16,7 @@ import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_s
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
+import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
@@ -22,6 +25,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -41,6 +45,9 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
+  double? latitude; // Latitude, in degrees
+  double? longitude; // Longitude, in degrees
+
   String _email = "";
   String _password = "";
   String? _emailValidation;
@@ -93,12 +100,9 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   static const loadingForgotPasswordKey = 'loadingForgotPasswordKey';
   static const loadingLoginGoogleKey = 'loadingLoginGoogleKey';
 
-  String? emailValidator(String v) =>
-      System().validateEmail(v) ? null : "Not a valid email address";
-  String? passwordValidator(String v) =>
-      v.length > 4 ? null : "Incorrect Password";
-  bool buttonDisable() =>
-      email.isNotEmpty && password.isNotEmpty ? true : false;
+  String? emailValidator(String v) => System().validateEmail(v) ? null : "Not a valid email address";
+  String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
+  bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
 
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);
@@ -106,16 +110,25 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future onClickLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
+    setLoading(true);
     if (connection) {
       unFocusController();
-      setLoading(true);
       incorrect = false;
+      await Locations().permissionLocation();
+      await Locations().getLocation().then((value) async {
+        latitude = value.latitude;
+        longitude = value.longitude;
+      });
+      // ignore: avoid_print
+      // print(a.latitude);
       await FcmService().initializeFcmIfNot();
       final notifier = UserBloc();
       await notifier.signInBlocV2(
         context,
         email: emailController.text,
         password: passwordController.text,
+        latitude: latitude,
+        longtitude: longitude,
         function: () => onClickLogin(context),
       );
       setLoading(false);
@@ -136,8 +149,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         }
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context,
-          tryAgainButton: () => Routing().moveBack());
+      setLoading(false);
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
     }
   }
 
@@ -175,16 +188,14 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  _validateUserData(BuildContext context, UserProfileModel signData,
-      bool isSociaMediaLogin) async {
+  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin) async {
     if (isSociaMediaLogin) {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       DeviceBloc().activityAwake(context);
       if (signData.interest!.isEmpty) {
-        Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-            argument: UserInterestScreenArgument());
+        Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
       } else {
         Routing().moveReplacement(Routes.lobby);
       }
@@ -201,8 +212,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       Routing().moveReplacement(Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
       print('apa2 ${signData.userType?.index}');
-      final signUpPinNotifier =
-          Provider.of<SignUpPinNotifier>(context, listen: false);
+      final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
 
       await ShowBottomSheet().onShowColouredSheet(
         context,
@@ -224,11 +234,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       signUpPinNotifier.userToken = signData.token!;
       // signUpPinNotifier.userID = signData.profileID!;
-      Routing()
-          .move(Routes.signUpPin,
-              argument:
-                  VerifyPageArgument(redirect: VerifyPageRedirection.toLogin))
-          .whenComplete(() {
+      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin)).whenComplete(() {
         clearTextController();
       });
     }
@@ -252,16 +258,19 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     if (connection) {
       UserCredential? userCredential;
       _userGoogleSignIn = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await _userGoogleSignIn?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-      userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
       unFocusController();
       setLoading(true);
+      await Locations().permissionLocation();
+      await Locations().getLocation().then((value) async {
+        latitude = value.latitude;
+        longitude = value.longitude;
+      });
       incorrect = false;
       await FcmService().initializeFcmIfNot();
       final notifier = UserBloc();
@@ -274,6 +283,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         await notifier.googleSignInBlocV2(
           context,
           email: userCredential.user!.email!,
+          latitude: latitude,
+          longtitude: longitude,
           function: () => loginGoogleSign(context),
         );
 
@@ -281,8 +292,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         final fetch = notifier.userFetch;
         if (fetch.userState == UserState.LoginSuccess) {
           hide = true;
-          final UserProfileModel _result =
-              UserProfileModel.fromJson(fetch.data);
+          final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
           _validateUserData(context, _result, true);
         }
         if (fetch.userState == UserState.LoginError) {
@@ -300,8 +310,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       // }
 
     } else {
-      ShowBottomSheet.onNoInternetConnection(context,
-          tryAgainButton: () => Routing().moveBack());
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
     }
   }
 

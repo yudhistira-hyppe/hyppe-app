@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_internal_server_error.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_content.dart';
@@ -102,7 +103,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onLongPressTileUserMessage(BuildContext _, Map<String, dynamic>? arguments) {
+  static onLongPressDeleteMessage(BuildContext _) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -122,7 +123,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnUploadContentBottomSheet(),
+            child: OnDeleteMessageBottomSheet(),
           ),
         );
       },

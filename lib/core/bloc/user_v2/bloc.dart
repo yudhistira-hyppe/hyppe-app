@@ -95,12 +95,11 @@ class UserBloc {
     );
   }
 
-  Future googleSignInBlocV2(BuildContext context, {required Function() function, required String email}) async {
+  Future googleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     String realDeviceId = await System().getDeviceIdentifier();
-    String referralEmail =
-        DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    String referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
     String platForm = Platform.isAndroid ? "android" : "ios";
     dynamic payload = {
       'email': email.toLowerCase(),
@@ -109,7 +108,11 @@ class UserBloc {
       "langIso": "en",
       "referral": referralEmail,
       "imei": realDeviceId,
-      "regSrc": platForm
+      "regSrc": platForm,
+      "location": {
+        "longitude": latitude ?? "${double.parse("0.0")}",
+        "latitude": longtitude ?? "${double.parse("0.0")}",
+      },
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -137,12 +140,12 @@ class UserBloc {
     );
   }
 
-  Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password}) async {
+  Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     String realDeviceID = await System().getDeviceIdentifier();
     String platForm = Platform.isAndroid ? "android" : "ios";
-    print('ini plat $platForm');
+    // print('ini plat $platForm');
     dynamic payload = {
       'email': email.toLowerCase(),
       "password": password,
@@ -150,8 +153,8 @@ class UserBloc {
       "imei": realDeviceID,
       "regSrc": platForm,
       "location": {
-        "longitude": "${double.parse("0.0")}",
-        "latitude": "${double.parse("0.0")}",
+        "longitude": latitude ?? "${double.parse("0.0")}",
+        "latitude": longtitude ?? "${double.parse("0.0")}",
       },
     };
     'Login payload => $payload'.logger();
