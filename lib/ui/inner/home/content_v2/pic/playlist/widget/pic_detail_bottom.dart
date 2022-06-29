@@ -112,9 +112,9 @@ class PicDetailBottom extends StatelessWidget {
           children: <Widget>[
             Consumer<LikeNotifier>(
               builder: (context, notifier, child) => data != null
-                  ? _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
+                  ? _buildButton(context, '${AssetPath.vectorPath}${data?.isLiked==true ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes}",
                       () => notifier.likePost(context, data!),
-                      colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
+                      colorIcon: data?.isLiked == true  ? kHyppePrimary : Theme.of(context).iconTheme.color)
                   : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
 

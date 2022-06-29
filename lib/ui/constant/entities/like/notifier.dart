@@ -42,6 +42,7 @@ class LikeNotifier with ChangeNotifier {
 
       if (postData.isLiked == true) {
            postData.isLiked = false;
+           print('ini true');
           
         await notifier.likePostUserBloc(context,
             postId: postData.postID!,
@@ -92,14 +93,14 @@ class LikeNotifier with ChangeNotifier {
       //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
       //   }
       // }
-      await notifier.likePostUserBloc(context,
-          postId: postData.postID!,
-          emailOwner: postData.email!,
-          isLike: postData.isLiked!);
-      final fetch = notifier.likeFetch;
-      if (fetch.likeState == LikeState.likeUserPostSuccess) {
-        "Like post success".logger();
-      }
+      // await notifier.likePostUserBloc(context,
+      //     postId: postData.postID!,
+      //     emailOwner: postData.email!,
+      //     isLike: postData.isLiked!);
+      // final fetch = notifier.likeFetch;
+      // if (fetch.likeState == LikeState.likeUserPostSuccess) {
+      //   "Like post success".logger();
+      // }
 
       //   },
       // );
