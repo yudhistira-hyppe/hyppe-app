@@ -28,7 +28,7 @@ class LikeNotifier with ChangeNotifier {
         // Prevent user from liking his own post
         return;
       }
-      print('rijal ${postData.insight?.isPostLiked}');
+      
 
       // if (!(postData.insight?.isPostLiked ?? false)) {
       //   postData.insight?.isPostLiked =
@@ -42,7 +42,7 @@ class LikeNotifier with ChangeNotifier {
 
       if (postData.isLiked == true) {
            postData.isLiked = false;
-           print('ini true');
+          
           
         await notifier.likePostUserBloc(context,
             postId: postData.postID!,
@@ -65,12 +65,12 @@ class LikeNotifier with ChangeNotifier {
        
              postData.isLiked = true;
            
-        print('ini false ${postData.isLiked}');
+      
         await notifier.likePostUserBloc(context,
             postId: postData.postID!,
             emailOwner: postData.email!,
             isLike: postData.isLiked!);
-        print('ini false');
+     
         final fetch = notifier.likeFetch;
        
         notifyListeners();
