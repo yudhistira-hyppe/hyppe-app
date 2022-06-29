@@ -523,25 +523,33 @@ class System {
     // request permission
     final permissionsStatus = await permissions.request();
 
-    return !permissionsStatus.values.toList().contains(PermissionStatus.denied) && !permissionsStatus.values.toList().contains(PermissionStatus.permanentlyDenied);
+    return !permissionsStatus.values.toList().contains(PermissionStatus.denied);
   }
 
   Future<bool> requestPrimaryPermission(BuildContext context) async {
     // request permission
-    await [
+    return requestPermission(context, permissions: [
       Permission.camera,
       Permission.microphone,
       Permission.storage,
       Permission.mediaLibrary,
       Permission.photos,
-    ].request();
+    ]);
 
-    // check permission
-    var cameraPermission = await checkPermission(permission: Permission.camera);
-    var microphonePermission = await checkPermission(permission: Permission.microphone);
-    var storagePermission = await checkPermission(permission: Permission.storage);
+    // await [
+    //   Permission.camera,
+    //   Permission.microphone,
+    //   Permission.storage,
+    //   Permission.mediaLibrary,
+    //   Permission.photos,
+    // ].request();
 
-    return cameraPermission.isGranted && microphonePermission.isGranted && storagePermission.isGranted;
+    // // check permission
+    // var cameraPermission = await checkPermission(permission: Permission.camera);
+    // var microphonePermission = await checkPermission(permission: Permission.microphone);
+    // var storagePermission = await checkPermission(permission: Permission.storage);
+
+    // return cameraPermission.isGranted && microphonePermission.isGranted && storagePermission.isGranted;
   }
 
   String searchCategory(SearchCategory searchCategory) {
