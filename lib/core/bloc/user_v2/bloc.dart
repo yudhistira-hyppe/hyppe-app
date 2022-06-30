@@ -122,7 +122,7 @@ class UserBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.LoginSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -165,7 +165,7 @@ class UserBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setUserFetch(UserFetch(UserState.LoginSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {

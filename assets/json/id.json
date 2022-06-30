@@ -470,5 +470,8 @@
   "linkYourReferral": "Tautan Referral Kamu",
   "shareYourQR": "Bagikan kode ini ke temanmu",
   "notReceivingOTP" : "Tidak Menerima OTP?",
-  "resendOTP" : "Kirim Ulang OTP"
+  "resendOTP" : "Kirim Ulang OTP",
+  "newUpdate" : "Perbaharui Aplikasi",
+  "contentNewUpdate" : "Perbaharui aplikasi Hyppe kamu ke versi terbaru sekarang dan nikmati fitur Hyppe yang lebih menyenangkan",
+  "updateNow" : "Perbaharui sekarang"
 }

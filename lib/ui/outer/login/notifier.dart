@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -14,6 +12,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
 import 'package:hyppe/core/services/locations.dart';
@@ -25,7 +24,6 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -47,6 +45,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final FocusNode passwordFocus = FocusNode();
   double? latitude; // Latitude, in degrees
   double? longitude; // Longitude, in degrees
+  String _version = "";
 
   String _email = "";
   String _password = "";
@@ -59,6 +58,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   AccessToken? _accessToken;
   FacebookSignIn? _currentUser;
 
+  String get version => _version;
   String get email => _email;
   String get password => _password;
   String? get emailValidation => _emailValidation;
@@ -66,6 +66,11 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool get hide => _hide;
   bool get incorrect => _incorrect;
   GoogleSignInAccount? get userGoogleSignIn => _userGoogleSignIn;
+
+  set version(String val) {
+    _version = val;
+    notifyListeners();
+  }
 
   set email(String val) {
     _email = val;
@@ -140,7 +145,10 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         DynamicLinkService.hitReferralBackend(context);
         hide = true;
         final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-        _validateUserData(context, _result, false);
+        version = fetch.version;
+        _version = fetch.version;
+        print("ini version ${version}");
+        _validateUserData(context, _result, false, onlineVersion: fetch.version);
       }
       if (fetch.userState == UserState.LoginError) {
         if (fetch.data != null) {
@@ -188,7 +196,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin) async {
+  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin, {String? onlineVersion}) async {
+    await CheckVersion().check(context, onlineVersion);
     if (isSociaMediaLogin) {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
@@ -208,6 +217,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
+      // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       DeviceBloc().activityAwake(context);
       Routing().moveReplacement(Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
@@ -293,7 +303,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         if (fetch.userState == UserState.LoginSuccess) {
           hide = true;
           final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-          _validateUserData(context, _result, true);
+          _validateUserData(context, _result, true, onlineVersion: fetch.version);
         }
         if (fetch.userState == UserState.LoginError) {
           if (fetch.data != null) {

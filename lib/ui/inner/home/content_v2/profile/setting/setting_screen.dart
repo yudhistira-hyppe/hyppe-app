@@ -55,13 +55,7 @@ class SettingScreen extends StatelessWidget {
                     onTap: () => Routing().move(Routes.userInterest,
                         argument: UserInterestScreenArgument(
                           fromSetting: true,
-                          userInterested: Provider.of<SelfProfileNotifier>(
-                                      context,
-                                      listen: false)
-                                  .user
-                                  .profile
-                                  ?.interest ??
-                              [],
+                          userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
                         )),
                     caption: '${notifier.translate.interest}',
                     icon: 'heart-icon.svg',
@@ -72,8 +66,7 @@ class SettingScreen extends StatelessWidget {
                     onTap: () => Routing().move(Routes.themeScreen),
                   ),
                   SettingTile(
-                    onTap: () =>
-                        ShowGeneralDialog.newAccountLanguageDropDown(context),
+                    onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
                     icon: 'language-icon.svg',
                     caption: '${notifier.translate.language}',
                   ),
@@ -99,8 +92,7 @@ class SettingScreen extends StatelessWidget {
                   //   icon: 'help-icon.svg',
                   // ),
                   SettingTile(
-                    caption: System().capitalizeFirstLetter(
-                        notifier.translate.privacyPolicy ?? ""),
+                    caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
                     icon: 'privacy-police-icon.svg',
                     onTap: () => Routing().move(Routes.userAgreement),
                   ),
@@ -127,8 +119,7 @@ class SettingScreen extends StatelessWidget {
                 tiles: [
                   SettingTile(
                     icon: 'info-icon.svg',
-                    caption: System().capitalizeFirstLetter(
-                        notifier.translate.version ?? ""),
+                    caption: System().capitalizeFirstLetter(notifier.translate.version ?? ""),
                     trailing: Selector<SettingNotifier, String>(
                       builder: (_, value, __) {
                         return CustomTextWidget(

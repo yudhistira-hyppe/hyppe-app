@@ -470,5 +470,8 @@
   "linkYourReferral": "Link your Referral",
   "shareYourQR": "Share this code to your friends",
   "notReceivingOTP" : "Not Receiving OTP?",
-  "resendOTP" : "Resend OTP"
+  "resendOTP" : "Resend OTP",
+  "newUpdate" : "New Update",
+  "contentNewUpdate" : "Update your Hyppe app to the latest version now and enjoy our new and improved features!",
+  "updateNow" : "Update Now"
 }

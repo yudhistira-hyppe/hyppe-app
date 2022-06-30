@@ -26,8 +26,15 @@ class FollowNotification extends StatelessWidget {
             if (_data == null) {
               return ComponentShimmer();
             }
-            return Component(data: _data[index], rightWidget: (_data[index].flowIsDone ?? true) ? const SizedBox.shrink() : const SizedBox.shrink() //AcceptButton(data: _data[index],),
-                );
+            return Component(
+              data: _data[index],
+              rightWidget: (_data[index].flowIsDone ?? true)
+                  ? const SizedBox.shrink()
+                  // : const SizedBox.shrink()
+                  : AcceptButton(
+                      data: _data[index],
+                    ),
+            );
           },
         );
       },

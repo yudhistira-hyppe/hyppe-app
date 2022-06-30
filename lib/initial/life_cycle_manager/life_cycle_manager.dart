@@ -1,8 +1,10 @@
 import 'dart:async' show Timer;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
+import 'package:hyppe/core/services/check_version.dart';
 
 import 'package:hyppe/core/services/socket_service.dart';
 import 'package:hyppe/core/services/isolate_service.dart';
@@ -10,6 +12,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/permanently_denied_permisson_content.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget? child;
@@ -43,7 +47,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     final activity = DeviceBloc();
 
     if (state == AppLifecycleState.inactive) {
@@ -55,12 +59,13 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
       if (_userToken != null) {
         try {
-          activity.activityAwake(context);
+          await activity.activityAwake(context);
+          //cek version aplikasi
+          await CheckVersion().check(context, activity.deviceFetch.version);
         } catch (e) {
           e.logger();
         }
       }
-
       _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
     }
   }

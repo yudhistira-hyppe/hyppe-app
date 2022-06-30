@@ -2,6 +2,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 import 'package:hyppe/core/models/collection/comment/comments.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/account_preferences_birth_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_content_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/old_version_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/permanently_denied_permisson_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/pick_file_error_alert.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/reaction_comment_content.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 // import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 
 class ShowGeneralDialog {
   ShowGeneralDialog._private();
@@ -38,16 +40,11 @@ class ShowGeneralDialog {
   }
 
   static permanentlyDeniedPermission(_, {String permissions = 'Permission Camera, Microphone and Storage'}) {
-    showCupertinoDialog(
-        context: _,
-        barrierLabel: 'Barrier',
-        barrierDismissible: true,
-        builder: (context) => PermanentlyDeniedPermissionContent(permissions: permissions));
+    showCupertinoDialog(context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PermanentlyDeniedPermissionContent(permissions: permissions));
   }
 
   static pickFileErrorAlert(_, String message) {
-    showCupertinoDialog(
-        context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PickFileErrorAlertContent(message: message));
+    showCupertinoDialog(context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PickFileErrorAlertContent(message: message));
   }
 
   static newAccountLanguageDropDown(_) {
@@ -85,7 +82,8 @@ class ShowGeneralDialog {
   //   );
   // }
 
-  static userCompleteProfileLocationCountryDropDown(_, {
+  static userCompleteProfileLocationCountryDropDown(
+    _, {
     required Function(String) onSelected,
   }) {
     showGeneralDialog(
@@ -102,7 +100,8 @@ class ShowGeneralDialog {
     );
   }
 
-  static userCompleteProfileLocationProvinceDropDown(_, {
+  static userCompleteProfileLocationProvinceDropDown(
+    _, {
     required String country,
     required Function(String) onSelected,
   }) {
@@ -122,7 +121,8 @@ class ShowGeneralDialog {
     );
   }
 
-  static userCompleteProfileLocationCityDropDown(_, {
+  static userCompleteProfileLocationCityDropDown(
+    _, {
     required String province,
     required Function(String) onSelected,
   }) {
@@ -198,6 +198,27 @@ class ShowGeneralDialog {
       pageBuilder: (context, animation, secondAnimation) => AlertDialog(
         content: DeleteContentDialog(contentTitle: contentTitle, function: function),
         contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future oldVersion(BuildContext context) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: OldVersionDialog(),
+          contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        ),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);

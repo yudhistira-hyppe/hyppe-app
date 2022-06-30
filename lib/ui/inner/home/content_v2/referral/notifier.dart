@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/register_referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
 import 'package:hyppe/core/bloc/referral/state.dart';
-import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';

@@ -11,6 +11,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
+import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
@@ -28,6 +29,7 @@ import 'package:hyppe/ui/inner/notification/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/search_v2/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +67,9 @@ class MainNotifier with ChangeNotifier {
 
     // Auto follow user if app is install from a dynamic link
     DynamicLinkService.followSender(context);
+
+    // final onlineVersion = SharedPreference().readStorage(SpKeys.onlineVersion);
+    // await CheckVersion().check(context, onlineVersion);
 
     if (!onUpdateProfile) {
       final utilsNotifier = UtilsBlocV2();
