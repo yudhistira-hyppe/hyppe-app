@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:twitter_login/twitter_login.dart';
+// import 'package:twitter_login/twitter_login.dart';
 
 class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -55,7 +55,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool _incorrect = false;
   GoogleSignInAccount? _userGoogleSignIn;
   String? googleSignInError;
-  AccessToken? _accessToken;
+  // AccessToken? _accessToken;
   FacebookSignIn? _currentUser;
 
   String get version => _version;
@@ -145,8 +145,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
         DynamicLinkService.hitReferralBackend(context);
         hide = true;
         final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-        version = fetch.version;
-        _version = fetch.version;
+        _version = fetch.version ?? '';
         print("ini version ${version}");
         _validateUserData(context, _result, false, onlineVersion: fetch.version);
       }
@@ -384,47 +383,47 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   });
   // }
 
-  Future loginTwitter() async {
-    final twitterLogin = TwitterLogin(
-      /// Consumer API keys
-      apiKey: SosmedConstants.twitterApiKey,
+  // Future loginTwitter() async {
+  //   final twitterLogin = TwitterLogin(
+  //     /// Consumer API keys
+  //     apiKey: SosmedConstants.twitterApiKey,
 
-      /// Consumer API Secret keys
-      apiSecretKey: SosmedConstants.twitterApiSecretKey,
+  //     /// Consumer API Secret keys
+  //     apiSecretKey: SosmedConstants.twitterApiSecretKey,
 
-      /// Registered Callback URLs in TwitterApp
-      /// Android is a deeplink
-      /// iOS is a URLScheme
-      redirectURI: SosmedConstants.twitterRedirectURI,
-    );
+  //     /// Registered Callback URLs in TwitterApp
+  //     /// Android is a deeplink
+  //     /// iOS is a URLScheme
+  //     redirectURI: SosmedConstants.twitterRedirectURI,
+  //   );
 
-    /// Forces the user to enter their credentials
-    /// to ensure the correct users account is authorized.
-    /// If you want to implement Twitter account switching, set [force_login] to true
-    /// login(forceLogin: true);
-    final authResult = await twitterLogin.loginV2();
-    switch (authResult.status) {
-      case TwitterLoginStatus.loggedIn:
-        // success
-        print('====== Login success ======');
-        print("TWITTER_TOKEN => ${authResult.authToken}");
-        print("TWITTER_USER_ID => ${authResult.user?.id}");
-        print("TWITTER_USER_NAME => ${authResult.user?.name}");
-        print("TWITTER_USER_SCREEN_NAME => ${authResult.user?.screenName}");
-        print("TWITTER_USER_THUMB => ${authResult.user?.thumbnailImage}");
+  //   /// Forces the user to enter their credentials
+  //   /// to ensure the correct users account is authorized.
+  //   /// If you want to implement Twitter account switching, set [force_login] to true
+  //   /// login(forceLogin: true);
+  //   final authResult = await twitterLogin.loginV2();
+  //   switch (authResult.status) {
+  //     case TwitterLoginStatus.loggedIn:
+  //       // success
+  //       print('====== Login success ======');
+  //       print("TWITTER_TOKEN => ${authResult.authToken}");
+  //       print("TWITTER_USER_ID => ${authResult.user?.id}");
+  //       print("TWITTER_USER_NAME => ${authResult.user?.name}");
+  //       print("TWITTER_USER_SCREEN_NAME => ${authResult.user?.screenName}");
+  //       print("TWITTER_USER_THUMB => ${authResult.user?.thumbnailImage}");
 
-        break;
-      case TwitterLoginStatus.cancelledByUser:
-        // cancel
-        print('====== Login cancel ======');
-        break;
-      case TwitterLoginStatus.error:
-      case null:
-        // error
-        print('====== Login error ======');
-        break;
-    }
-  }
+  //       break;
+  //     case TwitterLoginStatus.cancelledByUser:
+  //       // cancel
+  //       print('====== Login cancel ======');
+  //       break;
+  //     case TwitterLoginStatus.error:
+  //     case null:
+  //       // error
+  //       print('====== Login error ======');
+  //       break;
+  //   }
+  // }
 
   @override
   void setLoading(bool val, {bool setState = true, Object? loadingObject}) {
@@ -432,26 +431,26 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     if (setState) notifyListeners();
   }
 
-  Future<void> FacebookSignin() async {
-    final LoginResult loginResult = await FacebookAuth.i.login();
-    print('halo ${loginResult.accessToken}');
-    if (loginResult.status == LoginStatus.success) {
-      _accessToken = loginResult.accessToken;
+  // Future<void> FacebookSignin() async {
+  //   final LoginResult loginResult = await FacebookAuth.i.login();
+  //   print('halo ${loginResult.accessToken}');
+  //   if (loginResult.status == LoginStatus.success) {
+  //     _accessToken = loginResult.accessToken;
 
-      final data = await FacebookAuth.i.getUserData();
-      print('datanya $data');
+  //     final data = await FacebookAuth.i.getUserData();
+  //     print('datanya $data');
 
-      // FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
-      // debugPrint("FB_USER_ID => ${_accessToken?.userId}");
-      // debugPrint("FB_TOKEN => ${_accessToken?.token}");
-      // debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
-      // debugPrint("FB_APPID => ${_accessToken?.applicationId}");
-      // debugPrint("FB_ID => ${fbUser.id}");
-      // debugPrint("FB_EMAIL => ${fbUser.email}");
-      // debugPrint("FB_NAME => ${fbUser.name}");
-      // debugPrint("FB_PIC => ${fbUser.picture?.picture}");
+  //     // FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
+  //     // debugPrint("FB_USER_ID => ${_accessToken?.userId}");
+  //     // debugPrint("FB_TOKEN => ${_accessToken?.token}");
+  //     // debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
+  //     // debugPrint("FB_APPID => ${_accessToken?.applicationId}");
+  //     // debugPrint("FB_ID => ${fbUser.id}");
+  //     // debugPrint("FB_EMAIL => ${fbUser.email}");
+  //     // debugPrint("FB_NAME => ${fbUser.name}");
+  //     // debugPrint("FB_PIC => ${fbUser.picture?.picture}");
 
-      // _currentUser = fbUser;
-    }
-  }
+  //     // _currentUser = fbUser;
+  //   }
+  // }
 }

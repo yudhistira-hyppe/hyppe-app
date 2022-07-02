@@ -5,8 +5,10 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 
 class CheckVersion {
   Future check(BuildContext context, onlineVersion) async {
-    if (int.parse(onlineVersion) > version) {
-      return ShowGeneralDialog.oldVersion(context);
+    if (onlineVersion != null) {
+      if (int.parse(onlineVersion) > version) {
+        return ShowGeneralDialog.oldVersion(context);
+      }
     }
   }
 }
