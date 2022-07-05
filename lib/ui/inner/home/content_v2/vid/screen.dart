@@ -128,6 +128,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           );
                                         },
                                       ),
+                                      GestureDetector(onTap: () => vidNotifier.reportContent(context), child: const Icon(Icons.more_vert)),
                                     ],
                                   ),
                                 ),

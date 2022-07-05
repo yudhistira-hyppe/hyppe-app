@@ -56,69 +56,75 @@ class ProfileComponent extends StatelessWidget {
     return Visibility(
       visible: show,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          StoryColorValidator(
-            haveStory: haveStory,
-            featureType: featureType,
-            child: CustomProfileImage(
-              width: widthCircle,
-              height: heightCircle,
-              onTap: onTapOnProfileImage,
-              imageUrl: imageUrl,
-              following: following,
-              onFollow: onFollow,
-            ),
-          ),
-          Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),
-          Visibility(
-            visible: showNameAndTimeStamp,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: isDetail
-                            ? CustomStrokeTextWidget(
-                                textToDisplay: username!,
-                                maxLines: 1,
-                                textStyle: Theme.of(context).textTheme.button,
-                                textAlign: TextAlign.left,
-                              )
-                            : CustomTextWidget(
-                                textToDisplay: username!,
-                                maxLines: 1,
-                                textStyle: Theme.of(context).textTheme.button!.copyWith(color: textColor),
-                                textAlign: TextAlign.left,
-                              ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              StoryColorValidator(
+                haveStory: haveStory,
+                featureType: featureType,
+                child: CustomProfileImage(
+                  width: widthCircle,
+                  height: heightCircle,
+                  onTap: onTapOnProfileImage,
+                  imageUrl: imageUrl,
+                  following: following,
+                  onFollow: onFollow,
+                ),
+              ),
+              Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),
+              Visibility(
+                visible: showNameAndTimeStamp,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: isDetail
+                                ? CustomStrokeTextWidget(
+                                    textToDisplay: username!,
+                                    maxLines: 1,
+                                    textStyle: Theme.of(context).textTheme.button,
+                                    textAlign: TextAlign.left,
+                                  )
+                                : CustomTextWidget(
+                                    textToDisplay: username!,
+                                    maxLines: 1,
+                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: textColor),
+                                    textAlign: TextAlign.left,
+                                  ),
+                          ),
+                          tenPx,
+                          CustomVerifiedWidget(verified: isCelebrity)
+                        ],
                       ),
-                      tenPx,
-                      CustomVerifiedWidget(verified: isCelebrity)
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                      child: isDetail
+                          ? CustomStrokeTextWidget(
+                              maxLines: 1,
+                              textToDisplay: createdAt,
+                              textAlign: TextAlign.left,
+                              textStyle: Theme.of(context).textTheme.caption!,
+                            )
+                          : CustomTextWidget(
+                              maxLines: 1,
+                              textToDisplay: createdAt,
+                              textAlign: TextAlign.left,
+                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
+                            ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
-                  child: isDetail
-                      ? CustomStrokeTextWidget(
-                          maxLines: 1,
-                          textToDisplay: createdAt,
-                          textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.caption!,
-                        )
-                      : CustomTextWidget(
-                          maxLines: 1,
-                          textToDisplay: createdAt,
-                          textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
-                        ),
-                ),
-              ],
-            ),
-          )
+              )
+            ],
+          ),
+          // GestureDetector(onTap: () => onReport, child: const Icon(Icons.more_vert)),
         ],
       ),
     );

@@ -6,7 +6,7 @@ import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
-import 'package:hyppe/core/config/sosmed_contants.dart';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -24,6 +24,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -34,6 +35,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _googleSignInService = GoogleSignInService();
   final signOutGoogle = GoogleSignInService();
   LocalizationModelV2 language = LocalizationModelV2();
+  late PermissionStatus _permissionGranted;
   translate(LocalizationModelV2 translate) {
     language = translate;
     notifyListeners();
@@ -109,6 +111,35 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
   bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
 
+  Future<bool> getLocation(BuildContext context) async {
+    await Locations().permissionLocation();
+    final check = await Locations().getLocation().then((value) async {
+      if (value['latitude'] == 0.0) {
+        return false;
+      } else {
+        latitude = value['latitude'];
+        longitude = value['longitude'];
+        return true;
+      }
+    });
+    if (check) {
+      return true;
+    } else {
+      await ShowBottomSheet().onShowColouredSheet(
+        context,
+        'Please Allow Permission for Location',
+        maxLines: 2,
+        enableDrag: false,
+        dismissible: false,
+        color: Theme.of(context).colorScheme.error,
+        iconSvg: "${AssetPath.vectorPath}close.svg",
+      );
+      openAppSettings();
+
+      return false;
+    }
+  }
+
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);
   }
@@ -116,49 +147,46 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   Future onClickLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
     setLoading(true);
-    if (connection) {
-      unFocusController();
-      incorrect = false;
-      await Locations().permissionLocation();
-      await Locations().getLocation().then((value) async {
-        latitude = value.latitude;
-        longitude = value.longitude;
-      });
-      // ignore: avoid_print
-      // print(a.latitude);
-      await FcmService().initializeFcmIfNot();
-      final notifier = UserBloc();
-      await notifier.signInBlocV2(
-        context,
-        email: emailController.text,
-        password: passwordController.text,
-        latitude: latitude,
-        longtitude: longitude,
-        function: () => onClickLogin(context),
-      );
-      setLoading(false);
+    await getLocation(context).then((value) async {
+      if (value) {
+        if (connection) {
+          unFocusController();
+          incorrect = false;
+          // ignore: avoid_print
+          // print(a.latitude);
+          await FcmService().initializeFcmIfNot();
+          final notifier = UserBloc();
+          await notifier.signInBlocV2(
+            context,
+            email: emailController.text,
+            password: passwordController.text,
+            latitude: latitude,
+            longtitude: longitude,
+            function: () => onClickLogin(context),
+          );
 
-      final fetch = notifier.userFetch;
-      if (fetch.userState == UserState.LoginSuccess) {
-        // String realDeviceID = await System().getDeviceIdentifier();
-        // print('wee $realDeviceID');
-        DynamicLinkService.hitReferralBackend(context);
-        hide = true;
-        final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-        _version = fetch.version ?? '';
-        print("ini version ${version}");
-        _validateUserData(context, _result, false, onlineVersion: fetch.version);
-      }
-      if (fetch.userState == UserState.LoginError) {
-        if (fetch.data != null) {
-          clearTextController();
-          incorrect = true;
+          final fetch = notifier.userFetch;
+          if (fetch.userState == UserState.LoginSuccess) {
+            // String realDeviceID = await System().getDeviceIdentifier();
+            // print('wee $realDeviceID');
+            DynamicLinkService.hitReferralBackend(context);
+            hide = true;
+            final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+            _validateUserData(context, _result, false, onlineVersion: fetch.version);
+          }
+          if (fetch.userState == UserState.LoginError) {
+            if (fetch.data != null) {
+              clearTextController();
+              incorrect = true;
+            }
+          }
+        } else {
+          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
       }
-    } else {
-      setLoading(false);
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
-    }
+    });
+
+    setLoading(false);
   }
 
   void onClickSignUpHere() {
@@ -264,63 +292,61 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future loginGoogleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
-    if (connection) {
-      UserCredential? userCredential;
-      _userGoogleSignIn = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-      userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      unFocusController();
-      setLoading(true);
-      await Locations().permissionLocation();
-      await Locations().getLocation().then((value) async {
-        latitude = value.latitude;
-        longitude = value.longitude;
-      });
-      incorrect = false;
-      await FcmService().initializeFcmIfNot();
-      final notifier = UserBloc();
+    await getLocation(context).then((value) async {
+      if (value) {
+        if (connection) {
+          UserCredential? userCredential;
+          _userGoogleSignIn = await GoogleSignIn().signIn();
+          final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
+          final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth?.accessToken,
+            idToken: googleAuth?.idToken,
+          );
+          userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+          unFocusController();
+          setLoading(true);
 
-      if (userCredential.credential == null) {
-        setLoading(false);
-        _googleSignInService.handleSignOut();
-        ShowBottomSheet.onShowSomethingWhenWrong(context);
-      } else {
-        await notifier.googleSignInBlocV2(
-          context,
-          email: userCredential.user!.email!,
-          latitude: latitude,
-          longtitude: longitude,
-          function: () => loginGoogleSign(context),
-        );
+          incorrect = false;
+          await FcmService().initializeFcmIfNot();
+          final notifier = UserBloc();
 
-        setLoading(false);
-        final fetch = notifier.userFetch;
-        if (fetch.userState == UserState.LoginSuccess) {
-          hide = true;
-          final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-          _validateUserData(context, _result, true, onlineVersion: fetch.version);
-        }
-        if (fetch.userState == UserState.LoginError) {
-          if (fetch.data != null) {
-            clearTextController();
-            incorrect = true;
+          if (userCredential.credential == null) {
+            _googleSignInService.handleSignOut();
+            ShowBottomSheet.onShowSomethingWhenWrong(context);
+          } else {
+            await notifier.googleSignInBlocV2(
+              context,
+              email: userCredential.user!.email!,
+              latitude: latitude,
+              longtitude: longitude,
+              function: () => loginGoogleSign(context),
+            );
+            final fetch = notifier.userFetch;
+            if (fetch.userState == UserState.LoginSuccess) {
+              hide = true;
+              final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+              _validateUserData(context, _result, true, onlineVersion: fetch.version);
+            }
+            if (fetch.userState == UserState.LoginError) {
+              if (fetch.data != null) {
+                clearTextController();
+                incorrect = true;
+              }
+            }
           }
+          setLoading(false);
+
+          // if (data != null) {
+          //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+          //       argument: UserInterestScreenArgument());
+          //   notifyListeners();
+          // }
+
+        } else {
+          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
       }
-
-      // if (data != null) {
-      //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-      //       argument: UserInterestScreenArgument());
-      //   notifyListeners();
-      // }
-
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
-    }
+    });
   }
 
   // Future<UserCredential?> loginGoogleSignIn(BuildContext context) async {

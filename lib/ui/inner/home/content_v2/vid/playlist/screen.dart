@@ -59,21 +59,33 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                                     afterView: () => notifier.updateView(context),
                                   ),
                                 ),
-                                Visibility(
-                                  visible: true,
-                                  child: CustomTextButton(
-                                    onPressed: () => notifier.onPop(),
-                                    child: const DecoratedIconWidget(
-                                      Icons.arrow_back_ios,
-                                      size: 48 * 0.4,
-                                      shadows: [
-                                        BoxShadow(
-                                          blurRadius: 12.0,
-                                          color: Colors.black,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Visibility(
+                                      visible: true,
+                                      child: CustomTextButton(
+                                        onPressed: () => notifier.onPop(),
+                                        child: const DecoratedIconWidget(
+                                          Icons.arrow_back_ios,
+                                          size: 48 * 0.4,
+                                          shadows: [
+                                            BoxShadow(
+                                              blurRadius: 12.0,
+                                              color: Colors.black,
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
+                                    CustomTextButton(
+                                      onPressed: () => notifier.reportContent(context),
+                                      child: const DecoratedIconWidget(
+                                        Icons.more_vert,
+                                        size: 48 * 0.4,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             )

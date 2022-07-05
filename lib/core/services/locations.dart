@@ -30,6 +30,8 @@ class Locations {
 
     // Check if permission is granted
     _permissionGranted = await location.hasPermission();
+    print('_permissionGranted00');
+    print(_permissionGranted);
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
@@ -38,10 +40,19 @@ class Locations {
     }
   }
 
-  Future<LocationData> getLocation() async {
+  Future getLocation() async {
     LocationData locationData;
-
-    locationData = await location.getLocation();
-    return locationData;
+    bool _bgModeEnabled = await location.isBackgroundModeEnabled();
+    Map dataLocation = {};
+    try {
+      locationData = await location.getLocation();
+      dataLocation['latitude'] = locationData.latitude;
+      dataLocation['longitude'] = locationData.longitude;
+      return dataLocation;
+    } catch (e) {
+      dataLocation['latitude'] = 0.0;
+      dataLocation['longitude'] = 0.0;
+      return dataLocation;
+    }
   }
 }

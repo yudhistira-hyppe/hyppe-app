@@ -107,6 +107,25 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                     ),
                   ),
                 ),
+                CustomBalloonWidget(
+                  child: Visibility(
+                    visible: widget.data?.email != SharedPreference().readStorage(SpKeys.email),
+                    child: GestureDetector(
+                      onTap: () {
+                        widget.storyController.pause();
+                        ShowBottomSheet.onReportSpamContent(
+                          context,
+                          storyController: widget.storyController,
+                        );
+                      },
+                      child: const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: "${AssetPath.vectorPath}more.svg",
+                        color: kHyppeLightButtonText,
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: 40,
                   height: 40,

@@ -76,22 +76,35 @@ class PicDetailSlider extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: picData?.email == SharedPreference().readStorage(SpKeys.email),
-                    child: CustomTextButton(
-                      onPressed: () => ShowBottomSheet.onShowOptionContent(
-                        context,
-                        onDetail: onDetail,
-                        contentData: picData!,
-                        captionTitle: hyppePic,
-                        onUpdate: () => notifier.onUpdate(),
-                      ),
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
+                  Row(
+                    children: [
+                      picData?.email != SharedPreference().readStorage(SpKeys.email)
+                          ? CustomTextButton(
+                              onPressed: () => ShowBottomSheet.onReportContent(context),
+                              child: const CustomIconWidget(
+                                defaultColor: false,
+                                iconData: '${AssetPath.vectorPath}more.svg',
+                                color: kHyppeLightButtonText,
+                              ),
+                            )
+                          : SizedBox(),
+                      picData?.email == SharedPreference().readStorage(SpKeys.email)
+                          ? CustomTextButton(
+                              onPressed: () => ShowBottomSheet.onShowOptionContent(
+                                context,
+                                onDetail: onDetail,
+                                contentData: picData!,
+                                captionTitle: hyppePic,
+                                onUpdate: () => notifier.onUpdate(),
+                              ),
+                              child: const CustomIconWidget(
+                                defaultColor: false,
+                                iconData: '${AssetPath.vectorPath}more.svg',
+                                color: kHyppeLightButtonText,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
                   ),
                 ],
               ),

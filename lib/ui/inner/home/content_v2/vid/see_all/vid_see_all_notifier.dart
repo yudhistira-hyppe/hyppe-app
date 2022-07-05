@@ -69,10 +69,7 @@ class VidSeeAllNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialVid(context);
     }
   }
@@ -84,5 +81,9 @@ class VidSeeAllNotifier extends ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
+  }
+
+  void reportContent(BuildContext context) {
+    ShowBottomSheet.onReportContent(context);
   }
 }
