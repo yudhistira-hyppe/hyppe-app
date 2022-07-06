@@ -6,6 +6,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -113,10 +114,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                     child: GestureDetector(
                       onTap: () {
                         widget.storyController.pause();
-                        ShowBottomSheet.onReportSpamContent(
-                          context,
-                          storyController: widget.storyController,
-                        );
+                        ShowBottomSheet.onReportContent(context);
                       },
                       child: const CustomIconWidget(
                         defaultColor: false,
@@ -138,12 +136,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                     onPressed: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
                     child: const DecoratedIconWidget(
                       Icons.close_rounded,
-                      shadows: [
-                        BoxShadow(
-                          blurRadius: 12.0,
-                          color: Colors.black,
-                        ),
-                      ],
+                      color: Colors.white,
                     ),
                   ),
                 )

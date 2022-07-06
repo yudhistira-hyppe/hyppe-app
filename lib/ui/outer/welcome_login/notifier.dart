@@ -305,6 +305,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future loginGoogleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
+    setLoading(true);
     await getLocation(context).then((value) async {
       if (value) {
         if (connection) {
@@ -317,8 +318,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           );
           userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
           unFocusController();
-          setLoading(true);
-
           incorrect = false;
           await FcmService().initializeFcmIfNot();
           final notifier = UserBloc();
@@ -347,7 +346,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
               }
             }
           }
-          setLoading(false);
 
           // if (data != null) {
           //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
@@ -358,7 +356,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
+        setLoading(false);
       }
+      setLoading(false);
     });
   }
 
@@ -379,6 +379,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future loginAppleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
+    setLoading(true);
     await getLocation(context).then((value) async {
       if (value) {
         if (connection) {
@@ -421,7 +422,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
           userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
           unFocusController();
-          setLoading(true);
 
           incorrect = false;
           await FcmService().initializeFcmIfNot();
@@ -451,7 +451,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
               }
             }
           }
-          setLoading(false);
 
           //FOR ANDROID ONLY & WEB ONLY
           // final signInWithAppleEndpoint = Uri(
@@ -474,6 +473,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
+        setLoading(false);
       }
     });
   }

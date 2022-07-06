@@ -45,8 +45,7 @@ class DynamicLinkService {
     }
 
     // Get the initial dynamic link if the app is opened with a dynamic link
-    final PendingDynamicLinkData? data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance.getInitialLink();
 
     // Set [_pendingDynamicLinkData] to the initial dynamic link
     _pendingDynamicLinkData ??= data;
@@ -88,29 +87,25 @@ class DynamicLinkService {
           case Routes.storyDetail:
             _routing.moveReplacement(
               _path,
-              argument: StoryDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID'],
+              argument: StoryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
             );
             break;
           case Routes.vidDetail:
             _routing.moveReplacement(
               _path,
-              argument: VidDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID'],
+              argument: VidDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
             );
             break;
           case Routes.diaryDetail:
             _routing.moveReplacement(
               _path,
-              argument: DiaryDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID'],
+              argument: DiaryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
             );
             break;
           case Routes.picDetail:
             _routing.moveReplacement(
               _path,
-              argument: PicDetailScreenArgument()
-                ..postID = deepLink.queryParameters['postID'],
+              argument: PicDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
             );
             break;
           // TO DO: If register from referral link, then hit to backend
@@ -141,8 +136,7 @@ class DynamicLinkService {
         return;
       }
 
-      final _receiverParty =
-          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
       'Link | followSender | receiverParty: $_receiverParty'.logger();
 
@@ -177,23 +171,18 @@ class DynamicLinkService {
         return;
       }
 
-      final _referralEmail =
-          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
-          print('ini apa ya $_referralEmail');
+      final _referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      print('ini apa ya $_referralEmail');
 
       'Link | referralSender | receiverParty: $_referralEmail'.logger();
-          String realDeviceID = await System().getDeviceIdentifier();
-          
+      String realDeviceID = await System().getDeviceIdentifier();
 
       if (_referralEmail != null) {
         final notifier = ReferralBloc();
         await notifier.referralUserBloc(
           context,
           withAlertConnection: false,
-          data: ReferralUserArgument(
-            email: _referralEmail,
-            imei: realDeviceID
-          ),
+          data: ReferralUserArgument(email: _referralEmail, imei: realDeviceID),
         );
         final fetch = notifier.referralFetch;
         if (fetch.referralState == ReferralState.referralUserSuccess) {
@@ -216,8 +205,7 @@ class DynamicLinkService {
         return "";
       }
 
-      final _referralEmail =
-          _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      final _referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
 
       'Link | referralSender | _referralEmail: $_referralEmail'.logger();
 

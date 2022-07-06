@@ -54,37 +54,9 @@ class _PageBottomState extends State<PageBottom> {
                   fortyTwoPx,
                   ButtomSosmed(
                     function: () => notifier.loginGoogleSign(context),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 60,
-                          padding: EdgeInsets.only(right: 15.0),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              right: BorderSide(
-                                color: Color(0xFFEDEDED),
-                                width: 1.0,
-                              ),
-                            ),
-                          ),
-                          child: CustomIconWidget(
-                            defaultColor: false,
-                            iconData: '${AssetPath.vectorPath}google.svg',
-                          ),
-                        ),
-                        const Spacer(),
-                        CustomTextWidget(
-                          textToDisplay: 'Masuk dengan akun Google',
-                          textStyle: Theme.of(context).textTheme.subtitle2!,
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
-                  Platform.isIOS
-                      ? ButtomSosmed(
-                          function: () => notifier.loginAppleSign(context),
-                          child: Row(
+                    child: notifier.isLoading
+                        ? const CustomLoading()
+                        : Row(
                             children: [
                               Container(
                                 height: 60,
@@ -99,19 +71,51 @@ class _PageBottomState extends State<PageBottom> {
                                 ),
                                 child: CustomIconWidget(
                                   defaultColor: false,
-                                  color: Theme.of(context).colorScheme.onBackground,
-                                  width: 20,
-                                  iconData: '${AssetPath.vectorPath}apple.svg',
+                                  iconData: '${AssetPath.vectorPath}google.svg',
                                 ),
                               ),
                               const Spacer(),
                               CustomTextWidget(
-                                textToDisplay: 'Masuk dengan Apple Id',
+                                textToDisplay: 'Masuk dengan akun Google',
                                 textStyle: Theme.of(context).textTheme.subtitle2!,
                               ),
                               const Spacer(),
                             ],
                           ),
+                  ),
+                  Platform.isIOS
+                      ? ButtomSosmed(
+                          function: () => notifier.loginAppleSign(context),
+                          child: notifier.isLoading
+                              ? const CustomLoading()
+                              : Row(
+                                  children: [
+                                    Container(
+                                      height: 60,
+                                      padding: EdgeInsets.only(right: 15.0),
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                          right: BorderSide(
+                                            color: Color(0xFFEDEDED),
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                      ),
+                                      child: CustomIconWidget(
+                                        defaultColor: false,
+                                        color: Theme.of(context).colorScheme.onBackground,
+                                        width: 20,
+                                        iconData: '${AssetPath.vectorPath}apple.svg',
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    CustomTextWidget(
+                                      textToDisplay: 'Masuk dengan Apple Id',
+                                      textStyle: Theme.of(context).textTheme.subtitle2!,
+                                    ),
+                                    const Spacer(),
+                                  ],
+                                ),
                         )
                       : SizedBox(),
                   twelvePx,

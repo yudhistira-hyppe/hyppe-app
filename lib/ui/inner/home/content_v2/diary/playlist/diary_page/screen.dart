@@ -40,11 +40,9 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   void initState() {
-    final notifier =
-        Provider.of<DiariesPlaylistNotifier>(context, listen: false);
+    final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _storyItems =
-          notifier.initializeData(context, _storyController, widget.data!);
+      _storyItems = notifier.initializeData(context, _storyController, widget.data!);
     });
     super.initState();
   }
@@ -65,14 +63,12 @@ class _DiaryPageState extends State<DiaryPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _forcePause =
-        context.select((DiariesPlaylistNotifier value) => value.forcePause);
+    final _forcePause = context.select((DiariesPlaylistNotifier value) => value.forcePause);
 
     // logic when list isScrolled, pause the story
     if (widget.isScrolling!) {
       _storyController.pause();
-    } else if (_storyController.playbackNotifier.valueOrNull ==
-        PlaybackState.pause) {
+    } else if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause) {
       _storyController.play();
     }
 
@@ -106,9 +102,7 @@ class _DiaryPageState extends State<DiaryPage> {
           ),
           LeftItems(
             description: widget.data?.description,
-            tags: widget.data?.tags
-                ?.map((e) => "#${e.replaceFirst('#', '')}")
-                .join(" "),
+            tags: widget.data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
             musicName: "Dangdut koplo remix",
             authorName: widget.data?.username,
             userName: widget.data?.username,
@@ -127,8 +121,7 @@ class _DiaryPageState extends State<DiaryPage> {
           alignment: Alignment.center,
           child: CustomTextWidget(
             maxLines: 1,
-            textToDisplay:
-                context.watch<TranslateNotifierV2>().translate.noData!,
+            textToDisplay: context.watch<TranslateNotifierV2>().translate.noData!,
             textStyle: Theme.of(context).textTheme.button,
           ),
           margin: const EdgeInsets.symmetric(horizontal: 16),
