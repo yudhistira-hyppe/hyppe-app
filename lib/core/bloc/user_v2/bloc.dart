@@ -139,7 +139,50 @@ class UserBloc {
       data: payload,
     );
   }
+  Future appleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude}) async {
+    setUserFetch(UserFetch(UserState.loading));
+    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    String realDeviceId = await System().getDeviceIdentifier();
+    String referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    String platForm = Platform.isAndroid ? "android" : "ios";
+    dynamic payload = {
+      'email': email.toLowerCase(),
+      "socmedSource": "APPLE",
+      "deviceId": deviceID,
+      "langIso": "en",
+      "referral": referralEmail,
+      "imei": realDeviceId,
+      "regSrc": platForm,
+      "location": {
+        "longitude": latitude ?? "${double.parse("0.0")}",
+        "latitude": longtitude ?? "${double.parse("0.0")}",
+      },
+    };
+    'Payload in social login referralPayload $payload'.logger();
 
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
+          Routing().moveBack();
+          function();
+        });
+        setUserFetch(UserFetch(UserState.LoginError));
+      },
+      methodType: MethodType.post,
+      withCheckConnection: false,
+      withAlertMessage: true,
+      host: UrlConstants.loginGoogle,
+      data: payload,
+    );
+  }
   Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
