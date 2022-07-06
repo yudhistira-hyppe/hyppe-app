@@ -215,16 +215,20 @@ class PicDetailBottom extends StatelessWidget {
               if (data?.email == SharedPreference().readStorage(SpKeys.email)) {
                 return const SizedBox.shrink();
               }
-              return CustomFollowButton(
-                caption: value3.translate.follow!,
-                onPressed: () async {
-                  try {
-                    await value.followUser(context);
-                  } catch (e) {
-                    e.logger();
-                  }
-                },
-                isFollowing: value.statusFollowing,
+              return Column(
+                children: [
+                  CustomFollowButton(
+                    caption: value3.translate.follow!,
+                    onPressed: () async {
+                      try {
+                        await value.followUser(context);
+                      } catch (e) {
+                        e.logger();
+                      }
+                    },
+                    isFollowing: value.statusFollowing,
+                  ),
+                ],
               );
             },
           ),

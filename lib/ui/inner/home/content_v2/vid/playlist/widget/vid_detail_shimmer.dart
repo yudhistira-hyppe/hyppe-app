@@ -19,22 +19,16 @@ class VidDetailShimmer extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomIconWidget(
+                const CustomIconWidget(
                   defaultColor: false,
                   iconData: '${AssetPath.vectorPath}back-arrow.svg',
-                  color: Theme.of(context).appBarTheme.iconTheme!.color,
+                  color: Colors.white,
                 ),
                 Row(
                   children: [
-                    CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}bookmark.svg',
-                        color: Theme.of(context).appBarTheme.iconTheme!.color),
+                    CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}bookmark.svg', color: Theme.of(context).appBarTheme.iconTheme!.color),
                     twelvePx,
-                    CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: Theme.of(context).appBarTheme.iconTheme!.color),
+                    CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}more.svg', color: Theme.of(context).appBarTheme.iconTheme!.color),
                   ],
                 ),
               ],

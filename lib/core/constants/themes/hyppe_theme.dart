@@ -81,6 +81,7 @@ const ColorScheme _lightColorScheme = ColorScheme.light(
   primaryVariant: kHyppePrimary,
   secondaryVariant: kHyppeLightSecondary,
   brightness: Brightness.light,
+  onBackground: kHyppeSurface,
 );
 
 const ColorScheme _darkColorScheme = ColorScheme.dark(
@@ -93,6 +94,7 @@ const ColorScheme _darkColorScheme = ColorScheme.dark(
   primaryVariant: kHyppePrimary,
   secondaryVariant: kHyppeSecondary,
   brightness: Brightness.dark,
+  onBackground: kHyppeLightBackground,
 );
 
 const DividerThemeData _darkDividerThemeData = DividerThemeData(color: kHyppeDividerColor);

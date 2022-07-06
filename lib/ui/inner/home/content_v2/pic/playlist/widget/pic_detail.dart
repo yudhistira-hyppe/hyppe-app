@@ -107,12 +107,7 @@ class _PicDetailState extends State<PicDetail> {
                             ),
                             child: const DecoratedIconWidget(
                               Icons.arrow_back_ios,
-                              shadows: [
-                                BoxShadow(
-                                  blurRadius: 12.0,
-                                  color: Colors.black,
-                                ),
-                              ],
+                              color: Colors.white,
                             ),
                           ),
                           ProfileComponent(

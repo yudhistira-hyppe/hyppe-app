@@ -67,12 +67,7 @@ class PicDetailSlider extends StatelessWidget {
                       onPressed: () => notifier.onPop(),
                       child: const DecoratedIconWidget(
                         Icons.arrow_back_ios,
-                        shadows: [
-                          BoxShadow(
-                            blurRadius: 12.0,
-                            color: Colors.black,
-                          ),
-                        ],
+                        color: Colors.white,
                       ),
                     ),
                   ),

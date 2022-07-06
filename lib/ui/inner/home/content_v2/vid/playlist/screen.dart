@@ -69,12 +69,7 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                                         child: const DecoratedIconWidget(
                                           Icons.arrow_back_ios,
                                           size: 48 * 0.4,
-                                          shadows: [
-                                            BoxShadow(
-                                              blurRadius: 12.0,
-                                              color: Colors.black,
-                                            ),
-                                          ],
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ),
