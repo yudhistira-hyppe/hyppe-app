@@ -57,6 +57,9 @@ dependencies:
   # twitter_login: ^4.2.2
   location: ^4.4.0
   url_launcher: ^6.1.4
+  sign_in_with_apple: ^4.0.0
+  http: ^0.13.4
+
 
   dynamic_widget: # Dynamic widget builder
     git:

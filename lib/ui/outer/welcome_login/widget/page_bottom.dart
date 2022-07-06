@@ -80,6 +80,37 @@ class _PageBottomState extends State<PageBottom> {
                       ],
                     ),
                   ),
+                  ButtomSosmed(
+                    function: () => notifier.loginAppleSign(context),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 60,
+                          padding: EdgeInsets.only(right: 15.0),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              right: BorderSide(
+                                color: Color(0xFFEDEDED),
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                          child: CustomIconWidget(
+                            defaultColor: false,
+                            color: Theme.of(context).colorScheme.onBackground,
+                            width: 20,
+                            iconData: '${AssetPath.vectorPath}apple.svg',
+                          ),
+                        ),
+                        const Spacer(),
+                        CustomTextWidget(
+                          textToDisplay: 'Masuk dengan Apple Id',
+                          textStyle: Theme.of(context).textTheme.subtitle2!,
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
                   twelvePx,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

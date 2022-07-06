@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
@@ -8,10 +11,12 @@ import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/hyppe_version.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/services/api_action.dart';
 import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
@@ -28,7 +33,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
-// import 'package:twitter_login/twitter_login.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:http/http.dart' as http;
 
 class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -340,6 +346,72 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             }
           }
           setLoading(false);
+
+          // if (data != null) {
+          //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+          //       argument: UserInterestScreenArgument());
+          //   notifyListeners();
+          // }
+
+        } else {
+          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
+        }
+      }
+    });
+  }
+
+  Future loginAppleSign(BuildContext context) async {
+    bool connection = await System().checkConnections();
+    await getLocation(context).then((value) async {
+      if (value) {
+        if (connection) {
+          UserCredential? userCredential;
+          if (!await SignInWithApple.isAvailable()) {
+            print('this devices not eligable for Apple Sign in');
+          }
+          print('kIsWeb ${kIsWeb}');
+          final credentialApple = await SignInWithApple.getAppleIDCredential(
+            scopes: [
+              AppleIDAuthorizationScopes.email,
+              AppleIDAuthorizationScopes.fullName,
+            ],
+            webAuthenticationOptions: WebAuthenticationOptions(
+              // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
+              clientId: 'de.lunaone.flutter.signinwithappleexample.service',
+
+              redirectUri:
+                  // For web your redirect URI needs to be the host of the "current page",
+                  // while for Android you will be using the API server that redirects back into your app via a deep link
+                  kIsWeb
+                      ? Uri.parse('https://${window.location.host}/')
+                      : Uri.parse(
+                          'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+                        ),
+            ),
+            // TODO: Remove these if you have no need for them
+            nonce: 'example-nonce',
+            state: 'example-state',
+          );
+
+          print('hahahahaha');
+          print(credentialApple);
+          final signInWithAppleEndpoint = Uri(
+            scheme: 'https',
+            host: 'flutter-sign-in-with-apple-example.glitch.me',
+            path: '/sign_in_with_apple',
+            queryParameters: <String, String>{
+              'code': credentialApple.authorizationCode,
+              if (credentialApple.givenName != null) 'firstName': credentialApple.givenName!,
+              if (credentialApple.familyName != null) 'lastName': credentialApple.familyName!,
+              'useBundleId': !kIsWeb && (Platform.isIOS || Platform.isMacOS) ? 'true' : 'false',
+              if (credentialApple.state != null) 'state': credentialApple.state!,
+            },
+          );
+
+          final session = await http.Client().post(
+            signInWithAppleEndpoint,
+          );
+          return false;
 
           // if (data != null) {
           //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
