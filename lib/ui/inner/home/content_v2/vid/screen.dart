@@ -1,5 +1,7 @@
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:provider/provider.dart';
 
@@ -128,7 +130,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           );
                                         },
                                       ),
-                                      GestureDetector(onTap: () => vidNotifier.reportContent(context), child: const Icon(Icons.more_vert)),
+                                      GestureDetector(
+                                          onTap: () => vidNotifier.reportContent(context),
+                                          child: Visibility(
+                                            visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
+                                            child: const Icon(Icons.more_vert),
+                                          )),
                                     ],
                                   ),
                                 ),

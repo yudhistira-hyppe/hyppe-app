@@ -41,6 +41,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/register/register_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_agreement/user_agreement_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/screen.dart';
+import 'package:hyppe/ui/outer/welcome_login/screen.dart';
 import 'package:hyppe/ui/view/follower/follower_screen.dart';
 import 'package:hyppe/ui/view/theme/theme_screen.dart';
 import 'package:hyppe/ux/path.dart';
@@ -69,6 +70,8 @@ class Generate {
     switch (settings.name) {
       case Routes.root:
         return MaterialPageRoute(builder: (_) => OpeningLogo());
+      case Routes.welcomeLogin:
+        return MaterialPageRoute(builder: (_) => WelcomeLoginScreen());
       case Routes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
@@ -162,9 +165,7 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const Referral());
 
       case Routes.listReferral:
-        return MaterialPageRoute(
-            builder: (_) => ListReferralUser(
-                arguments: settings.arguments as ReferralListUserArgument));
+        return MaterialPageRoute(builder: (_) => ListReferralUser(arguments: settings.arguments as ReferralListUserArgument));
       case Routes.insertReferral:
         return MaterialPageRoute(builder: (_) => InsertReferral());
     }

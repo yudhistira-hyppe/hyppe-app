@@ -78,13 +78,13 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                                         ),
                                       ),
                                     ),
-                                    CustomTextButton(
-                                      onPressed: () => notifier.reportContent(context),
-                                      child: const DecoratedIconWidget(
-                                        Icons.more_vert,
-                                        size: 48 * 0.4,
-                                      ),
-                                    ),
+                                    // CustomTextButton(
+                                    //   onPressed: () => notifier.reportContent(context),
+                                    //   child: const DecoratedIconWidget(
+                                    //     Icons.more_vert,
+                                    //     size: 48 * 0.4,
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ],

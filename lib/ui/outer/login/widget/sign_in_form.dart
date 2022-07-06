@@ -124,13 +124,31 @@ class _SignInFormState extends State<SignInForm> {
             ],
           ),
           twentyPx,
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     CustomTextWidget(
+          //       textToDisplay: "${notifier.language.forgotPassword!}?",
+          //       textStyle: Theme.of(context).primaryTextTheme.button,
+          //     ),
+          //     notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
+          //         ? const CustomLoading(size: 6.3)
+          //         : CustomTextButton(
+          //             onPressed: () => notifier.onClickForgotPassword(context),
+          //             child: CustomTextWidget(
+          //               textToDisplay: "${notifier.language.forgotPassword!}?",
+          //               textStyle: Theme.of(context).primaryTextTheme.button!.copyWith(color: kHyppePrimary),
+          //             ),
+          //           ),
+          //   ],
+          // ),
           notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
               ? const CustomLoading(size: 6.3)
               : CustomTextButton(
                   onPressed: () => notifier.onClickForgotPassword(context),
                   child: CustomTextWidget(
                     textToDisplay: "${notifier.language.forgotPassword!}?",
-                    textStyle: Theme.of(context).primaryTextTheme.button,
+                    textStyle: Theme.of(context).primaryTextTheme.button!.copyWith(color: kHyppePrimary),
                   ),
                 ),
           fourPx,

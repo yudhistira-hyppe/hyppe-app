@@ -34,47 +34,46 @@ class _OpeningLogoState extends State<OpeningLogo> {
               defaultColor: false,
               iconData: '${AssetPath.vectorPath}logo_splash_screem.svg',
             ),
-            SizedBox(),
-            // Column(
-            //   children: [
-            //     const CustomIconWidget(
-            //       defaultColor: false,
-            //       iconData: '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
-            //     ),
-            //     const SizedBox(
-            //       height: 5,
-            //     ),
-            //     RichText(
-            //       text: TextSpan(
-            //         style: _textTheme.bodyText2,
-            //         text: 'Hyppe telah terdaftar di ',
-            //         children: [
-            //           TextSpan(
-            //             text: 'Kemendag',
-            //             // recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
-            //             style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
-            //             children: [
-            //               TextSpan(
-            //                 text: ' & ',
-            //                 style: _textTheme.bodyText2,
-            //                 children: [
-            //                   TextSpan(
-            //                     text: ' Kominfo ',
-            //                     // recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
-            //                     style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
-            //                   )
-            //                 ],
-            //               )
-            //             ],
-            //           )
-            //         ],
-            //       ),
-            //     ),
-            //     const SizedBox(
-            //       height: 20,
-            //     ),
-            //   ],
-            // ),
+            Column(
+              children: [
+                const CustomIconWidget(
+                  defaultColor: false,
+                  iconData: '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                RichText(
+                  text: TextSpan(
+                    style: _textTheme.bodyText2,
+                    text: 'Hyppe telah terdaftar di ',
+                    children: [
+                      TextSpan(
+                        text: 'Kemendag',
+                        // recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
+                        style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: ' & ',
+                            style: _textTheme.bodyText2,
+                            children: [
+                              TextSpan(
+                                text: ' Kominfo ',
+                                // recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
+                                style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ],
         ),
       ),

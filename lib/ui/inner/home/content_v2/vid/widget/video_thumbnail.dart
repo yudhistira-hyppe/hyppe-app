@@ -83,6 +83,17 @@ class VideoThumbnail extends StatelessWidget {
                     ),
                   ),
                 ),
+                Visibility(
+                  visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
+                  child: CustomTextButton(
+                    onPressed: () => context.read<VidDetailNotifier>().reportContent(context),
+                    child: const CustomIconWidget(
+                      defaultColor: false,
+                      iconData: '${AssetPath.vectorPath}more.svg',
+                      color: kHyppeLightButtonText,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

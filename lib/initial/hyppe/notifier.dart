@@ -89,7 +89,8 @@ class HyppeNotifier with ChangeNotifier {
         methodType: MethodType.post,
       );
     } else {
-      _routing.moveReplacement(Routes.login);
+      _routing.moveReplacement(Routes.welcomeLogin);
+      // _routing.moveReplacement(Routes.login);
     }
   }
 }

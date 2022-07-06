@@ -124,7 +124,7 @@
   "w": "w",
   "today": "Today",
   "deleteThis": "Delete this",
-  "afterThatThis": "After that, this",
+  "afterThatThis": "After this process your post will be deleted permanently, are you sure?",
   "willBePermanentlyDeleted": "will be permanently deleted",
   "delete": "Delete",
   "dontDelete": "Don't Delete",
@@ -473,5 +473,8 @@
   "resendOTP" : "Resend OTP",
   "newUpdate" : "New Update",
   "contentNewUpdate" : "Update your Hyppe app to the latest version now and enjoy our new and improved features!",
-  "updateNow" : "Update Now"
+  "updateNow" : "Update Now",
+  "deletePost": "Delete post?",
+  "deleteComment": "Delete Comment",
+  "commentWillPermanentlyDeletedContinue": "Comment will permanently deleted, continue?"
 }

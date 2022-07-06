@@ -3,6 +3,7 @@ class Routes {
 
   static const String root = '/';
   static const String login = '/login';
+  static const String welcomeLogin = '/welcome-login';
   static const String lobby = '/lobby';
   static const String selfProfile = '/self-profile';
   static const String otherProfile = '/other-profile';

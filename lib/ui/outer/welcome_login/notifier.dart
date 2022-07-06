@@ -30,7 +30,7 @@ import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
 // import 'package:twitter_login/twitter_login.dart';
 
-class LoginNotifier extends LoadingNotifier with ChangeNotifier {
+class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
   final _googleSignInService = GoogleSignInService();
   final signOutGoogle = GoogleSignInService();
@@ -194,8 +194,9 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     _routing.move(Routes.register);
   }
 
-  void tapBack() {
-    Routing().moveBack();
+  void onClickLoginEmail() {
+    incorrect = false;
+    _routing.move(Routes.login);
   }
 
   // Future onClickGoogle(BuildContext context) async {

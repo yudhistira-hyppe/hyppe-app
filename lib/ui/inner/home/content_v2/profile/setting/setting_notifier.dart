@@ -49,7 +49,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void _resetData(BuildContext context) async {
-    _routing.moveAndRemoveUntil(Routes.login, Routes.lobby);
+    _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.lobby);
 
     await _googleSignInService.handleSignOut();
     await SharedPreference().logOutStorage();
