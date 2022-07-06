@@ -362,7 +362,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         }
         setLoading(false);
       }
-      setLoading(false);
     });
   }
 
