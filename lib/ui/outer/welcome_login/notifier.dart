@@ -312,9 +312,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           UserCredential? userCredential;
           _userGoogleSignIn = await GoogleSignIn().signIn();
           final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
+          if (googleAuth == null) {
+            setLoading(false);
+            return false;
+          }
           final credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth?.accessToken,
-            idToken: googleAuth?.idToken,
+            accessToken: googleAuth.accessToken,
+            idToken: googleAuth.idToken,
           );
           userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
           unFocusController();
