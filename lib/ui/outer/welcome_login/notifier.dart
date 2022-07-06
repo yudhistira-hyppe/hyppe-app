@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:crypto/crypto.dart';
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
@@ -359,6 +362,22 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       }
     });
   }
+  /// Generates a cryptographically secure random nonce, to be included in a
+  /// credential request.
+  String generateNonce([int length = 32]) {
+    final charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
 
   Future loginAppleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
@@ -370,6 +389,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             print('this devices not eligable for Apple Sign in');
           }
           print('kIsWeb ${kIsWeb}');
+          final rawNonce = generateNonce();
+          final nonce = sha256ofString(rawNonce);
           final credentialApple = await SignInWithApple.getAppleIDCredential(
             scopes: [
               AppleIDAuthorizationScopes.email,
@@ -377,7 +398,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             ],
             webAuthenticationOptions: WebAuthenticationOptions(
               // TODO: Set the `clientId` and `redirectUri` arguments to the values you entered in the Apple Developer portal during the setup
-              clientId: 'de.lunaone.flutter.signinwithappleexample.service',
+              clientId: 'com.hyppe.hyppeapp',
 
               redirectUri:
                   // For web your redirect URI needs to be the host of the "current page",
@@ -385,39 +406,73 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
                   kIsWeb
                       ? Uri.parse('https://${window.location.host}/')
                       : Uri.parse(
-                          'https://flutter-sign-in-with-apple-example.glitch.me/callbacks/sign_in_with_apple',
+                          '',
                         ),
             ),
             // TODO: Remove these if you have no need for them
-            nonce: 'example-nonce',
-            state: 'example-state',
+            // nonce: 'example-nonce',
+            // state: 'example-state',
+            nonce:nonce,
+          );
+          print(credentialApple.authorizationCode);
+          print(credentialApple.identityToken);
+          final oauthCredential = OAuthProvider("apple.com").credential(
+            idToken: credentialApple.identityToken,
+            rawNonce: rawNonce,
           );
 
-          print('hahahahaha');
-          print(credentialApple);
-          final signInWithAppleEndpoint = Uri(
-            scheme: 'https',
-            host: 'flutter-sign-in-with-apple-example.glitch.me',
-            path: '/sign_in_with_apple',
-            queryParameters: <String, String>{
-              'code': credentialApple.authorizationCode,
-              if (credentialApple.givenName != null) 'firstName': credentialApple.givenName!,
-              if (credentialApple.familyName != null) 'lastName': credentialApple.familyName!,
-              'useBundleId': !kIsWeb && (Platform.isIOS || Platform.isMacOS) ? 'true' : 'false',
-              if (credentialApple.state != null) 'state': credentialApple.state!,
-            },
-          );
+          userCredential = await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+          unFocusController();
+          setLoading(true);
 
-          final session = await http.Client().post(
-            signInWithAppleEndpoint,
-          );
-          return false;
+          incorrect = false;
+          await FcmService().initializeFcmIfNot();
+          final notifier = UserBloc();
 
-          // if (data != null) {
-          //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-          //       argument: UserInterestScreenArgument());
-          //   notifyListeners();
-          // }
+          if (userCredential.credential == null) {
+            FirebaseAuth.instance.signOut();
+            ShowBottomSheet.onShowSomethingWhenWrong(context);
+          } else {
+            await notifier.appleSignInBlocV2(
+              context,
+              email: userCredential.user!.email!,
+              latitude: latitude,
+              longtitude: longitude,
+              function: () => loginAppleSign(context),
+            );
+            final fetch = notifier.userFetch;
+            if (fetch.userState == UserState.LoginSuccess) {
+              hide = true;
+              final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+              _validateUserData(context, _result, true, onlineVersion: fetch.version);
+            }
+            if (fetch.userState == UserState.LoginError) {
+              if (fetch.data != null) {
+                clearTextController();
+                incorrect = true;
+              }
+            }
+          }
+          setLoading(false);
+
+          //FOR ANDROID ONLY & WEB ONLY
+          // final signInWithAppleEndpoint = Uri(
+          //   scheme: 'https',
+          //   host: 'hyppeapp-297310.firebaseapp.com',
+          //   path: '/__/auth/handler',
+          //   queryParameters: <String, String>{
+          //     'code': credentialApple.authorizationCode,
+          //     if (credentialApple.givenName != null) 'firstName': credentialApple.givenName!,
+          //     if (credentialApple.familyName != null) 'lastName': credentialApple.familyName!,
+          //     'useBundleId': !kIsWeb && (Platform.isIOS || Platform.isMacOS) ? 'true' : 'false',
+          //     if (credentialApple.state != null) 'state': credentialApple.state!,
+          //   },
+          // );
+
+          // final session = await http.Client().post(
+          //   signInWithAppleEndpoint,
+          // );
+
 
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
