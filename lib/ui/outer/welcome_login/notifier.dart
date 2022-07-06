@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:convert';
 import 'dart:math';
 
@@ -362,14 +361,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       }
     });
   }
+
   /// Generates a cryptographically secure random nonce, to be included in a
   /// credential request.
   String generateNonce([int length = 32]) {
-    final charset =
-        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
     final random = Random.secure();
-    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
-        .join();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 
   /// Returns the sha256 hash of [input] in hex notation.
@@ -412,7 +410,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
             // TODO: Remove these if you have no need for them
             // nonce: 'example-nonce',
             // state: 'example-state',
-            nonce:nonce,
+            nonce: nonce,
           );
           print(credentialApple.authorizationCode);
           print(credentialApple.identityToken);
@@ -472,7 +470,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           // final session = await http.Client().post(
           //   signInWithAppleEndpoint,
           // );
-
 
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());

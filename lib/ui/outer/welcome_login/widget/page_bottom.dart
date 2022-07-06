@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -80,37 +81,39 @@ class _PageBottomState extends State<PageBottom> {
                       ],
                     ),
                   ),
-                  ButtomSosmed(
-                    function: () => notifier.loginAppleSign(context),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 60,
-                          padding: EdgeInsets.only(right: 15.0),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              right: BorderSide(
-                                color: Color(0xFFEDEDED),
-                                width: 1.0,
+                  Platform.isIOS
+                      ? ButtomSosmed(
+                          function: () => notifier.loginAppleSign(context),
+                          child: Row(
+                            children: [
+                              Container(
+                                height: 60,
+                                padding: EdgeInsets.only(right: 15.0),
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(
+                                      color: Color(0xFFEDEDED),
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                ),
+                                child: CustomIconWidget(
+                                  defaultColor: false,
+                                  color: Theme.of(context).colorScheme.onBackground,
+                                  width: 20,
+                                  iconData: '${AssetPath.vectorPath}apple.svg',
+                                ),
                               ),
-                            ),
+                              const Spacer(),
+                              CustomTextWidget(
+                                textToDisplay: 'Masuk dengan Apple Id',
+                                textStyle: Theme.of(context).textTheme.subtitle2!,
+                              ),
+                              const Spacer(),
+                            ],
                           ),
-                          child: CustomIconWidget(
-                            defaultColor: false,
-                            color: Theme.of(context).colorScheme.onBackground,
-                            width: 20,
-                            iconData: '${AssetPath.vectorPath}apple.svg',
-                          ),
-                        ),
-                        const Spacer(),
-                        CustomTextWidget(
-                          textToDisplay: 'Masuk dengan Apple Id',
-                          textStyle: Theme.of(context).textTheme.subtitle2!,
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
+                        )
+                      : SizedBox(),
                   twelvePx,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
