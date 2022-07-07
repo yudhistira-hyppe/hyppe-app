@@ -8,6 +8,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/interface/pagination_query_interface.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/check_version.dart';
 
 class ContentsDataQuery extends PaginationQueryInterface {
   FeatureType? featureType;
@@ -84,6 +85,9 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
       res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
 
+      if (featureType == FeatureType.vid) {
+        CheckVersion().check(context, fetch.version);
+      }
       hasNext = res?.length == limit;
       if (res != null) page++;
     } catch (e) {

@@ -1,14 +1,11 @@
+import 'package:hyppe/core/constants/hyppe_version.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-
 import 'package:hyppe/core/services/cache_service.dart';
-
 // v2 view
 import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';

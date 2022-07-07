@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/inner/upload/review_sell/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
@@ -27,6 +28,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/user_agreement/user_aggrement_no
 import 'package:hyppe/ui/outer/sign_up/contents/user_complete_profile/user_complete_profile_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/notifier.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
@@ -65,6 +67,7 @@ class AppDependencies {
 
         // UI && OUTER
         ChangeNotifierProvider(create: (context) => LoginNotifier()),
+        ChangeNotifierProvider(create: (context) => WelcomeLoginNotifier()),
 
         // SIGN UP
         ChangeNotifierProvider(create: (context) => SignUpPinNotifier()),
@@ -190,7 +193,11 @@ class AppDependencies {
         ChangeNotifierProvider<ProfileCompletionNotifier>(
             create: (context) => ProfileCompletionNotifier()),
 
+        //ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier())
         ChangeNotifierProvider<ReferralNotifier>(
-            create: (context) => ReferralNotifier())
+            create: (context) => ReferralNotifier()),
+
+        ChangeNotifierProvider<ReviewSellNotifier>(
+            create: (context) => ReviewSellNotifier())
       ];
 }

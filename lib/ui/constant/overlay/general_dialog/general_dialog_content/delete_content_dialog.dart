@@ -39,13 +39,14 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           CustomTextWidget(
-            textToDisplay: '${_language.deleteThis} ${widget.contentTitle}',
+            // textToDisplay: '${_language.deletePost} ${widget.contentTitle}',
+            textToDisplay: widget.contentTitle == 'Comment' || widget.contentTitle == 'Komentar' ? '${_language.deleteComment}' : '${_language.deletePost}',
             textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
-            maxLines: 2,
+            maxLines: 3,
             textOverflow: TextOverflow.visible,
-            textToDisplay: '${_language.afterThatThis} ${widget.contentTitle} ${_language.willBePermanentlyDeleted}',
+            textToDisplay: widget.contentTitle == 'Comment' || widget.contentTitle == 'Komentar' ? '${_language.commentWillPermanentlyDeletedContinue}' : '${_language.afterThatThis}',
             textStyle: theme.textTheme.bodyText1,
           ),
           Row(
@@ -61,7 +62,7 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
               else
                 const CustomLoading(),
               _buildButton(
-                caption: _language.dontDelete!,
+                caption: _language.cancel!,
                 color: theme.colorScheme.primaryVariant,
                 textColor: kHyppeLightButtonText,
                 function: () => _routing.moveBack(),

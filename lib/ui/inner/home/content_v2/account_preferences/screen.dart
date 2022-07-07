@@ -39,8 +39,6 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
     _tabController = TabController(
         initialIndex: notifier.initialIndex, length: 2, vsync: this);
 
-    
-
     super.initState();
   }
 

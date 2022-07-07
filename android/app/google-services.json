@@ -23,35 +23,11 @@
           }
         },
         {
-          "client_id": "590985523606-i15ugv12suirccjnbi7h260v8hf8fnpu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hyppe.hyppeapp",
-            "certificate_hash": "d6fb1607a5dce647680b8fd34020c7192beb9d74"
-          }
-        },
-        {
           "client_id": "590985523606-kukqqg2r99nte4q1cuemjqe72o9scqvq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hyppe.hyppeapp",
             "certificate_hash": "78f41b48ac3ba94fed7eff9c0141810c3af11471"
-          }
-        },
-        {
-          "client_id": "590985523606-msvoc3l08s04ejmvuvf5vn965g2iem2i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hyppe.hyppeapp",
-            "certificate_hash": "a88c639dabe046f4da79404cfc6f52097f693b73"
-          }
-        },
-        {
-          "client_id": "590985523606-ubdgkv9k6vqscd54kbag3jgrrsid1s6r.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.hyppe.hyppeapp",
-            "certificate_hash": "6e533c6b383267471eb1351ca972d93778857ec3"
           }
         },
         {

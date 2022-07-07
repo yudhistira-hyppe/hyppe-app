@@ -14,6 +14,7 @@ import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/review_sell/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
@@ -23,6 +24,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/user_agreement/user_aggrement_no
 import 'package:hyppe/ui/outer/sign_up/contents/user_complete_profile/user_complete_profile_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/notifier.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -77,18 +79,21 @@ class TranslateNotifierV2 with ChangeNotifier {
   Future loadLanguage({int? index}) async {
     late String langIso;
     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-    
+
     if (index == null && _isoCodeCache != null) {
       langIso = _isoCodeCache == "en" ? "en" : "id";
     } else {
-      langIso = index != null && _listLanguage.isNotEmpty ? _listLanguage[index].langIso ?? "en" : "id";
+      langIso = index != null && _listLanguage.isNotEmpty
+          ? _listLanguage[index].langIso ?? "en"
+          : "id";
     }
 
     SharedPreference().writeStorage(SpKeys.isoCode, langIso);
 
     // final localeDir = await getApplicationDocumentsDirectory();
     // File txt = File('${localeDir.path}/primaryLanguage.txt');
-    Map<String, dynamic> _langDefault = jsonDecode(await rootBundle.loadString('${AssetPath.jsonPath}$langIso.json'));
+    Map<String, dynamic> _langDefault = jsonDecode(
+        await rootBundle.loadString('${AssetPath.jsonPath}$langIso.json'));
 
     // bool downloaded = await txt.exists();
     // if (downloaded) {
@@ -111,6 +116,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     /// Outer
     // Login
     context.read<LoginNotifier>().translate(translate);
+    context.read<WelcomeLoginNotifier>().translate(translate);
     // Forgot Password
     context.read<ForgotPasswordNotifier>().translate(translate);
     context.read<UserOtpNotifier>().translate(translate);
@@ -136,7 +142,8 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<NotificationNotifier>().translate(translate);
     context.read<ProfileCompletionNotifier>().translate(translate);
     context.read<ReferralNotifier>().translate(translate);
-    
+    context.read<ReviewSellNotifier>().translate(translate);
+
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {
       _listIndex = 0;

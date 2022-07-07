@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/initial/hyppe/notifier.dart';
@@ -21,13 +23,66 @@ class _OpeningLogoState extends State<OpeningLogo> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    final _textTheme = Theme.of(context).textTheme;
+    return Scaffold(
       body: Center(
-        child: CustomIconWidget(
-          defaultColor: false,
-          iconData: '${AssetPath.vectorPath}logo.svg',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(),
+            const CustomIconWidget(
+              defaultColor: false,
+              iconData: '${AssetPath.vectorPath}logo_splash_screem.svg',
+            ),
+            Column(
+              children: [
+                const CustomIconWidget(
+                  defaultColor: false,
+                  iconData: '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                RichText(
+                  text: TextSpan(
+                    style: _textTheme.bodyText2,
+                    text: 'Hyppe telah terdaftar di ',
+                    children: [
+                      TextSpan(
+                        text: 'Kemendag',
+                        // recognizer: TapGestureRecognizer()..onTap = () => notifier.goToEula(),
+                        style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: ' & ',
+                            style: _textTheme.bodyText2,
+                            children: [
+                              TextSpan(
+                                text: ' Kominfo ',
+                                // recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
+                                style: _textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
+      // body: Center(
+      //   child: CustomIconWidget(
+      //     defaultColor: false,
+      //     iconData: '${AssetPath.vectorPath}logo_splash_screem.svg',
+      //   ),
+      // ),
     );
   }
 }

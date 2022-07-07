@@ -83,7 +83,8 @@ class PicDetailBottom extends StatelessWidget {
                       maxLines: 2,
                       textAlign: TextAlign.left,
                       textStyle: Theme.of(context).textTheme.subtitle2,
-                      textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                      textToDisplay:
+                          "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                     )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
@@ -92,9 +93,11 @@ class PicDetailBottom extends StatelessWidget {
                 ? CustomTextWidget(
                     maxLines: 2,
                     textAlign: TextAlign.left,
-                    textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
+                    textStyle: Theme.of(context).textTheme.caption!.apply(
+                        color: Theme.of(context).colorScheme.secondaryVariant),
                     // textToDisplay: '${_system.formatterNumber(data!.totalViews)}x ${notifier.language.views!}',
-                    textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                    textToDisplay:
+                        '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
           ],
@@ -110,12 +113,43 @@ class PicDetailBottom extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
+            // Consumer<PicDetailNotifier>(builder: (context, pic, _) => Text("${pic.data?.isLiked}")),
+            // Consumer<PicDetailNotifier>(
+            //   builder: (context, pica, _) => InkWell(
+            //     onTap: () {
+            //       var userStore = Provider.of<PicDetailNotifier>(context, listen: false);
+
+            //       print(userStore.data?.isLiked);
+            //       if (userStore.data?.isLiked == true) {
+            //         userStore.data?.isLiked = false;
+            //       } else {
+            //         userStore.data?.isLiked = true;
+            //       }
+            //       print(userStore.data?.isLiked);
+            //     },
+            //     child: Container(
+            //       child: Text('asdasd'),
+            //     ),
+            //   ),
+            // ),
             Consumer<LikeNotifier>(
               builder: (context, notifier, child) => data != null
-                  ? _buildButton(context, '${AssetPath.vectorPath}${data?.isLiked==true ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes}",
-                      () => notifier.likePost(context, data!),
-                      colorIcon: data?.isLiked == true  ? kHyppePrimary : Theme.of(context).iconTheme.color)
-                  : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
+                  ? _buildButton(
+                      context,
+                      '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                      "${value.data?.insight?.likes ?? 0}", () {
+                      // if (value.data?.isLiked == true) {
+                      //   value.data?.isLiked = false;
+                      // } else {
+                      //   value.data?.isLiked = true;
+                      // }
+                      notifier.likePost(context, data!);
+                    },
+                      colorIcon: (value.data?.isLiked ?? false)
+                          ? kHyppePrimary
+                          : Theme.of(context).iconTheme.color)
+                  : _buildButton(context,
+                      '${AssetPath.vectorPath} none-like.svg', "0", () {}),
             ),
 
             data != null
@@ -125,7 +159,8 @@ class PicDetailBottom extends StatelessWidget {
                         '${AssetPath.vectorPath}comment.svg',
                         value2.translate.comment!,
                         () {
-                          ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                          ShowBottomSheet.onShowCommentV2(context,
+                              postID: data?.postID);
                         },
                       )
                     : const SizedBox.shrink()
@@ -135,7 +170,9 @@ class PicDetailBottom extends StatelessWidget {
               context,
               '${AssetPath.vectorPath}share.svg',
               value2.translate.share!,
-              data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+              data != null
+                  ? () => value.createdDynamicLink(context, data: data)
+                  : () {},
             ),
 
             // _buildButton(
@@ -157,7 +194,9 @@ class PicDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(BuildContext context, String icon, String caption, Function onTap, {Color? colorIcon}) {
+  Widget _buildButton(
+      BuildContext context, String icon, String caption, Function onTap,
+      {Color? colorIcon}) {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Column(
@@ -186,7 +225,8 @@ class PicDetailBottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildProfilePicture(context),
-          Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+          Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier,
+              TranslateNotifierV2>(
             builder: (context, value, value2, value3, child) {
               if (data?.email == SharedPreference().readStorage(SpKeys.email)) {
                 return const SizedBox.shrink();
@@ -218,7 +258,8 @@ class PicDetailBottom extends StatelessWidget {
           spaceProfileAndId: eightPx,
           haveStory: false,
           isCelebrity: false,
-          onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email!),
+          onTapOnProfileImage: () =>
+              _system.navigateToProfile(context, data!.email!),
           featureType: FeatureType.pic,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(

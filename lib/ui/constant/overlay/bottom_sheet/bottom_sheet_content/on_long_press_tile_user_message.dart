@@ -4,8 +4,9 @@
 // import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 // import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
 // import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-// import 'package:hyppe/ui/inner/message/notifier.dart';
+// // import 'package:hyppe/ui/inner/message/notifier.dart';
 // import 'package:flutter/material.dart';
+// import 'package:hyppe/ui/inner/message_v2/notifier.dart';
 // import 'package:provider/provider.dart';
 
 // class OnLongPressTileUserMessageBottomSheet extends StatelessWidget {
@@ -15,52 +16,46 @@
 //       builder: (_, notifier, __) => Column(
 //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 //         children: [
-//           Expanded(
+//           const Expanded(
 //             flex: 1,
 //             child: CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
 //           ),
 //           Expanded(
-//             flex: 4,
-//             child: notifier.overview != null
-//                 ? Column(
-//                     children: [
-//                       Container(
-//                         child: ListTile(
-//                           leading: Container(
-//                             decoration: BoxDecoration(
-//                               image: DecorationImage(
-//                                 fit: BoxFit.cover,
-//                                 image: NetworkImage(notifier.overview!.profilePicture!),
-//                               ),
-//                               shape: BoxShape.circle,
-//                             ),
-//                             height: 48 * SizeConfig.scaleDiagonal,
-//                             width: 48 * SizeConfig.scaleDiagonal,
+//               flex: 4,
+//               child: Column(
+//                 children: [
+//                   Container(
+//                     child: ListTile(
+//                       leading: Container(
+//                         decoration: BoxDecoration(
+//                           image: DecorationImage(
+//                             fit: BoxFit.cover,
+//                             image: NetworkImage(notifier.overview!.profilePicture!),
 //                           ),
-//                           title: CustomTextWidget(
-//                             // "Demo user",
-//                             textToDisplay: notifier.overview!.username!,
-//                             textAlign: TextAlign.start,
-//                             textStyle: TextStyle(
-//                               fontWeight: FontWeight.bold,
-//                               fontSize: 14,
-//                             ),
-//                           ),
-//                           subtitle: CustomTextWidget(
-//                               textToDisplay: notifier.overview!.fullName!,
-//                               textAlign: TextAlign.start,
-//                               textStyle: Theme.of(context).textTheme.caption),
+//                           shape: BoxShape.circle,
+//                         ),
+//                         height: 48 * SizeConfig.scaleDiagonal,
+//                         width: 48 * SizeConfig.scaleDiagonal,
+//                       ),
+//                       title: CustomTextWidget(
+//                         // "Demo user",
+//                         textToDisplay: notifier.overview!.username!,
+//                         textAlign: TextAlign.start,
+//                         textStyle: TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 14,
 //                         ),
 //                       ),
-//                       SizedBox(
-//                         height: 1,
-//                         width: SizeConfig.screenWidth,
-//                         child: Container(color: Color(0xff2C3236)),
-//                       )
-//                     ],
+//                       subtitle: CustomTextWidget(textToDisplay: notifier.overview!.fullName!, textAlign: TextAlign.start, textStyle: Theme.of(context).textTheme.caption),
+//                     ),
+//                   ),
+//                   SizedBox(
+//                     height: 1,
+//                     width: SizeConfig.screenWidth,
+//                     child: Container(color: Color(0xff2C3236)),
 //                   )
-//                 : UnconstrainedBox(child: CustomLoading()),
-//           ),
+//                 ],
+//               )),
 //           Expanded(
 //             flex: 5,
 //             child: notifier.overview != null

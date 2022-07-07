@@ -27,10 +27,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   void _initThemes() {
     _currentThemeState = SharedPreference().readStorage(SpKeys.themeData) ?? false;
-    themes = {
-      "${_language.translate.dark}": true,
-      "${_language.translate.light}": false
-    };
+    themes = {"${_language.translate.dark}": true, "${_language.translate.light}": false};
   }
 
   @override

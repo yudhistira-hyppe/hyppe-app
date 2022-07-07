@@ -1,9 +1,11 @@
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/query_request/discuss_data_query.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +32,24 @@ class MessageNotifier extends ChangeNotifier {
 
   List<MessageDataV2>? get discussData => _discussData;
 
+  String? _choosedisqusID;
+  String? get choosedisqusID => _choosedisqusID;
+
+  String? _choosePhotoReceiver;
+  String? get choosePhotoReceiver => _choosePhotoReceiver;
+
   set discussData(List<MessageDataV2>? val) {
     _discussData = val;
+    notifyListeners();
+  }
+
+  set choosedisqusID(String? val) {
+    _choosedisqusID = val;
+    notifyListeners();
+  }
+
+  set choosePhotoReceiver(String? val) {
+    _choosePhotoReceiver = val;
     notifyListeners();
   }
 
@@ -60,10 +78,7 @@ class MessageNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context, ScrollController scrollController) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !discussQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !discussQuery.loading && hasNext) {
       getDiscussion(context);
     }
   }
@@ -95,5 +110,12 @@ class MessageNotifier extends ChangeNotifier {
         photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
       ),
     );
+  }
+
+  Future<void> onLongPressUser(BuildContext context, MessageDataV2? data) async {
+    choosedisqusID = data?.disqusID;
+    choosePhotoReceiver = System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '';
+    ShowBottomSheet.onLongPressDeleteMessage(context);
+    notifyListeners();
   }
 }

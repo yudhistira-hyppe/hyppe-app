@@ -43,6 +43,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   final TextEditingController captionController = TextEditingController();
   final TextEditingController tagsController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
 
   bool _updateContent = false;
   FeatureType? _featureType;
@@ -55,6 +56,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? _tags;
   String _visibility = "PUBLIC";
   dynamic _thumbNail;
+  bool _toSell = false;
+  bool _includeTotalViews = false;
+  bool _includeTotalLikes = false;
+  bool _priceIsFilled = false;
+  bool _isSavedPrice = false;
 
   bool get updateContent => _updateContent;
   FeatureType? get featureType => _featureType;
@@ -66,6 +72,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
+  bool get toSell => _toSell;
+  bool get includeTotalViews => _includeTotalViews;
+  bool get includeTotalLikes => _includeTotalLikes;
+  bool get priceIsFilled => _priceIsFilled;
+  bool get isSavedPrice => _isSavedPrice;
 
   set thumbNail(val) {
     _thumbNail = val;
@@ -94,6 +105,9 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set certified(bool val) {
     _certified = val;
+    if (!val) {
+      _toSell = false;
+    }
     notifyListeners();
   }
 
@@ -114,6 +128,31 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set fileContent(List<String?>? val) {
     _fileContent = val;
+    notifyListeners();
+  }
+
+  set toSell(bool val) {
+    _toSell = val;
+    notifyListeners();
+  }
+
+  set includeTotalViews(bool val) {
+    _includeTotalViews = val;
+    notifyListeners();
+  }
+
+  set includeTotalLikes(bool val) {
+    _includeTotalLikes = val;
+    notifyListeners();
+  }
+
+  set priceIsFilled(bool val) {
+    _priceIsFilled = val;
+    notifyListeners();
+  }
+
+  set isSavedPrice(bool val) {
+    _isSavedPrice = val;
     notifyListeners();
   }
 
@@ -167,6 +206,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     certified = false;
     captionController.clear();
     tagsController.clear();
+    priceController.clear();
   }
 
   Future _createPostContentV2() async {
@@ -307,12 +347,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     final connection = await System().checkConnections();
     if (_validateDescription()) {
       if (connection) {
-        checkKeyboardFocus(context);
-        if (onEdit) {
-          _updatePostContentV2(context,
-              postID: data!.postID!, content: content!);
+        if (_toSell) {
+          Routing().move(Routes.reviewSellContent);
         } else {
-          _createPostContentV2();
+          checkKeyboardFocus(context);
+          if (onEdit) {
+            _updatePostContentV2(context,
+                postID: data!.postID!, content: content!);
+          } else {
+            _createPostContentV2();
+          }
         }
       } else {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {

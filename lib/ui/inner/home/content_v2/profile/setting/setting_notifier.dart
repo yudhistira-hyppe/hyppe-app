@@ -37,10 +37,9 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     if (!isLoading) {
       setLoading(true);
       final notifier = UserBloc();
-     _resetData(context);
-      await notifier.logOut(context, withAlertMessage: true);
+      _resetData(context);
+      await notifier.logOut(context, withAlertMessage: false);
       setLoading(false);
-  
 
       // final fetch = notifier.userFetch;
       // if (fetch.userState == UserState.logoutSuccess) {
@@ -50,9 +49,8 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void _resetData(BuildContext context) async {
-    _routing.moveAndRemoveUntil(Routes.login, Routes.lobby);
- 
-    
+    _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.lobby);
+
     await _googleSignInService.handleSignOut();
     await SharedPreference().logOutStorage();
 

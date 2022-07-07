@@ -13,6 +13,7 @@ class SharedPreference {
   static SharedPreferences? _preferences;
 
   static Future onInitialSharedPreferences() async {
+    // SharedPreferences.setMockInitialValues({});
     _preferences = await SharedPreferences.getInstance();
   }
 
@@ -48,6 +49,5 @@ class SharedPreference {
     await _preferences!.remove(SpKeys.email);
     await _preferences!.remove(SpKeys.userID);
     await _preferences!.remove(SpKeys.fcmToken);
-  
   }
 }

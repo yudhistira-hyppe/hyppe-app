@@ -22,6 +22,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:file_picker/file_picker.dart';
@@ -247,7 +248,9 @@ class System {
     } else if (kIsWeb) {
       // The web doesnt have a device UID, so use a combination fingerprint as an example
       WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
-      deviceIdentifier = (webInfo.vendor ?? '') + (webInfo.userAgent ?? '') + webInfo.hardwareConcurrency.toString();
+      deviceIdentifier = (webInfo.vendor ?? '') +
+          (webInfo.userAgent ?? '') +
+          webInfo.hardwareConcurrency.toString();
     } else if (Platform.isLinux) {
       LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
       deviceIdentifier = linuxInfo.machineId ?? 'unknown';
@@ -573,34 +576,33 @@ class System {
     // request permission
     final permissionsStatus = await permissions.request();
 
-    return !permissionsStatus.values
-            .toList()
-            .contains(PermissionStatus.denied) &&
-        !permissionsStatus.values
-            .toList()
-            .contains(PermissionStatus.permanentlyDenied);
+    return !permissionsStatus.values.toList().contains(PermissionStatus.denied);
   }
 
   Future<bool> requestPrimaryPermission(BuildContext context) async {
     // request permission
-    await [
+    return requestPermission(context, permissions: [
       Permission.camera,
       Permission.microphone,
       Permission.storage,
       Permission.mediaLibrary,
       Permission.photos,
-    ].request();
+    ]);
 
-    // check permission
-    var cameraPermission = await checkPermission(permission: Permission.camera);
-    var microphonePermission =
-        await checkPermission(permission: Permission.microphone);
-    var storagePermission =
-        await checkPermission(permission: Permission.storage);
+    // await [
+    //   Permission.camera,
+    //   Permission.microphone,
+    //   Permission.storage,
+    //   Permission.mediaLibrary,
+    //   Permission.photos,
+    // ].request();
 
-    return cameraPermission.isGranted &&
-        microphonePermission.isGranted &&
-        storagePermission.isGranted;
+    // // check permission
+    // var cameraPermission = await checkPermission(permission: Permission.camera);
+    // var microphonePermission = await checkPermission(permission: Permission.microphone);
+    // var storagePermission = await checkPermission(permission: Permission.storage);
+
+    // return cameraPermission.isGranted && microphonePermission.isGranted && storagePermission.isGranted;
   }
 
   String searchCategory(SearchCategory searchCategory) {
@@ -891,10 +893,12 @@ class System {
         if (storyController != null) {
           storyController.pause();
           Routing()
-              .move(Routes.otherProfile,argument: OtherProfileArgument(senderEmail: email))
+              .move(Routes.otherProfile,
+                  argument: OtherProfileArgument(senderEmail: email))
               .whenComplete(() => storyController.play());
         } else {
-          Routing().move(Routes.otherProfile,argument: OtherProfileArgument(senderEmail: email));
+          Routing().move(Routes.otherProfile,
+              argument: OtherProfileArgument(senderEmail: email));
         }
       } else {
         storyController != null

@@ -42,26 +42,24 @@ class _ShareBlockState extends State<ShareBlock> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: (){
-                         Routing().move(Routes.listReferral,argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
+                        onTap: () {
+                          Routing().move(Routes.listReferral, argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
                         },
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.hasUsed!,
-                          textStyle:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: kHyppeLightSecondary,
-                                  ),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: kHyppeLightSecondary,
+                              ),
                         ),
                       ),
                       GestureDetector(
-                        onTap: (){
-                           Routing().move(Routes.listReferral,argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
+                        onTap: () {
+                          Routing().move(Routes.listReferral, argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
                         },
                         child: CustomTextWidget(
-                          textToDisplay:  notifier.modelReferral?.data != null ? '${notifier.modelReferral?.data}':'0',
+                          textToDisplay: notifier.modelReferral?.data != null ? '${notifier.modelReferral?.data}' : '0',
                           textStyle: Theme.of(context).textTheme.button?.copyWith(
-                                color:
-                                    Theme.of(context).colorScheme.primaryVariant,
+                                color: Theme.of(context).colorScheme.primaryVariant,
                               ),
                         ),
                       ),
@@ -88,33 +86,25 @@ class _ShareBlockState extends State<ShareBlock> {
                         alignment: Alignment.centerLeft,
                         child: CustomTextWidget(
                           textToDisplay: notifier.referralLink,
-                          textStyle:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: kHyppeLightSecondary,
-                                  ),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: kHyppeLightSecondary,
+                              ),
                         ),
                       ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
-                          onTap: () => System().shareText(
-                              dynamicLink: notifier.referralLinkText,
-                              context: context),
+                          onTap: () => System().shareText(dynamicLink: notifier.referralLinkText, context: context),
                           child: Container(
                             width: 93,
                             height: 32,
-                            decoration: BoxDecoration(
-                                color: kHyppePrimary,
-                                borderRadius: BorderRadius.circular(16)),
+                            decoration: BoxDecoration(color: kHyppePrimary, borderRadius: BorderRadius.circular(16)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomTextWidget(
                                   textToDisplay: notifier.language.share!,
-                                  textStyle: Theme.of(context)
-                                      .textTheme
-                                      .button
-                                      ?.copyWith(color: kHyppeLightButtonText),
+                                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                 ),
                               ],
                             ),

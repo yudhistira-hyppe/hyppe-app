@@ -36,11 +36,17 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   PicDetailScreenArgument? _routeArgument;
 
-  ContentData? get data => _data;
   StatusFollowing get statusFollowing => _statusFollowing;
 
   set statusFollowing(StatusFollowing statusFollowing) {
     _statusFollowing = statusFollowing;
+    notifyListeners();
+  }
+
+  ContentData? get data => _data;
+  set data(ContentData? value) {
+    _data = value;
+    print(value);
     notifyListeners();
   }
 
@@ -53,6 +59,9 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       _initialPic(context);
     } else {
       _data = _routeArgument?.picData;
+      'hahahahaha'.logger();
+      print(data?.isLiked);
+      data?.isLiked.logger();
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
@@ -85,21 +94,21 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         // System().actionReqiredIdCard(
         //   context,
         //   action: () async {
-            statusFollowing = StatusFollowing.requested;
-            final notifier = FollowBloc();
-            await notifier.followUserBlocV2(
-              context,
-              data: FollowUserArgument(
-                receiverParty: _data?.email ?? '',
-                eventType: InteractiveEventType.following,
-              ),
-            );
-            final fetch = notifier.followFetch;
-            if (fetch.followState == FollowState.followUserSuccess) {
-              statusFollowing = StatusFollowing.requested;
-            } else {
-              statusFollowing = StatusFollowing.none;
-            }
+        statusFollowing = StatusFollowing.requested;
+        final notifier = FollowBloc();
+        await notifier.followUserBlocV2(
+          context,
+          data: FollowUserArgument(
+            receiverParty: _data?.email ?? '',
+            eventType: InteractiveEventType.following,
+          ),
+        );
+        final fetch = notifier.followFetch;
+        if (fetch.followState == FollowState.followUserSuccess) {
+          statusFollowing = StatusFollowing.requested;
+        } else {
+          statusFollowing = StatusFollowing.none;
+        }
         //   },
         //   uploadContentAction: false,
         // );

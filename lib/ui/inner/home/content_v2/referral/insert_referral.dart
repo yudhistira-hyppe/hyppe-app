@@ -35,14 +35,13 @@ class _InsertReferralState extends State<InsertReferral> {
         titleSpacing: 0,
         title: CustomTextWidget(
           textToDisplay: 'Masukkan Referal',
-          textStyle:
-              Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+          textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
         ),
         centerTitle: false,
       ),
       body: Consumer<ReferralNotifier>(
         builder: (_, notifier, __) => Padding(
-          padding: EdgeInsets.only(bottom: 30,left: 10,right: 10),
+          padding: EdgeInsets.only(bottom: 30, left: 10, right: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -55,8 +54,7 @@ class _InsertReferralState extends State<InsertReferral> {
                     onChanged: (value) {
                       notifier.inserReferral = value;
                     },
-                    decoration:
-                        const InputDecoration(contentPadding: EdgeInsets.all(10)),
+                    decoration: const InputDecoration(contentPadding: EdgeInsets.all(10)),
                   ),
                 ],
               ),
@@ -84,12 +82,7 @@ class _InsertReferralState extends State<InsertReferral> {
                     ? const CustomLoading()
                     : CustomTextWidget(
                         textToDisplay: notifier.language.save!,
-                        textStyle: notifier.buttonReferralDisable()
-                            ? Theme.of(context)
-                                .textTheme
-                                .button!
-                                .copyWith(color: kHyppeLightButtonText)
-                            : Theme.of(context).primaryTextTheme.button,
+                        textStyle: notifier.buttonReferralDisable() ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                       ),
                 width: SizeConfig.screenWidth,
                 height: 49 * SizeConfig.scaleDiagonal,

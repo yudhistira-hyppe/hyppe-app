@@ -10,7 +10,8 @@ class ImagePreviewView extends StatelessWidget {
     required this.argument,
   }) : super(key: key);
 
-  final ValueNotifier<TransformationController> controller = ValueNotifier(TransformationController());
+  final ValueNotifier<TransformationController> controller =
+      ValueNotifier(TransformationController());
 
   void resetController() {
     if (controller.value.value != Matrix4.identity()) {
@@ -22,34 +23,50 @@ class ImagePreviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GestureDetector(
-      onDoubleTap: () => resetController(),
-      child: Scaffold(
-        body: Center(
-          child: ValueListenableBuilder<TransformationController>(
-            valueListenable: controller,
-            builder: (_, value, __) {
-              return InteractiveViewer(
-                transformationController: value,
-                child: Hero(
-                  tag: argument.heroTag,
-                  child: CustomCacheImage(
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        width: size.width,
-                        height: size.height * 0.5,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.contain,
-                            image: imageProvider,
-                          ),
+      onDoubleTap: () => Navigator.of(context).pop(),
+      child: Hero(
+        tag: argument.heroTag,
+        child: Scaffold(
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      icon: const Icon(Icons.cancel_sharp)),
+                ),
+                Center(
+                  child: ValueListenableBuilder<TransformationController>(
+                    valueListenable: controller,
+                    builder: (_, value, __) {
+                      return InteractiveViewer(
+                        transformationController: value,
+                        child: Stack(
+                          children: [
+                            CustomCacheImage(
+                              imageBuilder: (context, imageProvider) {
+                                return Container(
+                                  width: size.width,
+                                  height: size.height * 0.5,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.contain,
+                                      image: imageProvider,
+                                    ),
+                                  ),
+                                );
+                              },
+                              imageUrl: argument.sourceImage,
+                            ),
+                          ],
                         ),
                       );
                     },
-                    imageUrl: argument.sourceImage,
                   ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
       ),

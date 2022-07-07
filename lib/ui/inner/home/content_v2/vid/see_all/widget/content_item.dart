@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -27,8 +28,7 @@ class ContentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final notifier = context.watch<VidSeeAllNotifier>();
-    final error =
-        context.select((ErrorService value) => value.getError(ErrorType.vid));
+    final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
 
     return context.read<ErrorService>().isInitialError(error, notifier.vidData)
         ? CustomErrorWidget(
@@ -58,8 +58,7 @@ class ContentItem extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (notifier.vidData == null) {
                   return const CustomLoading();
-                } else if (index == notifier.vidData?.length &&
-                    notifier.hasNext) {
+                } else if (index == notifier.vidData?.length && notifier.hasNext) {
                   return const CustomLoading();
                 }
 
@@ -70,34 +69,36 @@ class ContentItem extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ProfileComponent(
-                        show: true,
-                        onFollow: () {},
-                        following: true,
-                        haveStory: false,
-                        username: data?.username,
-                        featureType: FeatureType.vid,
-                        isCelebrity: data?.privacy?.isCelebrity,
-                        imageUrl:
-                            '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                        onTapOnProfileImage: () =>
-                            System().navigateToProfile(context, data!.email!),
-                        createdAt:
-                            '${System().readTimestamp(DateTime.parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true)}',
-                        // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
-                        //       context,
-                        //       currentValue: vidData,
-                        //       fUserId: vidData.userID!,
-                        //       statusFollowing: StatusFollowing.rejected,
-                        //     ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ProfileComponent(
+                            show: true,
+                            onFollow: () {},
+                            following: true,
+                            haveStory: false,
+                            username: data?.username,
+                            featureType: FeatureType.vid,
+                            isCelebrity: data?.privacy?.isCelebrity,
+                            imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                            onTapOnProfileImage: () => System().navigateToProfile(context, data!.email!),
+                            createdAt: '${System().readTimestamp(DateTime.parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true)}',
+                            // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
+                            //       context,
+                            //       currentValue: vidData,
+                            //       fUserId: vidData.userID!,
+                            //       statusFollowing: StatusFollowing.rejected,
+                            //     ),
+                          ),
+                          GestureDetector(onTap: () => ShowBottomSheet.onReportContent(context), child: const Icon(Icons.more_vert)),
+                        ],
                       ),
                       twelvePx,
                       AspectRatio(
                         aspectRatio: 16 / 9,
                         child: ContentThumbnail(
                           vidData: data,
-                          fn: () =>
-                              notifier.navigateToHyppeVidDetail(context, data),
+                          fn: () => notifier.navigateToHyppeVidDetail(context, data),
                         ),
                       ),
                       Padding(
@@ -110,8 +111,7 @@ class ContentItem extends StatelessWidget {
                               child: CustomTextWidget(
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
-                                textToDisplay:
-                                    "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                textToDisplay: "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                                 textStyle: Theme.of(context).textTheme.caption,
                               ),
                             ),
@@ -121,11 +121,8 @@ class ContentItem extends StatelessWidget {
                                 builder: (context, notifier, child) => InkWell(
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    color: data.isLiked == true
-                                        ? kHyppePrimary
-                                        : Theme.of(context).iconTheme.color,
-                                    iconData:
-                                        '${AssetPath.vectorPath}${data.isLiked == true  ? 'liked.svg' : 'none-like.svg'}',
+                                    color: data.isLiked == true ? kHyppePrimary : Theme.of(context).iconTheme.color,
+                                    iconData: '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
                                   ),
                                   onTap: () => notifier.likePost(context, data),
                                 ),
