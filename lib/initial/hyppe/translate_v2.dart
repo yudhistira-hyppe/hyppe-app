@@ -10,11 +10,11 @@ import 'package:hyppe/core/models/collection/utils/language/language_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
-import 'package:hyppe/ui/inner/upload/review_sell/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
@@ -142,7 +142,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<NotificationNotifier>().translate(translate);
     context.read<ProfileCompletionNotifier>().translate(translate);
     context.read<ReferralNotifier>().translate(translate);
-    context.read<ReviewSellNotifier>().translate(translate);
+    context.read<ReviewBuyNotifier>().translate(translate);
 
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {

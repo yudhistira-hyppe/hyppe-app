@@ -111,7 +111,7 @@ class PicDetailBottom extends StatelessWidget {
       builder: (_, value, value2, __) => SizedBox(
         width: SizeConfig.screenWidth,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             // Consumer<PicDetailNotifier>(builder: (context, pic, _) => Text("${pic.data?.isLiked}")),
             // Consumer<PicDetailNotifier>(
@@ -152,19 +152,17 @@ class PicDetailBottom extends StatelessWidget {
                       '${AssetPath.vectorPath} none-like.svg', "0", () {}),
             ),
 
-            data != null
-                ? (data?.allowComments ?? false)
-                    ? _buildButton(
-                        context,
-                        '${AssetPath.vectorPath}comment.svg',
-                        value2.translate.comment!,
-                        () {
-                          ShowBottomSheet.onShowCommentV2(context,
-                              postID: data?.postID);
-                        },
-                      )
-                    : const SizedBox.shrink()
-                : const SizedBox.shrink(),
+            if (data != null)
+              if (data?.allowComments ?? false)
+                _buildButton(
+                  context,
+                  '${AssetPath.vectorPath}comment.svg',
+                  value2.translate.comment!,
+                  () {
+                    ShowBottomSheet.onShowCommentV2(context,
+                        postID: data?.postID);
+                  },
+                ),
 
             _buildButton(
               context,
@@ -173,6 +171,12 @@ class PicDetailBottom extends StatelessWidget {
               data != null
                   ? () => value.createdDynamicLink(context, data: data)
                   : () {},
+            ),
+            _buildButton(
+              context,
+              '${AssetPath.vectorPath}cart.svg',
+              value2.translate.buy!,
+              () => ShowBottomSheet.onBuyContent(context),
             ),
 
             // _buildButton(

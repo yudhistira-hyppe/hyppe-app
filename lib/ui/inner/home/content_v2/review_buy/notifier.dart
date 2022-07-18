@@ -3,7 +3,7 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 
 enum IntialBankSelect { vaBca, hyppeWallet }
 
-class ReviewSellNotifier extends ChangeNotifier {
+class ReviewBuyNotifier extends ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;

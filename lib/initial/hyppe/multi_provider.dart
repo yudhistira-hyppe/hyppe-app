@@ -11,6 +11,7 @@ import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -18,7 +19,6 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
-import 'package:hyppe/ui/inner/upload/review_sell/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
@@ -197,7 +197,7 @@ class AppDependencies {
         ChangeNotifierProvider<ReferralNotifier>(
             create: (context) => ReferralNotifier()),
 
-        ChangeNotifierProvider<ReviewSellNotifier>(
-            create: (context) => ReviewSellNotifier())
+        ChangeNotifierProvider<ReviewBuyNotifier>(
+            create: (context) => ReviewBuyNotifier())
       ];
 }

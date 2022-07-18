@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -30,10 +31,12 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+// import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
   final _eventService = EventService();
   final _socketService = SocketService();
+  late UpdateContentsArgument _arguments;
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -44,6 +47,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   final TextEditingController captionController = TextEditingController();
   final TextEditingController tagsController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
+  //final priceController = MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
 
   bool _updateContent = false;
   FeatureType? _featureType;
@@ -77,6 +81,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get includeTotalLikes => _includeTotalLikes;
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
+  UpdateContentsArgument get updateArguments => _arguments;
 
   set thumbNail(val) {
     _thumbNail = val;
@@ -156,6 +161,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set setUpdateArguments(UpdateContentsArgument args) {
+    _arguments = args;
+    notifyListeners();
+  }
+
   void onWillPop(BuildContext context) =>
       ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
 
@@ -164,6 +174,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   void handleDeleteOnLocation() => selectedLocation = '';
 
   bool _validateDescription() => captionController.text.length >= 5;
+
+  bool _validatePrice() => priceController.text.isNotEmpty;
 
   void checkKeyboardFocus(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -226,6 +238,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         certified: certified,
         fileContents: fileContent!,
         description: captionController.text,
+        saleAmount: _toSell ? priceController.text : "0",
+        saleLike: _includeTotalLikes,
+        saleView: _includeTotalViews,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         onReceiveProgress: (count, total) {
           _eventService.notifyUploadReceiveProgress(
@@ -343,35 +358,78 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future<void> onClickPost(BuildContext context,
       {required bool onEdit, ContentData? data, String? content}) async {
-    checkKeyboardFocus(context);
-    final connection = await System().checkConnections();
-    if (_validateDescription()) {
-      if (connection) {
-        if (_toSell) {
-          Routing().move(Routes.reviewSellContent);
-        } else {
-          checkKeyboardFocus(context);
-          if (onEdit) {
-            _updatePostContentV2(context,
-                postID: data!.postID!, content: content!);
-          } else {
-            _createPostContentV2();
-          }
-        }
-      } else {
-        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-          Routing().moveBack();
-          onClickPost(context, onEdit: onEdit, data: data, content: content);
-        });
+    if (_toSell) {
+      if (!_validatePrice()) {
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.priceIsNotEmpty!,
+          color: Theme.of(context).colorScheme.error,
+          maxLines: 2,
+        );
+        return;
       }
-    } else {
+    }
+
+    if (!_validateDescription()) {
       ShowBottomSheet().onShowColouredSheet(
         context,
         language.descriptionCanOnlyWithMin5Characters!,
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
       );
+      return;
     }
+
+    final connection = await System().checkConnections();
+    if (!connection) {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onClickPost(context, onEdit: onEdit, data: data, content: content);
+      });
+      return;
+    }
+
+    checkKeyboardFocus(context);
+    if (onEdit) {
+      _updatePostContentV2(context, postID: data!.postID!, content: content!);
+    } else {
+      _createPostContentV2();
+    }
+
+    // if (_validateDescription()) {
+    //   if (connection) {
+    //     // if (_validatePrice()) {
+    //     //   Routing().move(Routes.reviewSellContent, argument: _arguments);
+    //     // } else {
+    //     //   ShowBottomSheet().onShowColouredSheet(
+    //     //     context,
+    //     //     language.priceIsNotEmpty!,
+    //     //     color: Theme.of(context).colorScheme.error,
+    //     //     maxLines: 2,
+    //     //   );
+    //     // }
+
+    //     checkKeyboardFocus(context);
+    //     if (onEdit) {
+    //       _updatePostContentV2(context,
+    //           postID: data!.postID!, content: content!);
+    //     } else {
+    //       _createPostContentV2();
+    //     }
+    //   } else {
+    //     ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+    //       Routing().moveBack();
+    //       onClickPost(context, onEdit: onEdit, data: data, content: content);
+    //     });
+    //   }
+    // } else {
+    //   ShowBottomSheet().onShowColouredSheet(
+    //     context,
+    //     language.descriptionCanOnlyWithMin5Characters!,
+    //     color: Theme.of(context).colorScheme.error,
+    //     maxLines: 2,
+    //   );
+    // }
   }
 
   Future<Uint8List?> makeThumbnail() async {

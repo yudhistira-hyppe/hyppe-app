@@ -484,5 +484,8 @@
   "setPrice": "Tentukan Harga",
   "rp": "Rp",
   "change": "Change",
-  "orderSummary": "Ringkasan Pesanan"
+  "orderSummary": "Ringkasan Pesanan",
+  "priceIsNotEmpty": "Silahkan masukkan harga",
+  "buy": "Beli",
+  "purchaseTerms": "Ketentuan Pembelian"
 }

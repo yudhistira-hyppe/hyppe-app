@@ -3,6 +3,7 @@ import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_check_button.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -28,6 +29,14 @@ class PreUploadContentScreen extends StatefulWidget {
 }
 
 class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
+  @override
+  void initState() {
+    final _notifier =
+        Provider.of<PreUploadContentNotifier>(context, listen: false);
+    _notifier.setUpdateArguments = widget.arguments;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -563,10 +572,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         Theme.of(context).textTheme.bodyText2,
                                   ),
                                   CustomCheckButton(
-                                    value: notifier.includeTotalLikes,
-                                    onChanged: (value) =>
-                                        notifier.includeTotalLikes = value!,
-                                  ),
+                                      value: notifier.includeTotalLikes,
+                                      onChanged: (value) {
+                                        print("Like" + value.toString());
+                                        notifier.includeTotalLikes = value!;
+                                      }),
                                 ],
                               ),
                               SizedBox(height: 10 * SizeConfig.scaleDiagonal),
@@ -622,7 +632,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         textInputAction: TextInputAction.done,
                                         keyboardType: TextInputType.number,
                                         inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.digitsOnly
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
+                                          ThousandsFormatter()
                                         ], // Only numbers can be entered
                                         style: textTheme.bodyText2?.copyWith(
                                             fontWeight: FontWeight.bold),
@@ -639,77 +651,77 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: notifier.isSavedPrice
-                                        ? CustomElevatedButton(
-                                            width: 100.0 *
-                                                SizeConfig.scaleDiagonal,
-                                            height:
-                                                38.0 * SizeConfig.scaleDiagonal,
-                                            function: () {
-                                              notifier.isSavedPrice = false;
-                                            },
-                                            child: CustomTextWidget(
-                                              textToDisplay:
-                                                  notifier.language.change!,
-                                              textStyle: textTheme.button
-                                                  ?.copyWith(
-                                                      color:
-                                                          const Color.fromRGBO(
-                                                              171, 34, 175, 1)),
-                                            ),
-                                          )
-                                        : CustomElevatedButton(
-                                            width: 100.0 *
-                                                SizeConfig.scaleDiagonal,
-                                            height:
-                                                38.0 * SizeConfig.scaleDiagonal,
-                                            function: () {
-                                              if (notifier.priceIsFilled) {
-                                                notifier.isSavedPrice = true;
-                                              }
-                                            },
-                                            child: CustomTextWidget(
-                                              textToDisplay:
-                                                  notifier.language.save!,
-                                              textStyle: textTheme.button
-                                                  ?.copyWith(
-                                                      color: notifier
-                                                              .priceIsFilled
-                                                          ? kHyppeLightButtonText
-                                                          : kHyppeLightSecondary),
-                                            ),
-                                            buttonStyle: notifier.priceIsFilled
-                                                ? ButtonStyle(
-                                                    foregroundColor:
-                                                        MaterialStateProperty
-                                                            .all(Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .primaryVariant),
-                                                    shadowColor:
-                                                        MaterialStateProperty
-                                                            .all(Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .primaryVariant),
-                                                    overlayColor:
-                                                        MaterialStateProperty
-                                                            .all(Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .primaryVariant),
-                                                    backgroundColor:
-                                                        MaterialStateProperty
-                                                            .all(Theme.of(
-                                                                    context)
-                                                                .colorScheme
-                                                                .primaryVariant),
-                                                  )
-                                                : null,
-                                          ),
-                                  )
+                                  // Padding(
+                                  //   padding: const EdgeInsets.only(left: 10),
+                                  //   child: notifier.isSavedPrice
+                                  //       ? CustomElevatedButton(
+                                  //           width: 100.0 *
+                                  //               SizeConfig.scaleDiagonal,
+                                  //           height:
+                                  //               38.0 * SizeConfig.scaleDiagonal,
+                                  //           function: () {
+                                  //             notifier.isSavedPrice = false;
+                                  //           },
+                                  //           child: CustomTextWidget(
+                                  //             textToDisplay:
+                                  //                 notifier.language.change!,
+                                  //             textStyle: textTheme.button
+                                  //                 ?.copyWith(
+                                  //                     color:
+                                  //                         const Color.fromRGBO(
+                                  //                             171, 34, 175, 1)),
+                                  //           ),
+                                  //         )
+                                  //       : CustomElevatedButton(
+                                  //           width: 100.0 *
+                                  //               SizeConfig.scaleDiagonal,
+                                  //           height:
+                                  //               38.0 * SizeConfig.scaleDiagonal,
+                                  //           function: () {
+                                  //             if (notifier.priceIsFilled) {
+                                  //               notifier.isSavedPrice = true;
+                                  //             }
+                                  //           },
+                                  //           child: CustomTextWidget(
+                                  //             textToDisplay:
+                                  //                 notifier.language.save!,
+                                  //             textStyle: textTheme.button
+                                  //                 ?.copyWith(
+                                  //                     color: notifier
+                                  //                             .priceIsFilled
+                                  //                         ? kHyppeLightButtonText
+                                  //                         : kHyppeLightSecondary),
+                                  //           ),
+                                  //           buttonStyle: notifier.priceIsFilled
+                                  //               ? ButtonStyle(
+                                  //                   foregroundColor:
+                                  //                       MaterialStateProperty
+                                  //                           .all(Theme.of(
+                                  //                                   context)
+                                  //                               .colorScheme
+                                  //                               .primaryVariant),
+                                  //                   shadowColor:
+                                  //                       MaterialStateProperty
+                                  //                           .all(Theme.of(
+                                  //                                   context)
+                                  //                               .colorScheme
+                                  //                               .primaryVariant),
+                                  //                   overlayColor:
+                                  //                       MaterialStateProperty
+                                  //                           .all(Theme.of(
+                                  //                                   context)
+                                  //                               .colorScheme
+                                  //                               .primaryVariant),
+                                  //                   backgroundColor:
+                                  //                       MaterialStateProperty
+                                  //                           .all(Theme.of(
+                                  //                                   context)
+                                  //                               .colorScheme
+                                  //                               .primaryVariant),
+                                  //                 )
+                                  //               : null,
+                                  //         ),
+                                  // )
                                 ],
                               )
                             ]
@@ -717,58 +729,108 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         ),
                       ),
                     ],
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 0, vertical: 25),
-                      child: CustomElevatedButton(
-                        width: SizeConfig.screenWidth,
-                        height: 44.0 * SizeConfig.scaleDiagonal,
-                        // function: () => notifier.onClickPost(
-                        //   context,
-                        //   onEdit: widget.arguments.onEdit,
-                        //   data: widget.arguments.contentData,
-                        //   content: widget.arguments.content,
-                        // ),
-                        function: () => notifier.certified
-                            ? System().actionReqiredIdCard(context,
-                                action: () => notifier.onClickPost(
-                                      context,
-                                      onEdit: widget.arguments.onEdit,
-                                      data: widget.arguments.contentData,
-                                      content: widget.arguments.content,
-                                    ))
-                            : notifier.onClickPost(
-                                context,
-                                onEdit: widget.arguments.onEdit,
-                                data: widget.arguments.contentData,
-                                content: widget.arguments.content,
-                              ),
-                        child: widget.arguments.onEdit && notifier.updateContent
-                            ? const CustomLoading()
-                            : CustomTextWidget(
-                                textToDisplay: widget.arguments.onEdit
-                                    ? notifier.language.save!
-                                    : notifier.language.confirm!,
-                                textStyle: textTheme.button
-                                    ?.copyWith(color: kHyppeLightButtonText),
-                              ),
-                        buttonStyle: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primaryVariant),
-                          shadowColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primaryVariant),
-                          overlayColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primaryVariant),
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primaryVariant),
-                        ),
-                      ),
-                    )
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 0, vertical: 25),
+                    //   child: CustomElevatedButton(
+                    //     width: SizeConfig.screenWidth,
+                    //     height: 44.0 * SizeConfig.scaleDiagonal,
+                    //     // function: () => notifier.onClickPost(
+                    //     //   context,
+                    //     //   onEdit: widget.arguments.onEdit,
+                    //     //   data: widget.arguments.contentData,
+                    //     //   content: widget.arguments.content,
+                    //     // ),
+                    //     function: () => notifier.certified
+                    //         ? System().actionReqiredIdCard(context,
+                    //             action: () => notifier.onClickPost(
+                    //                   context,
+                    //                   onEdit: widget.arguments.onEdit,
+                    //                   data: widget.arguments.contentData,
+                    //                   content: widget.arguments.content,
+                    //                 ))
+                    //         : notifier.onClickPost(
+                    //             context,
+                    //             onEdit: widget.arguments.onEdit,
+                    //             data: widget.arguments.contentData,
+                    //             content: widget.arguments.content,
+                    //           ),
+                    //     child: widget.arguments.onEdit && notifier.updateContent
+                    //         ? const CustomLoading()
+                    //         : CustomTextWidget(
+                    //             textToDisplay: widget.arguments.onEdit
+                    //                 ? notifier.language.save!
+                    //                 : notifier.language.confirm!,
+                    //             textStyle: textTheme.button
+                    //                 ?.copyWith(color: kHyppeLightButtonText),
+                    //           ),
+                    //     buttonStyle: ButtonStyle(
+                    //       foregroundColor: MaterialStateProperty.all(
+                    //           Theme.of(context).colorScheme.primaryVariant),
+                    //       shadowColor: MaterialStateProperty.all(
+                    //           Theme.of(context).colorScheme.primaryVariant),
+                    //       overlayColor: MaterialStateProperty.all(
+                    //           Theme.of(context).colorScheme.primaryVariant),
+                    //       backgroundColor: MaterialStateProperty.all(
+                    //           Theme.of(context).colorScheme.primaryVariant),
+                    //     ),
+                    //   ),
+                    // )
+                    SizedBox(height: 100),
                   ],
                 ),
               ),
             ),
             backgroundColor: Theme.of(context).backgroundColor,
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: CustomElevatedButton(
+                width: 375.0 * SizeConfig.scaleDiagonal,
+                height: 44.0 * SizeConfig.scaleDiagonal,
+                // function: () => notifier.onClickPost(
+                //   context,
+                //   onEdit: widget.arguments.onEdit,
+                //   data: widget.arguments.contentData,
+                //   content: widget.arguments.content,
+                // ),
+                function: () => notifier.certified
+                    ? System().actionReqiredIdCard(context,
+                        action: () => notifier.onClickPost(
+                              context,
+                              onEdit: widget.arguments.onEdit,
+                              data: widget.arguments.contentData,
+                              content: widget.arguments.content,
+                            ))
+                    : notifier.onClickPost(
+                        context,
+                        onEdit: widget.arguments.onEdit,
+                        data: widget.arguments.contentData,
+                        content: widget.arguments.content,
+                      ),
+                child: widget.arguments.onEdit && notifier.updateContent
+                    ? const CustomLoading()
+                    : CustomTextWidget(
+                        textToDisplay: widget.arguments.onEdit
+                            ? notifier.language.save!
+                            : notifier.language.confirm!,
+                        textStyle: textTheme.button
+                            ?.copyWith(color: kHyppeLightButtonText),
+                      ),
+                buttonStyle: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  shadowColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primaryVariant),
+                ),
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            resizeToAvoidBottomInset: false,
           ),
         ),
       ),

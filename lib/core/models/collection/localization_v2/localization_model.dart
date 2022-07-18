@@ -486,6 +486,9 @@ class LocalizationModelV2 {
   String? rp;
   String? change;
   String? orderSummary;
+  String? priceIsNotEmpty;
+  String? buy;
+  String? purchaseTerms;
 
   LocalizationModelV2(
       {this.login,
@@ -973,7 +976,10 @@ class LocalizationModelV2 {
       this.setPrice,
       this.rp,
       this.change,
-      this.orderSummary});
+      this.orderSummary,
+      this.priceIsNotEmpty,
+      this.buy,
+      this.purchaseTerms});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1511,5 +1517,8 @@ class LocalizationModelV2 {
     rp = json['rp'];
     change = json['change'];
     orderSummary = json['orderSummary'];
+    priceIsNotEmpty = json['priceIsNotEmpty'];
+    buy = json['buy'];
+    purchaseTerms = json['purchaseTerms'];
   }
 }

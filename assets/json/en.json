@@ -484,5 +484,8 @@
   "setPrice": "Set Price",
   "rp": "Rp",
   "change": "Change",
-  "orderSummary": "Order Summary"
+  "orderSummary": "Order Summary",
+  "priceIsNotEmpty": "Please set your price",
+  "buy": " Buy",
+  "purchaseTerms": "Purchase Terms"
 }

@@ -58,5 +58,8 @@ class Routes {
 
   static const String testAliPlayer = '/test-ali-player';
 
-  static const String reviewSellContent = '/review-sell-content';
+  static const String reviewBuyContent = '/review-buy-content';
+  static const String paymentScreen = '/payment-screen';
+  static const String paymentMethodScreen = '/payment-method-screen';
+  static const String paymentBCAScreen = '/payment-bca-screen';
 }

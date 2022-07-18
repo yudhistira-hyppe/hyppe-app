@@ -8,29 +8,26 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
-import 'package:hyppe/ui/inner/upload/review_sell/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class ReviewSellContentScreen extends StatefulWidget {
-  final UpdateContentsArgument arguments;
-  const ReviewSellContentScreen({Key? key, required this.arguments})
-      : super(key: key);
+class ReviewBuyContentScreen extends StatefulWidget {
+  const ReviewBuyContentScreen({Key? key}) : super(key: key);
 
   @override
-  State<ReviewSellContentScreen> createState() =>
-      _ReviewSellContentScreenState();
+  State<ReviewBuyContentScreen> createState() => _ReviewBuyContentScreenState();
 }
 
-class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
+class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
 
-    return Consumer<ReviewSellNotifier>(
+    return Consumer<ReviewBuyNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
           leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
@@ -48,78 +45,75 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
           centerTitle: false,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                child: Column(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Row(
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ValidateType(editContent: widget.arguments.onEdit),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            contentInfo(textTheme,
-                                title: "Type", value: "HyppePic"),
-                            contentInfo(textTheme,
-                                title: "Time", value: "27/07/2021 02:25 PM"),
-                            contentInfo(textTheme,
-                                title: "Ownership", value: "Registering"),
-                            contentInfo(textTheme,
-                                title: "Fee", value: "Rp 15.000"),
-                            contentInfo(textTheme,
-                                title: "Price", value: "Rp 10.000.000"),
-                            contentInfo(textTheme,
-                                title: "Views", value: "include"),
-                            contentInfo(textTheme,
-                                title: "Likes", value: "include"),
-                            contentInfo(textTheme,
-                                title: "OrderID", value: "12584295y2ce3c002"),
-                          ],
-                        )
-                      ],
-                    ),
-                    subTotalBlock(textTheme, context),
+                    Expanded(
+                        child: Text(
+                            "Penonton histeris saat pentolan group band ABC naik ke atas panggung #musicasik #fyp")),
+                    SizedBox(width: 10),
+                    Container(
+                      alignment: Alignment.topRight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        image: DecorationImage(
+                          scale: 1,
+                          image: NetworkImage(
+                              "https://i.pinimg.com/originals/d9/56/9b/d9569bbed4393e2ceb1af7ba64fdf86a.jpg"),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      width: 48 * SizeConfig.scaleDiagonal,
+                      height: 48 * SizeConfig.scaleDiagonal,
+                      child: Center(
+                        child: CustomIconWidget(
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}pause.svg',
+                          width: 24 * SizeConfig.scaleDiagonal,
+                          height: 24 * SizeConfig.scaleDiagonal,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
-              paymentMethodsTitle(textTheme, context),
               Container(
-                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                     color: Theme.of(context).appBarTheme.backgroundColor,
                     borderRadius: const BorderRadius.all(Radius.circular(8))),
                 child: Column(
                   children: [
-                    bankTile(
-                        value: IntialBankSelect.vaBca,
-                        selected: notifier.bankSelected,
-                        onTap: (val) => notifier.bankSelected = val,
-                        icon: "${AssetPath.vectorPath}bank_icon.svg",
-                        title: "BCA Virtual Account",
-                        hasBottomBorder: true),
-                    bankTile(
-                        value: IntialBankSelect.hyppeWallet,
-                        selected: notifier.bankSelected,
-                        onTap: (val) => notifier.bankSelected = val,
-                        icon: "${AssetPath.vectorPath}logo.svg",
-                        title: "Hyppe Wallet",
-                        subtitle: "Balance Rp 10.000.000",
-                        hasBottomBorder: false),
+                    contentInfo(textTheme,
+                        title: "Order Number", value: "12912596495"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: SizedBox(
+                        height: 1,
+                        child: Container(color: Colors.black12),
+                      ),
+                    ),
+                    contentInfo(textTheme, title: "Type", value: "HyppePic"),
+                    contentInfo(textTheme,
+                        title: "Time", value: "27/07/2021 02:25 PM"),
+                    contentInfo(textTheme, title: "Fee", value: "Rp 15.000"),
+                    contentInfo(textTheme,
+                        title: "Price", value: "Rp 10.000.000"),
+                    contentInfo(textTheme,
+                        title: "Include Total Views", value: "No"),
+                    contentInfo(textTheme,
+                        title: "Include Total Likes", value: "No"),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
         floatingActionButton: Container(
-          height: 90,
+          height: 80,
           color: Theme.of(context).appBarTheme.backgroundColor,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -131,11 +125,11 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
                   children: [
                     CustomTextWidget(
                       textToDisplay: "Total",
-                      textStyle: textTheme.titleMedium,
+                      textStyle: textTheme.titleSmall,
                     ),
                     CustomTextWidget(
                       textToDisplay: "Rp 15.000",
-                      textStyle: textTheme.titleSmall,
+                      textStyle: textTheme.titleMedium,
                     ),
                   ],
                 ),
@@ -143,7 +137,7 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
                 CustomElevatedButton(
                   width: 375.0 * SizeConfig.scaleDiagonal,
                   height: 44.0 * SizeConfig.scaleDiagonal,
-                  function: () => Routing().move(Routes.paymentScreen),
+                  function: () => Routing().move(Routes.paymentMethodScreen),
                   child: CustomTextWidget(
                     textToDisplay: "Proceed To Payment",
                     textStyle: textTheme.button
@@ -164,8 +158,8 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
             ),
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        resizeToAvoidBottomInset: false,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        resizeToAvoidBottomInset: true,
       ),
     );
   }
@@ -229,22 +223,18 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
   Widget contentInfo(TextTheme textTheme,
       {required String title, required String value}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.all(10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            width: 95 * SizeConfig.scaleDiagonal,
-            child: CustomTextWidget(
-              textAlign: TextAlign.left,
-              textToDisplay: title,
-              textStyle: textTheme.bodyMedium
-                  ?.copyWith(color: Theme.of(context).hintColor),
-            ),
-          ),
           CustomTextWidget(
             textAlign: TextAlign.left,
+            textToDisplay: title,
+            textStyle: textTheme.bodyMedium
+                ?.copyWith(color: Theme.of(context).hintColor),
+          ),
+          CustomTextWidget(
+            textAlign: TextAlign.right,
             textToDisplay: value,
             textStyle: textTheme.bodyMedium
                 ?.copyWith(color: Theme.of(context).hintColor),

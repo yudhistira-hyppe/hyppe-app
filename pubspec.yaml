@@ -73,6 +73,8 @@ dependencies:
   #   path: packages/flutter_aliplayer
 
   qr_flutter: ^4.0.0
+  pattern_formatter: ^2.0.0
+  #flutter_masked_text: ^0.8.0 #currency format for input text
 
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
