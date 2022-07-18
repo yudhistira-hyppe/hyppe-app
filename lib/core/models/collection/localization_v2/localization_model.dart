@@ -489,6 +489,19 @@ class LocalizationModelV2 {
   String? priceIsNotEmpty;
   String? buy;
   String? purchaseTerms;
+  String? pleaseEnterMessage;
+  String? pleaseSetPrice;
+  String? orderNumber;
+  String? time;
+  String? price;
+  String? total;
+  String? proceedPayment;
+  String? paymentMethods;
+  String? payment;
+  String? totalPayment;
+  String? paymentBefore;
+  String? copy;
+  String? seeOtherBank;
 
   LocalizationModelV2(
       {this.login,
@@ -979,7 +992,20 @@ class LocalizationModelV2 {
       this.orderSummary,
       this.priceIsNotEmpty,
       this.buy,
-      this.purchaseTerms});
+      this.purchaseTerms,
+      this.pleaseEnterMessage,
+      this.pleaseSetPrice,
+      this.orderNumber,
+      this.time,
+      this.price,
+      this.total,
+      this.proceedPayment,
+      this.paymentMethods,
+      this.payment,
+      this.totalPayment,
+      this.paymentBefore,
+      this.copy,
+      this.seeOtherBank});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1520,5 +1546,18 @@ class LocalizationModelV2 {
     priceIsNotEmpty = json['priceIsNotEmpty'];
     buy = json['buy'];
     purchaseTerms = json['purchaseTerms'];
+    pleaseEnterMessage = json['pleaseEnterMessage'];
+    pleaseSetPrice = json['pleaseSetPrice'];
+    orderNumber = json['orderNumber'];
+    time = json['time'];
+    price = json['price'];
+    total = json['total'];
+    proceedPayment = json['proceedPayment'];
+    paymentMethods = json['paymentMethods'];
+    payment = json['payment'];
+    totalPayment = json['totalPayment'];
+    paymentBefore = json['paymentBefore'];
+    copy = json['copy'];
+    seeOtherBank = json['seeOtherBank'];
   }
 }

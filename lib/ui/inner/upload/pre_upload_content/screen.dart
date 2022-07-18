@@ -128,7 +128,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                               maxLines: 10,
                               validator: (String? input) {
                                 if (input?.isEmpty ?? true) {
-                                  return "Please enter message";
+                                  return notifier.language.pleaseEnterMessage;
                                 } else {
                                   return null;
                                 }
@@ -258,7 +258,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         style: textTheme.bodyText2
                             ?.copyWith(fontWeight: FontWeight.bold),
                         decoration: InputDecoration(
-                          hintText: "Hashtag",
+                          hintText: notifier.language.tag,
                           hintStyle: textTheme.bodyText2,
                           errorBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -574,7 +574,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   CustomCheckButton(
                                       value: notifier.includeTotalLikes,
                                       onChanged: (value) {
-                                        print("Like" + value.toString());
+                                        //print("Like" + value.toString());
                                         notifier.includeTotalLikes = value!;
                                       }),
                                 ],
@@ -611,7 +611,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                         maxLines: 1,
                                         validator: (String? input) {
                                           if (input?.isEmpty ?? true) {
-                                            return "Please set price";
+                                            return notifier
+                                                .language.pleaseSetPrice;
                                           } else {
                                             return null;
                                           }

@@ -487,5 +487,18 @@
   "orderSummary": "Ringkasan Pesanan",
   "priceIsNotEmpty": "Silahkan masukkan harga",
   "buy": "Beli",
-  "purchaseTerms": "Ketentuan Pembelian"
+  "purchaseTerms": "Ketentuan Pembelian",
+  "pleaseEnterMessage": "Silahkan tulis pesan",
+  "pleaseSetPrice":"Sliahkan tentukan harga",
+  "orderNumber": "Nomor Order",
+  "time": "Waktu",
+  "price": "Harga",
+  "total": "Jumlah",
+  "proceedPayment": "Lanjutkan ke Pembayaran",
+  "paymentMethods": "Methode Pembayaran",
+  "payment": "Pembayaran",
+  "totalPayment": "Jumlah Pembayaran",
+  "paymentBefore":"Lakukan pembayaran sebelum",
+  "copy":"Salin",
+  "seeOtherBank":"Lihat bank lain"
 }

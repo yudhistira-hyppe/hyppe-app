@@ -9,7 +9,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -88,7 +87,8 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                 child: Column(
                   children: [
                     contentInfo(textTheme,
-                        title: "Order Number", value: "12912596495"),
+                        title: notifier.language.orderNumber!,
+                        value: "12912596495"),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: SizedBox(
@@ -96,16 +96,21 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                         child: Container(color: Colors.black12),
                       ),
                     ),
-                    contentInfo(textTheme, title: "Type", value: "HyppePic"),
                     contentInfo(textTheme,
-                        title: "Time", value: "27/07/2021 02:25 PM"),
+                        title: notifier.language.type!, value: "HyppePic"),
+                    contentInfo(textTheme,
+                        title: notifier.language.time!,
+                        value: "27/07/2021 02:25 PM"),
                     contentInfo(textTheme, title: "Fee", value: "Rp 15.000"),
                     contentInfo(textTheme,
-                        title: "Price", value: "Rp 10.000.000"),
+                        title: notifier.language.price!,
+                        value: "Rp 10.000.000"),
                     contentInfo(textTheme,
-                        title: "Include Total Views", value: "No"),
+                        title: notifier.language.includeTotalViews!,
+                        value: "No"),
                     contentInfo(textTheme,
-                        title: "Include Total Likes", value: "No"),
+                        title: notifier.language.includeTotalLikes!,
+                        value: "No"),
                   ],
                 ),
               ),
@@ -124,7 +129,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: "Total",
+                      textToDisplay: notifier.language.total!,
                       textStyle: textTheme.titleSmall,
                     ),
                     CustomTextWidget(
@@ -139,7 +144,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                   height: 44.0 * SizeConfig.scaleDiagonal,
                   function: () => Routing().move(Routes.paymentMethodScreen),
                   child: CustomTextWidget(
-                    textToDisplay: "Proceed To Payment",
+                    textToDisplay: notifier.language.proceedPayment!,
                     textStyle: textTheme.button
                         ?.copyWith(color: kHyppeLightButtonText),
                   ),
@@ -164,62 +169,6 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
     );
   }
 
-  Widget paymentMethodsTitle(TextTheme textTheme, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CustomTextWidget(
-            textAlign: TextAlign.left,
-            textToDisplay: "Payment Methods",
-            textStyle: textTheme.titleMedium,
-          ),
-          CustomTextWidget(
-            textAlign: TextAlign.left,
-            textToDisplay: "See All",
-            textStyle: textTheme.labelLarge?.copyWith(color: kHyppePrimary),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget subTotalBlock(TextTheme textTheme, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 15),
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Colors.black12,
-            width: 0.5,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 145 * SizeConfig.scaleDiagonal,
-            child: CustomTextWidget(
-              textAlign: TextAlign.left,
-              textToDisplay: "Subtotal",
-              textStyle: textTheme.bodyMedium
-                  ?.copyWith(color: Theme.of(context).hintColor),
-            ),
-          ),
-          CustomTextWidget(
-            textAlign: TextAlign.left,
-            textToDisplay: "Rp 15.000.000",
-            textStyle: textTheme.bodyMedium
-                ?.copyWith(color: Theme.of(context).hintColor),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget contentInfo(TextTheme textTheme,
       {required String title, required String value}) {
     return Padding(
@@ -240,59 +189,6 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                 ?.copyWith(color: Theme.of(context).hintColor),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget bankTile(
-      {required IntialBankSelect value,
-      required IntialBankSelect? selected,
-      required void Function(IntialBankSelect?) onTap,
-      required String icon,
-      required String title,
-      required bool hasBottomBorder,
-      String? subtitle}) {
-    return Container(
-      decoration: hasBottomBorder
-          ? const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.black12,
-                  width: 0.5,
-                ),
-              ),
-            )
-          : null,
-      child: ListTile(
-        title: CustomTextWidget(
-          textToDisplay: title,
-          textStyle: Theme.of(context).textTheme.subtitle2,
-          textAlign: TextAlign.start,
-          textOverflow: TextOverflow.clip,
-        ),
-        subtitle: subtitle != null
-            ? CustomTextWidget(
-                textToDisplay: subtitle,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .caption!
-                    .copyWith(color: kHyppeSecondary),
-                textAlign: TextAlign.start,
-                textOverflow: TextOverflow.clip,
-              )
-            : null,
-        leading: Padding(
-          padding: const EdgeInsets.only(top: 6),
-          child:
-              CustomIconWidget(iconData: icon, defaultColor: false, width: 16),
-        ),
-        trailing: Radio<IntialBankSelect>(
-          value: value,
-          groupValue: selected,
-          onChanged: onTap,
-          activeColor: kHyppePrimary,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
     );
   }
