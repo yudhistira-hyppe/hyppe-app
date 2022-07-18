@@ -35,48 +35,53 @@ class ContentData {
   String? fullContentPath;
   ContentType? contentType;
   UserProfileAvatarModel? avatar;
+  String? visibility;
+  String? location;
+  List<Cats>? cats;
+  List<String>? tagPeople;
 
-  ContentData({
-    this.metadata,
-    this.mediaBasePath,
-    this.postType,
-    this.mediaUri,
-    this.isLiked,
-    this.description,
-    this.active,
-    this.privacy,
-    this.mediaType,
-    this.mediaThumbEndPoint,
-    this.postID,
-    this.title,
-    this.isViewed,
-    this.tags = const [],
-    this.allowComments,
-    this.certified,
-    this.createdAt,
-    this.insight,
-    this.mediaThumbUri,
-    this.mediaEndpoint,
-    this.email,
-    this.updatedAt,
-    this.username,
-    this.fullThumbPath,
-    this.fullContentPath,
-    this.contentType,
-    this.avatar,
-  });
+  ContentData(
+      {this.metadata,
+      this.mediaBasePath,
+      this.postType,
+      this.mediaUri,
+      this.isLiked,
+      this.description,
+      this.active,
+      this.privacy,
+      this.mediaType,
+      this.mediaThumbEndPoint,
+      this.postID,
+      this.title,
+      this.isViewed,
+      this.tags = const [],
+      this.allowComments,
+      this.certified,
+      this.createdAt,
+      this.insight,
+      this.mediaThumbUri,
+      this.mediaEndpoint,
+      this.email,
+      this.updatedAt,
+      this.username,
+      this.fullThumbPath,
+      this.fullContentPath,
+      this.contentType,
+      this.avatar,
+      this.location,
+      this.visibility,
+      this.cats,
+      this.tagPeople});
 
   ContentData.fromJson(Map<String, dynamic> json) {
-    metadata =
-        json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
+    metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
     mediaBasePath = json['mediaBasePath'];
     postType = json['postType'];
     mediaUri = json['mediaUri'];
     isLiked = json['isLiked'];
     description = json['description'] ?? '';
     active = json['active'];
-    privacy =
-        json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
+    privacy = json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
     mediaType = json['mediaType'];
     mediaThumbEndPoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
@@ -86,9 +91,7 @@ class ContentData {
     allowComments = json['allowComments'] ?? false;
     certified = json['certified'] ?? false;
     createdAt = json['createdAt'];
-    insight = json['insight'] != null
-        ? ContentDataInsight.fromJson(json['insight'])
-        : null;
+    insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight']) : null;
     mediaThumbUri = json['mediaThumbUri'];
     mediaEndpoint = json['mediaEndpoint'];
     email = json['email'];
@@ -97,9 +100,15 @@ class ContentData {
     fullThumbPath = concatThumbUri();
     fullContentPath = concatContentUri();
     contentType = _translateType(mediaType);
-    avatar = json['avatar'] != null
-        ? UserProfileAvatarModel.fromJson(json['avatar'])
-        : null;
+    avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
+    location = json['location'];
+    visibility = json['visibility'];
+    if (json['cats'] != null) {
+      cats = [];
+      json['cats'].forEach((v) => cats!.add(Cats.fromJson(v)));
+    }
+    tagPeople = json['tagPeople'] != null ? json['tagPeople'].cast<String>() : [];
+    // cats = List<Cats>.from(json["cats"].map((x) => Cats.fromJson(x)));
   }
 
   Map<String, dynamic> toJson() {
@@ -136,6 +145,10 @@ class ContentData {
     if (avatar != null) {
       data['avatar'] = avatar?.toJson();
     }
+    data['location'] = location;
+    data['visibility'] = visibility;
+    data['tagPeople'] = tagPeople;
+
     return data;
   }
 
@@ -220,5 +233,26 @@ class Privacy {
     data['isCelebrity'] = isCelebrity;
     data['isPrivate'] = isPrivate;
     return data;
+  }
+}
+
+//Category
+class Cats {
+  String? id;
+  String? interestName;
+  String? langIso;
+  String? icon;
+  String? createdAt;
+  String? updatedAt;
+
+  Cats({this.id, this.interestName, this.langIso, this.icon, this.createdAt, this.updatedAt});
+
+  Cats.fromJson(Map<String, dynamic> json) {
+    id = json["_id"];
+    interestName = json["interestName"];
+    langIso = json["langIso"];
+    icon = json["icon"];
+    createdAt = json["createdAt"];
+    updatedAt = json["updatedAt"];
   }
 }

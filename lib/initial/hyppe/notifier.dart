@@ -70,7 +70,7 @@ class HyppeNotifier with ChangeNotifier {
         (onResult) async {
           if (onResult.statusCode == HTTP_UNAUTHORIZED) {
             await SharedPreference().logOutStorage();
-            _routing.moveReplacement(Routes.login);
+            _routing.moveReplacement(Routes.welcomeLogin);
           } else {
             _routing.moveReplacement(Routes.lobby);
           }

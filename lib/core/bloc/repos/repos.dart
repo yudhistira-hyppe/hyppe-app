@@ -127,7 +127,7 @@ class Repos {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     dynamic dataError = {"type": "ERROR"};
     'User Token = $token'.logger();
-    'Send data $data'.logger();
+    'Send data ${data}'.logger();
     if (withCheckConnection) connection = await System().checkConnections();
 
     try {
@@ -163,7 +163,7 @@ class Repos {
       /// check if token is valid or not, if not, force logOut
       if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
         await SharedPreference().logOutStorage();
-        _routing.moveAndRemoveUntil(Routes.login, Routes.root);
+        _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
         return;
       }
 

@@ -10,10 +10,14 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comm
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_interest_list.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_internal_server_error.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_location_search.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_story.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_people_search.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_privacy_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content_form.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_spam_form.dart';
@@ -808,5 +812,130 @@ class ShowBottomSheet {
       Routing().moveBack();
       // if (onUpdate != null) onUpdate();
     });
+  }
+
+  static onShowOptionPrivacyPost(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnPrivacyPostBottomSheet(
+            value: value,
+            onSave: onSave,
+            onChange: onChange,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowLocation(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnLocationSearchBottomSheet(
+            value: value,
+            onSave: onSave,
+            onChange: onChange,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowInteresList(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnInterestListBottomSheet(
+            value: value,
+            onSave: onSave,
+            onChange: onChange,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowSearchPeople(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Material(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: OnSearchPeopleBottomSheet(
+              value: value,
+              onSave: onSave,
+              onChange: onChange,
+              onCancel: onCancel,
+            ),
+          ),
+        );
+      },
+    );
   }
 }

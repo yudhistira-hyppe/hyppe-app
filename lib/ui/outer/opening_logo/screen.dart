@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -17,7 +14,7 @@ class _OpeningLogoState extends State<OpeningLogo> {
   @override
   void initState() {
     final _notifier = Provider.of<HyppeNotifier>(context, listen: false);
-    Timer(Duration.zero, () async => await _notifier.handleStartUp(context));
+    Timer(const Duration(seconds: 2), () async => await _notifier.handleStartUp(context));
     super.initState();
   }
 

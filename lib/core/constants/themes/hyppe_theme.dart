@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'hyppe_colors.dart';
 
 ThemeData hyppeLightTheme() {
@@ -82,6 +83,9 @@ const ColorScheme _lightColorScheme = ColorScheme.light(
   secondaryVariant: kHyppeLightSecondary,
   brightness: Brightness.light,
   onBackground: kHyppeSurface,
+  onSecondary: kHyppeLightActiveChip,
+  secondaryContainer: kHyppeLightBackground,
+  onSecondaryContainer: kHyppeLightBackground,
 );
 
 const ColorScheme _darkColorScheme = ColorScheme.dark(
@@ -95,6 +99,9 @@ const ColorScheme _darkColorScheme = ColorScheme.dark(
   secondaryVariant: kHyppeSecondary,
   brightness: Brightness.dark,
   onBackground: kHyppeLightBackground,
+  onSecondary: kHyppeBackground,
+  secondaryContainer: kHyppeSurface,
+  onSecondaryContainer: kHyppePrimary,
 );
 
 const DividerThemeData _darkDividerThemeData = DividerThemeData(color: kHyppeDividerColor);
@@ -107,7 +114,7 @@ final BottomSheetThemeData _darkBottomSheetThemeData = BottomSheetThemeData(
 
 final ChipThemeData _lightChipThemeData = ChipThemeData(
   elevation: 0.0,
-  backgroundColor: _lightColorScheme.secondaryVariant,
+  backgroundColor: _lightColorScheme.background,
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
   disabledColor: const Color.fromRGBO(255, 255, 255, 0.12),
   selectedColor: const Color.fromRGBO(255, 255, 255, 0.12),
@@ -120,11 +127,11 @@ final ChipThemeData _lightChipThemeData = ChipThemeData(
 
 final ChipThemeData _darkChipThemeData = ChipThemeData(
   elevation: 0.0,
-  backgroundColor: _darkColorScheme.secondaryVariant,
+  backgroundColor: _darkColorScheme.background,
   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-  disabledColor: const Color.fromRGBO(255, 255, 255, 0.12),
-  selectedColor: const Color.fromRGBO(255, 255, 255, 0.12),
-  secondarySelectedColor: const Color.fromRGBO(255, 255, 255, 0.12),
+  disabledColor: Color.fromARGB(30, 164, 213, 26),
+  selectedColor: _darkColorScheme.background,
+  secondarySelectedColor: Color.fromARGB(30, 38, 46, 206),
   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
   labelStyle: _darkTextTheme().bodyText2!,
   secondaryLabelStyle: _darkTextTheme().bodyText2!,

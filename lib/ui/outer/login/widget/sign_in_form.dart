@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 
 class SignInForm extends StatefulWidget {
@@ -21,7 +22,7 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginNotifier>(
+    return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Column(
         children: [
           Column(

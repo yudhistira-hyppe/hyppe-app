@@ -60,6 +60,15 @@ dependencies:
   sign_in_with_apple: ^4.0.0
   crypto: ^3.0.0
   http: ^0.13.4
+  flutter_mentions: ^2.0.1
+  multi_select_flutter: ^4.1.2
+  
+  geolocator: ^8.0.5
+  geocoding: ^2.0.4
+  uuid: ^3.0.6
+  google_maps_flutter: ^2.1.8
+
+
 
 
   dynamic_widget: # Dynamic widget builder

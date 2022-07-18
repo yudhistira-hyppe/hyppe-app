@@ -28,7 +28,7 @@ class Env {
     debugShowCheckedModeBanner: false,
     baseUrl: UrlConstants.stagingBaseApi,
     deeplinkBaseUrl: UrlConstants.devDeeplinkUrl,
-    apiBaseUrl: UrlConstants.stagingBaseApi + '/${UrlConstants.apiV2}',
+    apiBaseUrl: UrlConstants.stagingBaseApi,
     // apiBaseUrl: UrlConstants.stagingBaseApi,
   );
 
@@ -41,7 +41,7 @@ class Env {
     debugShowCheckedModeBanner: false,
     baseUrl: UrlConstants.productionBaseApi,
     deeplinkBaseUrl: UrlConstants.prodDeeplinkUrl,
-    apiBaseUrl: UrlConstants.productionBaseApi + '/${UrlConstants.apiV2}',
+    apiBaseUrl: UrlConstants.productionBaseApi,
   );
 }
 

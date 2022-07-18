@@ -78,38 +78,35 @@ class _BuildTopViewState extends State<BuildTopView> {
             ),
             Row(
               children: [
-                CustomBalloonWidget(
-                  child: Visibility(
-                    visible: widget.data?.email == SharedPreference().readStorage(SpKeys.email),
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.storyController.pause();
-                        ShowBottomSheet.onShowOptionContent(
-                          context,
-                          contentData: widget.data!,
-                          captionTitle: hyppeStory,
-                          onDetail: widget.onDetail,
-                          storyController: widget.storyController,
-                        );
-                      },
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: GestureDetector(
-                      onTap: () => notifier.reportContent(context, storyController: widget.storyController),
-                      child: const Icon(
-                        Icons.more_vert,
-                        color: Colors.white,
-                      )),
-                ),
+                widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+                    ? GestureDetector(
+                        onTap: () {
+                          widget.storyController.pause();
+                          ShowBottomSheet.onShowOptionContent(
+                            context,
+                            contentData: widget.data!,
+                            captionTitle: hyppeStory,
+                            onDetail: widget.onDetail,
+                            storyController: widget.storyController,
+                          );
+                        },
+                        child: const CustomIconWidget(
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}more.svg',
+                          color: kHyppeLightButtonText,
+                        ),
+                      )
+                    : SizedBox(),
+                widget.data?.email != SharedPreference().readStorage(SpKeys.email)
+                    ? GestureDetector(
+                        onTap: () => notifier.reportContent(context, storyController: widget.storyController),
+                        child: const CustomIconWidget(
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}more.svg',
+                          color: kHyppeLightButtonText,
+                        ),
+                      )
+                    : SizedBox(),
                 SizedBox(
                   width: 40,
                   height: 40,

@@ -85,26 +85,17 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  String displayUserName() =>
-      user.profile != null ? "@" + user.profile!.username! : "";
+  String displayUserName() => user.profile != null ? "@" + user.profile!.username! : "";
 
-  String? displayPhotoProfile() =>
-      _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+  String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
 
-  String displayPostsCount() => user.profile?.insight != null
-      ? _system.formatterNumber(user.profile?.insight?.posts?.toInt())
-      : "0";
+  String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.posts?.toInt()) : "0";
 
-  String displayFollowers() => user.profile?.insight != null
-      ? _system.formatterNumber(user.profile?.insight?.followers?.toInt())
-      : "0";
+  String displayFollowers() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.followers?.toInt()) : "0";
 
-  String displayFollowing() => user.profile?.insight != null
-      ? _system.formatterNumber(user.profile?.insight?.followings?.toInt())
-      : "0";
+  String displayFollowing() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.followings?.toInt()) : "0";
 
-  String? displayFullName() =>
-      user.profile != null ? user.profile!.fullName ?? "" : "";
+  String? displayFullName() => user.profile != null ? user.profile!.fullName ?? "" : "";
 
   String displayBio() => user.profile != null
       ? user.profile?.bio != null
@@ -122,19 +113,15 @@ class SelfProfileNotifier with ChangeNotifier {
     }
   }
 
-  navigateToEditProfile() => Routing()
-      .move(Routes.accountPreferences)
-      .whenComplete(() => notifyListeners());
+  navigateToEditProfile() => Routing().move(Routes.accountPreferences).whenComplete(() => notifyListeners());
 
-  onScrollListener(
-      BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+  onScrollListener(BuildContext context, ScrollController scrollController) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       switch (pageIndex) {
         case 0:
           {
             if (!vidContentsQuery.loading && vidHasNext) {
-              List<ContentData> _res = await vidContentsQuery.loadNext(context);
+              List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
                 user.vids = [...user.vids!, ..._res];
               } else {
@@ -147,8 +134,7 @@ class SelfProfileNotifier with ChangeNotifier {
         case 1:
           {
             if (!diaryContentsQuery.loading && diaryHasNext) {
-              List<ContentData> _res =
-                  await diaryContentsQuery.loadNext(context);
+              List<ContentData> _res = await diaryContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
                 user.diaries = [...user.diaries!, ..._res];
               } else {
@@ -161,7 +147,7 @@ class SelfProfileNotifier with ChangeNotifier {
         case 2:
           {
             if (!picContentsQuery.loading && picHasNext) {
-              List<ContentData> _res = await picContentsQuery.loadNext(context);
+              List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
                 user.pics = [...user.pics!, ..._res];
               } else {
@@ -185,8 +171,7 @@ class SelfProfileNotifier with ChangeNotifier {
     picContentsQuery.limit = 12;
 
     vidContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
-    diaryContentsQuery.searchText =
-        SharedPreference().readStorage(SpKeys.email);
+    diaryContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
     picContentsQuery.searchText = SharedPreference().readStorage(SpKeys.email);
 
     final usersNotifier = UserBloc();
@@ -197,53 +182,38 @@ class SelfProfileNotifier with ChangeNotifier {
       user.profile = usersFetch.data;
       notifyListeners();
     }
-    user.vids = await vidContentsQuery.reload(context);
-    user.diaries = await diaryContentsQuery.reload(context);
-    user.pics = await picContentsQuery.reload(context);
+    user.vids = await vidContentsQuery.reload(context, myContent: true);
+    user.diaries = await diaryContentsQuery.reload(context, myContent: true);
+    user.pics = await picContentsQuery.reload(context, myContent: true);
     notifyListeners();
   }
 
   Widget optionButton() {
-    List pages = const [
-      SelfProfileVids(),
-      SelfProfileDiaries(),
-      SelfProfilePics()
-    ];
+    List pages = const [SelfProfileVids(), SelfProfileDiaries(), SelfProfilePics()];
     return pages[pageIndex];
   }
 
   navigateToSeeAllScreen(BuildContext context, int index) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      if (pageIndex == 0)
-        _routing.move(Routes.vidDetail,
-            argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      if (pageIndex == 1)
-        _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(
-                diaryData: user.diaries, index: index.toDouble()));
-      if (pageIndex == 2)
-        _routing.move(Routes.picDetail,
-            argument: PicDetailScreenArgument(picData: user.pics?[index]));
+      if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
+      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble()));
+      if (pageIndex == 2) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: user.pics?[index]));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
   }
 
-  void onDeleteSelfPostContent(BuildContext context,
-      {required String postID, required String content}) {
+  void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     switch (content) {
       case hyppeVid:
-        if (user.vids != null)
-          user.vids!.removeWhere((element) => element.postID == postID);
+        if (user.vids != null) user.vids!.removeWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        if (user.diaries != null)
-          user.diaries!.removeWhere((element) => element.postID == postID);
+        if (user.diaries != null) user.diaries!.removeWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        if (user.pics != null)
-          user.pics!.removeWhere((element) => element.postID == postID);
+        if (user.pics != null) user.pics!.removeWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -267,20 +237,17 @@ class SelfProfileNotifier with ChangeNotifier {
     switch (content) {
       case hyppeVid:
         if (user.vids != null) {
-          _updatedData = user.vids!
-              .firstWhereOrNull((element) => element.postID == postID);
+          _updatedData = user.vids!.firstWhereOrNull((element) => element.postID == postID);
         }
         break;
       case hyppeDiary:
         if (user.diaries != null) {
-          _updatedData = user.diaries!
-              .firstWhereOrNull((element) => element.postID == postID);
+          _updatedData = user.diaries!.firstWhereOrNull((element) => element.postID == postID);
         }
         break;
       case hyppePic:
         if (user.pics != null) {
-          _updatedData = user.pics!
-              .firstWhereOrNull((element) => element.postID == postID);
+          _updatedData = user.pics!.firstWhereOrNull((element) => element.postID == postID);
         }
         break;
       default:

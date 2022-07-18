@@ -45,7 +45,7 @@ class SignUpPinTop extends StatelessWidget {
                     )
                   ],
                 )
-              : Stack(),
+              : SizedBox(),
         ],
       ),
     );

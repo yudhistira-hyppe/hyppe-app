@@ -28,13 +28,19 @@ class PostsBloc {
     String? postID,
     required int pageNumber,
     required FeatureType type,
+    String? visibility,
     bool onlyMyData = false,
+    bool myContent = false,
+    bool otherContent = false,
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
+    String url = '';
 
     if (onlyMyData) {
-      formData.fields.add(MapEntry('search', email));
+      if (myContent != true) {
+        formData.fields.add(MapEntry('search', email));
+      }
       formData.fields.add(const MapEntry('withExp', 'true'));
       formData.fields.add(const MapEntry('withActive', 'true'));
       formData.fields.add(const MapEntry('withDetail', 'true'));
@@ -48,19 +54,41 @@ class PostsBloc {
       if (postID != null) {
         formData.fields.add(MapEntry('postID', postID));
       }
-      formData.fields.add(MapEntry('search', searchText));
+
+      if (searchText == '') {
+        formData.fields.add(MapEntry('visibility', '$visibility'));
+      }
+      if (myContent != true) {
+        formData.fields.add(MapEntry('search', searchText));
+      }
       formData.fields.add(const MapEntry('withActive', 'true'));
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('pageRow', '$pageRows'));
       formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
+
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     }
+    url = UrlConstants.getuserposts;
+    if (otherContent) {
+      formData.fields.add(MapEntry('email', searchText));
+      url = UrlConstants.getOtherUserPosts;
+    }
 
+    if (myContent) {
+      url = UrlConstants.getMyUserPosts;
+    }
+
+    print('hahahahahahahaha');
+    print(myContent);
+    print(onlyMyData);
+    print(postID);
+    print(formData.fields.map((e) => e).join(','));
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
       (onResult) {
+        print(onResult);
         if (onResult.statusCode! > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
@@ -74,7 +102,7 @@ class PostsBloc {
       headers: {
         'x-auth-user': email,
       },
-      host: UrlConstants.getuserposts,
+      host: url,
       withAlertMessage: false,
       withCheckConnection: false,
       methodType: MethodType.post,
@@ -85,12 +113,14 @@ class PostsBloc {
   Future postContentsBlocV2(
     BuildContext context, {
     String? tags,
+    List<String>? cats,
+    List<String>? tagPeople,
     required FeatureType type,
     required bool allowComment,
     required bool certified,
     required String description,
     required String visibility,
-    String location = "Indonesia",
+    String? location,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required List<String?> fileContents,
@@ -111,10 +141,12 @@ class PostsBloc {
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('description', description));
     formData.fields.add(MapEntry('tags', tags ?? ""));
+    formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
-    formData.fields.add(MapEntry('location', location));
+    formData.fields.add(MapEntry('location', location!));
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
@@ -189,6 +221,9 @@ class PostsBloc {
     required bool allowComment,
     required bool certified,
     required FeatureType type,
+    List<String>? cats,
+    List<String>? tagPeople,
+    String? location,
   }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -201,6 +236,13 @@ class PostsBloc {
     formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(const MapEntry('active', 'true'));
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+    formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('location', location!));
+
+    print('hahahahahahahaha');
+    print(type);
+    print(formData.fields.map((e) => e).join(','));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(

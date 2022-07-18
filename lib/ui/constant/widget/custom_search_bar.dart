@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 
@@ -18,7 +19,7 @@ class CustomSearchBar extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final EdgeInsetsGeometry? contentPadding;
   final bool readOnly;
-  
+
   const CustomSearchBar({
     Key? key,
     this.onSubmitted,
@@ -45,21 +46,25 @@ class CustomSearchBar extends StatelessWidget {
         readOnly: readOnly,
         focusNode: focusNode,
         controller: controller,
-        decoration: inputDecoration ?? InputDecoration(
-            prefixIcon: CustomIconButtonWidget(
-              defaultColor: false,
-              onPressed: onPressedIcon,
-              iconData: "${AssetPath.vectorPath}search.svg",
-            ),
-            hintStyle: Theme.of(context).textTheme.subtitle2,
-            hintText: hintText,
-            contentPadding: contentPadding,
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            counterText: ''),
+        decoration: inputDecoration ??
+            InputDecoration(
+                prefixIcon: CustomIconButtonWidget(
+                  defaultColor: false,
+                  onPressed: onPressedIcon,
+                  iconData: "${AssetPath.vectorPath}search.svg",
+                ),
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                hintText: hintText,
+                contentPadding: contentPadding,
+                border: InputBorder.none,
+                // focusedBorder: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: kHyppePrimary),
+                ),
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                counterText: ''),
         textInputAction: TextInputAction.search,
         maxLines: 1,
         textAlign: textAlign,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
 import 'package:hyppe/core/bloc/referral/state.dart';
@@ -68,6 +69,9 @@ class DynamicLinkService {
 
   static void _handleDeepLink(PendingDynamicLinkData? data) async {
     Uri? deepLink = data?.link;
+    print('testetstt00');
+    deepLink.logger();
+
     if (deepLink != null) {
       // Set [pendingDynamicLinkData] to the initial dynamic link
       _pendingDynamicLinkData ??= data;
@@ -81,7 +85,7 @@ class DynamicLinkService {
             'Error in followSender $e'.logger();
           }
         }
-
+        deepLink.path.logger();
         final _path = deepLink.path;
         switch (_path) {
           case Routes.storyDetail:
@@ -109,13 +113,12 @@ class DynamicLinkService {
             );
             break;
           // TO DO: If register from referral link, then hit to backend
-          // case Routes.otherProfile:
-          //   _routing.moveReplacement(
-          //     _path,
-          //     argument: OtherProfileArgument()
-          //       ..senderEmail = deepLink.queryParameters['sender_email'],
-          //   );
-          //   break;
+          case Routes.otherProfile:
+            _routing.moveReplacement(
+              _path,
+              argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
+            );
+            break;
         }
 
         // Set [_linkProcessed] to true

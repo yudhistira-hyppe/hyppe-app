@@ -45,7 +45,7 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
               onWillPop: () async => notifier.onWillPop(context),
               child: Scaffold(
                 body: PreviewIDVerification(
-                  pageController: _pageController,  
+                  pageController: _pageController,
                   picture: notifier.fileContent?[0],
                 ),
               ),

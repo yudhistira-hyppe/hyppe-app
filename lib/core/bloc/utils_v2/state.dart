@@ -1,18 +1,34 @@
-enum UtilsState{
-  init, loading,
-  getDocumentSuccess, getDocumentError,
-  getEulaSuccess, getEulaError,
-  getInterestsSuccess, getInterestsError,
-  getReactionSuccess, getReactionError,
-  languagesSuccess, languagesError,
-  loadCitySuccess, loadCityError,
-  loadCountrySuccess, loadCountryError,
-  loadAreaSuccess, loadAreaError,
-  downloadLanguageSuccess, downloadLanguageError,
-  welcomeNotesSuccess, welcomeNotesError,
-  getGenderSuccess, getGenderError,
-  getMartialStatusSuccess, getMartialStatusError,
+enum UtilsState {
+  init,
+  loading,
+  getDocumentSuccess,
+  getDocumentError,
+  getEulaSuccess,
+  getEulaError,
+  getInterestsSuccess,
+  getInterestsError,
+  getReactionSuccess,
+  getReactionError,
+  languagesSuccess,
+  languagesError,
+  loadCitySuccess,
+  loadCityError,
+  loadCountrySuccess,
+  loadCountryError,
+  loadAreaSuccess,
+  loadAreaError,
+  downloadLanguageSuccess,
+  downloadLanguageError,
+  welcomeNotesSuccess,
+  welcomeNotesError,
+  getGenderSuccess,
+  getGenderError,
+  getMartialStatusSuccess,
+  getMartialStatusError,
+  searchPeopleSuccess,
+  searchPeopleError
 }
+
 class UtilsFetch {
   final data;
   final UtilsState utilsState;

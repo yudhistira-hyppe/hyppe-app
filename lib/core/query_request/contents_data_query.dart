@@ -9,6 +9,8 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/interface/pagination_query_interface.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/check_version.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:provider/provider.dart';
 
 class ContentsDataQuery extends PaginationQueryInterface {
   FeatureType? featureType;
@@ -22,10 +24,12 @@ class ContentsDataQuery extends PaginationQueryInterface {
   ContentsDataQuery();
 
   @override
-  Future<List<ContentData>> loadNext(BuildContext context) async {
+  Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     if (!hasNext) return [];
+
+    final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
 
     loading = true;
 
@@ -40,6 +44,9 @@ class ContentsDataQuery extends PaginationQueryInterface {
         type: featureType!,
         searchText: searchText,
         onlyMyData: onlyMyData,
+        visibility: notifierMain.visibilty,
+        myContent: myContent,
+        otherContent: otherContent,
       );
       final fetch = notifier.postsFetch;
 
@@ -58,10 +65,10 @@ class ContentsDataQuery extends PaginationQueryInterface {
   }
 
   @override
-  Future<List<ContentData>> reload(BuildContext context) async {
+  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
-
+    final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
     hasNext = true;
 
     loading = true;
@@ -72,15 +79,16 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
     try {
       final notifier = PostsBloc();
-      await notifier.getContentsBlocV2(
-        context,
-        postID: postID,
-        pageRows: limit,
-        pageNumber: page,
-        type: featureType!,
-        searchText: searchText,
-        onlyMyData: onlyMyData,
-      );
+      await notifier.getContentsBlocV2(context,
+          postID: postID,
+          pageRows: limit,
+          pageNumber: page,
+          type: featureType!,
+          searchText: searchText,
+          onlyMyData: onlyMyData,
+          visibility: notifierMain.visibilty,
+          myContent: myContent,
+          otherContent: otherContent);
       final fetch = notifier.postsFetch;
 
       res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();

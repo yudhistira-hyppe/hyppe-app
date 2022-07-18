@@ -50,13 +50,7 @@ class SelfProfileTop extends StatelessWidget {
                           SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                           CustomTextWidget(
                             textToDisplay: notifier.language.posts!,
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .apply(
-                                    color: Theme.of(context)
-                                        .bottomNavigationBarTheme
-                                        .unselectedItemColor),
+                            textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                           )
                         ],
                       ),
@@ -79,13 +73,7 @@ class SelfProfileTop extends StatelessWidget {
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
                               textToDisplay: notifier.language.followers!,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .apply(
-                                      color: Theme.of(context)
-                                          .bottomNavigationBarTheme
-                                          .unselectedItemColor),
+                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
                         ),
@@ -109,13 +97,7 @@ class SelfProfileTop extends StatelessWidget {
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
                               textToDisplay: notifier.language.following!,
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .apply(
-                                      color: Theme.of(context)
-                                          .bottomNavigationBarTheme
-                                          .unselectedItemColor),
+                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
                         ),
@@ -247,18 +229,14 @@ class SelfProfileTop extends StatelessWidget {
             notifier.displayBio().length > 2
                 ? Padding(
                     padding: EdgeInsets.only(top: 8 * SizeConfig.scaleDiagonal),
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.displayBio(),
-                      textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.bodyText2,
-                      // maxLines: notifier.maxLine,
-                    ),
-                  )
+                    child: Text(
+                      notifier.displayBio(),
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ))
                 : const SizedBox.shrink(),
             notifier.displayPlace() != null
                 ? Padding(
-                    padding:
-                        EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
+                    padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
                     child: Row(
                       children: [
                         const CustomIconWidget(
@@ -288,8 +266,7 @@ class SelfProfileTop extends StatelessWidget {
                         ),
                         width: null,
                         height: 42 * SizeConfig.scaleDiagonal,
-                        buttonStyle:
-                            Theme.of(context).elevatedButtonTheme.style,
+                        buttonStyle: Theme.of(context).elevatedButtonTheme.style,
                         function: () => notifier.navigateToEditProfile(),
                       ),
                     ),

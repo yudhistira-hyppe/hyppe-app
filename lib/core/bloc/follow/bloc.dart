@@ -115,7 +115,8 @@ class FollowBloc {
     formData.fields.add(MapEntry('pageNumber', '${data.pageNumber}'));
     formData.fields.add(MapEntry('senderOrReceiver', data.senderOrReceiver));
     formData.fields.add(MapEntry('search', data.searchText));
-
+    print('ini interactive');
+    print(formData.fields);
     await Repos().reposPost(
       context,
       (onResult) {

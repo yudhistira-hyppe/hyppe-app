@@ -8,9 +8,11 @@ import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
+import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
 import 'package:hyppe/core/constants/post_follow_user.dart';
@@ -21,6 +23,7 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:file_picker/file_picker.dart';
@@ -864,5 +867,44 @@ class System {
       return bodyId ?? bodyEn;
     }
     return bodyEn;
+  }
+
+  Future<bool> getLocation(BuildContext context) async {
+    final notifier = Provider.of<WelcomeLoginNotifier>(context, listen: false);
+    await Locations().permissionLocation();
+
+    try {
+      final check = await Locations().getLocation().then((value) async {
+        if (value['latitude'] == 0.0) {
+          return false;
+        } else {
+          notifier.latitude = value['latitude'];
+          notifier.longitude = value['longitude'];
+          return true;
+        }
+      }).timeout(const Duration(seconds: 3));
+      if (check) {
+        return true;
+      } else {
+        await ShowBottomSheet().onShowColouredSheet(
+          context,
+          'Please Allow Permission for Location',
+          maxLines: 2,
+          enableDrag: false,
+          dismissible: false,
+          color: Theme.of(context).colorScheme.error,
+          iconSvg: "${AssetPath.vectorPath}close.svg",
+        );
+        openAppSettings();
+
+        return false;
+      }
+    } on TimeoutException catch (e) {
+      notifier.latitude = 0.0;
+      notifier.longitude = 0.0;
+      return true;
+    } on Error catch (e) {
+      return false;
+    }
   }
 }

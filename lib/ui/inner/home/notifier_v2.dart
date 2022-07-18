@@ -18,11 +18,26 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
 class HomeNotifier with ChangeNotifier {
+  //for visibilty
+  String _visibilty = 'PUBLIC';
+  List _visibiltyList = [
+    {"id": '1', 'name': 'All', 'code': 'PUBLIC'},
+    {"id": '2', 'name': 'Friend', 'code': 'FRIEND'},
+    {"id": '3', 'name': 'Following', 'code': 'FOLLOWING'},
+    {"id": '4', 'name': 'Only Me', 'code': 'PRIVATE'},
+  ];
+
+  List<String> _interestList = [];
+
+  List get visibiltyList => _visibiltyList;
+
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
     notifyListeners();
   }
+
+  String get visibilty => _visibilty;
 
   // bool _isHaveSomethingNew = false;
   String? _sessionID;
@@ -34,6 +49,16 @@ class HomeNotifier with ChangeNotifier {
   //   _isHaveSomethingNew = val;
   //   notifyListeners();
   // }
+
+  set visibilty(String val) {
+    _visibilty = val;
+    notifyListeners();
+  }
+
+  set visibiltyList(List val) {
+    _visibiltyList = val;
+    notifyListeners();
+  }
 
   void setSessionID() {
     _sessionID ??= System().generateUUID();
@@ -52,8 +77,7 @@ class HomeNotifier with ChangeNotifier {
       final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-      final stories =
-          Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
       // Refresh profile
       try {
@@ -91,8 +115,7 @@ class HomeNotifier with ChangeNotifier {
     // isHaveSomethingNew = false;
   }
 
-  void onDeleteSelfPostContent(BuildContext context,
-      {required String postID, required String content}) {
+  void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
@@ -108,8 +131,7 @@ class HomeNotifier with ChangeNotifier {
         pic.pic!.removeWhere((element) => element.postID == postID);
         break;
       case hyppeStory:
-        stories.myStoriesData!
-            .removeWhere((element) => element.postID == postID);
+        stories.myStoriesData!.removeWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -136,20 +158,16 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData!
-            .firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData!
-            .firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData =
-            pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData!
-            .firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -165,13 +183,9 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future navigateToProfilePage(BuildContext context,
-      {bool whenComplete = false, Function? onWhenComplete}) async {
-    if (context.read<OverlayHandlerProvider>().overlayActive)
-      context.read<OverlayHandlerProvider>().removeOverlay(context);
-    whenComplete
-        ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete)
-        : Routing().move(Routes.selfProfile);
+  Future navigateToProfilePage(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
+    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    whenComplete ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete) : Routing().move(Routes.selfProfile);
   }
 
   Future navigateToWallet(BuildContext context) async {
@@ -188,14 +202,17 @@ class HomeNotifier with ChangeNotifier {
   }
 
   //untuk test aliplayer
-  Future navigateToTestAliPlayer(BuildContext context,
-      {bool whenComplete = false, Function? onWhenComplete}) async {
-    if (context.read<OverlayHandlerProvider>().overlayActive)
-      context.read<OverlayHandlerProvider>().removeOverlay(context);
-    whenComplete
-        ? Routing()
-            .move(Routes.testAliPlayer)
-            .whenComplete(() => onWhenComplete)
-        : Routing().move(Routes.testAliPlayer);
+  Future navigateToTestAliPlayer(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
+    if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+    whenComplete ? Routing().move(Routes.testAliPlayer).whenComplete(() => onWhenComplete) : Routing().move(Routes.testAliPlayer);
+  }
+
+  bool pickedVisibility(String? tile) => _visibilty.contains(tile!) ? true : false;
+
+  void changeVisibility(BuildContext context, index) {
+    _visibilty = _visibiltyList[index]['code'];
+    print(_visibilty);
+    onRefresh(context);
+    notifyListeners();
   }
 }

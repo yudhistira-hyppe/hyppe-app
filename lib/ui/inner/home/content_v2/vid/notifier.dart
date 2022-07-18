@@ -71,6 +71,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     bool reload = false,
   }) async {
     Future<List<ContentData>> _resFuture;
+
     try {
       if (reload) {
         _resFuture = contentsQuery.reload(context);

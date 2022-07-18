@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/models/collection/utils/eula/eula.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
+import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/welcome/welcome.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -24,7 +25,7 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
         } else {
@@ -33,7 +34,7 @@ class UtilsBlocV2 {
           setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesSuccess, data: _result));
         }
       },
-          (errorData) {
+      (errorData) {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
       },
@@ -49,14 +50,14 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getGenderError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.getGenderSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.getGenderError));
       },
       errorServiceType: ErrorType.getGender,
@@ -72,14 +73,14 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.getInterestsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
       },
       errorServiceType: ErrorType.getGender,
@@ -95,7 +96,7 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
         } else {
@@ -104,7 +105,7 @@ class UtilsBlocV2 {
           setUtilsFetch(UtilsFetch(UtilsState.getEulaSuccess, data: _result));
         }
       },
-          (errorData) {
+      (errorData) {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
       },
@@ -119,17 +120,17 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.loadCountryError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.loadCountrySuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.loadCountryError));
       },
-      host: UrlConstants.country + "${search != null ?  "?search=$search&" : "?"}pageNumber=$pageNumber&pageRow=$pageRow",
+      host: UrlConstants.country + "${search != null ? "?search=$search&" : "?"}pageNumber=$pageNumber&pageRow=$pageRow",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -141,18 +142,18 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.loadAreaError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.loadAreaSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.loadAreaError));
       },
       errorServiceType: ErrorType.getStates,
-      host: UrlConstants.area +"${search != null ?  "?search=$search" : "?countryID=$countryID"}&pageNumber=$pageNumber&pageRow=$pageRow",
+      host: UrlConstants.area + "${search != null ? "?search=$search" : "?countryID=$countryID"}&pageNumber=$pageNumber&pageRow=$pageRow",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,
@@ -163,14 +164,14 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.loadCityError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.loadCitySuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.loadCityError));
       },
       errorServiceType: ErrorType.getCities,
@@ -185,14 +186,14 @@ class UtilsBlocV2 {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.languagesError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.languagesSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setUtilsFetch(UtilsFetch(UtilsState.languagesError));
       },
       errorServiceType: ErrorType.getLanguage,
@@ -224,6 +225,34 @@ class UtilsBlocV2 {
       methodType: MethodType.get,
       withCheckConnection: false,
       errorServiceType: ErrorType.getReactions,
+    );
+  }
+
+  Future getSearchPeopleBloc(BuildContext context, String? keyword, int skip, int limit) async {
+    setUtilsFetch(UtilsFetch(UtilsState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUtilsFetch(UtilsFetch(UtilsState.searchPeopleError));
+        } else {
+          setUtilsFetch(UtilsFetch(UtilsState.searchPeopleSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          // setUtilsFetch(UtilsFetch(UtilsState.searchPeopleSuccess, data: _response.toJson()));
+        }
+      },
+      (errorData) {
+        setUtilsFetch(UtilsFetch(UtilsState.getReactionError));
+      },
+      host: UrlConstants.getSearchPeople,
+      withAlertMessage: false,
+      methodType: MethodType.post,
+      withCheckConnection: false,
+      errorServiceType: ErrorType.getReactions,
+      data: {
+        "username": keyword,
+        "skip": skip,
+        "limit": limit,
+      },
     );
   }
 }

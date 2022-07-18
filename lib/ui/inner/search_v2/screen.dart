@@ -18,8 +18,7 @@ class SearchScreen extends StatefulWidget {
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen>
-    with SingleTickerProviderStateMixin {
+class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,8 +39,7 @@ class _SearchScreenState extends State<SearchScreen>
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context
-        .select((ErrorService value) => value.getError(ErrorType.getPost));
+    final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(
       builder: (context, notifier, child) => Scaffold(
         key: _scaffoldKey,
@@ -63,12 +61,10 @@ class _SearchScreenState extends State<SearchScreen>
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: CustomSearchBar(
                         hintText: notifier.language.whatAreYouFindOut,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 16 * SizeConfig.scaleDiagonal),
+                        contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                         focusNode: notifier.focusNode,
                         controller: notifier.searchController,
-                        onSubmitted: (v) =>
-                            notifier.onSearchPost(context, value: v),
+                        onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                         onPressedIcon: () => notifier.onSearchPost(context),
                         // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
                       ),
@@ -79,21 +75,10 @@ class _SearchScreenState extends State<SearchScreen>
                       indicatorSize: TabBarIndicatorSize.tab,
                       labelPadding: const EdgeInsets.symmetric(vertical: 8),
                       labelColor: Theme.of(context).tabBarTheme.labelColor,
-                      unselectedLabelColor:
-                          Theme.of(context).tabBarTheme.unselectedLabelColor,
-                      labelStyle: TextStyle(
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16 * SizeConfig.scaleDiagonal),
-                      indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              color:
-                                  Theme.of(context).colorScheme.primaryVariant,
-                              width: 2.0)),
-                      unselectedLabelStyle: TextStyle(
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16 * SizeConfig.scaleDiagonal),
+                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                      labelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
+                      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primaryVariant, width: 2.0)),
+                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
                       tabs: const [
                         OptionBar(title: "Vid", icon: "pause", pageIndex: 0),
                         OptionBar(title: "Diary", icon: "diary", pageIndex: 1),
@@ -110,16 +95,13 @@ class _SearchScreenState extends State<SearchScreen>
                       ],
                       onTap: (index) => notifier.pageIndex = index,
                     ),
-                    context
-                            .read<ErrorService>()
-                            .isInitialError(error, notifier.allContents)
+                    context.read<ErrorService>().isInitialError(error, notifier.allContents)
                         ? Center(
                             child: SizedBox(
                               height: 198,
                               child: CustomErrorWidget(
                                 errorType: ErrorType.getPost,
-                                function: () =>
-                                    notifier.onInitialSearch(context),
+                                function: () => notifier.onInitialSearch(context),
                               ),
                             ),
                           )
@@ -128,18 +110,9 @@ class _SearchScreenState extends State<SearchScreen>
                               physics: const NeverScrollableScrollPhysics(),
                               controller: _tabController,
                               children: [
-                                SearchContent(
-                                    content: notifier.allContents?.vids,
-                                    featureType:
-                                        notifier.vidContentsQuery.featureType),
-                                SearchContent(
-                                    content: notifier.allContents?.diaries,
-                                    featureType: notifier
-                                        .diaryContentsQuery.featureType),
-                                SearchContent(
-                                    content: notifier.allContents?.pics,
-                                    featureType:
-                                        notifier.picContentsQuery.featureType),
+                                SearchContent(content: notifier.allContents?.vids, featureType: notifier.vidContentsQuery.featureType),
+                                SearchContent(content: notifier.allContents?.diaries, featureType: notifier.diaryContentsQuery.featureType),
+                                SearchContent(content: notifier.allContents?.pics, featureType: notifier.picContentsQuery.featureType),
                               ],
                             ),
                           ),

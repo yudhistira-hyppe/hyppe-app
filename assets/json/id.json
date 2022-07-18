@@ -476,6 +476,8 @@
   "updateNow" : "Perbaharui sekarang",
   "deletePost": "Hapus postingan?",
   "deleteComment": "Hapus Komentar?",
-  "commentWillPermanentlyDeletedContinue": "Komentar akan terhapus secara permanen, lanjutkan?"
-
+  "commentWillPermanentlyDeletedContinue": "Komentar akan terhapus secara permanen, lanjutkan?",
+  "addPostDescription" : "Tambahkan deskripsi posting, @teman, dan bergabung dengan #topik (maks 2500 karakter)",
+  "privacy" : "Rahasia",
+  "selectLocation": "Pilih Lokasi"
 }

@@ -476,5 +476,8 @@
   "updateNow" : "Update Now",
   "deletePost": "Delete post?",
   "deleteComment": "Delete Comment",
-  "commentWillPermanentlyDeletedContinue": "Comment will permanently deleted, continue?"
+  "commentWillPermanentlyDeletedContinue": "Comment will permanently deleted, continue?",
+  "addPostDescription" : "Add post description, @friends, and  join # topic (max 2500 characters)",
+  "privacy" : "Privacy",
+  "selectLocation": "Select Location"
 }

@@ -1,4 +1,7 @@
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -89,7 +92,7 @@ class _PicDetailState extends State<PicDetail> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
@@ -138,11 +141,26 @@ class _PicDetailState extends State<PicDetail> {
                           ),
                         ],
                       ),
-                      _buildButtonV2(
-                        context: context,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        function: () => ShowBottomSheet.onReportContent(context),
-                      ),
+                      widget.arguments!.email == SharedPreference().readStorage(SpKeys.email)
+                          ? _buildButtonV2(
+                              context: context,
+                              iconData: '${AssetPath.vectorPath}more.svg',
+                              function: () => ShowBottomSheet.onShowOptionContent(
+                                context,
+                                contentData: widget.arguments!,
+                                captionTitle: hyppeDiary,
+                                // storyController: widget.storyController,
+                                onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                              ),
+                            )
+                          : SizedBox(),
+                      widget.arguments!.email != SharedPreference().readStorage(SpKeys.email)
+                          ? _buildButtonV2(
+                              context: context,
+                              iconData: '${AssetPath.vectorPath}more.svg',
+                              function: () => ShowBottomSheet.onReportContent(context),
+                            )
+                          : SizedBox(),
                     ],
                   ),
                 ),

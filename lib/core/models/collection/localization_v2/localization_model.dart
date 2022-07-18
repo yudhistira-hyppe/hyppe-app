@@ -475,6 +475,9 @@ class LocalizationModelV2 {
   String? deletePost;
   String? deleteComment;
   String? commentWillPermanentlyDeletedContinue;
+  String? addPostDescription;
+  String? privacy;
+  String? selectLocation;
 
   LocalizationModelV2(
       {this.login,
@@ -952,7 +955,10 @@ class LocalizationModelV2 {
       this.updateNow,
       this.deletePost,
       this.deleteComment,
-      this.commentWillPermanentlyDeletedContinue});
+      this.commentWillPermanentlyDeletedContinue,
+      this.addPostDescription,
+      this.privacy,
+      this.selectLocation});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1432,5 +1438,8 @@ class LocalizationModelV2 {
     deletePost = json['deletePost'];
     deleteComment = json['deleteComment'];
     commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
+    addPostDescription = json['addPostDescription'];
+    privacy = json['privacy'];
+    selectLocation = json['selectLocation'];
   }
 }

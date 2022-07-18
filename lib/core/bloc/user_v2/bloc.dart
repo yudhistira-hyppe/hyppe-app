@@ -139,6 +139,7 @@ class UserBloc {
       data: payload,
     );
   }
+
   Future appleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
@@ -183,6 +184,7 @@ class UserBloc {
       data: payload,
     );
   }
+
   Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
@@ -454,6 +456,39 @@ class UserBloc {
       host: UrlConstants.getuserprofile,
       withCheckConnection: false,
       methodType: MethodType.post,
+      withAlertMessage: withAlertMessage,
+    );
+  }
+
+  Future getMyUserProfilesBloc(
+    BuildContext context, {
+    String? search,
+    required bool withAlertMessage,
+  }) async {
+    setUserFetch(UserFetch(UserState.loading));
+    var formData = FormData();
+    // formData.fields.add(MapEntry('search', search ?? SharedPreference().readStorage(SpKeys.email)));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode != 202) {
+          setUserFetch(UserFetch(UserState.getUserProfilesError));
+        } else {
+          UserProfileModel _result = UserProfileModel.fromJson(onResult.data["data"][0]);
+          setUserFetch(UserFetch(UserState.getUserProfilesSuccess, data: _result));
+        }
+      },
+      (errorData) {
+        context.read<ErrorService>().addErrorObject(ErrorType.gGetUserDetail, errorData.message);
+        setUserFetch(UserFetch(UserState.getUserProfilesError));
+      },
+      data: formData,
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      host: UrlConstants.getMyUserPosts,
+      withCheckConnection: false,
+      methodType: MethodType.get,
       withAlertMessage: withAlertMessage,
     );
   }

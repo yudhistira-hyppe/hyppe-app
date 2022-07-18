@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/hyppe_version.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: const [
                   ProcessUploadComponent(),
                   HyppePreviewStories(),
+                  FilterLanding(),
                   HyppePreviewVid(),
                   HyppePreviewDiary(),
                   HyppePreviewPic(),

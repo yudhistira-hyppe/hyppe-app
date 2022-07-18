@@ -38,55 +38,54 @@ class OtherProfileTop extends StatelessWidget {
                     onTap: () => notifier.viewStory(context),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay: notifier.displayPostsCount(),
-                            textStyle: Theme.of(context).textTheme.subtitle1,
-                          ),
-                          SizedBox(height: 8 * SizeConfig.scaleDiagonal),
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.posts!,
-                            textStyle:
-                                Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
-                          )
-                        ],
-                      ),
-                      SizedBox(width: 35 * SizeConfig.scaleDiagonal),
-                      Column(
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay: notifier.displayFollowers(),
-                            textStyle: Theme.of(context).textTheme.subtitle1,
-                          ),
-                          SizedBox(height: 8 * SizeConfig.scaleDiagonal),
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.followers!,
-                            textStyle:
-                                Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
-                          )
-                        ],
-                      ),
-                      SizedBox(width: 35 * SizeConfig.scaleDiagonal),
-                      Column(
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay: notifier.displayFollowing(),
-                            textStyle: Theme.of(context).textTheme.subtitle1,
-                          ),
-                          SizedBox(height: 8 * SizeConfig.scaleDiagonal),
-                          CustomTextWidget(
-                            textToDisplay: notifier.language.following!,
-                            textStyle:
-                                Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
-                          )
-                        ],
-                      ),
-                    ],
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Column(
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: notifier.displayPostsCount(),
+                              textStyle: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.posts!,
+                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: notifier.displayFollowers(),
+                              textStyle: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.followers!,
+                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: notifier.displayFollowing(),
+                              textStyle: Theme.of(context).textTheme.subtitle1,
+                            ),
+                            SizedBox(height: 8 * SizeConfig.scaleDiagonal),
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.following!,
+                              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -146,9 +145,7 @@ class OtherProfileTop extends StatelessWidget {
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
-                      backgroundColor: notifier.statusFollowing == StatusFollowing.requested
-                          ? null
-                          : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      backgroundColor: notifier.statusFollowing == StatusFollowing.requested ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                     ),
                     function: () {
                       if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {

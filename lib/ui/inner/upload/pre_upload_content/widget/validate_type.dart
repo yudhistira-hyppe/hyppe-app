@@ -38,8 +38,8 @@ class ValidateType extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      width: 48 * SizeConfig.scaleDiagonal,
-      height: 48 * SizeConfig.scaleDiagonal,
+      width: 40 * SizeConfig.scaleDiagonal,
+      height: 40 * SizeConfig.scaleDiagonal,
       child: isEditingOverlay
           ? const SizedBox.shrink()
           : Center(

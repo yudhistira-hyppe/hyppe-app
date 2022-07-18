@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -53,8 +54,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
-  double? latitude; // Latitude, in degrees
-  double? longitude; // Longitude, in degrees
+  double _latitude = 0.0; // Latitude, in degrees
+  double _longitude = 0.0; // Longitude, in degrees
   String _version = "";
 
   String _email = "";
@@ -68,6 +69,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   // AccessToken? _accessToken;
   FacebookSignIn? _currentUser;
 
+  double get latitude => _latitude;
+  double get longitude => _longitude;
+
   String get version => _version;
   String get email => _email;
   String get password => _password;
@@ -76,6 +80,16 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool get hide => _hide;
   bool get incorrect => _incorrect;
   GoogleSignInAccount? get userGoogleSignIn => _userGoogleSignIn;
+
+  set latitude(double val) {
+    _latitude = val;
+    notifyListeners();
+  }
+
+  set longitude(double val) {
+    _longitude = val;
+    notifyListeners();
+  }
 
   set version(String val) {
     _version = val;
@@ -119,35 +133,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
   bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
 
-  Future<bool> getLocation(BuildContext context) async {
-    await Locations().permissionLocation();
-    final check = await Locations().getLocation().then((value) async {
-      if (value['latitude'] == 0.0) {
-        return false;
-      } else {
-        latitude = value['latitude'];
-        longitude = value['longitude'];
-        return true;
-      }
-    });
-    if (check) {
-      return true;
-    } else {
-      await ShowBottomSheet().onShowColouredSheet(
-        context,
-        'Please Allow Permission for Location',
-        maxLines: 2,
-        enableDrag: false,
-        dismissible: false,
-        color: Theme.of(context).colorScheme.error,
-        iconSvg: "${AssetPath.vectorPath}close.svg",
-      );
-      openAppSettings();
-
-      return false;
-    }
-  }
-
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);
   }
@@ -155,7 +140,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   Future onClickLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
     setLoading(true);
-    await getLocation(context).then((value) async {
+    await System().getLocation(context).then((value) async {
       if (value) {
         if (connection) {
           unFocusController();
@@ -191,10 +176,10 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
+        setLoading(false);
       }
+      setLoading(false);
     });
-
-    setLoading(false);
   }
 
   void onClickSignUpHere() {
@@ -306,7 +291,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   Future loginGoogleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
     setLoading(true);
-    await getLocation(context).then((value) async {
+    await System().getLocation(context).then((value) async {
+      print(value);
       if (value) {
         if (connection) {
           UserCredential? userCredential;
@@ -360,8 +346,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
-        setLoading(false);
       }
+      setLoading(false);
     });
   }
 
@@ -383,7 +369,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   Future loginAppleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
     setLoading(true);
-    await getLocation(context).then((value) async {
+    await System().getLocation(context).then((value) async {
       if (value) {
         if (connection) {
           UserCredential? userCredential;
@@ -476,8 +462,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
-        setLoading(false);
       }
+      setLoading(false);
     });
   }
 

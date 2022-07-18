@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:flutter/foundation.dart' show kReleaseMode;
 
@@ -9,7 +10,7 @@ class ApiAction {
   ApiAction() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: Env.data.apiBaseUrl,
+        baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV2}',
         validateStatus: (status) => status! < 500,
       ),
     );
@@ -39,6 +40,11 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    }
     try {
       final _response = await _dio.post(
         url,
@@ -70,6 +76,11 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    }
     try {
       final _response = await _dio.post(
         url,
@@ -102,6 +113,12 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
+
+    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount || url == UrlConstants.getSearchPeople) {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    }
     try {
       final _response = await _dio
           .post(
@@ -138,7 +155,11 @@ class ApiAction {
 
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-
+    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    }
     try {
       final _response = await _dio
           .get(
@@ -176,6 +197,11 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
+    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    }
 
     try {
       final _response = await _dio
@@ -212,6 +238,11 @@ class ApiAction {
 
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    } else {
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    }
 
     try {
       final _response = await _dio

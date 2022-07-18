@@ -12,6 +12,8 @@ class UrlConstants {
 
   static const String apiV2 = 'v2';
 
+  static const String apiV3 = 'v3';
+
   /// Production Base url
   static const String productionBaseApi = "https://prod.hyppe.app";
   // static const String productionBaseApi = "https://staging.hyppe.app";
@@ -60,6 +62,9 @@ class UrlConstants {
 
   /* Wallet route */
   static const String bizRoute = "/api/biz";
+
+  /* v3 user profile */
+  static const String profileRoute = "/api/getuserprofiles";
 
   ///---------------------------------------------------------------------------------------------------------///
 
@@ -344,6 +349,12 @@ class UrlConstants {
   /// post => Get Contents
   static const String getuserposts = "$postRouteV2/getuserposts";
 
+  /// get => Get My Contents.
+  static const String getMyUserPosts = "$postRouteV2/getuserposts/my";
+
+  /// get => Get My Contents.
+  static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile";
+
   /// post => Get Contents Qmatic
   static const String qmatic = "$postRouteV2/qmatic";
 
@@ -382,4 +393,10 @@ class UrlConstants {
 
   /// post => Get Ads Roster
   static const String getAdsRoster = "$bizRoute/adsroster";
+
+  //apis goole plcae
+  static const String getGoogleMapApis = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+
+  //get search people
+  static const String getSearchPeople = "$profileRoute/search";
 }

@@ -68,8 +68,14 @@ class _ReferralState extends State<Referral> {
                             },
                             child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
                           )
-                        : notifier.modelReferral?.parent != null
-                            ? Row(
+                        : notifier.modelReferral?.parent == null || notifier.modelReferral?.parent == ""
+                            ? GestureDetector(
+                                onTap: () {
+                                  Routing().move(Routes.insertReferral);
+                                },
+                                child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
+                              )
+                            : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text('Diundang oleh: ', style: Theme.of(context).textTheme.subtitle1),
@@ -82,12 +88,6 @@ class _ReferralState extends State<Referral> {
                                     ),
                                   ),
                                 ],
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  Routing().move(Routes.insertReferral);
-                                },
-                                child: const Text('Masukkan Referral', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: kHyppePrimary)),
                               )
 
                     // CustomElevatedButton(

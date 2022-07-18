@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' show Alignment, Color, LinearGradient;
 
 const kHyppePrimary = Color(0xffAB22AF);
+const kHyppePrimaryShadow = Color(0xff91299E);
 
 /// Light Mode
 const kHyppeLightBackground = Color(0xffFDFDFD);
@@ -21,13 +22,14 @@ const kHyppeLightDanger = Color(0xffC91D1D);
 const kHyppeLightSuccess = Color(0xff237804);
 const kHyppeLightInfo = Color(0xff0095F2);
 
+const kHyppeLightActiveChip = Color(0xFFF5E7F5);
+
 /// Dark Mode
 const kHyppeBackground = Color(0xff121212);
 
 const kHyppeSurface = Color(0xff1D2124);
 const kHyppeSecondary = Color(0xff707070);
 const kHyppeTextPrimary = Color(0xffFFFFFF);
-
 
 const kHyppeUploadIcon = Color(0xff822e6e);
 const kHyppeSenderBubbleChat = Color(0xff5A1E4C);
