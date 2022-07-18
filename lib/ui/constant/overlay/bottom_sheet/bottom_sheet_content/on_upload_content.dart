@@ -24,7 +24,8 @@ class OnUploadContentBottomSheet extends StatelessWidget {
               padding: EdgeInsets.all(8 * SizeConfig.scaleDiagonal),
               child: Column(
                 children: [
-                  const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                  const CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}handler.svg"),
                   SizedBox(height: 16 * SizeConfig.scaleDiagonal),
                   CustomTextWidget(
                     textToDisplay: notifier.language.postTo!,
@@ -41,7 +42,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
-                    notifier.thumbnailLocalMedia();
+                    // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.story;
                     notifier.selectedDuration = 15;
                     Routing().moveAndPop(Routes.makeContent);
@@ -50,12 +51,16 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppeStory".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppeStoryCaption!,
                     textAlign: TextAlign.start,
-                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle:
+                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}story.svg",
@@ -69,7 +74,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
-                    notifier.thumbnailLocalMedia();
+                    // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.vid;
                     notifier.isVideo = true;
                     notifier.selectedDuration = 15;
@@ -79,12 +84,16 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppeVid".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppeVidCaption!,
                     textAlign: TextAlign.start,
-                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle:
+                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}vid.svg",
@@ -98,7 +107,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
-                    notifier.thumbnailLocalMedia();
+                    // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.diary;
                     notifier.isVideo = true;
                     notifier.selectedDuration = 15;
@@ -108,12 +117,16 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppeDiary".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppeDiaryCaption!,
                     textAlign: TextAlign.start,
-                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle:
+                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}diary.svg",
@@ -127,7 +140,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                 ListTile(
                   visualDensity: VisualDensity.adaptivePlatformDensity,
                   onTap: () {
-                    notifier.thumbnailLocalMedia();
+                    // notifier.thumbnailLocalMedia();
                     notifier.featureType = FeatureType.pic;
                     notifier.isVideo = false;
                     notifier.selectedDuration = 15;
@@ -138,12 +151,16 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                   title: CustomTextWidget(
                     textToDisplay: "HyppePic".toLowerCase(),
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                    textStyle: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
                     textToDisplay: notifier.language.hyppePicCaption!,
                     textAlign: TextAlign.start,
-                    textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
+                    textStyle:
+                        const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
                   ),
                   leading: CustomIconWidget(
                     iconData: "${AssetPath.vectorPath}pic.svg",

@@ -27,8 +27,7 @@ class ContentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final notifier = context.watch<PicSeeAllNotifier>();
-    final error =
-        context.select((ErrorService value) => value.getError(ErrorType.pic));
+    final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
 
     return context.read<ErrorService>().isInitialError(error, notifier.picData)
         ? CustomErrorWidget(
@@ -58,8 +57,7 @@ class ContentItem extends StatelessWidget {
               itemBuilder: (context, index) {
                 if (notifier.picData == null) {
                   return const CustomLoading();
-                } else if (index == notifier.picData?.length &&
-                    notifier.hasNext) {
+                } else if (index == notifier.picData?.length && notifier.hasNext) {
                   return const CustomLoading();
                 }
 
@@ -77,12 +75,10 @@ class ContentItem extends StatelessWidget {
                         username: data?.username,
                         featureType: FeatureType.pic,
                         isCelebrity: data?.privacy?.isCelebrity,
-                        imageUrl:
-                            '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                        onTapOnProfileImage: () =>
-                            System().navigateToProfile(context, data!.email!),
-                        createdAt:
-                            '${System().readTimestamp(DateTime.parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true)}',
+                        imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                        onTapOnProfileImage: () => System().navigateToProfile(context, data!.email!),
+                        createdAt: '${System().readTimestamp(DateTime.parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true)}',
+
                         // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
                         //       context,
                         //       currentValue: vidData,
@@ -95,8 +91,7 @@ class ContentItem extends StatelessWidget {
                         aspectRatio: 16 / 9,
                         child: ContentThumbnail(
                           picData: data,
-                          fn: () =>
-                              notifier.navigateToHyppePicDetail(context, data),
+                          fn: () => notifier.navigateToHyppePicDetail(context, data),
                         ),
                       ),
                       Padding(
@@ -109,8 +104,7 @@ class ContentItem extends StatelessWidget {
                               child: CustomTextWidget(
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
-                                textToDisplay:
-                                    "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                textToDisplay: "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                                 textStyle: Theme.of(context).textTheme.caption,
                               ),
                             ),
@@ -120,11 +114,8 @@ class ContentItem extends StatelessWidget {
                                 builder: (context, notifier, child) => InkWell(
                                   child: CustomIconWidget(
                                     defaultColor: false,
-                                    color: data.isLiked==true 
-                                        ? kHyppePrimary
-                                        : Theme.of(context).iconTheme.color,
-                                    iconData:
-                                        '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
+                                    color: data.isLiked == true ? kHyppePrimary : Theme.of(context).iconTheme.color,
+                                    iconData: '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
                                   ),
                                   onTap: () => notifier.likePost(context, data),
                                 ),

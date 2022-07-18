@@ -25,4 +25,6 @@ class SpKeys {
   static const String isUserRequestRecoverPassword = 'isUserRequestRecoverPassword';
   static const String isUserInOTP = 'isUserInOTP';
   static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
+
+  static const String onlineVersion = 'onlineVersion';
 }

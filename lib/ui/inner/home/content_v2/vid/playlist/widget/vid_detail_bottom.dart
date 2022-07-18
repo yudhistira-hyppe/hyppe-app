@@ -112,10 +112,10 @@ class VidDetailBottom extends StatelessWidget {
               builder: (context, notifier, child) => data != null
                   ? _buildButton(
                       context,
-                      '${AssetPath.vectorPath}${data?.isLiked ==true ? 'liked.svg' : 'none-like.svg'}',
-                      "${data?.insight?.likes}",
+                      '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                      "${data?.insight?.likes ?? 0}",
                       () => notifier.likePost(context, data!),
-                      colorIcon: data?.isLiked == true
+                      colorIcon: (data?.insight?.isPostLiked ?? false)
                           ? kHyppePrimary
                           : Theme.of(context).iconTheme.color)
                   : _buildButton(context,
@@ -151,6 +151,12 @@ class VidDetailBottom extends StatelessWidget {
               data != null
                   ? () => value.createdDynamicLink(context, data: data)
                   : () {},
+            ),
+            _buildButton(
+              context,
+              '${AssetPath.vectorPath}cart.svg',
+              value2.translate.buy!,
+              () => ShowBottomSheet.onBuyContent(context),
             ),
             // _buildButton(
             //   context,

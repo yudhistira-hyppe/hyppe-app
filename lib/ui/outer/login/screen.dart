@@ -1,8 +1,13 @@
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_in_form.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_in_text.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_up_or_google.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -16,17 +21,26 @@ class LoginScreen extends StatelessWidget {
             width: SizeConfig.screenWidth,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Stack(
+              child: Column(
                 children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: Consumer<LoginNotifier>(
+                        builder: (_, notifier, __) => GestureDetector(
+                          onTap: () => notifier.tapBack(),
+                          child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  thirtySixPx,
                   Align(alignment: const Alignment(0.0, -0.85), child: SignInText()),
-                  Transform.translate(
-                    offset: Offset(0.0, SizeConfig.screenHeight! / 3.5),
-                    child: SignInForm(),
-                  ),
-                  Transform.translate(
-                    offset: Offset(0.0, SizeConfig.screenHeight! / 1.4),
-                    child: const SignUpOrGoogle(),
-                  ),
+                  sixtyFourPx,
+                  SignInForm(),
+                  sixtyFourPx,
+                  const SignUpOrGoogle(),
                 ],
               ),
             ),

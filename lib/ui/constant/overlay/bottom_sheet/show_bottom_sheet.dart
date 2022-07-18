@@ -7,12 +7,17 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_internal_server_error.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_story.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content_form.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_spam_form.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_ID_verification.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_complete_profile_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
@@ -25,6 +30,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stor
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
@@ -97,6 +103,34 @@ class ShowBottomSheet {
             ),
             padding: const EdgeInsets.all(0),
             child: OnUploadContentBottomSheet(),
+          ),
+        );
+      },
+    );
+  }
+
+  static onLongPressDeleteMessage(BuildContext _) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            height: SizeConfig.screenHeight! / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnDeleteMessageBottomSheet(),
           ),
         );
       },
@@ -726,6 +760,115 @@ class ShowBottomSheet {
             child: const OnComingSoonDoku(),
           ),
         );
+      },
+    );
+  }
+
+  static onReportContent(_, {StoryController? storyController}) {
+    showModalBottomSheet(
+      context: _,
+      builder: (builder) {
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            // height: SizeConfig.screenHeight! / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnReportContentBottomSheet(),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      if (storyController != null) storyController.play();
+      // if (onUpdate != null) onUpdate();
+    });
+    ;
+  }
+
+  static onReportFormContent(_, {StoryController? storyController}) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            // height: SizeConfig.screenHeight! / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: const OnReportContentFormBottomSheet(),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      if (storyController != null) storyController.play();
+      Routing().moveBack();
+      // if (onUpdate != null) onUpdate();
+    });
+  }
+
+  static onReportSpamContent(_, {StoryController? storyController}) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            // height: SizeConfig.screenHeight! / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnReportSpamFormBottomSheet(),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      if (storyController != null) storyController.play();
+      Routing().moveBack();
+      // if (onUpdate != null) onUpdate();
+    });
+  }
+
+  static onBuyContent(_) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: _,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+            height: 250,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: const OnBuyContentBottomSheet());
       },
     );
   }

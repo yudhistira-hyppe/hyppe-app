@@ -1,7 +1,10 @@
 enum AdvertisingState {
-  init, loading,
-  getAdvertisingBlocSuccess, getAdvertisingBlocError,
+  init,
+  loading,
+  getAdvertisingBlocSuccess,
+  getAdvertisingBlocError,
 }
+
 class AdvertisingFetch {
   final data;
   final AdvertisingState advertisingState;

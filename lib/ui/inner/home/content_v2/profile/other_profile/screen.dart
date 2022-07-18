@@ -21,18 +21,13 @@ class OtherProfileScreen extends StatefulWidget {
 
 class _OtherProfileScreenState extends State<OtherProfileScreen> {
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey<RefreshIndicatorState> _globalKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
-    Future.delayed(
-        Duration.zero,
-        () =>
-            notifier.initialOtherProfile(context, argument: widget.arguments));
-    _scrollController.addListener(
-        () => notifier.onScrollListener(context, _scrollController));
+    Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context, argument: widget.arguments));
+    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -63,8 +58,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                     children: [
                       IconButton(
                         onPressed: () => notifier.onExit(),
-                        icon: const CustomIconWidget(
-                            iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                        icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                       ),
                       CustomTextWidget(
                         textToDisplay: notifier.displayUserName(),
@@ -93,17 +87,26 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
               scrollDirection: Axis.vertical,
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
-                SliverAppBar(
-                  pinned: false,
-                  stretch: false,
-                  elevation: 0.0,
-                  floating: false,
-                  automaticallyImplyLeading: false,
-                  expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: EdgeInsets.zero,
-                    background: notifier.user.profile != null
+                // SliverAppBar(
+                //   pinned: false,
+                //   stretch: false,
+                //   elevation: 0.0,
+                //   floating: false,
+                //   automaticallyImplyLeading: false,
+                //   expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
+                //   backgroundColor: Theme.of(context).colorScheme.background,
+                //   flexibleSpace: FlexibleSpaceBar(
+                //     titlePadding: EdgeInsets.zero,
+                //     background: notifier.user.profile != null
+                //         ? notifier.statusFollowing == StatusFollowing.following
+                //             ? const OtherProfileTop()
+                //             : const OtherProfileTop()
+                //         : BothProfileTopShimmer(),
+                //   ),
+                // ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    child: notifier.user.profile != null
                         ? notifier.statusFollowing == StatusFollowing.following
                             ? const OtherProfileTop()
                             : const OtherProfileTop()
@@ -116,8 +119,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                   automaticallyImplyLeading: false,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
-                if (notifier.user.profile != null &&
-                    notifier.statusFollowing == StatusFollowing.following)
+                if (notifier.user.profile != null && notifier.statusFollowing == StatusFollowing.following)
                   notifier.optionButton()
                 // else if (notifier.peopleProfile?.userDetail?.data?.isPrivate ?? false)
                 //     SliverList(delegate: SliverChildListDelegate([PrivateAccount()]))

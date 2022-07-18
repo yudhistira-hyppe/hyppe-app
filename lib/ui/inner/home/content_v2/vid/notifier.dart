@@ -18,6 +18,15 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   List<ContentData>? get vidData => _vidData;
 
+  int _selectedRadioTile = 0;
+
+  int get selectedRadioTile => _selectedRadioTile;
+
+  set selectedRadioTile(int val) {
+    _selectedRadioTile = val;
+    notifyListeners();
+  }
+
   set vidData(List<ContentData>? val) {
     _vidData = val;
     notifyListeners();
@@ -88,10 +97,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void scrollListener(BuildContext context) {
-    if (pageController.offset >= pageController.position.maxScrollExtent &&
-        !pageController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (pageController.offset >= pageController.position.maxScrollExtent && !pageController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialVid(context);
     }
   }
@@ -106,5 +112,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
+  }
+
+  void reportContent(BuildContext context) {
+    ShowBottomSheet.onReportContent(context);
   }
 }

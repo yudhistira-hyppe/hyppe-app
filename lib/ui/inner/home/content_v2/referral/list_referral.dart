@@ -28,28 +28,24 @@ class ListReferralUser extends StatelessWidget {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: '${notifier.language.linkYourReferral}',
-              textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
           body: Container(
-            padding: const EdgeInsets.only(top: 30, left: 16,right: 16),
+            padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
             child: Column(
               children: [
                 Row(
                   children: [
-                   const Text(
+                    const Text(
                       'Telah Digunakan Oleh ',
-                      style:
-                          TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
                     ),
-                    Text('(${arguments.modelReferral?.data} kali)',
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400)),
+                    Text('(${arguments.modelReferral?.data} kali)', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
                   ],
                 ),
-               const SizedBox(
+                const SizedBox(
                   height: 32,
                 ),
                 Expanded(
@@ -65,8 +61,7 @@ class ListReferralUser extends StatelessWidget {
                             height: 40,
                             child: Text(
                               '${listUser?.children}',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                             ),
                           ),
                           Divider(

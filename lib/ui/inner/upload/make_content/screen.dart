@@ -17,7 +17,8 @@ class MakeContentScreen extends StatefulWidget {
   _MakeContentScreenState createState() => _MakeContentScreenState();
 }
 
-class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLayoutMixin, RouteAware {
+class _MakeContentScreenState extends State<MakeContentScreen>
+    with AfterFirstLayoutMixin, RouteAware {
   @override
   void afterFirstLayout(BuildContext context) {
     context.read<MakeContentNotifier>().onInitialUploadContent();
@@ -32,13 +33,15 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 

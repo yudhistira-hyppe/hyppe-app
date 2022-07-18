@@ -5,16 +5,13 @@ class ModelReferral {
   Messages? messages;
   List<ListReferral>? list;
 
-  ModelReferral(
-      {this.parent, this.responseCode, this.data, this.messages, this.list});
+  ModelReferral({this.parent, this.responseCode, this.data, this.messages, this.list});
 
   ModelReferral.fromJson(Map<String, dynamic> json) {
     parent = json['parent'];
     responseCode = json['response_code'];
     data = json['data'];
-    messages = json['messages'] != null
-        ? new Messages.fromJson(json['messages'])
-        : null;
+    messages = json['messages'] != null ? new Messages.fromJson(json['messages']) : null;
     if (json['list'] != null) {
       list = <ListReferral>[];
       json['list'].forEach((v) {
@@ -64,15 +61,7 @@ class ListReferral {
   String? createdAt;
   String? updatedAt;
 
-  ListReferral(
-      {this.sId,
-      this.parent,
-      this.children,
-      this.active,
-      this.verified,
-      this.imei,
-      this.createdAt,
-      this.updatedAt});
+  ListReferral({this.sId, this.parent, this.children, this.active, this.verified, this.imei, this.createdAt, this.updatedAt});
 
   ListReferral.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

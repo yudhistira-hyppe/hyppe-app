@@ -1,19 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
-import 'package:hyppe/core/config/sosmed_contants.dart';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
+import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
+import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
@@ -22,16 +24,18 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:twitter_login/twitter_login.dart';
+// import 'package:twitter_login/twitter_login.dart';
 
 class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
   final _googleSignInService = GoogleSignInService();
   final signOutGoogle = GoogleSignInService();
   LocalizationModelV2 language = LocalizationModelV2();
+  late PermissionStatus _permissionGranted;
   translate(LocalizationModelV2 translate) {
     language = translate;
     notifyListeners();
@@ -41,6 +45,10 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
+  double? latitude; // Latitude, in degrees
+  double? longitude; // Longitude, in degrees
+  String _version = "";
+
   String _email = "";
   String _password = "";
   String? _emailValidation;
@@ -49,9 +57,10 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool _incorrect = false;
   GoogleSignInAccount? _userGoogleSignIn;
   String? googleSignInError;
-  AccessToken? _accessToken;
+  // AccessToken? _accessToken;
   FacebookSignIn? _currentUser;
 
+  String get version => _version;
   String get email => _email;
   String get password => _password;
   String? get emailValidation => _emailValidation;
@@ -59,6 +68,11 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool get hide => _hide;
   bool get incorrect => _incorrect;
   GoogleSignInAccount? get userGoogleSignIn => _userGoogleSignIn;
+
+  set version(String val) {
+    _version = val;
+    notifyListeners();
+  }
 
   set email(String val) {
     _email = val;
@@ -97,49 +111,91 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
   bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
 
+  Future<bool> getLocation(BuildContext context) async {
+    await Locations().permissionLocation();
+    final check = await Locations().getLocation().then((value) async {
+      if (value['latitude'] == 0.0) {
+        return false;
+      } else {
+        latitude = value['latitude'];
+        longitude = value['longitude'];
+        return true;
+      }
+    });
+    if (check) {
+      return true;
+    } else {
+      await ShowBottomSheet().onShowColouredSheet(
+        context,
+        'Please Allow Permission for Location',
+        maxLines: 2,
+        enableDrag: false,
+        dismissible: false,
+        color: Theme.of(context).colorScheme.error,
+        iconSvg: "${AssetPath.vectorPath}close.svg",
+      );
+      openAppSettings();
+
+      return false;
+    }
+  }
+
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);
   }
 
   Future onClickLogin(BuildContext context) async {
     bool connection = await System().checkConnections();
-    if (connection) {
-      unFocusController();
-      setLoading(true);
-      incorrect = false;
-      await FcmService().initializeFcmIfNot();
-      final notifier = UserBloc();
-      await notifier.signInBlocV2(
-        context,
-        email: emailController.text,
-        password: passwordController.text,
-        function: () => onClickLogin(context),
-      );
-      setLoading(false);
+    setLoading(true);
+    await getLocation(context).then((value) async {
+      if (value) {
+        if (connection) {
+          unFocusController();
+          incorrect = false;
+          // ignore: avoid_print
+          // print(a.latitude);
+          await FcmService().initializeFcmIfNot();
+          final notifier = UserBloc();
+          await notifier.signInBlocV2(
+            context,
+            email: emailController.text,
+            password: passwordController.text,
+            latitude: latitude,
+            longtitude: longitude,
+            function: () => onClickLogin(context),
+          );
 
-      final fetch = notifier.userFetch;
-      if (fetch.userState == UserState.LoginSuccess) {
-        // String realDeviceID = await System().getDeviceIdentifier();
-        // print('wee $realDeviceID');
-          DynamicLinkService.hitReferralBackend(context);
-        hide = true;
-        final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-        _validateUserData(context, _result, false);
-      }
-      if (fetch.userState == UserState.LoginError) {
-        if (fetch.data != null) {
-          clearTextController();
-          incorrect = true;
+          final fetch = notifier.userFetch;
+          if (fetch.userState == UserState.LoginSuccess) {
+            // String realDeviceID = await System().getDeviceIdentifier();
+            // print('wee $realDeviceID');
+            DynamicLinkService.hitReferralBackend(context);
+            hide = true;
+            final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+            _validateUserData(context, _result, false, onlineVersion: fetch.version);
+          }
+          if (fetch.userState == UserState.LoginError) {
+            if (fetch.data != null) {
+              clearTextController();
+              incorrect = true;
+            }
+          }
+        } else {
+          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
       }
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
-    }
+    });
+
+    setLoading(false);
   }
 
   void onClickSignUpHere() {
     incorrect = false;
     _routing.move(Routes.register);
+  }
+
+  void tapBack() {
+    Routing().moveBack();
   }
 
   // Future onClickGoogle(BuildContext context) async {
@@ -171,7 +227,8 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   }
   // }
 
-  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin) async {
+  _validateUserData(BuildContext context, UserProfileModel signData, bool isSociaMediaLogin, {String? onlineVersion}) async {
+    await CheckVersion().check(context, onlineVersion);
     if (isSociaMediaLogin) {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
@@ -191,6 +248,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
+      // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       DeviceBloc().activityAwake(context);
       Routing().moveReplacement(Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
@@ -238,56 +296,61 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future loginGoogleSign(BuildContext context) async {
     bool connection = await System().checkConnections();
-    if (connection) {
-      UserCredential? userCredential;
-      _userGoogleSignIn = await GoogleSignIn().signIn();
-      final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
-      userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      unFocusController();
-      setLoading(true);
-      incorrect = false;
-      await FcmService().initializeFcmIfNot();
-      final notifier = UserBloc();
+    await getLocation(context).then((value) async {
+      if (value) {
+        if (connection) {
+          UserCredential? userCredential;
+          _userGoogleSignIn = await GoogleSignIn().signIn();
+          final GoogleSignInAuthentication? googleAuth = await _userGoogleSignIn?.authentication;
+          final credential = GoogleAuthProvider.credential(
+            accessToken: googleAuth?.accessToken,
+            idToken: googleAuth?.idToken,
+          );
+          userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+          unFocusController();
+          setLoading(true);
 
-      if (userCredential.credential == null) {
-        setLoading(false);
-        _googleSignInService.handleSignOut();
-        ShowBottomSheet.onShowSomethingWhenWrong(context);
-      } else {
-        await notifier.googleSignInBlocV2(
-          context,
-          email: userCredential.user!.email!,
-          function: () => loginGoogleSign(context),
-        );
+          incorrect = false;
+          await FcmService().initializeFcmIfNot();
+          final notifier = UserBloc();
 
-        setLoading(false);
-        final fetch = notifier.userFetch;
-        if (fetch.userState == UserState.LoginSuccess) {
-          hide = true;
-          final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
-          _validateUserData(context, _result, true);
-        }
-        if (fetch.userState == UserState.LoginError) {
-          if (fetch.data != null) {
-            clearTextController();
-            incorrect = true;
+          if (userCredential.credential == null) {
+            _googleSignInService.handleSignOut();
+            ShowBottomSheet.onShowSomethingWhenWrong(context);
+          } else {
+            await notifier.googleSignInBlocV2(
+              context,
+              email: userCredential.user!.email!,
+              latitude: latitude,
+              longtitude: longitude,
+              function: () => loginGoogleSign(context),
+            );
+            final fetch = notifier.userFetch;
+            if (fetch.userState == UserState.LoginSuccess) {
+              hide = true;
+              final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+              _validateUserData(context, _result, true, onlineVersion: fetch.version);
+            }
+            if (fetch.userState == UserState.LoginError) {
+              if (fetch.data != null) {
+                clearTextController();
+                incorrect = true;
+              }
+            }
           }
+          setLoading(false);
+
+          // if (data != null) {
+          //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
+          //       argument: UserInterestScreenArgument());
+          //   notifyListeners();
+          // }
+
+        } else {
+          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
       }
-
-      // if (data != null) {
-      //   Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root,
-      //       argument: UserInterestScreenArgument());
-      //   notifyListeners();
-      // }
-
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
-    }
+    });
   }
 
   // Future<UserCredential?> loginGoogleSignIn(BuildContext context) async {
@@ -350,47 +413,47 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   //   });
   // }
 
-  Future loginTwitter() async {
-    final twitterLogin = TwitterLogin(
-      /// Consumer API keys
-      apiKey: SosmedConstants.twitterApiKey,
+  // Future loginTwitter() async {
+  //   final twitterLogin = TwitterLogin(
+  //     /// Consumer API keys
+  //     apiKey: SosmedConstants.twitterApiKey,
 
-      /// Consumer API Secret keys
-      apiSecretKey: SosmedConstants.twitterApiSecretKey,
+  //     /// Consumer API Secret keys
+  //     apiSecretKey: SosmedConstants.twitterApiSecretKey,
 
-      /// Registered Callback URLs in TwitterApp
-      /// Android is a deeplink
-      /// iOS is a URLScheme
-      redirectURI: SosmedConstants.twitterRedirectURI,
-    );
+  //     /// Registered Callback URLs in TwitterApp
+  //     /// Android is a deeplink
+  //     /// iOS is a URLScheme
+  //     redirectURI: SosmedConstants.twitterRedirectURI,
+  //   );
 
-    /// Forces the user to enter their credentials
-    /// to ensure the correct users account is authorized.
-    /// If you want to implement Twitter account switching, set [force_login] to true
-    /// login(forceLogin: true);
-    final authResult = await twitterLogin.loginV2();
-    switch (authResult.status) {
-      case TwitterLoginStatus.loggedIn:
-        // success
-        print('====== Login success ======');
-        print("TWITTER_TOKEN => ${authResult.authToken}");
-        print("TWITTER_USER_ID => ${authResult.user?.id}");
-        print("TWITTER_USER_NAME => ${authResult.user?.name}");
-        print("TWITTER_USER_SCREEN_NAME => ${authResult.user?.screenName}");
-        print("TWITTER_USER_THUMB => ${authResult.user?.thumbnailImage}");
+  //   /// Forces the user to enter their credentials
+  //   /// to ensure the correct users account is authorized.
+  //   /// If you want to implement Twitter account switching, set [force_login] to true
+  //   /// login(forceLogin: true);
+  //   final authResult = await twitterLogin.loginV2();
+  //   switch (authResult.status) {
+  //     case TwitterLoginStatus.loggedIn:
+  //       // success
+  //       print('====== Login success ======');
+  //       print("TWITTER_TOKEN => ${authResult.authToken}");
+  //       print("TWITTER_USER_ID => ${authResult.user?.id}");
+  //       print("TWITTER_USER_NAME => ${authResult.user?.name}");
+  //       print("TWITTER_USER_SCREEN_NAME => ${authResult.user?.screenName}");
+  //       print("TWITTER_USER_THUMB => ${authResult.user?.thumbnailImage}");
 
-        break;
-      case TwitterLoginStatus.cancelledByUser:
-        // cancel
-        print('====== Login cancel ======');
-        break;
-      case TwitterLoginStatus.error:
-      case null:
-        // error
-        print('====== Login error ======');
-        break;
-    }
-  }
+  //       break;
+  //     case TwitterLoginStatus.cancelledByUser:
+  //       // cancel
+  //       print('====== Login cancel ======');
+  //       break;
+  //     case TwitterLoginStatus.error:
+  //     case null:
+  //       // error
+  //       print('====== Login error ======');
+  //       break;
+  //   }
+  // }
 
   @override
   void setLoading(bool val, {bool setState = true, Object? loadingObject}) {
@@ -398,26 +461,26 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     if (setState) notifyListeners();
   }
 
-  Future<void> FacebookSignin() async {
-    final LoginResult loginResult = await FacebookAuth.i.login();
-    print('halo ${loginResult.accessToken}');
-    if (loginResult.status == LoginStatus.success) {
-      _accessToken = loginResult.accessToken;
+  // Future<void> FacebookSignin() async {
+  //   final LoginResult loginResult = await FacebookAuth.i.login();
+  //   print('halo ${loginResult.accessToken}');
+  //   if (loginResult.status == LoginStatus.success) {
+  //     _accessToken = loginResult.accessToken;
 
-      final data = await FacebookAuth.i.getUserData();
-      print('datanya $data');
+  //     final data = await FacebookAuth.i.getUserData();
+  //     print('datanya $data');
 
-      // FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
-      // debugPrint("FB_USER_ID => ${_accessToken?.userId}");
-      // debugPrint("FB_TOKEN => ${_accessToken?.token}");
-      // debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
-      // debugPrint("FB_APPID => ${_accessToken?.applicationId}");
-      // debugPrint("FB_ID => ${fbUser.id}");
-      // debugPrint("FB_EMAIL => ${fbUser.email}");
-      // debugPrint("FB_NAME => ${fbUser.name}");
-      // debugPrint("FB_PIC => ${fbUser.picture?.picture}");
+  //     // FacebookSignIn fbUser = FacebookSignIn.fromJson(data);
+  //     // debugPrint("FB_USER_ID => ${_accessToken?.userId}");
+  //     // debugPrint("FB_TOKEN => ${_accessToken?.token}");
+  //     // debugPrint("FB_TOKEN_EXPIRES => ${_accessToken?.expires}");
+  //     // debugPrint("FB_APPID => ${_accessToken?.applicationId}");
+  //     // debugPrint("FB_ID => ${fbUser.id}");
+  //     // debugPrint("FB_EMAIL => ${fbUser.email}");
+  //     // debugPrint("FB_NAME => ${fbUser.name}");
+  //     // debugPrint("FB_PIC => ${fbUser.picture?.picture}");
 
-      // _currentUser = fbUser;
-    }
-  }
+  //     // _currentUser = fbUser;
+  //   }
+  // }
 }

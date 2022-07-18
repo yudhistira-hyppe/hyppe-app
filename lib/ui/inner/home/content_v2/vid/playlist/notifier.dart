@@ -4,6 +4,7 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -75,21 +76,21 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
         // System().actionReqiredIdCard(
         //   context,
         //   action: () async {
-            statusFollowing = StatusFollowing.requested;
-            final notifier = FollowBloc();
-            await notifier.followUserBlocV2(
-              context,
-              data: FollowUserArgument(
-                receiverParty: _data?.email ?? '',
-                eventType: InteractiveEventType.following,
-              ),
-            );
-            final fetch = notifier.followFetch;
-            if (fetch.followState == FollowState.followUserSuccess) {
-              statusFollowing = StatusFollowing.requested;
-            } else {
-              statusFollowing = StatusFollowing.none;
-            }
+        statusFollowing = StatusFollowing.requested;
+        final notifier = FollowBloc();
+        await notifier.followUserBlocV2(
+          context,
+          data: FollowUserArgument(
+            receiverParty: _data?.email ?? '',
+            eventType: InteractiveEventType.following,
+          ),
+        );
+        final fetch = notifier.followFetch;
+        if (fetch.followState == FollowState.followUserSuccess) {
+          statusFollowing = StatusFollowing.requested;
+        } else {
+          statusFollowing = StatusFollowing.none;
+        }
         //   },
         //   uploadContentAction: false,
         // );
@@ -161,5 +162,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     }
 
     return true;
+  }
+
+  void reportContent(BuildContext context) {
+    ShowBottomSheet.onReportContent(context);
   }
 }

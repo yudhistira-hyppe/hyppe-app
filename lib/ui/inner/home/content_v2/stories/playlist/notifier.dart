@@ -26,6 +26,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -481,6 +482,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     } catch (e) {
       'follow user: ERROR: $e'.logger();
     }
+  }
+
+  void reportContent(BuildContext context, {StoryController? storyController}) {
+    storyController?.pause();
+    ShowBottomSheet.onReportContent(context);
   }
 }
 

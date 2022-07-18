@@ -11,6 +11,7 @@ import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -27,6 +28,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/user_agreement/user_aggrement_no
 import 'package:hyppe/ui/outer/sign_up/contents/user_complete_profile/user_complete_profile_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/notifier.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
@@ -65,6 +67,7 @@ class AppDependencies {
 
         // UI && OUTER
         ChangeNotifierProvider(create: (context) => LoginNotifier()),
+        ChangeNotifierProvider(create: (context) => WelcomeLoginNotifier()),
 
         // SIGN UP
         ChangeNotifierProvider(create: (context) => SignUpPinNotifier()),
@@ -190,7 +193,11 @@ class AppDependencies {
         ChangeNotifierProvider<ProfileCompletionNotifier>(
             create: (context) => ProfileCompletionNotifier()),
 
+        //ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier())
         ChangeNotifierProvider<ReferralNotifier>(
-            create: (context) => ReferralNotifier())
+            create: (context) => ReferralNotifier()),
+
+        ChangeNotifierProvider<ReviewBuyNotifier>(
+            create: (context) => ReviewBuyNotifier())
       ];
 }

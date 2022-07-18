@@ -28,7 +28,7 @@ class LikeNotifier with ChangeNotifier {
         // Prevent user from liking his own post
         return;
       }
-      
+      print('rijal ${postData.isLiked}');
 
       // if (!(postData.insight?.isPostLiked ?? false)) {
       //   postData.insight?.isPostLiked =
@@ -41,18 +41,17 @@ class LikeNotifier with ChangeNotifier {
       // }
 
       if (postData.isLiked == true) {
-           postData.isLiked = false;
-          
-          
+        postData.isLiked = false;
+        postData.insight?.isPostLiked = false;
+        notifyListeners();
+
         await notifier.likePostUserBloc(context,
             postId: postData.postID!,
             emailOwner: postData.email!,
             isLike: postData.isLiked!);
         final fetch = notifier.likeFetch;
-
-       
-
         notifyListeners();
+
         if (fetch.likeState == LikeState.likeUserPostSuccess) {
           "Like post success".logger();
 
@@ -62,17 +61,18 @@ class LikeNotifier with ChangeNotifier {
           notifyListeners();
         }
       } else if (postData.isLiked == false) {
-       
-             postData.isLiked = true;
-           
-      
+        postData.isLiked = true;
+        postData.insight?.isPostLiked = true;
+        notifyListeners();
+
+        print('ini false ${postData.isLiked}');
         await notifier.likePostUserBloc(context,
             postId: postData.postID!,
             emailOwner: postData.email!,
             isLike: postData.isLiked!);
-     
+        print('ini false');
         final fetch = notifier.likeFetch;
-       
+
         notifyListeners();
         if (fetch.likeState == LikeState.likeUserPostSuccess) {
           "Like post success".logger();
@@ -93,14 +93,13 @@ class LikeNotifier with ChangeNotifier {
       //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
       //   }
       // }
-      // await notifier.likePostUserBloc(context,
-      //     postId: postData.postID!,
-      //     emailOwner: postData.email!,
-      //     isLike: postData.isLiked!);
+
+      // await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
       // final fetch = notifier.likeFetch;
       // if (fetch.likeState == LikeState.likeUserPostSuccess) {
       //   "Like post success".logger();
       // }
+      // notifyListeners();
 
       //   },
       // );

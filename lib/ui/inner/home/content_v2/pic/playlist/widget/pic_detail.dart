@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -88,67 +89,79 @@ class _PicDetailState extends State<PicDetail> {
               ),
               // Top action
               SafeArea(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextButton(
-                      onPressed: () {
-                        resetZooming();
-                        Routing().moveBack();
-                      },
-                      style: ButtonStyle(
-                        alignment: Alignment.topCenter,
-                        padding: MaterialStateProperty.all(EdgeInsets.zero),
-                      ),
-                      child: const DecoratedIconWidget(
-                        Icons.arrow_back_ios,
-                        shadows: [
-                          BoxShadow(
-                            blurRadius: 12.0,
-                            color: Colors.black,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextButton(
+                            onPressed: () {
+                              resetZooming();
+                              Routing().moveBack();
+                            },
+                            style: ButtonStyle(
+                              alignment: Alignment.topCenter,
+                              padding:
+                                  MaterialStateProperty.all(EdgeInsets.zero),
+                            ),
+                            child: const DecoratedIconWidget(
+                              Icons.arrow_back_ios,
+                              shadows: [
+                                BoxShadow(
+                                  blurRadius: 12.0,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          ),
+                          ProfileComponent(
+                            isDetail: true,
+                            show: true,
+                            following: true,
+                            onFollow: () {},
+                            haveStory: false,
+                            onTapOnProfileImage: () => System()
+                                .navigateToProfile(
+                                    context, widget.arguments!.email!),
+                            spaceProfileAndId: eightPx,
+                            featureType: FeatureType.pic,
+                            username: widget.arguments?.username,
+                            isCelebrity: widget.arguments?.privacy?.isCelebrity,
+                            imageUrl:
+                                '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
+                            createdAt: '${System().readTimestamp(
+                              DateTime.parse(widget.arguments!.createdAt!)
+                                  .millisecondsSinceEpoch,
+                              context,
+                              fullCaption: true,
+                            )}',
+                            // username: picData.username,
+                            // spaceProfileAndId: eightPx,
+                            // isCelebrity: picData.isCelebrity,
+                            // haveStory: picData.isHaveStory ?? false,
+                            // imageUrl: '${picData.profilePic}$VERYBIG',
+                            // featureType: context.read<SeeAllNotifier>().featureType!,
+                            // onTapOnProfileImage: () => System().navigateToProfileScreen(context, picData),
+                            // createdAt: '${System().readTimestamp(int.parse(picData.createdAt!), context, fullCaption: true)}',
                           ),
                         ],
                       ),
-                    ),
-                    ProfileComponent(
-                      isDetail: true,
-                      show: true,
-                      following: true,
-                      onFollow: () {},
-                      haveStory: false,
-                      onTapOnProfileImage: () => System()
-                          .navigateToProfile(context, widget.arguments!.email!),
-                      spaceProfileAndId: eightPx,
-                      featureType: FeatureType.pic,
-                      username: widget.arguments?.username,
-                      isCelebrity: widget.arguments?.privacy?.isCelebrity,
-                      imageUrl:
-                          '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
-                      createdAt: '${System().readTimestamp(
-                        DateTime.parse(widget.arguments!.createdAt!)
-                            .millisecondsSinceEpoch,
-                        context,
-                        fullCaption: true,
-                      )}',
-                      // username: picData.username,
-                      // spaceProfileAndId: eightPx,
-                      // isCelebrity: picData.isCelebrity,
-                      // haveStory: picData.isHaveStory ?? false,
-                      // imageUrl: '${picData.profilePic}$VERYBIG',
-                      // featureType: context.read<SeeAllNotifier>().featureType!,
-                      // onTapOnProfileImage: () => System().navigateToProfileScreen(context, picData),
-                      // createdAt: '${System().readTimestamp(int.parse(picData.createdAt!), context, fullCaption: true)}',
-                    ),
-                  ],
+                      _buildButtonV2(
+                        context: context,
+                        iconData: '${AssetPath.vectorPath}more.svg',
+                        function: () =>
+                            ShowBottomSheet.onReportContent(context),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              // _buildButton(
-              //   context,
-              //   iconData: '${AssetPath.vectorPath}more.svg',
-              //   function: () => ShowBottomSheet.onShowReport(context, data: picData, reportType: ReportType.post),
-              //   alignment: const Alignment(1.0, -0.98),
-              // ),
+
               // _buildButton(
               //   context,
               //   iconData: '${AssetPath.vectorPath}bookmark.svg',
@@ -190,6 +203,11 @@ class _PicDetailState extends State<PicDetail> {
                                   .createdDynamicLink(context,
                                       data: widget.arguments)
                               : () {},
+                        ),
+                        _buildButtonV2(
+                          context: context,
+                          iconData: '${AssetPath.vectorPath}cart.svg',
+                          function: () => ShowBottomSheet.onBuyContent(context),
                         ),
                         // _buildButtonV2(
                         //   context: context,

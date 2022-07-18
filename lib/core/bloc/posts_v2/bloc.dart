@@ -67,6 +67,7 @@ class PostsBloc {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.getContentsSuccess,
+              version: onResult.data['version'],
               data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
@@ -85,20 +86,21 @@ class PostsBloc {
     );
   }
 
-  Future postContentsBlocV2(
-    BuildContext context, {
-    String? tags,
-    required FeatureType type,
-    required bool allowComment,
-    required bool certified,
-    required String description,
-    required String visibility,
-    String location = "Indonesia",
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-    required List<String?> fileContents,
-    required NativeDeviceOrientation rotate,
-  }) async {
+  Future postContentsBlocV2(BuildContext context,
+      {String? tags,
+      required FeatureType type,
+      required bool allowComment,
+      required bool certified,
+      required String description,
+      required String visibility,
+      String location = "Indonesia",
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress,
+      required List<String?> fileContents,
+      required NativeDeviceOrientation rotate,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView}) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -127,6 +129,14 @@ class PostsBloc {
     formData.fields.add(MapEntry('location', location));
     formData.fields
         .add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
+    // sell content
+    formData.fields.add(MapEntry(
+        'saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(
+        MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(
+        MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 

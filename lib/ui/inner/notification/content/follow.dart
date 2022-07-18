@@ -30,6 +30,7 @@ class FollowNotification extends StatelessWidget {
               data: _data[index],
               rightWidget: (_data[index].flowIsDone ?? true)
                   ? const SizedBox.shrink()
+                  // : const SizedBox.shrink()
                   : AcceptButton(
                       data: _data[index],
                     ),

@@ -3,6 +3,7 @@ class Routes {
 
   static const String root = '/';
   static const String login = '/login';
+  static const String welcomeLogin = '/welcome-login';
   static const String lobby = '/lobby';
   static const String selfProfile = '/self-profile';
   static const String otherProfile = '/other-profile';
@@ -56,4 +57,9 @@ class Routes {
   static const String imagePreviewScreen = '/image-preview-screen';
 
   static const String testAliPlayer = '/test-ali-player';
+
+  static const String reviewBuyContent = '/review-buy-content';
+  static const String paymentScreen = '/payment-screen';
+  static const String paymentMethodScreen = '/payment-method-screen';
+  static const String paymentBCAScreen = '/payment-bca-screen';
 }

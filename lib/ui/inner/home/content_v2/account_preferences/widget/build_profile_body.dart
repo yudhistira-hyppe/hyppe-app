@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
@@ -21,23 +22,30 @@ class BuildProfileBody extends StatelessWidget {
               controller: notifier.userNameController,
               labelText: "${notifier.language.userName}*",
               hintText: notifier.language.userName,
+              inputAreaHeight: 50 * SizeConfig.scaleDiagonal,
             ),
             TextInputAccountPreferences(
               controller: notifier.emailController,
               labelText: "${notifier.language.email}*",
               hintText: notifier.language.email,
               readOnly: true,
+              inputAreaHeight: 50 * SizeConfig.scaleDiagonal,
             ),
             TextInputAccountPreferences(
               controller: notifier.fullNameController,
               labelText: "${notifier.language.fullName}*",
               hintText: notifier.language.fullName,
+              inputAreaHeight: 50 * SizeConfig.scaleDiagonal,
             ),
             TextInputAccountPreferences(
               controller: notifier.bioController,
               labelText: "Bio",
               hintText: "Bio",
               inputFormatter: [LengthLimitingTextInputFormatter(150)],
+              maxLength: 150,
+              inputAreaHeight: 200 * SizeConfig.scaleDiagonal,
+              minLines: 3,
+              keyboardNewline: true,
             ),
             const ProofPicture(),
           ],

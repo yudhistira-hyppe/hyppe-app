@@ -51,25 +51,30 @@ class _BuildTopViewState extends State<BuildTopView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Selector<SelfProfileNotifier, UserProfileModel?>(
-              selector: (_, select) => select.user.profile,
-              builder: (_, valueNotifier, __) {
-                return ProfileComponent(
-                  isDetail: true,
-                  show: true,
-                  onFollow: () {},
-                  following: true,
-                  createdAt: widget.when,
-                  isCelebrity: false,
-                  onTapOnProfileImage: () => System().navigateToProfile(context, widget.data!.email!, storyController: widget.storyController),
-                  featureType: FeatureType.story,
-                  username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
-                  imageUrl: notifier.onProfilePicShow(
-                    "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data!.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
-                  ),
-                  // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
-                );
-              },
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Selector<SelfProfileNotifier, UserProfileModel?>(
+                  selector: (_, select) => select.user.profile,
+                  builder: (_, valueNotifier, __) {
+                    return ProfileComponent(
+                      isDetail: true,
+                      show: true,
+                      onFollow: () {},
+                      following: true,
+                      createdAt: widget.when,
+                      isCelebrity: false,
+                      onTapOnProfileImage: () => System().navigateToProfile(context, widget.data!.email!, storyController: widget.storyController),
+                      featureType: FeatureType.story,
+                      username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
+                      imageUrl: notifier.onProfilePicShow(
+                        "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data!.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
+                      ),
+                      // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
+                    );
+                  },
+                ),
+              ],
             ),
             Row(
               children: [
@@ -94,6 +99,16 @@ class _BuildTopViewState extends State<BuildTopView> {
                       ),
                     ),
                   ),
+                ),
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: GestureDetector(
+                      onTap: () => notifier.reportContent(context, storyController: widget.storyController),
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Colors.white,
+                      )),
                 ),
                 SizedBox(
                   width: 40,

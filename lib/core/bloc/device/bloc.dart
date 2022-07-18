@@ -24,9 +24,9 @@ class DeviceBloc {
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setDeviceFetch(DeviceFetch(DeviceState.activityAwakeSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setDeviceFetch(DeviceFetch(DeviceState.activityAwakeSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -57,14 +57,14 @@ class DeviceBloc {
 
     await Repos().reposPost(
       context,
-          (onResult) {
+      (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-          (errorData) {
+      (errorData) {
         setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError));
       },
       methodType: MethodType.post,
@@ -78,7 +78,7 @@ class DeviceBloc {
         "email": "$email",
         "deviceId": "$deviceID",
         "event": "SLEEP",
-        "status":"ACTIVE",
+        "status": "ACTIVE",
       },
     );
   }

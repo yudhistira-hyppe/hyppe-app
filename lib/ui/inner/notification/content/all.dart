@@ -26,6 +26,7 @@ class AllNotification extends StatelessWidget {
                   ? const SizedBox.shrink()
                   : System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
                           System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
+                      // ? Container()
                       ? AcceptButton(data: notifier.data?[index])
                       : ImageComponent(
                           borderRadiusGeometry: BorderRadius.circular(4.0),

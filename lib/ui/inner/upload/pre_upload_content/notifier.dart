@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -30,10 +31,12 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+// import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
   final _eventService = EventService();
   final _socketService = SocketService();
+  late UpdateContentsArgument _arguments;
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -43,6 +46,8 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   final TextEditingController captionController = TextEditingController();
   final TextEditingController tagsController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  //final priceController = MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
 
   bool _updateContent = false;
   FeatureType? _featureType;
@@ -55,6 +60,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? _tags;
   String _visibility = "PUBLIC";
   dynamic _thumbNail;
+  bool _toSell = false;
+  bool _includeTotalViews = false;
+  bool _includeTotalLikes = false;
+  bool _priceIsFilled = false;
+  bool _isSavedPrice = false;
 
   bool get updateContent => _updateContent;
   FeatureType? get featureType => _featureType;
@@ -66,6 +76,12 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
+  bool get toSell => _toSell;
+  bool get includeTotalViews => _includeTotalViews;
+  bool get includeTotalLikes => _includeTotalLikes;
+  bool get priceIsFilled => _priceIsFilled;
+  bool get isSavedPrice => _isSavedPrice;
+  UpdateContentsArgument get updateArguments => _arguments;
 
   set thumbNail(val) {
     _thumbNail = val;
@@ -94,6 +110,9 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set certified(bool val) {
     _certified = val;
+    if (!val) {
+      _toSell = false;
+    }
     notifyListeners();
   }
 
@@ -117,6 +136,36 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set toSell(bool val) {
+    _toSell = val;
+    notifyListeners();
+  }
+
+  set includeTotalViews(bool val) {
+    _includeTotalViews = val;
+    notifyListeners();
+  }
+
+  set includeTotalLikes(bool val) {
+    _includeTotalLikes = val;
+    notifyListeners();
+  }
+
+  set priceIsFilled(bool val) {
+    _priceIsFilled = val;
+    notifyListeners();
+  }
+
+  set isSavedPrice(bool val) {
+    _isSavedPrice = val;
+    notifyListeners();
+  }
+
+  set setUpdateArguments(UpdateContentsArgument args) {
+    _arguments = args;
+    notifyListeners();
+  }
+
   void onWillPop(BuildContext context) =>
       ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
 
@@ -125,6 +174,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   void handleDeleteOnLocation() => selectedLocation = '';
 
   bool _validateDescription() => captionController.text.length >= 5;
+
+  bool _validatePrice() => priceController.text.isNotEmpty;
 
   void checkKeyboardFocus(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -167,6 +218,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     certified = false;
     captionController.clear();
     tagsController.clear();
+    priceController.clear();
   }
 
   Future _createPostContentV2() async {
@@ -186,6 +238,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         certified: certified,
         fileContents: fileContent!,
         description: captionController.text,
+        saleAmount: _toSell ? priceController.text : "0",
+        saleLike: _includeTotalLikes,
+        saleView: _includeTotalViews,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         onReceiveProgress: (count, total) {
           _eventService.notifyUploadReceiveProgress(
@@ -303,31 +358,78 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future<void> onClickPost(BuildContext context,
       {required bool onEdit, ContentData? data, String? content}) async {
-    checkKeyboardFocus(context);
-    final connection = await System().checkConnections();
-    if (_validateDescription()) {
-      if (connection) {
-        checkKeyboardFocus(context);
-        if (onEdit) {
-          _updatePostContentV2(context,
-              postID: data!.postID!, content: content!);
-        } else {
-          _createPostContentV2();
-        }
-      } else {
-        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-          Routing().moveBack();
-          onClickPost(context, onEdit: onEdit, data: data, content: content);
-        });
+    if (_toSell) {
+      if (!_validatePrice()) {
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.priceIsNotEmpty!,
+          color: Theme.of(context).colorScheme.error,
+          maxLines: 2,
+        );
+        return;
       }
-    } else {
+    }
+
+    if (!_validateDescription()) {
       ShowBottomSheet().onShowColouredSheet(
         context,
         language.descriptionCanOnlyWithMin5Characters!,
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
       );
+      return;
     }
+
+    final connection = await System().checkConnections();
+    if (!connection) {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onClickPost(context, onEdit: onEdit, data: data, content: content);
+      });
+      return;
+    }
+
+    checkKeyboardFocus(context);
+    if (onEdit) {
+      _updatePostContentV2(context, postID: data!.postID!, content: content!);
+    } else {
+      _createPostContentV2();
+    }
+
+    // if (_validateDescription()) {
+    //   if (connection) {
+    //     // if (_validatePrice()) {
+    //     //   Routing().move(Routes.reviewSellContent, argument: _arguments);
+    //     // } else {
+    //     //   ShowBottomSheet().onShowColouredSheet(
+    //     //     context,
+    //     //     language.priceIsNotEmpty!,
+    //     //     color: Theme.of(context).colorScheme.error,
+    //     //     maxLines: 2,
+    //     //   );
+    //     // }
+
+    //     checkKeyboardFocus(context);
+    //     if (onEdit) {
+    //       _updatePostContentV2(context,
+    //           postID: data!.postID!, content: content!);
+    //     } else {
+    //       _createPostContentV2();
+    //     }
+    //   } else {
+    //     ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+    //       Routing().moveBack();
+    //       onClickPost(context, onEdit: onEdit, data: data, content: content);
+    //     });
+    //   }
+    // } else {
+    //   ShowBottomSheet().onShowColouredSheet(
+    //     context,
+    //     language.descriptionCanOnlyWithMin5Characters!,
+    //     color: Theme.of(context).colorScheme.error,
+    //     maxLines: 2,
+    //   );
+    // }
   }
 
   Future<Uint8List?> makeThumbnail() async {
