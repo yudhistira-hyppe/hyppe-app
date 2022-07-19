@@ -356,6 +356,7 @@ class LocalizationModelV2 {
   String? yesCancelPost;
   String? keepEditing;
   String? descriptionCanOnlyWithMin5Characters;
+  String? categoryCanOnlyWithMin1Characters;
   String? internalServerError;
   String? postCanceled;
   String? postCreatedSuccessfully;
@@ -837,6 +838,7 @@ class LocalizationModelV2 {
       this.yesCancelPost,
       this.keepEditing,
       this.descriptionCanOnlyWithMin5Characters,
+      this.categoryCanOnlyWithMin1Characters,
       this.internalServerError,
       this.postCanceled,
       this.postCreatedSuccessfully,
@@ -1319,6 +1321,7 @@ class LocalizationModelV2 {
     yesCancelPost = json['yesCancelPost'];
     keepEditing = json['keepEditing'];
     descriptionCanOnlyWithMin5Characters = json['descriptionCanOnlyWithMin5Characters'];
+    categoryCanOnlyWithMin1Characters = json['categoryCanOnlyWithMin1Characters'];
     internalServerError = json['internalServerError'];
     postCanceled = json['postCanceled'];
     postCreatedSuccessfully = json['postCreatedSuccessfully'];

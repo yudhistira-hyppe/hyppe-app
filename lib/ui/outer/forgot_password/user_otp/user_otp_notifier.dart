@@ -198,7 +198,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
       await _directLogin(context, message);
     } catch (e) {
       print(e);
-      Routing().moveAndRemoveUntil(Routes.login, Routes.root);
+      Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
     } finally {
       setLoading(false);
       onResetData();

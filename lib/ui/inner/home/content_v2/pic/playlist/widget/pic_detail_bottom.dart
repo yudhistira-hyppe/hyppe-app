@@ -130,8 +130,9 @@ class PicDetailBottom extends StatelessWidget {
             //   ),
             // ),
             Consumer<LikeNotifier>(
-              builder: (context, notifier, child) => data != null
-                  ? _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
+                builder: (context, notifier, child) =>
+                    // data != null ?
+                    _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
                       // if (value.data?.isLiked == true) {
                       //   value.data?.isLiked = false;
                       // } else {
@@ -139,8 +140,8 @@ class PicDetailBottom extends StatelessWidget {
                       // }
                       notifier.likePost(context, data!);
                     }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
-                  : _buildButton(context, '${AssetPath.vectorPath} none-like.svg', "0", () {}),
-            ),
+                // : _buildButton(context, '${AssetPath.vectorPath} none-like.svg', "0", () {}),
+                ),
 
             data != null
                 ? (data?.allowComments ?? false)

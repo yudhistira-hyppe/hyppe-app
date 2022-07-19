@@ -356,6 +356,7 @@
   "yesCancelPost": "Iya, Batalkan Kiriman",
   "keepEditing": "Tetap Ubah",
   "descriptionCanOnlyWithMin5Characters": "Deskripsi harus terisi minimal 5 karakter",
+  "categoryCanOnlyWithMin1Characters": "Kategori harus terpilih minimal 1",
   "internalServerError": "Server dalam gangguan",
   "postCanceled": "Kiriman di hentikan",
   "postCreatedSuccessfully": "Kiriman sukses terbuat",

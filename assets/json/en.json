@@ -356,6 +356,7 @@
   "yesCancelPost": "Yes, Cancel Post",
   "keepEditing": "Keep Editing",
   "descriptionCanOnlyWithMin5Characters": "Description can only with min 5 characters",
+  "categoryCanOnlyWithMin1Characters": "Category can only with min 1",
   "internalServerError": "Internal Server Error",
   "postCanceled": "Post canceled",
   "postCreatedSuccessfully": "Post created successfully",
