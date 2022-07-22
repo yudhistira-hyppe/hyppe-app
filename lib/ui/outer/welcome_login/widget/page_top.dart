@@ -38,7 +38,7 @@ class PageTop extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomTextWidget(
-              textToDisplay: " MonetizeYourIdeas",
+              textToDisplay: "#MonetizeYourIdeas",
               textStyle: Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

@@ -479,6 +479,7 @@ class LocalizationModelV2 {
   String? addPostDescription;
   String? privacy;
   String? selectLocation;
+  String? youDontHaveAnyPostsYetCreateOneNow;
 
   LocalizationModelV2(
       {this.login,
@@ -960,7 +961,8 @@ class LocalizationModelV2 {
       this.commentWillPermanentlyDeletedContinue,
       this.addPostDescription,
       this.privacy,
-      this.selectLocation});
+      this.selectLocation,
+      this.youDontHaveAnyPostsYetCreateOneNow});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1444,5 +1446,6 @@ class LocalizationModelV2 {
     addPostDescription = json['addPostDescription'];
     privacy = json['privacy'];
     selectLocation = json['selectLocation'];
+    youDontHaveAnyPostsYetCreateOneNow = json['youDontHaveAnyPostsYetCreateOneNow'];
   }
 }

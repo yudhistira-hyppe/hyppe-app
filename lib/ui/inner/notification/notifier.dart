@@ -78,10 +78,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   void scrollListener(BuildContext context, ScrollController scrollController) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !notificationsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !notificationsQuery.loading && hasNext) {
       getNotifications(context);
     }
   }
@@ -143,7 +140,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
       LikeNotification(): language.like!,
       CommentNotification(): language.comment!,
       const FollowNotification(category: NotificationCategory.follower): language.follow!,
-      const FollowNotification(category: NotificationCategory.following): 'Following',
+      const FollowNotification(category: NotificationCategory.following): language.following!,
       MentionNotification(): language.mention!,
       GeneralNotification(): language.general!
     };
@@ -159,13 +156,13 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
       // System().actionReqiredIdCard(
       //   context,
       //   action: () async {
-          final notifier = FollowBloc();
-          await notifier.followUserBlocV2(context, data: argument);
-          final fetch = notifier.followFetch;
-          if (fetch.followState == FollowState.followUserSuccess) {
-            _data?.removeWhere((element) => element.notificationID == data?.notificationID);
-            notifyListeners();
-          }
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(context, data: argument);
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        _data?.removeWhere((element) => element.notificationID == data?.notificationID);
+        notifyListeners();
+      }
       //   },
       //   uploadContentAction: false,
       // );

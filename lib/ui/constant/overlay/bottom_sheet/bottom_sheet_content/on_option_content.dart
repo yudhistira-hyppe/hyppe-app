@@ -171,6 +171,8 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
 
                     notifier.privacyValue = widget.contentData.visibility!;
                     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+                    print('widget.contentData.visibility');
+                    print(widget.contentData.visibility);
                     if (_isoCodeCache == 'id') {
                       switch (widget.contentData.visibility!) {
                         case 'PUBLIC':
@@ -188,11 +190,13 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                       notifier.privacyValue = widget.contentData.visibility!;
                     }
 
+                    notifier.interestData = [];
                     if (widget.contentData.cats != null) {
                       widget.contentData.cats!.map((val) {
                         notifier.interestData.add(val.interestName!);
                       }).toList();
                     }
+                    notifier.userTagData = [];
                     if (widget.contentData.tagPeople != null) {
                       widget.contentData.tagPeople!.map((val) {
                         notifier.userTagData.add(val);

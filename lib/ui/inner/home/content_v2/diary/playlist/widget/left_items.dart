@@ -24,8 +24,7 @@ class LeftItems extends StatefulWidget {
   _LeftItemsState createState() => _LeftItemsState();
 }
 
-class _LeftItemsState extends State<LeftItems>
-    with SingleTickerProviderStateMixin {
+class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMixin {
   // AnimationController? _controller;
   // Animation<Offset>? _offsetAnimation;
 
@@ -60,8 +59,9 @@ class _LeftItemsState extends State<LeftItems>
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.5),
+            padding: const EdgeInsets.all(2),
+            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
             child: SingleChildScrollView(
               child: ReadMoreText(
                 "${widget.description} ${widget.tags}",
@@ -70,16 +70,10 @@ class _LeftItemsState extends State<LeftItems>
                 textAlign: TextAlign.left,
                 trimExpandedText: 'Show less',
                 trimCollapsedText: 'Show more',
-                colorClickableText:
-                    Theme.of(context).colorScheme.primaryVariant,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: kHyppeLightButtonText),
-                moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    color: Theme.of(context).colorScheme.primaryVariant),
-                lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    color: Theme.of(context).colorScheme.primaryVariant),
+                colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
               ),
             ),
           ),

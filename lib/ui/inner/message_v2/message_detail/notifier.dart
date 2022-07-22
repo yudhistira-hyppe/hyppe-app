@@ -2,6 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 // import 'package:hyppe/core/constants/api.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/event/discuss_event_handler.dart';
@@ -47,14 +48,24 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
   List<MessageDataV2>? get discussData => _discussData;
 
+  int _selectData = 0;
+
+  int get selectData => _selectData;
+
   set discussData(List<MessageDataV2>? val) {
     _discussData = val;
+    notifyListeners();
+  }
+
+  set selectData(int val) {
+    _selectData = val;
     notifyListeners();
   }
 
   void initState(BuildContext context, MessageDetailArgument argument) {
     _argument = argument;
     // _connectAndListenToSocket(context);
+    _selectData = -1;
 
     _eventService.addDiscussHandler(EventKey.messageReceivedKey, this);
     getMessageDiscussion(context, reload: true);
@@ -62,6 +73,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
   void disposeNotifier() {
     // _socketService.closeSocket();
+    _selectData = -1;
     _eventService.removeDiscussHandler(EventKey.messageReceivedKey);
   }
 
@@ -141,10 +153,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !discussQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !discussQuery.loading && hasNext) {
       getMessageDiscussion(context);
     }
   }
@@ -371,10 +380,12 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   // }
 
   void closeKeyboard(context) {
+    _selectData = -1;
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+    notifyListeners();
   }
 
   void onBack() {
@@ -414,4 +425,23 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //     );
   //   }
   // }
+
+  Future<void> deleteChat(
+    context,
+  ) async {
+    final _routing = Routing();
+    final notifier = MessageBlocV2();
+    String? postId = _discussData?.first.disqusLogs[_selectData].lineID;
+    try {
+      await notifier.deleteDiscussionBloc(context, postEmail: '', postId: postId!);
+      final fetch = notifier.messageFetch;
+      if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
+        _selectData = -1;
+        getMessageDiscussion(context, reload: true);
+      }
+    } catch (e) {
+      _routing.moveBack();
+      e.logger();
+    }
+  }
 }

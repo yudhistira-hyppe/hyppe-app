@@ -258,25 +258,25 @@ class CommentNotifierV2 with ChangeNotifier {
   }
 
   void autoComplete(BuildContext context, value) {
+    final selection = _commentController.selection;
+    String _text = value.toString().substring(0, selection.baseOffset);
     final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9]+\w*", caseSensitive: false);
-    final sentences = value.split('\n');
-    sentences.forEach(
-      (sentence) {
-        final words = sentence.split(' ');
-        String withat = words.last;
-        if (_tagRegex.hasMatch(withat)) {
-          String withoutat = withat.substring(1);
-          if (withoutat.length > 2) {
-            _startSearch = 0;
-            _isShowAutoComplete = true;
-            searchPeople(context, input: withoutat);
-            _temporarySearch = withoutat;
-          }
-        } else {
-          _isShowAutoComplete = false;
+    final sentences = _text.split('\n');
+    for (var sentence in sentences) {
+      final words = sentence.split(' ');
+      String withat = words.last;
+      if (_tagRegex.hasMatch(withat)) {
+        String withoutat = withat.substring(1);
+        if (withoutat.length > 2) {
+          _startSearch = 0;
+          _isShowAutoComplete = true;
+          searchPeople(context, input: withoutat);
+          _temporarySearch = withoutat;
         }
-      },
-    );
+      } else {
+        _isShowAutoComplete = false;
+      }
+    }
     notifyListeners();
   }
 
@@ -284,12 +284,14 @@ class CommentNotifierV2 with ChangeNotifier {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       if (_startSearch == 0) {
-        _searchPeolpleData = [];
         _isLoading = true;
       }
       await notifier.getSearchPeopleBloc(context, input, _startSearch * 20, 20);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
+        if (_startSearch == 0) {
+          _searchPeolpleData = [];
+        }
         fetch.data.forEach((v) {
           _searchPeolpleData.add(SearchPeolpleData.fromJson(v));
         });

@@ -33,7 +33,6 @@ class Register extends StatelessWidget {
               ),
             ],
           ),
-          twelvePx,
         ],
       ),
     );

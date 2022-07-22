@@ -369,7 +369,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       context,
       postId: postID,
       type: featureType!,
-      visibility: visibility,
+      visibility: privacyValue,
       tags: tagsController.text,
       allowComment: allowComment,
       certified: certified,
@@ -379,27 +379,34 @@ class PreUploadContentNotifier with ChangeNotifier {
       location: locationName == 'Add Location' ? '' : locationName,
     );
     final fetch = notifier.postsFetch;
+
     if (fetch.postsState == PostsState.updateContentsSuccess) {
       context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
             content: content,
-            visibility: visibility,
+            visibility: privacyValue,
             allowComment: allowComment,
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
+            location: locationName == '' ? 'Add Location' : locationName,
+            tagPeople: userTagData,
+            cats: _interestData,
           );
 
       context.read<HomeNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
             content: content,
-            visibility: visibility,
+            visibility: privacyValue,
             allowComment: allowComment,
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
+            location: locationName == '' ? 'Add Location' : locationName,
+            tagPeople: userTagData,
+            cats: _interestData,
           );
 
       updateContent = false;
@@ -701,12 +708,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       if (_startSearch == 0) {
-        _searchPeolpleData = [];
         _isLoading = true;
       }
       await notifier.getSearchPeopleBloc(context, input, _startSearch * 10, 10);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
+        if (_startSearch == 0) {
+          _searchPeolpleData = [];
+        }
         fetch.data.forEach((v) {
           _searchPeolpleData.add(SearchPeolpleData.fromJson(v));
         });
@@ -728,50 +737,29 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future searchPeopleAutoComplete(BuildContext context, {input}) async {
-    final notifier = UtilsBlocV2();
-
-    if (_startSearch == 0) {
-      _searchPeolpleData = [];
-      _isLoading = true;
-    }
-    await notifier.getSearchPeopleBloc(context, input, _startSearch * 10, 10);
-    final fetch = notifier.utilsFetch;
-    if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
-      _searchPeopleACData = List<Map<String, dynamic>>.from(fetch.data);
-      // print('test2');
-
-      // print(searchPeopleACData.runtimeType);
-      print(_searchPeopleACData);
-
-      // (jsonDecode(fetch.data) as List).map((dynamic e) => searchPeopleACData as Map<String, dynamic>).toList();
-
-      notifyListeners();
-    }
-    _isLoading = false;
-    isLoadingLoadMore = false;
-  }
-
   void showAutoComplete(value, BuildContext context) {
+    _searchPeolpleData = [];
+    final selection = _captionController.selection;
+    String _text = value.toString().substring(0, selection.baseOffset);
     final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9]+\w*", caseSensitive: false);
-    final sentences = value.split('\n');
-    sentences.forEach(
-      (sentence) {
-        final words = sentence.split(' ');
-        String withat = words.last;
-        if (_tagRegex.hasMatch(withat)) {
-          String withoutat = withat.substring(1);
-          if (withoutat.length > 2) {
-            _startSearch = 0;
-            _isShowAutoComplete = true;
-            searchPeople(context, input: withoutat);
-            _temporarySearch = withoutat;
-          }
-        } else {
-          _isShowAutoComplete = false;
+    final sentences = _text.split('\n');
+
+    for (var sentence in sentences) {
+      final words = sentence.split(' ');
+      String withat = words.last;
+
+      if (_tagRegex.hasMatch(withat)) {
+        String withoutat = withat.substring(1);
+
+        if (withoutat.length > 2) {
+          _isShowAutoComplete = true;
+          searchPeople(context, input: withoutat);
+          _temporarySearch = withoutat;
         }
-      },
-    );
+      } else {
+        _isShowAutoComplete = false;
+      }
+    }
     notifyListeners();
   }
 

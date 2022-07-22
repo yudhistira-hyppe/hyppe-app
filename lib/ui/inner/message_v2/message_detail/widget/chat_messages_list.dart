@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/constants/size_config.dart';
 // import 'package:hyppe/core/constants/file_extension.dart';
 // import 'package:hyppe/core/constants/thumb/profile_image.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
-
 import 'package:hyppe/ui/inner/message_v2/message_detail/notifier.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/sender_layout.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/receiver_layout.dart';
@@ -60,37 +58,36 @@ class _ChatMessageListState extends State<ChatMessageList> {
                 physics: const BouncingScrollPhysics(),
                 padding: EdgeInsets.only(
                   top: 10 * SizeConfig.scaleDiagonal,
-                  left: 13 * SizeConfig.scaleDiagonal,
-                  right: 8 * SizeConfig.scaleDiagonal,
+                  // left: 13 * SizeConfig.scaleDiagonal,
+                  // right: 8 * SizeConfig.scaleDiagonal,
                   bottom: 10 * SizeConfig.scaleDiagonal,
                 ),
                 itemBuilder: (context, index) {
                   final discussLogs = notifier.discussData?.first.disqusLogs[index];
 
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        // child: Row(
-                        //   mainAxisAlignment:
-                        //       notifier.listChatData[index].senderID == notifier.senderID ? MainAxisAlignment.end : MainAxisAlignment.start,
-                        //   children: <Widget>[
-                        //     notifier.listChatData[index].senderID == notifier.senderID
-                        //         ? Flexible(child: SenderLayout(chatData: notifier.listChatData[index]))
-                        //         : Flexible(child: ReceiverLayout(chatData: notifier.listChatData[index]))
-                        //   ],
-                        // ),
-                        child: Row(
-                          mainAxisAlignment: notifier.isMyMessage(discussLogs?.sender) ? MainAxisAlignment.end : MainAxisAlignment.start,
-                          children: <Widget>[
-                            notifier.isMyMessage(discussLogs?.sender)
-                                ? Flexible(child: SenderLayout(chatData: discussLogs))
-                                : Flexible(child: ReceiverLayout(chatData: discussLogs))
-                          ],
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          color: notifier.selectData == index ? kHyppeBottomNavBarIcon : Colors.transparent,
+                          padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                          child: Row(
+                            mainAxisAlignment: notifier.isMyMessage(discussLogs?.sender) ? MainAxisAlignment.end : MainAxisAlignment.start,
+                            children: <Widget>[
+                              notifier.isMyMessage(discussLogs?.sender)
+                                  ? InkWell(
+                                      onLongPress: () {
+                                        notifier.selectData = index;
+                                      },
+                                      child: Flexible(child: SenderLayout(chatData: discussLogs)))
+                                  : Flexible(child: ReceiverLayout(chatData: discussLogs))
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               ),

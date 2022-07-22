@@ -110,6 +110,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
                   automaticallyImplyLeading: false,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
+
                 notifier.optionButton()
               ],
             ),

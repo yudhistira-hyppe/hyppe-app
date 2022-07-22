@@ -130,7 +130,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             Expanded(
                               flex: 8,
                               child: TextFormField(
-                                minLines: 3,
+                                minLines: 5,
                                 maxLines: 10,
                                 maxLength: 2500,
                                 validator: (String? input) {
@@ -234,7 +234,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         Row(
                           children: [
                             CustomTextWidget(
-                              textToDisplay: "Category ",
+                              textToDisplay: notifier.language.categories!,
                               textStyle: textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                             ),
                             Container(
@@ -255,11 +255,17 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   onPressed: () {
                                     notifier.insertInterest(context, index);
                                   },
-                                  style: TextButton.styleFrom(padding: EdgeInsets.zero, splashFactory: NoSplash.splashFactory),
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    splashFactory: NoSplash.splashFactory,
+                                  ),
                                   child: PickitemTitle(
                                     title: notifier.interest[index].interestName!,
                                     select: notifier.pickedInterest(notifier.interest[index].interestName) ? true : false,
                                     button: false,
+                                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: notifier.pickedInterest(notifier.interest[index].interestName) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
+                                        ),
                                   ),
                                 ),
                               ),
@@ -300,6 +306,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                             title: '@' + notifier.userTagData[index],
                                             select: notifier.pickedInterest(notifier.userTagData[index]) ? true : false,
                                             button: true,
+                                            textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                                  color: notifier.pickedInterest(notifier.userTagData[index]) ? kHyppeLightSurface : kHyppeSurface,
+                                                ),
                                           ),
                                         ),
                                       ),

@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
@@ -112,28 +113,29 @@ class ShowBottomSheet {
     );
   }
 
-  static onLongPressDeleteMessage(BuildContext _) {
+  static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
     showModalBottomSheet(
       context: _,
-      isScrollControlled: true,
-      enableDrag: true,
-      isDismissible: true,
+      isScrollControlled: false,
+
+      // isDismissible: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-          child: Container(
-            height: SizeConfig.screenHeight! / 1.78,
-            decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+        return Wrap(
+          children: [
+            Container(
+              // height: SizeConfig.screenHeight! / 1.78,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
+              padding: const EdgeInsets.all(0),
+              child: OnDeleteMessageBottomSheet(data: data, function: function),
             ),
-            padding: const EdgeInsets.all(0),
-            child: OnDeleteMessageBottomSheet(),
-          ),
+          ],
         );
       },
     );
