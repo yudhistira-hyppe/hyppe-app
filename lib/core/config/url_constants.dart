@@ -392,6 +392,12 @@ class UrlConstants {
   /// post => Get/Create Discussion
   static const String discuss = "$postRouteV2/disqus";
 
+  /// post => Delete Discuss
+  static const String deleteDiscuss = "$postRouteV2/disqus/deletedicuss";
+
+  /// post => Delete Chat
+  static const String deleteChat = "$postRouteV2/disqus/deletedicusslog";
+
   /// post => Get Notification
   static const String getNotification = "$postRouteV2/getnotification";
 

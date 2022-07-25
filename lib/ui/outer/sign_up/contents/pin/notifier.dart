@@ -197,7 +197,7 @@ class SignUpPinNotifier with ChangeNotifier {
     if (indicateBack) {
       unFocusingNode();
       SharedPreference().removeValue(SpKeys.isUserInOTP);
-      Routing().moveAndRemoveUntil(Routes.login, Routes.root);
+      Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
     }
   }
 
@@ -346,7 +346,7 @@ class SignUpPinNotifier with ChangeNotifier {
     await ShowBottomSheet().onShowColouredSheet(context, language.verified!, subCaption: message).whenComplete(() async {
       switch (verifyPageArgument.redirect) {
         case VerifyPageRedirection.toLogin:
-          Routing().moveAndRemoveUntil(Routes.login, Routes.root);
+          Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
           break;
         case VerifyPageRedirection.toHome:
           Routing().moveAndRemoveUntil(

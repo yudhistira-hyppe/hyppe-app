@@ -152,9 +152,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
               // notifier.onCloseStory(mounted);
               // notifier.nextPage();
               // _storyController.next();
-              System().increaseViewCount(context, widget.data!).whenComplete(() {
-                setState(() {});
-              });
+              System().increaseViewCount(context, widget.data!).whenComplete(() {});
             });
             if (isLastPage) {
               notifier.onCloseStory(mounted);

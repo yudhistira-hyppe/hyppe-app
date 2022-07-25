@@ -117,10 +117,15 @@ class _MessageScreenState extends State<MessageScreen> {
 
                                       return InkWell(
                                         onTap: () => notifier.onClickUser(context, discussData),
-                                        // onLongPress: () {
-                                        //   // ShowBottomSheet.onLongPressTileUserMessage(context);
-                                        //   notifier.onLongPressUser(context, discussData);
-                                        // },
+                                        onLongPress: () {
+                                          // ShowBottomSheet.onLongPressTileUserMessage(context);
+                                          ShowBottomSheet.onLongPressDeleteMessage(context, data: discussData, function: () {
+                                            // print('masuk mas eko');
+                                            // print(discussData!.senderOrReceiverInfo!.email!);
+                                            // print(discussData.disqusID);
+                                            notifier.deletetConversation(context, discussData!.senderOrReceiverInfo!.email!, discussData.disqusID!);
+                                          });
+                                        },
                                         child: ListTile(
                                           leading: StoryColorValidator(
                                             featureType: FeatureType.other,

@@ -3,8 +3,10 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
@@ -111,28 +113,29 @@ class ShowBottomSheet {
     );
   }
 
-  static onLongPressDeleteMessage(BuildContext _) {
+  static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
     showModalBottomSheet(
       context: _,
-      isScrollControlled: true,
-      enableDrag: true,
-      isDismissible: true,
+      isScrollControlled: false,
+
+      // isDismissible: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-          child: Container(
-            height: SizeConfig.screenHeight! / 1.78,
-            decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+        return Wrap(
+          children: [
+            Container(
+              // height: SizeConfig.screenHeight! / 1.78,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
+              padding: const EdgeInsets.all(0),
+              child: OnDeleteMessageBottomSheet(data: data, function: function),
             ),
-            padding: const EdgeInsets.all(0),
-            child: OnDeleteMessageBottomSheet(),
-          ),
+          ],
         );
       },
     );
@@ -286,11 +289,20 @@ class ShowBottomSheet {
     //   _,
     //   uploadContentAction: false,
     //   action: () {
-    Scaffold.of(_)
-        .showBottomSheet(
-          (context) {
-            return Container(
-              height: SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
+    final _routing = Routing();
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: _,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return ChangeNotifierProvider(
+          create: (context) => CommentNotifierV2(),
+          child: Consumer<CommentNotifierV2>(
+            builder: (context, notifier, child) => Container(
+              height: !notifier.isLoading ? SizeConfig.screenHeight! : SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
               decoration: BoxDecoration(
                 color: Theme.of(_).colorScheme.background,
                 borderRadius: const BorderRadius.only(
@@ -304,20 +316,11 @@ class ShowBottomSheet {
                 fromFront: false,
                 parentComment: parentComment,
               ),
-            );
-          },
-        )
-        .closed
-        .whenComplete(() {
-          try {
-            if (_.read<DiariesPlaylistNotifier>().forcePause) {
-              _.read<DiariesPlaylistNotifier>().forcePause = false;
-            }
-          } catch (e) {
-            e.logger();
-          }
-          // Provider.of<CommentNotifier>(_, listen: false).onCommentExit();
-        });
+            ),
+          ),
+        );
+      },
+    );
     //    ;
     //   },
     // );
@@ -819,7 +822,7 @@ class ShowBottomSheet {
     required String value,
     required Function() onSave,
     required Function() onCancel,
-    required Function(String value) onChange,
+    required Function(String value, String code) onChange,
   }) {
     showModalBottomSheet(
       context: context,
@@ -917,6 +920,43 @@ class ShowBottomSheet {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      builder: (builder) {
+        return Material(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: OnSearchPeopleBottomSheet(
+              value: value,
+              onSave: onSave,
+              onChange: onChange,
+              onCancel: onCancel,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void onShowAutoComplate(
+    BuildContext _,
+  ) {
+    // System().actionReqiredIdCard(
+    //   _,
+    //   uploadContentAction: false,
+    //   action: () {
+    String value = '';
+    Function() onSave = () {};
+    Function() onCancel = () {};
+    Function(String value) onChange = (val) {};
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      useRootNavigator: true,
       builder: (builder) {
         return Material(
           child: Container(

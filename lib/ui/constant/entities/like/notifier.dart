@@ -18,6 +18,8 @@ class LikeNotifier with ChangeNotifier {
   bool? change;
   Future<void> likePost(BuildContext context, ContentData postData) async {
     final notifier = LikeBloc();
+    print(postData.isLiked);
+
     try {
       // System().actionReqiredIdCard(
       //   context,
@@ -41,41 +43,45 @@ class LikeNotifier with ChangeNotifier {
       // }
 
       if (postData.isLiked == true) {
+        //unlike
         postData.isLiked = false;
         postData.insight?.isPostLiked = false;
+        postData.insight?.likes = postData.insight!.likes! - 1;
         notifyListeners();
 
         await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
-        final fetch = notifier.likeFetch;
-        notifyListeners();
+        // final fetch = notifier.likeFetch;
+        // notifyListeners();
 
-        if (fetch.likeState == LikeState.likeUserPostSuccess) {
-          "Like post success".logger();
+        // if (fetch.likeState == LikeState.likeUserPostSuccess) {
+        //   "Like post success".logger();
 
-          if (postData.isLiked == false) {
-            postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
-          }
-          notifyListeners();
-        }
+        //   if (postData.isLiked == false) {
+        //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
+        //   }
+        //   notifyListeners();
+        // }
       } else if (postData.isLiked == false) {
+        //like
         postData.isLiked = true;
         postData.insight?.isPostLiked = true;
+        postData.insight?.likes = postData.insight!.likes! + 1;
         notifyListeners();
 
-        print('ini false ${postData.isLiked}');
+        // print('ini false ${postData.isLiked}');
         await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
-        print('ini false');
-        final fetch = notifier.likeFetch;
+        // print('ini false');
+        // final fetch = notifier.likeFetch;
 
-        notifyListeners();
-        if (fetch.likeState == LikeState.likeUserPostSuccess) {
-          "Like post success".logger();
+        // notifyListeners();
+        // if (fetch.likeState == LikeState.likeUserPostSuccess) {
+        //   "Like post success".logger();
 
-          if (postData.isLiked == true) {
-            postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-          }
-          notifyListeners();
-        }
+        //   if (postData.isLiked == true) {
+        //     postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
+        //   }
+        //   notifyListeners();
+        // }
       }
 
       // TODO: Future implementation

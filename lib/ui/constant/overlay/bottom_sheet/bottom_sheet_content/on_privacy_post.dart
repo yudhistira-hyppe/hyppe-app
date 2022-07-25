@@ -22,7 +22,7 @@ class OnPrivacyPostBottomSheet extends StatefulWidget {
   final Function() onSave;
   final Function() onCancel;
 
-  final Function(String value) onChange;
+  final Function(String value, String code) onChange;
 
   const OnPrivacyPostBottomSheet({
     Key? key,
@@ -49,9 +49,9 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
     _currentPrivacy = widget.value;
     // privacy = ["${_language.translate.public}", "${_language.translate.friends}", "${_language.translate.onlyMe}"];
     privacy = [
-      {"title": "${_language.translate.public}", "subtitle": '${_language.translate.anyoneCanView}', "icon": 'globe.svg'},
-      {"title": "${_language.translate.friends}", "subtitle": '${_language.translate.onlyFriendsCanView}', "icon": 'friend.svg'},
-      {"title": "${_language.translate.onlyMe}", "subtitle": '${_language.translate.onlyYouCanView}', "icon": 'person.svg'},
+      {"title": "${_language.translate.public}", "subtitle": '${_language.translate.anyoneCanView}', "icon": 'globe.svg', 'code': 'PUBLIC'},
+      {"title": "${_language.translate.friends}", "subtitle": '${_language.translate.onlyFriendsCanView}', "icon": 'friend.svg', 'code': 'FRIEND'},
+      {"title": "${_language.translate.onlyMe}", "subtitle": '${_language.translate.onlyYouCanView}', "icon": 'person.svg', 'code': 'PRIVATE'},
     ];
   }
 
@@ -99,12 +99,12 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                       itemBuilder: (context, index) {
                         return RadioListTile<String>(
                           contentPadding: EdgeInsets.zero,
-                          groupValue: privacy[index]['title'],
+                          groupValue: privacy[index]['code'],
                           value: _currentPrivacy,
                           onChanged: (_) {
                             setState(() {
-                              _currentPrivacy = privacy[index]['title'];
-                              widget.onChange(privacy[index]['title']);
+                              _currentPrivacy = privacy[index]['code'];
+                              widget.onChange(privacy[index]['title'], privacy[index]['code']);
                             });
                           },
                           toggleable: true,

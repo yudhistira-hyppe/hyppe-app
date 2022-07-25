@@ -5,7 +5,7 @@
   "emailOrUsername": "Email atau Nama Pengguna",
   "password": "Kata Sandi",
   "forgotPassword": "Lupa Kata Sandi",
-  "dontHaveAnAccount": "Tidak punya akun",
+  "dontHaveAnAccount": "Belum punya akun",
   "registerHere": "Daftar disini",
   "or": "Atau",
   "continueUsingGoogle": "Lanjutkan menggunakan Google",
@@ -149,6 +149,7 @@
   "newPost": "Kiriman Baru",
   "writeACaption": "Tulis keterangan",
   "tagPeople": "Tandai orang",
+  "category": "Kategori",
   "selectCategory": "Pilih Kategori",
   "seeMore": "Lihat lebih banyak",
   "advancedSettings": "Pengaturan lanjutan",
@@ -356,6 +357,7 @@
   "yesCancelPost": "Iya, Batalkan Kiriman",
   "keepEditing": "Tetap Ubah",
   "descriptionCanOnlyWithMin5Characters": "Deskripsi harus terisi minimal 5 karakter",
+  "categoryCanOnlyWithMin1Characters": "Kategori harus terpilih minimal 1",
   "internalServerError": "Server dalam gangguan",
   "postCanceled": "Kiriman di hentikan",
   "postCreatedSuccessfully": "Kiriman sukses terbuat",
@@ -479,5 +481,6 @@
   "commentWillPermanentlyDeletedContinue": "Komentar akan terhapus secara permanen, lanjutkan?",
   "addPostDescription" : "Tambahkan deskripsi posting, @teman, dan bergabung dengan #topik (maks 2500 karakter)",
   "privacy" : "Rahasia",
-  "selectLocation": "Pilih Lokasi"
+  "selectLocation": "Pilih Lokasi",
+  "youDontHaveAnyPostsYetCreateOneNow": "Anda belum memiliki postingan, buat sekarang"
 }

@@ -155,6 +155,7 @@ class DisqusLogs {
   List<Content> content = [];
   String? updatedAt;
   String? reactionIcon;
+  String? lineID;
 
   DisqusLogs({
     this.createdAt,
@@ -167,6 +168,7 @@ class DisqusLogs {
     this.content = const [],
     this.updatedAt,
     this.reactionIcon,
+    this.lineID,
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -184,6 +186,7 @@ class DisqusLogs {
     }
     updatedAt = json['updatedAt'];
     reactionIcon = json['reaction_icon'];
+    lineID = json['lineID'];
   }
 
   Map<String, dynamic> toJson() {
@@ -198,8 +201,11 @@ class DisqusLogs {
     data['content'] = content.map((v) => v.toJson()).toList();
     data['updatedAt'] = updatedAt;
     data['reaction_icon'] = reactionIcon;
+    data['lineID'] = lineID;
     return data;
   }
+
+  void removeWhere(bool Function(dynamic item) param0) {}
 }
 
 class Content {

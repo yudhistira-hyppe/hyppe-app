@@ -10,15 +10,16 @@ class WelcomeLoginScreen extends StatelessWidget {
     return GestureDetector(
       child: Scaffold(
         body: SafeArea(
-          child: Container(
-            color: Theme.of(context).colorScheme.secondary,
-            height: SizeConfig.screenHeight,
-            width: SizeConfig.screenWidth,
-            child: Column(
-              children: [
-                PageTop(),
-                Expanded(child: PageBottom()),
-              ],
+          child: SingleChildScrollView(
+            child: Container(
+              color: Theme.of(context).colorScheme.secondary,
+              width: SizeConfig.screenWidth,
+              child: Column(
+                children: [
+                  PageTop(),
+                  PageBottom(),
+                ],
+              ),
             ),
           ),
         ),

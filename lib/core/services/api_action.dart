@@ -81,6 +81,7 @@ class ApiAction {
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     }
+
     try {
       final _response = await _dio.post(
         url,
@@ -114,7 +115,7 @@ class ApiAction {
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
 
-    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount || url == UrlConstants.getSearchPeople) {
+    if (Env.dataUrlv3.contains(url)) {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';

@@ -19,6 +19,14 @@ class Env {
     }
   }
 
+  static final List dataUrlv3 = [
+    UrlConstants.signUp,
+    UrlConstants.verifyAccount,
+    UrlConstants.getSearchPeople,
+    UrlConstants.deleteDiscuss,
+    UrlConstants.deleteChat,
+  ];
+
   static final EnvData dev = EnvData(
     debug: true,
     appID: appID,

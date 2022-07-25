@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -21,21 +23,22 @@ class _OpeningLogoState extends State<OpeningLogo> {
   @override
   Widget build(BuildContext context) {
     final _textTheme = Theme.of(context).textTheme;
+    bool _themeState = SharedPreference().readStorage(SpKeys.themeData) ?? false;
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(),
-            const CustomIconWidget(
+            CustomIconWidget(
               defaultColor: false,
-              iconData: '${AssetPath.vectorPath}logo_splash_screem.svg',
+              iconData: _themeState ? '${AssetPath.vectorPath}logo.svg' : '${AssetPath.vectorPath}logo_splash_screem.svg',
             ),
             Column(
               children: [
-                const CustomIconWidget(
+                CustomIconWidget(
                   defaultColor: false,
-                  iconData: '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
+                  iconData: _themeState ? '${AssetPath.vectorPath}logo_kemendag_kominfo-white.svg' : '${AssetPath.vectorPath}logo_kemendag_kominfo.svg',
                 ),
                 const SizedBox(
                   height: 5,

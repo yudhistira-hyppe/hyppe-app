@@ -1,4 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,8 @@ class PageTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool _themeState = SharedPreference().readStorage(SpKeys.themeData) ?? false;
+
     return Column(
       children: [
         thirtyTwoPx,
@@ -19,11 +24,22 @@ class PageTop extends StatelessWidget {
           children: [
             const CustomIconWidget(
               defaultColor: false,
-              iconData: '${AssetPath.vectorPath}hastag.svg',
+              iconData: '${AssetPath.vectorPath}logo-purple.svg',
             ),
+            eightPx,
+            CustomIconWidget(
+              defaultColor: false,
+              iconData: _themeState ? '${AssetPath.vectorPath}logo-text-white.svg' : '${AssetPath.vectorPath}logo-text-black.svg',
+            ),
+          ],
+        ),
+        sixteenPx,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
             CustomTextWidget(
-              textToDisplay: " MonetizeYourIdeas",
-              textStyle: Theme.of(context).primaryTextTheme.headline5?.copyWith(
+              textToDisplay: "#MonetizeYourIdeas",
+              textStyle: Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),

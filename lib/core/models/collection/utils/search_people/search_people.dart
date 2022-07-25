@@ -31,15 +31,13 @@ class SearchPeolpleData {
     this.fullName,
   });
 
-  factory SearchPeolpleData.createPeopleData(Map<String, dynamic> object) {
-    return SearchPeolpleData(
-      id: object['id'],
-      avatar: object['avatar'] != null ? Avatar.fromJson(object['avatar']) : null,
-      idUserAuth: object['idUserAuth'],
-      username: object['username'],
-      fullName: object['fullName'],
-    );
-  }
+  factory SearchPeolpleData.createPeopleData(Map<String, dynamic> object) => SearchPeolpleData(
+        id: object['id'],
+        avatar: object['avatar'] != null ? Avatar.fromJson(object['avatar']) : null,
+        idUserAuth: object['idUserAuth'],
+        username: object['username'],
+        fullName: object['fullName'],
+      );
 
   static SearchPeolpleData fromJson(json) => SearchPeolpleData(
         id: json['_id'],

@@ -8,7 +8,8 @@ class PickitemTitle extends StatelessWidget {
   final bool select;
   final bool button;
   final Function? function;
-  const PickitemTitle({Key? key, required this.title, required this.select, this.function, required this.button}) : super(key: key);
+  final TextStyle? textStyle;
+  const PickitemTitle({Key? key, required this.title, required this.select, this.function, required this.button, this.textStyle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +25,11 @@ class PickitemTitle extends StatelessWidget {
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomTextWidget(
-            textAlign: TextAlign.left,
-            textOverflow: TextOverflow.clip,
-            textToDisplay: title,
-            textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                  color: select ? kHyppeLightSurface : kHyppeSurface,
-                ),
-          ),
+          CustomTextWidget(textAlign: TextAlign.left, textOverflow: TextOverflow.clip, textToDisplay: title, textStyle: textStyle),
         ],
       ),
       padding: const EdgeInsets.all(8),
-      backgroundColor: !select ? kHyppeLightInactive2 : kHyppePrimary,
+      backgroundColor: !select ? Theme.of(context).colorScheme.secondary : kHyppePrimary,
     );
   }
 }

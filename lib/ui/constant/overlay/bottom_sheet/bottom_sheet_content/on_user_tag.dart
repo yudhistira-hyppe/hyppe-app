@@ -10,14 +10,14 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
-class OnSearchPeopleBottomSheet extends StatefulWidget {
+class OnUserTagBottomSheet extends StatefulWidget {
   final String value;
   final Function() onSave;
   final Function() onCancel;
 
   final Function(String value) onChange;
 
-  const OnSearchPeopleBottomSheet({
+  const OnUserTagBottomSheet({
     Key? key,
     required this.value,
     required this.onSave,
@@ -26,10 +26,10 @@ class OnSearchPeopleBottomSheet extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<OnSearchPeopleBottomSheet> createState() => _OnSearchPeopleBottomSheetState();
+  State<OnUserTagBottomSheet> createState() => _OnUserTagBottomSheetState();
 }
 
-class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
+class _OnUserTagBottomSheetState extends State<OnUserTagBottomSheet> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final _notifier = PreUploadContentNotifier();

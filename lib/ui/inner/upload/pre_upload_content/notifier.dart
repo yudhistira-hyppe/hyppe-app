@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -54,11 +55,17 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   bool _isLoadingLoadMore = false;
   bool get isLoadingLoadMore => _isLoadingLoadMore;
+  bool _isShowAutoComplete = false;
+  bool get isShowAutoComplete => _isShowAutoComplete;
+  String _temporarySearch = '';
+  String get temporarySearch => _temporarySearch;
 
   ModelGoogleMapPlace? _modelGoogleMapPlace;
   ModelGoogleMapPlace? get modelGoogleMapPlace => _modelGoogleMapPlace;
   List<SearchPeolpleData> _searchPeolpleData = [];
   List<SearchPeolpleData> get searchPeolpleData => _searchPeolpleData;
+  List<Map<String, dynamic>> _searchPeopleACData = [];
+  List<Map<String, dynamic>> get searchPeopleACData => _searchPeopleACData;
 
   TextEditingController _captionController = TextEditingController();
   TextEditingController _location = TextEditingController();
@@ -136,6 +143,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set temporarySearch(String val) {
+    _temporarySearch = val;
+    notifyListeners();
+  }
+
   set thumbNail(val) {
     _thumbNail = val;
     notifyListeners();
@@ -181,6 +193,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set isShowAutoComplete(bool val) {
+    _isShowAutoComplete = val;
+    notifyListeners();
+  }
+
   set selectedLocation(String val) {
     _selectedLocation = val;
     notifyListeners();
@@ -211,6 +228,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set searchPeopleACData(List<Map<String, dynamic>> val) {
+    _searchPeopleACData = val;
+    notifyListeners();
+  }
+
   void onWillPop(BuildContext context) async {
     print('exitjuga');
     ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
@@ -221,6 +243,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   void handleDeleteOnLocation() => selectedLocation = '';
 
   bool _validateDescription() => captionController.text.length >= 5;
+
+  bool _validateCategory() => _interestData.isNotEmpty;
 
   void checkKeyboardFocus(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -279,6 +303,19 @@ class PreUploadContentNotifier with ChangeNotifier {
     final _orientation = context.read<CameraNotifier>().orientation;
     certifiedTmp = _certified;
 
+    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final _tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+
+    List userTagCaption = [];
+    List hastagCaption = [];
+    _tagRegex.allMatches(captionController.text).map((z) {
+      userTagCaption.add(z.group(0)?.substring(1));
+    }).toList();
+
+    _tagHastagRegex.allMatches(captionController.text).map((z) {
+      hastagCaption.add(z.group(0)?.substring(1));
+    }).toList();
+
     try {
       _connectAndListenToSocket(context);
       final notifier = PostsBloc();
@@ -286,7 +323,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         context,
         type: featureType!,
         visibility: privacyValue,
-        tags: tagsController.text,
+        tags: hastagCaption.join(','),
         allowComment: allowComment,
         certified: certified,
         fileContents: fileContent!,
@@ -332,7 +369,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       context,
       postId: postID,
       type: featureType!,
-      visibility: visibility,
+      visibility: privacyValue,
       tags: tagsController.text,
       allowComment: allowComment,
       certified: certified,
@@ -342,27 +379,34 @@ class PreUploadContentNotifier with ChangeNotifier {
       location: locationName == 'Add Location' ? '' : locationName,
     );
     final fetch = notifier.postsFetch;
+
     if (fetch.postsState == PostsState.updateContentsSuccess) {
       context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
             content: content,
-            visibility: visibility,
+            visibility: privacyValue,
             allowComment: allowComment,
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
+            location: locationName == '' ? 'Add Location' : locationName,
+            tagPeople: userTagData,
+            cats: _interestData,
           );
 
       context.read<HomeNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
             content: content,
-            visibility: visibility,
+            visibility: privacyValue,
             allowComment: allowComment,
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
+            location: locationName == '' ? 'Add Location' : locationName,
+            tagPeople: userTagData,
+            cats: _interestData,
           );
 
       updateContent = false;
@@ -412,7 +456,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {
     checkKeyboardFocus(context);
     final connection = await System().checkConnections();
-    if (_validateDescription()) {
+    if (_validateDescription() && _validateCategory()) {
       if (connection) {
         checkKeyboardFocus(context);
         if (onEdit) {
@@ -433,7 +477,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     } else {
       ShowBottomSheet().onShowColouredSheet(
         context,
-        language.descriptionCanOnlyWithMin5Characters!,
+        _validateDescription() ? language.categoryCanOnlyWithMin1Characters! : language.descriptionCanOnlyWithMin5Characters!,
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
       );
@@ -472,30 +516,15 @@ class PreUploadContentNotifier with ChangeNotifier {
         FocusScope.of(context).unfocus();
         checkKeyboardFocus(context);
       },
-      onChange: (value) {
+      onChange: (value, code) {
         _privacyTitle = value;
-        final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-        if (_isoCodeCache == 'id') {
-          switch (value) {
-            case 'Umum':
-              privacyValue = 'PUBLIC';
-              break;
-            case 'Teman':
-              privacyValue = 'FRIEND';
-              break;
-            case 'Hanya saya':
-              privacyValue = 'PRIVATE';
-              break;
-            default:
-          }
-        } else {
-          privacyValue = value;
-        }
+        privacyValue = code;
+
         // Routing().moveBack();
         checkKeyboardFocus(context);
         notifyListeners();
       },
-      value: _privacyTitle,
+      value: privacyValue,
     );
   }
 
@@ -679,17 +708,17 @@ class PreUploadContentNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       if (_startSearch == 0) {
-        _searchPeolpleData = [];
         _isLoading = true;
       }
       await notifier.getSearchPeopleBloc(context, input, _startSearch * 10, 10);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
+        if (_startSearch == 0) {
+          _searchPeolpleData = [];
+        }
         fetch.data.forEach((v) {
           _searchPeolpleData.add(SearchPeolpleData.fromJson(v));
         });
-        print('_searchPeolpleData000');
-        print(_searchPeolpleData);
         notifyListeners();
       }
       _isLoading = false;
@@ -706,5 +735,46 @@ class PreUploadContentNotifier with ChangeNotifier {
         notifyListeners();
       }
     }
+  }
+
+  void showAutoComplete(value, BuildContext context) {
+    _searchPeolpleData = [];
+    final selection = _captionController.selection;
+    String _text = value.toString().substring(0, selection.baseOffset);
+    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9]+\w*", caseSensitive: false);
+    final sentences = _text.split('\n');
+
+    for (var sentence in sentences) {
+      final words = sentence.split(' ');
+      String withat = words.last;
+
+      if (_tagRegex.hasMatch(withat)) {
+        String withoutat = withat.substring(1);
+
+        if (withoutat.length > 2) {
+          _isShowAutoComplete = true;
+          searchPeople(context, input: withoutat);
+          _temporarySearch = withoutat;
+        }
+      } else {
+        _isShowAutoComplete = false;
+      }
+    }
+    notifyListeners();
+  }
+
+  void insertAutoComplete(index) {
+    final text = _captionController.text;
+    final selection = _captionController.selection;
+    int searchLength = _temporarySearch.length;
+    _isShowAutoComplete = false;
+
+    final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
+    int length = _searchPeolpleData[index].username!.length;
+    _captionController.value = TextEditingValue(
+      text: "${newText}",
+      selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
+    );
+    notifyListeners();
   }
 }

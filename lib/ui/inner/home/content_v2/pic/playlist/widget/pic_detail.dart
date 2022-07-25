@@ -212,7 +212,9 @@ class _PicDetailState extends State<PicDetail> {
                     ),
                     Padding(
                       child: Container(
+                        padding: const EdgeInsets.all(2),
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
                         child: SingleChildScrollView(
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

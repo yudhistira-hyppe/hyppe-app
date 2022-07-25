@@ -149,6 +149,7 @@
   "newPost": "New Post",
   "writeACaption": "Write a caption",
   "tagPeople": "Tag People",
+  "category": "Category",
   "selectCategory": "Select Category",
   "seeMore": "See more",
   "advancedSettings": "Advanced Settings",
@@ -356,6 +357,7 @@
   "yesCancelPost": "Yes, Cancel Post",
   "keepEditing": "Keep Editing",
   "descriptionCanOnlyWithMin5Characters": "Description can only with min 5 characters",
+  "categoryCanOnlyWithMin1Characters": "Category can only with min 1",
   "internalServerError": "Internal Server Error",
   "postCanceled": "Post canceled",
   "postCreatedSuccessfully": "Post created successfully",
@@ -479,5 +481,6 @@
   "commentWillPermanentlyDeletedContinue": "Comment will permanently deleted, continue?",
   "addPostDescription" : "Add post description, @friends, and  join # topic (max 2500 characters)",
   "privacy" : "Privacy",
-  "selectLocation": "Select Location"
+  "selectLocation": "Select Location",
+  "youDontHaveAnyPostsYetCreateOneNow": "You don't have any posts yet, create one now"
 }

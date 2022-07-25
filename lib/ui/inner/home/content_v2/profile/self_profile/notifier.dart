@@ -232,6 +232,9 @@ class SelfProfileNotifier with ChangeNotifier {
     required bool allowComment,
     required bool certified,
     List<String>? tags,
+    List<String>? cats,
+    List<String>? tagPeople,
+    String? location,
   }) {
     ContentData? _updatedData;
     switch (content) {
@@ -260,6 +263,19 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.description = description;
       _updatedData.allowComments = allowComment;
       _updatedData.certified = certified;
+      _updatedData.visibility = visibility;
+      _updatedData.tagPeople = tagPeople;
+      _updatedData.location = location;
+      _updatedData.cats = [];
+      if (cats != null) {
+        for (var v in cats) {
+          _updatedData.cats!.add(
+            Cats(
+              interestName: v,
+            ),
+          );
+        }
+      }
     }
 
     notifyListeners();

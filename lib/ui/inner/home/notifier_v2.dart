@@ -20,23 +20,17 @@ import 'package:collection/collection.dart' show IterableExtension;
 class HomeNotifier with ChangeNotifier {
   //for visibilty
   String _visibilty = 'PUBLIC';
-  List _visibiltyList = [
-    {"id": '1', 'name': 'All', 'code': 'PUBLIC'},
-    {"id": '2', 'name': 'Friend', 'code': 'FRIEND'},
-    {"id": '3', 'name': 'Following', 'code': 'FOLLOWING'},
-    {"id": '4', 'name': 'Only Me', 'code': 'PRIVATE'},
-  ];
-
-  List<String> _interestList = [];
-
-  List get visibiltyList => _visibiltyList;
 
   LocalizationModelV2 language = LocalizationModelV2();
+
   translate(LocalizationModelV2 translate) {
     language = translate;
+
     notifyListeners();
   }
 
+  List _visibiltyList = [];
+  List get visibiltyList => _visibiltyList;
   String get visibilty => _visibilty;
 
   // bool _isHaveSomethingNew = false;
@@ -57,11 +51,20 @@ class HomeNotifier with ChangeNotifier {
 
   set visibiltyList(List val) {
     _visibiltyList = val;
+
     notifyListeners();
   }
 
   void setSessionID() {
     _sessionID ??= System().generateUUID();
+
+    // _visibiltyList = [
+    //   {"id": '1', 'name': "${language.all}", 'code': 'PUBLIC'},
+    //   {"id": '2', 'name': "${language.friends}", 'code': 'FRIEND'},
+    //   {"id": '3', 'name': "${language.following}", 'code': 'FOLLOWING'},
+    //   {"id": '4', 'name': "${language.onlyMe}", 'code': 'PRIVATE'},
+    // ];
+    notifyListeners();
   }
 
   void resetSessionID() {
@@ -149,6 +152,9 @@ class HomeNotifier with ChangeNotifier {
     required bool allowComment,
     required bool certified,
     List<String>? tags,
+    List<String>? cats,
+    List<String>? tagPeople,
+    String? location,
   }) {
     ContentData? _updatedData;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -178,6 +184,24 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.tags = tags;
       _updatedData.description = description;
       _updatedData.allowComments = allowComment;
+      _updatedData.visibility = visibility;
+      _updatedData.tagPeople = tagPeople;
+      _updatedData.location = location;
+      _updatedData.cats = [];
+      print("cats");
+      print(cats);
+      print(cats!.length);
+      print(_updatedData.cats!.length);
+      if (cats != null) {
+        for (var v in cats) {
+          _updatedData.cats!.add(
+            Cats(
+              interestName: v,
+            ),
+          );
+        }
+      }
+      print(_updatedData.cats!.length);
     }
 
     notifyListeners();

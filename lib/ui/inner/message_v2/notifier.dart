@@ -1,4 +1,6 @@
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
+import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -16,6 +18,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/core/services/system.dart';
 
 class MessageNotifier extends ChangeNotifier {
+  bool _muteMessage = false;
+  bool get muteMessage => _muteMessage;
+
   DiscussDataQuery discussQuery = DiscussDataQuery()
     ..withDetail = false
     ..limit = 25;
@@ -40,6 +45,11 @@ class MessageNotifier extends ChangeNotifier {
 
   set discussData(List<MessageDataV2>? val) {
     _discussData = val;
+    notifyListeners();
+  }
+
+  set muteMessage(bool val) {
+    _muteMessage = val;
     notifyListeners();
   }
 
@@ -112,10 +122,21 @@ class MessageNotifier extends ChangeNotifier {
     );
   }
 
-  Future<void> onLongPressUser(BuildContext context, MessageDataV2? data) async {
-    choosedisqusID = data?.disqusID;
-    choosePhotoReceiver = System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '';
-    ShowBottomSheet.onLongPressDeleteMessage(context);
+  // Future<void> onLongPressUser(BuildContext context, MessageDataV2? data) async {
+  //   choosedisqusID = data?.disqusID;
+  //   choosePhotoReceiver = System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '';
+  //   ShowBottomSheet.onLongPressDeleteMessage(context);
+  //   notifyListeners();
+  // }
+
+  Future<void> deletetConversation(BuildContext context, String email, String postId) async {
+    final notifier = MessageBlocV2();
+    await notifier.deleteDiscussionBloc(context, postEmail: email, postId: postId);
+    final fetch = notifier.messageFetch;
+    if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
+      getDiscussion(context, reload: true);
+      Routing().moveBack();
+    }
     notifyListeners();
   }
 }
