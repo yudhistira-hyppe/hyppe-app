@@ -172,12 +172,13 @@ class PicDetailBottom extends StatelessWidget {
                   ? () => value.createdDynamicLink(context, data: data)
                   : () {},
             ),
-            _buildButton(
-              context,
-              '${AssetPath.vectorPath}cart.svg',
-              value2.translate.buy!,
-              () => ShowBottomSheet.onBuyContent(context),
-            ),
+            if (data!.saleAmount! > 0)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}cart.svg',
+                value2.translate.buy!,
+                () => ShowBottomSheet.onBuyContent(context, data: data),
+              ),
 
             // _buildButton(
             //   context,
@@ -198,7 +199,7 @@ class PicDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(
+  _buildButton(
       BuildContext context, String icon, String caption, Function onTap,
       {Color? colorIcon}) {
     return GestureDetector(

@@ -502,6 +502,13 @@ class LocalizationModelV2 {
   String? paymentBefore;
   String? copy;
   String? seeOtherBank;
+  String? yes;
+  String? no;
+  String? pay;
+  String? seePaymentInstruction;
+  String? checkPaymentStatus;
+  String? vaCopyToClipboard;
+  String? expired;
 
   LocalizationModelV2(
       {this.login,
@@ -1005,7 +1012,14 @@ class LocalizationModelV2 {
       this.totalPayment,
       this.paymentBefore,
       this.copy,
-      this.seeOtherBank});
+      this.seeOtherBank,
+      this.yes,
+      this.no,
+      this.pay,
+      this.seePaymentInstruction,
+      this.checkPaymentStatus,
+      this.vaCopyToClipboard,
+      this.expired});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1559,5 +1573,12 @@ class LocalizationModelV2 {
     paymentBefore = json['paymentBefore'];
     copy = json['copy'];
     seeOtherBank = json['seeOtherBank'];
+    yes = json['yes'];
+    no = json['no'];
+    pay = json['pay'];
+    seePaymentInstruction = json['seePaymentInstruction'];
+    checkPaymentStatus = json['seePaymentInstruction'];
+    vaCopyToClipboard = json['vaCopyToClipboard'];
+    expired = json['expired'];
   }
 }

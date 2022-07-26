@@ -500,5 +500,12 @@
   "totalPayment": "Total Payment",
   "paymentBefore":"Make payment before",
   "copy":"Copy",
-  "seeOtherBank":"See other bank"
+  "seeOtherBank":"See other bank",
+  "yes":"Yes",
+  "no":"No",
+  "pay": "Pay",
+  "seePaymentInstruction": "See payment instruction",
+  "checkPaymentStatus": "Check payment status",
+  "vaCopyToClipboard": "Virtual account number has been copied to clipboard",
+  "expired": "Expired"
 }

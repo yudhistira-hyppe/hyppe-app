@@ -61,5 +61,5 @@ class Routes {
   static const String reviewBuyContent = '/review-buy-content';
   static const String paymentScreen = '/payment-screen';
   static const String paymentMethodScreen = '/payment-method-screen';
-  static const String paymentBCAScreen = '/payment-bca-screen';
+  static const String paymentSummaryScreen = '/payment-summary-screen';
 }

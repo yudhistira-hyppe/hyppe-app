@@ -172,6 +172,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent>
                     final notifier = Provider.of<PreUploadContentNotifier>(
                         context,
                         listen: false);
+                    notifier.isUpdate = true;
                     notifier.captionController.text =
                         widget.contentData.description ?? "";
                     notifier.tagsController.text =
@@ -182,6 +183,17 @@ class _OnShowOptionContentState extends State<OnShowOptionContent>
                     notifier.allowComment =
                         widget.contentData.allowComments ?? false;
                     notifier.certified = widget.contentData.certified ?? false;
+                    notifier.toSell = widget.contentData.saleAmount != null &&
+                            widget.contentData.saleAmount! > 0
+                        ? true
+                        : false;
+                    notifier.includeTotalViews =
+                        widget.contentData.saleView ?? false;
+                    notifier.includeTotalLikes =
+                        widget.contentData.saleLike ?? false;
+                    notifier.certified = widget.contentData.certified ?? false;
+                    notifier.priceController.text =
+                        widget.contentData.saleAmount!.toInt().toString();
                     _routing
                         .move(Routes.preUploadContent,
                             argument: UpdateContentsArgument(

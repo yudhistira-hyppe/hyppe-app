@@ -1,10 +1,9 @@
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/privacy.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
-
 import 'package:hyppe/core/services/shared_preference.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
 class ContentData {
@@ -35,36 +34,41 @@ class ContentData {
   String? fullContentPath;
   ContentType? contentType;
   UserProfileAvatarModel? avatar;
+  double? saleAmount;
+  bool? saleView;
+  bool? saleLike;
 
-  ContentData({
-    this.metadata,
-    this.mediaBasePath,
-    this.postType,
-    this.mediaUri,
-    this.isLiked,
-    this.description,
-    this.active,
-    this.privacy,
-    this.mediaType,
-    this.mediaThumbEndPoint,
-    this.postID,
-    this.title,
-    this.isViewed,
-    this.tags = const [],
-    this.allowComments,
-    this.certified,
-    this.createdAt,
-    this.insight,
-    this.mediaThumbUri,
-    this.mediaEndpoint,
-    this.email,
-    this.updatedAt,
-    this.username,
-    this.fullThumbPath,
-    this.fullContentPath,
-    this.contentType,
-    this.avatar,
-  });
+  ContentData(
+      {this.metadata,
+      this.mediaBasePath,
+      this.postType,
+      this.mediaUri,
+      this.isLiked,
+      this.description,
+      this.active,
+      this.privacy,
+      this.mediaType,
+      this.mediaThumbEndPoint,
+      this.postID,
+      this.title,
+      this.isViewed,
+      this.tags = const [],
+      this.allowComments,
+      this.certified,
+      this.createdAt,
+      this.insight,
+      this.mediaThumbUri,
+      this.mediaEndpoint,
+      this.email,
+      this.updatedAt,
+      this.username,
+      this.fullThumbPath,
+      this.fullContentPath,
+      this.contentType,
+      this.avatar,
+      this.saleAmount,
+      this.saleView,
+      this.saleLike});
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata =
@@ -100,6 +104,9 @@ class ContentData {
     avatar = json['avatar'] != null
         ? UserProfileAvatarModel.fromJson(json['avatar'])
         : null;
+    saleAmount = json['saleAmount'] ?? 0;
+    saleView = json['saleView'] ?? false;
+    saleLike = json['saleLike'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -133,6 +140,9 @@ class ContentData {
     data['email'] = email;
     data['updatedAt'] = updatedAt;
     data['username'] = username;
+    data['saleAmount'] = saleAmount ?? 0;
+    data['saleView'] = saleView ?? false;
+    data['saleLike'] = saleLike ?? false;
     if (avatar != null) {
       data['avatar'] = avatar?.toJson();
     }
@@ -140,6 +150,9 @@ class ContentData {
   }
 
   String? concatThumbUri() {
+    print(Env.data.baseUrl +
+        (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
+        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}');
     return Env.data.baseUrl +
         (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
@@ -193,32 +206,6 @@ class Metadata {
     data['midRoll'] = midRoll;
     data['postID'] = postID;
     data['email'] = email;
-    return data;
-  }
-}
-
-class Privacy {
-  bool? isPostPrivate;
-  bool? isCelebrity;
-  bool? isPrivate;
-
-  Privacy({
-    this.isPrivate,
-    this.isCelebrity,
-    this.isPostPrivate,
-  });
-
-  Privacy.fromJson(Map<String, dynamic> json) {
-    isPostPrivate = json['isPostPrivate'];
-    isCelebrity = json['isCelebrity'];
-    isPrivate = json['isPrivate'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['isPostPrivate'] = isPostPrivate;
-    data['isCelebrity'] = isCelebrity;
-    data['isPrivate'] = isPrivate;
     return data;
   }
 }

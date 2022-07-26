@@ -850,10 +850,10 @@ class ShowBottomSheet {
     });
   }
 
-  static onBuyContent(_) {
+  static onBuyContent(context, {ContentData? data}) {
     showModalBottomSheet(
       isScrollControlled: true,
-      context: _,
+      context: context,
       enableDrag: true,
       isDismissible: true,
       backgroundColor: Colors.transparent,
@@ -861,14 +861,16 @@ class ShowBottomSheet {
         return Container(
             height: 250,
             decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: const OnBuyContentBottomSheet());
+            child: OnBuyContentBottomSheet(
+              data: data,
+            ));
       },
     );
   }

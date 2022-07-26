@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
@@ -207,5 +208,8 @@ class AppDependencies {
 
         ChangeNotifierProvider<PaymentNotifier>(
             create: (context) => PaymentNotifier()),
+
+        ChangeNotifierProvider<PaymentSummaryNotifier>(
+            create: (context) => PaymentSummaryNotifier()),
       ];
 }

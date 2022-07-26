@@ -500,5 +500,12 @@
   "totalPayment": "Jumlah Pembayaran",
   "paymentBefore":"Lakukan pembayaran sebelum",
   "copy":"Salin",
-  "seeOtherBank":"Lihat bank lain"
+  "seeOtherBank":"Lihat bank lain",
+  "yes":"Ya",
+  "no":"Tidak",
+  "pay": "Bayar",
+  "seePaymentInstruction": "Lihat panduan pembayaran",
+  "checkPaymentStatus": "Check payment status",
+  "vaCopyToClipboard": "Nomor virtual account telah di salin ke clipboard",
+  "expired": "Kedaluarsa"
 }

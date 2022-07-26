@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -18,6 +21,13 @@ class PaymentMethodScreen extends StatefulWidget {
 }
 
 class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
+  @override
+  void initState() {
+    var nn = Provider.of<PaymentMethodNotifier>(context, listen: false);
+    nn.initState(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -40,44 +50,72 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           ),
           centerTitle: false,
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextWidget(
-                  textToDisplay: notifier.language.totalPayment!,
-                  textStyle: textTheme.titleMedium),
-              const SizedBox(height: 5),
-              CustomTextWidget(
-                textToDisplay: "Rp 15.000",
-                textStyle: textTheme.titleMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.primaryVariant),
+        body: notifier.data != null && notifier.data!.isNotEmpty
+            ? SingleChildScrollView(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextWidget(
+                        textToDisplay: notifier.language.totalPayment!,
+                        textStyle: textTheme.titleMedium),
+                    const SizedBox(height: 5),
+                    CustomTextWidget(
+                      textToDisplay: notifier.reviewBuyNotifier.data != null
+                          ? System().currencyFormat(
+                              amount:
+                                  notifier.reviewBuyNotifier.data?.totalAmount)
+                          : '',
+                      textStyle: textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primaryVariant),
+                    ),
+                    const SizedBox(height: 24),
+                    CustomTextWidget(
+                        textToDisplay: "Virtual Account",
+                        textStyle: textTheme.bodyMedium),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).appBarTheme.backgroundColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
+                      child: Column(children: [
+                        ..._getListBank(notifier),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                ),
+              )
+            : const Center(
+                child: CircularProgressIndicator(),
               ),
-              const SizedBox(height: 24),
-              CustomTextWidget(
-                  textToDisplay: "Virtual Account",
-                  textStyle: textTheme.bodyMedium),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).appBarTheme.backgroundColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                child: Column(children: [
-                  listBank(image: "bank_bca.png"),
-                  listBank(image: "bank_mandiri.png"),
-                  listBank(image: "bank_bni.png"),
-                  listBank(
-                      image: "other_bank.png",
-                      title: notifier.language.seeOtherBank!,
-                      bg: false,
-                      isLast: true),
-                ]),
-              ),
-            ],
+        floatingActionButton: CustomElevatedButton(
+          width: 375.0 * SizeConfig.scaleDiagonal,
+          height: 44.0 * SizeConfig.scaleDiagonal,
+          function: () => notifier.submitPay(context),
+          // function: () => Routing().move(Routes.paymentSummaryScreen),
+          child: CustomTextWidget(
+            textToDisplay: notifier.language.pay!,
+            textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+          ),
+          buttonStyle: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(
+                Theme.of(context).colorScheme.primaryVariant),
+            shadowColor: MaterialStateProperty.all(
+                Theme.of(context).colorScheme.primaryVariant),
+            overlayColor: MaterialStateProperty.all(
+                Theme.of(context).colorScheme.primaryVariant),
+            backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).colorScheme.primaryVariant),
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        resizeToAvoidBottomInset: true,
       ),
     );
   }
@@ -90,7 +128,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     final textTheme = Theme.of(context).textTheme;
 
     return GestureDetector(
-      onTap: () => Routing().move(Routes.paymentBCAScreen),
+      onTap: () => Routing().move(Routes.paymentSummaryScreen),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15),
         decoration: !isLast
@@ -130,6 +168,75 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                 iconData: "${AssetPath.vectorPath}chevron_right.svg"),
           ],
         ),
+      ),
+    );
+  }
+
+  Iterable<Widget> _getListBank(PaymentMethodNotifier notifier) {
+    if (notifier.data != null && notifier.data!.isNotEmpty) {
+      return notifier.data!.map((e) => bankTile(
+            icon: e.bankIcon!,
+            title: e.bankname!,
+            hasBottomBorder: true,
+            value: e.bankcode.toString(),
+            selected: notifier.bankSelected,
+            onTap: (val) => notifier.bankSelected = val!,
+          ));
+    }
+    return [];
+  }
+
+  Widget bankTile(
+      {required String value,
+      required String selected,
+      required void Function(String?) onTap,
+      required String icon,
+      required String title,
+      required bool hasBottomBorder,
+      String? subtitle}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 0),
+      decoration: hasBottomBorder
+          ? const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.black12,
+                  width: 0.5,
+                ),
+              ),
+            )
+          : null,
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        title: CustomTextWidget(
+          textToDisplay: title,
+          textStyle: Theme.of(context).textTheme.subtitle2,
+          textAlign: TextAlign.start,
+          textOverflow: TextOverflow.clip,
+        ),
+        subtitle: subtitle != null
+            ? CustomTextWidget(
+                textToDisplay: subtitle,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .caption!
+                    .copyWith(color: kHyppeSecondary),
+                textAlign: TextAlign.start,
+                textOverflow: TextOverflow.clip,
+              )
+            : null,
+        leading: Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: Image(
+              image: NetworkImage(icon),
+            )),
+        trailing: Radio<String>(
+          value: value,
+          groupValue: selected,
+          onChanged: onTap,
+          activeColor: kHyppePrimary,
+        ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
     );
   }

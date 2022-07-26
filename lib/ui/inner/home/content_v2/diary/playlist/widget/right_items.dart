@@ -103,13 +103,15 @@ class RightItems extends StatelessWidget {
                     colorIcon: kHyppeLightButtonText,
                     onTap: () => value.createdDynamicLink(context, data: data),
                   ),
-                  _customIcon2(
-                    context,
-                    "${AssetPath.vectorPath}cart.svg",
-                    value2.translate.buy!,
-                    colorIcon: kHyppeLightButtonText,
-                    onTap: () => ShowBottomSheet.onBuyContent(context),
-                  )
+                  if (data.saleAmount! > 0)
+                    _customIcon2(
+                      context,
+                      "${AssetPath.vectorPath}cart.svg",
+                      value2.translate.buy!,
+                      colorIcon: kHyppeLightButtonText,
+                      onTap: () =>
+                          ShowBottomSheet.onBuyContent(context, data: data),
+                    ),
                 ],
               ),
             ),
