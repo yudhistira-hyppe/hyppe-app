@@ -5,6 +5,7 @@ import 'package:hyppe/core/bloc/reaction/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment/comments.dart';
 import 'package:hyppe/core/models/collection/comment/update_comment_reaction.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/post_reaction.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
@@ -13,8 +14,43 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:provider/provider.dart';
 
 class LikeNotifier with ChangeNotifier {
+  LocalizationModelV2 language = LocalizationModelV2();
+
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+
+    notifyListeners();
+  }
+
+  List _visibiltyList = [];
+  List get visibiltyList => _visibiltyList;
+
+  String _visibilty = 'PUBLIC';
+  String get visibilty => _visibilty;
+
+  String _visibilitySelect = 'PUBLIC';
+  String get visibilitySelect => _visibilitySelect;
+
+  set visibilty(String val) {
+    _visibilty = val;
+    notifyListeners();
+  }
+
+  set visibilitySelect(String val) {
+    _visibilitySelect = val;
+    notifyListeners();
+  }
+
+  set visibiltyList(List val) {
+    _visibiltyList = val;
+
+    notifyListeners();
+  }
+
   bool? change;
   Future<void> likePost(BuildContext context, ContentData postData) async {
     final notifier = LikeBloc();
@@ -138,5 +174,14 @@ class LikeNotifier with ChangeNotifier {
       }
       notifyListeners();
     }
+  }
+
+  void changeVisibility(BuildContext context, val) {
+    _visibilty = val;
+    _visibilitySelect = val;
+
+    Provider.of<HomeNotifier>(context, listen: false).onRefresh(context);
+    Provider.of<HomeNotifier>(context, listen: false).visibilty = val;
+    notifyListeners();
   }
 }

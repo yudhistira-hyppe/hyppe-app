@@ -1,6 +1,7 @@
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -38,7 +39,8 @@ class ContentData {
   String? visibility;
   String? location;
   List<Cats>? cats;
-  List<String>? tagPeople;
+  List<TagPeople>? tagPeople;
+  int? likes;
 
   ContentData(
       {this.metadata,
@@ -71,7 +73,8 @@ class ContentData {
       this.location,
       this.visibility,
       this.cats,
-      this.tagPeople});
+      this.tagPeople,
+      this.likes});
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -107,7 +110,10 @@ class ContentData {
       cats = [];
       json['cats'].forEach((v) => cats!.add(Cats.fromJson(v)));
     }
-    tagPeople = json['tagPeople'] != null ? json['tagPeople'].cast<String>() : [];
+    tagPeople = json['tagPeople'] != null ? List<TagPeople>.from(json["tagPeople"].map((x) => TagPeople.fromJson(x))) : [];
+    if (json['likes'] != null) {
+      likes = json['likes'];
+    }
     // cats = List<Cats>.from(json["cats"].map((x) => Cats.fromJson(x)));
   }
 
@@ -147,7 +153,9 @@ class ContentData {
     }
     data['location'] = location;
     data['visibility'] = visibility;
-    data['tagPeople'] = tagPeople;
+    data['tagPeople'] = List<dynamic>.from(tagPeople!.map((x) => x.toJson()));
+
+    data['likes'] = likes;
 
     return data;
   }
@@ -255,4 +263,27 @@ class Cats {
     createdAt = json["createdAt"];
     updatedAt = json["updatedAt"];
   }
+}
+
+class TagPeople {
+  String? email;
+  String? username;
+  String? status;
+  Avatar? avatar;
+
+  TagPeople({this.email, this.username, this.status, this.avatar});
+
+  TagPeople.fromJson(Map<String, dynamic> json) {
+    email = json["email"];
+    username = json["username"];
+    status = json["status"];
+    avatar = json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null;
+  }
+
+  Map<String, dynamic> toJson() => {
+        "email": email,
+        "username": username,
+        "status": status,
+        "avatar": avatar != null ? avatar?.toJson() : '',
+      };
 }

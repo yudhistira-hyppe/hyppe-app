@@ -57,4 +57,8 @@ class Routes {
   static const String imagePreviewScreen = '/image-preview-screen';
 
   static const String testAliPlayer = '/test-ali-player';
+
+//search
+  static const String searcMore = '/search-more';
+  static const String searcMoreComplete = '/search-more-complete';
 }

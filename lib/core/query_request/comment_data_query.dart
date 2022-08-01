@@ -19,6 +19,8 @@ class CommentDataQuery extends PaginationQueryInterface {
 
   String txtMessages = '';
 
+  List<dynamic> tagComment = [];
+
   CommentDataQuery();
 
   @override
@@ -104,7 +106,8 @@ class CommentDataQuery extends PaginationQueryInterface {
         ..isQuery = false
         ..postID = postID
         ..parentID = parentID
-        ..txtMessages = txtMessages;
+        ..txtMessages = txtMessages
+        ..tagComment = tagComment;
 
       final notifier = CommentBloc();
       await notifier.commentsBlocV2(context, argument: param);

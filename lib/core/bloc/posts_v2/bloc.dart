@@ -46,6 +46,9 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+      if (type == FeatureType.story) {
+        formData.fields.add(const MapEntry('visibility', 'PRIVATE'));
+      }
     } else {
       if (type == FeatureType.story) {
         if (postID == null) formData.fields.add(MapEntry('exclude', email));

@@ -51,11 +51,13 @@ class _ChatMessageListState extends State<ChatMessageList> {
                 ],
               )
             : ListView.builder(
+                shrinkWrap: true,
                 reverse: true,
                 controller: notifier.scrollController,
                 // itemCount: notifier.listChatData.length,
                 itemCount: notifier.discussData?.first.disqusLogs.length,
-                physics: const BouncingScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
+                // physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.only(
                   top: 10 * SizeConfig.scaleDiagonal,
                   // left: 13 * SizeConfig.scaleDiagonal,
@@ -77,11 +79,12 @@ class _ChatMessageListState extends State<ChatMessageList> {
                             mainAxisAlignment: notifier.isMyMessage(discussLogs?.sender) ? MainAxisAlignment.end : MainAxisAlignment.start,
                             children: <Widget>[
                               notifier.isMyMessage(discussLogs?.sender)
-                                  ? InkWell(
-                                      onLongPress: () {
-                                        notifier.selectData = index;
-                                      },
-                                      child: Flexible(child: SenderLayout(chatData: discussLogs)))
+                                  ? Flexible(
+                                      child: InkWell(
+                                          onLongPress: () {
+                                            notifier.selectData = index;
+                                          },
+                                          child: SenderLayout(chatData: discussLogs)))
                                   : Flexible(child: ReceiverLayout(chatData: discussLogs))
                             ],
                           ),

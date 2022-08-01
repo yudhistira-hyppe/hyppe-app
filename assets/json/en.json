@@ -482,5 +482,6 @@
   "addPostDescription" : "Add post description, @friends, and  join # topic (max 2500 characters)",
   "privacy" : "Privacy",
   "selectLocation": "Select Location",
-  "youDontHaveAnyPostsYetCreateOneNow": "You don't have any posts yet, create one now"
+  "youDontHaveAnyPostsYetCreateOneNow": "You don't have any posts yet, create one now",
+  "removeMeFromPost": "Remove Me From Post"
 }

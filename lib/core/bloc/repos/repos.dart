@@ -122,7 +122,9 @@ class Repos {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
+    print('kkkkkk');
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    print(_language);
     bool? connection;
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     dynamic dataError = {"type": "ERROR"};

@@ -86,4 +86,8 @@ class VidSeeAllNotifier extends ChangeNotifier {
   void reportContent(BuildContext context) {
     ShowBottomSheet.onReportContent(context);
   }
+
+  void showUserTag(BuildContext context, index) {
+    ShowBottomSheet.onShowUserTag(context, value: _vidData![index].tagPeople!, function: () {}, postId: _vidData![index].postID);
+  }
 }

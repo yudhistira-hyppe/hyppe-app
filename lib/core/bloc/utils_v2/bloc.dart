@@ -255,4 +255,35 @@ class UtilsBlocV2 {
       },
     );
   }
+
+  Future<void> deleteTagUsersBloc(BuildContext context, String? postId) async {
+    setUtilsFetch(UtilsFetch(UtilsState.loading));
+    print('sdsdfsd');
+    final email = SharedPreference().readStorage(SpKeys.email);
+    print(email);
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        print(onResult);
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUtilsFetch(UtilsFetch(UtilsState.deleteUserTagError));
+        } else {
+          setUtilsFetch(UtilsFetch(UtilsState.deleteUserTagSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          // setUtilsFetch(UtilsFetch(UtilsState.searchPeopleSuccess, data: _response.toJson()));
+        }
+      },
+      (errorData) {
+        setUtilsFetch(UtilsFetch(UtilsState.deleteUserTagError));
+        print(errorData);
+      },
+      host: UrlConstants.deletTagUser,
+      headers: {
+        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+      },
+      data: {"email": email, 'postID': postId},
+      withCheckConnection: false,
+      methodType: MethodType.post,
+      withAlertMessage: false,
+    );
+  }
 }

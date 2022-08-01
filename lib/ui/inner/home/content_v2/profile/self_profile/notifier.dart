@@ -227,10 +227,10 @@ class SelfProfileNotifier with ChangeNotifier {
     BuildContext context, {
     required String postID,
     required String content,
-    required String description,
-    required String visibility,
-    required bool allowComment,
-    required bool certified,
+    String? description,
+    String? visibility,
+    bool? allowComment,
+    bool? certified,
     List<String>? tags,
     List<String>? cats,
     List<String>? tagPeople,
@@ -264,9 +264,13 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.allowComments = allowComment;
       _updatedData.certified = certified;
       _updatedData.visibility = visibility;
-      _updatedData.tagPeople = tagPeople;
       _updatedData.location = location;
       _updatedData.cats = [];
+      if (tagPeople != null) {
+        for (var v in tagPeople) {
+          _updatedData.tagPeople!.add(TagPeople(username: v));
+        }
+      }
       if (cats != null) {
         for (var v in cats) {
           _updatedData.cats!.add(

@@ -29,6 +29,8 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.da
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
+import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
@@ -168,6 +170,10 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ListReferralUser(arguments: settings.arguments as ReferralListUserArgument));
       case Routes.insertReferral:
         return MaterialPageRoute(builder: (_) => InsertReferral());
+      case Routes.searcMore:
+        return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
+      case Routes.searcMoreComplete:
+        return MaterialPageRoute(builder: (_) => const SearchMoreCompleteScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

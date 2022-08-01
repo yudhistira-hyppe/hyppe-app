@@ -405,4 +405,19 @@ class UrlConstants {
 
   //get search people
   static const String getSearchPeople = "$profileRoute/search";
+
+  static const String getSearch = "$profileRoute/search";
+
+  ///---------------------------------------------------------------------------------------------------------///
+  // V3
+
+  /// APIs end point
+  /* Post route */
+  static const String contentRouteV3 = "/api/getusercontents";
+
+  ///---------------------------------------------------------------------------------------------------------///
+  /* v3 user profile */
+  static const String getSearchContentV3 = "$contentRouteV3/searchdata";
+  // v3 delete tag
+  static const String deletTagUser = "$postRouteV2/deletetag";
 }

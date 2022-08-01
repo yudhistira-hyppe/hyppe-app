@@ -19,6 +19,7 @@ class CustomSearchBar extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final EdgeInsetsGeometry? contentPadding;
   final bool readOnly;
+  final bool autoFocus;
 
   const CustomSearchBar({
     Key? key,
@@ -35,6 +36,7 @@ class CustomSearchBar extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.textAlign = TextAlign.start,
     this.readOnly = false,
+    this.autoFocus = false,
   }) : super(key: key);
 
   @override
@@ -46,6 +48,7 @@ class CustomSearchBar extends StatelessWidget {
         readOnly: readOnly,
         focusNode: focusNode,
         controller: controller,
+        autofocus: autoFocus,
         decoration: inputDecoration ??
             InputDecoration(
                 prefixIcon: CustomIconButtonWidget(

@@ -1,4 +1,9 @@
+import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/post_follow_user.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 // import 'package:hyppe/ui/inner/home/content/diary/preview/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content/pic/notifier.dart';
@@ -11,12 +16,32 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/follow/follow.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:flutter/material.dart' show BuildContext;
+import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 // import 'package:hyppe/core/extension/custom_extension.dart';
 
 // TODO(Hendi Noviansyah): check if this class is still needed
 class FollowRequestUnfollowNotifier with ChangeNotifier {
+  bool _isLoading = false;
+  bool get isLoading => false;
+
+  List _listFollow = [];
+  List get listFollow => _listFollow;
+
+  set isLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
+  set listFollow(List val) {
+    _listFollow = val;
+    notifyListeners();
+  }
+
   Future<StatusFollowing> followRequestUnfollowUser(
     BuildContext context, {
     required String fUserId,

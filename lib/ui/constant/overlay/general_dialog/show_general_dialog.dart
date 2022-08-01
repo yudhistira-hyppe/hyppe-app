@@ -1,3 +1,4 @@
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_tag_user_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/new_account_language_content.dart';
 import 'package:hyppe/core/models/collection/comment/comments.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/account_preferences_birth_content.dart';
@@ -197,6 +198,27 @@ class ShowGeneralDialog {
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => AlertDialog(
         content: DeleteContentDialog(contentTitle: contentTitle, function: function),
+        contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future deleteTagUserContentDialog(BuildContext context, String contentTitle, Function function, String postId) async {
+    await showGeneralDialog(
+      context: context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => AlertDialog(
+        content: DeleteTagUserContentDialog(
+          contentTitle: contentTitle,
+          function: function,
+          postId: postId,
+        ),
         contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {

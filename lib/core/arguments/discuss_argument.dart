@@ -25,6 +25,8 @@ class DiscussArgument {
 
   DiscussEventType discussEventType = DiscussEventType.directMsg;
 
+  List<dynamic> tagComment = [];
+
   DiscussArgument({
     required this.email,
     required this.receiverParty,
@@ -44,6 +46,7 @@ class DiscussArgument {
       'detailOnly': detailOnly,
       'postType': postType.toString(),
       'messageEventType': discussEventType.toString(),
+      'tagComment': tagComment,
     };
   }
 }

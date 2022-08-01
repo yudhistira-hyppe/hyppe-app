@@ -149,10 +149,18 @@ class CommentNotifierV2 with ChangeNotifier {
 
     loading = true;
 
+    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+
+    List userTagCaption = [];
+    _tagRegex.allMatches(commentController.text).map((z) {
+      userTagCaption.add(z.group(0)?.substring(1));
+    }).toList();
+
     commentQuery
       ..postID = postID ?? ''
       ..parentID = parentID ?? ''
-      ..txtMessages = commentController.text;
+      ..txtMessages = commentController.text
+      ..tagComment = userTagCaption;
 
     try {
       final _resFuture = commentQuery.addComment(context);

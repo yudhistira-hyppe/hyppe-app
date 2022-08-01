@@ -70,7 +70,7 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      return Env.data.baseUrl + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      return Env.data.baseUrl + "/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
     } else {
       return null;
     }
