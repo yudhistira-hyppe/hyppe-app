@@ -27,6 +27,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_complete_profile_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
@@ -977,5 +978,75 @@ class ShowBottomSheet {
         );
       },
     );
+  }
+
+  static onShowUserTag(
+    BuildContext _, {
+    required List<TagPeople> value,
+    required Function() function,
+    required postId,
+    StoryController? storyController,
+  }) {
+    showModalBottomSheet<dynamic>(
+        isScrollControlled: true,
+        context: _,
+        builder: (BuildContext bc) {
+          return Wrap(children: <Widget>[
+            WillPopScope(
+              onWillPop: () async {
+                Routing().moveBack();
+                if (storyController != null) {
+                  storyController.play();
+                }
+                return false;
+              },
+              child: Container(
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(25.0),
+                    topRight: const Radius.circular(25.0),
+                  ),
+                ),
+                child: OnShowUserTagBottomSheet(
+                  value: value,
+                  function: function,
+                  postId: postId,
+                ),
+              ),
+            )
+          ]);
+        });
+
+    // showModalBottomSheet(
+    //   context: _,
+    //   isScrollControlled: true,
+    //   builder: (builder) {
+    //     return DraggableScrollableSheet(
+    //       initialChildSize: 0.1, // half screen on load
+    //       maxChildSize: 0.3, // full screen on scroll
+    //       minChildSize: 0.1,
+    //       builder: (BuildContext context, ScrollController scrollController) {
+    //         return Padding(
+    //           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+    //           child: Container(
+    //             decoration: BoxDecoration(
+    //               color: Theme.of(_).colorScheme.surface,
+    //               borderRadius: const BorderRadius.only(
+    //                 topLeft: Radius.circular(8),
+    //                 topRight: Radius.circular(8),
+    //               ),
+    //             ),
+    //             padding: const EdgeInsets.all(0),
+    //             child: OnShowUserTagBottomSheet(
+    //               value: value,
+    //               function: function,
+    //             ),
+    //           ),
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
   }
 }

@@ -26,7 +26,9 @@ enum UtilsState {
   getMartialStatusSuccess,
   getMartialStatusError,
   searchPeopleSuccess,
-  searchPeopleError
+  searchPeopleError,
+  deleteUserTagSuccess,
+  deleteUserTagError,
 }
 
 class UtilsFetch {

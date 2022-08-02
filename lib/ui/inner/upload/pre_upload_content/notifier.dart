@@ -1,7 +1,10 @@
-import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/bloc/follow/bloc.dart';
+import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -18,6 +21,7 @@ import 'package:hyppe/core/models/collection/utils/search_people/search_people.d
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -39,6 +43,9 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+// import 'package:video_compress/video_compress.dart';
+import 'package:light_compressor/light_compressor.dart';
+import 'package:path_provider/path_provider.dart' as path;
 
 class PreUploadContentNotifier with ChangeNotifier {
   final _eventService = EventService();
@@ -59,6 +66,19 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isShowAutoComplete => _isShowAutoComplete;
   String _temporarySearch = '';
   String get temporarySearch => _temporarySearch;
+
+  String? _statusFollow;
+  String? get statusFollow => _statusFollow;
+
+  int _videoSize = 0;
+  int get videoSize => _videoSize;
+
+  // late Subscription subscription;
+  double _progressCompress = 0.0;
+  double get progressCompress => _progressCompress;
+
+  String? _desFile;
+  String? get desFile => _desFile;
 
   ModelGoogleMapPlace? _modelGoogleMapPlace;
   ModelGoogleMapPlace? get modelGoogleMapPlace => _modelGoogleMapPlace;
@@ -112,6 +132,19 @@ class PreUploadContentNotifier with ChangeNotifier {
   String get locationName => _locationName;
   List<String> get interestData => _interestData;
   int get startSearch => _startSearch;
+
+  List _listFollow = [];
+  List get listFollow => _listFollow;
+
+  set listFollow(List val) {
+    _listFollow = val;
+    notifyListeners();
+  }
+
+  set progressCompress(double val) {
+    _progressCompress = val;
+    notifyListeners();
+  }
 
   set interestData(List<String> val) {
     _interestData = [];
@@ -233,6 +266,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set statusFollow(String? val) {
+    _statusFollow = val;
+    notifyListeners();
+  }
+
   void onWillPop(BuildContext context) async {
     print('exitjuga');
     ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
@@ -283,6 +321,10 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   void _onExit() {
     print('ini exit');
+    _progressCompress = 0;
+    LightCompressor.cancelCompression();
+    // VideoCompress.cancelCompression();
+    // subscription.unsubscribe();
     selectedLocation = '';
     allowComment = true;
     certified = false;
@@ -315,6 +357,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tagHastagRegex.allMatches(captionController.text).map((z) {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
+
+    if (featureType == FeatureType.vid && progressCompress != 100) {
+      showSnackBar(
+        icon: "info-icon.svg",
+        color: kHyppeDanger,
+        message: "Compressing Video",
+      );
+      return;
+    }
 
     try {
       _connectAndListenToSocket(context);
@@ -364,13 +415,26 @@ class PreUploadContentNotifier with ChangeNotifier {
     updateContent = true;
     certifiedTmp = false;
 
+    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final _tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+
+    List userTagCaption = [];
+    List hastagCaption = [];
+    _tagRegex.allMatches(captionController.text).map((z) {
+      userTagCaption.add(z.group(0)?.substring(1));
+    }).toList();
+
+    _tagHastagRegex.allMatches(captionController.text).map((z) {
+      hastagCaption.add(z.group(0)?.substring(1));
+    }).toList();
+
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
       context,
       postId: postID,
       type: featureType!,
       visibility: privacyValue,
-      tags: tagsController.text,
+      tags: hastagCaption.join(','),
       allowComment: allowComment,
       certified: certified,
       description: captionController.text,
@@ -411,7 +475,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       updateContent = false;
       Routing().moveBack();
-      _showSnackBar(
+      showSnackBar(
         color: kHyppeTextSuccess,
         message: "${language.update} $content ${language.successfully}",
       );
@@ -419,7 +483,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  void _showSnackBar({
+  void showSnackBar({
     String? icon,
     required Color color,
     required String message,
@@ -586,7 +650,72 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
+  Future getVideoSize() async {
+    final size = await File(fileContent![0]!).length();
+    _videoSize = size;
+    notifyListeners();
+  }
+
+  Future<String> get _destinationFile async {
+    String directory;
+    final String videoName = '${DateTime.now().millisecondsSinceEpoch}.mp4';
+    if (Platform.isAndroid) {
+      // Handle this part the way you want to save it in any directory you wish.
+      final List<Directory>? dir = await path.getExternalStorageDirectories(type: path.StorageDirectory.downloads);
+      directory = dir!.first.path;
+      return File('$directory/$videoName').path;
+    } else {
+      final Directory dir = await path.getLibraryDirectory();
+      directory = dir.path;
+      return File('$directory/$videoName').path;
+    }
+  }
+
+  Future<void> compressVideo() async {
+    try {
+      final LightCompressor _lightCompressor = LightCompressor();
+      _desFile = await _destinationFile;
+      _lightCompressor.onProgressUpdated.listen((val) {
+        _progressCompress = val;
+        // print("contoh dari value yang di terima : $val");
+        notifyListeners();
+      });
+
+      final dynamic response = await _lightCompressor.compressVideo(
+        path: File(fileContent![0]!).path,
+        destinationPath: _desFile!,
+        videoQuality: VideoQuality.medium,
+        isMinBitrateCheckEnabled: false,
+        // frameRate: 24, /* or ignore it */
+      );
+
+      if (response is OnSuccess) {
+        _desFile = response.destinationPath;
+        _fileContent = [response.destinationPath];
+        _progressCompress = 100;
+        notifyListeners();
+
+        // print('sukses');
+        // print('${File(fileContent![0]!).path}');
+        // print("size ${File(fileContent![0]!).path}");
+      } else if (response is OnFailure) {
+        // print('failed');
+        // print(response.message);
+      } else if (response is OnCancelled) {
+        // print('cancel');
+        // print(response.isCancelled);
+      }
+    } catch (e) {
+      // VideoCompress.cancelCompression();
+    }
+  }
+
   Future onGetInterest(BuildContext context) async {
+    getVideoSize();
+    if (featureType == FeatureType.vid) {
+      compressVideo();
+    }
+
     final notifier = UtilsBlocV2();
     await notifier.getInterestBloc(context);
     final fetch = notifier.utilsFetch;
@@ -660,7 +789,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (_searchPeolpleData.isNotEmpty) {
       String tile = searchPeolpleData[index].username!;
       if (_userTagData.contains(tile)) {
-        _showSnackBar(
+        showSnackBar(
           icon: "info-icon.svg",
           color: kHyppeDanger,
           message: "User sudah ditag",
@@ -776,5 +905,73 @@ class PreUploadContentNotifier with ChangeNotifier {
       selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
     );
     notifyListeners();
+  }
+
+  bool emailcheck(String? email) => email == SharedPreference().readStorage(SpKeys.email) ? true : false;
+  String label(String? tile) {
+    String label = '';
+    if (tile == 'requested') {
+      label = 'Requested';
+    } else {
+      final index = _listFollow.indexWhere((element) => element["code"] == tile);
+      label = _listFollow[index]['name'];
+    }
+    print(label);
+
+    return label;
+  }
+
+  // void showDeleteMyTag(BuildContext context, postId) {
+  //   Routing().moveBack();
+  //   ShowGeneralDialog.deleteContentDialog(context, '', () async {
+  //     deleteMyTag(context, postId);
+  //   });
+  // }
+
+  // Future deleteMyTag(BuildContext context, postId) async {
+  //   final connect = await System().checkConnections();
+  //   final notifier = UtilsBlocV2();
+
+  //   print('delete in updload');
+  //   if (connect) {
+  //     print(postId);
+  //     await notifier.deleteTagUsersBloc(context, postId);
+
+  //     final fetch = notifier.utilsFetch;
+  //     print('fetch.followState');
+  //     print(fetch.utilsState);
+  //     if (fetch.utilsState == UtilsState.deleteUserTagSuccess) {
+  //       showSnackBar(color: kHyppeLightSuccess, message: 'Your successfully removed from HyppeVid', icon: 'valid-invert.svg');
+  //       Routing().moveBack();
+  //     } else {
+  //       showSnackBar(color: kHyppeDanger, message: 'Somethink wrong', icon: 'info-icon.svg');
+  //       Routing().moveBack();
+  //     }
+  //   } else {
+  //     ShowBottomSheet.onNoInternetConnection(context);
+  //   }
+  // }
+
+  Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index}) async {
+    try {
+      // statusFollowing = StatusFollowing.requested;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: email ?? '',
+          eventType: InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      'follow user: ERROR: $e'.logger();
+      return false;
+    }
   }
 }

@@ -57,7 +57,11 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   }) async {
     Future<List<NotificationModel>> _resFuture;
 
+    print('getnotification');
+    print(eventType);
     notificationsQuery = notificationsQuery..eventType = eventType;
+    print('getnotification');
+    print(eventType);
 
     try {
       if (reload) {

@@ -141,8 +141,9 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                   ? const Center(child: CustomLoading())
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
                       children: const <Widget>[
-                        SizedBox.shrink(),
+                        // SizedBox.shrink(),
                         // ChatMessageList(scrollController: _scrollController),
                         // ChatInputWidget(_scrollController),
                         ChatMessageList(),

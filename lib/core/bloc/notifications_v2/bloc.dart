@@ -36,6 +36,13 @@ class NotificationBloc {
     formData.fields.add(MapEntry("pageRow", argument.pageRow.toString()));
     formData.fields.add(MapEntry("pageNumber", argument.pageNumber.toString()));
 
+    print('asdasd');
+    print(formData.fields);
+    print(eventType);
+    formData.fields.map(
+      (e) => print(e),
+    );
+
     await Repos().reposPost(
       context,
       (onResult) {

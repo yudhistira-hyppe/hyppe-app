@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/widget/content_thumbnail.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -94,6 +96,32 @@ class ContentItem extends StatelessWidget {
                           fn: () => notifier.navigateToHyppePicDetail(context, data),
                         ),
                       ),
+                      data.tagPeople!.length != 0 || data.location == ''
+                          ? Padding(
+                              padding: const EdgeInsets.only(bottom: 10, top: 16),
+                              child: Row(
+                                children: [
+                                  data.tagPeople!.length != 0
+                                      ? TagLabel(
+                                          icon: 'user',
+                                          label: '${data.tagPeople!.length} people',
+                                          function: () {
+                                            context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                                            // vidNotifier.showUserTag(context, index, data!.postID);
+                                          },
+                                        )
+                                      : const SizedBox(),
+                                  data.location == '' || data.location == null
+                                      ? const SizedBox()
+                                      : TagLabel(
+                                          icon: 'maptag',
+                                          label: "${data.location}",
+                                          function: () {},
+                                        ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
                       Padding(
                         padding: const EdgeInsets.only(top: 13.0),
                         child: Row(

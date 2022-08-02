@@ -93,6 +93,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                           return PicCenterItem(
                             data: notifier.pic?[index],
                             onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
+                            margin: const EdgeInsets.symmetric(horizontal: 4.5),
                           );
 
                           // if (notifier.pic != null) {

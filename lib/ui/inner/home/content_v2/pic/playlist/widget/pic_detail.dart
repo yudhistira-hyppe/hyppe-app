@@ -5,6 +5,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -210,6 +212,31 @@ class _PicDetailState extends State<PicDetail> {
                         // )
                       ],
                     ),
+                    widget.arguments?.tagPeople!.length != 0 || widget.arguments?.location == ''
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                            child: Row(
+                              children: [
+                                widget.arguments?.tagPeople!.length != 0
+                                    ? PicTagLabel(
+                                        icon: 'user',
+                                        label: '${widget.arguments?.tagPeople!.length} people',
+                                        function: () {
+                                          context.read<PicDetailNotifier>().showUserTag(context, widget.arguments!.tagPeople, widget.arguments?.postID);
+                                        },
+                                      )
+                                    : const SizedBox(),
+                                widget.arguments?.location == '' || widget.arguments?.location == null
+                                    ? const SizedBox()
+                                    : PicTagLabel(
+                                        icon: 'maptag',
+                                        label: "${widget.arguments?.location}",
+                                        function: () {},
+                                      ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
                     Padding(
                       child: Container(
                         padding: const EdgeInsets.all(2),

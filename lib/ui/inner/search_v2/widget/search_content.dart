@@ -45,7 +45,10 @@ class _SearchContentState extends State<SearchContent> {
           itemBuilder: (context, index) {
             try {
               return GestureDetector(
-                onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen(context, widget.content!, index),
+                onTap: () {
+                  print('asdasd');
+                  context.read<SearchNotifier>().navigateToSeeAllScreen(context, widget.content!, index);
+                },
                 child: Container(
                   padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
                   child: ClipRRect(
@@ -55,8 +58,7 @@ class _SearchContentState extends State<SearchContent> {
                       height: double.infinity,
                       featureType: widget.featureType!,
                       isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                      thumbnail: System().showUserPicture(
-                          widget.featureType != FeatureType.pic ? widget.content![index].mediaThumbEndPoint : widget.content![index].mediaEndpoint)!,
+                      thumbnail: System().showUserPicture(widget.featureType != FeatureType.pic ? widget.content![index].mediaThumbEndPoint : widget.content![index].mediaEndpoint)!,
                     ),
                   ),
                 ),
@@ -75,67 +77,3 @@ class _SearchContentState extends State<SearchContent> {
         )
       : SearchShimmer();
 }
-
-/**
- * ? SingleChildScrollView(
-          controller: _scrollController,
-          padding: EdgeInsets.symmetric(horizontal: 12),
-          child: Column(
-            children: [
-              /// Get All List Length
-              // Padding(
-              //   padding: const EdgeInsets.all(16),
-              //   child: Row(
-              //     children: [
-              //       content != null
-              //           ? CustomTextWidget(
-              //               textToDisplay:
-              //                   "${content!.length < 500 ? content!.length.toString() : "500+"} ${context.read<TranslateNotifier>().translate.posts}",
-              //               textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
-              //             )
-              //           : SizedBox.shrink(),
-              //     ],
-              //   ),
-              // ),
-              GridView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                itemCount: widget.content!.length,
-                itemBuilder: (context, index) {
-                  try {
-                    return GestureDetector(
-                      onTap: () => context.read<SearchNotifier>().navigateToSeeAllScreen(context, widget.content!, index),
-                      child: Container(
-                        padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: CustomContentModeratedWidget(
-                            width: double.infinity,
-                            height: double.infinity,
-                            featureType: widget.featureType!,
-                            isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                            thumbnail: System().showUserPicture(widget.featureType != FeatureType.pic
-                                ? widget.content![index].mediaThumbEndPoint
-                                : widget.content![index].mediaEndpoint)!,
-                          ),
-                        ),
-                      ),
-                    );
-                  } catch (e) {
-                    print('[DevError] => ${e.toString()}');
-                    return Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage('${AssetPath.pngPath}filter_search-error.png'), fit: BoxFit.fill),
-                      ),
-                    );
-                  }
-                },
-              )
-            ],
-          ),
-        )
-      : SearchShimmer()
- */

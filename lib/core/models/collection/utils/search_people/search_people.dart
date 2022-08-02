@@ -22,6 +22,7 @@ class SearchPeolpleData {
   String? idUserAuth;
   String? username;
   String? fullName;
+  String? email;
 
   SearchPeolpleData({
     this.id,
@@ -29,6 +30,7 @@ class SearchPeolpleData {
     this.idUserAuth,
     this.username,
     this.fullName,
+    this.email,
   });
 
   factory SearchPeolpleData.createPeopleData(Map<String, dynamic> object) => SearchPeolpleData(
@@ -37,6 +39,7 @@ class SearchPeolpleData {
         idUserAuth: object['idUserAuth'],
         username: object['username'],
         fullName: object['fullName'],
+        email: object['email'],
       );
 
   static SearchPeolpleData fromJson(json) => SearchPeolpleData(
@@ -45,6 +48,7 @@ class SearchPeolpleData {
         idUserAuth: json['idUserAuth'],
         username: json['username'],
         fullName: json['fullName'],
+        email: json['email'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,5 +57,6 @@ class SearchPeolpleData {
         "idUserAuth": idUserAuth,
         "username": username,
         "fullName": fullName,
+        "email": email,
       };
 }

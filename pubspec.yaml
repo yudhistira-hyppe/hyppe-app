@@ -66,6 +66,10 @@ dependencies:
   geocoding: ^2.0.4
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
+  video_compress: ^3.1.0
+  light_compressor: ^1.2.2
+
+
 
 
 

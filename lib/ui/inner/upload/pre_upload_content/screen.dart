@@ -34,9 +34,30 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   String search = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    print('init state');
     Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
+  }
+
+  Widget loadingCompress(progressCompress) {
+    return progressCompress > 0 && progressCompress < 100
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Loading .."),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(40.0),
+                child: LinearProgressIndicator(
+                  value: progressCompress / 100,
+                  minHeight: 5,
+                  backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
+                ),
+              ),
+              sixPx,
+            ],
+          )
+        : const SizedBox();
   }
 
   @override
@@ -78,6 +99,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        loadingCompress(notifier.progressCompress),
+                        // Text("${notifier.progressCompress}"),
+                        // Text("${notifier.videoSize / 1000000} mb"),
                         Row(
                           children: [
                             CustomTextWidget(

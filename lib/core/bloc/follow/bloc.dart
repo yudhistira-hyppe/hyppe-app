@@ -139,4 +139,35 @@ class FollowBloc {
       methodType: MethodType.post,
     );
   }
+
+  Future deleteTagUsersBloc(BuildContext context, {String? postId}) async {
+    print('asdasd');
+    final _repos = Repos();
+
+    print(postId);
+    final email = SharedPreference().readStorage(SpKeys.email);
+    print(email);
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setFollowFetch(FollowFetch(FollowState.deleteUserTagError));
+        } else {
+          setFollowFetch(FollowFetch(FollowState.deleteUserTagSuccess));
+        }
+      },
+      (errorData) {
+        setFollowFetch(FollowFetch(FollowState.deleteUserTagError));
+      },
+      data: {'postID': postId, 'email': email},
+      headers: {
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      withAlertMessage: true,
+      withCheckConnection: false,
+      host: UrlConstants.deletTagUser,
+      methodType: MethodType.post,
+    );
+  }
 }

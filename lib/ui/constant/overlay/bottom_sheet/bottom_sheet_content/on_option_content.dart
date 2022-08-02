@@ -199,7 +199,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.userTagData = [];
                     if (widget.contentData.tagPeople != null) {
                       widget.contentData.tagPeople!.map((val) {
-                        notifier.userTagData.add(val);
+                        notifier.userTagData.add(val.username!);
                       }).toList();
                     }
 

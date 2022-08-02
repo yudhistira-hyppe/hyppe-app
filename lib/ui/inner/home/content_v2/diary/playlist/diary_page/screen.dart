@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -99,6 +101,35 @@ class _DiaryPageState extends State<DiaryPage> {
           ),
           RightItems(
             data: widget.data!,
+          ),
+          Align(
+            alignment: const Alignment(1.0, 0.70),
+            child: widget.data?.tagPeople!.length != 0 || widget.data?.location == ''
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                    child: Row(
+                      children: [
+                        widget.data?.tagPeople!.length != 0
+                            ? PicTagLabel(
+                                icon: 'user',
+                                label: '${widget.data?.tagPeople!.length} people',
+                                function: () {
+                                  _storyController.pause();
+                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data!.tagPeople, widget.data?.postID, storyController: _storyController);
+                                },
+                              )
+                            : const SizedBox(),
+                        widget.data?.location == '' || widget.data?.location == null
+                            ? const SizedBox()
+                            : PicTagLabel(
+                                icon: 'maptag',
+                                label: "${widget.data?.location}",
+                                function: () {},
+                              ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
           ),
           LeftItems(
             description: widget.data?.description,

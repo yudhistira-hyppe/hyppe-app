@@ -1,21 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 
-class FilterLanding extends StatelessWidget {
+class FilterLanding extends StatefulWidget {
   const FilterLanding({Key? key}) : super(key: key);
 
   @override
+  State<FilterLanding> createState() => _FilterLandingState();
+}
+
+class _FilterLandingState extends State<FilterLanding> {
+  String _select = 'PUBLIC';
+  List filterList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
+    filterList = [
+      {"id": '1', 'name': "${homeNotifier.language.all}", 'code': 'PUBLIC'},
+      {"id": '2', 'name': "${homeNotifier.language.friends}", 'code': 'FRIEND'},
+      {"id": '3', 'name': "${homeNotifier.language.following}", 'code': 'FOLLOWING'},
+      {"id": '4', 'name': "${homeNotifier.language.onlyMe}", 'code': 'PRIVATE'},
+    ];
+  }
+
+  void selected(val) {
+    _select = val;
+    setState(() {});
+  }
+
+  bool pickedFilter(String? tile) => filterList.contains(tile) ? true : false;
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<HomeNotifier>(builder: (context, notifier, child) {
-      notifier.visibiltyList = [
-        {"id": '1', 'name': "${notifier.language.all}", 'code': 'PUBLIC'},
-        {"id": '2', 'name': "${notifier.language.friends}", 'code': 'FRIEND'},
-        {"id": '3', 'name': "${notifier.language.following}", 'code': 'FOLLOWING'},
-        {"id": '4', 'name': "${notifier.language.onlyMe}", 'code': 'PRIVATE'},
-      ];
+    return Consumer<LikeNotifier>(builder: (context, notifier, child) {
       return Padding(
         padding: EdgeInsets.fromLTRB(8, 8, 0, 12),
         child: Container(
@@ -25,26 +47,48 @@ class FilterLanding extends StatelessWidget {
             shrinkWrap: false,
             children: [
               ...List.generate(
-                notifier.visibiltyList.length,
+                filterList.length,
                 (index) => GestureDetector(
-                  onTap: () => notifier.changeVisibility(context, index),
+                  onTap: () {
+                    selected(filterList[index]['code']);
+                    notifier.changeVisibility(context, filterList[index]['code']);
+                  },
                   child: Chip(
-                      // selected: notifier.pickedVisibility(notifier.visibiltyList[index]['code']),
-                      backgroundColor: notifier.pickedVisibility(notifier.visibiltyList[index]['code']) ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+                      // selected: notifier.pickedVisibility(filterList[index]['code']),
+                      backgroundColor: _select == filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
                       shape: StadiumBorder(
-                          side: BorderSide(
-                              color: notifier.pickedVisibility(notifier.visibiltyList[index]['code'])
-                                  ? Theme.of(context).colorScheme.onSecondaryContainer
-                                  : Theme.of(context).colorScheme.secondaryContainer)),
+                          side: BorderSide(color: _select == filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.secondaryContainer)),
                       label: CustomTextWidget(
-                        textToDisplay: notifier.visibiltyList[index]['name'],
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: notifier.pickedVisibility(notifier.visibiltyList[index]['code']) ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                        textToDisplay: filterList[index]['name'],
+                        textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: _select == filterList[index]['code'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
                       )),
                 ),
               ),
+
+              // ...List.generate(
+              //   notifier.visibiltyList.length,
+              //   (index) => GestureDetector(
+              //     onTap: () {
+              //       selected(notifier.visibiltyList[index]['code']);
+              //       notifier.changeVisibility(context, index);
+              //     },
+              //     child: Chip(
+              //         // selected: notifier.pickedVisibility(notifier.visibiltyList[index]['code']),
+              //         backgroundColor: notifier.visibilitySelect == notifier.visibiltyList[index]['code'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+              //         shape: StadiumBorder(
+              //             side: BorderSide(
+              //                 color: notifier.visibilitySelect == notifier.visibiltyList[index]['code']
+              //                     ? Theme.of(context).colorScheme.onSecondaryContainer
+              //                     : Theme.of(context).colorScheme.secondaryContainer)),
+              //         label: CustomTextWidget(
+              //           textToDisplay: notifier.visibiltyList[index]['name'],
+              //           textStyle: Theme.of(context)
+              //               .textTheme
+              //               .bodyMedium!
+              //               .copyWith(color: notifier.visibilitySelect == notifier.visibiltyList[index]['code'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+              //         )),
+              //   ),
+              // ),
             ],
           ),
         ),

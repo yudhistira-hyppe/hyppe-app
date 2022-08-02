@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    final notifierFollow = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    final _language = TranslateNotifierV2();
+    notifierFollow.listFollow = [
+      {'name': "${_language.translate.follow}", 'code': 'TOFOLLOW'},
+      {'name': "${_language.translate.following}", 'code': 'FOLLOWING'},
+    ];
     Provider.of<HomeNotifier>(context, listen: false).setSessionID();
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {

@@ -25,6 +25,8 @@ class ContentThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    print('video gambar');
+    print('${vidData?.fullThumbPath}');
 
     return Stack(
       children: [

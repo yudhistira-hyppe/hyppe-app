@@ -482,5 +482,6 @@
   "addPostDescription" : "Tambahkan deskripsi posting, @teman, dan bergabung dengan #topik (maks 2500 karakter)",
   "privacy" : "Rahasia",
   "selectLocation": "Pilih Lokasi",
-  "youDontHaveAnyPostsYetCreateOneNow": "Anda belum memiliki postingan, buat sekarang"
+  "youDontHaveAnyPostsYetCreateOneNow": "Anda belum memiliki postingan, buat sekarang",
+  "removeMeFromPost": "Hapus Saya Dari Pos"
 }

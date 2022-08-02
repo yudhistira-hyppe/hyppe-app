@@ -68,7 +68,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
               color: Theme.of(context).colorScheme.onSurface,
             )),
         title: CustomTextWidget(
-          textToDisplay: 'Tag People ${_notifier.searchPeolpleData.length}',
+          textToDisplay: 'Tag People',
           textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.transparent,

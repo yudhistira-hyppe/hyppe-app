@@ -19,7 +19,6 @@ import 'package:collection/collection.dart' show IterableExtension;
 
 class HomeNotifier with ChangeNotifier {
   //for visibilty
-  String _visibilty = 'PUBLIC';
 
   LocalizationModelV2 language = LocalizationModelV2();
 
@@ -31,7 +30,12 @@ class HomeNotifier with ChangeNotifier {
 
   List _visibiltyList = [];
   List get visibiltyList => _visibiltyList;
+
+  String _visibilty = 'PUBLIC';
   String get visibilty => _visibilty;
+
+  String _visibilitySelect = 'PUBLIC';
+  String get visibilitySelect => _visibilitySelect;
 
   // bool _isHaveSomethingNew = false;
   String? _sessionID;
@@ -46,6 +50,11 @@ class HomeNotifier with ChangeNotifier {
 
   set visibilty(String val) {
     _visibilty = val;
+    notifyListeners();
+  }
+
+  set visibilitySelect(String val) {
+    _visibilitySelect = val;
     notifyListeners();
   }
 
@@ -147,10 +156,10 @@ class HomeNotifier with ChangeNotifier {
     BuildContext context, {
     required String postID,
     required String content,
-    required String description,
-    required String visibility,
-    required bool allowComment,
-    required bool certified,
+    String? description,
+    String? visibility,
+    bool? allowComment,
+    bool? certified,
     List<String>? tags,
     List<String>? cats,
     List<String>? tagPeople,
@@ -185,13 +194,14 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.description = description;
       _updatedData.allowComments = allowComment;
       _updatedData.visibility = visibility;
-      _updatedData.tagPeople = tagPeople;
       _updatedData.location = location;
       _updatedData.cats = [];
-      print("cats");
-      print(cats);
-      print(cats!.length);
-      print(_updatedData.cats!.length);
+
+      if (tagPeople != null) {
+        for (var v in tagPeople) {
+          _updatedData.tagPeople!.add(TagPeople(username: v));
+        }
+      }
       if (cats != null) {
         for (var v in cats) {
           _updatedData.cats!.add(
@@ -231,12 +241,54 @@ class HomeNotifier with ChangeNotifier {
     whenComplete ? Routing().move(Routes.testAliPlayer).whenComplete(() => onWhenComplete) : Routing().move(Routes.testAliPlayer);
   }
 
-  bool pickedVisibility(String? tile) => _visibilty.contains(tile!) ? true : false;
+  bool pickedVisibility(String? tile) {
+    notifyListeners();
+    if (_visibilty.contains(tile!)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   void changeVisibility(BuildContext context, index) {
     _visibilty = _visibiltyList[index]['code'];
-    print(_visibilty);
+    _visibilitySelect = _visibiltyList[index]['code'];
     onRefresh(context);
+    notifyListeners();
+  }
+
+  void onDeleteSelfTagUserContent(BuildContext context, {required String postID, required String content, required String email}) {
+    ContentData? _updatedData;
+    final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+    final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+    switch (content) {
+      case hyppeVid:
+        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppeStory:
+        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    final index = vid.vidData!.indexWhere((element) => element.postID == postID);
+    print(vid.vidData![index].tagPeople!.length);
+    vid.vidData![index].tagPeople?.removeWhere((element) => element.email == email);
+    vid.vidData![index].description = 'asdaksdjha jsd';
+
+    print(vid.vidData![index].tagPeople!.length);
+    _updatedData!.tagPeople!.removeWhere((element) => element.email == email);
+
     notifyListeners();
   }
 }

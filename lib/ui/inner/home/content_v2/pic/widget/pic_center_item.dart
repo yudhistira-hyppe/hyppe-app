@@ -12,8 +12,9 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
 class PicCenterItem extends StatelessWidget {
   final Function? onTap;
   final ContentData? data;
+  final EdgeInsets? margin;
 
-  const PicCenterItem({Key? key, this.onTap, this.data}) : super(key: key);
+  const PicCenterItem({Key? key, this.onTap, this.data, this.margin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,8 @@ class PicCenterItem extends StatelessWidget {
         heightPlaceHolder: 80,
         imageUrl: "${data?.fullThumbPath}",
         imageBuilder: (context, imageProvider) => Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4.5),
+          margin: margin,
+          // const EdgeInsets.symmetric(horizontal: 4.5),
           width: _scaling,
           height: 168,
           decoration: BoxDecoration(
@@ -37,7 +39,8 @@ class PicCenterItem extends StatelessWidget {
           child: _buildBody(),
         ),
         errorWidget: (context, url, error) => Container(
-          margin: const EdgeInsets.symmetric(horizontal: 4.5),
+          margin: margin,
+          // const EdgeInsets.symmetric(horizontal: 4.5),
           width: _scaling,
           height: 186,
           child: _buildBody(),
