@@ -24,6 +24,7 @@ class AllSearchContent extends StatefulWidget {
 class _AllSearchContentState extends State<AllSearchContent> {
   final ScrollController _scrollController = ScrollController();
   TranslateNotifierV2? _translate;
+  static final _system = System();
 
   @override
   void initState() {
@@ -87,7 +88,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
               (index) => Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ListTile(
-                  // onTap: () => notifier.inserTagPeople(index),
+                  onTap: () => _system.navigateToProfile(context, widget.content!.users!.data![index].email!),
                   contentPadding: EdgeInsets.zero,
                   title: Text("${widget.content!.users!.data![index].fullName}"),
                   subtitle: Text("${widget.content!.users!.data![index].username}"),

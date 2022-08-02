@@ -348,14 +348,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
     final _tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
 
-    List userTagCaption = [];
-    List hastagCaption = [];
+    List<String> userTagCaption = [];
+    List<String> hastagCaption = [];
     _tagRegex.allMatches(captionController.text).map((z) {
-      userTagCaption.add(z.group(0)?.substring(1));
+      userTagCaption.add(z.group(0)!.substring(1));
     }).toList();
 
     _tagHastagRegex.allMatches(captionController.text).map((z) {
-      hastagCaption.add(z.group(0)?.substring(1));
+      hastagCaption.add(z.group(0)!.substring(1));
     }).toList();
 
     if (featureType == FeatureType.vid && progressCompress != 100) {
@@ -374,7 +374,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         context,
         type: featureType!,
         visibility: privacyValue,
-        tags: hastagCaption.join(','),
+        tags: hastagCaption,
+        tagDescription: userTagCaption,
         allowComment: allowComment,
         certified: certified,
         fileContents: fileContent!,

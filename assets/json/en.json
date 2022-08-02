@@ -294,7 +294,7 @@
   "library": "Library",
   "privateAccount": "Private Account",
   "followThisAccountToSeeTheirContents": "Follow this account to see their contents",
-  "hyppeStoryCaption": "Image or video max 60 seconds, only for 24 hours",
+  "hyppeStoryCaption": "Image or video max 15 seconds, only for 24 hours",
   "hyppeVidCaption": "Long video",
   "hyppeDiaryCaption": "Video max 60 seconds",
   "hyppePicCaption": "Only image",
@@ -483,5 +483,6 @@
   "privacy" : "Privacy",
   "selectLocation": "Select Location",
   "youDontHaveAnyPostsYetCreateOneNow": "You don't have any posts yet, create one now",
-  "removeMeFromPost": "Remove Me From Post"
+  "removeMeFromPost": "Remove Me From Post",
+  "noResultsFoundTryAnother": "No results found, try another"
 }

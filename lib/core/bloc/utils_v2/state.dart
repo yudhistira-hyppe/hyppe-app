@@ -29,6 +29,8 @@ enum UtilsState {
   searchPeopleError,
   deleteUserTagSuccess,
   deleteUserTagError,
+  updateLangError,
+  updateLangSuccess,
 }
 
 class UtilsFetch {

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_content_dialog.dart';
@@ -36,6 +38,7 @@ class CommentListTile extends StatefulWidget {
 }
 
 class _CommentListTileState extends State<CommentListTile> {
+  final email = SharedPreference().readStorage(SpKeys.email);
   @override
   Widget build(BuildContext context) {
     final comment = widget.data?.comment;
@@ -53,15 +56,12 @@ class _CommentListTileState extends State<CommentListTile> {
               following: true,
               width: 30 * SizeConfig.scaleDiagonal,
               height: 30 * SizeConfig.scaleDiagonal,
-              imageUrl:
-                  System().showUserPicture(commentor?.avatar?.mediaEndpoint),
-              onTap: () =>
-                  System().navigateToProfile(context, comment?.sender ?? ''),
+              imageUrl: System().showUserPicture(commentor?.avatar?.mediaEndpoint),
+              onTap: () => System().navigateToProfile(context, comment?.sender ?? ''),
             ),
           ),
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 42 * SizeConfig.scaleDiagonal),
+            padding: EdgeInsets.symmetric(horizontal: 42 * SizeConfig.scaleDiagonal),
             child: Consumer<CommentNotifierV2>(
               builder: (_, notifier, __) => Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -71,23 +71,15 @@ class _CommentListTileState extends State<CommentListTile> {
                     textAlign: TextAlign.start,
                     textSpan: TextSpan(
                       style: Theme.of(context).textTheme.caption,
-                      text: commentor?.username != null
-                          ? "@" + commentor!.username! + "   "
-                          : '',
+                      text: commentor?.username != null ? "@" + commentor!.username! + "   " : '',
                       children: [
                         TextSpan(
                           text: System().readTimestamp(
-                            DateTime.parse(widget.data?.comment?.createdAt ??
-                                    DateTime.now().toString())
-                                .millisecondsSinceEpoch,
+                            DateTime.parse(widget.data?.comment?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
                             context,
                             fullCaption: true,
                           ),
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryVariant),
+                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
                         )
                       ],
                     ),
@@ -156,9 +148,7 @@ class _CommentListTileState extends State<CommentListTile> {
                       ),
                     ],
                   ),
-                  repliesCount > 0
-                      ? SizedBox(height: 16 * SizeConfig.scaleDiagonal)
-                      : const SizedBox.shrink(),
+                  repliesCount > 0 ? SizedBox(height: 16 * SizeConfig.scaleDiagonal) : const SizedBox.shrink(),
                   repliesCount > 0
                       ? InkWell(
                           onTap: () {
@@ -172,12 +162,8 @@ class _CommentListTileState extends State<CommentListTile> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: CustomTextWidget(
-                              textStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryVariant),
-                              textToDisplay:
-                                  "See $repliesCount ${repliesCount > 1 ? "replies" : "reply"}...",
+                              textStyle: TextStyle(color: Theme.of(context).colorScheme.primaryVariant),
+                              textToDisplay: "See $repliesCount ${repliesCount > 1 ? "replies" : "reply"}...",
                             ),
                           ),
                         )
@@ -209,19 +195,19 @@ class _CommentListTileState extends State<CommentListTile> {
           //             })),
           //   ),
           // ),
-          Consumer<CommentNotifierV2>(
-            builder: (_, notifier, __) => Align(
-                alignment: const Alignment(1.0, 0.0),
-                child: InkWell(
-                    onTap: () async {
-                      ShowGeneralDialog.deleteContentDialog(
-                          context, '${_language.comment}', () async {
-                        notifier.deleteComment(context, comment!.lineID!);
-                      });
-                    
-                    },
-                    child: const Icon(Icons.close))),
-          ),
+          widget.data!.comment!.sender == email
+              ? Consumer<CommentNotifierV2>(
+                  builder: (_, notifier, __) => Align(
+                      alignment: const Alignment(1.0, 0.0),
+                      child: InkWell(
+                          onTap: () async {
+                            ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
+                              notifier.deleteComment(context, comment!.lineID!);
+                            });
+                          },
+                          child: const Icon(Icons.close))),
+                )
+              : const SizedBox(),
         ],
       ),
     );

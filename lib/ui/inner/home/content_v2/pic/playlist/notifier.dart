@@ -187,7 +187,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<bool> onPop() async {
-    if (_routeArgument?.postID != null) {
+    if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
       Routing().moveAndPop(Routes.lobby);
     } else {
       Routing().moveBack();

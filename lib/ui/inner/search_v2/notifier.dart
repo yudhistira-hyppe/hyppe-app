@@ -162,6 +162,7 @@ class SearchNotifier with ChangeNotifier {
   void onSearchPost(BuildContext context, {String? value}) async {
     _routing.moveReplacement(Routes.searcMoreComplete);
     String search = value ?? searchController.text;
+    focusNode.unfocus();
 
     final notifier = SearchContentBloc();
 
@@ -203,15 +204,28 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future navigateToSeeAllScreen2(BuildContext context, List<ContentData> data, int index, int selectIndex) async {
-    print('selectIndex');
-    print(selectIndex);
-    print(data[index].postID);
     focusNode.unfocus();
     bool connect = await System().checkConnections();
     if (connect) {
-      if (selectIndex == 2) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data[index]));
-      if (selectIndex == 3) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble()));
-      if (selectIndex == 4) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: data[index]));
+      // VidDetailScreenArgument()..postID = deepLink.queryParameters['postID']
+      if (selectIndex == 2) {
+        _routing.move(Routes.vidDetail,
+            argument: VidDetailScreenArgument(vidData: data[index])
+              ..postID = data[index].postID
+              ..backPage = true);
+      }
+      if (selectIndex == 3) {
+        _routing.move(Routes.diaryDetail,
+            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble())
+              ..postID = data[index].postID
+              ..backPage = true);
+      }
+      if (selectIndex == 4) {
+        _routing.move(Routes.picDetail,
+            argument: PicDetailScreenArgument(picData: data[index])
+              ..postID = data[index].postID
+              ..backPage = true);
+      }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         _routing.moveBack();
@@ -242,7 +256,7 @@ class SearchNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       isLoading = true;
-      await notifier.getSearchPeopleBloc(context, input, 0, 10);
+      await notifier.getSearchPeopleBloc(context, input, 0, 20);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
         _searchPeolpleData = [];

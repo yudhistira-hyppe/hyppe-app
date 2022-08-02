@@ -286,4 +286,32 @@ class UtilsBlocV2 {
       withAlertMessage: false,
     );
   }
+
+  Future<void> updateLanguage(BuildContext context, String? lang) async {
+    setUtilsFetch(UtilsFetch(UtilsState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        print(onResult);
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUtilsFetch(UtilsFetch(UtilsState.updateLangError));
+        } else {
+          setUtilsFetch(UtilsFetch(UtilsState.updateLangSuccess));
+        }
+      },
+      (errorData) {
+        setUtilsFetch(UtilsFetch(UtilsState.updateLangError));
+        print(errorData);
+      },
+      headers: {
+        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      host: UrlConstants.updateLanguage,
+      data: {"langIso": lang},
+      withCheckConnection: false,
+      methodType: MethodType.post,
+      withAlertMessage: false,
+    );
+  }
 }

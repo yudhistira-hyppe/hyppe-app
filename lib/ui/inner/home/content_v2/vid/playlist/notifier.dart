@@ -43,10 +43,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {
-      print('ini ada postID');
       _initialVid(context);
     } else {
-      print('ini tidak ada postID');
       _data = _routeArgument?.vidData;
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: false);
@@ -157,7 +155,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<bool> onPop() async {
-    if (_routeArgument?.postID != null) {
+    if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
       Routing().moveAndPop(Routes.lobby);
     } else {
       Routing().moveBack();

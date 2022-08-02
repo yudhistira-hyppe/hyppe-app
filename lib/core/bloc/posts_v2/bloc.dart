@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -61,6 +62,12 @@ class PostsBloc {
       if (searchText == '') {
         formData.fields.add(MapEntry('visibility', '$visibility'));
       }
+
+      if (type == FeatureType.diary && postID != null) {
+        // _objTable.removeWhere((key, value) => key == "propertyName");
+        formData.fields.removeWhere((element) => element.key == 'visibility');
+      }
+
       if (myContent != true) {
         formData.fields.add(MapEntry('search', searchText));
       }
@@ -115,7 +122,7 @@ class PostsBloc {
 
   Future postContentsBlocV2(
     BuildContext context, {
-    String? tags,
+    List<String>? tags,
     List<String>? cats,
     List<String>? tagPeople,
     required FeatureType type,
@@ -128,6 +135,7 @@ class PostsBloc {
     ProgressCallback? onReceiveProgress,
     required List<String?> fileContents,
     required NativeDeviceOrientation rotate,
+    List<String>? tagDescription,
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
@@ -143,13 +151,15 @@ class PostsBloc {
     formData.fields.add(MapEntry('email', email));
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('description', description));
-    formData.fields.add(MapEntry('tags', tags ?? ""));
+    formData.fields.add(MapEntry('tags', tags!.join(',')));
     formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(MapEntry('location', location!));
+    formData.fields.add(MapEntry('tagDescription', tagDescription!.join(',')));
+    // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));

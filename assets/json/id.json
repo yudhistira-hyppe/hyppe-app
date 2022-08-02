@@ -294,7 +294,7 @@
   "library": "Koleksi",
   "privateAccount": "Akun Privat",
   "followThisAccountToSeeTheirContents": "Ikuti akun ini untuk melihat kontenya",
-  "hyppeStoryCaption": "Gambar atau video 60 detik, hanya 24 jam",
+  "hyppeStoryCaption": "Gambar atau video 15 detik, hanya 24 jam",
   "hyppeVidCaption": "Video berdurasi panjang",
   "hyppeDiaryCaption": "Video 60 detik",
   "hyppePicCaption": "Hanya Gambar",
@@ -483,5 +483,6 @@
   "privacy" : "Rahasia",
   "selectLocation": "Pilih Lokasi",
   "youDontHaveAnyPostsYetCreateOneNow": "Anda belum memiliki postingan, buat sekarang",
-  "removeMeFromPost": "Hapus Saya Dari Pos"
+  "removeMeFromPost": "Hapus Saya Dari Pos",
+  "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya"
 }

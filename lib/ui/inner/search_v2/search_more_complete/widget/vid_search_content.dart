@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/thumbnail_content_search.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -100,8 +105,31 @@ class _VidSearchContentState extends State<VidSearchContent> {
                           return ThumbnailContentSearch(
                             data: widget.content![index],
                             onTap: () {
+                              final _routing = Routing();
+                              switch (widget.featureType) {
+                                case FeatureType.vid:
+                                  _routing.move(Routes.vidDetail,
+                                      argument: VidDetailScreenArgument(vidData: widget.content![index])
+                                        ..postID = widget.content![index].postID
+                                        ..backPage = true);
+                                  break;
+                                case FeatureType.diary:
+                                  _routing.move(Routes.diaryDetail,
+                                      argument: DiaryDetailScreenArgument(diaryData: widget.content!, index: index.toDouble())
+                                        ..postID = widget.content![index].postID
+                                        ..backPage = true);
+                                  break;
+                                case FeatureType.pic:
+                                  _routing.move(Routes.picDetail,
+                                      argument: PicDetailScreenArgument(picData: widget.content![index])
+                                        ..postID = widget.content![index].postID
+                                        ..backPage = true);
+                                  break;
+                                default:
+                              }
+
                               // print(widget.content![index].username);
-                              context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, widget.content![index]);
+                              // context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, widget.content![index]);
                             },
                             margin: EdgeInsets.only(right: 11),
                           );

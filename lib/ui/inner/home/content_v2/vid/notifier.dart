@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -17,6 +18,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     language = translate;
     notifyListeners();
   }
+
+  final _system = System();
+  final _routing = Routing();
 
   ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.vid;
   PageController pageController = PageController();
@@ -132,37 +136,24 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   void onDeleteSelfTagUserContent(BuildContext context, {required String postID, required String content, required String email}) {
     ContentData? _updatedData;
-    // final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
-    // final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-    // final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
-    // final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    // switch (content) {
-    //   case hyppeVid:
-    //     _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
-    //     break;
-    //   case hyppeDiary:
-    //     _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
-    //     break;
-    //   case hyppePic:
-    //     _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
-    //     break;
-    //   case hyppeStory:
-    //     _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
-    //     break;
-    //   default:
-    //     "$content It's Not a content of $postID".logger();
-    //     break;
-    // }
 
     final index = vidData!.indexWhere((element) => element.postID == postID);
     print(vidData![index].tagPeople!.length);
     vidData![index].tagPeople?.removeWhere((element) => element.email == email);
-    vidData![index].description = 'asdaksdjha jsd';
 
     print(vidData![index].tagPeople!.length);
     // _updatedData!.tagPeople!.removeWhere((element) => element.email == email);
     // _updatedData.description = 'hflkjsdhkfjhskdjfhk';
 
     notifyListeners();
+  }
+
+  void navigateToHyppeVidDetail(BuildContext context, ContentData? data) async {
+    final connect = await _system.checkConnections();
+    if (connect) {
+      _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data));
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context);
+    }
   }
 }

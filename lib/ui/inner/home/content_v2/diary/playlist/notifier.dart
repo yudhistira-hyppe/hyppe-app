@@ -76,7 +76,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   void onWillPop(bool mounted) {
     if (mounted) {
-      if (_routeArgument?.postID != null) {
+      if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
         Routing().moveAndPop(Routes.lobby);
       } else {
         Routing().moveBack();
