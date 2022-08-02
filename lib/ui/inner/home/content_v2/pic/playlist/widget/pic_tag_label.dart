@@ -20,7 +20,7 @@ class PicTagLabel extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: EdgeInsets.only(right: 4),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Theme.of(context).colorScheme.onBackground),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Theme.of(context).colorScheme.secondary),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -32,7 +32,7 @@ class PicTagLabel extends StatelessWidget {
               sixPx,
               Text(
                 label.length < 20 ? label : "${label.substring(0, 20)}...",
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(),
               ),
             ],
           ),

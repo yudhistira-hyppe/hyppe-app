@@ -242,7 +242,7 @@ class VidDetailBottom extends StatelessWidget {
           username: data!.username,
           spaceProfileAndId: eightPx,
           haveStory: false,
-          isCelebrity: true,
+          isCelebrity: false,
           onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email!),
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',

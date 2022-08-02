@@ -330,9 +330,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                             title: '@' + notifier.userTagData[index],
                                             select: notifier.pickedInterest(notifier.userTagData[index]) ? true : false,
                                             button: true,
-                                            textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                                  color: notifier.pickedInterest(notifier.userTagData[index]) ? kHyppeLightSurface : kHyppeSurface,
-                                                ),
+                                            textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(),
                                           ),
                                         ),
                                       ),

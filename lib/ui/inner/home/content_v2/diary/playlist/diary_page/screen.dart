@@ -42,6 +42,7 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   void initState() {
+    print('kesini-----');
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _storyItems = notifier.initializeData(context, _storyController, widget.data!);

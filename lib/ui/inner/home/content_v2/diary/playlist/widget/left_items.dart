@@ -64,7 +64,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
             color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
             child: SingleChildScrollView(
               child: ReadMoreText(
-                "${widget.description} ${widget.tags}",
+                "${widget.description}",
                 trimLines: 5,
                 trimMode: TrimMode.Line,
                 textAlign: TextAlign.left,

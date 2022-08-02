@@ -85,7 +85,6 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                     onPressedIcon: () => notifier.onSearchPost(context),
                                     autoFocus: true,
                                     onChanged: (e) {
-                                      print(e);
                                       if (lastInputValue != e) {
                                         lastInputValue = e;
                                         notifier.searchPeople(context, input: e);

@@ -481,6 +481,7 @@ class LocalizationModelV2 {
   String? selectLocation;
   String? youDontHaveAnyPostsYetCreateOneNow;
   String? removeMeFromPost;
+  String? noResultsFoundTryAnother;
 
   LocalizationModelV2({
     this.login,
@@ -965,6 +966,7 @@ class LocalizationModelV2 {
     this.selectLocation,
     this.youDontHaveAnyPostsYetCreateOneNow,
     this.removeMeFromPost,
+    this.noResultsFoundTryAnother,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1451,5 +1453,6 @@ class LocalizationModelV2 {
     selectLocation = json['selectLocation'];
     youDontHaveAnyPostsYetCreateOneNow = json['youDontHaveAnyPostsYetCreateOneNow'];
     removeMeFromPost = json['removeMeFromPost'];
+    noResultsFoundTryAnother = json['noResultsFoundTryAnother'];
   }
 }

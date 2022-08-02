@@ -194,6 +194,9 @@ class UrlConstants {
   /// user => Referral Count
   static const String referralCount = "$userRoute/referral-count";
 
+  /// user => Change Language
+  static const String updateLanguage = "$userRoute/updatelang";
+
   ///---------------------------------------------------------------------------------------------------------///
 
   /* APIs Playlist */
@@ -421,7 +424,7 @@ class UrlConstants {
   static const String contentRouteV3 = "/api/getusercontents";
 
   ///---------------------------------------------------------------------------------------------------------///
-  /* v3 user profile */
+  /* v3 search data content dan user */
   static const String getSearchContentV3 = "$contentRouteV3/searchdata";
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -28,8 +29,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
   void initState() {
     final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     notifier.initialDiary(context, reload: true);
-    notifier.scrollController
-        .addListener(() => notifier.scrollListener(context));
+    notifier.scrollController.addListener(() => notifier.scrollListener(context));
     super.initState();
   }
 
@@ -38,8 +38,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
     SizeConfig().init(context);
     final notifier = context.watch<PreviewDiaryNotifier>();
     final translateNotifier = context.watch<TranslateNotifierV2>();
-    final error =
-        context.select((ErrorService value) => value.getError(ErrorType.diary));
+    final error = context.select((ErrorService value) => value.getError(ErrorType.diary));
     // double _result = context.read<PreviewDiaryNotifier>().scaleDiary(context) - 16 - 8;
     // _result = _result < 100
     //     ? SizeWidget.barShortVideoHomeLarge
@@ -60,64 +59,54 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
           ),
           eightPx,
           Expanded(
-            child: context
-                    .read<ErrorService>()
-                    .isInitialError(error, notifier.diaryData)
-                ? CustomErrorWidget(
-                    errorType: ErrorType.diary,
-                    function: () =>
-                        notifier.initialDiary(context, reload: true))
-                : NotificationListener<ScrollNotification>(
-                    onNotification: (ScrollNotification scrollInfo) {
-                      if (scrollInfo is ScrollStartNotification) {
-                        Future.delayed(const Duration(milliseconds: 100), () {
-                          notifier.initialDiary(context);
-                        });
-                      }
-                      return true;
-                    },
-                    child: ListView.builder(
-                      controller: notifier.scrollController,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: notifier.itemCount,
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      itemBuilder: (context, index) {
-                        if (notifier.diaryData == null) {
-                          return CustomShimmer(
-                            width: (MediaQuery.of(context).size.width -
-                                    16.0 -
-                                    16.0 -
-                                    8) /
-                                3,
-                            height: 181,
-                            radius: 8,
-                            padding: const EdgeInsets.all(8.0),
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                          );
-                        } else if (index == notifier.diaryData?.length &&
-                            notifier.hasNext) {
-                          return UnconstrainedBox(
-                            child: Container(
-                              child: const CustomLoading(),
-                              alignment: Alignment.center,
-                              width: 112 * SizeConfig.scaleDiagonal,
-                              height: 40 * SizeConfig.scaleDiagonal,
-                            ),
-                          );
-                        }
+            child: context.read<ErrorService>().isInitialError(error, notifier.diaryData)
+                ? CustomErrorWidget(errorType: ErrorType.diary, function: () => notifier.initialDiary(context, reload: true))
+                : notifier.itemCount == 0
+                    ? const NoResultFound()
+                    : NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification scrollInfo) {
+                          if (scrollInfo is ScrollStartNotification) {
+                            Future.delayed(const Duration(milliseconds: 100), () {
+                              notifier.initialDiary(context);
+                            });
+                          }
+                          return true;
+                        },
+                        child: ListView.builder(
+                          controller: notifier.scrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: notifier.itemCount,
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          itemBuilder: (context, index) {
+                            if (notifier.diaryData == null) {
+                              return CustomShimmer(
+                                width: (MediaQuery.of(context).size.width - 16.0 - 16.0 - 8) / 3,
+                                height: 181,
+                                radius: 8,
+                                padding: const EdgeInsets.all(8.0),
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                              );
+                            } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                              return UnconstrainedBox(
+                                child: Container(
+                                  child: const CustomLoading(),
+                                  alignment: Alignment.center,
+                                  width: 112 * SizeConfig.scaleDiagonal,
+                                  height: 40 * SizeConfig.scaleDiagonal,
+                                ),
+                              );
+                            }
 
-                        return CenterItemView(
-                          data: notifier.diaryData?[index],
-                          onTap: () {
-                            // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-                            context
-                                .read<PreviewDiaryNotifier>()
-                                .navigateToShortVideoPlayer(context, index);
+                            return CenterItemView(
+                              data: notifier.diaryData?[index],
+                              onTap: () {
+                                // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+                                context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                              },
+                            );
                           },
-                        );
-                      },
-                    ),
-                  ),
+                        ),
+                      ),
           )
         ],
       ),
