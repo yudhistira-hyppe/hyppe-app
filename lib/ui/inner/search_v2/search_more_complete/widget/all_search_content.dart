@@ -50,73 +50,15 @@ class _AllSearchContentState extends State<AllSearchContent> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   widget.content!.users!.data!.isNotEmpty ? widgetUserList(_themes) : const SizedBox(),
-
                   sixteenPx,
-                  // CustomTextWidget(
-                  //   maxLines: 1,
-                  //   textAlign: TextAlign.left,
-                  //   textToDisplay: _translate!.translate.tag!,
-                  //   textStyle: _themes.textTheme.button!.apply(
-                  //     color: _themes.bottomNavigationBarTheme.unselectedItemColor,
-                  //   ),
-                  // ),
-                  // twelvePx,
-                  // ListTile(
-                  //   // onTap: () => notifier.inserTagPeople(index),
-                  //   contentPadding: EdgeInsets.zero,
-                  //   title: Text("#Wisataindonesia"),
-                  //   subtitle: Text("500+ posts"),
-                  //   leading: Container(
-                  //     width: 50,
-                  //     height: 50,
-                  //     // padding: EdgeInsets.all(12),
-                  //     decoration: BoxDecoration(
-                  //       border: Border.all(color: kHyppeLightIcon),
-                  //       borderRadius: BorderRadius.circular(50),
-                  //     ),
-                  //     child: CustomIconWidget(
-                  //       iconData: '${AssetPath.vectorPath}hashtag.svg',
-                  //       defaultColor: false,
-                  //       width: 20,
-                  //     ),
-                  //   ),
-                  // ),
-                  // sixteenPx,
-                  CustomTextWidget(
-                    maxLines: 1,
-                    textAlign: TextAlign.left,
-                    textToDisplay: 'HyppeVid',
-                    textStyle: _themes.textTheme.button!.apply(
-                      color: _themes.bottomNavigationBarTheme.unselectedItemColor,
-                    ),
-                  ),
-                  sixPx,
                   //------video content search
-                  VidSearchContent(content: widget.content!.vid!.data, featureType: FeatureType.vid),
+                  widget.content!.vid!.data!.isNotEmpty ? VidSearchContent(content: widget.content!.vid!.data, featureType: FeatureType.vid, title: 'HyppeVid') : const SizedBox(),
                   sixteenPx,
-                  CustomTextWidget(
-                    maxLines: 1,
-                    textAlign: TextAlign.left,
-                    textToDisplay: 'HyppeDiary',
-                    textStyle: _themes.textTheme.button!.apply(
-                      color: _themes.bottomNavigationBarTheme.unselectedItemColor,
-                    ),
-                  ),
-                  sixPx,
                   //------diaries content search
-                  VidSearchContent(content: widget.content!.diary!.data, featureType: FeatureType.diary),
+                  widget.content!.diary!.data!.isNotEmpty ? VidSearchContent(content: widget.content!.diary!.data, featureType: FeatureType.diary, title: 'HyppeDiary') : const SizedBox(),
                   sixteenPx,
-                  CustomTextWidget(
-                    maxLines: 1,
-                    textAlign: TextAlign.left,
-                    textToDisplay: 'HyppePic',
-                    textStyle: _themes.textTheme.button!.apply(
-                      color: _themes.bottomNavigationBarTheme.unselectedItemColor,
-                    ),
-                  ),
-                  sixPx,
                   //------pic  content search
-                  VidSearchContent(content: widget.content!.pict!.data, featureType: FeatureType.pic),
+                  widget.content!.pict!.data!.isNotEmpty ? VidSearchContent(content: widget.content!.pict!.data, featureType: FeatureType.pic, title: 'HyppePic') : const SizedBox(),
                 ],
               ),
             ),

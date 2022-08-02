@@ -25,7 +25,7 @@ class AutoCompleteSearch extends StatelessWidget {
                     ? Row(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: const [
                           Expanded(child: SizedBox(height: 50, child: CustomLoading())),
                         ],
                       )
@@ -33,7 +33,7 @@ class AutoCompleteSearch extends StatelessWidget {
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: const [
                               Expanded(child: Center(child: Text('User tidak ditemukan'))),
                             ],
                           )
@@ -45,7 +45,6 @@ class AutoCompleteSearch extends StatelessWidget {
                                 height: 60,
                                 child: ListTile(
                                   onTap: () {
-                                    print('asdasd');
                                     _system.navigateToProfile(context, notifier.searchPeolpleData![index].email!);
                                   },
                                   title: CustomTextWidget(
@@ -54,7 +53,7 @@ class AutoCompleteSearch extends StatelessWidget {
                                     textAlign: TextAlign.start,
                                   ),
                                   subtitle: Text(
-                                    "${notifier.searchPeolpleData![index].username!}",
+                                    notifier.searchPeolpleData![index].username!,
                                     style: TextStyle(fontSize: 12),
                                   ),
                                   leading: StoryColorValidator(
@@ -75,7 +74,7 @@ class AutoCompleteSearch extends StatelessWidget {
                           )
                 : Container(),
             notifier.searchPeolpleData != null
-                ? notifier.searchPeolpleData!.length != 0
+                ? notifier.searchPeolpleData!.length != 0 || notifier.searchController.text != ''
                     ? ListTile(
                         onTap: () => notifier.onSearchPost(context),
                         title: CustomTextWidget(
@@ -83,8 +82,8 @@ class AutoCompleteSearch extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: kHyppePrimary),
                         ),
                       )
-                    : SizedBox()
-                : SizedBox(),
+                    : const SizedBox()
+                : const SizedBox(),
           ],
         ),
       ),

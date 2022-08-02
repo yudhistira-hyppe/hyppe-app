@@ -44,7 +44,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Compressing Video .."),
+              const Text("Loading .."),
               ClipRRect(
                 borderRadius: BorderRadius.circular(40.0),
                 child: LinearProgressIndicator(

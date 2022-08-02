@@ -288,7 +288,6 @@ class HomeNotifier with ChangeNotifier {
 
     print(vid.vidData![index].tagPeople!.length);
     _updatedData!.tagPeople!.removeWhere((element) => element.email == email);
-    // _updatedData.description = 'hflkjsdhkfjhskdjfhk';
 
     notifyListeners();
   }

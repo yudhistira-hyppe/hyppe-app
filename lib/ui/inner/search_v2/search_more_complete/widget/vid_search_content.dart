@@ -16,9 +16,10 @@ import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 
 class VidSearchContent extends StatefulWidget {
+  final String? title;
   final List<ContentData>? content;
   final FeatureType? featureType;
-  const VidSearchContent({Key? key, this.content, this.featureType}) : super(key: key);
+  const VidSearchContent({Key? key, this.content, this.featureType, this.title}) : super(key: key);
 
   @override
   _VidSearchContentState createState() => _VidSearchContentState();
@@ -46,6 +47,15 @@ class _VidSearchContentState extends State<VidSearchContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
+            CustomTextWidget(
+              maxLines: 1,
+              textAlign: TextAlign.left,
+              textToDisplay: widget.title!,
+              textStyle: _themes.textTheme.button!.apply(
+                color: _themes.bottomNavigationBarTheme.unselectedItemColor,
+              ),
+            ),
+            sixPx,
             Expanded(
               child: context.read<ErrorService>().isInitialError(error, widget.content)
                   ? CustomErrorWidget(

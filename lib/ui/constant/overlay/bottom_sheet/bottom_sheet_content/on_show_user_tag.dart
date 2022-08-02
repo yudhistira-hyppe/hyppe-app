@@ -75,7 +75,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                   return Column(
                     children: [
                       ListTile(
-                        // onTap: () => notifier.inserTagPeople(index),
+                        onTap: () => System().navigateToProfile(context, widget.value[index].email!),
                         contentPadding: EdgeInsets.zero,
                         title: CustomTextWidget(
                           textToDisplay: widget.value[index].username!,
@@ -85,27 +85,14 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                         // subtitle: Text("${notifier.searchPeolpleData[index].fullName!}"),
                         trailing: Consumer<PreUploadContentNotifier>(
                           builder: (_, notifier, __) {
+                            notifier.statusFollow = notifier.label(widget.value[index].status!);
                             return notifier.emailcheck(widget.value[index].email)
                                 ? SizedBox(
                                     width: 100,
                                     child: CustomTextButton(
                                       onPressed: () {
-                                        // notifier.showDeleteMyTag(context, postId);
-                                        // ShowGeneralDialog.deleteContentDialog(context, widget.captionTitle.replaceAll('Hyppe', ''), () async {
-                                        //   await deletePostByID(context, postID: widget.contentData.postID!, postType: widget.contentData.postType!).then((value) {
-                                        //     if (value) _handleDelete(context);
-                                        //   });
-                                        // });
-                                        // deleteMyTag(context, widget.postId);
-                                        print(widget.postId);
-
                                         Routing().moveBack();
-                                        ShowGeneralDialog.deleteTagUserContentDialog(context, '', () {
-                                          // await deleteMyTag(context, widget.postId).then((value) {
-                                          //   // if (value) _handleDelete(context);
-                                          // });
-                                          // await notifier.deleteMyTag(context, postId);
-                                        }, widget.postId);
+                                        ShowGeneralDialog.deleteTagUserContentDialog(context, '', () {}, widget.postId);
                                       },
                                       child: Text(
                                         notifier.language.delete!,
@@ -117,17 +104,27 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                     width: 100,
                                     child: CustomTextButton(
                                       child: Text(
-                                        notifier.label(widget.value[index].status!),
-                                        style: TextStyle(color: widget.value[index].status != 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
+                                        notifier.statusFollow!,
+                                        style: TextStyle(color: widget.value[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
                                       ),
-                                      onPressed: widget.value[index].status != 'TOFOLLOW' ? null : () {},
-                                      style: widget.value[index].status != 'TOFOLLOW'
+                                      onPressed: widget.value[index].status != 'TOFOLLOW'
+                                          ? null
+                                          : () {
+                                              notifier.followUser(context, email: widget.value[index].email, index: index).then((value) {
+                                                if (value) {
+                                                  widget.value[index].status = 'requested';
+                                                  setState(() {});
+                                                }
+                                              });
+                                            },
+                                      style: widget.value[index].status == 'TOFOLLOW'
                                           ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
                                           : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
                                     ),
                                   );
                           },
                         ),
+
                         leading: StoryColorValidator(
                           haveStory: false,
                           featureType: FeatureType.pic,

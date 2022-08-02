@@ -985,13 +985,21 @@ class ShowBottomSheet {
     required List<TagPeople> value,
     required Function() function,
     required postId,
+    StoryController? storyController,
   }) {
     showModalBottomSheet<dynamic>(
         isScrollControlled: true,
         context: _,
         builder: (BuildContext bc) {
           return Wrap(children: <Widget>[
-            Container(
+            WillPopScope(
+              onWillPop: () async {
+                Routing().moveBack();
+                if (storyController != null) {
+                  storyController.play();
+                }
+                return false;
+              },
               child: Container(
                 decoration: new BoxDecoration(
                   color: Colors.white,

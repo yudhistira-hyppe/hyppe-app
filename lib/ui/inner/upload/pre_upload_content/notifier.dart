@@ -2,6 +2,9 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/bloc/follow/bloc.dart';
+import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -63,6 +66,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isShowAutoComplete => _isShowAutoComplete;
   String _temporarySearch = '';
   String get temporarySearch => _temporarySearch;
+
+  String? _statusFollow;
+  String? get statusFollow => _statusFollow;
 
   int _videoSize = 0;
   int get videoSize => _videoSize;
@@ -257,6 +263,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set searchPeopleACData(List<Map<String, dynamic>> val) {
     _searchPeopleACData = val;
+    notifyListeners();
+  }
+
+  set statusFollow(String? val) {
+    _statusFollow = val;
     notifyListeners();
   }
 
@@ -898,82 +909,69 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   bool emailcheck(String? email) => email == SharedPreference().readStorage(SpKeys.email) ? true : false;
   String label(String? tile) {
-    final index = _listFollow.indexWhere((element) => element["code"] == tile);
-    return _listFollow[index]['name'];
-  }
-
-  void showDeleteMyTag(BuildContext context, postId) {
-    Routing().moveBack();
-    ShowGeneralDialog.deleteContentDialog(context, '', () async {
-      deleteMyTag(context, postId);
-    });
-  }
-
-  Future deleteMyTag(BuildContext context, postId) async {
-    final connect = await System().checkConnections();
-    final notifier = UtilsBlocV2();
-
-    print('delete in updload');
-    if (connect) {
-      print(postId);
-      await notifier.deleteTagUsersBloc(context, postId);
-
-      final fetch = notifier.utilsFetch;
-      print('fetch.followState');
-      print(fetch.utilsState);
-      if (fetch.utilsState == UtilsState.deleteUserTagSuccess) {
-        showSnackBar(color: kHyppeLightSuccess, message: 'Your successfully removed from HyppeVid', icon: 'valid-invert.svg');
-        Routing().moveBack();
-      } else {
-        showSnackBar(color: kHyppeDanger, message: 'Somethink wrong', icon: 'info-icon.svg');
-        Routing().moveBack();
-      }
+    String label = '';
+    if (tile == 'requested') {
+      label = 'Requested';
     } else {
-      ShowBottomSheet.onNoInternetConnection(context);
+      final index = _listFollow.indexWhere((element) => element["code"] == tile);
+      label = _listFollow[index]['name'];
     }
+    print(label);
+
+    return label;
   }
 
-  try {
-      if (checkIdCard) {
-        // System().actionReqiredIdCard(
-        //   context,
-        //   action: () async {
-        statusFollowing = StatusFollowing.requested;
-        final notifier = FollowBloc();
-        await notifier.followUserBlocV2(
-          context,
-          data: FollowUserArgument(
-            receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
-          ),
-        );
-        final fetch = notifier.followFetch;
-        if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
-        } else {
-          statusFollowing = StatusFollowing.none;
-        }
-        //   },
-        //   uploadContentAction: false,
-        // );
+  // void showDeleteMyTag(BuildContext context, postId) {
+  //   Routing().moveBack();
+  //   ShowGeneralDialog.deleteContentDialog(context, '', () async {
+  //     deleteMyTag(context, postId);
+  //   });
+  // }
+
+  // Future deleteMyTag(BuildContext context, postId) async {
+  //   final connect = await System().checkConnections();
+  //   final notifier = UtilsBlocV2();
+
+  //   print('delete in updload');
+  //   if (connect) {
+  //     print(postId);
+  //     await notifier.deleteTagUsersBloc(context, postId);
+
+  //     final fetch = notifier.utilsFetch;
+  //     print('fetch.followState');
+  //     print(fetch.utilsState);
+  //     if (fetch.utilsState == UtilsState.deleteUserTagSuccess) {
+  //       showSnackBar(color: kHyppeLightSuccess, message: 'Your successfully removed from HyppeVid', icon: 'valid-invert.svg');
+  //       Routing().moveBack();
+  //     } else {
+  //       showSnackBar(color: kHyppeDanger, message: 'Somethink wrong', icon: 'info-icon.svg');
+  //       Routing().moveBack();
+  //     }
+  //   } else {
+  //     ShowBottomSheet.onNoInternetConnection(context);
+  //   }
+  // }
+
+  Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index}) async {
+    try {
+      // statusFollowing = StatusFollowing.requested;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: email ?? '',
+          eventType: InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        return true;
       } else {
-        statusFollowing = StatusFollowing.requested;
-        final notifier = FollowBloc();
-        await notifier.followUserBlocV2(
-          context,
-          data: FollowUserArgument(
-            receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
-          ),
-        );
-        final fetch = notifier.followFetch;
-        if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
-        } else {
-          statusFollowing = StatusFollowing.none;
-        }
+        return false;
       }
     } catch (e) {
       'follow user: ERROR: $e'.logger();
+      return false;
     }
+  }
 }

@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/account_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_content.dart';
+import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/content_search.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_content.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
@@ -23,10 +24,17 @@ class SearchMoreCompleteScreen extends StatefulWidget {
 class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     _tabController = TabController(length: 5, vsync: this);
+    _tabController.addListener(() {
+      setState(() {
+        _selectedIndex = _tabController.index;
+      });
+    });
+
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
     super.initState();
@@ -129,9 +137,9 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
                                   children: [
                                     AllSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
                                     AccountSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
-                                    SearchContent(content: notifier.searchContent?.vid?.data, featureType: notifier.diaryContentsQuery.featureType),
-                                    SearchContent(content: notifier.searchContent?.diary?.data, featureType: notifier.picContentsQuery.featureType),
-                                    SearchContent(content: notifier.searchContent?.pict?.data, featureType: notifier.picContentsQuery.featureType),
+                                    ContentSearch(content: notifier.searchContent?.vid?.data, featureType: notifier.vidContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.diary?.data, featureType: notifier.diaryContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.pict?.data, featureType: notifier.picContentsQuery.featureType, selectIndex: _selectedIndex),
                                   ],
                                 ),
                               ),

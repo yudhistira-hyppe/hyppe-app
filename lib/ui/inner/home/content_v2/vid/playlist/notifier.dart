@@ -43,8 +43,10 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {
+      print('ini ada postID');
       _initialVid(context);
     } else {
+      print('ini tidak ada postID');
       _data = _routeArgument?.vidData;
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: false);
@@ -166,5 +168,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context) {
     ShowBottomSheet.onReportContent(context);
+  }
+
+  void showUserTag(BuildContext context, data, postId) {
+    ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId);
   }
 }

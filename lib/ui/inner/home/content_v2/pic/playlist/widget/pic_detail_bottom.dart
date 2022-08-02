@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
@@ -76,6 +77,32 @@ class PicDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            data?.tagPeople!.length != 0 || data?.location == ''
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        data?.tagPeople!.length != 0
+                            ? TagLabel(
+                                icon: 'user',
+                                label: '${data?.tagPeople!.length} people',
+                                function: () {
+                                  notifier.showUserTag(context, data?.tagPeople, data?.postID);
+                                  // vidNotifier.showUserTag(context, index, data!.postID);
+                                },
+                              )
+                            : const SizedBox(),
+                        data?.location == '' || data?.location == null
+                            ? const SizedBox()
+                            : TagLabel(
+                                icon: 'maptag',
+                                label: "${data?.location}",
+                                function: () {},
+                              ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
             SizedBox(
               width: SizeConfig.screenWidth,
               child: data != null

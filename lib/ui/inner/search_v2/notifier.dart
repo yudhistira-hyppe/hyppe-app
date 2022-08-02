@@ -202,6 +202,24 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
+  Future navigateToSeeAllScreen2(BuildContext context, List<ContentData> data, int index, int selectIndex) async {
+    print('selectIndex');
+    print(selectIndex);
+    print(data[index].postID);
+    focusNode.unfocus();
+    bool connect = await System().checkConnections();
+    if (connect) {
+      if (selectIndex == 2) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data[index]));
+      if (selectIndex == 3) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble()));
+      if (selectIndex == 4) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: data[index]));
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        _routing.moveBack();
+        navigateToSeeAllScreen2(context, data, index, selectIndex);
+      });
+    }
+  }
+
   void moveSearchMore() {
     print('kesini');
     focusNode1.unfocus();

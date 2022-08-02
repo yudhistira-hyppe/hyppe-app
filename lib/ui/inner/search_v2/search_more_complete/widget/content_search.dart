@@ -9,16 +9,17 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_shimmer.dart';
 import 'package:provider/provider.dart';
 
-class SearchContent extends StatefulWidget {
+class ContentSearch extends StatefulWidget {
   final List<ContentData>? content;
   final FeatureType? featureType;
-  const SearchContent({Key? key, this.content, this.featureType}) : super(key: key);
+  final int? selectIndex;
+  const ContentSearch({Key? key, this.content, this.featureType, this.selectIndex}) : super(key: key);
 
   @override
-  State<SearchContent> createState() => _SearchContentState();
+  State<ContentSearch> createState() => ContentSearchState();
 }
 
-class _SearchContentState extends State<SearchContent> {
+class ContentSearchState extends State<ContentSearch> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -46,8 +47,8 @@ class _SearchContentState extends State<SearchContent> {
             try {
               return GestureDetector(
                 onTap: () {
-                  print('asdasd');
-                  context.read<SearchNotifier>().navigateToSeeAllScreen(context, widget.content!, index);
+                  print('asdasd 33');
+                  context.read<SearchNotifier>().navigateToSeeAllScreen2(context, widget.content!, index, widget.selectIndex!);
                 },
                 child: Container(
                   padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -22,6 +23,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
+import 'package:story_view/controller/story_controller.dart';
 
 class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.pic;
@@ -192,5 +194,9 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
 
     return true;
+  }
+
+  void showUserTag(BuildContext context, data, postId, {final StoryController? storyController}) {
+    ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId, storyController: storyController);
   }
 }
