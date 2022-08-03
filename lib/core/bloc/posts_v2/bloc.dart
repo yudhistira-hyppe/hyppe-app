@@ -63,10 +63,10 @@ class PostsBloc {
         formData.fields.add(MapEntry('visibility', '$visibility'));
       }
 
-      if (type == FeatureType.diary && postID != null) {
-        // _objTable.removeWhere((key, value) => key == "propertyName");
-        formData.fields.removeWhere((element) => element.key == 'visibility');
-      }
+      // if (type == FeatureType.diary && postID != null) {
+      //   // _objTable.removeWhere((key, value) => key == "propertyName");
+      //   formData.fields.removeWhere((element) => element.key == 'visibility');
+      // }
 
       if (myContent != true) {
         formData.fields.add(MapEntry('search', searchText));

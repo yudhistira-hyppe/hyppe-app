@@ -5,6 +5,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/view_content.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
@@ -28,6 +29,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
@@ -1017,36 +1019,50 @@ class ShowBottomSheet {
             )
           ]);
         });
+  }
 
-    // showModalBottomSheet(
-    //   context: _,
-    //   isScrollControlled: true,
-    //   builder: (builder) {
-    //     return DraggableScrollableSheet(
-    //       initialChildSize: 0.1, // half screen on load
-    //       maxChildSize: 0.3, // full screen on scroll
-    //       minChildSize: 0.1,
-    //       builder: (BuildContext context, ScrollController scrollController) {
-    //         return Padding(
-    //           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-    //           child: Container(
-    //             decoration: BoxDecoration(
-    //               color: Theme.of(_).colorScheme.surface,
-    //               borderRadius: const BorderRadius.only(
-    //                 topLeft: Radius.circular(8),
-    //                 topRight: Radius.circular(8),
-    //               ),
-    //             ),
-    //             padding: const EdgeInsets.all(0),
-    //             child: OnShowUserTagBottomSheet(
-    //               value: value,
-    //               function: function,
-    //             ),
-    //           ),
-    //         );
-    //       },
-    //     );
-    //   },
-    // );
+  static onShowUserViewContent(
+    BuildContext _, {
+    // required List<ViewContent> value,
+    // required Function() function,
+    required postId,
+    required eventType,
+    required title,
+    StoryController? storyController,
+  }) {
+    showModalBottomSheet<dynamic>(
+        isScrollControlled: true,
+        context: _,
+        builder: (BuildContext bc) {
+          return Wrap(children: <Widget>[
+            WillPopScope(
+              onWillPop: () async {
+                Routing().moveBack();
+                if (storyController != null) {
+                  storyController.play();
+                }
+                return false;
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                  // color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25.0),
+                    topRight: Radius.circular(25.0),
+                  ),
+                ),
+                child: OnShowUserViewContentBottomSheet(
+                  postId: postId,
+                  eventType: eventType,
+                  title: title,
+
+                  // value: value,
+                  // function: function,
+                  // postId: postId,
+                ),
+              ),
+            )
+          ]);
+        });
   }
 }

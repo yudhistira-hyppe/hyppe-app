@@ -129,9 +129,16 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   static const loadingForgotPasswordKey = 'loadingForgotPasswordKey';
   static const loadingLoginGoogleKey = 'loadingLoginGoogleKey';
 
-  String? emailValidator(String v) => System().validateEmail(v) ? null : "Not a valid email address";
+  String? emailValidator(String v) {
+    if (v.isNotEmpty) {
+      return System().validateEmail(v) ? '' : language.notAValidEmailAddress;
+    } else {
+      return '';
+    }
+  }
+
   String? passwordValidator(String v) => v.length > 4 ? null : "Incorrect Password";
-  bool buttonDisable() => email.isNotEmpty && password.isNotEmpty ? true : false;
+  bool buttonDisable() => email.isNotEmpty && password.isNotEmpty && emailValidator(emailController.text) == '' ? true : false;
 
   Future onClickForgotPassword(BuildContext context) async {
     _routing.move(Routes.forgotPassword);

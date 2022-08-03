@@ -21,11 +21,19 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   @override
+  void initState() {
+    // var notif = Provider.of<WelcomeLoginNotifier>(context, listen: false);
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Column(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextFormField(
                 focusNode: notifier.emailFocus,
@@ -34,12 +42,14 @@ class _SignInFormState extends State<SignInForm> {
                 textEditingController: notifier.emailController,
                 style: Theme.of(context).textTheme.bodyText1,
                 textInputType: TextInputType.emailAddress,
-                onChanged: (v) => notifier.email = v,
+                onChanged: (v) {
+                  notifier.email = v;
+                },
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
                   labelText: notifier.incorrect ? notifier.language.notAValidEmailAddress : notifier.language.email,
                   labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: notifier.incorrect
+                      color: notifier.emailValidator(notifier.emailController.text) != ''
                           ? Theme.of(context).colorScheme.error
                           : notifier.emailFocus.hasFocus
                               ? Theme.of(context).colorScheme.primaryVariant
@@ -56,12 +66,26 @@ class _SignInFormState extends State<SignInForm> {
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
                   focusedBorder:
                       UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary)),
+                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
                     : notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
                         ? true
                         : false,
+                // validator: (v) {
+                //   if (notifier.emailValidator(v!) == '') {
+                //     return 'asdasd';
+                //   } else {
+                //     return null;
+                //   }
+                // },
+              ),
+              fourPx,
+              CustomTextWidget(
+                textToDisplay: "${notifier.emailValidator(notifier.emailController.text)}",
+                textAlign: TextAlign.start,
+                textStyle: const TextStyle(color: Colors.red),
               ),
               twentyFourPx,
               CustomTextFormField(
@@ -156,7 +180,7 @@ class _SignInFormState extends State<SignInForm> {
           CustomElevatedButton(
             function: () {
               if (!notifier.isLoading) {
-                if (notifier.email.isNotEmpty && notifier.password.isNotEmpty) {
+                if (notifier.email.isNotEmpty && notifier.password.isNotEmpty && notifier.emailValidator(notifier.emailController.text) == '') {
                   notifier.onClickLogin(context);
                 }
               }

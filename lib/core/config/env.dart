@@ -27,6 +27,7 @@ class Env {
     UrlConstants.deleteChat,
     UrlConstants.getSearchContentV3,
     UrlConstants.deletTagUser,
+    UrlConstants.viewLike,
   ];
 
   static final EnvData dev = EnvData(

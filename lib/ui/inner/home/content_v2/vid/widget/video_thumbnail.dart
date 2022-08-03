@@ -27,6 +27,7 @@ class VideoThumbnail extends StatelessWidget {
   const VideoThumbnail({Key? key, this.videoData, required this.fn, required this.onDetail}) : super(key: key);
 
   static final _system = System();
+  static String email = SharedPreference().readStorage(SpKeys.email);
 
   @override
   Widget build(BuildContext context) {
@@ -121,21 +122,28 @@ class VideoThumbnail extends StatelessWidget {
               children: [
                 Consumer<LikeNotifier>(
                   builder: (context, value, child) {
-                    return CustomBalloonWidget(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CustomIconWidget(
-                            defaultColor: false,
-                            iconData: '${AssetPath.vectorPath}like.svg',
-                            color: kHyppeLightButtonText,
-                          ),
-                          fourPx,
-                          CustomTextWidget(
-                            textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-                            textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
-                          )
-                        ],
+                    return GestureDetector(
+                      onTap: email == videoData?.email
+                          ? () {
+                              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData!.postID, 'LIKE', 'Like');
+                            }
+                          : null,
+                      child: CustomBalloonWidget(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              defaultColor: false,
+                              iconData: '${AssetPath.vectorPath}like.svg',
+                              color: kHyppeLightButtonText,
+                            ),
+                            fourPx,
+                            CustomTextWidget(
+                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                              textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },

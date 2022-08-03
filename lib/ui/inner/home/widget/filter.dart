@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -20,12 +21,6 @@ class _FilterLandingState extends State<FilterLanding> {
   void initState() {
     super.initState();
     final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
-    filterList = [
-      {"id": '1', 'name': "${homeNotifier.language.all}", 'code': 'PUBLIC'},
-      {"id": '2', 'name': "${homeNotifier.language.friends}", 'code': 'FRIEND'},
-      {"id": '3', 'name': "${homeNotifier.language.following}", 'code': 'FOLLOWING'},
-      {"id": '4', 'name': "${homeNotifier.language.onlyMe}", 'code': 'PRIVATE'},
-    ];
   }
 
   void selected(val) {
@@ -37,7 +32,13 @@ class _FilterLandingState extends State<FilterLanding> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LikeNotifier>(builder: (context, notifier, child) {
+    return Consumer2<LikeNotifier, TranslateNotifierV2>(builder: (context, notifier, transNotifier, child) {
+      filterList = [
+        {"id": '1', 'name': "${transNotifier.translate.all}", 'code': 'PUBLIC'},
+        {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
+        {"id": '3', 'name': "${transNotifier.translate.following}", 'code': 'FOLLOWING'},
+        {"id": '4', 'name': "${transNotifier.translate.onlyMe}", 'code': 'PRIVATE'},
+      ];
       return Padding(
         padding: EdgeInsets.fromLTRB(8, 8, 0, 12),
         child: Container(

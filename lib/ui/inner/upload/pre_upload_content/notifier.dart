@@ -1,7 +1,9 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
@@ -109,6 +111,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<InterestData> _interestList = [];
   List<UserData> _userList = [];
   List<String> _userTagData = [];
+  List<TagPeople> _userTagDataReal = [];
   int _startSearch = 0;
 
   TextEditingController get captionController => _captionController;
@@ -131,6 +134,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String> get userTagData => _userTagData;
   String get locationName => _locationName;
   List<String> get interestData => _interestData;
+  List<TagPeople> get userTagDataReal => _userTagDataReal;
   int get startSearch => _startSearch;
 
   List _listFollow = [];
@@ -148,6 +152,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set interestData(List<String> val) {
     _interestData = [];
+    notifyListeners();
+  }
+
+  set userTagDataReal(List<TagPeople> val) {
+    _userTagDataReal = [];
     notifyListeners();
   }
 
@@ -455,8 +464,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
-            location: locationName == '' ? 'Add Location' : locationName,
-            tagPeople: userTagData,
+            location: locationName == 'Add Location' ? '' : locationName,
+            tagPeople: userTagDataReal,
             cats: _interestData,
           );
 
@@ -469,8 +478,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
-            location: locationName == '' ? 'Add Location' : locationName,
-            tagPeople: userTagData,
+            location: locationName == 'Add Location' ? '' : locationName,
+            tagPeople: userTagDataReal,
             cats: _interestData,
           );
 
@@ -584,7 +593,6 @@ class PreUploadContentNotifier with ChangeNotifier {
       onChange: (value, code) {
         _privacyTitle = value;
         privacyValue = code;
-
         // Routing().moveBack();
         checkKeyboardFocus(context);
         notifyListeners();
@@ -712,14 +720,18 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future onGetInterest(BuildContext context) async {
-    getVideoSize();
-    if (featureType == FeatureType.vid) {
-      compressVideo();
-    }
-
     final notifier = UtilsBlocV2();
     await notifier.getInterestBloc(context);
     final fetch = notifier.utilsFetch;
+    // getVideoSize();
+
+    var _typeFile = MediaType(
+      System().lookupContentMimeType(File(fileContent![0]!).path)?.split('/')[0] ?? '',
+      System().extensionFiles(File(fileContent![0]!).path)?.replaceAll(".", "") ?? "",
+    );
+    if (_typeFile.toString() != 'image/jpg') {
+      compressVideo();
+    }
 
     final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
     if (fetch.utilsState == UtilsState.getInterestsSuccess) {
@@ -736,7 +748,6 @@ class PreUploadContentNotifier with ChangeNotifier {
           return a.interestName!.compareTo(b.interestName!);
         });
       });
-
       notifyListeners();
     }
     if (fetch.utilsState == UtilsState.getInterestsError) {
@@ -797,6 +808,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         );
       } else {
         _userTagData.add(tile);
+        _userTagDataReal.add(
+          TagPeople(username: tile, avatar: searchPeolpleData[index].avatar, email: searchPeolpleData[index].email, status: 'FOLLOWING'),
+        );
+
         notifyListeners();
 
         Routing().moveBack();
@@ -811,6 +826,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (_userTagData.isNotEmpty) {
       String tile = _userTagData[index];
       _userTagData.removeWhere((v) => v == tile);
+      _userTagDataReal.removeWhere((v) => v.username == tile);
       notifyListeners();
     }
   }
@@ -869,10 +885,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   void showAutoComplete(value, BuildContext context) {
     _searchPeolpleData = [];
-    final selection = _captionController.selection;
+    final selection = captionController.selection;
     String _text = value.toString().substring(0, selection.baseOffset);
     final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9]+\w*", caseSensitive: false);
     final sentences = _text.split('\n');
+    notifyListeners();
 
     for (var sentence in sentences) {
       final words = sentence.split(' ');

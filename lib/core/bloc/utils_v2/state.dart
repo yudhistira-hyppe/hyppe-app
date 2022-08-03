@@ -11,6 +11,8 @@ enum UtilsState {
   getReactionError,
   languagesSuccess,
   languagesError,
+  updateLanguagesSuccess,
+  updateLanguagesError,
   loadCitySuccess,
   loadCityError,
   loadCountrySuccess,
