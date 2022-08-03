@@ -162,7 +162,7 @@ class HomeNotifier with ChangeNotifier {
     bool? certified,
     List<String>? tags,
     List<String>? cats,
-    List<String>? tagPeople,
+    List<TagPeople>? tagPeople,
     String? location,
   }) {
     ContentData? _updatedData;
@@ -196,12 +196,9 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.visibility = visibility;
       _updatedData.location = location;
       _updatedData.cats = [];
-
-      if (tagPeople != null) {
-        for (var v in tagPeople) {
-          _updatedData.tagPeople!.add(TagPeople(username: v));
-        }
-      }
+      _updatedData.tagPeople = [];
+      // _updatedData.tagPeople = tagPeople;
+      _updatedData.tagPeople!.addAll(tagPeople!);
       if (cats != null) {
         for (var v in cats) {
           _updatedData.cats!.add(

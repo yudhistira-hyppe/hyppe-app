@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
@@ -109,6 +110,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<InterestData> _interestList = [];
   List<UserData> _userList = [];
   List<String> _userTagData = [];
+  List<TagPeople> _userTagDataReal = [];
   int _startSearch = 0;
 
   TextEditingController get captionController => _captionController;
@@ -131,6 +133,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String> get userTagData => _userTagData;
   String get locationName => _locationName;
   List<String> get interestData => _interestData;
+  List<TagPeople> get userTagDataReal => _userTagDataReal;
   int get startSearch => _startSearch;
 
   List _listFollow = [];
@@ -148,6 +151,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set interestData(List<String> val) {
     _interestData = [];
+    notifyListeners();
+  }
+
+  set userTagDataReal(List<TagPeople> val) {
+    _userTagDataReal = [];
     notifyListeners();
   }
 
@@ -455,8 +463,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
-            location: locationName == '' ? 'Add Location' : locationName,
-            tagPeople: userTagData,
+            location: locationName == 'Add Location' ? '' : locationName,
+            tagPeople: userTagDataReal,
             cats: _interestData,
           );
 
@@ -469,8 +477,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
-            location: locationName == '' ? 'Add Location' : locationName,
-            tagPeople: userTagData,
+            location: locationName == 'Add Location' ? '' : locationName,
+            tagPeople: userTagDataReal,
             cats: _interestData,
           );
 
@@ -584,7 +592,6 @@ class PreUploadContentNotifier with ChangeNotifier {
       onChange: (value, code) {
         _privacyTitle = value;
         privacyValue = code;
-
         // Routing().moveBack();
         checkKeyboardFocus(context);
         notifyListeners();
@@ -797,6 +804,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         );
       } else {
         _userTagData.add(tile);
+        _userTagDataReal.add(
+          TagPeople(username: tile, avatar: searchPeolpleData[index].avatar, email: searchPeolpleData[index].email, status: 'FOLLOWING'),
+        );
+
         notifyListeners();
 
         Routing().moveBack();
@@ -811,6 +822,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (_userTagData.isNotEmpty) {
       String tile = _userTagData[index];
       _userTagData.removeWhere((v) => v == tile);
+      _userTagDataReal.removeWhere((v) => v.username == tile);
       notifyListeners();
     }
   }

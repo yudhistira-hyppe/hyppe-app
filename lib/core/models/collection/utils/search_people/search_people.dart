@@ -59,4 +59,6 @@ class SearchPeolpleData {
         "fullName": fullName,
         "email": email,
       };
+
+  void forEach(Null Function(dynamic v) param0) {}
 }
