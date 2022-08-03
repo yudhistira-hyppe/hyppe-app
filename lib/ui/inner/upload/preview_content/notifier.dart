@@ -227,6 +227,7 @@ class PreviewContentNotifier with ChangeNotifier {
     if (_isSheetOpen) closeFilters();
     if (betterPlayerController != null) isForcePaused = true;
     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    notifier.isEdit = false;
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
     notifier.thumbNail = _thumbNails != null ? _thumbNails![0] : null;

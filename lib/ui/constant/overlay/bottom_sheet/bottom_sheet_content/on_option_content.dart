@@ -157,6 +157,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   icon: 'edit-content.svg',
                   onTap: () {
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    notifier.isEdit = true;
                     notifier.captionController.text = widget.contentData.description ?? "";
                     notifier.tagsController.text = widget.contentData.tags!.join(",");
                     notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType!);

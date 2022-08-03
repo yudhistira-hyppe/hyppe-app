@@ -59,6 +59,9 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isEdit = false;
+  bool get isEdit => _isEdit;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -139,6 +142,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   List _listFollow = [];
   List get listFollow => _listFollow;
+
+  set isEdit(bool val) {
+    _isEdit = val;
+    notifyListeners();
+  }
 
   set listFollow(List val) {
     _listFollow = val;
@@ -724,13 +732,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     await notifier.getInterestBloc(context);
     final fetch = notifier.utilsFetch;
     // getVideoSize();
-
-    var _typeFile = MediaType(
-      System().lookupContentMimeType(File(fileContent![0]!).path)?.split('/')[0] ?? '',
-      System().extensionFiles(File(fileContent![0]!).path)?.replaceAll(".", "") ?? "",
-    );
-    if (_typeFile.toString() != 'image/jpg') {
-      compressVideo();
+    print(isEdit);
+    if (!isEdit) {
+      var _typeFile = MediaType(
+        System().lookupContentMimeType(File(fileContent![0]!).path)?.split('/')[0] ?? '',
+        System().extensionFiles(File(fileContent![0]!).path)?.replaceAll(".", "") ?? "",
+      );
+      if (_typeFile.toString() != 'image/jpg') {
+        compressVideo();
+      }
     }
 
     final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};

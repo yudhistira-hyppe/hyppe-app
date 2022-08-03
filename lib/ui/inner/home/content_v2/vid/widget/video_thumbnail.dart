@@ -133,13 +133,15 @@ class VideoThumbnail extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const CustomIconWidget(
+                              width: 20,
+                              height: 20,
                               defaultColor: false,
                               iconData: '${AssetPath.vectorPath}like.svg',
                               color: kHyppeLightButtonText,
                             ),
                             fourPx,
                             CustomTextWidget(
-                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                              textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
                               textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
                             )
                           ],

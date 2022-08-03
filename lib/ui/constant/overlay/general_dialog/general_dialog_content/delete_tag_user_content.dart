@@ -43,7 +43,7 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
           CustomTextWidget(
             maxLines: 3,
             textOverflow: TextOverflow.visible,
-            textToDisplay: _language.commentWillPermanentlyDeletedContinue!,
+            textToDisplay: _language.afterthatThisTagWillBePermanentlyRemoved!,
             textStyle: theme.textTheme.bodyText1,
           ),
           Row(
