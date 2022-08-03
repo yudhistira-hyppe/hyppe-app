@@ -34,9 +34,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   String search = '';
   @override
   void initState() {
+    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    notifier.onGetInterest(context);
     super.initState();
-    print('init state');
-    Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
   }
 
   Widget loadingCompress(progressCompress) {

@@ -484,5 +484,6 @@
   "selectLocation": "Pilih Lokasi",
   "youDontHaveAnyPostsYetCreateOneNow": "Anda belum memiliki postingan, buat sekarang",
   "removeMeFromPost": "Hapus Saya Dari Pos",
-  "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya"
+  "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya",
+  "afterthatThisTagWillBePermanentlyRemoved" : "After that, this diary will be permanently removed"
 }
