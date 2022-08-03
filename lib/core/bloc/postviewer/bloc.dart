@@ -28,20 +28,62 @@ class PostViewerBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserError));
         } else {
-          setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserSuccess,
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context,
-            tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserError));
       },
       headers: {
         "x-auth-user": SharedPreference().readStorage(SpKeys.email),
       },
-      data: {"postID":postID},
+      data: {"postID": postID},
       host: UrlConstants.postViewer,
+      withCheckConnection: true,
+      methodType: MethodType.post,
+      withAlertMessage: withAlertConnection,
+    );
+  }
+
+  Future likeViewContentBloc(
+    BuildContext context, {
+    bool withAlertConnection = true,
+    String? eventType,
+    int? skip,
+    int? limit,
+    required String postID,
+  }) async {
+    print('hahaha status code2');
+    setPostViewerFetch(PostViewerFetch(PostViewerState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        print('hahaha status code');
+        print(onResult.statusCode);
+        if (onResult.statusCode! > HTTP_CODE) {
+          setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
+        } else {
+          // print(onResult.data['data']);
+          setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewSuccess, data: onResult.data['data']));
+        }
+      },
+      (errorData) {
+        print('asasas');
+        print(errorData);
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
+      },
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      data: {
+        "postID": postID,
+        "eventType": eventType,
+        "skip": skip,
+        "limit": limit,
+      },
+      host: UrlConstants.viewLike,
       withCheckConnection: true,
       methodType: MethodType.post,
       withAlertMessage: withAlertConnection,

@@ -240,6 +240,9 @@ class UrlConstants {
   /// delete => Delete Post.
   static const String deletePostByID = "$postRoute/deletePostByID";
 
+  /// post => View Like and View.
+  static const String viewLike = "$postRoute/viewlike";
+
   ///---------------------------------------------------------------------------------------------------------///
 
   /* APIs Reaction */

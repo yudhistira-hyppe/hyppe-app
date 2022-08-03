@@ -110,11 +110,14 @@ class VidDetailBottom extends StatelessWidget {
             ),
             eightPx,
             data != null
-                ? CustomTextWidget(
-                    maxLines: 2,
-                    textAlign: TextAlign.left,
-                    textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
-                    textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                ? GestureDetector(
+                    onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer'),
+                    child: CustomTextWidget(
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
+                      textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                    ),
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
           ],

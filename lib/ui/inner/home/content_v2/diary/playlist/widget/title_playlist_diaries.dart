@@ -86,44 +86,42 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
             ),
             Row(
               children: [
-                CustomBalloonWidget(
-                  child: Visibility(
-                    visible: widget.data?.email == SharedPreference().readStorage(SpKeys.email),
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.storyController.pause();
-                        ShowBottomSheet.onShowOptionContent(
-                          context,
-                          contentData: widget.data!,
-                          captionTitle: hyppeDiary,
-                          storyController: widget.storyController,
-                          onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
-                        );
-                      },
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: "${AssetPath.vectorPath}more.svg",
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
-                  ),
-                ),
-                CustomBalloonWidget(
-                  child: Visibility(
-                    visible: widget.data?.email != SharedPreference().readStorage(SpKeys.email),
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.storyController.pause();
-                        ShowBottomSheet.onReportContent(context);
-                      },
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: "${AssetPath.vectorPath}more.svg",
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
-                  ),
-                ),
+                widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+                    ? CustomBalloonWidget(
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.storyController.pause();
+                            ShowBottomSheet.onShowOptionContent(
+                              context,
+                              contentData: widget.data!,
+                              captionTitle: hyppeDiary,
+                              storyController: widget.storyController,
+                              onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
+                            );
+                          },
+                          child: const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}more.svg",
+                            color: kHyppeLightButtonText,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+                widget.data?.email != SharedPreference().readStorage(SpKeys.email)
+                    ? CustomBalloonWidget(
+                        child: GestureDetector(
+                          onTap: () {
+                            widget.storyController.pause();
+                            ShowBottomSheet.onReportContent(context);
+                          },
+                          child: const CustomIconWidget(
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}more.svg",
+                            color: kHyppeLightButtonText,
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
                 SizedBox(
                   width: 40,
                   height: 40,

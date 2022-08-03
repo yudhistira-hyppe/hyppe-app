@@ -204,6 +204,33 @@ class UtilsBlocV2 {
     );
   }
 
+  Future updateLanguages(BuildContext context, {required String lang}) async {
+    setUtilsFetch(UtilsFetch(UtilsState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUtilsFetch(UtilsFetch(UtilsState.updateLanguagesError));
+        } else {
+          setUtilsFetch(UtilsFetch(UtilsState.updateLanguagesSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setUtilsFetch(UtilsFetch(UtilsState.updateLanguagesError));
+      },
+      data: {'langIso': lang},
+      headers: {
+        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      errorServiceType: ErrorType.getLanguage,
+      host: UrlConstants.updateLanguage,
+      withAlertMessage: false,
+      methodType: MethodType.post,
+      withCheckConnection: false,
+    );
+  }
+
   Future getReactionBloc(BuildContext context) async {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
@@ -281,34 +308,6 @@ class UtilsBlocV2 {
         "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
       },
       data: {"email": email, 'postID': postId},
-      withCheckConnection: false,
-      methodType: MethodType.post,
-      withAlertMessage: false,
-    );
-  }
-
-  Future<void> updateLanguage(BuildContext context, String? lang) async {
-    setUtilsFetch(UtilsFetch(UtilsState.loading));
-    await Repos().reposPost(
-      context,
-      (onResult) {
-        print(onResult);
-        if (onResult.statusCode! > HTTP_CODE) {
-          setUtilsFetch(UtilsFetch(UtilsState.updateLangError));
-        } else {
-          setUtilsFetch(UtilsFetch(UtilsState.updateLangSuccess));
-        }
-      },
-      (errorData) {
-        setUtilsFetch(UtilsFetch(UtilsState.updateLangError));
-        print(errorData);
-      },
-      headers: {
-        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
-        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
-      },
-      host: UrlConstants.updateLanguage,
-      data: {"langIso": lang},
       withCheckConnection: false,
       methodType: MethodType.post,
       withAlertMessage: false,

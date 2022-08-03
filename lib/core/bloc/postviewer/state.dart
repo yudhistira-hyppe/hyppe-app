@@ -2,7 +2,9 @@ enum PostViewerState {
   init,
   loading,
   postViewerUserSuccess,
-  postViewerUserError
+  postViewerUserError,
+  likeViewError,
+  likeViewSuccess,
 }
 
 class PostViewerFetch {

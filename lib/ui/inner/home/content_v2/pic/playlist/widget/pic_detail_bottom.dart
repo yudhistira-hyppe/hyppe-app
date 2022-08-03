@@ -36,9 +36,11 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 class PicDetailBottom extends StatelessWidget {
   final ContentData? data;
 
-  const PicDetailBottom({Key? key, this.data}) : super(key: key);
+  PicDetailBottom({Key? key, this.data}) : super(key: key);
 
   static final _system = System();
+
+  var email = SharedPreference().readStorage(SpKeys.email);
 
   @override
   Widget build(BuildContext context) {
@@ -117,12 +119,19 @@ class PicDetailBottom extends StatelessWidget {
             ),
             eightPx,
             data != null
-                ? CustomTextWidget(
-                    maxLines: 2,
-                    textAlign: TextAlign.left,
-                    textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
-                    // textToDisplay: '${_system.formatterNumber(data!.totalViews)}x ${notifier.language.views!}',
-                    textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                ? GestureDetector(
+                    onTap: email == data?.email
+                        ? () {
+                            Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer');
+                          }
+                        : null,
+                    child: CustomTextWidget(
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
+                      textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
+                      // textToDisplay: '${_system.formatterNumber(data!.totalViews)}x ${notifier.language.views!}',
+                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                    ),
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
           ],
