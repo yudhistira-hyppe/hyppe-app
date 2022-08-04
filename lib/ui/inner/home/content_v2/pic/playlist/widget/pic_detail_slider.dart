@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +26,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 class PicDetailSlider extends StatelessWidget {
   final ContentData? picData;
   final bool onDetail;
+  static final _system = System();
 
   const PicDetailSlider({
     Key? key,
@@ -32,7 +38,7 @@ class PicDetailSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
-
+    var email = SharedPreference().readStorage(SpKeys.email);
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Stack(
@@ -105,6 +111,49 @@ class PicDetailSlider extends StatelessWidget {
               ),
             ),
           ),
+          // Align(
+          //   alignment: Alignment.bottomLeft,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         GestureDetector(
+          //           onTap: email == picData?.email
+          //               ? () {
+          //                   Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like');
+          //                 }
+          //               : null,
+          //           child: CustomBalloonWidget(
+          //             child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.center,
+          //               children: [
+          //                 const CustomIconWidget(
+          //                   width: 20,
+          //                   height: 20,
+          //                   defaultColor: false,
+          //                   iconData: '${AssetPath.vectorPath}like.svg',
+          //                   color: kHyppeLightButtonText,
+          //                 ),
+          //                 fourPx,
+          //                 CustomTextWidget(
+          //                   textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+          //                   textToDisplay: _system.formatterNumber(picData?.insight?.likes),
+          //                 )
+          //               ],
+          //             ),
+          //           ),
+          //         ),
+          //         CustomBalloonWidget(
+          //           child: CustomTextWidget(
+          //             textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+          //             textToDisplay: System().formatDuration(Duration(seconds: picData?.metadata?.duration ?? 0).inMilliseconds),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
