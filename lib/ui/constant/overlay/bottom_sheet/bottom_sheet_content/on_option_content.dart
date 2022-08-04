@@ -205,8 +205,6 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     }
                     notifier.userTagDataReal = [];
                     notifier.userTagDataReal.addAll(widget.contentData.tagPeople!);
-                    print('notifier.userTagDataReal');
-                    print(notifier.userTagDataReal);
 
                     _routing
                         .move(Routes.preUploadContent,

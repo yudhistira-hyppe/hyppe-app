@@ -231,6 +231,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
     notifier.thumbNail = _thumbNails != null ? _thumbNails![0] : null;
+    notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public! : notifier.privacyTitle = notifier.privacyTitle;
+    notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation! : notifier.locationName = notifier.locationName;
+
+    notifier.compressVideo();
+
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }
 

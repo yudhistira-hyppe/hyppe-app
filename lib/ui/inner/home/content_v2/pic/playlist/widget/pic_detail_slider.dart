@@ -111,49 +111,43 @@ class PicDetailSlider extends StatelessWidget {
               ),
             ),
           ),
-          // Align(
-          //   alignment: Alignment.bottomLeft,
-          //   child: Padding(
-          //     padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         GestureDetector(
-          //           onTap: email == picData?.email
-          //               ? () {
-          //                   Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like');
-          //                 }
-          //               : null,
-          //           child: CustomBalloonWidget(
-          //             child: Row(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: [
-          //                 const CustomIconWidget(
-          //                   width: 20,
-          //                   height: 20,
-          //                   defaultColor: false,
-          //                   iconData: '${AssetPath.vectorPath}like.svg',
-          //                   color: kHyppeLightButtonText,
-          //                 ),
-          //                 fourPx,
-          //                 CustomTextWidget(
-          //                   textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
-          //                   textToDisplay: _system.formatterNumber(picData?.insight?.likes),
-          //                 )
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //         CustomBalloonWidget(
-          //           child: CustomTextWidget(
-          //             textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-          //             textToDisplay: System().formatDuration(Duration(seconds: picData?.metadata?.duration ?? 0).inMilliseconds),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // )
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: email == picData?.email
+                        ? () {
+                            Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like');
+                          }
+                        : null,
+                    child: CustomBalloonWidget(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const CustomIconWidget(
+                            width: 20,
+                            height: 20,
+                            defaultColor: false,
+                            iconData: '${AssetPath.vectorPath}like.svg',
+                            color: kHyppeLightButtonText,
+                          ),
+                          fourPx,
+                          CustomTextWidget(
+                            textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                            textToDisplay: _system.formatterNumber(picData?.insight?.likes),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
