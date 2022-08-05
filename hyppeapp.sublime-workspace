@@ -71,10 +71,10 @@
 	],
 	"file_history":
 	[
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/locations.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/login/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/url_constants.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/hyppe_version.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/locations.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/login/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/app.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/system.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/pubspec.yaml",
@@ -225,12 +225,16 @@
 		"selected_items":
 		[
 			[
-				"locatio",
-				"core/services/locations.dart"
+				"urls",
+				"core/config/url_constants.dart"
 			],
 			[
 				"version",
 				"core/constants/hyppe_version.dart"
+			],
+			[
+				"locatio",
+				"core/services/locations.dart"
 			],
 			[
 				"url_co",

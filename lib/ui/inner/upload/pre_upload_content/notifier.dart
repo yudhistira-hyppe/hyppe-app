@@ -359,6 +359,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _selectedLocation = '';
     _interestData = [];
     _locationName = '';
+    // _interestList = [];
     _userTagData = [];
     _privacyTitle = '';
     privacyValue = 'PUBLIC';
@@ -745,6 +746,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       final notifier = UtilsBlocV2();
       await notifier.getInterestBloc(context);
       final fetch = notifier.utilsFetch;
+      print("GET INTEREST");
+      print(fetch);
 
       final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
       if (fetch.utilsState == UtilsState.getInterestsSuccess) {
@@ -757,9 +760,9 @@ class PreUploadContentNotifier with ChangeNotifier {
             _interest.add(InterestData.fromJson(seeMore));
           }
           _interestList.add(InterestData.fromJson(v));
-          _interestList.sort((a, b) {
-            return a.interestName!.compareTo(b.interestName!);
-          });
+        });
+        _interestList.sort((a, b) {
+          return a.interestName!.compareTo(b.interestName!);
         });
         print('isEdit');
         print(isEdit);
@@ -776,8 +779,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         //   // }
         // }
         notifyListeners();
-      }
-      if (fetch.utilsState == UtilsState.getInterestsError) {
+      } else if (fetch.utilsState == UtilsState.getInterestsError) {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           // _routing.moveBack();
         }, backButton: () {
@@ -800,7 +802,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _interestData.add(tile);
         }
-        notifyListeners();
+        // notifyListeners();
       }
     }
     notifyListeners();
