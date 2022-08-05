@@ -196,6 +196,8 @@ PODS:
   - libwebp/mux (1.2.1):
     - libwebp/demux
   - libwebp/webp (1.2.1)
+  - light_compressor (0.0.1):
+    - Flutter
   - location (0.0.1):
     - Flutter
   - nanopb (2.30908.0):
@@ -236,6 +238,8 @@ PODS:
   - SwiftyGif (5.4.3)
   - url_launcher_ios (0.0.1):
     - Flutter
+  - video_compress (0.3.0):
+    - Flutter
   - video_thumbnail (0.0.1):
     - Flutter
     - libwebp
@@ -261,6 +265,7 @@ DEPENDENCIES:
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - light_compressor (from `.symlinks/plugins/light_compressor/ios`)
   - location (from `.symlinks/plugins/location/ios`)
   - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
@@ -271,6 +276,7 @@ DEPENDENCIES:
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_compress (from `.symlinks/plugins/video_compress/ios`)
   - video_thumbnail (from `.symlinks/plugins/video_thumbnail/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
 
@@ -343,6 +349,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in_ios/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
+  light_compressor:
+    :path: ".symlinks/plugins/light_compressor/ios"
   location:
     :path: ".symlinks/plugins/location/ios"
   native_device_orientation:
@@ -363,6 +371,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_compress:
+    :path: ".symlinks/plugins/video_compress/ios"
   video_thumbnail:
     :path: ".symlinks/plugins/video_thumbnail/ios"
   wakelock:
@@ -409,6 +419,7 @@ SPEC CHECKSUMS:
   HLSCachingReverseProxyServer: 59935e1e0244ad7f3375d75b5ef46e8eb26ab181
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
+  light_compressor: 789ed7df289f0cd43f1dae8a6eed5d932b214c59
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   native_device_orientation: 3b4cfc9565a7b879cc4fde282b3e27745e852d0d
@@ -426,6 +437,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  video_compress: fce97e4fb1dfd88175aa07d2ffc8a2f297f87fbe
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 

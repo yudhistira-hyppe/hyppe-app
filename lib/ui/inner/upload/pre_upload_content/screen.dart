@@ -34,6 +34,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   String search = '';
 
   @override
+  void initState(){
+    super.initState();
+    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false); 
+  }
+  @override
   void dispose() {
     super.dispose();
   }
