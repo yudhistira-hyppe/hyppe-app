@@ -220,6 +220,7 @@ class UserBloc {
         });
         setUserFetch(UserFetch(UserState.LoginError));
       },
+      errorServiceType: ErrorType.login,
       methodType: MethodType.post,
       withCheckConnection: false,
       withAlertMessage: true,

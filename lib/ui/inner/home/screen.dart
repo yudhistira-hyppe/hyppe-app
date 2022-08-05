@@ -34,6 +34,11 @@ class _HomeScreenState extends State<HomeScreen> {
       {'name': "${_language.translate.following}", 'code': 'FOLLOWING'},
     ];
     Provider.of<HomeNotifier>(context, listen: false).setSessionID();
+    // final preUploadNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    // preUploadNotifier.interest = [];
+    context.read<PreUploadContentNotifier>().onGetInterest(context);
+    // Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
+
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {
     //     final notifier = Provider.of<CacheService>(context, listen: false);
