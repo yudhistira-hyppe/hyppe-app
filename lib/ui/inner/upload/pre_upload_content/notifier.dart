@@ -359,7 +359,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     _selectedLocation = '';
     _interestData = [];
     _locationName = '';
-    _interestList = [];
     _userTagData = [];
     _privacyTitle = '';
     privacyValue = 'PUBLIC';
@@ -625,17 +624,17 @@ class PreUploadContentNotifier with ChangeNotifier {
     ShowBottomSheet.onShowLocation(
       context,
       onSave: () {
-        Routing().moveBack();
-        Provider.of<PreUploadContentNotifier>(context, listen: false)._privacyTitle = _privacyTitle;
-        notifyListeners();
+        // Routing().moveBack();
+        // Provider.of<PreUploadContentNotifier>(context, listen: false)._privacyTitle = _privacyTitle;
+        // notifyListeners();
       },
       onCancel: () {
         Routing().moveBack();
         FocusScope.of(context).unfocus();
       },
       onChange: (value) {
-        Routing().moveBack();
-        notifyListeners();
+        // Routing().moveBack();
+        // notifyListeners();
       },
       value: _privacyTitle,
     );
@@ -742,7 +741,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future onGetInterest(BuildContext context) async {
-    if (interest.isEmpty) {
+    if (_interestList.isEmpty) {
       final notifier = UtilsBlocV2();
       await notifier.getInterestBloc(context);
       final fetch = notifier.utilsFetch;
@@ -862,8 +861,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future searchLocation(BuildContext context, {input}) async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     final _language = SharedPreference().readStorage(SpKeys.isoCode);
-    updateContent = true;
-    certifiedTmp = false;
 
     final notifier = GoogleMapPlaceBloc();
     await notifier.getGoogleMapPlaceBloc(

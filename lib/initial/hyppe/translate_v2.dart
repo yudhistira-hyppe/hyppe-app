@@ -145,7 +145,6 @@ class TranslateNotifierV2 with ChangeNotifier {
       _listIndex = 0;
       Routing().moveBack();
     }
-
     var lang = SharedPreference().readStorage(SpKeys.isoCode);
     final notifier = UtilsBlocV2();
     await notifier.updateLanguages(context, lang: lang);

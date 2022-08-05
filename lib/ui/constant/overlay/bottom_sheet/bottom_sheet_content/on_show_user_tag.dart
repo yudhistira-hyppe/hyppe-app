@@ -114,7 +114,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                               : () {
                                                   notifier.followUser(context, email: widget.value[index].email, index: index).then((value) {
                                                     if (value) {
-                                                      widget.value[index].status = 'requested';
+                                                      widget.value[index].status = 'FOLLOWING';
                                                       setState(() {});
                                                     }
                                                   });
