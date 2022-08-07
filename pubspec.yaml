@@ -2,12 +2,12 @@ name: hyppe
 description: Hyppe Teknologi Indonesia.
 homepage: https://www.hyppe.id
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.11+57
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -61,38 +61,35 @@ dependencies:
   crypto: ^3.0.0
   http: ^0.13.4
   multi_select_flutter: ^4.1.2
-  
+
   geolocator: ^8.0.5
   geocoding: ^2.0.4
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
-  video_compress: ^3.1.0
+  video_compress: ^3.1.1
   light_compressor: ^1.2.2
-
-
-
-
-
 
   dynamic_widget: # Dynamic widget builder
     git:
-        url: https://github.com/dengyin2000/dynamic_widget.git
-        ref: e6ece410e1abcb536ed9a599cbff17f20a81669c
+      url: https://github.com/dengyin2000/dynamic_widget.git
+      ref: e6ece410e1abcb536ed9a599cbff17f20a81669c
 
   better_player: # Better player
     path: ../hyppe-better-player
 
   story_view: # Story viewer
     path: packages/story_view
-    
+
   qr_flutter: ^4.0.0
+
+  google_ml_kit: ^0.12.0 # Text recognition
 
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
 
 dependency_overrides:
   camera: <=0.9.8+1
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

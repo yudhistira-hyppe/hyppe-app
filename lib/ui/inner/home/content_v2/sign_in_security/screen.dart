@@ -26,7 +26,8 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.translate.signInAndSecurity!,
-            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+            textStyle:
+                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -38,9 +39,14 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingTile(
-                icon: 'setting.svg',
+                icon: 'lock.svg',
                 onTap: () => Routing().move(Routes.changePassword),
                 caption: '${notifier.translate.changePassword}',
+              ),
+              SettingTile(
+                icon: 'verification-icon.svg',
+                onTap: () => Routing().move(Routes.verificationIDStep1),
+                caption: '${notifier.translate.idVerification}',
               ),
             ],
           ),

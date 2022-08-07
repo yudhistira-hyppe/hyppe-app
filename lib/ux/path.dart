@@ -61,4 +61,12 @@ class Routes {
 //search
   static const String searcMore = '/search-more';
   static const String searcMoreComplete = '/search-more-complete';
+
+  static const String verificationIDStep1 = '/verification-id-step-1';
+  static const String verificationIDStep2 = '/verification-id-step-2';
+  static const String verificationIDStep3 = '/verification-id-step-3';
+  static const String verificationIDStep4 = '/verification-id-step-4';
+  static const String verificationIDStep5 = '/verification-id-step-5';
+  static const String verificationIDFailed = '/verification-id-failed';
+  static const String verificationIDSuccess = '/verification-id-success';
 }
