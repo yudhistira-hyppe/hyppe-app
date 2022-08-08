@@ -480,10 +480,11 @@
   "deleteComment": "Hapus Komentar?",
   "commentWillPermanentlyDeletedContinue": "Komentar akan terhapus secara permanen, lanjutkan?",
   "addPostDescription" : "Tambahkan deskripsi posting, @teman, dan bergabung dengan #topik (maks 2500 karakter)",
-  "privacy" : "Rahasia",
+  "privacy" : "Privasi",
   "selectLocation": "Pilih Lokasi",
   "youDontHaveAnyPostsYetCreateOneNow": "Anda belum memiliki postingan, buat sekarang",
   "removeMeFromPost": "Hapus Saya Dari Pos",
   "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya",
-  "afterthatThisTagWillBePermanentlyRemoved" : "After that, this diary will be permanently removed"
+  "afterthatThisTagWillBePermanentlyRemoved" : "Setelah itu, tag ini akan dihapus secara permanen",
+  "caption" : "Keterangan"
 }

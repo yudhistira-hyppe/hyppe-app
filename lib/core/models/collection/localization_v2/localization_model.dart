@@ -483,6 +483,7 @@ class LocalizationModelV2 {
   String? removeMeFromPost;
   String? noResultsFoundTryAnother;
   String? afterthatThisTagWillBePermanentlyRemoved;
+  String? caption;
 
   LocalizationModelV2({
     this.login,
@@ -969,6 +970,7 @@ class LocalizationModelV2 {
     this.removeMeFromPost,
     this.noResultsFoundTryAnother,
     this.afterthatThisTagWillBePermanentlyRemoved,
+    this.caption,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1457,5 +1459,6 @@ class LocalizationModelV2 {
     removeMeFromPost = json['removeMeFromPost'];
     noResultsFoundTryAnother = json['noResultsFoundTryAnother'];
     afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
+    caption = json['caption'];
   }
 }

@@ -485,5 +485,6 @@
   "youDontHaveAnyPostsYetCreateOneNow": "You don't have any posts yet, create one now",
   "removeMeFromPost": "Remove Me From Post",
   "noResultsFoundTryAnother": "No results found, try another",
-  "afterthatThisTagWillBePermanentlyRemoved" : "Setelah itu, tag ini akan dihapus secara permanen"
+  "afterthatThisTagWillBePermanentlyRemoved" : "After that, this tag will be permanently removed",
+  "caption" : "Caption"
 }

@@ -32,32 +32,15 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
   bool autoComplete = false;
   String search = '';
-  @override
-  void initState() {
-    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
-    notifier.onGetInterest(context);
-    super.initState();
-  }
 
-  Widget loadingCompress(progressCompress) {
-    return progressCompress > 0 && progressCompress < 100
-        ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Loading .."),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(40.0),
-                child: LinearProgressIndicator(
-                  value: progressCompress / 100,
-                  minHeight: 5,
-                  backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
-                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
-                ),
-              ),
-              sixPx,
-            ],
-          )
-        : const SizedBox();
+  @override
+  void initState(){
+    super.initState();
+    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false); 
+  }
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -105,7 +88,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         Row(
                           children: [
                             CustomTextWidget(
-                              textToDisplay: "Caption ",
+                              textToDisplay: notifier.language.caption!,
                               textStyle: textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                             ),
                             Container(
@@ -306,7 +289,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 },
                                 contentPadding: EdgeInsets.zero,
                                 title: CustomTextWidget(
-                                  textToDisplay: ' Tag People',
+                                  textToDisplay: notifier.language.tagPeople!,
                                   textAlign: TextAlign.start,
                                   textStyle: textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                                 ),
@@ -366,11 +349,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             textAlign: TextAlign.start,
                             textStyle: textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                           ),
-                          trailing: notifier.locationName == 'Add Location'
+                          trailing: notifier.locationName == notifier.language.addLocation!
                               ? const Icon(Icons.arrow_forward_ios_rounded)
                               : GestureDetector(
                                   onTap: () {
-                                    notifier.locationName = 'Add Location';
+                                    notifier.locationName = notifier.language.addLocation!;
                                   },
                                   child: const Icon(Icons.close)),
                           minLeadingWidth: 0,
@@ -397,7 +380,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         ListTile(
                           onTap: () => notifier.onClickPrivacyPost(context),
                           title: CustomTextWidget(
-                            textToDisplay: 'Privacy',
+                            textToDisplay: notifier.language.privacy!,
                             textStyle: textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                             textAlign: TextAlign.start,
                           ),
@@ -689,5 +672,26 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         ),
       ),
     );
+  }
+
+  Widget loadingCompress(progressCompress) {
+    return progressCompress > 0 && progressCompress < 100
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text("Loading .."),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(40.0),
+                child: LinearProgressIndicator(
+                  value: progressCompress / 100,
+                  minHeight: 5,
+                  backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
+                ),
+              ),
+              sixPx,
+            ],
+          )
+        : const SizedBox();
   }
 }

@@ -45,7 +45,6 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-// import 'package:video_compress/video_compress.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
 
@@ -95,9 +94,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   TextEditingController _captionController = TextEditingController();
   TextEditingController _location = TextEditingController();
   final TextEditingController tagsController = TextEditingController();
-  String _privacyTitle = 'Public';
+  String _privacyTitle = '';
   String privacyValue = 'PUBLIC';
-  String _locationName = 'Add Location';
+  String _locationName = '';
   bool _updateContent = false;
   FeatureType? _featureType;
   List<String?>? _fileContent;
@@ -143,6 +142,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   List _listFollow = [];
   List get listFollow => _listFollow;
 
+  set interestList(List<InterestData> val) {
+    _interestList = val;
+    notifyListeners();
+  }
+
   set isEdit(bool val) {
     _isEdit = val;
     notifyListeners();
@@ -159,12 +163,17 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   set interestData(List<String> val) {
-    _interestData = [];
+    _interestData = val;
+    notifyListeners();
+  }
+
+  set interest(List<InterestData> val) {
+    _interest = val;
     notifyListeners();
   }
 
   set userTagDataReal(List<TagPeople> val) {
-    _userTagDataReal = [];
+    _userTagDataReal = val;
     notifyListeners();
   }
 
@@ -289,7 +298,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   void onWillPop(BuildContext context) async {
-    print('exitjuga');
     ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
   }
 
@@ -339,22 +347,25 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     print('ini exit');
     _progressCompress = 0;
-    LightCompressor.cancelCompression();
+    if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+      LightCompressor.cancelCompression();
+    }
     // VideoCompress.cancelCompression();
-    // subscription.unsubscribe();
     selectedLocation = '';
     allowComment = true;
     certified = false;
     captionController.clear();
-    tagsController.clear();
+    // tagsController.clear();
     _selectedLocation = '';
     _interestData = [];
-    _locationName = 'Add Location';
-    _interestList = [];
+    _locationName = '';
+    // _interestList = [];
     _userTagData = [];
-    _privacyTitle = 'Public';
+    _privacyTitle = '';
     privacyValue = 'PUBLIC';
     interestData = [];
+    userTagDataReal = [];
+    notifyListeners();
   }
 
   Future _createPostContentV2() async {
@@ -458,7 +469,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       description: captionController.text,
       cats: _interestData,
       tagPeople: userTagData,
-      location: locationName == 'Add Location' ? '' : locationName,
+      location: locationName == language.addLocation ? '' : locationName,
     );
     final fetch = notifier.postsFetch;
 
@@ -472,7 +483,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
-            location: locationName == 'Add Location' ? '' : locationName,
+            location: locationName == language.addLocation ? '' : locationName,
             tagPeople: userTagDataReal,
             cats: _interestData,
           );
@@ -486,7 +497,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             certified: certified,
             description: captionController.text,
             tags: tagsController.text.split(','),
-            location: locationName == 'Add Location' ? '' : locationName,
+            location: locationName == language.addLocation ? '' : locationName,
             tagPeople: userTagDataReal,
             cats: _interestData,
           );
@@ -532,6 +543,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     context.read<CameraNotifier>().orientation = null;
     context.read<PreviewContentNotifier>().isForcePaused = false;
+    // Routing().move(Routes.lobby);
     Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
   }
 
@@ -689,83 +701,93 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future<void> compressVideo() async {
-    try {
-      final LightCompressor _lightCompressor = LightCompressor();
-      _desFile = await _destinationFile;
-      _lightCompressor.onProgressUpdated.listen((val) {
-        _progressCompress = val;
-        // print("contoh dari value yang di terima : $val");
-        notifyListeners();
-      });
+    if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+      try {
+        final LightCompressor _lightCompressor = LightCompressor();
+        _desFile = await _destinationFile;
+        _lightCompressor.onProgressUpdated.listen((val) {
+          _progressCompress = val;
+          // print("contoh dari value yang di terima : $val");
+          notifyListeners();
+        });
 
-      final dynamic response = await _lightCompressor.compressVideo(
-        path: File(fileContent![0]!).path,
-        destinationPath: _desFile!,
-        videoQuality: VideoQuality.medium,
-        isMinBitrateCheckEnabled: false,
-        // frameRate: 24, /* or ignore it */
-      );
+        final dynamic response = await _lightCompressor.compressVideo(
+          path: File(fileContent![0]!).path,
+          destinationPath: _desFile!,
+          videoQuality: VideoQuality.medium,
+          isMinBitrateCheckEnabled: false,
+          // frameRate: 24, /* or ignore it */
+        );
 
-      if (response is OnSuccess) {
-        _desFile = response.destinationPath;
-        _fileContent = [response.destinationPath];
-        _progressCompress = 100;
-        notifyListeners();
+        if (response is OnSuccess) {
+          _desFile = response.destinationPath;
+          _fileContent = [response.destinationPath];
+          _progressCompress = 100;
+          notifyListeners();
 
-        // print('sukses');
-        // print('${File(fileContent![0]!).path}');
-        // print("size ${File(fileContent![0]!).path}");
-      } else if (response is OnFailure) {
-        // print('failed');
-        // print(response.message);
-      } else if (response is OnCancelled) {
-        // print('cancel');
-        // print(response.isCancelled);
+          // print('sukses');
+          // print('${File(fileContent![0]!).path}');
+          // print("size ${File(fileContent![0]!).path}");
+        } else if (response is OnFailure) {
+          // print('failed');
+          // print(response.message);
+        } else if (response is OnCancelled) {
+          // print('cancel');
+          // print(response.isCancelled);
+        }
+      } catch (e) {
+        // VideoCompress.cancelCompression();
       }
-    } catch (e) {
-      // VideoCompress.cancelCompression();
     }
   }
 
   Future onGetInterest(BuildContext context) async {
-    final notifier = UtilsBlocV2();
-    await notifier.getInterestBloc(context);
-    final fetch = notifier.utilsFetch;
-    // getVideoSize();
-    print(isEdit);
-    if (!isEdit) {
-      var _typeFile = MediaType(
-        System().lookupContentMimeType(File(fileContent![0]!).path)?.split('/')[0] ?? '',
-        System().extensionFiles(File(fileContent![0]!).path)?.replaceAll(".", "") ?? "",
-      );
-      if (_typeFile.toString() != 'image/jpg') {
-        compressVideo();
-      }
-    }
+    if (interest.isEmpty) {
+      final notifier = UtilsBlocV2();
+      await notifier.getInterestBloc(context);
+      final fetch = notifier.utilsFetch;
+      print("GET INTEREST");
+      print(fetch);
 
-    final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
-    if (fetch.utilsState == UtilsState.getInterestsSuccess) {
-      _interest = [];
-      fetch.data.forEach((v) {
-        if (_interest.length <= 5) {
-          _interest.add(InterestData.fromJson(v));
-        }
-        if (_interest.length == 6) {
-          _interest.add(InterestData.fromJson(seeMore));
-        }
-        _interestList.add(InterestData.fromJson(v));
+      final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
+      if (fetch.utilsState == UtilsState.getInterestsSuccess) {
+        _interest = [];
+        fetch.data.forEach((v) {
+          if (_interest.length <= 5) {
+            _interest.add(InterestData.fromJson(v));
+          }
+          if (_interest.length == 6) {
+            _interest.add(InterestData.fromJson(seeMore));
+          }
+          _interestList.add(InterestData.fromJson(v));
+          
+        });
         _interestList.sort((a, b) {
           return a.interestName!.compareTo(b.interestName!);
         });
-      });
-      notifyListeners();
-    }
-    if (fetch.utilsState == UtilsState.getInterestsError) {
-      ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-        // _routing.moveBack();
-      }, backButton: () {
-        // _routing.moveBack();
-      });
+        print('isEdit');
+        print(isEdit);
+        // if (isEdit == false) {
+        //   if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+        //     compressVideo();
+        //   }
+        //   // var _typeFile = MediaType(
+        //   //   System().lookupContentMimeType(File(fileContent![0]!).path)?.split('/')[0] ?? '',
+        //   //   System().extensionFiles(File(fileContent![0]!).path)?.replaceAll(".", "") ?? "",
+        //   // );
+        //   // if (_typeFile.toString() != 'image/jpg') {
+        //   //   compressVideo();
+        //   // }
+        // }
+        notifyListeners();
+      }
+      else if (fetch.utilsState == UtilsState.getInterestsError) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
+          // _routing.moveBack();
+        }, backButton: () {
+          // _routing.moveBack();
+        });
+      }
     }
   }
 
@@ -782,11 +804,10 @@ class PreUploadContentNotifier with ChangeNotifier {
         } else {
           _interestData.add(tile);
         }
-        notifyListeners();
+        // notifyListeners();
       }
-    } else {
-      return null;
     }
+    notifyListeners();
   }
 
   void insertInterestList(BuildContext context, int index) {
