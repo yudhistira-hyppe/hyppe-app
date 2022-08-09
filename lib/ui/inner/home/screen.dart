@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -27,18 +28,23 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    final notifierFollow = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    print('ini iniststate home');
     final _language = TranslateNotifierV2();
-    notifierFollow.listFollow = [
-      {'name': "${_language.translate.follow}", 'code': 'TOFOLLOW'},
-      {'name': "${_language.translate.following}", 'code': 'FOLLOWING'},
-    ];
     Provider.of<HomeNotifier>(context, listen: false).setSessionID();
-    // final preUploadNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
-    // preUploadNotifier.interest = [];
-    context.read<PreUploadContentNotifier>().onGetInterest(context);
-    // Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
 
+    final notifierFollow = Provider.of<FollowRequestUnfollowNotifier>(context, listen: false);
+
+    if (notifierFollow.listFollow.isEmpty) {
+      notifierFollow.listFollow = [
+        {'name': "${_language.translate.follow}", 'code': 'TOFOLLOW'},
+        {'name': "${_language.translate.following}", 'code': 'FOLLOWING'},
+      ];
+    }
+    Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
+
+    if (mounted) {
+      setState(() => {});
+    }
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {
     //     final notifier = Provider.of<CacheService>(context, listen: false);

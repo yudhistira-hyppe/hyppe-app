@@ -54,11 +54,15 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void onUpdate() => notifyListeners();
 
-  void initState(BuildContext context, PicDetailScreenArgument routeArgument) {
+  void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
+    print('_routeArgument');
+    print(_routeArgument);
+    print(_routeArgument?.postID);
 
     if (_routeArgument?.postID != null) {
-      _initialPic(context);
+      print('dari dynamic link');
+      await _initialPic(context);
     } else {
       _data = _routeArgument?.picData;
       'hahahahaha'.logger();
@@ -75,16 +79,22 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ) async {
     Future<List<ContentData>> _resFuture;
 
+    print('initial PIC');
+
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
       _resFuture = contentsQuery.reload(context);
 
       final res = await _resFuture;
+      print('ini res');
+      print(res);
+      print(res.firstOrNull);
       _data = res.firstOrNull;
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: true);
       _increaseViewCount(context);
+      notifyListeners();
     } catch (e) {
       'load pic: ERROR: $e'.logger();
     }
@@ -107,7 +117,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
+          statusFollowing = StatusFollowing.following;
         } else {
           statusFollowing = StatusFollowing.none;
         }
@@ -126,7 +136,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
+          statusFollowing = StatusFollowing.following;
         } else {
           statusFollowing = StatusFollowing.none;
         }

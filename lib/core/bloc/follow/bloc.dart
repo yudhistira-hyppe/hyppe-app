@@ -115,7 +115,7 @@ class FollowBloc {
     formData.fields.add(MapEntry('pageNumber', '${data.pageNumber}'));
     formData.fields.add(MapEntry('senderOrReceiver', data.senderOrReceiver));
     formData.fields.add(MapEntry('search', data.searchText));
-    print('ini interactive');
+    print('ini getinteractive');
     print(formData.fields);
     await Repos().reposPost(
       context,
@@ -132,6 +132,7 @@ class FollowBloc {
       data: formData,
       headers: {
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
       withAlertMessage: true,
       withCheckConnection: false,

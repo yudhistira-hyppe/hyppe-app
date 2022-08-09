@@ -46,6 +46,17 @@ class PicDetailBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _themes = Theme.of(context);
+    print('test test');
+    print(data?.username);
+    print(data?.avatar);
+    print(data?.email);
+    print(_system.showUserPicture(data?.avatar?.mediaEndpoint));
+    print(_system.readTimestamp(
+      DateTime.parse(data!.createdAt!).millisecondsSinceEpoch,
+      context,
+      fullCaption: true,
+    ));
+
     return Container(
       width: SizeConfig.screenWidth,
       color: _themes.colorScheme.surface,
@@ -79,7 +90,7 @@ class PicDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            data?.tagPeople!.length != 0 || data?.location == ''
+            data?.tagPeople!.length != 0 || data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
@@ -248,28 +259,28 @@ class PicDetailBottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildProfilePicture(context),
-          Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
-            builder: (context, value, value2, value3, child) {
-              if (data?.email == SharedPreference().readStorage(SpKeys.email)) {
-                return const SizedBox.shrink();
-              }
-              return Column(
-                children: [
-                  CustomFollowButton(
-                    caption: value3.translate.follow!,
-                    onPressed: () async {
-                      try {
-                        await value.followUser(context);
-                      } catch (e) {
-                        e.logger();
-                      }
-                    },
-                    isFollowing: value.statusFollowing,
-                  ),
-                ],
-              );
-            },
-          ),
+          // Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+          //   builder: (context, value, value2, value3, child) {
+          //     if (data?.email == SharedPreference().readStorage(SpKeys.email)) {
+          //       return const SizedBox.shrink();
+          //     }
+          //     return Column(
+          //       children: [
+          //         CustomFollowButton(
+          //           caption: value3.translate.follow!,
+          //           onPressed: () async {
+          //             try {
+          //               await value.followUser(context);
+          //             } catch (e) {
+          //               e.logger();
+          //             }
+          //           },
+          //           isFollowing: value.statusFollowing,
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // ),
         ],
       ),
     );

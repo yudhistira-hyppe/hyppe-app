@@ -73,8 +73,7 @@ class NotificationService {
 
   // initialization service
   Future initializeLocalNotification() async {
-    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onSelectNotification: (String? payload) async {
@@ -101,17 +100,17 @@ class NotificationService {
   // show notification
 
   Future showNotification(RemoteMessage message) async {
-      String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    if(deviceID!=null){
+    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    if (deviceID != null) {
       if (message.notification != null) {
-      await flutterLocalNotificationsPlugin.show(
-        message.hashCode,
-        message.notification?.title ?? '',
-        message.notification?.body ?? '',
-        platformChannelSpecifics,
-        payload: jsonEncode(message.data),
-      );
-    }
+        await flutterLocalNotificationsPlugin.show(
+          message.hashCode,
+          message.notification?.title ?? '',
+          message.notification?.body ?? '',
+          platformChannelSpecifics,
+          payload: jsonEncode(message.data),
+        );
+      }
     }
   }
 }

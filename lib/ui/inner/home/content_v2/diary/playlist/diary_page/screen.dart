@@ -90,6 +90,7 @@ class _DiaryPageState extends State<DiaryPage> {
             progressPosition: ProgressPosition.top,
             onStoryShow: (storyItem) {
               int pos = _storyItems.indexOf(storyItem);
+
               context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
               // _addPostView();
               print('Current position $pos');
@@ -105,7 +106,7 @@ class _DiaryPageState extends State<DiaryPage> {
           ),
           Align(
             alignment: const Alignment(1.0, 0.70),
-            child: widget.data?.tagPeople!.length != 0 || widget.data?.location == ''
+            child: widget.data?.tagPeople!.length != 0 || widget.data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                     child: Row(

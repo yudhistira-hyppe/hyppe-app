@@ -90,7 +90,8 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     required bool mounted,
   }) {
     onWillPop(mounted);
-    System().increaseViewCount(context, data).whenComplete(() => notifyListeners());
+    // System().increaseViewCount(context, data).whenComplete(() => notifyListeners());
+    System().increaseViewCount(context, data);
   }
 
   void initState(BuildContext context, DiaryDetailScreenArgument routeArgument) {
@@ -98,9 +99,11 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _currentPage = _routeArgument?.index;
 
     if (_routeArgument?.postID != null) {
+      print('dinamik link diary');
       _initialDiary(context);
     } else {
       _listData = _routeArgument?.diaryData;
+      _listData.logger();
       notifyListeners();
     }
   }
@@ -114,11 +117,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       _resFuture = contentsQuery.reload(context);
-
       final res = await _resFuture;
       _listData = res;
       notifyListeners();
-      _followUser(context);
+      // _followUser(context);
     } catch (e) {
       'load diary: ERROR: $e'.logger();
     }

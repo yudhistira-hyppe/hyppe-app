@@ -165,7 +165,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           ),
                                         ),
                                       ),
-                                      vidData?.tagPeople!.length != 0 || vidData?.location == ''
+                                      vidData?.tagPeople!.length != 0 || vidData?.location != ''
                                           ? Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
                                               child: Row(

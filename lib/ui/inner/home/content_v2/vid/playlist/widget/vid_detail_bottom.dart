@@ -71,7 +71,7 @@ class VidDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            data?.tagPeople!.length != 0 || data?.location == ''
+            data?.tagPeople!.length != 0 || data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(

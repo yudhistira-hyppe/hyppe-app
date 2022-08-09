@@ -16,7 +16,7 @@ class _OpeningLogoState extends State<OpeningLogo> {
   @override
   void initState() {
     final _notifier = Provider.of<HyppeNotifier>(context, listen: false);
-    Timer(const Duration(seconds: 0), () async => await _notifier.handleStartUp(context));
+    Timer(const Duration(seconds: 1), () async => await _notifier.handleStartUp(context));
     super.initState();
   }
 

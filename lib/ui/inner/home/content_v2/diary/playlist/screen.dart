@@ -28,6 +28,8 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
   @override
   void initState() {
     _pageController = PageController(initialPage: widget.argument.index.toInt());
+    print('kesini dong');
+    print(_pageController);
     _pageController.addListener(() => notifier.currentPage = _pageController.page);
     super.initState();
   }

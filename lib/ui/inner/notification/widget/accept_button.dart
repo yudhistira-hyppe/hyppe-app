@@ -67,6 +67,8 @@ class AcceptButton extends StatelessWidget {
   }
 
   Color buttonColor(ThemeData theme) {
+    print('warna');
+    print(System().convertEvent(data?.event));
     if (System().convertEvent(data?.event) != InteractiveEvent.accept) {
       return theme.colorScheme.primaryVariant;
     } else {
@@ -78,11 +80,9 @@ class AcceptButton extends StatelessWidget {
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false);
     if (System().convertEvent(data?.event) == InteractiveEvent.accept || System().convertEvent(data?.event) == InteractiveEvent.done) {
       return _language.translate.following!;
-    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.follower &&
-        System().convertEvent(data?.event) == InteractiveEvent.request) {
+    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.follower && System().convertEvent(data?.event) == InteractiveEvent.request) {
       return _language.translate.accept!;
-    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.following &&
-        System().convertEvent(data?.event) == InteractiveEvent.initial) {
+    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.following && System().convertEvent(data?.event) == InteractiveEvent.initial) {
       return 'Requested';
     } else {
       return _language.translate.follow!;

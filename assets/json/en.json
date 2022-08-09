@@ -486,5 +486,6 @@
   "removeMeFromPost": "Remove Me From Post",
   "noResultsFoundTryAnother": "No results found, try another",
   "afterthatThisTagWillBePermanentlyRemoved" : "After that, this tag will be permanently removed",
-  "caption" : "Caption"
+  "caption" : "Caption",
+  "contentUploaded": "Content uploaded"
 }

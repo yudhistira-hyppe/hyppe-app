@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
-import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 
 class OnPrivacyPostBottomSheet extends StatefulWidget {
   final String value;
@@ -44,7 +36,6 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
   BuildContext? scaffoldContext;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _currentPrivacy = widget.value;
     // privacy = ["${_language.translate.public}", "${_language.translate.friends}", "${_language.translate.onlyMe}"];
@@ -93,7 +84,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                       textAlign: TextAlign.start,
                     ),
                     ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: privacy.length,
                       itemBuilder: (context, index) {
@@ -102,10 +93,12 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                           groupValue: privacy[index]['code'],
                           value: _currentPrivacy,
                           onChanged: (_) {
-                            setState(() {
-                              _currentPrivacy = privacy[index]['code'];
-                              widget.onChange(privacy[index]['title'], privacy[index]['code']);
-                            });
+                            if (mounted) {
+                              setState(() {
+                                _currentPrivacy = privacy[index]['code'];
+                                widget.onChange(privacy[index]['title'], privacy[index]['code']);
+                              });
+                            }
                           },
                           toggleable: true,
                           title: CustomTextWidget(

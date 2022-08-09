@@ -1,3 +1,4 @@
+import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/post_follow_user.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -29,16 +30,24 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => false;
 
-  List _listFollow = [];
-  List get listFollow => _listFollow;
+  String? _statusFollow;
+  String? get statusFollow => _statusFollow;
+
+  List<dynamic> _listFollow = [];
+  List<dynamic> get listFollow => _listFollow;
 
   set isLoading(bool val) {
     _isLoading = val;
     notifyListeners();
   }
 
-  set listFollow(List val) {
+  set listFollow(List<dynamic> val) {
     _listFollow = val;
+    notifyListeners();
+  }
+
+  set statusFollow(String? val) {
+    _statusFollow = val;
     notifyListeners();
   }
 
@@ -90,5 +99,43 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
     // context.read<PreviewPicNotifier>().pic?.data.updateFollowingData(currentValue.userID!, false);
     notifyListeners();
     ShowBottomSheet.onShowSomethingWhenWrong(context);
+  }
+
+  bool emailcheck(String? email) => email == SharedPreference().readStorage(SpKeys.email) ? true : false;
+
+  String label(String? tile) {
+    String label = '';
+    if (tile == 'requested') {
+      label = 'Requested';
+    } else {
+      final index = _listFollow.indexWhere((element) => element["code"] == tile);
+      label = _listFollow[index]['name'];
+    }
+    print(label);
+
+    return label;
+  }
+
+  Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index}) async {
+    try {
+      // statusFollowing = StatusFollowing.requested;
+      final notifier = FollowBloc();
+      await notifier.followUserBlocV2(
+        context,
+        data: FollowUserArgument(
+          receiverParty: email ?? '',
+          eventType: InteractiveEventType.following,
+        ),
+      );
+      final fetch = notifier.followFetch;
+      if (fetch.followState == FollowState.followUserSuccess) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      // 'follow user: ERROR: $e'.logger();
+      return false;
+    }
   }
 }
