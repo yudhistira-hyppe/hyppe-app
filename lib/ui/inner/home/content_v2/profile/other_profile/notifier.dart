@@ -244,7 +244,7 @@ class OtherProfileNotifier with ChangeNotifier {
       );
       final fetch = notifier.followFetch;
       if (fetch.followState == FollowState.followUserSuccess) {
-        statusFollowing = StatusFollowing.requested;
+        statusFollowing = StatusFollowing.following;
       } else {
         statusFollowing = StatusFollowing.none;
       }
