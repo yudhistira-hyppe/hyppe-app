@@ -123,11 +123,9 @@ class VideoThumbnail extends StatelessWidget {
                 Consumer<LikeNotifier>(
                   builder: (context, value, child) {
                     return GestureDetector(
-                      onTap: email == videoData?.email
-                          ? () {
-                              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData!.postID, 'LIKE', 'Like');
-                            }
-                          : null,
+                      onTap: () {
+                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData!.postID, 'LIKE', 'Like', videoData?.email);
+                      },
                       child: CustomBalloonWidget(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

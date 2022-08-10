@@ -102,7 +102,7 @@ class ContentItem extends StatelessWidget {
                           fn: () => notifier.navigateToHyppeVidDetail(context, data),
                         ),
                       ),
-                      data.tagPeople!.length != 0 || data.location == ''
+                      data.tagPeople!.length != 0 || data.location != ''
                           ? Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(top: 10.0),
                               child: Row(

@@ -156,6 +156,7 @@ class DisqusLogs {
   String? updatedAt;
   String? reactionIcon;
   String? lineID;
+  Mate? senderInfo;
 
   DisqusLogs({
     this.createdAt,
@@ -169,6 +170,7 @@ class DisqusLogs {
     this.updatedAt,
     this.reactionIcon,
     this.lineID,
+    this.senderInfo,
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -187,6 +189,7 @@ class DisqusLogs {
     updatedAt = json['updatedAt'];
     reactionIcon = json['reaction_icon'];
     lineID = json['lineID'];
+    senderInfo = json['senderInfo'] != null ? Mate.fromJson(json['senderInfo']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -202,6 +205,9 @@ class DisqusLogs {
     data['updatedAt'] = updatedAt;
     data['reaction_icon'] = reactionIcon;
     data['lineID'] = lineID;
+    if (senderInfo != null) {
+      data['senderInfo'] = senderInfo?.toJson();
+    }
     return data;
   }
 

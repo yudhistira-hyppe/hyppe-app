@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
@@ -23,7 +21,6 @@ import 'package:hyppe/core/models/collection/utils/search_people/search_people.d
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -70,9 +67,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isShowAutoComplete => _isShowAutoComplete;
   String _temporarySearch = '';
   String get temporarySearch => _temporarySearch;
-
-  String? _statusFollow;
-  String? get statusFollow => _statusFollow;
 
   int _videoSize = 0;
   int get videoSize => _videoSize;
@@ -139,9 +133,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<TagPeople> get userTagDataReal => _userTagDataReal;
   int get startSearch => _startSearch;
 
-  List _listFollow = [];
-  List get listFollow => _listFollow;
-
   set interestList(List<InterestData> val) {
     _interestList = val;
     notifyListeners();
@@ -149,11 +140,6 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set isEdit(bool val) {
     _isEdit = val;
-    notifyListeners();
-  }
-
-  set listFollow(List val) {
-    _listFollow = val;
     notifyListeners();
   }
 
@@ -292,11 +278,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set statusFollow(String? val) {
-    _statusFollow = val;
-    notifyListeners();
-  }
-
   void onWillPop(BuildContext context) async {
     ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
   }
@@ -347,19 +328,20 @@ class PreUploadContentNotifier with ChangeNotifier {
   void _onExit() {
     print('ini exit');
     _progressCompress = 0;
-    if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
-      LightCompressor.cancelCompression();
-    }
+    // if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+    //   LightCompressor.cancelCompression();
+    // }
     // VideoCompress.cancelCompression();
+    // tagsController.clear();
+    // _interestList = [];
+    /////////////
     selectedLocation = '';
     allowComment = true;
     certified = false;
     captionController.clear();
-    // tagsController.clear();
     _selectedLocation = '';
     _interestData = [];
     _locationName = '';
-    // _interestList = [];
     _userTagData = [];
     _privacyTitle = '';
     privacyValue = 'PUBLIC';
@@ -411,12 +393,12 @@ class PreUploadContentNotifier with ChangeNotifier {
         cats: _interestData,
         tagPeople: userTagData,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
-        location: locationName == 'Add Location' ? '' : locationName,
-        onReceiveProgress: (count, total) {
-          _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+        location: locationName == language.addLocation ? '' : locationName,
+        onReceiveProgress: (count, total) async {
+          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
         },
-        onSendProgress: (received, total) {
-          _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+        onSendProgress: (received, total) async {
+          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
         },
       ).then((value) {
         _uploadSuccess = value;
@@ -544,7 +526,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     context.read<CameraNotifier>().orientation = null;
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
-    Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
   }
 
   Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {
@@ -554,13 +536,13 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (connection) {
         checkKeyboardFocus(context);
         if (onEdit) {
-          _updatePostContentV2(
+          await _updatePostContentV2(
             context,
             postID: data!.postID!,
             content: content!,
           );
         } else {
-          _createPostContentV2();
+          await _createPostContentV2();
         }
       } else {
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -625,17 +607,17 @@ class PreUploadContentNotifier with ChangeNotifier {
     ShowBottomSheet.onShowLocation(
       context,
       onSave: () {
-        Routing().moveBack();
-        Provider.of<PreUploadContentNotifier>(context, listen: false)._privacyTitle = _privacyTitle;
-        notifyListeners();
+        // Routing().moveBack();
+        // Provider.of<PreUploadContentNotifier>(context, listen: false)._privacyTitle = _privacyTitle;
+        // notifyListeners();
       },
       onCancel: () {
         Routing().moveBack();
         FocusScope.of(context).unfocus();
       },
       onChange: (value) {
-        Routing().moveBack();
-        notifyListeners();
+        // Routing().moveBack();
+        // notifyListeners();
       },
       value: _privacyTitle,
     );
@@ -701,7 +683,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future<void> compressVideo() async {
-    if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+    if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
       try {
         final LightCompressor _lightCompressor = LightCompressor();
         _desFile = await _destinationFile;
@@ -714,7 +696,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         final dynamic response = await _lightCompressor.compressVideo(
           path: File(fileContent![0]!).path,
           destinationPath: _desFile!,
-          videoQuality: VideoQuality.medium,
+          videoQuality: VideoQuality.high,
           isMinBitrateCheckEnabled: false,
           // frameRate: 24, /* or ignore it */
         );
@@ -722,6 +704,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         if (response is OnSuccess) {
           _desFile = response.destinationPath;
           _fileContent = [response.destinationPath];
+          getVideoSize();
           _progressCompress = 100;
           notifyListeners();
 
@@ -742,12 +725,10 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future onGetInterest(BuildContext context) async {
-    if (interest.isEmpty) {
+    if (_interestList.isEmpty) {
       final notifier = UtilsBlocV2();
       await notifier.getInterestBloc(context);
       final fetch = notifier.utilsFetch;
-      print("GET INTEREST");
-      print(fetch);
 
       final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
       if (fetch.utilsState == UtilsState.getInterestsSuccess) {
@@ -760,28 +741,13 @@ class PreUploadContentNotifier with ChangeNotifier {
             _interest.add(InterestData.fromJson(seeMore));
           }
           _interestList.add(InterestData.fromJson(v));
-          
         });
         _interestList.sort((a, b) {
           return a.interestName!.compareTo(b.interestName!);
         });
-        print('isEdit');
-        print(isEdit);
-        // if (isEdit == false) {
-        //   if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
-        //     compressVideo();
-        //   }
-        //   // var _typeFile = MediaType(
-        //   //   System().lookupContentMimeType(File(fileContent![0]!).path)?.split('/')[0] ?? '',
-        //   //   System().extensionFiles(File(fileContent![0]!).path)?.replaceAll(".", "") ?? "",
-        //   // );
-        //   // if (_typeFile.toString() != 'image/jpg') {
-        //   //   compressVideo();
-        //   // }
-        // }
+
         notifyListeners();
-      }
-      else if (fetch.utilsState == UtilsState.getInterestsError) {
+      } else if (fetch.utilsState == UtilsState.getInterestsError) {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           // _routing.moveBack();
         }, backButton: () {
@@ -865,8 +831,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future searchLocation(BuildContext context, {input}) async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     final _language = SharedPreference().readStorage(SpKeys.isoCode);
-    updateContent = true;
-    certifiedTmp = false;
 
     final notifier = GoogleMapPlaceBloc();
     await notifier.getGoogleMapPlaceBloc(
@@ -956,20 +920,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  bool emailcheck(String? email) => email == SharedPreference().readStorage(SpKeys.email) ? true : false;
-  String label(String? tile) {
-    String label = '';
-    if (tile == 'requested') {
-      label = 'Requested';
-    } else {
-      final index = _listFollow.indexWhere((element) => element["code"] == tile);
-      label = _listFollow[index]['name'];
-    }
-    print(label);
-
-    return label;
-  }
-
   // void showDeleteMyTag(BuildContext context, postId) {
   //   Routing().moveBack();
   //   ShowGeneralDialog.deleteContentDialog(context, '', () async {
@@ -1001,26 +951,4 @@ class PreUploadContentNotifier with ChangeNotifier {
   //   }
   // }
 
-  Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index}) async {
-    try {
-      // statusFollowing = StatusFollowing.requested;
-      final notifier = FollowBloc();
-      await notifier.followUserBlocV2(
-        context,
-        data: FollowUserArgument(
-          receiverParty: email ?? '',
-          eventType: InteractiveEventType.following,
-        ),
-      );
-      final fetch = notifier.followFetch;
-      if (fetch.followState == FollowState.followUserSuccess) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      'follow user: ERROR: $e'.logger();
-      return false;
-    }
-  }
 }

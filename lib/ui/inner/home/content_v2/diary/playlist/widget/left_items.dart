@@ -61,7 +61,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           Container(
             padding: const EdgeInsets.all(2),
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
-            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+            // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
             child: SingleChildScrollView(
               child: ReadMoreText(
                 "${widget.description}",

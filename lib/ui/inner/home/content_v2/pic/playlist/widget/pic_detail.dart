@@ -212,7 +212,7 @@ class _PicDetailState extends State<PicDetail> {
                         // )
                       ],
                     ),
-                    widget.arguments?.tagPeople!.length != 0 || widget.arguments?.location == ''
+                    widget.arguments?.tagPeople!.length != 0 || widget.arguments?.location != ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                             child: Row(

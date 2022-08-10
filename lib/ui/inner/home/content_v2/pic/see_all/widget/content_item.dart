@@ -96,7 +96,7 @@ class ContentItem extends StatelessWidget {
                           fn: () => notifier.navigateToHyppePicDetail(context, data),
                         ),
                       ),
-                      data.tagPeople!.length != 0 || data.location == ''
+                      data.tagPeople!.length != 0 || data.location != ''
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: 10, top: 16),
                               child: Row(

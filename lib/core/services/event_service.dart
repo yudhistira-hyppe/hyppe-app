@@ -102,7 +102,7 @@ class EventService {
   }
 
   // Uplaod
-  void notifyUploadReceiveProgress(ProgressUploadArgument receiveProgress) {
+  Future notifyUploadReceiveProgress(ProgressUploadArgument receiveProgress) async {
     streamService.uploadReceiveProgress.add(receiveProgress);
 
     for (var element in _uploadHandlers.values) {
@@ -110,7 +110,7 @@ class EventService {
     }
   }
 
-  void notifyUploadSendProgress(ProgressUploadArgument sendProgress) {
+  Future notifyUploadSendProgress(ProgressUploadArgument sendProgress) async {
     streamService.uploadSendProgress.add(sendProgress);
 
     for (var element in _uploadHandlers.values) {

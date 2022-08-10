@@ -79,7 +79,7 @@
   "completeNow": "Lengkapi Sekarang",
   "completeProfiles": "Lengkapi Profil",
   "letsCompleteYourProfileDetails": "Mari lengkapi profil Anda",
-  "phoneNumber": "Nomor telefon",
+  "phoneNumber": "Nomor telepon",
   "country": "Negara",
   "provinceRegion": "Provinsi/Wilayah",
   "locationInThisCountryRegion": "Lokasi di Negara/Wilayah",
@@ -141,7 +141,7 @@
   "replies": "balasan",
   "forYou": "untuk Anda",
   "news": "Terbaru",
-  "whatAreYouFindOut": "Apa yang kamu temukan",
+  "whatAreYouFindOut": "Apa yang kamu cari",
   "editProfile": "Sunting Profil",
   "librarys": "Koleksi",
   "post": "Kirim",
@@ -486,5 +486,6 @@
   "removeMeFromPost": "Hapus Saya Dari Pos",
   "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya",
   "afterthatThisTagWillBePermanentlyRemoved" : "Setelah itu, tag ini akan dihapus secara permanen",
-  "caption" : "Keterangan"
+  "caption" : "Keterangan",
+  "contentUploaded": "Kontent berhasil diupload"
 }

@@ -40,14 +40,14 @@ class OnShowUserTagBottomSheet extends StatefulWidget {
 class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> with GeneralMixin {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final _notifier = PreUploadContentNotifier();
+
   String? lastInputValue;
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Consumer<PreviewVidNotifier>(
-      builder: (context, notifier, child) => Padding(
+    return Consumer2<FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+      builder: (context, notifier, notifierTranslate, child) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -72,6 +72,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                 itemCount: widget.value.length,
                 itemBuilder: (context, index) {
                   // print(System().showUserPicture(value[index].avatar));
+                  widget.value[index].status == 'UNLINK' ? '' : notifier.statusFollow = notifier.label(widget.value[index].status!);
                   return Column(
                     children: [
                       ListTile(
@@ -83,49 +84,44 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                           textAlign: TextAlign.start,
                         ),
                         // subtitle: Text("${notifier.searchPeolpleData[index].fullName!}"),
-                        trailing: Consumer<PreUploadContentNotifier>(
-                          builder: (_, notifier, __) {
-                            widget.value[index].status == 'UNLINK' ? '' : notifier.statusFollow = notifier.label(widget.value[index].status!);
-                            return widget.value[index].status == 'UNLINK'
-                                ? const SizedBox()
-                                : notifier.emailcheck(widget.value[index].email)
-                                    ? SizedBox(
-                                        width: 100,
-                                        child: CustomTextButton(
-                                          onPressed: () {
-                                            Routing().moveBack();
-                                            ShowGeneralDialog.deleteTagUserContentDialog(context, '', () {}, widget.postId);
-                                          },
-                                          child: Text(
-                                            notifier.language.delete!,
-                                            style: const TextStyle(color: kHyppePrimary),
-                                          ),
-                                        ),
-                                      )
-                                    : SizedBox(
-                                        width: 100,
-                                        child: CustomTextButton(
-                                          child: Text(
-                                            notifier.statusFollow!,
-                                            style: TextStyle(color: widget.value[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
-                                          ),
-                                          onPressed: widget.value[index].status != 'TOFOLLOW'
-                                              ? null
-                                              : () {
-                                                  notifier.followUser(context, email: widget.value[index].email, index: index).then((value) {
-                                                    if (value) {
-                                                      widget.value[index].status = 'requested';
-                                                      setState(() {});
-                                                    }
-                                                  });
-                                                },
-                                          style: widget.value[index].status == 'TOFOLLOW'
-                                              ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
-                                              : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
-                                        ),
-                                      );
-                          },
-                        ),
+                        trailing: widget.value[index].status == 'UNLINK'
+                            ? const SizedBox()
+                            : notifier.emailcheck(widget.value[index].email)
+                                ? SizedBox(
+                                    width: 100,
+                                    child: CustomTextButton(
+                                      onPressed: () {
+                                        Routing().moveBack();
+                                        ShowGeneralDialog.deleteTagUserContentDialog(context, '', () {}, widget.postId);
+                                      },
+                                      child: Text(
+                                        notifierTranslate.translate.delete!,
+                                        style: const TextStyle(color: kHyppePrimary),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: 100,
+                                    child: CustomTextButton(
+                                      child: Text(
+                                        notifier.statusFollow!,
+                                        style: TextStyle(color: widget.value[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
+                                      ),
+                                      onPressed: widget.value[index].status != 'TOFOLLOW'
+                                          ? null
+                                          : () {
+                                              notifier.followUser(context, email: widget.value[index].email, index: index).then((value) {
+                                                if (value) {
+                                                  widget.value[index].status = 'FOLLOWING';
+                                                  setState(() {});
+                                                }
+                                              });
+                                            },
+                                      style: widget.value[index].status == 'TOFOLLOW'
+                                          ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
+                                          : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
+                                    ),
+                                  ),
 
                         leading: StoryColorValidator(
                           haveStory: false,

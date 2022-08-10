@@ -158,7 +158,7 @@ class MainNotifier with ChangeNotifier {
               NotificationService().showNotification(
                 RemoteMessage(
                   notification: RemoteNotification(
-                    title: "@${msgData.username} (${msgData.fullName})",
+                    title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
                     body: msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
                   ),
                   data: msgData.toJson(),

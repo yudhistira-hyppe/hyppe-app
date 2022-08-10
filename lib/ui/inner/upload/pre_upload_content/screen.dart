@@ -34,21 +34,17 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   String search = '';
 
   @override
-  void initState(){
-    super.initState();
-    final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false); 
-  }
-  @override
   void dispose() {
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    // Provider.of<PreUploadContentNotifier>(context);
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
     return Consumer<PreUploadContentNotifier>(
-      builder: (_, notifier, __) => GestureDetector(
+      builder: (context, notifier, child) => GestureDetector(
         onTap: () => notifier.checkKeyboardFocus(context),
         child: WillPopScope(
           onWillPop: () {

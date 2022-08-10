@@ -71,6 +71,8 @@ class DynamicLinkService {
     Uri? deepLink = data?.link;
     print('testetstt00');
     deepLink.logger();
+    print(deepLink?.queryParameters);
+    print(deepLink?.queryParameters['postID']);
 
     if (deepLink != null) {
       // Set [pendingDynamicLinkData] to the initial dynamic link
@@ -91,25 +93,33 @@ class DynamicLinkService {
           case Routes.storyDetail:
             _routing.moveReplacement(
               _path,
-              argument: StoryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: StoryDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           case Routes.vidDetail:
             _routing.moveReplacement(
               _path,
-              argument: VidDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: VidDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           case Routes.diaryDetail:
             _routing.moveReplacement(
               _path,
-              argument: DiaryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: DiaryDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           case Routes.picDetail:
             _routing.moveReplacement(
               _path,
-              argument: PicDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: PicDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           // TO DO: If register from referral link, then hit to backend

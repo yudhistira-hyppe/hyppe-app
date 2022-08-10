@@ -28,6 +28,14 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isLoadingVid = false;
+  bool _isLoadingDiary = false;
+  bool _isLoadingPict = false;
+
+  bool get isLoadingVid => _isLoadingVid;
+  bool get isLoadingDiary => _isLoadingDiary;
+  bool get isLoadingPict => _isLoadingPict;
+
   List _visibiltyList = [];
   List get visibiltyList => _visibiltyList;
 
@@ -47,6 +55,21 @@ class HomeNotifier with ChangeNotifier {
   //   _isHaveSomethingNew = val;
   //   notifyListeners();
   // }
+
+  set isLoadingVid(bool val) {
+    _isLoadingVid = val;
+    notifyListeners();
+  }
+
+  set isLoadingDiary(bool val) {
+    _isLoadingDiary = val;
+    notifyListeners();
+  }
+
+  set isLoadingPict(bool val) {
+    _isLoadingPict = val;
+    notifyListeners();
+  }
 
   set visibilty(String val) {
     _visibilty = val;
@@ -85,6 +108,9 @@ class HomeNotifier with ChangeNotifier {
   Future onRefresh(BuildContext context) async {
     bool isConnected = await System().checkConnections();
     if (isConnected) {
+      isLoadingVid = true;
+      int totLoading = 0;
+
       final profile = Provider.of<MainNotifier>(context, listen: false);
       final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
@@ -93,31 +119,37 @@ class HomeNotifier with ChangeNotifier {
 
       // Refresh profile
       try {
-        profile.initMain(context, onUpdateProfile: true);
+        await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       // Refresh content
       try {
-        stories.initialStories(context);
+        await stories.initialStories(context).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        vid.initialVid(context, reload: true);
+        await vid.initialVid(context, reload: true).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        diary.initialDiary(context, reload: true);
+        await diary.initialDiary(context, reload: true).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        pic.initialPic(context, reload: true);
+        await pic.initialPic(context, reload: true).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
+
+      if (totLoading >= 3) {
+        isLoadingVid = false;
+      }
+
+      notifyListeners();
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();

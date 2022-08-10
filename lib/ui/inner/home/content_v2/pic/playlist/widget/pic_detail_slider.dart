@@ -38,7 +38,6 @@ class PicDetailSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
-    var email = SharedPreference().readStorage(SpKeys.email);
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Stack(
@@ -119,11 +118,9 @@ class PicDetailSlider extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: email == picData?.email
-                        ? () {
-                            Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like');
-                          }
-                        : null,
+                    onTap: () {
+                      Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
+                    },
                     child: CustomBalloonWidget(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

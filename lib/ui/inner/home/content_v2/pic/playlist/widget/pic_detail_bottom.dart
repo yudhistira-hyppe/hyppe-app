@@ -46,6 +46,7 @@ class PicDetailBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _themes = Theme.of(context);
+
     return Container(
       width: SizeConfig.screenWidth,
       color: _themes.colorScheme.surface,
@@ -79,7 +80,7 @@ class PicDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            data?.tagPeople!.length != 0 || data?.location == ''
+            data?.tagPeople!.length != 0 || data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
@@ -120,11 +121,9 @@ class PicDetailBottom extends StatelessWidget {
             eightPx,
             data != null
                 ? GestureDetector(
-                    onTap: email == data?.email
-                        ? () {
-                            Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer');
-                          }
-                        : null,
+                    onTap: () {
+                      Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data?.email);
+                    },
                     child: CustomTextWidget(
                       maxLines: 2,
                       textAlign: TextAlign.left,
@@ -250,7 +249,7 @@ class PicDetailBottom extends StatelessWidget {
           _buildProfilePicture(context),
           Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
             builder: (context, value, value2, value3, child) {
-              if (data?.email == SharedPreference().readStorage(SpKeys.email)) {
+              if (data?.email == email) {
                 return const SizedBox.shrink();
               }
               return Column(

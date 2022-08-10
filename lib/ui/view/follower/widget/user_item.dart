@@ -67,9 +67,9 @@ class _UserItemState extends State<UserItem> {
                   ),
 
                   // button
-                  ButtonWidget(
-                    data: widget.data,
-                  ),
+                  // ButtonWidget(
+                  //   data: widget.data,
+                  // ),
                 ],
               ),
             )

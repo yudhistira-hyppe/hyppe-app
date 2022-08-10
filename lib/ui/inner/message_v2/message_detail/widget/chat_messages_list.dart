@@ -56,8 +56,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
                 controller: notifier.scrollController,
                 // itemCount: notifier.listChatData.length,
                 itemCount: notifier.discussData?.first.disqusLogs.length,
-                physics: NeverScrollableScrollPhysics(),
-                // physics: NeverScrollableScrollPhysics(),
+                physics: BouncingScrollPhysics(),
                 padding: EdgeInsets.only(
                   top: 10 * SizeConfig.scaleDiagonal,
                   // left: 13 * SizeConfig.scaleDiagonal,

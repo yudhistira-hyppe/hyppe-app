@@ -304,20 +304,28 @@ class ShowBottomSheet {
         return ChangeNotifierProvider(
           create: (context) => CommentNotifierV2(),
           child: Consumer<CommentNotifierV2>(
-            builder: (context, notifier, child) => Container(
-              height: !notifier.isLoading ? SizeConfig.screenHeight! : SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
-              decoration: BoxDecoration(
-                color: Theme.of(_).colorScheme.background,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
+            builder: (context, notifier, child) => WillPopScope(
+              onWillPop: () async {
+                notifier.initState(context, postID, true, parentComment);
+                return false;
+              },
+              child: SafeArea(
+                child: Container(
+                  height: !notifier.isLoading ? SizeConfig.screenHeight! : SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
+                  decoration: BoxDecoration(
+                    color: Theme.of(_).colorScheme.background,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                  ),
+                  margin: const EdgeInsets.only(top: 200),
+                  child: OnShowCommentBottomSheetV2(
+                    postID: postID,
+                    fromFront: false,
+                    parentComment: parentComment,
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.all(0),
-              child: OnShowCommentBottomSheetV2(
-                postID: postID,
-                fromFront: false,
-                parentComment: parentComment,
               ),
             ),
           ),
