@@ -696,7 +696,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         final dynamic response = await _lightCompressor.compressVideo(
           path: File(fileContent![0]!).path,
           destinationPath: _desFile!,
-          videoQuality: VideoQuality.medium,
+          videoQuality: VideoQuality.high,
           isMinBitrateCheckEnabled: false,
           // frameRate: 24, /* or ignore it */
         );
@@ -704,6 +704,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         if (response is OnSuccess) {
           _desFile = response.destinationPath;
           _fileContent = [response.destinationPath];
+          getVideoSize();
           _progressCompress = 100;
           notifyListeners();
 

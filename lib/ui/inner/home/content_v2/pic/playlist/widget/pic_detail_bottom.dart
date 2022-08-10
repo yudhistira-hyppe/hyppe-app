@@ -46,16 +46,6 @@ class PicDetailBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _themes = Theme.of(context);
-    print('test test');
-    print(data?.username);
-    print(data?.avatar);
-    print(data?.email);
-    print(_system.showUserPicture(data?.avatar?.mediaEndpoint));
-    print(_system.readTimestamp(
-      DateTime.parse(data!.createdAt!).millisecondsSinceEpoch,
-      context,
-      fullCaption: true,
-    ));
 
     return Container(
       width: SizeConfig.screenWidth,
@@ -131,11 +121,9 @@ class PicDetailBottom extends StatelessWidget {
             eightPx,
             data != null
                 ? GestureDetector(
-                    onTap: email == data?.email
-                        ? () {
-                            Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer');
-                          }
-                        : null,
+                    onTap: () {
+                      Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data?.email);
+                    },
                     child: CustomTextWidget(
                       maxLines: 2,
                       textAlign: TextAlign.left,
@@ -259,28 +247,28 @@ class PicDetailBottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildProfilePicture(context),
-          // Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
-          //   builder: (context, value, value2, value3, child) {
-          //     if (data?.email == SharedPreference().readStorage(SpKeys.email)) {
-          //       return const SizedBox.shrink();
-          //     }
-          //     return Column(
-          //       children: [
-          //         CustomFollowButton(
-          //           caption: value3.translate.follow!,
-          //           onPressed: () async {
-          //             try {
-          //               await value.followUser(context);
-          //             } catch (e) {
-          //               e.logger();
-          //             }
-          //           },
-          //           isFollowing: value.statusFollowing,
-          //         ),
-          //       ],
-          //     );
-          //   },
-          // ),
+          Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+            builder: (context, value, value2, value3, child) {
+              if (data?.email == email) {
+                return const SizedBox.shrink();
+              }
+              return Column(
+                children: [
+                  CustomFollowButton(
+                    caption: value3.translate.follow!,
+                    onPressed: () async {
+                      try {
+                        await value.followUser(context);
+                      } catch (e) {
+                        e.logger();
+                      }
+                    },
+                    isFollowing: value.statusFollowing,
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );

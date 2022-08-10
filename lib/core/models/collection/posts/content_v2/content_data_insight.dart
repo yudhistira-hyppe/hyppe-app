@@ -7,6 +7,7 @@ class ContentDataInsight {
   int? views;
   int? likes;
   bool isPostLiked = false;
+  bool isView = false;
   List<InsightLogs>? insightLogs;
 
   ContentDataInsight({
@@ -33,6 +34,7 @@ class ContentDataInsight {
     views = json['views'];
     likes = json['likes'];
     isPostLiked = insightLogs != null && insightLogs!.where((element) => element.eventInsight?.toLowerCase() == 'like').isNotEmpty;
+    isView = (json['isView'] != null) ? json['isView'] : false;
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +49,7 @@ class ContentDataInsight {
     data['reactions'] = reactions;
     data['views'] = views;
     data['likes'] = likes;
+    data['isView'] = isView;
     return data;
   }
 }

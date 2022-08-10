@@ -111,7 +111,7 @@ class VidDetailBottom extends StatelessWidget {
             eightPx,
             data != null
                 ? GestureDetector(
-                    onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer'),
+                    onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data!.email),
                     child: CustomTextWidget(
                       maxLines: 2,
                       textAlign: TextAlign.left,

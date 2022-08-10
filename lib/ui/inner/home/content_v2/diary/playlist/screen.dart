@@ -63,6 +63,10 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                       controller: _pageController,
                       itemCount: notifier.listData?.length ?? 0,
                       itemBuilder: (context, rootIndex) {
+                        print('ini diari');
+                        print(mounted);
+                        print(notifier.listData![rootIndex]);
+
                         if (notifier.listData!.isNotEmpty) {
                           if (notifier.currentPage!.floor() == rootIndex) {
                             double value = notifier.currentPage! - rootIndex;

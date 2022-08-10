@@ -25,6 +25,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
 
   @override
   void initState() {
+    print('other profile');
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context, argument: widget.arguments));
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));

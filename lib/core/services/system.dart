@@ -809,8 +809,11 @@ class System {
     final notifier = ViewBloc();
     await notifier.viewPostUserBloc(context, postId: data.postID!, emailOwner: data.email!);
     final fetch = notifier.viewFetch;
-    if (fetch.viewState == ViewState.viewUserPostSuccess) {
-      data.insight?.views = (data.insight?.views ?? 0) + 1;
+    if (!data.insight!.isView) {
+      if (fetch.viewState == ViewState.viewUserPostSuccess) {
+        data.insight?.views = (data.insight?.views ?? 0) + 1;
+        data.insight!.isView = true;
+      }
     }
   }
 

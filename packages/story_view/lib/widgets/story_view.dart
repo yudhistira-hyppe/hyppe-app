@@ -278,7 +278,7 @@ class StoryItem {
         ),
         source: url,
         shown: shown,
-        duration: duration ?? const Duration(seconds: 10));
+        duration: duration ?? const Duration(seconds: 1));
   }
 
   /// Shorthand for creating a story item from an image provider such as `AssetImage`

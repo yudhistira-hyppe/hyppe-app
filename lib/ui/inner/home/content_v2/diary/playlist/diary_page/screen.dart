@@ -46,7 +46,11 @@ class _DiaryPageState extends State<DiaryPage> {
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _storyItems = notifier.initializeData(context, _storyController, widget.data!);
+      print('kesini++++');
+      print(_storyItems);
+      print(widget.data!.metadata!.duration);
     });
+
     super.initState();
   }
 
@@ -93,7 +97,6 @@ class _DiaryPageState extends State<DiaryPage> {
 
               context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
               // _addPostView();
-              print('Current position $pos');
             },
             onComplete: () => widget.function(),
           ),

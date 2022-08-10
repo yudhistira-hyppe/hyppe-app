@@ -141,6 +141,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
           statusFollowing = StatusFollowing.none;
         }
       }
+      notifyListeners();
     } catch (e) {
       'follow user: ERROR: $e'.logger();
     }

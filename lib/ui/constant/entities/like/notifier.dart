@@ -213,8 +213,9 @@ class LikeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void viewLikeContent(BuildContext context, postId, eventType, title) {
-    ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
+  void viewLikeContent(BuildContext context, postId, eventType, title, emailData) {
+    final email = SharedPreference().readStorage(SpKeys.email);
+    if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
   }
 
   Future getLikeView(BuildContext context, postId, eventType, limit) async {

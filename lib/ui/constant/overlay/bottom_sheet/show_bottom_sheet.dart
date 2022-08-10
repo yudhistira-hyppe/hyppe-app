@@ -319,7 +319,7 @@ class ShowBottomSheet {
                       topRight: Radius.circular(8),
                     ),
                   ),
-                  margin: const EdgeInsets.only(top: 50),
+                  margin: const EdgeInsets.only(top: 200),
                   child: OnShowCommentBottomSheetV2(
                     postID: postID,
                     fromFront: false,
