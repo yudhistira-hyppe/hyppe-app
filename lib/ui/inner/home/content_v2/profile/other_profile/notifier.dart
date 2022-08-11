@@ -342,7 +342,7 @@ class OtherProfileNotifier with ChangeNotifier {
     statusFollowing = StatusFollowing.rejected;
     try {
       _usersFollowingQuery.senderOrReceiver = email;
-      _usersFollowingQuery.limit = 10;
+      _usersFollowingQuery.limit = 200;
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;
 

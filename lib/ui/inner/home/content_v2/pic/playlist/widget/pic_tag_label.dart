@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
@@ -8,8 +9,9 @@ import 'package:provider/provider.dart';
 class PicTagLabel extends StatelessWidget {
   String icon;
   String label;
+  double? width;
   final Function() function;
-  PicTagLabel({Key? key, required this.icon, required this.label, required this.function}) : super(key: key);
+  PicTagLabel({Key? key, required this.icon, required this.label, required this.function, this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,19 +21,19 @@ class PicTagLabel extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: EdgeInsets.only(right: 4),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Theme.of(context).colorScheme.secondary),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: kHyppeSurface.withOpacity(0.2)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               CustomIconWidget(
-                width: 18,
+                width: width,
                 iconData: "${AssetPath.vectorPath + icon}.svg",
                 defaultColor: false,
               ),
               sixPx,
               Text(
                 label.length < 20 ? label : "${label.substring(0, 20)}...",
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kHyppeLightBackground),
               ),
             ],
           ),

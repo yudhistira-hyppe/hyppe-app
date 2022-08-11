@@ -87,7 +87,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
+          statusFollowing = StatusFollowing.following;
         } else {
           statusFollowing = StatusFollowing.none;
         }
@@ -106,7 +106,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
+          statusFollowing = StatusFollowing.following;
         } else {
           statusFollowing = StatusFollowing.none;
         }

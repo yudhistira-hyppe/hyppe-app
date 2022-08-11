@@ -62,7 +62,7 @@ class HyppeNotifier with ChangeNotifier {
       return;
     } else if (token != null) {
       final formData = FormData();
-      formData.fields.add(const MapEntry('pageRow', '10'));
+      formData.fields.add(const MapEntry('pageRow', '200'));
       formData.fields.add(const MapEntry('pageNumber', '0'));
 
       await _repos.reposPost(
