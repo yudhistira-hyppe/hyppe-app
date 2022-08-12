@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/status_code.dart';
@@ -16,14 +17,15 @@ class ApiAction {
     );
 
     if (!kReleaseMode) {
-      _dio.interceptors.add(LogInterceptor(
-        error: true,
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: true,
-      ));
+      // _dio.interceptors.add(LogInterceptor(
+      //   error: true,
+      //   request: true,
+      //   requestBody: true,
+      //   responseBody: true,
+      //   requestHeader: true,
+      //   responseHeader: true,
+      // ));
+      _dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
     }
   }
 
@@ -40,7 +42,7 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+    if (Env.dataUrlv3.contains(url)) {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
@@ -76,7 +78,7 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (url == UrlConstants.signUp || url == UrlConstants.verifyAccount) {
+    if (Env.dataUrlv3.contains(url)) {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';

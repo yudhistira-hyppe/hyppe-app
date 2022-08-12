@@ -98,7 +98,8 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
               CustomElevatedButton(
                 width: SizeConfig.screenWidth,
                 height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () => Routing().move(Routes.verificationIDStep2),
+                function: () =>
+                    Routing().moveAndPop(Routes.verificationIDStep2),
                 child: CustomTextWidget(
                   textToDisplay: "Agree",
                   textStyle:

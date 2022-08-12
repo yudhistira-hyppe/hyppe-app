@@ -67,7 +67,7 @@ dependencies:
   geocoding: ^2.0.4
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
-  video_compress: ^3.1.1
+  # video_compress: ^3.1.1 # tidak dipakai lagi
   light_compressor: ^1.2.2
 
   dynamic_widget: # Dynamic widget builder
@@ -84,6 +84,7 @@ dependencies:
   qr_flutter: ^4.0.0
 
   google_ml_kit: ^0.12.0 # Text recognition
+  curl_logger_dio_interceptor: ^0.0.3
 
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability

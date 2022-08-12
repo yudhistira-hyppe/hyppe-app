@@ -1,8 +1,15 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/progress_upload_argument.dart';
+import 'package:hyppe/core/bloc/verification_id/bloc.dart';
+import 'package:hyppe/core/bloc/verification_id/state.dart';
+import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -13,6 +20,8 @@ import 'package:provider/provider.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 
 class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
+  final _eventService = EventService();
+
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -22,6 +31,7 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
   String _realName = "";
   bool _isScanning = false;
   String _imagePath = "";
+  String _selfiePath = "";
   String _scannedText = "";
   double _aspectRatio = 1;
   bool _isNameMatch = false;
@@ -34,6 +44,7 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
   CameraNotifier cameraNotifier = CameraNotifier();
   TextEditingController _realNameController = TextEditingController();
   TextEditingController _birtDateController = TextEditingController();
+  TextEditingController _birtPlaceController = TextEditingController();
 
   TextEditingController get realNameController => _realNameController;
   set realNameController(TextEditingController val) {
@@ -44,6 +55,12 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
   TextEditingController get birtDateController => _birtDateController;
   set birtDateController(TextEditingController val) {
     _birtDateController = val;
+    notifyListeners();
+  }
+
+  TextEditingController get birtPlaceController => _birtPlaceController;
+  set birtPlaceController(TextEditingController val) {
+    _birtPlaceController = val;
     notifyListeners();
   }
 
@@ -95,6 +112,12 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
     notifyListeners();
   }
 
+  String get selfiePath => _selfiePath;
+  set selfiePath(String val) {
+    _selfiePath = val;
+    notifyListeners();
+  }
+
   bool get acceptTos => _acceptTos;
   set acceptTos(bool val) {
     _acceptTos = val;
@@ -129,7 +152,7 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
       );
     } else {
       realName = nameText;
-      Routing().move(Routes.verificationIDStep3);
+      Routing().moveAndPop(Routes.verificationIDStep3);
     }
   }
 
@@ -173,6 +196,7 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
 
     sleep(const Duration(seconds: 1));
     if (idCardNumber != "" && isNameMatch) {
+      isScanning = false;
       return true;
     }
 
@@ -187,16 +211,89 @@ class VerificationIDNotifier extends ChangeNotifier implements CameraInterface {
       if (filePath != null) {
         imagePath = filePath.path;
         aspectRatio = cameraNotifier.cameraAspectRatio;
+        Routing().moveAndPop(Routes.verificationIDStep5);
+        // bool isIDCardValid = await validateIDCard();
+        // if (isIDCardValid) {
+        //   Routing().moveAndPop(Routes.verificationIDStep5);
+        // } else {
+        //   if (kDebugMode) {
+        //     print("ID Card is not valid");
+        //     print(scannedText);
+        //   }
+        //   ShowBottomSheet.onShowIDVerificationFailed(context);
+        // }
+      }
+    });
+  }
 
-        bool isIDCardValid = await validateIDCard();
-        // validate ID Card
-        if (isIDCardValid) {
-          Routing().move(Routes.verificationIDStep5);
-        } else {
-          if (kDebugMode) {
-            print("ID Card is not valid");
-            print(scannedText);
+  void onTakeSelfie(BuildContext context) {
+    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    cameraNotifier.takePicture().then((filePath) async {
+      if (filePath != null) {
+        selfiePath = filePath.path;
+        aspectRatio = cameraNotifier.cameraAspectRatio;
+
+        // To Do : Submit to backend
+        if (kDebugMode) {
+          print("Selfie Path => " + selfiePath);
+          print("Camera Path => " + imagePath);
+        }
+
+        isScanning = true;
+
+        try {
+          final bloc = VerificationIDBloc();
+          await bloc.postVerificationIDBloc(
+            context,
+            idCardFile: imagePath,
+            selfieFile: selfiePath,
+            idcardnumber: idCardNumber,
+            nama: realName,
+            tempatLahir: birtPlaceController.text,
+            onReceiveProgress: (count, total) async {
+              await _eventService.notifyUploadReceiveProgress(
+                  ProgressUploadArgument(count: count, total: total));
+            },
+            onSendProgress: (received, total) async {
+              await _eventService.notifyUploadSendProgress(
+                  ProgressUploadArgument(count: received, total: total));
+            },
+          );
+          final fetch = bloc.postsFetch;
+          if (fetch.verificationIDState ==
+              VerificationIDState.postVerificationIDSuccess) {
+            'verification ID success'.logger();
+            isScanning = false;
+            _eventService.notifyUploadSuccess(fetch.data);
+            Routing().move(Routes.verificationIDSuccess);
+          } else if (fetch.verificationIDState == VerificationIDState.loading) {
+            {
+              isScanning = true;
+            }
+          } else {
+            isScanning = false;
+            _eventService.notifyUploadFailed(
+              DioError(
+                requestOptions: RequestOptions(
+                  path: UrlConstants.verificationID,
+                ),
+                error: fetch.data,
+              ),
+            );
+            'verification ID failed'.logger();
+            Routing().move(Routes.verificationIDFailed);
           }
+        } catch (e) {
+          isScanning = false;
+          _eventService.notifyUploadFailed(
+            DioError(
+              requestOptions: RequestOptions(
+                path: UrlConstants.verificationID,
+              ),
+              error: e,
+            ),
+          );
+          'verification ID: ERROR: $e'.logger();
           Routing().move(Routes.verificationIDFailed);
         }
       }

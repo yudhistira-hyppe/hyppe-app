@@ -77,24 +77,27 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
         ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: CustomElevatedButton(
-            width: SizeConfig.screenWidth,
-            height: 44.0 * SizeConfig.scaleDiagonal,
-            function: () => Routing().move(Routes.verificationIDStep4),
-            child: CustomTextWidget(
-              textToDisplay: "Continue",
-              textStyle:
-                  textTheme.button?.copyWith(color: kHyppeLightButtonText),
-            ),
-            buttonStyle: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
-              shadowColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
-              overlayColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
-              backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
+          child: Container(
+            color: Theme.of(context).backgroundColor,
+            child: CustomElevatedButton(
+              width: SizeConfig.screenWidth,
+              height: 44.0 * SizeConfig.scaleDiagonal,
+              function: () => Routing().moveAndPop(Routes.verificationIDStep4),
+              child: CustomTextWidget(
+                textToDisplay: "Continue",
+                textStyle:
+                    textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              ),
+              buttonStyle: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+                shadowColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+              ),
             ),
           ),
         ),

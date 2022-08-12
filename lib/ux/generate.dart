@@ -30,7 +30,9 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_2/screen.dar
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_3/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -232,10 +234,14 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDStep4());
       case Routes.verificationIDStep5:
         return MaterialPageRoute(builder: (_) => const VerificationIDStep5());
+      case Routes.verificationIDStep6:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep6());
       case Routes.verificationIDFailed:
         return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
       case Routes.verificationIDSuccess:
         return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
+      case Routes.verificationIDLoading:
+        return MaterialPageRoute(builder: (_) => const VerificationIDLoading());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

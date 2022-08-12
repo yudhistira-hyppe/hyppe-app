@@ -4,26 +4,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
+import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class VerificationIDStep4 extends StatefulWidget {
-  const VerificationIDStep4({Key? key}) : super(key: key);
+class VerificationIDStep6 extends StatefulWidget {
+  const VerificationIDStep6({Key? key}) : super(key: key);
 
   @override
-  State<VerificationIDStep4> createState() => _VerificationIDStep4State();
+  State<VerificationIDStep6> createState() => _VerificationIDStep6State();
 }
 
-class _VerificationIDStep4State extends State<VerificationIDStep4>
+class _VerificationIDStep6State extends State<VerificationIDStep6>
     with RouteAware {
   @override
   void initState() {
@@ -56,27 +58,6 @@ class _VerificationIDStep4State extends State<VerificationIDStep4>
           onCameraNotifierUpdate: (cameraNotifier) =>
               notifier.cameraNotifier = cameraNotifier,
           additionalViews: <Widget>[
-            Align(
-              alignment: Alignment.topCenter,
-              child: Container(
-                width: double.infinity,
-                height: SizeConfig.screenHeight! * 0.07,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(context).colorScheme.primary.withOpacity(0.44),
-                      Colors.transparent,
-                    ],
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                  ),
-                ),
-              ),
-            ),
             SafeArea(
               top: Platform.isIOS,
               child: Align(
@@ -90,41 +71,43 @@ class _VerificationIDStep4State extends State<VerificationIDStep4>
                         child: const CustomIconWidget(
                             iconData: "${AssetPath.vectorPath}close.svg",
                             defaultColor: false)),
-                    CustomTextWidget(
-                      textToDisplay: "ID Verification",
-                      textStyle:
-                          textTheme.subtitle1?.copyWith(color: Colors.white),
-                    ),
                   ],
                 ),
               ),
             ),
             Align(
-              alignment: const Alignment(0.0, 0.9),
-              child: CustomIconButtonWidget(
-                  iconData: "${AssetPath.vectorPath}shutter.svg",
-                  onPressed: () => notifier.onTakePicture(context)),
-            ),
-            const Align(
-              alignment: Alignment(0.8, 0.9),
-              child: CameraFlashButton(),
-            ),
-            const Align(
-              alignment: Alignment.center,
-              child: CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}card.svg",
-                defaultColor: false,
-                height: 183,
-                width: 281,
+              alignment: const Alignment(0.0, 0.75),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Expanded(flex: 4, child: CameraFlashButton()),
+                  Expanded(
+                    flex: 4,
+                    child: CustomIconButtonWidget(
+                        iconData: "${AssetPath.vectorPath}shutter.svg",
+                        onPressed: () => notifier.onTakeSelfie(context)),
+                  ),
+                  const Expanded(flex: 4, child: CameraSwitchButton())
+                ],
               ),
             ),
-            Align(
-              alignment: const Alignment(0.0, 0.6),
-              child: CustomTextWidget(
-                  textToDisplay: "Place your KTP within the frame",
-                  textStyle:
-                      textTheme.subtitle1?.copyWith(color: Colors.white)),
-            )
+            if (notifier.isScanning)
+              Container(
+                width: SizeConfig.screenWidth,
+                height: SizeConfig.screenHeight,
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    CircularProgressIndicator(
+                      color: kHyppePrimary,
+                    ),
+                    SizedBox(height: 10),
+                    ProcessUploadComponent(),
+                  ],
+                ),
+              )
           ],
         ),
       ),
