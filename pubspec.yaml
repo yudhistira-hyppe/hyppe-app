@@ -69,11 +69,6 @@ dependencies:
   google_maps_flutter: ^2.1.8
   light_compressor: ^1.2.2
 
-
-
-
-
-
   dynamic_widget: # Dynamic widget builder
     git:
         url: https://github.com/dengyin2000/dynamic_widget.git

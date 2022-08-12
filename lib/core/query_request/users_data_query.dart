@@ -77,7 +77,7 @@ class UsersDataQuery extends PaginationQueryInterface {
     try {
       final notifier = FollowBloc();
       final param = GetFollowerUsersArgument(
-        pageRow: limit,
+        pageRow: 200,
         pageNumber: page,
         eventType: eventType!,
       )
