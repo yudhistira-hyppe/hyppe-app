@@ -42,12 +42,12 @@ class _PageBottomState extends State<PageBottom> {
               Column(
                 children: [
                   CustomTextWidget(
-                    textToDisplay: 'Selamat Datang di Hyppe',
+                    textToDisplay: notifier.language.welcomeToHyppe!,
                     textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
                   ),
                   eightPx,
                   CustomTextWidget(
-                    textToDisplay: 'Masuk untuk menemukan sesuatu yang menarik di aplikasi Hyppe',
+                    textToDisplay: notifier.language.signInToFindSomethingInterestingInTheHyppeApp!,
                     maxLines: 2,
                     textStyle: Theme.of(context).primaryTextTheme.subtitle2!,
                   ),
@@ -76,7 +76,7 @@ class _PageBottomState extends State<PageBottom> {
                               ),
                               const Spacer(),
                               CustomTextWidget(
-                                textToDisplay: 'Masuk dengan akun Google',
+                                textToDisplay: notifier.language.signInWithGoogleAccount!,
                                 textStyle: Theme.of(context).textTheme.subtitle2!,
                               ),
                               const Spacer(),
@@ -110,7 +110,7 @@ class _PageBottomState extends State<PageBottom> {
                                     ),
                                     const Spacer(),
                                     CustomTextWidget(
-                                      textToDisplay: 'Masuk dengan Apple Id',
+                                      textToDisplay: notifier.language.signInWithApple!,
                                       textStyle: Theme.of(context).textTheme.subtitle2!,
                                     ),
                                     const Spacer(),
@@ -168,7 +168,7 @@ class _PageBottomState extends State<PageBottom> {
                         ),
                         const Spacer(),
                         CustomTextWidget(
-                          textToDisplay: 'Gunakan alamat Email lainnya',
+                          textToDisplay: notifier.language.useAnotherEmailAddress!,
                           textStyle: Theme.of(context).textTheme.subtitle2!,
                         ),
                         const Spacer(),

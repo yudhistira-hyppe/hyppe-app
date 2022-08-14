@@ -33,6 +33,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/reportProfile.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stories/screen.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
@@ -1072,5 +1073,27 @@ class ShowBottomSheet {
             )
           ]);
         });
+  }
+
+  static onShowReportProfile(BuildContext _, {userID}) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: _,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          // height: height ?? SizeConfig.screenHeight! / 4,
+          decoration: BoxDecoration(
+            color: Theme.of(_).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: ReportProfile(userID: userID),
+        );
+      },
+    );
   }
 }
