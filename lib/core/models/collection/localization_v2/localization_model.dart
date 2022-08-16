@@ -491,6 +491,22 @@ class LocalizationModelV2 {
   String? useAnotherEmailAddress;
   String? welcomeToHyppe;
   String? signInToFindSomethingInterestingInTheHyppeApp;
+  String? your;
+  String? successfullySave;
+  String? deleteAccount;
+  String? whyAreYouLeavingHyppe;
+  String? wereSorryToSeeYouGo;
+  String? iHaveAnotherProfileAndIDontNeedThisOne;
+  String? iDontFindItUseful;
+  String? iDontKnowHowToEarnMoneyWithThisApp;
+  String? iHaveSafetyConcern;
+  String? iHavePrivacyConcern;
+  String? iCantFindPeopleToFollow;
+  String? iveSeenTooManyAds;
+  String? anotherReason;
+  String? tappingDeleteAccountWillDelete;
+  String? accountWillBeDeletedProccessAfter24Hours;
+  String? deletingYourAccountIsPermanent;
 
   LocalizationModelV2({
     this.login,
@@ -985,6 +1001,22 @@ class LocalizationModelV2 {
     this.useAnotherEmailAddress,
     this.welcomeToHyppe,
     this.signInToFindSomethingInterestingInTheHyppeApp,
+    this.your,
+    this.successfullySave,
+    this.deleteAccount,
+    this.whyAreYouLeavingHyppe,
+    this.wereSorryToSeeYouGo,
+    this.iHaveAnotherProfileAndIDontNeedThisOne,
+    this.iDontFindItUseful,
+    this.iDontKnowHowToEarnMoneyWithThisApp,
+    this.iHaveSafetyConcern,
+    this.iHavePrivacyConcern,
+    this.iCantFindPeopleToFollow,
+    this.iveSeenTooManyAds,
+    this.anotherReason,
+    this.tappingDeleteAccountWillDelete,
+    this.accountWillBeDeletedProccessAfter24Hours,
+    this.deletingYourAccountIsPermanent,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1481,5 +1513,33 @@ class LocalizationModelV2 {
     useAnotherEmailAddress = json['useAnotherEmailAddress'];
     welcomeToHyppe = json['welcomeToHyppe'];
     signInToFindSomethingInterestingInTheHyppeApp = json['signInToFindSomethingInterestingInTheHyppeApp'];
+    your = json['your'];
+    successfullySave = json['successfullySave'];
+    deleteAccount = json['deleteAccount'];
+    whyAreYouLeavingHyppe = json['whyAreYouLeavingHyppe'];
+    whyAreYouLeavingHyppe = json['whyAreYouLeavingHyppe'];
+    wereSorryToSeeYouGo = json['wereSorryToSeeYouGo'];
+    wereSorryToSeeYouGo = json['wereSorryToSeeYouGo'];
+    iHaveAnotherProfileAndIDontNeedThisOne = json['iHaveAnotherProfileAndIDontNeedThisOne'];
+    iHaveAnotherProfileAndIDontNeedThisOne = json['iHaveAnotherProfileAndIDontNeedThisOne'];
+    iDontFindItUseful = json['iDontFindItUseful'];
+    iDontFindItUseful = json['iDontFindItUseful'];
+    iDontKnowHowToEarnMoneyWithThisApp = json['iDontKnowHowToEarnMoneyWithThisApp'];
+    iDontKnowHowToEarnMoneyWithThisApp = json['iDontKnowHowToEarnMoneyWithThisApp'];
+    iHaveSafetyConcern = json['iHaveSafetyConcern'];
+    iHaveSafetyConcern = json['iHaveSafetyConcern'];
+    iHavePrivacyConcern = json['iHavePrivacyConcern'];
+    iHavePrivacyConcern = json['iHavePrivacyConcern'];
+    iCantFindPeopleToFollow = json['iCantFindPeopleToFollow'];
+    iCantFindPeopleToFollow = json['iCantFindPeopleToFollow'];
+    iveSeenTooManyAds = json['iveSeenTooManyAds'];
+    iveSeenTooManyAds = json['iveSeenTooManyAds'];
+    anotherReason = json['anotherReason'];
+    anotherReason = json['anotherReason'];
+    tappingDeleteAccountWillDelete = json['tappingDeleteAccountWillDelete'];
+    tappingDeleteAccountWillDelete = json['tappingDeleteAccountWillDelete'];
+    accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
+    accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
+    deletingYourAccountIsPermanent = json['deletingYourAccountIsPermanent'];
   }
 }

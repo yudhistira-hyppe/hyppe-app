@@ -28,6 +28,7 @@ class Env {
     UrlConstants.getSearchContentV3,
     UrlConstants.deletTagUser,
     UrlConstants.viewLike,
+    UrlConstants.deleteAccount,
   ];
 
   static final EnvData dev = EnvData(

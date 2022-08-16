@@ -45,7 +45,7 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _notifier.data != null ? PicDetailSlider(picData: _notifier.data) : PicDetailShimmer(),
+                      _notifier.data != null ? PicDetailSlider(picData: notifier.data) : PicDetailShimmer(),
                       PicDetailBottom(data: notifier.data),
                       _notifier.data != null && (_notifier.data?.allowComments ?? false)
                           ? Expanded(

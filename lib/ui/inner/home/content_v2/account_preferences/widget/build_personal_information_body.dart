@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/widget/text_input_account_preferences.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ class BuildPersonalInformationBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25.0),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16.0),
         child: Column(
           children: [
             Stack(
@@ -80,9 +82,7 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   labelText: "${notifier.language.country}*",
                   hintText: notifier.language.country,
                   readOnly: true,
-                  onTap: () => ShowGeneralDialog.userCompleteProfileLocationCountryDropDown(context,
-                      onSelected: (value) => notifier.locationCountryListSelected(value)
-                  ),
+                  onTap: () => ShowGeneralDialog.userCompleteProfileLocationCountryDropDown(context, onSelected: (value) => notifier.locationCountryListSelected(value)),
                 ),
               ],
             ),
@@ -103,10 +103,11 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   readOnly: true,
                   onTap: notifier.countryController.text.isEmpty
                       ? () => print("Please choose country first")
-                      : () => ShowGeneralDialog.userCompleteProfileLocationProvinceDropDown(context,
-                    country: notifier.countryController.text,
-                    onSelected: (value) => notifier.locationProvinceListSelected(value),
-                  ),
+                      : () => ShowGeneralDialog.userCompleteProfileLocationProvinceDropDown(
+                            context,
+                            country: notifier.countryController.text,
+                            onSelected: (value) => notifier.locationProvinceListSelected(value),
+                          ),
                 ),
               ],
             ),
@@ -127,13 +128,32 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   readOnly: true,
                   onTap: notifier.areaController.text.isEmpty
                       ? () => print("Please choose province first")
-                      : () => ShowGeneralDialog.userCompleteProfileLocationCityDropDown(context,
-                    province: notifier.areaController.text,
-                    onSelected: (value) => notifier.locationCityListSelected(value),
-                  ),
+                      : () => ShowGeneralDialog.userCompleteProfileLocationCityDropDown(
+                            context,
+                            province: notifier.areaController.text,
+                            onSelected: (value) => notifier.locationCityListSelected(value),
+                          ),
                 ),
               ],
             ),
+            eightPx,
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              minLeadingWidth: 10,
+              shape: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).iconTheme.color!, width: 0.2)),
+              onTap: () {
+                notifier.getListDeleteOption();
+                notifier.navigateToDeleteProfile();
+              },
+              leading: CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}delete.svg",
+              ),
+              title: CustomTextWidget(
+                textToDisplay: 'Delete Account',
+                textStyle: Theme.of(context).textTheme.bodyText1!,
+                textAlign: TextAlign.start,
+              ),
+            )
           ],
         ),
       ),

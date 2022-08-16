@@ -100,12 +100,7 @@ class VidDetailBottom extends StatelessWidget {
             SizedBox(
               width: SizeConfig.screenWidth,
               child: data != null
-                  ? CustomTextWidget(
-                      maxLines: 2,
-                      textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.bodyText2,
-                      textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                    )
+                  ? CustomTextWidget(maxLines: 2, textAlign: TextAlign.left, textStyle: Theme.of(context).textTheme.bodyText2, textToDisplay: "${data?.description}")
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,

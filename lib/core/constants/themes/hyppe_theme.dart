@@ -34,6 +34,7 @@ ThemeData hyppeLightTheme() {
     chipTheme: _lightChipThemeData,
     bottomSheetTheme: _lightBottomSheetThemeData,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    textSelectionHandleColor: kHyppePrimary,
   );
 }
 
@@ -172,8 +173,8 @@ const TabBarTheme _darkTabBarTheme = TabBarTheme(
   indicator: UnderlineTabIndicator(borderSide: BorderSide(color: kHyppeTextPrimary, width: 2.0)),
 );
 
-const TextSelectionThemeData _lightTextSelectionThemeData = TextSelectionThemeData(cursorColor: kHyppePrimary);
-const TextSelectionThemeData _darkTextSelectionThemeData = TextSelectionThemeData(cursorColor: kHyppePrimary);
+TextSelectionThemeData _lightTextSelectionThemeData = TextSelectionThemeData(cursorColor: kHyppePrimary, selectionHandleColor: kHyppePrimary, selectionColor: kHyppePrimary.withOpacity(0.5));
+TextSelectionThemeData _darkTextSelectionThemeData = TextSelectionThemeData(cursorColor: kHyppePrimary, selectionHandleColor: kHyppePrimary, selectionColor: kHyppePrimary.withOpacity(0.5));
 
 final SwitchThemeData _lightSwitchThemeData = SwitchThemeData(thumbColor: MaterialStateProperty.all<Color>(kHyppeLightInactive2));
 final SwitchThemeData _darkSwitchThemeData = SwitchThemeData(thumbColor: MaterialStateProperty.all<Color>(kHyppeTextPrimary));

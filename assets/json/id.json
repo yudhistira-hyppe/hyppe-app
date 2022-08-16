@@ -493,5 +493,21 @@
   "signInWithApple": "Masuk dengan Apple",
   "useAnotherEmailAddress": "Gunakan alamat Email lainnya",
   "welcomeToHyppe": "Selamat Datang di Hyppe",
-  "signInToFindSomethingInterestingInTheHyppeApp": "Masuk untuk menemukan sesuatu yang menarik di aplikasi Hyppe"
+  "signInToFindSomethingInterestingInTheHyppeApp": "Masuk untuk menemukan sesuatu yang menarik di aplikasi Hyppe",
+  "your": "Anda",
+  "successfullySave" : "berhasil disimpan",
+  "deleteAccount": "Hapus Akun",
+  "whyAreYouLeavingHyppe": "Mengapa kamu meninggalkan Hyppe?",
+  "wereSorryToSeeYouGo": "Kami sangat menyayangkan kamu pergi! Kami ingin mengetahui mengapa kamu ingin menghapus akunmu, sehingga kami dapat meningkatkan aplikasi dan mendukung komunitas kami.",
+  "iHaveAnotherProfileAndIDontNeedThisOne": " Saya mempunyai profil lain dan saya tidak membutuhkan yang ini",
+  "iDontFindItUseful": "Saya menemukan ini kurang berguna",
+  "iDontKnowHowToEarnMoneyWithThisApp":"Saya tidak mengerti cara menghasilkan uang dengan aplikasi ini",
+  "iHaveSafetyConcern":"Saya mempunyai masalah keamanan",
+  "iHavePrivacyConcern":"Saya mempunyai masalah privasi",
+  "iCantFindPeopleToFollow":"Saya tidak menemukan orang untuk diikuti",
+  "iveSeenTooManyAds":"Saya terlalu melihat banyak iklan",
+  "anotherReason":"Alasan lain",
+  "tappingDeleteAccountWillDelete":"Setelah mengklik “Hapus Akun” akun kamu ",
+  "accountWillBeDeletedProccessAfter24Hours":" akan terhapus secara permanen. Proses akan memakan waktu selama 24 jam. Aksi ini tidak dapat di batalkan",
+  "deletingYourAccountIsPermanent":"Menghapus akun Kamu bersifat permanen. Profil, pesan, teman, suka, dan kiriman Anda akan dihapus secara permanen."
 }

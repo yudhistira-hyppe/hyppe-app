@@ -426,4 +426,7 @@ class UrlConstants {
   static const String getSearchContentV3 = "$contentRouteV3/searchdata";
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";
+
+  //delete Account
+  static const String deleteAccount = "$userRoute/noneactive";
 }

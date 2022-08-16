@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -42,71 +43,73 @@ class ContentItem extends StatelessWidget {
 
               return true;
             },
-            child: GridView.builder(
-              itemCount: notifier.itemCount,
-              scrollDirection: Axis.vertical,
-              controller: notifier.scrollController,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.79,
-              ),
-              padding: const EdgeInsets.all(16.0),
-              itemBuilder: (context, index) {
-                if (notifier.diaryData == null) {
-                  return const CustomLoading();
-                } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                  return const CustomLoading();
-                }
+            child: notifier.itemCount == 0
+                ? const NoResultFound()
+                : GridView.builder(
+                    itemCount: notifier.itemCount,
+                    scrollDirection: Axis.vertical,
+                    controller: notifier.scrollController,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.79,
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    itemBuilder: (context, index) {
+                      if (notifier.diaryData == null) {
+                        return const CustomLoading();
+                      } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                        return const CustomLoading();
+                      }
 
-                final data = notifier.diaryData?[index];
-                return InkWell(
-                  onTap: () => notifier.navigateToShortVideoPlayer(context, index),
-                  child: CustomBaseCacheImage(
-                    imageUrl: "${data?.fullThumbPath}",
-                    imageBuilder: (context, imageProvider) => Container(
-                      alignment: Alignment.bottomLeft,
-                      child: CustomBalloonWidget(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              defaultColor: false,
-                              color: kHyppeLightButtonText,
-                              iconData: '${AssetPath.vectorPath}like.svg',
+                      final data = notifier.diaryData?[index];
+                      return InkWell(
+                        onTap: () => notifier.navigateToShortVideoPlayer(context, index),
+                        child: CustomBaseCacheImage(
+                          imageUrl: "${data?.fullThumbPath}",
+                          imageBuilder: (context, imageProvider) => Container(
+                            alignment: Alignment.bottomLeft,
+                            child: CustomBalloonWidget(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CustomIconWidget(
+                                    defaultColor: false,
+                                    color: kHyppeLightButtonText,
+                                    iconData: '${AssetPath.vectorPath}like.svg',
+                                  ),
+                                  fourPx,
+                                  CustomTextWidget(
+                                    textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
+                                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                                  )
+                                ],
+                              ),
                             ),
-                            fourPx,
-                            CustomTextWidget(
-                              textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-                            )
-                          ],
+                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
                         ),
-                      ),
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           );
   }
 }

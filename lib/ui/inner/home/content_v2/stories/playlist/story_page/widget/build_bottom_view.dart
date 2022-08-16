@@ -16,7 +16,7 @@ class BuildBottomView extends StatelessWidget {
   final AnimationController? animationController;
   final ContentData? data;
   final int? currentStory;
-  
+
   const BuildBottomView({
     Key? key,
     required this.storyController,
@@ -29,11 +29,12 @@ class BuildBottomView extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);
-    
+
     return notifier.isUserLoggedIn(data?.email)
         ? ViewerStoriesButton(
             data: data,
             currentStory: currentStory,
+            storyController: storyController,
           )
         : AnimatedPositioned(
             duration: const Duration(milliseconds: 300),

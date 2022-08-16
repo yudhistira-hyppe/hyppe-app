@@ -61,4 +61,8 @@ class Routes {
 //search
   static const String searcMore = '/search-more';
   static const String searcMoreComplete = '/search-more-complete';
+
+//delete account
+  static const String deleteAccount = '/delete-account';
+  static const String confirmDeleteAccount = '/confirm-delete-account';
 }

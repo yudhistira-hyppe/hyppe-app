@@ -793,6 +793,14 @@ class System {
     return text.length >= 8;
   }
 
+  bool atLeastThreeThreetyCharacter(String text) {
+    return text.length >= 3 && text.length <= 30;
+  }
+
+  bool canOnlyContainLettersNumbersPeriodsAndUnderscores(String text) {
+    return text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
+  }
+
   bool atLeastContainOneCharacterAndOneNumber({required String text}) {
     return text.length > 1 && text.contains(RegExp(r'[0-9]'));
   }

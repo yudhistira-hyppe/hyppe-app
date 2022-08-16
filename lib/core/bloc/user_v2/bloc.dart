@@ -636,4 +636,36 @@ class UserBloc {
       },
     );
   }
+
+  Future deleteAccountBlocV2(BuildContext context) async {
+    setUserFetch(UserFetch(UserState.loading));
+    String? email = SharedPreference().readStorage(SpKeys.email);
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUserFetch(UserFetch(UserState.deleteAccountError, data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setUserFetch(UserFetch(UserState.deleteAccountSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
+        setUserFetch(UserFetch(UserState.deleteAccountError));
+        Dio().close(force: true);
+      },
+      data: {
+        "email": email,
+      },
+      headers: {"x-auth-user": email, "x-auth-token": token},
+      host: UrlConstants.deleteAccount,
+      methodType: MethodType.post,
+      withAlertMessage: true,
+      withCheckConnection: false,
+    );
+  }
 }

@@ -486,9 +486,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       updateContent = false;
       Routing().moveBack();
+
+      var isoCode = SharedPreference().readStorage(SpKeys.isoCode);
       showSnackBar(
         color: kHyppeTextSuccess,
-        message: "${language.update} $content ${language.successfully}",
+        message: isoCode == 'id' ? "$content ${language.your} ${language.successfullySave}" : "${language.your} $content ${language.successfullySave}",
       );
       _onExit();
     }

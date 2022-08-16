@@ -42,6 +42,8 @@ enum UserState {
   getUserProfilesError,
   logoutSuccess,
   logoutError,
+  deleteAccountError,
+  deleteAccountSuccess,
 }
 
 class UserFetch {
