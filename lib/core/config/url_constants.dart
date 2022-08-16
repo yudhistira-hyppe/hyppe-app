@@ -15,8 +15,8 @@ class UrlConstants {
   static const String apiV3 = 'v3';
 
   /// Production Base url
-  // static const String productionBaseApi = "https://prod.hyppe.app";
-  static const String productionBaseApi = "https://staging.hyppe.app";
+  static const String productionBaseApi = "https://prod.hyppe.app";
+  // static const String productionBaseApi = "https://staging.hyppe.app";
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
@@ -76,8 +76,7 @@ class UrlConstants {
 
   /* APIs In App Notification */
   /// get => Get Users notification.
-  static const String getUsersNotification =
-      "$notificationRoute/getAllUsersnotification";
+  static const String getUsersNotification = "$notificationRoute/getAllUsersnotification";
 
   /// post => Read notification.
   static const String readNotification = "$notificationRoute/readNotification";
@@ -107,8 +106,7 @@ class UrlConstants {
   static const String addPostComment = "$postRoute/comments/commentOnPost";
 
   /// post => Add Post Comment On Comment.
-  static const String addPostCommentOnComment =
-      "$postRoute/comments/commentOnComment";
+  static const String addPostCommentOnComment = "$postRoute/comments/commentOnComment";
 
   /// get => Get More Comments.
   static const String getMoreComments = "$postRoute/comments/viewMoreComments";
@@ -252,15 +250,13 @@ class UrlConstants {
   static const String addPostReaction = "$postRoute/reactions/reactOnPost";
 
   /// get => Get Post Reactions Count.
-  static const String getPostReactionsCount =
-      "$postRoute/reactions/getPostReactionsCounts";
+  static const String getPostReactionsCount = "$postRoute/reactions/getPostReactionsCounts";
 
   /// post Add Reaction to comment.
   static const String addReactOnComment = "$postRoute/reactions/reactOnComment";
 
   /// post get Comment from Post.
-  static const String getCommentReactions =
-      "$postRoute/reactions/getCommentReactions";
+  static const String getCommentReactions = "$postRoute/reactions/getCommentReactions";
 
   ///---------------------------------------------------------------------------------------------------------///
 
@@ -411,8 +407,7 @@ class UrlConstants {
   static const String getAdsRoster = "$bizRoute/adsroster";
 
   //apis goole plcae
-  static const String getGoogleMapApis =
-      "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+  static const String getGoogleMapApis = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
   //get search people
   static const String getSearchPeople = "$profileRoute/search";

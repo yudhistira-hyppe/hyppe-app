@@ -56,17 +56,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
-    print('_routeArgument');
-    print(_routeArgument);
-    print(_routeArgument?.postID);
-
     if (_routeArgument?.postID != null) {
-      print('dari dynamic link');
       await _initialPic(context);
     } else {
       _data = _routeArgument?.picData;
-      'hahahahaha'.logger();
-      print(data?.isLiked);
       data?.isLiked.logger();
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: false);
@@ -79,17 +72,12 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ) async {
     Future<List<ContentData>> _resFuture;
 
-    print('initial PIC');
-
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
       _resFuture = contentsQuery.reload(context);
 
       final res = await _resFuture;
-      print('ini res');
-      print(res);
-      print(res.firstOrNull);
       _data = res.firstOrNull;
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: true);

@@ -487,5 +487,11 @@
   "noResultsFoundTryAnother": "No results found, try another",
   "afterthatThisTagWillBePermanentlyRemoved" : "After that, this tag will be permanently removed",
   "caption" : "Caption",
-  "contentUploaded": "Content uploaded"
+  "contentUploaded": "Content uploaded",
+  "reportThisAccount": "Report this account",
+  "signInWithGoogleAccount": "Sign in with Google account",
+  "signInWithApple": "Sign in with Apple",
+  "useAnotherEmailAddress": "Use another Email address",
+  "welcomeToHyppe": "Welcome to Hyppe",
+  "signInToFindSomethingInterestingInTheHyppeApp": "Sign in to find something interesting in the Hyppe app"
 }

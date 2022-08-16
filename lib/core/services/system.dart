@@ -889,18 +889,23 @@ class System {
       if (check) {
         return true;
       } else {
-        await ShowBottomSheet().onShowColouredSheet(
-          context,
-          'Please Allow Permission for Location',
-          maxLines: 2,
-          enableDrag: false,
-          dismissible: false,
-          color: Theme.of(context).colorScheme.error,
-          iconSvg: "${AssetPath.vectorPath}close.svg",
-        );
-        openAppSettings();
-
-        return false;
+        if (Platform.isIOS) {
+          notifier.latitude = 0.0;
+          notifier.longitude = 0.0;
+          return true;
+        } else {
+          await ShowBottomSheet().onShowColouredSheet(
+            context,
+            'Please Allow Permission for Location',
+            maxLines: 2,
+            enableDrag: false,
+            dismissible: false,
+            color: Theme.of(context).colorScheme.error,
+            iconSvg: "${AssetPath.vectorPath}close.svg",
+          );
+          openAppSettings();
+          return false;
+        }
       }
     } on TimeoutException catch (e) {
       notifier.latitude = 0.0;

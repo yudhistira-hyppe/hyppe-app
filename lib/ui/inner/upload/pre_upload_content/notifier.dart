@@ -368,14 +368,14 @@ class PreUploadContentNotifier with ChangeNotifier {
       hastagCaption.add(z.group(0)!.substring(1));
     }).toList();
 
-    if (featureType == FeatureType.vid && progressCompress != 100) {
-      showSnackBar(
-        icon: "info-icon.svg",
-        color: kHyppeDanger,
-        message: "Compressing Video",
-      );
-      return;
-    }
+    // if (featureType == FeatureType.vid && progressCompress != 100) {
+    //   showSnackBar(
+    //     icon: "info-icon.svg",
+    //     color: kHyppeDanger,
+    //     message: "Compressing Video",
+    //   );
+    //   return;
+    // }
 
     try {
       _connectAndListenToSocket(context);
@@ -696,7 +696,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         final dynamic response = await _lightCompressor.compressVideo(
           path: File(fileContent![0]!).path,
           destinationPath: _desFile!,
-          videoQuality: VideoQuality.high,
+          videoQuality: VideoQuality.medium,
           isMinBitrateCheckEnabled: false,
           // frameRate: 24, /* or ignore it */
         );

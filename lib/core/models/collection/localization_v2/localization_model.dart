@@ -485,6 +485,12 @@ class LocalizationModelV2 {
   String? afterthatThisTagWillBePermanentlyRemoved;
   String? caption;
   String? contentUploaded;
+  String? reportThisAccount;
+  String? signInWithGoogleAccount;
+  String? signInWithApple;
+  String? useAnotherEmailAddress;
+  String? welcomeToHyppe;
+  String? signInToFindSomethingInterestingInTheHyppeApp;
 
   LocalizationModelV2({
     this.login,
@@ -973,6 +979,12 @@ class LocalizationModelV2 {
     this.afterthatThisTagWillBePermanentlyRemoved,
     this.caption,
     this.contentUploaded,
+    this.reportThisAccount,
+    this.signInWithGoogleAccount,
+    this.signInWithApple,
+    this.useAnotherEmailAddress,
+    this.welcomeToHyppe,
+    this.signInToFindSomethingInterestingInTheHyppeApp,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1463,5 +1475,11 @@ class LocalizationModelV2 {
     afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
     caption = json['caption'];
     contentUploaded = json['contentUploaded'];
+    reportThisAccount = json['reportThisAccount'];
+    signInWithGoogleAccount = json['signInWithGoogleAccount'];
+    signInWithApple = json['signInWithApple'];
+    useAnotherEmailAddress = json['useAnotherEmailAddress'];
+    welcomeToHyppe = json['welcomeToHyppe'];
+    signInToFindSomethingInterestingInTheHyppeApp = json['signInToFindSomethingInterestingInTheHyppeApp'];
   }
 }

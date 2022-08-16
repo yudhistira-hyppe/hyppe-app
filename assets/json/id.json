@@ -487,5 +487,11 @@
   "noResultsFoundTryAnother": "Hasil tidak ditemukan, coba lainnya",
   "afterthatThisTagWillBePermanentlyRemoved" : "Setelah itu, tag ini akan dihapus secara permanen",
   "caption" : "Keterangan",
-  "contentUploaded": "Kontent berhasil diupload"
+  "contentUploaded": "Kontent berhasil diupload",
+  "reportThisAccount" : "Laporkan akun ini",
+  "signInWithGoogleAccount": "Masuk dengan akun Google",
+  "signInWithApple": "Masuk dengan Apple",
+  "useAnotherEmailAddress": "Gunakan alamat Email lainnya",
+  "welcomeToHyppe": "Selamat Datang di Hyppe",
+  "signInToFindSomethingInterestingInTheHyppeApp": "Masuk untuk menemukan sesuatu yang menarik di aplikasi Hyppe"
 }

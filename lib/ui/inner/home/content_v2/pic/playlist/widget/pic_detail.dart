@@ -224,14 +224,16 @@ class _PicDetailState extends State<PicDetail> {
                                         function: () {
                                           context.read<PicDetailNotifier>().showUserTag(context, widget.arguments!.tagPeople, widget.arguments?.postID);
                                         },
+                                        width: 18,
                                       )
                                     : const SizedBox(),
                                 widget.arguments?.location == '' || widget.arguments?.location == null
                                     ? const SizedBox()
                                     : PicTagLabel(
-                                        icon: 'maptag',
+                                        icon: 'maptag-white',
                                         label: "${widget.arguments?.location}",
                                         function: () {},
+                                        width: 13,
                                       ),
                               ],
                             ),
@@ -241,7 +243,7 @@ class _PicDetailState extends State<PicDetail> {
                       child: Container(
                         padding: const EdgeInsets.all(2),
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
-                        color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+                        // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
                         child: SingleChildScrollView(
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

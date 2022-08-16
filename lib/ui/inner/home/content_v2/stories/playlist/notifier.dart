@@ -244,6 +244,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     Future<List<ContentData>> _resFuture;
 
     myContentsQuery.postID = _routeArgument?.postID;
+    myContentsQuery.onlyMyData = false;
 
     try {
       _resFuture = myContentsQuery.reload(context);
@@ -464,23 +465,25 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool isUserLoggedIn(String? email) => _sharedPrefs.readStorage(SpKeys.email) == email;
 
   Future _followUser(BuildContext context) async {
-    try {
-      final notifier = FollowBloc();
-      await notifier.followUserBlocV2(
-        context,
-        data: FollowUserArgument(
-          eventType: InteractiveEventType.following,
-          receiverParty: _dataUserStories.single.email ?? '',
-        ),
-      );
-      final fetch = notifier.followFetch;
-      if (fetch.followState == FollowState.followUserSuccess) {
-        'follow user success'.logger();
-      } else {
-        'follow user failed'.logger();
+    if (_sharedPrefs.readStorage(SpKeys.email) != _dataUserStories.single.email) {
+      try {
+        final notifier = FollowBloc();
+        await notifier.followUserBlocV2(
+          context,
+          data: FollowUserArgument(
+            eventType: InteractiveEventType.following,
+            receiverParty: _dataUserStories.single.email ?? '',
+          ),
+        );
+        final fetch = notifier.followFetch;
+        if (fetch.followState == FollowState.followUserSuccess) {
+          'follow user success'.logger();
+        } else {
+          'follow user failed'.logger();
+        }
+      } catch (e) {
+        'follow user: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'follow user: ERROR: $e'.logger();
     }
   }
 

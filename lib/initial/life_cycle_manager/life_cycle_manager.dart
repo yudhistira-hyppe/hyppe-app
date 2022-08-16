@@ -32,7 +32,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   @override
   void initState() {
     WidgetsBinding.instance!.addObserver(this);
-    _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
+    _timerLink = Timer(const Duration(seconds: 2), () => DynamicLinkService.handleDynamicLinks());
     _isolateService.turnOnWorkers();
     super.initState();
   }

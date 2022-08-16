@@ -2,6 +2,7 @@ import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +69,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                       ),
                     ],
                   ),
-                  // IconButton(
-                  //   icon: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
-                  //   onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
-                  // ),
+                  IconButton(
+                    icon: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
+                    onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
+                  ),
                 ],
               ),
             ),
