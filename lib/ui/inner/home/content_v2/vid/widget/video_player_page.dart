@@ -135,31 +135,31 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     try {
       if (_clipsData == null) {
-        // / Dummy Data
-        final _dummyAds = {
-          "postID": "cb888306-2827-47b2-90fa-5930e4a9a9b9",
-          "preRoll": [
-            {
-              "preRollDuration": 9,
-              "preRollUri": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
-            }
-          ],
-          "midRoll": [
-            {
-              "midRollDuration": 9,
-              "midRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
-            }
-          ],
-          "postRoll": [
-            {
-              "postRollDuration": 9,
-              "postRollUri": "https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8",
-            }
-          ]
-        };
+        /// Dummy Data
+        // final _dummyAds = {
+        //   "postID": "cb888306-2827-47b2-90fa-5930e4a9a9b9",
+        //   "preRoll": [
+        //     {
+        //       "preRollDuration": 9,
+        //       "preRollUri": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
+        //     }
+        //   ],
+        //   "midRoll": [
+        //     {
+        //       "midRollDuration": 9,
+        //       "midRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
+        //     }
+        //   ],
+        //   "postRoll": [
+        //     {
+        //       "postRollDuration": 9,
+        //       "postRollUri":
+        //           "https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8",
+        //     }
+        //   ]
+        // };
 
-        _clipsData = AdvertisingData.fromJson(_dummyAds, widget.videoData?.metadata);
-
+        // _clipsData = AdvertisingData.fromJson(_dummyAds, widget.videoData?.metadata);
         /// End Dummy Data
 
         final param = AdvertisingArgument(
