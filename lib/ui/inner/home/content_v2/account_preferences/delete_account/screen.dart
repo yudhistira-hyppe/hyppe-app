@@ -99,7 +99,7 @@ class HyppeDeleteAccoount extends StatelessWidget {
                     function: () => notifier.navigateToConfirmDeleteProfile(),
                     buttonStyle: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.primaryVariant,
                       ),
                       overlayColor: MaterialStateProperty.all(Colors.transparent),
                     ),
