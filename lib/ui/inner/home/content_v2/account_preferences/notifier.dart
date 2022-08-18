@@ -713,10 +713,10 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   void navigateToConfirmDeleteProfile() => Routing().move(Routes.confirmDeleteAccount).whenComplete(() => notifyListeners());
 
   getListDeleteOption() {
-    _optionDelete ??= [
+    _optionDelete = [
       {'code': 1, 'title': language.iHaveAnotherProfileAndIDontNeedThisOne},
       {'code': 2, 'title': language.iDontFindItUseful},
-      {'code': 3, 'title': language.iDontKnowHowToEarnMoneyWithThisApp},
+      // {'code': 3, 'title': language.iDontKnowHowToEarnMoneyWithThisApp},
       {'code': 4, 'title': language.iHaveSafetyConcern},
       {'code': 5, 'title': language.iHavePrivacyConcern},
       {'code': 6, 'title': language.iCantFindPeopleToFollow},

@@ -32,67 +32,77 @@ class HyppeDeleteAccoount extends StatelessWidget {
             },
           ),
         ),
-        body: Container(
+        body: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay: notifier.language.whyAreYouLeavingHyppe!,
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.whyAreYouLeavingHyppe!,
+                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        eightPx,
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.wereSorryToSeeYouGo!,
+                          textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(),
+                          maxLines: 100,
+                          textAlign: TextAlign.start,
+                        ),
+                      ],
                     ),
-                    eightPx,
-                    CustomTextWidget(
-                      textToDisplay: notifier.language.wereSorryToSeeYouGo!,
-                      textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(),
-                      maxLines: 100,
-                      textAlign: TextAlign.start,
-                    ),
-                  ],
-                ),
-              ),
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: notifier.optionDelete!.length,
-                itemBuilder: (context, index) {
-                  return RadioListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                    groupValue: notifier.optionDelete![index]['code'],
-                    value: notifier.currentOptionDelete,
-                    onChanged: (_) {
-                      notifier.currentOptionDelete = notifier.optionDelete![index]['code'];
-                    },
-                    toggleable: true,
-                    title: CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: notifier.optionDelete![index]['title'],
-                      textStyle: Theme.of(context).primaryTextTheme.titleSmall,
-                      maxLines: 3,
-                    ),
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    activeColor: Theme.of(context).colorScheme.primaryVariant,
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: CustomElevatedButton(
-                  width: SizeConfig.screenWidth,
-                  height: 49 * SizeConfig.scaleDiagonal,
-                  child: CustomTextWidget(
-                    textToDisplay: notifier.language.next!,
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
                   ),
-                  function: () => notifier.navigateToConfirmDeleteProfile(),
-                  buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                      notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary,
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: notifier.optionDelete!.length,
+                    itemBuilder: (context, index) {
+                      return RadioListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                        groupValue: notifier.optionDelete![index]['code'],
+                        value: notifier.currentOptionDelete,
+                        onChanged: (_) {
+                          notifier.currentOptionDelete = notifier.optionDelete![index]['code'];
+                        },
+                        toggleable: true,
+                        title: CustomTextWidget(
+                          textAlign: TextAlign.left,
+                          textToDisplay: notifier.optionDelete![index]['title'],
+                          textStyle: Theme.of(context).primaryTextTheme.titleSmall,
+                          maxLines: 3,
+                        ),
+                        controlAffinity: ListTileControlAffinity.trailing,
+                        activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: CustomElevatedButton(
+                    width: SizeConfig.screenWidth,
+                    height: 49 * SizeConfig.scaleDiagonal,
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.language.next!,
+                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
                     ),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    function: () => notifier.navigateToConfirmDeleteProfile(),
+                    buttonStyle: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary,
+                      ),
+                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                    ),
                   ),
                 ),
               ),
