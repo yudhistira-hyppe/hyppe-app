@@ -59,6 +59,10 @@ class AdvertisingData {
     // Add ads from preroll
     if (preRoll != null) {
       for (var i = 0; i < (preRoll?.length ?? 0); i++) {
+        print(preRoll?[i].preRollUri);
+        print(preRoll?[i].preRollDuration);
+        print(metadata?.preRoll);
+        print('detik');
         ads.add(Roll(
           playingAt: metadata?.preRoll,
           rollUri: preRoll?[i].preRollUri,

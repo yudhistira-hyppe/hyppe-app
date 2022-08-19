@@ -135,31 +135,32 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     try {
       if (_clipsData == null) {
-        /// Dummy Data
+        // / Dummy Data
         // final _dummyAds = {
-        //   "postID": "cb888306-2827-47b2-90fa-5930e4a9a9b9",
+        //   "postID": "8c010081-910b-4d5f-a5a6-43fab040a1ce",
         //   "preRoll": [
-        //     {
-        //       "preRollDuration": 9,
-        //       "preRollUri": "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8",
-        //     }
+        //     // {
+        //     //   "preRollDuration": 15,
+        //     //   "preRollUri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        //     //   // "preRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
+        //     // }
         //   ],
         //   "midRoll": [
         //     {
-        //       "midRollDuration": 9,
+        //       "midRollDuration": 5,
         //       "midRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
         //     }
         //   ],
         //   "postRoll": [
         //     {
         //       "postRollDuration": 9,
-        //       "postRollUri":
-        //           "https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8",
+        //       "postRollUri": "https://staging.hyppe.app/stream/67bebeb5-fc7b-4d65-8206-62d48dbad2a0.m3u8",
         //     }
         //   ]
         // };
 
         // _clipsData = AdvertisingData.fromJson(_dummyAds, widget.videoData?.metadata);
+
         /// End Dummy Data
 
         final param = AdvertisingArgument(
@@ -222,6 +223,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
         'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
+
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
         maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
@@ -242,7 +244,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     _betterPlayerController?.addEventsListener(
       (event) {
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
-          _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
+          // var param = {'rollUri': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 'rollDuration': 5};
+          // _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(param));
+          _initializeAdsBetterPlayerControllerMap(
+            BetterPlayerRoll.fromJson(event.parameters ?? {}),
+          );
         } else if (event.betterPlayerEventType == BetterPlayerEventType.openFullscreen) {
           _handleOpenFullScreenEvent();
         } else if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
@@ -263,7 +269,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         return;
       }
       BetterPlayerConfiguration betterPlayerConfigurationAds = const BetterPlayerConfiguration(
-        autoPlay: false,
+        autoPlay: true,
         autoDispose: false,
         fit: BoxFit.contain,
         deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
@@ -282,17 +288,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         BetterPlayerDataSourceType.network,
         roll.rollUri ?? '',
         headers: {
-          'post-id': widget.videoData?.postID ?? '',
+          'post-id': _clipsData!.postID!, //. widget.videoData?.postID ?? '',
           'x-auth-user': SharedPreference().readStorage(SpKeys.email),
           'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
         },
       );
 
       _betterPlayerRollUri = roll.rollUri;
-
       _betterPlayerControllerMap[_betterPlayerRollUri] = BetterPlayerController(betterPlayerConfigurationAds);
-
-      setState(() {
+      setStateIfMounted(() {
         _eventType = BetterPlayerEventType.showingAds;
         // pause user video
         _betterPlayerController?.pause();
@@ -301,7 +305,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       try {
         await _betterPlayerControllerMap[_betterPlayerRollUri]?.setupDataSource(dataSource);
 
-        setState(() {
+        setStateIfMounted(() {
           _betterPlayerControllerMap[_betterPlayerRollUri]?.setOverriddenAspectRatio(_betterPlayerControllerMap[_betterPlayerRollUri]!.videoPlayerController!.value.aspectRatio);
           _betterPlayerControllerMap[_betterPlayerRollUri]?.play();
         });
@@ -331,7 +335,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void _handleClosingAdsEvent(BetterPlayerRoll? roll) async {
     _removeAdsBetterPlayerControllerMap();
     // resume user video
-    setState(() {
+    setStateIfMounted(() {
       _eventType = null;
       _betterPlayerController?.play();
     });
@@ -397,6 +401,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     super.didPopNext();
   }
 
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -417,6 +425,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                   valueListenable: _awaitInitial,
                   builder: (context, value, child) {
                     if (!value) {
+                      print('keisniniiinini');
+                      print(_betterPlayerControllerMap[_betterPlayerRollUri]);
+                      print(_betterPlayerControllerMap[_betterPlayerRollUri]?.isVideoInitialized());
                       return const CircularProgressIndicator();
                     } else {
                       if (_eventType == BetterPlayerEventType.showingAds) {
