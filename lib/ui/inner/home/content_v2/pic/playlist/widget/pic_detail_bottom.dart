@@ -146,38 +146,12 @@ class PicDetailBottom extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            // Consumer<PicDetailNotifier>(builder: (context, pic, _) => Text("${pic.data?.isLiked}")),
-            // Consumer<PicDetailNotifier>(
-            //   builder: (context, pica, _) => InkWell(
-            //     onTap: () {
-            //       var userStore = Provider.of<PicDetailNotifier>(context, listen: false);
-
-            //       print(userStore.data?.isLiked);
-            //       if (userStore.data?.isLiked == true) {
-            //         userStore.data?.isLiked = false;
-            //       } else {
-            //         userStore.data?.isLiked = true;
-            //       }
-            //       print(userStore.data?.isLiked);
-            //     },
-            //     child: Container(
-            //       child: Text('asdasd'),
-            //     ),
-            //   ),
-            // ),
             Consumer<LikeNotifier>(
                 builder: (context, notifier, child) =>
                     // data != null ?
                     _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
-                      // if (value.data?.isLiked == true) {
-                      //   value.data?.isLiked = false;
-                      // } else {
-                      //   value.data?.isLiked = true;
-                      // }
                       notifier.likePost(context, data!);
-                    }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
-                // : _buildButton(context, '${AssetPath.vectorPath} none-like.svg', "0", () {}),
-                ),
+                    }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)),
 
             data != null
                 ? (data?.allowComments ?? false)

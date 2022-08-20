@@ -48,7 +48,6 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentData? get data => _data;
   set data(ContentData? value) {
     _data = value;
-    print(value);
     notifyListeners();
   }
 

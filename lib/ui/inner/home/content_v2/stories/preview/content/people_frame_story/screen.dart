@@ -39,7 +39,7 @@ class PeopleFrameStory extends StatelessWidget {
           margin: const EdgeInsets.symmetric(horizontal: 4.5),
           child: StoryColorValidator(
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
-            haveStory:index.isEven,
+            haveStory: index.isEven,
             contentData: data,
             child: CustomProfileImage(
               following: true,

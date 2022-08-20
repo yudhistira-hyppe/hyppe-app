@@ -18,8 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
+import 'package:story_view/controller/story_controller.dart';
 
 class LikeNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -90,10 +92,10 @@ class LikeNotifier with ChangeNotifier {
       //   uploadContentAction: false,
       //   action: () async {
 
-      if (postData.email == SharedPreference().readStorage(SpKeys.email)) {
-        // Prevent user from liking his own post
-        return;
-      }
+      // if (postData.email == SharedPreference().readStorage(SpKeys.email)) {
+      //   // Prevent user from liking his own post
+      //   return;
+      // }
       print('rijal ${postData.isLiked}');
 
       // if (!(postData.insight?.isPostLiked ?? false)) {
@@ -111,6 +113,7 @@ class LikeNotifier with ChangeNotifier {
         postData.isLiked = false;
         postData.insight?.isPostLiked = false;
         postData.insight?.likes = postData.insight!.likes! - 1;
+
         notifyListeners();
 
         await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
@@ -130,6 +133,7 @@ class LikeNotifier with ChangeNotifier {
         postData.isLiked = true;
         postData.insight?.isPostLiked = true;
         postData.insight?.likes = postData.insight!.likes! + 1;
+
         notifyListeners();
 
         // print('ini false ${postData.isLiked}');
@@ -213,9 +217,9 @@ class LikeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void viewLikeContent(BuildContext context, postId, eventType, title, emailData) {
+  void viewLikeContent(BuildContext context, postId, eventType, title, emailData, {StoryController? storyController}) {
     final email = SharedPreference().readStorage(SpKeys.email);
-    if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title);
+    if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title, storyController: storyController);
   }
 
   Future getLikeView(BuildContext context, postId, eventType, limit) async {

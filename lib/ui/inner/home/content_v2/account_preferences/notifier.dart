@@ -10,6 +10,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/constant/widget/show_overlay_loading.dart';
 import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_complete_profile.dart';
@@ -20,6 +21,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -58,6 +60,14 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   String get progress => _progress;
   bool get hold => _hold;
   int get initialIndex => _initialIndex;
+  List<dynamic>? _optionDelete;
+  List<dynamic>? get optionDelete => _optionDelete;
+  int _currentOptionDelete = 1;
+  int get currentOptionDelete => _currentOptionDelete;
+  bool _confirmDeleteAccount = false;
+  bool get confirmDeleteAccount => _confirmDeleteAccount;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   set initialIndex(int val) {
     _initialIndex = val;
@@ -71,6 +81,26 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
   set progress(String val) {
     _progress = val;
+    notifyListeners();
+  }
+
+  set optionDelete(List<dynamic>? val) {
+    _optionDelete = val;
+    notifyListeners();
+  }
+
+  set currentOptionDelete(int val) {
+    _currentOptionDelete = val;
+    notifyListeners();
+  }
+
+  set confirmDeleteAccount(bool val) {
+    _confirmDeleteAccount = val;
+    notifyListeners();
+  }
+
+  set isLoading(bool val) {
+    _isLoading = val;
     notifyListeners();
   }
 
@@ -282,6 +312,17 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     if (connect) {
       if (somethingChanged(context)) {
         try {
+          if (!System().canOnlyContainLettersNumbersPeriodsAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
+            await ShowBottomSheet().onShowColouredSheet(
+                context,
+                // language.successUploadId!,
+                'Username only contain letters, numbers, periods, and underscore',
+                color: Colors.red,
+                iconSvg: "${AssetPath.vectorPath}remove.svg",
+                maxLines: 2);
+            return;
+          }
+
           progress = "0%";
           FocusScopeNode currentFocus = FocusScope.of(context);
 
@@ -666,5 +707,38 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   void _determineIdProofStatusUser(BuildContext context) {
     final _selfNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
     _selfNotifier.setIdProofStatusUser(_selfNotifier.user.profile?.idProofStatus);
+  }
+
+  void navigateToDeleteProfile() => Routing().move(Routes.deleteAccount).whenComplete(() => notifyListeners());
+  void navigateToConfirmDeleteProfile() => Routing().move(Routes.confirmDeleteAccount).whenComplete(() => notifyListeners());
+
+  getListDeleteOption() {
+    _optionDelete = [
+      {'code': 1, 'title': language.iHaveAnotherProfileAndIDontNeedThisOne},
+      {'code': 2, 'title': language.iDontFindItUseful},
+      // {'code': 3, 'title': language.iDontKnowHowToEarnMoneyWithThisApp},
+      {'code': 4, 'title': language.iHaveSafetyConcern},
+      {'code': 5, 'title': language.iHavePrivacyConcern},
+      {'code': 6, 'title': language.iCantFindPeopleToFollow},
+      {'code': 7, 'title': language.iveSeenTooManyAds},
+      {'code': 8, 'title': language.anotherReason},
+    ];
+  }
+
+  Future onClickDeleteAccount(BuildContext context) async {
+    isLoading = true;
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        final notifier = UserBloc();
+        await notifier.deleteAccountBlocV2(context);
+        final fetch = notifier.userFetch;
+        if (fetch.userState == UserState.deleteAccountSuccess) {
+          context.read<SettingNotifier>().logOut(context);
+        }
+      } catch (e) {}
+    }
+    isLoading = false;
+    notifyListeners();
   }
 }

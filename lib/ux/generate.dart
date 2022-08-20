@@ -17,6 +17,8 @@ import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
@@ -223,7 +225,6 @@ class Generate {
       case Routes.searcMoreComplete:
         return MaterialPageRoute(
             builder: (_) => const SearchMoreCompleteScreen());
-
       case Routes.verificationIDStep1:
         return MaterialPageRoute(builder: (_) => const VerificationIDStep1());
       case Routes.verificationIDStep2:
@@ -242,6 +243,11 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
       case Routes.verificationIDLoading:
         return MaterialPageRoute(builder: (_) => const VerificationIDLoading());
+      case Routes.deleteAccount:
+        return MaterialPageRoute(builder: (_) => const HyppeDeleteAccoount());
+      case Routes.confirmDeleteAccount:
+        return MaterialPageRoute(
+            builder: (_) => const HyppeConfirmDeleteAccount());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

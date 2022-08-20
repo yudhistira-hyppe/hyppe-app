@@ -96,7 +96,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         ),
                         eightPx,
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             // Selector<SelfProfileNotifier, UserProfileModel?>(

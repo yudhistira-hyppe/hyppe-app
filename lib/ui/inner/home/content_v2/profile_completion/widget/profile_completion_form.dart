@@ -18,27 +18,22 @@ class ProfileCompletionForm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Please input the data correctly",
-                style: Theme.of(context).textTheme.titleMedium),
-            Text(
-                "you will be returned to post setting page after this process is done"),
+            Text("Please input the data correctly", style: Theme.of(context).textTheme.titleMedium),
+            Text("you will be returned to post setting page after this process is done"),
             fortyPx,
             Stack(
               children: [
                 const Align(
                   alignment: Alignment(0.975, 1),
                   heightFactor: 2.25,
-                  child: CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}calendar.svg"),
+                  child: CustomIconWidget(iconData: "${AssetPath.vectorPath}calendar.svg"),
                 ),
                 TextInputAccountPreferences(
                   controller: notifier.dobController,
                   labelText: notifier.language.dateOfBirth,
                   hintText: notifier.language.dateOfBirth,
                   readOnly: true,
-                  onTap: () =>
-                      ShowGeneralDialog.accountPreferencesBirthDropDown(
-                          context),
+                  onTap: () => ShowGeneralDialog.accountPreferencesBirthDropDown(context),
                 ),
               ],
             ),
@@ -54,8 +49,7 @@ class ProfileCompletionForm extends StatelessWidget {
                   heightFactor: 2.25,
                   child: RotatedBox(
                     quarterTurns: -45,
-                    child: CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                    child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                   ),
                 ),
                 TextInputAccountPreferences(

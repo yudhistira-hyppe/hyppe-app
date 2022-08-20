@@ -29,6 +29,7 @@ class Env {
     UrlConstants.deletTagUser,
     UrlConstants.viewLike,
     UrlConstants.verificationID,
+    UrlConstants.deleteAccount,
   ];
 
   static final EnvData dev = EnvData(
