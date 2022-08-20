@@ -59,13 +59,9 @@ class AdvertisingData {
     // Add ads from preroll
     if (preRoll != null) {
       for (var i = 0; i < (preRoll?.length ?? 0); i++) {
-        print(preRoll?[i].preRollUri);
-        print(preRoll?[i].preRollDuration);
-        print(metadata?.preRoll);
-        print('detik');
         ads.add(Roll(
-          playingAt: metadata?.preRoll,
           rollUri: preRoll?[i].preRollUri,
+          playingAt: metadata!.preRoll,
           rollDuration: preRoll?[i].preRollDuration,
         ));
       }
@@ -75,8 +71,8 @@ class AdvertisingData {
     if (midRoll != null) {
       for (var i = 0; i < (midRoll?.length ?? 0); i++) {
         ads.add(Roll(
-          playingAt: metadata?.midRoll,
           rollUri: midRoll?[i].midRollUri,
+          playingAt: metadata!.midRoll,
           rollDuration: midRoll?[i].midRollDuration,
         ));
       }

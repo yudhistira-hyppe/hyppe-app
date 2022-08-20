@@ -139,11 +139,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         // final _dummyAds = {
         //   "postID": "8c010081-910b-4d5f-a5a6-43fab040a1ce",
         //   "preRoll": [
-        //     // {
-        //     //   "preRollDuration": 15,
-        //     //   "preRollUri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        //     //   // "preRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
-        //     // }
+        //     {
+        //       "preRollDuration": 3,
+        //       "preRollUri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        //       // "preRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
+        //     }
         //   ],
         //   "midRoll": [
         //     {
@@ -199,6 +199,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   void _userVideo(bool autoPlay) async {
+    // print('test iklan data');
+    // print(_clipsData!.ads[0].playingAt);
+    // print(_clipsData!.ads[0].rollDuration);
+    // print(_clipsData!.ads[0].rollUri);
+    // print(_clipsData!.ads[1].playingAt);
+    // print(_clipsData!.ads[1].rollDuration);
+    // print(_clipsData!.ads[1].rollUri);
+    // print(_clipsData!.ads[2].playingAt);
+    // print(_clipsData!.ads[2].rollDuration);
+    // print(_clipsData!.ads[2].rollUri);
+
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
       autoDispose: false,
       autoPlay: autoPlay,
@@ -246,9 +257,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           // var param = {'rollUri': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 'rollDuration': 5};
           // _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(param));
-          _initializeAdsBetterPlayerControllerMap(
-            BetterPlayerRoll.fromJson(event.parameters ?? {}),
-          );
+          _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
         } else if (event.betterPlayerEventType == BetterPlayerEventType.openFullscreen) {
           _handleOpenFullScreenEvent();
         } else if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
