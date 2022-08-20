@@ -65,6 +65,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _includeTotalLikes = false;
   bool _priceIsFilled = false;
   bool _isSavedPrice = false;
+  bool _isUpdate = false;
 
   bool get updateContent => _updateContent;
   FeatureType? get featureType => _featureType;
@@ -81,6 +82,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get includeTotalLikes => _includeTotalLikes;
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
+  bool get isUpdate => _isUpdate;
   UpdateContentsArgument get updateArguments => _arguments;
 
   set thumbNail(val) {
@@ -166,6 +168,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set isUpdate(bool val) {
+    _isUpdate = val;
+    notifyListeners();
+  }
+
   void onWillPop(BuildContext context) =>
       ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
 
@@ -219,6 +226,10 @@ class PreUploadContentNotifier with ChangeNotifier {
     captionController.clear();
     tagsController.clear();
     priceController.clear();
+    toSell = false;
+    includeTotalLikes = false;
+    includeTotalLikes = false;
+    isUpdate = false;
   }
 
   Future _createPostContentV2() async {
@@ -238,7 +249,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         certified: certified,
         fileContents: fileContent!,
         description: captionController.text,
-        saleAmount: _toSell ? priceController.text : "0",
+        saleAmount: _toSell
+            ? priceController.text.replaceAll(',', '').replaceAll('.', '')
+            : "0",
         saleLike: _includeTotalLikes,
         saleView: _includeTotalViews,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,

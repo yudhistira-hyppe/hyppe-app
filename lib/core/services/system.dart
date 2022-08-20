@@ -22,7 +22,6 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:file_picker/file_picker.dart';
@@ -44,6 +43,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart' as intl;
 
 class System {
   System._private();
@@ -944,5 +944,10 @@ class System {
       return bodyId ?? bodyEn;
     }
     return bodyEn;
+  }
+
+  String currencyFormat({required int? amount}) {
+    return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ')
+        .format(amount);
   }
 }

@@ -204,11 +204,14 @@ class _PicDetailState extends State<PicDetail> {
                                       data: widget.arguments)
                               : () {},
                         ),
-                        _buildButtonV2(
-                          context: context,
-                          iconData: '${AssetPath.vectorPath}cart.svg',
-                          function: () => ShowBottomSheet.onBuyContent(context),
-                        ),
+                        if (widget.arguments!.saleAmount! > 0)
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}cart.svg',
+                            function: () => ShowBottomSheet.onBuyContent(
+                                context,
+                                data: widget.arguments),
+                          ),
                         // _buildButtonV2(
                         //   context: context,
                         //   iconData: '${AssetPath.vectorPath}bookmark.svg',

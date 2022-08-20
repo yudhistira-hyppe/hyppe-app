@@ -18,7 +18,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/payment/payment_bca/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
@@ -212,15 +212,16 @@ class Generate {
         return MaterialPageRoute(builder: (_) => InsertReferral());
       case Routes.reviewBuyContent:
         return MaterialPageRoute(
-            builder: (_) => const ReviewBuyContentScreen());
+            builder: (_) => ReviewBuyContentScreen(
+                arguments: settings.arguments as ContentData));
       case Routes.paymentScreen:
         return MaterialPageRoute(builder: (_) => const PaymentScreen());
 
       case Routes.paymentMethodScreen:
         return MaterialPageRoute(builder: (_) => const PaymentMethodScreen());
 
-      case Routes.paymentBCAScreen:
-        return MaterialPageRoute(builder: (_) => const PaymentBCAScreen());
+      case Routes.paymentSummaryScreen:
+        return MaterialPageRoute(builder: (_) => const PaymentSummaryScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

@@ -41,6 +41,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
+    bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+
     return Consumer<PreUploadContentNotifier>(
       builder: (_, notifier, __) => GestureDetector(
         onTap: () => notifier.checkKeyboardFocus(context),
@@ -128,7 +130,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                               maxLines: 10,
                               validator: (String? input) {
                                 if (input?.isEmpty ?? true) {
-                                  return "Please enter message";
+                                  return notifier.language.pleaseEnterMessage;
                                 } else {
                                   return null;
                                 }
@@ -258,7 +260,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         style: textTheme.bodyText2
                             ?.copyWith(fontWeight: FontWeight.bold),
                         decoration: InputDecoration(
-                          hintText: "Hashtag",
+                          hintText: notifier.language.tag,
                           hintStyle: textTheme.bodyText2,
                           errorBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -437,11 +439,19 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                     )
                                   ],
                                 ),
-                                CustomSwitchButton(
-                                  value: notifier.certified,
-                                  onChanged: (value) =>
-                                      notifier.certified = value,
-                                ),
+                                notifier.isUpdate && notifier.certified
+                                    ? const Switch(
+                                        value: true,
+                                        inactiveThumbColor:
+                                            Color.fromRGBO(237, 237, 237, 1),
+                                        inactiveTrackColor:
+                                            Color.fromRGBO(237, 237, 237, 1),
+                                        onChanged: null)
+                                    : CustomSwitchButton(
+                                        value: notifier.certified,
+                                        onChanged: (value) =>
+                                            notifier.certified = value,
+                                      ),
                               ],
                             ),
                             if (notifier.certified) ...[
@@ -527,11 +537,19 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                       )
                                     ],
                                   ),
-                                  CustomSwitchButton(
-                                    value: notifier.toSell,
-                                    onChanged: (value) =>
-                                        notifier.toSell = value,
-                                  ),
+                                  notifier.isUpdate && notifier.toSell
+                                      ? const Switch(
+                                          value: true,
+                                          inactiveThumbColor:
+                                              Color.fromRGBO(237, 237, 237, 1),
+                                          inactiveTrackColor:
+                                              Color.fromRGBO(237, 237, 237, 1),
+                                          onChanged: null)
+                                      : CustomSwitchButton(
+                                          value: notifier.toSell,
+                                          onChanged: (value) =>
+                                              notifier.toSell = value,
+                                        ),
                                 ],
                               ),
                               SizedBox(height: 20 * SizeConfig.scaleDiagonal),
@@ -574,154 +592,85 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   CustomCheckButton(
                                       value: notifier.includeTotalLikes,
                                       onChanged: (value) {
-                                        print("Like" + value.toString());
+                                        //print("Like" + value.toString());
                                         notifier.includeTotalLikes = value!;
                                       }),
                                 ],
                               ),
                               SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                              Text(
-                                notifier.language.setPrice!,
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              // Text(
+                              //   notifier.language.setPrice!,
+                              //   style: Theme.of(context).textTheme.bodyText2,
+                              // ),
+                              Stack(
+                                alignment: AlignmentDirectional.bottomStart,
                                 children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 35, right: 10),
+                                    decoration: const BoxDecoration(
+                                        color: Color.fromRGBO(245, 245, 245, 1),
+                                        borderRadius:
+                                            BorderRadius.all(Radius.circular(8))
+                                        // border: Border(
+                                        //   bottom: BorderSide(
+                                        //     color:
+                                        //         Color.fromRGBO(171, 34, 175, 1),
+                                        //     width: 0.5,
+                                        //   ),
+                                        // ),
+                                        ),
+                                    child: TextFormField(
+                                      maxLines: 1,
+                                      validator: (String? input) {
+                                        if (input?.isEmpty ?? true) {
+                                          return notifier
+                                              .language.pleaseSetPrice;
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      enabled:
+                                          notifier.isSavedPrice ? false : true,
+                                      controller: notifier.priceController,
+                                      onChanged: (val) {
+                                        if (val.isNotEmpty) {
+                                          notifier.priceIsFilled = true;
+                                        } else {
+                                          notifier.priceIsFilled = false;
+                                        }
+                                      },
+                                      keyboardAppearance: Brightness.dark,
+                                      cursorColor: const Color(0xff8A3181),
+                                      textInputAction: TextInputAction.done,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                        ThousandsFormatter()
+                                      ], // Only numbers can be entered
+                                      style: textTheme.bodyText2?.copyWith(
+                                          fontWeight: FontWeight.bold),
+                                      decoration: InputDecoration(
+                                        errorBorder: InputBorder.none,
+                                        hintStyle: textTheme.bodyText2,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                        disabledBorder: InputBorder.none,
+                                        focusedErrorBorder: InputBorder.none,
+                                        contentPadding:
+                                            const EdgeInsets.only(bottom: 2),
+                                      ),
+                                    ),
+                                  ),
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 10),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 18, left: 10),
                                     child: Text(
                                       notifier.language.rp!,
                                       style:
                                           Theme.of(context).textTheme.bodyText2,
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 8,
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(
-                                            color:
-                                                Color.fromRGBO(171, 34, 175, 1),
-                                            width: 0.5,
-                                          ),
-                                        ),
-                                      ),
-                                      child: TextFormField(
-                                        maxLines: 1,
-                                        validator: (String? input) {
-                                          if (input?.isEmpty ?? true) {
-                                            return "Please set price";
-                                          } else {
-                                            return null;
-                                          }
-                                        },
-                                        enabled: notifier.isSavedPrice
-                                            ? false
-                                            : true,
-                                        controller: notifier.priceController,
-                                        onChanged: (val) {
-                                          if (val.isNotEmpty) {
-                                            notifier.priceIsFilled = true;
-                                          } else {
-                                            notifier.priceIsFilled = false;
-                                          }
-                                        },
-                                        keyboardAppearance: Brightness.dark,
-                                        cursorColor: const Color(0xff8A3181),
-                                        textInputAction: TextInputAction.done,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
-                                          ThousandsFormatter()
-                                        ], // Only numbers can be entered
-                                        style: textTheme.bodyText2?.copyWith(
-                                            fontWeight: FontWeight.bold),
-                                        decoration: InputDecoration(
-                                          errorBorder: InputBorder.none,
-                                          hintStyle: textTheme.bodyText2,
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                          disabledBorder: InputBorder.none,
-                                          focusedErrorBorder: InputBorder.none,
-                                          contentPadding:
-                                              const EdgeInsets.only(bottom: 2),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.only(left: 10),
-                                  //   child: notifier.isSavedPrice
-                                  //       ? CustomElevatedButton(
-                                  //           width: 100.0 *
-                                  //               SizeConfig.scaleDiagonal,
-                                  //           height:
-                                  //               38.0 * SizeConfig.scaleDiagonal,
-                                  //           function: () {
-                                  //             notifier.isSavedPrice = false;
-                                  //           },
-                                  //           child: CustomTextWidget(
-                                  //             textToDisplay:
-                                  //                 notifier.language.change!,
-                                  //             textStyle: textTheme.button
-                                  //                 ?.copyWith(
-                                  //                     color:
-                                  //                         const Color.fromRGBO(
-                                  //                             171, 34, 175, 1)),
-                                  //           ),
-                                  //         )
-                                  //       : CustomElevatedButton(
-                                  //           width: 100.0 *
-                                  //               SizeConfig.scaleDiagonal,
-                                  //           height:
-                                  //               38.0 * SizeConfig.scaleDiagonal,
-                                  //           function: () {
-                                  //             if (notifier.priceIsFilled) {
-                                  //               notifier.isSavedPrice = true;
-                                  //             }
-                                  //           },
-                                  //           child: CustomTextWidget(
-                                  //             textToDisplay:
-                                  //                 notifier.language.save!,
-                                  //             textStyle: textTheme.button
-                                  //                 ?.copyWith(
-                                  //                     color: notifier
-                                  //                             .priceIsFilled
-                                  //                         ? kHyppeLightButtonText
-                                  //                         : kHyppeLightSecondary),
-                                  //           ),
-                                  //           buttonStyle: notifier.priceIsFilled
-                                  //               ? ButtonStyle(
-                                  //                   foregroundColor:
-                                  //                       MaterialStateProperty
-                                  //                           .all(Theme.of(
-                                  //                                   context)
-                                  //                               .colorScheme
-                                  //                               .primaryVariant),
-                                  //                   shadowColor:
-                                  //                       MaterialStateProperty
-                                  //                           .all(Theme.of(
-                                  //                                   context)
-                                  //                               .colorScheme
-                                  //                               .primaryVariant),
-                                  //                   overlayColor:
-                                  //                       MaterialStateProperty
-                                  //                           .all(Theme.of(
-                                  //                                   context)
-                                  //                               .colorScheme
-                                  //                               .primaryVariant),
-                                  //                   backgroundColor:
-                                  //                       MaterialStateProperty
-                                  //                           .all(Theme.of(
-                                  //                                   context)
-                                  //                               .colorScheme
-                                  //                               .primaryVariant),
-                                  //                 )
-                                  //               : null,
-                                  //         ),
-                                  // )
                                 ],
                               )
                             ]
@@ -776,61 +725,64 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     //     ),
                     //   ),
                     // )
-                    SizedBox(height: 100),
+                    const SizedBox(height: 100),
                   ],
                 ),
               ),
             ),
             backgroundColor: Theme.of(context).backgroundColor,
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: CustomElevatedButton(
-                width: 375.0 * SizeConfig.scaleDiagonal,
-                height: 44.0 * SizeConfig.scaleDiagonal,
-                // function: () => notifier.onClickPost(
-                //   context,
-                //   onEdit: widget.arguments.onEdit,
-                //   data: widget.arguments.contentData,
-                //   content: widget.arguments.content,
-                // ),
-                function: () => notifier.certified
-                    ? System().actionReqiredIdCard(context,
-                        action: () => notifier.onClickPost(
-                              context,
-                              onEdit: widget.arguments.onEdit,
-                              data: widget.arguments.contentData,
-                              content: widget.arguments.content,
-                            ))
-                    : notifier.onClickPost(
-                        context,
-                        onEdit: widget.arguments.onEdit,
-                        data: widget.arguments.contentData,
-                        content: widget.arguments.content,
-                      ),
-                child: widget.arguments.onEdit && notifier.updateContent
-                    ? const CustomLoading()
-                    : CustomTextWidget(
-                        textToDisplay: widget.arguments.onEdit
-                            ? notifier.language.save!
-                            : notifier.language.confirm!,
-                        textStyle: textTheme.button
-                            ?.copyWith(color: kHyppeLightButtonText),
-                      ),
-                buttonStyle: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  shadowColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
+            floatingActionButton: Visibility(
+              visible: !keyboardIsOpen,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: CustomElevatedButton(
+                  width: 375.0 * SizeConfig.scaleDiagonal,
+                  height: 44.0 * SizeConfig.scaleDiagonal,
+                  // function: () => notifier.onClickPost(
+                  //   context,
+                  //   onEdit: widget.arguments.onEdit,
+                  //   data: widget.arguments.contentData,
+                  //   content: widget.arguments.content,
+                  // ),
+                  function: () => notifier.certified
+                      ? System().actionReqiredIdCard(context,
+                          action: () => notifier.onClickPost(
+                                context,
+                                onEdit: widget.arguments.onEdit,
+                                data: widget.arguments.contentData,
+                                content: widget.arguments.content,
+                              ))
+                      : notifier.onClickPost(
+                          context,
+                          onEdit: widget.arguments.onEdit,
+                          data: widget.arguments.contentData,
+                          content: widget.arguments.content,
+                        ),
+                  child: widget.arguments.onEdit && notifier.updateContent
+                      ? const CustomLoading()
+                      : CustomTextWidget(
+                          textToDisplay: widget.arguments.onEdit
+                              ? notifier.language.save!
+                              : notifier.language.confirm!,
+                          textStyle: textTheme.button
+                              ?.copyWith(color: kHyppeLightButtonText),
+                        ),
+                  buttonStyle: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primaryVariant),
+                    shadowColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primaryVariant),
+                    overlayColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primaryVariant),
+                    backgroundColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.primaryVariant),
+                  ),
                 ),
               ),
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
           ),
         ),
       ),
