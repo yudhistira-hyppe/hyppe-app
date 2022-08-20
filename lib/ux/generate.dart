@@ -34,6 +34,8 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/screen.dar
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
@@ -248,6 +250,12 @@ class Generate {
       case Routes.confirmDeleteAccount:
         return MaterialPageRoute(
             builder: (_) => const HyppeConfirmDeleteAccount());
+      case Routes.verificationIDStepSupportingDocs:
+        return MaterialPageRoute(
+            builder: (_) => const VerificationIDStepSupportingDocs());
+      case Routes.verificationIDStepSupportingDocsPreview:
+        return MaterialPageRoute(
+            builder: (_) => const VerificationIDStepSupportingDocsPreview());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

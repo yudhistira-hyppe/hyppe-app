@@ -47,7 +47,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
+            onPressed: () => Routing().moveAndPop(Routes.verificationIDStep4),
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
@@ -57,7 +57,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
           ),
           centerTitle: false,
         ),
-        body: notifier.isScanning
+        body: notifier.isLoading
             ? const Center(
                 child: CircularProgressIndicator(
                 color: kHyppePrimary,
@@ -230,7 +230,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                 function: () =>
                     Routing().moveAndPop(Routes.verificationIDStep6),
                 child: CustomTextWidget(
-                  textToDisplay: "Continue",
+                  textToDisplay: "Continue Selfie",
                   textStyle:
                       textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),

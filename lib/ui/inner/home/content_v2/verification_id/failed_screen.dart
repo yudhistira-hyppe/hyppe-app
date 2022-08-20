@@ -23,7 +23,6 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
@@ -32,7 +31,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
+            onPressed: () => notifier.retryTakeIdCard(),
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
@@ -97,7 +96,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
-                onTap: () => Routing().moveBack(),
+                onTap: () => notifier.retryTakeIdCard(),
                 child: Text(
                   "Retry",
                   style: textTheme.titleMedium!.copyWith(
@@ -108,7 +107,8 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
               CustomElevatedButton(
                 width: SizeConfig.screenWidth,
                 height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () => Routing().move(Routes.verificationIDFailed),
+                function: () =>
+                    Routing().move(Routes.verificationIDStepSupportingDocs),
                 child: CustomTextWidget(
                   textToDisplay: "Upload Supporting Document",
                   textStyle:

@@ -30,6 +30,7 @@ class Env {
     UrlConstants.viewLike,
     UrlConstants.verificationID,
     UrlConstants.deleteAccount,
+    UrlConstants.verificationIDSupportingDocs
   ];
 
   static final EnvData dev = EnvData(

@@ -66,8 +66,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomTextButton(
-                        onPressed: () => Routing()
-                            .moveAndRemoveUntil(Routes.lobby, Routes.root),
+                        onPressed: () => notifier.clearAndMoveToLobby(),
                         child: const CustomIconWidget(
                             iconData: "${AssetPath.vectorPath}close.svg",
                             defaultColor: false)),
@@ -91,7 +90,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
                 ],
               ),
             ),
-            if (notifier.isScanning)
+            if (notifier.isLoading)
               Container(
                 width: SizeConfig.screenWidth,
                 height: SizeConfig.screenHeight,

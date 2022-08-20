@@ -75,4 +75,8 @@ class Routes {
   //delete account
   static const String deleteAccount = '/delete-account';
   static const String confirmDeleteAccount = '/confirm-delete-account';
+  static const String verificationIDStepSupportingDocs =
+      '/verification-id-docs';
+  static const String verificationIDStepSupportingDocsPreview =
+      '/verification-id-docs-preview';
 }

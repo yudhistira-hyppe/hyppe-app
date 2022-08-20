@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
@@ -76,8 +75,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
           child: CustomElevatedButton(
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
-            function: () =>
-                Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby),
+            function: () => notifier.clearAndMoveToLobby(),
             child: CustomTextWidget(
               textToDisplay: "Close",
               textStyle:

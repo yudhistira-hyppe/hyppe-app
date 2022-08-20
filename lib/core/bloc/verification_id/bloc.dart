@@ -6,6 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/bloc/verification_id/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/constants/status_code.dart';
@@ -54,6 +55,64 @@ class VerificationIDBloc {
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
+          setVerificationIDFetch(VerificationIDFetch(
+              VerificationIDState.postVerificationIDError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setVerificationIDFetch(VerificationIDFetch(
+              VerificationIDState.postVerificationIDSuccess,
+              data: onResult));
+        }
+      },
+      (errorData) {
+        setVerificationIDFetch(VerificationIDFetch(
+            VerificationIDState.postVerificationIDError,
+            data: errorData));
+      },
+      data: formData,
+      headers: {
+        'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: UrlConstants.verificationID,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+      methodType: MethodType.postUploadContent,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
+  }
+
+  Future postVerificationIDSupportDocsBloc(
+    BuildContext context, {
+    required String id,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+    required List<File>? docFiles,
+  }) async {
+    FormData formData = FormData.fromMap({"_id": id});
+
+    if (docFiles != null) {
+      for (File docFile in docFiles) {
+        formData.files.add(MapEntry(
+            "supportFile",
+            await MultipartFile.fromFile(docFile.path,
+                filename: System().basenameFiles(docFile.path),
+                contentType: MediaType(
+                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ??
+                      '',
+                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ??
+                      "",
+                ))));
+      }
+    }
+
+    setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
           setVerificationIDFetch(
               VerificationIDFetch(VerificationIDState.postVerificationIDError));
         } else {
@@ -73,7 +132,7 @@ class VerificationIDBloc {
       },
       withAlertMessage: true,
       withCheckConnection: true,
-      host: UrlConstants.verificationID,
+      host: UrlConstants.verificationIDSupportingDocs,
       onSendProgress: onSendProgress,
       onReceiveProgress: onReceiveProgress,
       methodType: MethodType.postUploadContent,

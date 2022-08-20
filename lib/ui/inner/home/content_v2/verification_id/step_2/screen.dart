@@ -79,6 +79,14 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 5),
+                  CustomTextWidget(
+                      textOverflow: TextOverflow.visible,
+                      textAlign: TextAlign.left,
+                      textStyle:
+                          textTheme.caption!.copyWith(color: Colors.black26),
+                      textToDisplay:
+                          "Ensure to use your full name as stated in E-KTP, this cannot be edited at later stage")
                 ],
               ),
               Visibility(

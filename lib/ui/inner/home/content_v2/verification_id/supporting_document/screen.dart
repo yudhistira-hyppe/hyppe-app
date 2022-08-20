@@ -7,18 +7,19 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
-import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class VerificationIDStep3 extends StatefulWidget {
-  const VerificationIDStep3({Key? key}) : super(key: key);
+class VerificationIDStepSupportingDocs extends StatefulWidget {
+  const VerificationIDStepSupportingDocs({Key? key}) : super(key: key);
 
   @override
-  State<VerificationIDStep3> createState() => _VerificationIDStep3State();
+  State<VerificationIDStepSupportingDocs> createState() =>
+      _VerificationIDStepSupportingDocsState();
 }
 
-class _VerificationIDStep3State extends State<VerificationIDStep3> {
+class _VerificationIDStepSupportingDocsState
+    extends State<VerificationIDStepSupportingDocs> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -34,7 +35,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: "Upload Supporting Document",
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -49,23 +50,30 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Image(image: AssetImage("assets/png/professional.png")),
+                    Image(
+                        image: AssetImage("assets/png/verification-docs.png")),
                   ],
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 unorderedList(
-                    "Make sure you upload an E-KTP photo taken directly from the cellphone camera"),
-                unorderedList("Original E-KTP photo or in your own name"),
-                unorderedList("Upload a physical E-KTP photo, not a photocopy"),
+                    "You can upload supporting documents such as, Family Identity Card, Passport, and Driver’s License issued legally by the country"),
                 unorderedList(
-                    "The photo of the E-KTP is not damaged, for example cracked or broken"),
+                    "Make sure your full name is listed on your family identity card"),
                 unorderedList(
-                    "The photo of the E-KTP is clear, not blurry, the light is bright enough and not cut off"),
-                unorderedList("Photo E-KTP does not use flask"),
+                    "Make sure your name and ID Number on the family identity card can be read clearly and in matches with the ID card that you uploaded earlier"),
                 unorderedList(
-                    "Make sure the selfie you take is facing the front with sufficient lighting, without flash and not cropped"),
+                    "Supporting documents such as a passport, you can upload the front page of your passport which displays your photo and full name"),
+                unorderedList(
+                    "Make sure your Driver’s License full name matches the ID card that you uploaded earlier"),
+                unorderedList(
+                    "Make sure your supporting documents are original"),
+                unorderedList(
+                    "Upload a original supporting document, not a copy"),
+                unorderedList(
+                    "The photo of the supporting document is not damaged, for example torn, cracked, blurry, broken, and/or dirty"),
+                unorderedList("Do not use flash for taking the photo"),
                 unorderedList(
                     "If you have followed the method above, but it doesn't work, you can complain about this problem to the Hyppe Help Center 081398582108"),
                 const SizedBox(
@@ -81,7 +89,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
           child: CustomElevatedButton(
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
-            function: () => Routing().moveAndPop(Routes.verificationIDStep4),
+            function: () => notifier.onPickSupportedDocument(context, true),
             child: CustomTextWidget(
               textToDisplay: "Continue",
               textStyle:

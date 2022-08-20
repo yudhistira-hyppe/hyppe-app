@@ -85,8 +85,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomTextButton(
-                        onPressed: () => Routing()
-                            .moveAndRemoveUntil(Routes.lobby, Routes.root),
+                        onPressed: () => notifier.clearAndMoveToLobby(),
                         child: const CustomIconWidget(
                             iconData: "${AssetPath.vectorPath}close.svg",
                             defaultColor: false)),

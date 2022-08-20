@@ -437,4 +437,5 @@ class UrlConstants {
 
   //delete Account
   static const String deleteAccount = "$userRoute/noneactive";
+  static const String verificationIDSupportingDocs = "$postsRoute/supportfile";
 }
