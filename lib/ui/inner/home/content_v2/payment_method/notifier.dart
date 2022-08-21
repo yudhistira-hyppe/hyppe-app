@@ -66,16 +66,13 @@ class PaymentMethodNotifier extends ChangeNotifier {
       });
     } else if (fetch.postsState == BuyState.getContentsSuccess) {
       //List<BankData>? res = BankData.fromJson(fetch.data);
-      List<BankData>? res = (fetch.data as List<dynamic>?)
-          ?.map((e) => BankData.fromJson(e as Map<String, dynamic>))
-          .toList();
+      List<BankData>? res = (fetch.data as List<dynamic>?)?.map((e) => BankData.fromJson(e as Map<String, dynamic>)).toList();
       data = res;
       notifyListeners();
     }
   }
 
-  void _showSnackBar(Color color, String message, String desc,
-      {Function? function}) {
+  void _showSnackBar(Color color, String message, String desc, {Function? function}) {
     Routing().showSnackBar(
       snackBar: SnackBar(
         margin: EdgeInsets.zero,
@@ -106,7 +103,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
   Future<void> _postSubmitBuy(BuildContext context) async {
     var params = BuyRequest(
         postid: reviewBuyNotifier.data!.postId,
-        amount: reviewBuyNotifier.data!.totalAmount,
+        amount: reviewBuyNotifier.data!.totalAmount!.toInt(),
         bankcode: _bankSelected,
         paymentmethod: 'VA', //TO DO : Other payment method
         salelike: reviewBuyNotifier.data!.saleLike,
@@ -122,8 +119,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
       BuyResponse? res = BuyResponse.fromJson(fetch.data);
       postResponse = res;
 
-      _showSnackBar(kHyppeTextSuccess, 'Success',
-          "Request buy conten success, please complete payment");
+      _showSnackBar(kHyppeTextSuccess, 'Success', "Request buy conten success, please complete payment");
 
       Future.delayed(const Duration(seconds: 2), () {
         Routing().move(Routes.paymentSummaryScreen);

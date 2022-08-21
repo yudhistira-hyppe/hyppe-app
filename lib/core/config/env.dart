@@ -29,6 +29,10 @@ class Env {
     UrlConstants.deletTagUser,
     UrlConstants.viewLike,
     UrlConstants.deleteAccount,
+    UrlConstants.getBuyContent,
+    UrlConstants.postBuyContent,
+    UrlConstants.getAllBank,
+    UrlConstants.getBankByCode,
   ];
 
   static final EnvData dev = EnvData(

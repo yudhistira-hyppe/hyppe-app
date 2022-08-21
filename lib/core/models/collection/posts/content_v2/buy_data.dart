@@ -31,10 +31,10 @@ class BuyData {
   bool? isCertified;
   bool? saleLike;
   bool? saleView;
-  int? adminFee;
+  double? adminFee;
   String? prosentaseAdminFee;
   int? price;
-  int? totalAmount;
+  double? totalAmount;
   bool? monetize;
 
   BuyData({
@@ -88,8 +88,7 @@ class BuyData {
     comments = json["comments"];
     isOwned = json["isOwned"];
     views = json["views"];
-    privacy =
-        json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
+    privacy = json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
     isViewed = json["isViewed"];
     allowComments = json["allowComments"];
     isCertified = json["isCertified"];

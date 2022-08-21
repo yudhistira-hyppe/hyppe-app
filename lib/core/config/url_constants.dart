@@ -16,7 +16,6 @@ class UrlConstants {
 
   /// Production Base url
   static const String productionBaseApi = "https://prod.hyppe.app";
-  // static const String productionBaseApi = "https://staging.hyppe.app";
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
@@ -31,57 +30,55 @@ class UrlConstants {
 
   /// APIs end point
   /* User route */
-  static const String userRoute = "/$apiV2/api/user";
+  static const String userRoute = "/api/user";
 
   /* Utils route */
-  static const String utilsRoute = "/$apiV2/api/utils";
+  static const String utilsRoute = "/api/utils";
 
   /* Post route */
-  static const String postRoute = "/$apiV2/api/post";
+  static const String postRoute = "/api/post";
 
   /* Posts route */
-  static const String postsRoute = "/$apiV2/api/posts";
+  static const String postsRoute = "/api/posts";
 
   /* Follow route */
-  static const String followRoute = "/$apiV2/api/follow";
+  static const String followRoute = "/api/follow";
 
   /* Stories route */
-  static const String storiesRoute = "/$apiV2/api/story";
+  static const String storiesRoute = "/api/story";
 
   /* Search route */
-  static const String searchRoute = "/$apiV2/api/search";
+  static const String searchRoute = "/api/search";
 
   /* Chat route */
-  static const String chatRoute = "/$apiV2/api/chat";
+  static const String chatRoute = "/api/chat";
 
   /* Notification route */
-  static const String notificationRoute = "/$apiV2/api/inapp";
+  static const String notificationRoute = "/api/inapp";
 
   /* Wallet route */
   static const String walletRoute = "/bagea-core";
 
   /* Wallet route */
-  static const String bizRoute = "/$apiV2/api/biz";
-
-  /* User Content route */
-  static const String userContentRoute = "/$apiV3/api/getusercontents";
-
-  /* User Content route */
-  static const String bankRoute = "/$apiV3/api/banks";
-
-  static const String transactionRoute = "/$apiV3/api/transactions";
+  static const String bizRoute = "/api/biz";
 
   /* v3 user profile */
   static const String profileRoute = "/api/getuserprofiles";
 
-  ///---------------------------------------------------------------------------------------------------------///
+  /* User Content route */
+  static const String userContentRoute = "/api/getusercontents";
 
+  /* User Content route */
+  static const String bankRoute = "/api/banks";
+
+  static const String transactionRoute = "/api/transactions";
+
+  ///---------------------------------------------------------------------------------------------------------///
   /* APIs Wallet */
   /// event.
   static const String eventBus = "$walletRoute/eventbus";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs In App Notification */
   /// get => Get Users notification.
   static const String getUsersNotification = "$notificationRoute/getAllUsersnotification";
@@ -90,7 +87,6 @@ class UrlConstants {
   static const String readNotification = "$notificationRoute/readNotification";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Bookmark */
   /// get => Get bookmark.
   static const String getBookmark = "$postRoute/getBookmark";
@@ -99,7 +95,6 @@ class UrlConstants {
   static const String addBookmark = "$postRoute/addBookmark";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Chat */
   /// all user chat
   static const String allUserChat = "$chatRoute/getAllUserChats";
@@ -108,7 +103,6 @@ class UrlConstants {
   static const String historyChat = "$chatRoute/getChatHistoryByrecipientId";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Comment */
   /// post => Add Post Comment.
   static const String addPostComment = "$postRoute/comments/commentOnPost";
@@ -120,7 +114,6 @@ class UrlConstants {
   static const String getMoreComments = "$postRoute/comments/viewMoreComments";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Follow */
   /// post Add Story View.
   static const String followUser = "$followRoute/follow";
@@ -132,7 +125,6 @@ class UrlConstants {
   static const String isFollowing = "$followRoute/isFollowing";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Users */
   /// post sign_up => Send data user to server.
   static const String signUp = "$userRoute/signup";
@@ -204,7 +196,6 @@ class UrlConstants {
   static const String updateLanguage = "$userRoute/updatelang";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Playlist */
   /// post => Create new playlist.
   static const String createNewPlaylist = "$postRoute/createPlaylist";
@@ -213,7 +204,6 @@ class UrlConstants {
   static const String getAllPlaylist = "$postRoute/getAllPlaylist";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Posts */
   /// post Content.
   static const String createPost = "$postRoute/createPost";
@@ -252,7 +242,6 @@ class UrlConstants {
   static const String viewLike = "$postRoute/viewlike";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Reaction */
   /// post Add Reaction to content.
   static const String addPostReaction = "$postRoute/reactions/reactOnPost";
@@ -267,7 +256,6 @@ class UrlConstants {
   static const String getCommentReactions = "$postRoute/reactions/getCommentReactions";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Search */
   /// post => Search.
   static const String searchMedia = "$searchRoute/media/search";
@@ -279,7 +267,6 @@ class UrlConstants {
   static const String addToTrending = "$searchRoute/search/trending";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Stories */
   /// get list_story.
   static const String myUserStories = "$storiesRoute/myUserStories";
@@ -309,7 +296,6 @@ class UrlConstants {
   static const String deleteStoryByID = "$storiesRoute/deleteStoryByID";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Utils */
   /// get list of Area
   static const String area = "$utilsRoute/area";
@@ -351,15 +337,13 @@ class UrlConstants {
   static const String postLogDevice = "$utilsRoute/logdevice";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   // V2
 
   /// APIs end point
   /* Post route */
-  static const String postRouteV2 = "/$apiV2/api/posts";
+  static const String postRouteV2 = "/api/posts";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /// post => Get Contents
   static const String getuserposts = "$postRouteV2/getuserposts";
 

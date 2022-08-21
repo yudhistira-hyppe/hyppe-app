@@ -66,8 +66,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             return Future.value(true);
           },
           child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            // resizeToAvoidBottomInset: true,
+            resizeToAvoidBottomInset: true,
             appBar: AppBar(
               elevation: 0,
               centerTitle: false,
@@ -289,174 +288,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                 ),
                               ),
                             ),
-                            if (notifier.certified) ...[
-                              SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        notifier.language.forSell!,
-                                        style: Theme.of(context).textTheme.bodyText1?.copyWith(color: const Color.fromRGBO(63, 63, 63, 1)),
-                                      ),
-                                      SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                                      Text(
-                                        notifier.language.marketContent!,
-                                        style: Theme.of(context).textTheme.bodyText2,
-                                      ),
-                                      SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const Text("• "),
-                                          SizedBox(
-                                            width: 276 * SizeConfig.scaleDiagonal,
-                                            child: CustomRichTextWidget(
-                                              textAlign: TextAlign.start,
-                                              textOverflow: TextOverflow.clip,
-                                              textSpan: TextSpan(
-                                                text: notifier.language.registerContentOwnershipExplain1!,
-                                                style: Theme.of(context).textTheme.caption!.copyWith(height: 1.5),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          const Text("• "),
-                                          SizedBox(
-                                            width: 276 * SizeConfig.scaleDiagonal,
-                                            child: CustomRichTextWidget(
-                                              textAlign: TextAlign.start,
-                                              textOverflow: TextOverflow.clip,
-                                              textSpan: TextSpan(
-                                                text: notifier.language.registerContentOwnershipExplain2!,
-                                                style: Theme.of(context).textTheme.caption!.copyWith(height: 1.5),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  notifier.isUpdate && notifier.toSell
-                                      ? const Switch(value: true, inactiveThumbColor: Color.fromRGBO(237, 237, 237, 1), inactiveTrackColor: Color.fromRGBO(237, 237, 237, 1), onChanged: null)
-                                      : CustomSwitchButton(
-                                          value: notifier.toSell,
-                                          onChanged: (value) => notifier.toSell = value,
-                                        ),
-                                ],
-                              ),
-                              SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                              Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.black12,
-                                      width: 0.5,
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      notifier.language.includeTotalViews!,
-                                      style: Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                    CustomCheckButton(
-                                      value: notifier.includeTotalViews,
-                                      onChanged: (value) => notifier.includeTotalViews = value!,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    notifier.language.includeTotalLikes!,
-                                    style: Theme.of(context).textTheme.bodyText2,
-                                  ),
-                                  CustomCheckButton(
-                                      value: notifier.includeTotalLikes,
-                                      onChanged: (value) {
-                                        //print("Like" + value.toString());
-                                        notifier.includeTotalLikes = value!;
-                                      }),
-                                ],
-                              ),
-                              SizedBox(height: 10 * SizeConfig.scaleDiagonal),
-                              // Text(
-                              //   notifier.language.setPrice!,
-                              //   style: Theme.of(context).textTheme.bodyText2,
-                              // ),
-                              Stack(
-                                alignment: AlignmentDirectional.bottomStart,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 35, right: 10),
-                                    decoration: const BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1), borderRadius: BorderRadius.all(Radius.circular(8))
-                                        // border: Border(
-                                        //   bottom: BorderSide(
-                                        //     color:
-                                        //         Color.fromRGBO(171, 34, 175, 1),
-                                        //     width: 0.5,
-                                        //   ),
-                                        // ),
-                                        ),
-                                    child: TextFormField(
-                                      maxLines: 1,
-                                      validator: (String? input) {
-                                        if (input?.isEmpty ?? true) {
-                                          return notifier.language.pleaseSetPrice;
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                      enabled: notifier.isSavedPrice ? false : true,
-                                      controller: notifier.priceController,
-                                      onChanged: (val) {
-                                        if (val.isNotEmpty) {
-                                          notifier.priceIsFilled = true;
-                                        } else {
-                                          notifier.priceIsFilled = false;
-                                        }
-                                      },
-                                      keyboardAppearance: Brightness.dark,
-                                      cursorColor: const Color(0xff8A3181),
-                                      textInputAction: TextInputAction.done,
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly, ThousandsFormatter()], // Only numbers can be entered
-                                      style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
-                                      decoration: InputDecoration(
-                                        errorBorder: InputBorder.none,
-                                        hintStyle: textTheme.bodyText2,
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
-                                        disabledBorder: InputBorder.none,
-                                        focusedErrorBorder: InputBorder.none,
-                                        contentPadding: const EdgeInsets.only(bottom: 2),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 18, left: 10),
-                                    child: Text(
-                                      notifier.language.rp!,
-                                      style: Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ]
                           ],
                         ),
 
@@ -755,6 +586,174 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                     ),
                                   ],
                                 ),
+                                if (notifier.certified) ...[
+                                  SizedBox(height: 20 * SizeConfig.scaleDiagonal),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            notifier.language.forSell!,
+                                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: const Color.fromRGBO(63, 63, 63, 1)),
+                                          ),
+                                          SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                          Text(
+                                            notifier.language.marketContent!,
+                                            style: Theme.of(context).textTheme.bodyText2,
+                                          ),
+                                          SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text("• "),
+                                              SizedBox(
+                                                width: 276 * SizeConfig.scaleDiagonal,
+                                                child: CustomRichTextWidget(
+                                                  textAlign: TextAlign.start,
+                                                  textOverflow: TextOverflow.clip,
+                                                  textSpan: TextSpan(
+                                                    text: notifier.language.registerContentOwnershipExplain1!,
+                                                    style: Theme.of(context).textTheme.caption!.copyWith(height: 1.5),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text("• "),
+                                              SizedBox(
+                                                width: 276 * SizeConfig.scaleDiagonal,
+                                                child: CustomRichTextWidget(
+                                                  textAlign: TextAlign.start,
+                                                  textOverflow: TextOverflow.clip,
+                                                  textSpan: TextSpan(
+                                                    text: notifier.language.registerContentOwnershipExplain2!,
+                                                    style: Theme.of(context).textTheme.caption!.copyWith(height: 1.5),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                      notifier.isUpdate && notifier.toSell
+                                          ? const Switch(value: true, inactiveThumbColor: Color.fromRGBO(237, 237, 237, 1), inactiveTrackColor: Color.fromRGBO(237, 237, 237, 1), onChanged: null)
+                                          : CustomSwitchButton(
+                                              value: notifier.toSell,
+                                              onChanged: (value) => notifier.toSell = value,
+                                            ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20 * SizeConfig.scaleDiagonal),
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.black12,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          notifier.language.includeTotalViews!,
+                                          style: Theme.of(context).textTheme.bodyText2,
+                                        ),
+                                        CustomCheckButton(
+                                          value: notifier.includeTotalViews,
+                                          onChanged: (value) => notifier.includeTotalViews = value!,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        notifier.language.includeTotalLikes!,
+                                        style: Theme.of(context).textTheme.bodyText2,
+                                      ),
+                                      CustomCheckButton(
+                                          value: notifier.includeTotalLikes,
+                                          onChanged: (value) {
+                                            //print("Like" + value.toString());
+                                            notifier.includeTotalLikes = value!;
+                                          }),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10 * SizeConfig.scaleDiagonal),
+                                  // Text(
+                                  //   notifier.language.setPrice!,
+                                  //   style: Theme.of(context).textTheme.bodyText2,
+                                  // ),
+                                  Stack(
+                                    alignment: AlignmentDirectional.bottomStart,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.only(left: 35, right: 10),
+                                        decoration: const BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1), borderRadius: BorderRadius.all(Radius.circular(8))
+                                            // border: Border(
+                                            //   bottom: BorderSide(
+                                            //     color:
+                                            //         Color.fromRGBO(171, 34, 175, 1),
+                                            //     width: 0.5,
+                                            //   ),
+                                            // ),
+                                            ),
+                                        child: TextFormField(
+                                          maxLines: 1,
+                                          validator: (String? input) {
+                                            if (input?.isEmpty ?? true) {
+                                              return notifier.language.pleaseSetPrice;
+                                            } else {
+                                              return null;
+                                            }
+                                          },
+                                          enabled: notifier.isSavedPrice ? false : true,
+                                          controller: notifier.priceController,
+                                          onChanged: (val) {
+                                            if (val.isNotEmpty) {
+                                              notifier.priceIsFilled = true;
+                                            } else {
+                                              notifier.priceIsFilled = false;
+                                            }
+                                          },
+                                          keyboardAppearance: Brightness.dark,
+                                          cursorColor: const Color(0xff8A3181),
+                                          textInputAction: TextInputAction.done,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly, ThousandsFormatter()], // Only numbers can be entered
+                                          style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
+                                          decoration: InputDecoration(
+                                            errorBorder: InputBorder.none,
+                                            hintStyle: textTheme.bodyText2,
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                            disabledBorder: InputBorder.none,
+                                            focusedErrorBorder: InputBorder.none,
+                                            contentPadding: const EdgeInsets.only(bottom: 2),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 18, left: 10),
+                                        child: Text(
+                                          notifier.language.rp!,
+                                          style: Theme.of(context).textTheme.bodyText2,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ]
                               ],
                             ),
                           ),
