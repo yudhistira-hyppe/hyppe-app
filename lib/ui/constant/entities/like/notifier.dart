@@ -1,5 +1,4 @@
 import 'package:hyppe/core/bloc/like/bloc.dart';
-import 'package:hyppe/core/bloc/like/state.dart';
 import 'package:hyppe/core/bloc/postviewer/bloc.dart';
 import 'package:hyppe/core/bloc/postviewer/state.dart';
 import 'package:hyppe/core/bloc/reaction/bloc.dart';
@@ -16,9 +15,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 // import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
@@ -116,18 +113,9 @@ class LikeNotifier with ChangeNotifier {
 
         notifyListeners();
 
-<<<<<<< HEAD
         await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
         // final fetch = notifier.likeFetch;
         // notifyListeners();
-=======
-        await notifier.likePostUserBloc(context,
-            postId: postData.postID!,
-            emailOwner: postData.email!,
-            isLike: postData.isLiked!);
-        final fetch = notifier.likeFetch;
-        notifyListeners();
->>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
 
         // if (fetch.likeState == LikeState.likeUserPostSuccess) {
         //   "Like post success".logger();
@@ -145,20 +133,10 @@ class LikeNotifier with ChangeNotifier {
 
         notifyListeners();
 
-<<<<<<< HEAD
         // print('ini false ${postData.isLiked}');
         await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
         // print('ini false');
         // final fetch = notifier.likeFetch;
-=======
-        print('ini false ${postData.isLiked}');
-        await notifier.likePostUserBloc(context,
-            postId: postData.postID!,
-            emailOwner: postData.email!,
-            isLike: postData.isLiked!);
-        print('ini false');
-        final fetch = notifier.likeFetch;
->>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
 
         // notifyListeners();
         // if (fetch.likeState == LikeState.likeUserPostSuccess) {
@@ -195,8 +173,7 @@ class LikeNotifier with ChangeNotifier {
     }
   }
 
-  onLikeComment(BuildContext context,
-      {required Comments comment, required ReactionInteractive rData}) async {
+  onLikeComment(BuildContext context, {required Comments comment, required ReactionInteractive rData}) async {
     final notifier = ReactionBloc();
     await notifier.addReactOnCommentBloc(
       context,
@@ -215,11 +192,9 @@ class LikeNotifier with ChangeNotifier {
     final fetch = notifier.reactionFetch;
     if (fetch.reactionState == ReactionState.addReactOnCommentBlocSuccess) {
       notifyListeners();
-      await notifier.getCommentReactionsBloc(context,
-          postID: comment.postID, commentID: comment.commentID);
+      await notifier.getCommentReactionsBloc(context, postID: comment.postID, commentID: comment.commentID);
       final fetch2 = notifier.reactionFetch;
-      if (fetch2.reactionState ==
-          ReactionState.getCommentReactionsBlocSuccess) {
+      if (fetch2.reactionState == ReactionState.getCommentReactionsBlocSuccess) {
         UpdateCommentReaction _result = fetch2.data;
         comment.isReacted = true;
         comment.count = _result.count;

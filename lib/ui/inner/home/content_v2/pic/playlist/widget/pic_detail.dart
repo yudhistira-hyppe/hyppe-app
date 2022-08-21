@@ -36,8 +36,7 @@ class PicDetail extends StatefulWidget {
 }
 
 class _PicDetailState extends State<PicDetail> {
-  final TransformationController transformationController =
-      TransformationController();
+  final TransformationController transformationController = TransformationController();
 
   void resetZooming() {
     if (transformationController.value != Matrix4.identity()) {
@@ -74,8 +73,7 @@ class _PicDetailState extends State<PicDetail> {
                   imageBuilder: (_, imageProvider) {
                     return Container(
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: imageProvider, fit: BoxFit.contain),
+                        image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
                       ),
                     );
                   },
@@ -84,8 +82,7 @@ class _PicDetailState extends State<PicDetail> {
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           fit: BoxFit.contain,
-                          image: AssetImage(
-                              '${AssetPath.pngPath}content-error.png'),
+                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
                         ),
                       ),
                     );
@@ -111,8 +108,7 @@ class _PicDetailState extends State<PicDetail> {
                             },
                             style: ButtonStyle(
                               alignment: Alignment.topCenter,
-                              padding:
-                                  MaterialStateProperty.all(EdgeInsets.zero),
+                              padding: MaterialStateProperty.all(EdgeInsets.zero),
                             ),
                             child: const DecoratedIconWidget(
                               Icons.arrow_back_ios,
@@ -125,18 +121,14 @@ class _PicDetailState extends State<PicDetail> {
                             following: true,
                             onFollow: () {},
                             haveStory: false,
-                            onTapOnProfileImage: () => System()
-                                .navigateToProfile(
-                                    context, widget.arguments!.email!),
+                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.arguments!.email!),
                             spaceProfileAndId: eightPx,
                             featureType: FeatureType.pic,
                             username: widget.arguments?.username,
                             isCelebrity: widget.arguments?.privacy?.isCelebrity,
-                            imageUrl:
-                                '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
+                            imageUrl: '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
                             createdAt: '${System().readTimestamp(
-                              DateTime.parse(widget.arguments!.createdAt!)
-                                  .millisecondsSinceEpoch,
+                              DateTime.parse(widget.arguments!.createdAt!).millisecondsSinceEpoch,
                               context,
                               fullCaption: true,
                             )}',
@@ -151,7 +143,6 @@ class _PicDetailState extends State<PicDetail> {
                           ),
                         ],
                       ),
-<<<<<<< HEAD
                       widget.arguments!.email == SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
@@ -172,14 +163,6 @@ class _PicDetailState extends State<PicDetail> {
                               function: () => ShowBottomSheet.onReportContent(context),
                             )
                           : SizedBox(),
-=======
-                      _buildButtonV2(
-                        context: context,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        function: () =>
-                            ShowBottomSheet.onReportContent(context),
-                      ),
->>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
                     ],
                   ),
                 ),
@@ -206,34 +189,21 @@ class _PicDetailState extends State<PicDetail> {
                         Consumer<LikeNotifier>(
                           builder: (context, notifier, child) => _buildButtonV2(
                             context: context,
-                            colorIcon:
-                                (widget.arguments?.insight?.isPostLiked ??
-                                        false)
-                                    ? kHyppePrimary
-                                    : kHyppeLightButtonText,
-                            iconData:
-                                '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            function: () =>
-                                notifier.likePost(context, widget.arguments!),
+                            colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                            iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            function: () => notifier.likePost(context, widget.arguments!),
                           ),
                         ),
                         _buildButtonV2(
                           context: context,
                           iconData: '${AssetPath.vectorPath}share.svg',
-                          function: widget.arguments != null
-                              ? () => context
-                                  .read<PicDetailNotifier>()
-                                  .createdDynamicLink(context,
-                                      data: widget.arguments)
-                              : () {},
+                          function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
                         ),
                         if (widget.arguments!.saleAmount! > 0)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
-                            function: () => ShowBottomSheet.onBuyContent(
-                                context,
-                                data: widget.arguments),
+                            function: () => ShowBottomSheet.onBuyContent(context, data: widget.arguments),
                           ),
                         // _buildButtonV2(
                         //   context: context,
@@ -277,15 +247,10 @@ class _PicDetailState extends State<PicDetail> {
                         : const SizedBox(),
                     Padding(
                       child: Container(
-<<<<<<< HEAD
                         padding: const EdgeInsets.all(2),
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
                         // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-=======
-                        constraints: BoxConstraints(
-                            maxHeight:
-                                MediaQuery.of(context).size.height * 0.5),
->>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
+
                         child: SingleChildScrollView(
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,26 +263,10 @@ class _PicDetailState extends State<PicDetail> {
                               textAlign: TextAlign.left,
                               trimExpandedText: 'Show less',
                               trimCollapsedText: 'Show more',
-                              colorClickableText:
-                                  Theme.of(context).colorScheme.primaryVariant,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(color: kHyppeLightButtonText),
-                              moreStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryVariant),
-                              lessStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primaryVariant),
+                              colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                              moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                              lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             ),
                           ],
                         )),
