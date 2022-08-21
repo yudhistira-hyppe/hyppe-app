@@ -31,37 +31,45 @@ class UrlConstants {
 
   /// APIs end point
   /* User route */
-  static const String userRoute = "/api/user";
+  static const String userRoute = "/$apiV2/api/user";
 
   /* Utils route */
-  static const String utilsRoute = "/api/utils";
+  static const String utilsRoute = "/$apiV2/api/utils";
 
   /* Post route */
-  static const String postRoute = "/api/post";
+  static const String postRoute = "/$apiV2/api/post";
 
   /* Posts route */
-  static const String postsRoute = "/api/posts";
+  static const String postsRoute = "/$apiV2/api/posts";
 
   /* Follow route */
-  static const String followRoute = "/api/follow";
+  static const String followRoute = "/$apiV2/api/follow";
 
   /* Stories route */
-  static const String storiesRoute = "/api/story";
+  static const String storiesRoute = "/$apiV2/api/story";
 
   /* Search route */
-  static const String searchRoute = "/api/search";
+  static const String searchRoute = "/$apiV2/api/search";
 
   /* Chat route */
-  static const String chatRoute = "/api/chat";
+  static const String chatRoute = "/$apiV2/api/chat";
 
   /* Notification route */
-  static const String notificationRoute = "/api/inapp";
+  static const String notificationRoute = "/$apiV2/api/inapp";
 
   /* Wallet route */
   static const String walletRoute = "/bagea-core";
 
   /* Wallet route */
-  static const String bizRoute = "/api/biz";
+  static const String bizRoute = "/$apiV2/api/biz";
+
+  /* User Content route */
+  static const String userContentRoute = "/$apiV3/api/getusercontents";
+
+  /* User Content route */
+  static const String bankRoute = "/$apiV3/api/banks";
+
+  static const String transactionRoute = "/$apiV3/api/transactions";
 
   /* v3 user profile */
   static const String profileRoute = "/api/getuserprofiles";
@@ -76,7 +84,8 @@ class UrlConstants {
 
   /* APIs In App Notification */
   /// get => Get Users notification.
-  static const String getUsersNotification = "$notificationRoute/getAllUsersnotification";
+  static const String getUsersNotification =
+      "$notificationRoute/getAllUsersnotification";
 
   /// post => Read notification.
   static const String readNotification = "$notificationRoute/readNotification";
@@ -106,7 +115,8 @@ class UrlConstants {
   static const String addPostComment = "$postRoute/comments/commentOnPost";
 
   /// post => Add Post Comment On Comment.
-  static const String addPostCommentOnComment = "$postRoute/comments/commentOnComment";
+  static const String addPostCommentOnComment =
+      "$postRoute/comments/commentOnComment";
 
   /// get => Get More Comments.
   static const String getMoreComments = "$postRoute/comments/viewMoreComments";
@@ -250,13 +260,15 @@ class UrlConstants {
   static const String addPostReaction = "$postRoute/reactions/reactOnPost";
 
   /// get => Get Post Reactions Count.
-  static const String getPostReactionsCount = "$postRoute/reactions/getPostReactionsCounts";
+  static const String getPostReactionsCount =
+      "$postRoute/reactions/getPostReactionsCounts";
 
   /// post Add Reaction to comment.
   static const String addReactOnComment = "$postRoute/reactions/reactOnComment";
 
   /// post get Comment from Post.
-  static const String getCommentReactions = "$postRoute/reactions/getCommentReactions";
+  static const String getCommentReactions =
+      "$postRoute/reactions/getCommentReactions";
 
   ///---------------------------------------------------------------------------------------------------------///
 
@@ -348,7 +360,7 @@ class UrlConstants {
 
   /// APIs end point
   /* Post route */
-  static const String postRouteV2 = "/api/posts";
+  static const String postRouteV2 = "/$apiV2/api/posts";
 
   ///---------------------------------------------------------------------------------------------------------///
 
@@ -406,6 +418,7 @@ class UrlConstants {
   /// post => Get Ads Roster
   static const String getAdsRoster = "$bizRoute/adsroster";
 
+<<<<<<< HEAD
   //apis goole plcae
   static const String getGoogleMapApis = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
@@ -429,4 +442,17 @@ class UrlConstants {
 
   //delete Account
   static const String deleteAccount = "$userRoute/noneactive";
+=======
+  /// post => Get Buy Content
+  static const String getBuyContent = "$userContentRoute/buy/details";
+
+  /// post => Get Buy Content
+  static const String postBuyContent = "$transactionRoute/";
+
+  /// get => Get All Bank
+  static const String getAllBank = "$bankRoute/all";
+
+  /// get => Get All Bank
+  static const String getBankByCode = "$bankRoute/search";
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
 }

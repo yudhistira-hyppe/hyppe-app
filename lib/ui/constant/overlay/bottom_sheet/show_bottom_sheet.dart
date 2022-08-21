@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
@@ -99,7 +100,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
@@ -125,6 +127,7 @@ class ShowBottomSheet {
       // isDismissible: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
+<<<<<<< HEAD
         return Wrap(
           children: [
             Container(
@@ -135,6 +138,18 @@ class ShowBottomSheet {
                   topLeft: Radius.circular(8),
                   topRight: Radius.circular(8),
                 ),
+=======
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            height: SizeConfig.screenHeight! / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
               ),
               padding: const EdgeInsets.all(0),
               child: OnDeleteMessageBottomSheet(data: data, function: function),
@@ -145,7 +160,8 @@ class ShowBottomSheet {
     );
   }
 
-  static onNoInternetConnection(_, {Function? tryAgainButton, Function? onBackButton}) {
+  static onNoInternetConnection(_,
+      {Function? tryAgainButton, Function? onBackButton}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -154,7 +170,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight,
             decoration: BoxDecoration(
@@ -165,14 +182,17 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnNoInternetConnectionBottomSheet(tryAgainButton: tryAgainButton ?? () {}, onBackButton: onBackButton),
+            child: OnNoInternetConnectionBottomSheet(
+                tryAgainButton: tryAgainButton ?? () {},
+                onBackButton: onBackButton),
           ),
         );
       },
     );
   }
 
-  static onInternalServerError(_, {Function? tryAgainButton, Function? backButton}) {
+  static onInternalServerError(_,
+      {Function? tryAgainButton, Function? backButton}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -181,7 +201,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight,
             decoration: BoxDecoration(
@@ -192,14 +213,19 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton!, backButton: backButton),
+            child: OnInternalServerErrorBottomSheet(
+                tryAgainButton: tryAgainButton!, backButton: backButton),
           ),
         );
       },
     );
   }
 
-  static onShowReport(BuildContext _, {ContentData? data, ReportType? reportType, double? height, bool fromLandscapeMode = false}) {
+  static onShowReport(BuildContext _,
+      {ContentData? data,
+      ReportType? reportType,
+      double? height,
+      bool fromLandscapeMode = false}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -217,7 +243,11 @@ class ShowBottomSheet {
             ),
           ),
           padding: const EdgeInsets.all(0),
-          child: ReportContent(userID: data!.email, postID: data.postID, reportType: reportType, fromLandscapeMode: fromLandscapeMode),
+          child: ReportContent(
+              userID: data!.email,
+              postID: data.postID,
+              reportType: reportType,
+              fromLandscapeMode: fromLandscapeMode),
         );
       },
     ).whenComplete(() {
@@ -226,7 +256,8 @@ class ShowBottomSheet {
     });
   }
 
-  static onShowReportStory(_, {ContentData? data, int? index, bool? forceStop}) {
+  static onShowReportStory(_,
+      {ContentData? data, int? index, bool? forceStop}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -235,7 +266,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight! / 4,
             decoration: BoxDecoration(
@@ -246,7 +278,10 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: ReportContent(userID: data!.email, storyID: data.postID, reportType: ReportType.story),
+            child: ReportContent(
+                userID: data!.email,
+                storyID: data.postID,
+                reportType: ReportType.story),
           ),
         );
       },
@@ -293,6 +328,7 @@ class ShowBottomSheet {
     //   _,
     //   uploadContentAction: false,
     //   action: () {
+<<<<<<< HEAD
     final _routing = Routing();
 
     showModalBottomSheet(
@@ -326,6 +362,19 @@ class ShowBottomSheet {
                     fromFront: false,
                     parentComment: parentComment,
                   ),
+=======
+    Scaffold.of(_)
+        .showBottomSheet(
+          (context) {
+            return Container(
+              height: SizeConfig.screenHeight! -
+                  (28 + (SizeConfig.screenWidth! / 1.78)),
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.background,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
                 ),
               ),
             ),
@@ -338,7 +387,8 @@ class ShowBottomSheet {
     // );
   }
 
-  static onShowPlaylist(BuildContext _, {String? feature, ContentData? data, int? index}) {
+  static onShowPlaylist(BuildContext _,
+      {String? feature, ContentData? data, int? index}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -349,7 +399,8 @@ class ShowBottomSheet {
         return Selector<PlaylistNotifier, bool>(
           selector: (_, select) => select.screen,
           builder: (_, screen, __) => Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(builder).viewInsets.bottom),
             child: Container(
               height: MediaQuery.of(_).size.height / 2,
               decoration: BoxDecoration(
@@ -360,7 +411,12 @@ class ShowBottomSheet {
                 ),
               ),
               padding: const EdgeInsets.all(0),
-              child: screen ? AddPlaylist() : ListMyPlaylist(featureType: feature, postID: data!.postID, contentID: data.postID),
+              child: screen
+                  ? AddPlaylist()
+                  : ListMyPlaylist(
+                      featureType: feature,
+                      postID: data!.postID,
+                      contentID: data.postID),
             ),
           ),
         );
@@ -555,7 +611,11 @@ class ShowBottomSheet {
     );
   }
 
-  PersistentBottomSheetController<T> onShowFilters<T>(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, String file, GlobalKey? globalKey) {
+  PersistentBottomSheetController<T> onShowFilters<T>(
+      BuildContext context,
+      GlobalKey<ScaffoldState> scaffoldState,
+      String file,
+      GlobalKey? globalKey) {
     return scaffoldState.currentState!.showBottomSheet<T>(
       (context) => GestureDetector(
         onVerticalDragStart: (_) {},
@@ -706,7 +766,8 @@ class ShowBottomSheet {
           child: Container(
             height: MediaQuery.of(context).size.height * 0.28,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
               color: Theme.of(context).colorScheme.surface,
             ),
             child: const SafeArea(
@@ -728,7 +789,8 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
@@ -751,7 +813,8 @@ class ShowBottomSheet {
       context: _,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
@@ -779,7 +842,8 @@ class ShowBottomSheet {
       isScrollControlled: true,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
@@ -790,7 +854,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnReportContentFormBottomSheet(),
+            child: const OnReportContentFormBottomSheet(),
           ),
         );
       },
@@ -807,7 +871,8 @@ class ShowBottomSheet {
       isScrollControlled: true,
       builder: (builder) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
             // height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
@@ -829,6 +894,7 @@ class ShowBottomSheet {
     });
   }
 
+<<<<<<< HEAD
   static onShowOptionPrivacyPost(
     BuildContext context, {
     required String value,
@@ -1093,6 +1159,29 @@ class ShowBottomSheet {
           padding: const EdgeInsets.all(0),
           child: ReportProfile(userID: userID),
         );
+=======
+  static onBuyContent(context, {ContentData? data}) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+            height: 250,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnBuyContentBottomSheet(
+              data: data,
+            ));
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
       },
     );
   }

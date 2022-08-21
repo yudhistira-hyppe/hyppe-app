@@ -65,4 +65,9 @@ class Routes {
 //delete account
   static const String deleteAccount = '/delete-account';
   static const String confirmDeleteAccount = '/confirm-delete-account';
+
+  static const String reviewBuyContent = '/review-buy-content';
+  static const String paymentScreen = '/payment-screen';
+  static const String paymentMethodScreen = '/payment-method-screen';
+  static const String paymentSummaryScreen = '/payment-summary-screen';
 }

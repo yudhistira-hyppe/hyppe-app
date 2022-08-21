@@ -62,7 +62,9 @@ class VidDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(
+      thickness: 1.0,
+      color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
 
   Widget _buildDescription(context) {
     return Consumer2<VidDetailNotifier, TranslateNotifierV2>(
@@ -100,11 +102,22 @@ class VidDetailBottom extends StatelessWidget {
             SizedBox(
               width: SizeConfig.screenWidth,
               child: data != null
+<<<<<<< HEAD
                   ? CustomTextWidget(maxLines: 2, textAlign: TextAlign.left, textStyle: Theme.of(context).textTheme.bodyText2, textToDisplay: "${data?.description}")
+=======
+                  ? CustomTextWidget(
+                      maxLines: 2,
+                      textAlign: TextAlign.left,
+                      textStyle: Theme.of(context).textTheme.bodyText2,
+                      textToDisplay:
+                          "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                    )
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
             data != null
+<<<<<<< HEAD
                 ? GestureDetector(
                     onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data!.email),
                     child: CustomTextWidget(
@@ -113,6 +126,15 @@ class VidDetailBottom extends StatelessWidget {
                       textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
                       textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
                     ),
+=======
+                ? CustomTextWidget(
+                    maxLines: 2,
+                    textAlign: TextAlign.left,
+                    textStyle: Theme.of(context).textTheme.caption!.apply(
+                        color: Theme.of(context).colorScheme.secondaryVariant),
+                    textToDisplay:
+                        '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
           ],
@@ -130,10 +152,16 @@ class VidDetailBottom extends StatelessWidget {
           children: <Widget>[
             Consumer<LikeNotifier>(
               builder: (context, notifier, child) => data != null
-                  ? _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
+                  ? _buildButton(
+                      context,
+                      '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                      "${data?.insight?.likes ?? 0}",
                       () => notifier.likePost(context, data!),
-                      colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
-                  : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
+                      colorIcon: (data?.insight?.isPostLiked ?? false)
+                          ? kHyppePrimary
+                          : Theme.of(context).iconTheme.color)
+                  : _buildButton(context,
+                      '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
             data != null
                 ? (data?.allowComments ?? false)
@@ -152,7 +180,8 @@ class VidDetailBottom extends StatelessWidget {
                           // } else {
                           //   ShowBottomSheet.onShowSomethingWhenWrong(context);
                           // }
-                          ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                          ShowBottomSheet.onShowCommentV2(context,
+                              postID: data?.postID);
                         },
                       )
                     : const SizedBox.shrink()
@@ -161,8 +190,17 @@ class VidDetailBottom extends StatelessWidget {
               context,
               '${AssetPath.vectorPath}share.svg',
               value2.translate.share!,
-              data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+              data != null
+                  ? () => value.createdDynamicLink(context, data: data)
+                  : () {},
             ),
+            if (data!.saleAmount! > 0)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}cart.svg',
+                value2.translate.buy!,
+                () => ShowBottomSheet.onBuyContent(context, data: data),
+              ),
             // _buildButton(
             //   context,
             //   '${AssetPath.vectorPath}bookmark.svg',
@@ -182,7 +220,8 @@ class VidDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(context, String icon, String caption, Function onTap, {Color? colorIcon}) {
+  Widget _buildButton(context, String icon, String caption, Function onTap,
+      {Color? colorIcon}) {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Column(
@@ -211,9 +250,11 @@ class VidDetailBottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildProfilePicture(context),
-          Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+          Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier,
+              TranslateNotifierV2>(
             builder: (context, value, value2, value3, child) {
-              if (data?.email == SharedPreference().readStorage(SpKeys.email)) return const SizedBox.shrink();
+              if (data?.email == SharedPreference().readStorage(SpKeys.email))
+                return const SizedBox.shrink();
               return CustomFollowButton(
                 caption: value3.translate.follow!,
                 onPressed: () async {
@@ -240,8 +281,14 @@ class VidDetailBottom extends StatelessWidget {
           username: data!.username,
           spaceProfileAndId: eightPx,
           haveStory: false,
+<<<<<<< HEAD
           isCelebrity: false,
           onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email!),
+=======
+          isCelebrity: true,
+          onTapOnProfileImage: () =>
+              _system.navigateToProfile(context, data!.email!),
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(

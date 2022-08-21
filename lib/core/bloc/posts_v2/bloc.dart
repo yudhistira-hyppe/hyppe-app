@@ -46,10 +46,15 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withActive', 'true'));
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
+<<<<<<< HEAD
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
       if (type == FeatureType.story) {
         formData.fields.add(const MapEntry('visibility', 'PRIVATE'));
       }
+=======
+      formData.fields
+          .add(MapEntry('postType', System().validatePostTypeV2(type)));
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
     } else {
       if (type == FeatureType.story) {
         if (postID == null) formData.fields.add(MapEntry('exclude', email));
@@ -76,8 +81,13 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('pageRow', '$pageRows'));
       formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
+<<<<<<< HEAD
 
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+=======
+      formData.fields
+          .add(MapEntry('postType', System().validatePostTypeV2(type)));
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
     }
     url = UrlConstants.getuserposts;
     if (otherContent) {
@@ -102,7 +112,9 @@ class PostsBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(PostsFetch(PostsState.getContentsSuccess,
+              version: onResult.data['version'],
+              data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -120,6 +132,7 @@ class PostsBloc {
     );
   }
 
+<<<<<<< HEAD
   Future postContentsBlocV2(
     BuildContext context, {
     List<String>? tags,
@@ -137,6 +150,23 @@ class PostsBloc {
     required NativeDeviceOrientation rotate,
     List<String>? tagDescription,
   }) async {
+=======
+  Future postContentsBlocV2(BuildContext context,
+      {String? tags,
+      required FeatureType type,
+      required bool allowComment,
+      required bool certified,
+      required String description,
+      required String visibility,
+      String location = "Indonesia",
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress,
+      required List<String?> fileContents,
+      required NativeDeviceOrientation rotate,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView}) async {
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -145,11 +175,18 @@ class PostsBloc {
         await MultipartFile.fromFile(File(fileContents[0]!).path,
             filename: System().basenameFiles(File(fileContents[0]!).path),
             contentType: MediaType(
-              System().lookupContentMimeType(File(fileContents[0]!).path)?.split('/')[0] ?? '',
-              System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", "") ?? "",
+              System()
+                      .lookupContentMimeType(File(fileContents[0]!).path)
+                      ?.split('/')[0] ??
+                  '',
+              System()
+                      .extensionFiles(File(fileContents[0]!).path)
+                      ?.replaceAll(".", "") ??
+                  "",
             ))));
     formData.fields.add(MapEntry('email', email));
-    formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+    formData.fields
+        .add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('description', description));
     formData.fields.add(MapEntry('tags', tags!.join(',')));
     formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
@@ -157,10 +194,24 @@ class PostsBloc {
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
+<<<<<<< HEAD
     formData.fields.add(MapEntry('location', location!));
     formData.fields.add(MapEntry('tagDescription', tagDescription!.join(',')));
     // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
+=======
+    formData.fields.add(MapEntry('location', location));
+    formData.fields
+        .add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
+    // sell content
+    formData.fields.add(MapEntry(
+        'saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(
+        MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(
+        MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 
@@ -171,7 +222,8 @@ class PostsBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
+          setPostsFetch(
+              PostsFetch(PostsState.postContentsSuccess, data: onResult));
         }
       },
       (errorData) {
@@ -193,7 +245,8 @@ class PostsBloc {
     return _postsFetch.data;
   }
 
-  Future deleteContentBlocV2(BuildContext context, {required String postId, required FeatureType type}) async {
+  Future deleteContentBlocV2(BuildContext context,
+      {required String postId, required FeatureType type}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     final formData = FormData();
@@ -207,7 +260,8 @@ class PostsBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.deleteContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
+          setPostsFetch(
+              PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
         }
       },
       (errorData) {
@@ -248,6 +302,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(const MapEntry('active', 'true'));
+<<<<<<< HEAD
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
@@ -256,6 +311,10 @@ class PostsBloc {
     print('hahahahahahahaha');
     print(type);
     print(formData.fields.map((e) => e).join(','));
+=======
+    formData.fields
+        .add(MapEntry('postType', System().validatePostTypeV2(type)));
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
@@ -264,7 +323,8 @@ class PostsBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.updateContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.updateContentsSuccess, data: onResult));
+          setPostsFetch(
+              PostsFetch(PostsState.updateContentsSuccess, data: onResult));
         }
       },
       (errorData) {

@@ -156,14 +156,28 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   caption: '${TranslateNotifierV2().translate.edit}',
                   icon: 'edit-content.svg',
                   onTap: () {
+<<<<<<< HEAD
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
                     notifier.isEdit = true;
                     notifier.captionController.text = widget.contentData.description ?? "";
                     notifier.tagsController.text = widget.contentData.tags!.join(",");
                     notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType!);
+=======
+                    final notifier = Provider.of<PreUploadContentNotifier>(
+                        context,
+                        listen: false);
+                    notifier.isUpdate = true;
+                    notifier.captionController.text =
+                        widget.contentData.description ?? "";
+                    notifier.tagsController.text =
+                        widget.contentData.tags!.join(",");
+                    notifier.featureType =
+                        _system.getFeatureTypeV2(widget.contentData.postType!);
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
                     notifier.thumbNail = widget.contentData.fullThumbPath;
                     notifier.allowComment = widget.contentData.allowComments ?? false;
                     notifier.certified = widget.contentData.certified ?? false;
+<<<<<<< HEAD
                     if (widget.contentData.location != null) {
                       notifier.locationName = widget.contentData.location!;
                     }
@@ -206,6 +220,19 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.userTagDataReal = [];
                     notifier.userTagDataReal.addAll(widget.contentData.tagPeople!);
 
+=======
+                    notifier.toSell = widget.contentData.saleAmount != null &&
+                            widget.contentData.saleAmount! > 0
+                        ? true
+                        : false;
+                    notifier.includeTotalViews =
+                        widget.contentData.saleView ?? false;
+                    notifier.includeTotalLikes =
+                        widget.contentData.saleLike ?? false;
+                    notifier.certified = widget.contentData.certified ?? false;
+                    notifier.priceController.text =
+                        widget.contentData.saleAmount!.toInt().toString();
+>>>>>>> 572f1c3d4fcecad21e7558364b5396c0bbfee4c1
                     _routing
                         .move(Routes.preUploadContent,
                             argument: UpdateContentsArgument(
