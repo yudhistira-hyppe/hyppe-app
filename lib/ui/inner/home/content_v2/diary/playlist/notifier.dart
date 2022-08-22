@@ -99,7 +99,6 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _currentPage = _routeArgument?.index;
 
     if (_routeArgument?.postID != null) {
-      print('dinamik link diary');
       _initialDiary(context);
     } else {
       _listData = _routeArgument?.diaryData;
@@ -120,7 +119,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       final res = await _resFuture;
       _listData = res;
       notifyListeners();
-      // _followUser(context);
+      _followUser(context);
     } catch (e) {
       'load diary: ERROR: $e'.logger();
     }
@@ -145,23 +144,25 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future _followUser(BuildContext context) async {
-    try {
-      final notifier = FollowBloc();
-      await notifier.followUserBlocV2(
-        context,
-        data: FollowUserArgument(
-          eventType: InteractiveEventType.following,
-          receiverParty: _listData?.single.email ?? '',
-        ),
-      );
-      final fetch = notifier.followFetch;
-      if (fetch.followState == FollowState.followUserSuccess) {
-        'follow user success'.logger();
-      } else {
-        'follow user failed'.logger();
+    if (_sharedPrefs.readStorage(SpKeys.email) != _listData?.single.email) {
+      try {
+        final notifier = FollowBloc();
+        await notifier.followUserBlocV2(
+          context,
+          data: FollowUserArgument(
+            eventType: InteractiveEventType.following,
+            receiverParty: _listData?.single.email ?? '',
+          ),
+        );
+        final fetch = notifier.followFetch;
+        if (fetch.followState == FollowState.followUserSuccess) {
+          'follow user success'.logger();
+        } else {
+          'follow user failed'.logger();
+        }
+      } catch (e) {
+        'follow user: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'follow user: ERROR: $e'.logger();
     }
   }
 }

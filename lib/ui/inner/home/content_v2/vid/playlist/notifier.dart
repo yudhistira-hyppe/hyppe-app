@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -60,7 +62,6 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       _resFuture = contentsQuery.reload(context);
-
       final res = await _resFuture;
       _data = res.firstOrNull;
       notifyListeners();
@@ -71,48 +72,52 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future followUser(BuildContext context, {bool checkIdCard = true}) async {
-    try {
-      if (checkIdCard) {
-        // System().actionReqiredIdCard(
-        //   context,
-        //   action: () async {
-        statusFollowing = StatusFollowing.requested;
-        final notifier = FollowBloc();
-        await notifier.followUserBlocV2(
-          context,
-          data: FollowUserArgument(
-            receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
-          ),
-        );
-        final fetch = notifier.followFetch;
-        if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.following;
+    final _sharedPrefs = SharedPreference();
+
+    if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
+      try {
+        if (checkIdCard) {
+          // System().actionReqiredIdCard(
+          //   context,
+          //   action: () async {
+          statusFollowing = StatusFollowing.requested;
+          final notifier = FollowBloc();
+          await notifier.followUserBlocV2(
+            context,
+            data: FollowUserArgument(
+              receiverParty: _data?.email ?? '',
+              eventType: InteractiveEventType.following,
+            ),
+          );
+          final fetch = notifier.followFetch;
+          if (fetch.followState == FollowState.followUserSuccess) {
+            statusFollowing = StatusFollowing.following;
+          } else {
+            statusFollowing = StatusFollowing.none;
+          }
+          //   },
+          //   uploadContentAction: false,
+          // );
         } else {
-          statusFollowing = StatusFollowing.none;
+          statusFollowing = StatusFollowing.requested;
+          final notifier = FollowBloc();
+          await notifier.followUserBlocV2(
+            context,
+            data: FollowUserArgument(
+              receiverParty: _data?.email ?? '',
+              eventType: InteractiveEventType.following,
+            ),
+          );
+          final fetch = notifier.followFetch;
+          if (fetch.followState == FollowState.followUserSuccess) {
+            statusFollowing = StatusFollowing.following;
+          } else {
+            statusFollowing = StatusFollowing.none;
+          }
         }
-        //   },
-        //   uploadContentAction: false,
-        // );
-      } else {
-        statusFollowing = StatusFollowing.requested;
-        final notifier = FollowBloc();
-        await notifier.followUserBlocV2(
-          context,
-          data: FollowUserArgument(
-            receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
-          ),
-        );
-        final fetch = notifier.followFetch;
-        if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.following;
-        } else {
-          statusFollowing = StatusFollowing.none;
-        }
+      } catch (e) {
+        'follow user: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'follow user: ERROR: $e'.logger();
     }
   }
 
@@ -121,6 +126,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
       _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;
+
       if (_resRequest.isNotEmpty) {
         if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
           statusFollowing = StatusFollowing.following;

@@ -41,7 +41,7 @@ class UploadContent extends StatelessWidget {
               alignment: Alignment.topRight,
               child: Column(
                 children: [
-                  const CameraFlashButton(),
+                  // const CameraFlashButton(),
                   CustomTextWidget(
                     textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
                     textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
@@ -59,9 +59,7 @@ class UploadContent extends StatelessWidget {
             child: Align(
               alignment: Alignment.topLeft,
               child: CustomTextButton(
-                onPressed: notifier!.conditionalOnClose()
-                    ? () async => await notifier!.onClose(context)
-                    : null,
+                onPressed: notifier!.conditionalOnClose() ? () async => await notifier!.onClose(context) : null,
                 child: const UnconstrainedBox(
                   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                 ),
@@ -99,11 +97,7 @@ class UploadContent extends StatelessWidget {
         ),
         // Widget modal, this is widget appear, if loading state is true
         notifier!.isLoading
-            ? Container(
-                color: Colors.black54,
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight,
-                child: const UnconstrainedBox(child: CustomLoading()))
+            ? Container(color: Colors.black54, width: SizeConfig.screenWidth, height: SizeConfig.screenHeight, child: const UnconstrainedBox(child: CustomLoading()))
             : const SizedBox.shrink()
       ],
     );

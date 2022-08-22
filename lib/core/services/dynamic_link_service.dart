@@ -82,6 +82,7 @@ class DynamicLinkService {
         // Auto follow user if app is install from a dynamic link
         if (deepLink.queryParameters['referral'] != '1') {
           try {
+            print('masuk sini dynamic');
             followSender(Routing.navigatorKey.currentContext!);
           } catch (e) {
             'Error in followSender $e'.logger();
@@ -144,37 +145,38 @@ class DynamicLinkService {
   }
 
   static Future followSender(BuildContext context) async {
-    try {
-      if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
-        return;
-      }
-
-      final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
-
-      'Link | followSender | receiverParty: $_receiverParty'.logger();
-
-      if (_receiverParty != null) {
-        final notifier = FollowBloc();
-        await notifier.followUserBlocV2(
-          context,
-          withAlertConnection: false,
-          data: FollowUserArgument(
-            receiverParty: _receiverParty,
-            eventType: InteractiveEventType.following,
-          ),
-        );
-        final fetch = notifier.followFetch;
-        if (fetch.followState == FollowState.followUserSuccess) {
-          'followUser | followUserSuccess'.logger();
-        } else {
-          'followUser | followUserFailed'.logger();
+    final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+    if (_sharedPrefs.readStorage(SpKeys.email) != _receiverParty) {
+      try {
+        if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
+          return;
         }
-        _pendingDynamicLinkData = null;
-      } else {
-        'followUser | _receiverParty is null'.logger();
+
+        'Link | followSender | receiverParty: $_receiverParty'.logger();
+
+        if (_receiverParty != null) {
+          final notifier = FollowBloc();
+          await notifier.followUserBlocV2(
+            context,
+            withAlertConnection: false,
+            data: FollowUserArgument(
+              receiverParty: _receiverParty,
+              eventType: InteractiveEventType.following,
+            ),
+          );
+          final fetch = notifier.followFetch;
+          if (fetch.followState == FollowState.followUserSuccess) {
+            'followUser | followUserSuccess'.logger();
+          } else {
+            'followUser | followUserFailed'.logger();
+          }
+          _pendingDynamicLinkData = null;
+        } else {
+          'followUser | _receiverParty is null'.logger();
+        }
+      } catch (e) {
+        'follow user: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'follow user: ERROR: $e'.logger();
     }
   }
 

@@ -22,17 +22,14 @@ class AllNotification extends StatelessWidget {
             }
             return Component(
               data: notifier.data![index],
-              rightWidget: notifier.data![index].flowIsDone!
-                  ? const SizedBox.shrink()
-                  : System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
-                          System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
-                      // ? Container()
-                      ? Container()
-                      // ? AcceptButton(data: notifier.data?[index])
-                      : ImageComponent(
-                          borderRadiusGeometry: BorderRadius.circular(4.0),
-                          data: notifier.data?[index].content.firstOrNull,
-                        ),
+              rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
+                      System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
+                  ? Container()
+                  // ? AcceptButton(data: notifier.data?[index])
+                  : ImageComponent(
+                      borderRadiusGeometry: BorderRadius.circular(4.0),
+                      data: notifier.data?[index].content.firstOrNull,
+                    ),
             );
           },
         ),

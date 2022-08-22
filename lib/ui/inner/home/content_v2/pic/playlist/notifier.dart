@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/ux/path.dart';
@@ -56,8 +58,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
     if (_routeArgument?.postID != null) {
+      print('initstate pic');
       await _initialPic(context);
     } else {
+      print('initstate pic2');
       _data = _routeArgument?.picData;
       data?.isLiked.logger();
       notifyListeners();
@@ -143,23 +147,29 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
-    try {
-      _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
-      final _resFuture = _usersFollowingQuery.reload(context);
-      final _resRequest = await _resFuture;
-      if (_resRequest.isNotEmpty) {
-        if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
-          statusFollowing = StatusFollowing.following;
-        } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
-          statusFollowing = StatusFollowing.requested;
-        } else {
-          if (autoFollow) {
-            followUser(context, checkIdCard: false);
+    print('autofollow');
+    final _sharedPrefs = SharedPreference();
+    print(_sharedPrefs.readStorage(SpKeys.email));
+    print(_data?.email);
+    if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
+      try {
+        _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
+        final _resFuture = _usersFollowingQuery.reload(context);
+        final _resRequest = await _resFuture;
+        if (_resRequest.isNotEmpty) {
+          if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+            statusFollowing = StatusFollowing.following;
+          } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+            statusFollowing = StatusFollowing.requested;
+          } else {
+            if (autoFollow) {
+              followUser(context, checkIdCard: false);
+            }
           }
         }
+      } catch (e) {
+        'load following request list: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'load following request list: ERROR: $e'.logger();
     }
   }
 

@@ -100,12 +100,15 @@ android {
             ndk {
                 debugSymbolLevel 'SYMBOL_TABLE'
             }
+
         }
         debug{
             signingConfig signingConfigs.debug
+             
         }
     }
 }
+
 
 flutter {
     source '../..'
