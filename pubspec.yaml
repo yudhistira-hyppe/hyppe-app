@@ -35,7 +35,7 @@ dependencies:
   intl: ^0.17.0 # Untuk kebutuhan format date and time
   lottie: ^1.2.1 # load image
   path_provider: ^2.0.8 # Untuk kebutuhan get path directory di device
-  permission_handler: ^10.0.0 # Untuk kebutuhan handling permission
+  permission_handler: ^8.1.6 # Untuk kebutuhan handling permission
   provider: ^6.0.2 # Untuk kebutuhan state management
   share_plus: ^3.0.4 # Untuk kebutuhan sharing content to another apps
   shared_preferences: ^2.0.12 # Untuk kebutuhan penyimpanan memory internal
@@ -68,7 +68,6 @@ dependencies:
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
   light_compressor: ^1.2.2
-  deepar_flutter: ^0.0.2 #deepAr
 
   dynamic_widget: # Dynamic widget builder
     git:
@@ -108,7 +107,6 @@ flutter:
     - assets/png/
     - assets/vector/
     - assets/dummy_md/
-    - assets/effects/
 
   fonts:
     - family: Lato

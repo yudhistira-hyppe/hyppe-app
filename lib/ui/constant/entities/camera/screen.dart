@@ -1,4 +1,3 @@
-import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_view.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -26,11 +25,9 @@ class CameraPage extends StatefulWidget {
 
 class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, AfterFirstLayoutMixin {
   late CameraNotifier notifier;
-  final DeepArController _controller = DeepArController();
 
   @override
   void initState() {
-    _controller.initialize(androidLicenseKey: "be454b7ca67d4ff3efba86500755b102d128e2f012c316e6b577979e8e750dbb9ec5e6722618f022", iosLicenseKey: "---iOS key---", resolution: Resolution.high);
     super.initState();
   }
 
@@ -91,12 +88,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
           : notifier.item1 && !notifier.item3
               ? Stack(
                   children: [
-                    _controller.isInitialized
-                        ? CameraView(
-                            controller: _controller,
-                          )
-                        : Container(),
-                    // ...widget.additionalViews,
+                    const CameraView(),
+                    ...widget.additionalViews,
                   ],
                 )
               : const Center(child: CustomLoading()),
