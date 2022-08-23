@@ -41,7 +41,7 @@ class UploadContent extends StatelessWidget {
               alignment: Alignment.topRight,
               child: Column(
                 children: [
-                  // const CameraFlashButton(),
+                  const CameraFlashButton(),
                   CustomTextWidget(
                     textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
                     textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),

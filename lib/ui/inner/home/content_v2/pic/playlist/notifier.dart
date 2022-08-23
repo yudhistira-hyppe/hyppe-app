@@ -58,10 +58,8 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
     if (_routeArgument?.postID != null) {
-      print('initstate pic');
       await _initialPic(context);
     } else {
-      print('initstate pic2');
       _data = _routeArgument?.picData;
       data?.isLiked.logger();
       notifyListeners();
@@ -147,10 +145,8 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
-    print('autofollow');
     final _sharedPrefs = SharedPreference();
-    print(_sharedPrefs.readStorage(SpKeys.email));
-    print(_data?.email);
+
     if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
       try {
         _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
