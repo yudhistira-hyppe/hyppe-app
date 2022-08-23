@@ -542,6 +542,19 @@
   "seePaymentInstruction": "Lihat panduan pembayaran",
   "checkPaymentStatus": "Check payment status",
   "vaCopyToClipboard": "Nomor virtual account telah di salin ke clipboard",
-  "expired": "Kedaluarsa"
- 
+  "expired": "Kedaluarsa",
+  "transaction": "Transaksi",
+  "addBankAccount" : "Tambah Rekening",
+  "withdrawal": "Penarikan",
+  "bankAccount": "Akun Bank",
+  "noSavedAccountYet": "Belum ada akun yang disimpan",
+  "addYourBankAccountForAnEasierWithdraw":"Tambahkan rekening bank Anda untuk penarikan yang lebih mudah",
+  "selectBank" : "Pilih Bank",
+  "bankName" : "Nama Bank",
+  "noBankAccount" : "No Akun Bank",
+  "accountOwnerName":"Nama Pemilik Akun",
+  "keepThisAccount?":"Simpan Akun Ini?",
+  "youWillAdd ":"Anda akan menambahkan rekening ",
+  "accountWithAccountNumber" : "dengan nomor rekening",
+  "ownedBy" : "milik"
 }

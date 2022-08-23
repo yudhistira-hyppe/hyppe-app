@@ -27,7 +27,7 @@ class ViewContent {
         fullName: json["fullName"],
         email: json["email"],
         username: json["username"],
-        avatar: Avatar.fromJson(json["avatar"]),
+        avatar: json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null,
       );
 
   Map<String, dynamic> toJson() => {

@@ -511,12 +511,7 @@
   "tappingDeleteAccountWillDelete":"Tapping “Delete Account” will delete Hyppe Account ",
   "accountWillBeDeletedProccessAfter24Hours":"Account will be deleted proccess after 24 hours.",
   "deletingYourAccountIsPermanent":"Deleting your account is permanent. Your profile, messages, friends, likes, and post will be permanently deleted.",
- 
-
-
-
-
-        "marketContent": "Market your content",
+  "marketContent": "Market your content",
   "marketContent1": "IMPORTANT NOTICE!  The content sold will included the Content Ownership Number Certificate.",
   "includeTotalViews": "Include Total Views",
   "includeTotalLikes": "Include Total Likes",
@@ -546,6 +541,19 @@
   "seePaymentInstruction": "See payment instruction",
   "checkPaymentStatus": "Check payment status",
   "vaCopyToClipboard": "Virtual account number has been copied to clipboard",
-  "expired": "Expired"
- 
+  "expired": "Expired",
+  "transaction": "Transaction",
+  "addBankAccount" : "Add Bank Account",
+  "withdrawal" : "Withdrawal",
+  "bankAccount" : "Bank Account",
+  "noSavedAccountYet": "No saved account yet",
+  "addYourBankAccountForAnEasierWithdraw":"Add your bank account for an easier withdraw",
+  "selectBank" : "Select Bank",
+  "bankName" : "Bank Name",
+  "noBankAccount" : "No Bank Account",
+  "accountOwnerName":"Account Owner Name",
+  "keepThisAccount?":"Keep This Account?",
+  "youWillAdd ":"you will add",
+  "accountWithAccountNumber" : "account with account number",
+  "ownedBy" : "owned by "
 }

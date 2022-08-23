@@ -161,7 +161,7 @@ class DataUser {
 
   factory DataUser.fromJson(Map<String, dynamic> json) => DataUser(
         id: json["_id"],
-        avatar: Avatar.fromJson(json["avatar"]),
+        avatar: json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null,
         idUserAuth: json["idUserAuth"],
         username: json["username"],
         fullName: json["fullName"],

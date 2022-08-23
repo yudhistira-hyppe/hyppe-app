@@ -31,10 +31,10 @@ class BuyData {
   bool? isCertified;
   bool? saleLike;
   bool? saleView;
-  double? adminFee;
+  int? adminFee;
   String? prosentaseAdminFee;
   int? price;
-  double? totalAmount;
+  int? totalAmount;
   bool? monetize;
 
   BuyData({

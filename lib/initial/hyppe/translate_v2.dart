@@ -14,6 +14,7 @@ import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -86,17 +87,14 @@ class TranslateNotifierV2 with ChangeNotifier {
     if (index == null && _isoCodeCache != null) {
       langIso = _isoCodeCache == "en" ? "en" : "id";
     } else {
-      langIso = index != null && _listLanguage.isNotEmpty
-          ? _listLanguage[index].langIso ?? "en"
-          : "id";
+      langIso = index != null && _listLanguage.isNotEmpty ? _listLanguage[index].langIso ?? "en" : "id";
     }
 
     SharedPreference().writeStorage(SpKeys.isoCode, langIso);
 
     // final localeDir = await getApplicationDocumentsDirectory();
     // File txt = File('${localeDir.path}/primaryLanguage.txt');
-    Map<String, dynamic> _langDefault = jsonDecode(
-        await rootBundle.loadString('${AssetPath.jsonPath}$langIso.json'));
+    Map<String, dynamic> _langDefault = jsonDecode(await rootBundle.loadString('${AssetPath.jsonPath}$langIso.json'));
 
     // bool downloaded = await txt.exists();
     // if (downloaded) {
@@ -150,6 +148,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<PaymentMethodNotifier>().translate(translate);
     context.read<PaymentNotifier>().translate(translate);
     context.read<PaymentSummaryNotifier>().translate(translate);
+    context.read<TransactionNotifier>().translate(translate);
 
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {

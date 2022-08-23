@@ -70,4 +70,8 @@ class Routes {
   static const String paymentScreen = '/payment-screen';
   static const String paymentMethodScreen = '/payment-method-screen';
   static const String paymentSummaryScreen = '/payment-summary-screen';
+
+  //transaction
+  static const String transaction = '/transaction';
+  static const String bankAccount = '/bank-account';
 }

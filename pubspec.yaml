@@ -116,7 +116,7 @@ flutter:
     - assets/png/
     - assets/vector/
     - assets/dummy_md/
-    - assets/effects/
+ 
 
   fonts:
     - family: Lato
