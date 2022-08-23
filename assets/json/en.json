@@ -479,6 +479,7 @@
   "deletePost": "Delete post?",
   "deleteComment": "Delete Comment",
   "commentWillPermanentlyDeletedContinue": "Comment will permanently deleted, continue?",
+ 
   "addPostDescription" : "Add post description, @friends, and  join # topic (max 2500 characters)",
   "privacy" : "Privacy",
   "selectLocation": "Select Location",
@@ -509,5 +510,42 @@
   "anotherReason":"Another Reason",
   "tappingDeleteAccountWillDelete":"Tapping “Delete Account” will delete Hyppe Account ",
   "accountWillBeDeletedProccessAfter24Hours":"Account will be deleted proccess after 24 hours.",
-  "deletingYourAccountIsPermanent":"Deleting your account is permanent. Your profile, messages, friends, likes, and post will be permanently deleted."
+  "deletingYourAccountIsPermanent":"Deleting your account is permanent. Your profile, messages, friends, likes, and post will be permanently deleted.",
+ 
+
+
+
+
+        "marketContent": "Market your content",
+  "marketContent1": "IMPORTANT NOTICE!  The content sold will included the Content Ownership Number Certificate.",
+  "includeTotalViews": "Include Total Views",
+  "includeTotalLikes": "Include Total Likes",
+  "setPrice": "Set Price",
+  "rp": "Rp",
+  "change": "Change",
+  "orderSummary": "Order Summary",
+  "priceIsNotEmpty": "Please set your price",
+  "buy": " Buy",
+  "purchaseTerms": "Purchase Terms",
+  "pleaseEnterMessage": "Please enter message",
+  "pleaseSetPrice":"Please set price",
+  "orderNumber": "Order Number",
+  "time": "Time",
+  "price": "Price",
+  "total": "Total",
+  "proceedPayment": "Proceed To Payment",
+  "paymentMethods": "Payment Methods",
+  "payment": "Payment",
+  "totalPayment": "Total Payment",
+  "paymentBefore":"Make payment before",
+  "copy":"Copy",
+  "seeOtherBank":"See other bank",
+  "yes":"Yes",
+  "no":"No",
+  "pay": "Pay",
+  "seePaymentInstruction": "See payment instruction",
+  "checkPaymentStatus": "Check payment status",
+  "vaCopyToClipboard": "Virtual account number has been copied to clipboard",
+  "expired": "Expired"
+ 
 }

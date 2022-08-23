@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 class CustomSwitchButton extends StatelessWidget {
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool>? onChanged;
   final bool value;
 
   const CustomSwitchButton({Key? key, required this.onChanged, required this.value}) : super(key: key);

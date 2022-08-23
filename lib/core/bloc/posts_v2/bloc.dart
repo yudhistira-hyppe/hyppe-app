@@ -46,6 +46,7 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withActive', 'true'));
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
+
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
       if (type == FeatureType.story) {
         formData.fields.add(const MapEntry('visibility', 'PRIVATE'));
@@ -76,7 +77,6 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('pageRow', '$pageRows'));
       formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
-
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     }
     url = UrlConstants.getuserposts;
@@ -120,23 +120,24 @@ class PostsBloc {
     );
   }
 
-  Future postContentsBlocV2(
-    BuildContext context, {
-    List<String>? tags,
-    List<String>? cats,
-    List<String>? tagPeople,
-    required FeatureType type,
-    required bool allowComment,
-    required bool certified,
-    required String description,
-    required String visibility,
-    String? location,
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-    required List<String?> fileContents,
-    required NativeDeviceOrientation rotate,
-    List<String>? tagDescription,
-  }) async {
+  Future postContentsBlocV2(BuildContext context,
+      {List<String>? tags,
+      List<String>? cats,
+      List<String>? tagPeople,
+      required FeatureType type,
+      required bool allowComment,
+      required bool certified,
+      required String description,
+      required String visibility,
+      String? location,
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress,
+      required List<String?> fileContents,
+      required NativeDeviceOrientation rotate,
+      List<String>? tagDescription,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView}) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -157,10 +158,18 @@ class PostsBloc {
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
+
     formData.fields.add(MapEntry('location', location!));
     formData.fields.add(MapEntry('tagDescription', tagDescription!.join(',')));
     // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
+    formData.fields.add(MapEntry(
+        // sell content
+        'saleAmount',
+        saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 

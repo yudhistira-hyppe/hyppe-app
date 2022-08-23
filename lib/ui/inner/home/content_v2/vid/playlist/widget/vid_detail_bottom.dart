@@ -163,6 +163,13 @@ class VidDetailBottom extends StatelessWidget {
               value2.translate.share!,
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
+            if (data!.saleAmount! > 0)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}cart.svg',
+                value2.translate.buy!,
+                () => ShowBottomSheet.onBuyContent(context, data: data),
+              ),
             // _buildButton(
             //   context,
             //   '${AssetPath.vectorPath}bookmark.svg',
@@ -240,8 +247,10 @@ class VidDetailBottom extends StatelessWidget {
           username: data!.username,
           spaceProfileAndId: eightPx,
           haveStory: false,
+
           isCelebrity: false,
           onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email!),
+
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(

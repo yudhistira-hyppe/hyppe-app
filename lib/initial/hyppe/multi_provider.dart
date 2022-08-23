@@ -7,10 +7,14 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -37,16 +41,22 @@ import 'package:hyppe/ui/inner/home/notifier_v2.dart' as homeV2;
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart' as vidV2;
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart' as picV2;
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart' as diaryV2;
-import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart' as storyV2;
-import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart' as V2;
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart'
+    as diaryV2;
+import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart'
+    as storyV2;
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart'
+    as V2;
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart' as cpV2;
+import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart'
+    as cpV2;
 import 'package:hyppe/ui/inner/search_v2/notifier.dart' as sV2;
 
 class AppDependencies {
-  static List<SingleChildWidget> inject({required HyppeNotifier rootNotifier}) => [
+  static List<SingleChildWidget> inject(
+          {required HyppeNotifier rootNotifier}) =>
+      [
         /// All Dependency Injection
 
         // Root Notifier
@@ -74,29 +84,34 @@ class AppDependencies {
         ChangeNotifierProvider(create: (context) => PreviewContentNotifier()),
         ChangeNotifierProvider(create: (context) => PreUploadContentNotifier()),
 
-        ChangeNotifierProvider(create: (context) => cpV2.ChangePasswordNotifier()),
+        ChangeNotifierProvider(
+            create: (context) => cpV2.ChangePasswordNotifier()),
 
         // Profile
         ChangeNotifierProvider(create: (context) => SelfProfileNotifier()),
         ChangeNotifierProvider(create: (context) => OtherProfileNotifier()),
-        ChangeNotifierProvider(create: (context) => V2.AccountPreferencesNotifier()),
+        ChangeNotifierProvider(
+            create: (context) => V2.AccountPreferencesNotifier()),
 
         // Vid
         ChangeNotifierProvider(create: (context) => vidV2.PreviewVidNotifier()),
 
         // Stories
-        ChangeNotifierProvider(create: (context) => storyV2.PreviewStoriesNotifier()),
+        ChangeNotifierProvider(
+            create: (context) => storyV2.PreviewStoriesNotifier()),
 
         // Pic
         ChangeNotifierProvider(create: (context) => picV2.PreviewPicNotifier()),
         ChangeNotifierProvider(create: (context) => PicDetailNotifier()),
 
         // Diary
-        ChangeNotifierProvider(create: (context) => diaryV2.PreviewDiaryNotifier()),
+        ChangeNotifierProvider(
+            create: (context) => diaryV2.PreviewDiaryNotifier()),
 
         // TODO(Hendi Noviansyah): Refactor totalViews variable
         // Viewer Stories
-        ChangeNotifierProxyProvider<storyV2.PreviewStoriesNotifier, ViewerStoriesNotifier>(
+        ChangeNotifierProxyProvider<storyV2.PreviewStoriesNotifier,
+            ViewerStoriesNotifier>(
           create: (context) => ViewerStoriesNotifier(),
           update: (context, value, previous) => previous!..viewers = 0,
           // update: (context, value, previous) => previous!..viewers = value.myStoriesData?.totalViews,
@@ -108,7 +123,8 @@ class AppDependencies {
         // Playlist
         ChangeNotifierProvider(create: (context) => PlaylistNotifier()),
         ChangeNotifierProvider(create: (context) => LikeNotifier()),
-        ChangeNotifierProvider(create: (context) => FollowRequestUnfollowNotifier()),
+        ChangeNotifierProvider(
+            create: (context) => FollowRequestUnfollowNotifier()),
 
         // Notification
         ChangeNotifierProvider(create: (context) => NotificationNotifier()),
@@ -169,15 +185,31 @@ class AppDependencies {
 
         ChangeNotifierProxyProvider<HyppeNotifier, SettingNotifier>(
           create: (context) => SettingNotifier(),
-          update: (context, value, previous) => previous!..appPackage = value.appVersion,
+          update: (context, value, previous) =>
+              previous!..appPackage = value.appVersion,
         ),
 
         ChangeNotifierProvider<UploadNotifier>(
           create: (context) => UploadNotifier(),
         ),
 
-        ChangeNotifierProvider<ProfileCompletionNotifier>(create: (context) => ProfileCompletionNotifier()),
+        ChangeNotifierProvider<ProfileCompletionNotifier>(
+            create: (context) => ProfileCompletionNotifier()),
 
-        ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier())
+        //ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier())
+        ChangeNotifierProvider<ReferralNotifier>(
+            create: (context) => ReferralNotifier()),
+
+        ChangeNotifierProvider<ReviewBuyNotifier>(
+            create: (context) => ReviewBuyNotifier()),
+
+        ChangeNotifierProvider<PaymentMethodNotifier>(
+            create: (context) => PaymentMethodNotifier()),
+
+        ChangeNotifierProvider<PaymentNotifier>(
+            create: (context) => PaymentNotifier()),
+
+        ChangeNotifierProvider<PaymentSummaryNotifier>(
+            create: (context) => PaymentSummaryNotifier()),
       ];
 }

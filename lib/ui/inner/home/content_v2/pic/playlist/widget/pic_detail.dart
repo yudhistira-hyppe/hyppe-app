@@ -199,6 +199,12 @@ class _PicDetailState extends State<PicDetail> {
                           iconData: '${AssetPath.vectorPath}share.svg',
                           function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
                         ),
+                        if (widget.arguments!.saleAmount! > 0)
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}cart.svg',
+                            function: () => ShowBottomSheet.onBuyContent(context, data: widget.arguments),
+                          ),
                         // _buildButtonV2(
                         //   context: context,
                         //   iconData: '${AssetPath.vectorPath}bookmark.svg',
@@ -244,6 +250,7 @@ class _PicDetailState extends State<PicDetail> {
                         padding: const EdgeInsets.all(2),
                         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
                         // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+
                         child: SingleChildScrollView(
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

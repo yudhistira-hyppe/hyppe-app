@@ -2,12 +2,14 @@ name: hyppe
 description: Hyppe Teknologi Indonesia.
 homepage: https://www.hyppe.id
 
-publish_to: 'none'
+publish_to: "none"
 
+ 
 version: 1.0.12+58
+ 
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -37,7 +39,7 @@ dependencies:
   path_provider: ^2.0.8 # Untuk kebutuhan get path directory di device
   permission_handler: ^8.1.6 # Untuk kebutuhan handling permission
   provider: ^6.0.2 # Untuk kebutuhan state management
-  share_plus: ^3.0.4 # Untuk kebutuhan sharing content to another apps
+  share_plus: ^4.0.10 # Untuk kebutuhan sharing content to another apps
   shared_preferences: ^2.0.12 # Untuk kebutuhan penyimpanan memory internal
   shimmer: ^2.0.0 # A package provides an easy way to add shimmer effect in Flutter project
   tuple: ^2.0.0 # Tuple data structure
@@ -71,20 +73,27 @@ dependencies:
 
   dynamic_widget: # Dynamic widget builder
     git:
-        url: https://github.com/dengyin2000/dynamic_widget.git
-        ref: e6ece410e1abcb536ed9a599cbff17f20a81669c
+      url: https://github.com/dengyin2000/dynamic_widget.git
+      ref: e6ece410e1abcb536ed9a599cbff17f20a81669c
 
   better_player: # Better player
     path: ../hyppe-better-player
 
   story_view: # Story viewer
     path: packages/story_view
-    
+
+  # flutter_aliplayer:
+  #   path: packages/flutter_aliplayer
+
   qr_flutter: ^4.0.0
+  pattern_formatter: ^2.0.0
+  flutter_countdown_timer: ^4.1.0
+  #flutter_masked_text: ^0.8.0 #currency format for input text
 
   # uuid: ^3.0.4 # UUID Generator and Parser for all Dart platforms
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
 
+ 
 # dependency_overrides:
 #   camera: <=0.10.0
   

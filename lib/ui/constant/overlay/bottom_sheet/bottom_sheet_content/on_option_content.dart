@@ -158,12 +158,15 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   onTap: () {
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
                     notifier.isEdit = true;
+                    notifier.isUpdate = true;
                     notifier.captionController.text = widget.contentData.description ?? "";
                     notifier.tagsController.text = widget.contentData.tags!.join(",");
                     notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType!);
+
                     notifier.thumbNail = widget.contentData.fullThumbPath;
                     notifier.allowComment = widget.contentData.allowComments ?? false;
                     notifier.certified = widget.contentData.certified ?? false;
+
                     if (widget.contentData.location != null) {
                       notifier.locationName = widget.contentData.location!;
                     }
@@ -172,8 +175,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
 
                     notifier.privacyValue = widget.contentData.visibility!;
                     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-                    print('widget.contentData.visibility');
-                    print(widget.contentData.visibility);
+
                     if (_isoCodeCache == 'id') {
                       switch (widget.contentData.visibility!) {
                         case 'PUBLIC':
@@ -205,6 +207,12 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     }
                     notifier.userTagDataReal = [];
                     notifier.userTagDataReal.addAll(widget.contentData.tagPeople!);
+
+                    notifier.toSell = widget.contentData.saleAmount != null && widget.contentData.saleAmount! > 0 ? true : false;
+                    notifier.includeTotalViews = widget.contentData.saleView ?? false;
+                    notifier.includeTotalLikes = widget.contentData.saleLike ?? false;
+                    notifier.certified = widget.contentData.certified ?? false;
+                    notifier.priceController.text = widget.contentData.saleAmount!.toInt().toString();
 
                     _routing
                         .move(Routes.preUploadContent,

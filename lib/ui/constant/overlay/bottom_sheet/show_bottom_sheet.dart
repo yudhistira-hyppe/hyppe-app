@@ -10,6 +10,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
@@ -293,6 +294,7 @@ class ShowBottomSheet {
     //   _,
     //   uploadContentAction: false,
     //   action: () {
+
     final _routing = Routing();
 
     showModalBottomSheet(
@@ -790,7 +792,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnReportContentFormBottomSheet(),
+            child: const OnReportContentFormBottomSheet(),
           ),
         );
       },
@@ -1077,22 +1079,46 @@ class ShowBottomSheet {
 
   static onShowReportProfile(BuildContext _, {userID}) {
     showModalBottomSheet(
-      isScrollControlled: false,
-      context: _,
+        isScrollControlled: false,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return Container(
+            // height: height ?? SizeConfig.screenHeight! / 4,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: ReportProfile(userID: userID),
+          );
+        });
+  }
+
+  static onBuyContent(context, {ContentData? data}) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-          // height: height ?? SizeConfig.screenHeight! / 4,
-          decoration: BoxDecoration(
-            color: Theme.of(_).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
+            height: 250,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
             ),
-          ),
-          padding: const EdgeInsets.all(0),
-          child: ReportProfile(userID: userID),
-        );
+            padding: const EdgeInsets.all(0),
+            child: OnBuyContentBottomSheet(
+              data: data,
+            ));
       },
     );
   }

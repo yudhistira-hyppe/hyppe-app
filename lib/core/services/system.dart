@@ -45,6 +45,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
+import 'package:intl/intl.dart' as intl;
 
 class System {
   System._private();
@@ -71,6 +72,13 @@ class System {
   String? showUserPicture(String? url) {
     if (url != null) {
       return Env.data.baseUrl + "/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+
+      // return Env.data.baseUrl + url +
+      //     "?x-auth-token=" +
+      //     SharedPreference().readStorage(SpKeys.userToken) +
+      //     "&x-auth-user=" +
+      //     SharedPreference().readStorage(SpKeys.email);
+
     } else {
       return null;
     }
@@ -922,5 +930,9 @@ class System {
     } on Error catch (e) {
       return false;
     }
+  }
+
+  String currencyFormat({required int? amount}) {
+    return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ').format(amount);
   }
 }

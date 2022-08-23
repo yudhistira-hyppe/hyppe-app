@@ -8,8 +8,12 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/utils/language/language_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -82,14 +86,17 @@ class TranslateNotifierV2 with ChangeNotifier {
     if (index == null && _isoCodeCache != null) {
       langIso = _isoCodeCache == "en" ? "en" : "id";
     } else {
-      langIso = index != null && _listLanguage.isNotEmpty ? _listLanguage[index].langIso ?? "en" : "id";
+      langIso = index != null && _listLanguage.isNotEmpty
+          ? _listLanguage[index].langIso ?? "en"
+          : "id";
     }
 
     SharedPreference().writeStorage(SpKeys.isoCode, langIso);
 
     // final localeDir = await getApplicationDocumentsDirectory();
     // File txt = File('${localeDir.path}/primaryLanguage.txt');
-    Map<String, dynamic> _langDefault = jsonDecode(await rootBundle.loadString('${AssetPath.jsonPath}$langIso.json'));
+    Map<String, dynamic> _langDefault = jsonDecode(
+        await rootBundle.loadString('${AssetPath.jsonPath}$langIso.json'));
 
     // bool downloaded = await txt.exists();
     // if (downloaded) {
@@ -139,6 +146,10 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<NotificationNotifier>().translate(translate);
     context.read<ProfileCompletionNotifier>().translate(translate);
     context.read<ReferralNotifier>().translate(translate);
+    context.read<ReviewBuyNotifier>().translate(translate);
+    context.read<PaymentMethodNotifier>().translate(translate);
+    context.read<PaymentNotifier>().translate(translate);
+    context.read<PaymentSummaryNotifier>().translate(translate);
 
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {

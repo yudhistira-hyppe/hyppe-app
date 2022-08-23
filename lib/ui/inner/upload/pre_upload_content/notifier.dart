@@ -2,11 +2,9 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/arguments/follow_user_argument.dart';
-import 'package:hyppe/core/bloc/follow/bloc.dart';
-import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
+import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
@@ -45,9 +43,12 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
 
+// import 'package:flutter_masked_text/flutter_masked_text.dart';
+
 class PreUploadContentNotifier with ChangeNotifier {
   final _eventService = EventService();
   final _socketService = SocketService();
+  late UpdateContentsArgument _arguments;
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -57,6 +58,8 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   bool _isEdit = false;
   bool get isEdit => _isEdit;
+
+  //final priceController = MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -85,6 +88,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<Map<String, dynamic>> _searchPeopleACData = [];
   List<Map<String, dynamic>> get searchPeopleACData => _searchPeopleACData;
 
+  final TextEditingController priceController = TextEditingController();
   TextEditingController _captionController = TextEditingController();
   TextEditingController _location = TextEditingController();
   final TextEditingController tagsController = TextEditingController();
@@ -102,6 +106,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? _tags;
   String _visibility = "PUBLIC";
   dynamic _thumbNail;
+
   List<String> _interestData = [];
   List<InterestData> _interest = [];
   List<InterestData> _interestList = [];
@@ -109,6 +114,13 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String> _userTagData = [];
   List<TagPeople> _userTagDataReal = [];
   int _startSearch = 0;
+
+  bool _toSell = false;
+  bool _includeTotalViews = false;
+  bool _includeTotalLikes = false;
+  bool _priceIsFilled = false;
+  bool _isSavedPrice = false;
+  bool _isUpdate = false;
 
   TextEditingController get captionController => _captionController;
   TextEditingController get location => _location;
@@ -124,6 +136,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
+
   List<InterestData> get interest => _interest;
   List<InterestData> get interestList => _interestList;
   List<UserData> get userList => _userList;
@@ -193,6 +206,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool get toSell => _toSell;
+  bool get includeTotalViews => _includeTotalViews;
+  bool get includeTotalLikes => _includeTotalLikes;
+  bool get priceIsFilled => _priceIsFilled;
+  bool get isSavedPrice => _isSavedPrice;
+  bool get isUpdate => _isUpdate;
+  UpdateContentsArgument get updateArguments => _arguments;
+
   set thumbNail(val) {
     _thumbNail = val;
     notifyListeners();
@@ -220,6 +241,9 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set certified(bool val) {
     _certified = val;
+    if (!val) {
+      _toSell = false;
+    }
     notifyListeners();
   }
 
@@ -278,9 +302,42 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onWillPop(BuildContext context) async {
-    ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
+  set toSell(bool val) {
+    _toSell = val;
+    notifyListeners();
   }
+
+  set includeTotalViews(bool val) {
+    _includeTotalViews = val;
+    notifyListeners();
+  }
+
+  set includeTotalLikes(bool val) {
+    _includeTotalLikes = val;
+    notifyListeners();
+  }
+
+  set priceIsFilled(bool val) {
+    _priceIsFilled = val;
+    notifyListeners();
+  }
+
+  set isSavedPrice(bool val) {
+    _isSavedPrice = val;
+    notifyListeners();
+  }
+
+  set setUpdateArguments(UpdateContentsArgument args) {
+    _arguments = args;
+    notifyListeners();
+  }
+
+  set isUpdate(bool val) {
+    _isUpdate = val;
+    notifyListeners();
+  }
+
+  void onWillPop(BuildContext context) => ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
 
   void handleTapOnLocation(String value) => selectedLocation = value;
 
@@ -289,6 +346,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _validateDescription() => captionController.text.length >= 5;
 
   bool _validateCategory() => _interestData.isNotEmpty;
+
+  bool _validatePrice() => priceController.text.isNotEmpty;
 
   void checkKeyboardFocus(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
@@ -347,7 +406,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
-    notifyListeners();
+    priceController.clear();
+    toSell = false;
+    includeTotalLikes = false;
+    includeTotalLikes = false;
+    isUpdate = false;
   }
 
   Future _createPostContentV2() async {
@@ -392,6 +455,9 @@ class PreUploadContentNotifier with ChangeNotifier {
         description: captionController.text,
         cats: _interestData,
         tagPeople: userTagData,
+        saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+        saleLike: _includeTotalLikes,
+        saleView: _includeTotalViews,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
         onReceiveProgress: (count, total) async {
@@ -533,6 +599,17 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {
     checkKeyboardFocus(context);
+    if (_toSell) {
+      if (!_validatePrice()) {
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.priceIsNotEmpty!,
+          color: Theme.of(context).colorScheme.error,
+          maxLines: 2,
+        );
+        return;
+      }
+    }
     final connection = await System().checkConnections();
     if (_validateDescription() && _validateCategory()) {
       if (connection) {

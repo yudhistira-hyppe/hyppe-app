@@ -113,6 +113,7 @@ class PicDetailBottom extends StatelessWidget {
                       maxLines: 2,
                       textAlign: TextAlign.left,
                       textStyle: Theme.of(context).textTheme.subtitle2,
+
                       // textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e}").join(" ")}",
                       textToDisplay: "${data?.description}",
                     )
@@ -144,7 +145,7 @@ class PicDetailBottom extends StatelessWidget {
       builder: (_, value, value2, __) => SizedBox(
         width: SizeConfig.screenWidth,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
             Consumer<LikeNotifier>(
                 builder: (context, notifier, child) =>
@@ -153,18 +154,35 @@ class PicDetailBottom extends StatelessWidget {
                       notifier.likePost(context, data!);
                     }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)),
 
-            data != null
-                ? (data?.allowComments ?? false)
-                    ? _buildButton(
-                        context,
-                        '${AssetPath.vectorPath}comment.svg',
-                        value2.translate.comment!,
-                        () {
-                          ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
-                        },
-                      )
-                    : const SizedBox.shrink()
-                : const SizedBox.shrink(),
+            //   builder: (context, notifier, child) => data != null
+            //       ? _buildButton(
+            //           context,
+            //           '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+            //           "${value.data?.insight?.likes ?? 0}", () {
+            //           // if (value.data?.isLiked == true) {
+            //           //   value.data?.isLiked = false;
+            //           // } else {
+            //           //   value.data?.isLiked = true;
+            //           // }
+            //           notifier.likePost(context, data!);
+            //         },
+            //           colorIcon: (value.data?.isLiked ?? false)
+            //               ? kHyppePrimary
+            //               : Theme.of(context).iconTheme.color)
+            //       : _buildButton(context,
+            //           '${AssetPath.vectorPath} none-like.svg', "0", () {}),
+            // ),
+
+            if (data != null)
+              if (data?.allowComments ?? false)
+                _buildButton(
+                  context,
+                  '${AssetPath.vectorPath}comment.svg',
+                  value2.translate.comment!,
+                  () {
+                    ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                  },
+                ),
 
             _buildButton(
               context,
@@ -172,6 +190,13 @@ class PicDetailBottom extends StatelessWidget {
               value2.translate.share!,
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
+            if (data!.saleAmount! > 0)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}cart.svg',
+                value2.translate.buy!,
+                () => ShowBottomSheet.onBuyContent(context, data: data),
+              ),
 
             // _buildButton(
             //   context,
@@ -192,7 +217,7 @@ class PicDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(BuildContext context, String icon, String caption, Function onTap, {Color? colorIcon}) {
+  _buildButton(BuildContext context, String icon, String caption, Function onTap, {Color? colorIcon}) {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Column(

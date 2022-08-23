@@ -2,10 +2,11 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+
+import 'package:hyppe/core/models/collection/posts/content_v2/privacy.dart';
+
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
-
 import 'package:hyppe/core/services/shared_preference.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
 class ContentData {
@@ -41,6 +42,9 @@ class ContentData {
   List<Cats>? cats;
   List<TagPeople>? tagPeople;
   int? likes;
+  double? saleAmount;
+  bool? saleView;
+  bool? saleLike;
 
   ContentData(
       {this.metadata,
@@ -74,7 +78,10 @@ class ContentData {
       this.visibility,
       this.cats,
       this.tagPeople,
-      this.likes});
+      this.likes,
+      this.saleAmount,
+      this.saleView,
+      this.saleLike});
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -103,6 +110,7 @@ class ContentData {
     fullThumbPath = concatThumbUri();
     fullContentPath = concatContentUri();
     contentType = _translateType(mediaType);
+
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
     location = json['location'];
     visibility = json['visibility'];
@@ -115,6 +123,11 @@ class ContentData {
       likes = json['likes'];
     }
     // cats = List<Cats>.from(json["cats"].map((x) => Cats.fromJson(x)));
+
+    avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
+    saleAmount = json['saleAmount'] ?? 0;
+    saleView = json['saleView'] ?? false;
+    saleLike = json['saleLike'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -148,6 +161,9 @@ class ContentData {
     data['email'] = email;
     data['updatedAt'] = updatedAt;
     data['username'] = username;
+    data['saleAmount'] = saleAmount ?? 0;
+    data['saleView'] = saleView ?? false;
+    data['saleLike'] = saleLike ?? false;
     if (avatar != null) {
       data['avatar'] = avatar?.toJson();
     }
@@ -161,6 +177,9 @@ class ContentData {
   }
 
   String? concatThumbUri() {
+    print(Env.data.baseUrl +
+        (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
+        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}');
     return Env.data.baseUrl +
         (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
