@@ -177,9 +177,6 @@ class ContentData {
   }
 
   String? concatThumbUri() {
-    print(Env.data.baseUrl +
-        (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}');
     return Env.data.baseUrl +
         (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';

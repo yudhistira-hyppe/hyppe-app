@@ -27,4 +27,5 @@ class SpKeys {
   static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
 
   static const String onlineVersion = 'onlineVersion';
+  static const String countAds = '0';
 }

@@ -38,16 +38,16 @@ class SettingScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SettingTile(
-                icon: 'transaction-icon.svg',
-                onTap: () => Routing().move(Routes.transaction),
-                caption: '${notifier.translate.transaction}',
-              ),
-              Divider(
-                thickness: 1,
-                color: theme.colorScheme.surface,
-              ),
-              sixteenPx,
+              // SettingTile(
+              //   icon: 'transaction-icon.svg',
+              //   onTap: () => Routing().move(Routes.transaction),
+              //   caption: '${notifier.translate.transaction}',
+              // ),
+              // Divider(
+              //   thickness: 1,
+              //   color: theme.colorScheme.surface,
+              // ),
+              // sixteenPx,
               SettingComponent(
                 headerCaption: '${notifier.translate.account}',
                 tiles: [

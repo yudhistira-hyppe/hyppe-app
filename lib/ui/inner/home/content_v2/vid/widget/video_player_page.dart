@@ -55,6 +55,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
 
+  int countAds = 0;
+
   void _resetOrintationStream() {
     _orientationStream?.cancel();
     _orientationStream = null;
@@ -136,30 +138,31 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     try {
       if (_clipsData == null) {
         // / Dummy Data
-        // final _dummyAds = {
-        //   "postID": "8c010081-910b-4d5f-a5a6-43fab040a1ce",
-        //   "preRoll": [
-        //     {
-        //       "preRollDuration": 3,
-        //       "preRollUri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        //       // "preRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
-        //     }
-        //   ],
-        //   "midRoll": [
-        //     {
-        //       "midRollDuration": 5,
-        //       "midRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
-        //     }
-        //   ],
-        //   "postRoll": [
-        //     {
-        //       "postRollDuration": 9,
-        //       "postRollUri": "https://staging.hyppe.app/stream/67bebeb5-fc7b-4d65-8206-62d48dbad2a0.m3u8",
-        //     }
-        //   ]
-        // };
+        final _dummyAds = {
+          "postID": "8c010081-910b-4d5f-a5a6-43fab040a1ce",
+          "preRoll": [
+            // {
+            // "preRollDuration": 3,
+            // "preRollUri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            // "preRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
+            // }
+          ],
+          "midRoll": [
+            {
+              "midRollDuration": 5,
+              "midRollUri": "http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4",
+              // "midRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
+            }
+          ],
+          "postRoll": [
+            {
+              "postRollDuration": 9,
+              "postRollUri": "https://staging.hyppe.app/stream/67bebeb5-fc7b-4d65-8206-62d48dbad2a0.m3u8",
+            }
+          ]
+        };
 
-        // _clipsData = AdvertisingData.fromJson(_dummyAds, widget.videoData?.metadata);
+        _clipsData = AdvertisingData.fromJson(_dummyAds, widget.videoData?.metadata);
 
         /// End Dummy Data
 
@@ -174,9 +177,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
         final fetch = notifier.advertisingFetchFetch;
 
-        if (fetch.advertisingState == AdvertisingState.getAdvertisingBlocSuccess) {
-          _clipsData = fetch.data;
-        }
+        // if (fetch.advertisingState == AdvertisingState.getAdvertisingBlocSuccess) {
+        //   _clipsData = fetch.data;
+        // }
 
         _eventType = (_clipsData?.preRoll?.isNotEmpty ?? false) ? BetterPlayerEventType.showingAds : null;
 
@@ -189,12 +192,33 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     }
   }
 
+  void getCountVid() async {
+    String _countAds = SharedPreference().readStorage(SpKeys.countAds);
+    if (_countAds == null) {
+      print('kesini');
+      SharedPreference().writeStorage(SpKeys.countAds, '0');
+      countAds = 0;
+    } else {
+      print('kesono');
+      countAds = int.parse(_countAds);
+    }
+  }
+
   void _initialize() async {
     'Hyppe Vid Post Id ${widget.videoData?.postID}'.logger();
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
     'Hyppe Vid Email ${SharedPreference().readStorage(SpKeys.email)}'.logger();
     'Hyppe Vid Token ${SharedPreference().readStorage(SpKeys.userToken)}'.logger();
-    await _initAds();
+
+    getCountVid();
+    print(countAds);
+    if (countAds < 1) {
+      await _initAds();
+    } else {
+      _clipsData = AdvertisingData.fromJson({}, widget.videoData?.metadata);
+      _eventType = (_clipsData?.preRoll?.isNotEmpty ?? false) ? BetterPlayerEventType.showingAds : null;
+      _awaitInitial.value = true;
+    }
     _userVideo(_eventType == null);
   }
 
@@ -209,6 +233,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     // print(_clipsData!.ads[2].playingAt);
     // print(_clipsData!.ads[2].rollDuration);
     // print(_clipsData!.ads[2].rollUri);
+    setStateIfMounted(() {
+      countAds += 1;
+      if (countAds > 4) {
+        countAds = 0;
+      }
+      SharedPreference().writeStorage(SpKeys.countAds, countAds.toString());
+    });
 
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
       autoDispose: false,
@@ -216,6 +247,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       fit: BoxFit.contain,
       showPlaceholderUntilPlay: true,
       deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+      autoDetectFullscreenAspectRatio: true,
+      autoDetectFullscreenDeviceOrientation: true,
       controlsConfiguration: const BetterPlayerControlsConfiguration(
         enableFullscreen: true,
         controlBarColor: Colors.black26,
@@ -224,7 +257,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       widget.videoData?.fullContentPath ?? '',
-      // 'https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8',
       adsConfiguration: BetterPlayerAdsConfiguration(
         postID: widget.videoData?.postID ?? '',
         rolls: _clipsData?.ads.map((e) => BetterPlayerRoll(rollUri: e.rollUri, rollDuration: e.playingAt)).toList(),
@@ -234,7 +266,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
         'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
-
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
         maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
@@ -255,8 +286,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     _betterPlayerController?.addEventsListener(
       (event) {
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
-          // var param = {'rollUri': 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4', 'rollDuration': 5};
-          // _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(param));
           _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
         } else if (event.betterPlayerEventType == BetterPlayerEventType.openFullscreen) {
           _handleOpenFullScreenEvent();
@@ -309,6 +338,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         _eventType = BetterPlayerEventType.showingAds;
         // pause user video
         _betterPlayerController?.pause();
+        print('mulai iklan dong');
       });
 
       try {
@@ -327,6 +357,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           'Show skip ads'.logger();
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.closingAds) {
+          print('skips di click');
           'Closing ads'.logger();
           _handleClosingAdsEvent(roll);
         }
@@ -434,9 +465,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                   valueListenable: _awaitInitial,
                   builder: (context, value, child) {
                     if (!value) {
-                      print('keisniniiinini');
-                      print(_betterPlayerControllerMap[_betterPlayerRollUri]);
-                      print(_betterPlayerControllerMap[_betterPlayerRollUri]?.isVideoInitialized());
                       return const CircularProgressIndicator();
                     } else {
                       if (_eventType == BetterPlayerEventType.showingAds) {
