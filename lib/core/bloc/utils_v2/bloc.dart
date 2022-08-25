@@ -138,7 +138,7 @@ class UtilsBlocV2 {
     );
   }
 
-  Future getProvinceBloc(BuildContext context, {String? countryID, int pageNumber = 0, int pageRow = 20, String? search}) async {
+  Future getProvinceBloc(BuildContext context, {String? countryID, int pageNumber = 0, int pageRow = 40, String? search}) async {
     setUtilsFetch(UtilsFetch(UtilsState.loading));
     await Repos().reposPost(
       context,
