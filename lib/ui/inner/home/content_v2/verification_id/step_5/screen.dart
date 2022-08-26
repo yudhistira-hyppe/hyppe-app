@@ -227,8 +227,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
               CustomElevatedButton(
                 width: SizeConfig.screenWidth,
                 height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () =>
-                    Routing().moveAndPop(Routes.verificationIDStep6),
+                function: () => notifier.continueSelfie(context),
                 child: CustomTextWidget(
                   textToDisplay: "Continue Selfie",
                   textStyle:

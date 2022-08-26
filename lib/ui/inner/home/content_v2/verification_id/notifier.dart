@@ -467,6 +467,43 @@ class VerificationIDNotifier extends LoadingNotifier
     Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
   }
 
+  void continueSelfie(BuildContext context) {
+    var error = 0;
+    if (idCardNumber == "") {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        "Silahkan masukan nomor KTP",
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 2,
+      );
+      error++;
+    }
+
+    if (birtPlaceController.text == "") {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        "Silahkan masukan tempat lahir",
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 2,
+      );
+      error++;
+    }
+
+    if (birtDateController.text == "") {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        "Silahkan masukan tanggal lahir",
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 2,
+      );
+      error++;
+    }
+
+    if (error == 0) {
+      Routing().moveAndPop(Routes.verificationIDStep6);
+    }
+  }
+
   @override
   void onPauseRecordedVideo(BuildContext context) {
     // TODO: implement onPauseRecordedVideo
