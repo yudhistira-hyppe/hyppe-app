@@ -107,41 +107,45 @@ class _DiaryPageState extends State<DiaryPage> {
           RightItems(
             data: widget.data!,
           ),
-          Align(
-            alignment: const Alignment(1.0, 0.70),
-            child: widget.data?.tagPeople!.length != 0 || widget.data?.location != ''
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
-                    child: Row(
-                      children: [
-                        widget.data?.tagPeople!.length != 0
-                            ? PicTagLabel(
-                                icon: 'user',
-                                label: '${widget.data?.tagPeople!.length} people',
-                                function: () {
-                                  _storyController.pause();
-                                  context.read<PicDetailNotifier>().showUserTag(context, widget.data!.tagPeople, widget.data?.postID, storyController: _storyController);
-                                },
-                              )
-                            : const SizedBox(),
-                        widget.data?.location == '' || widget.data?.location == null
-                            ? const SizedBox()
-                            : PicTagLabel(
-                                icon: 'maptag',
-                                label: "${widget.data?.location}",
-                                function: () {},
-                              ),
-                      ],
-                    ),
-                  )
-                : const SizedBox(),
-          ),
+          // Align(
+          //   alignment: const Alignment(1.0, 0.70),
+          //   child: widget.data?.tagPeople!.length != 0 || widget.data?.location != ''
+          //       ? Padding(
+          //           padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+          //           child: Row(
+          //             children: [
+          //               widget.data?.tagPeople!.length != 0
+          //                   ? PicTagLabel(
+          //                       icon: 'user',
+          //                       label: '${widget.data?.tagPeople!.length} people',
+          //                       function: () {
+          //                         _storyController.pause();
+          //                         context.read<PicDetailNotifier>().showUserTag(context, widget.data!.tagPeople, widget.data?.postID, storyController: _storyController);
+          //                       },
+          //                     )
+          //                   : const SizedBox(),
+          //               widget.data?.location == '' || widget.data?.location == null
+          //                   ? const SizedBox()
+          //                   : PicTagLabel(
+          //                       icon: 'maptag',
+          //                       label: "${widget.data?.location}",
+          //                       function: () {},
+          //                     ),
+          //             ],
+          //           ),
+          //         )
+          //       : const SizedBox(),
+          // ),
           LeftItems(
             description: widget.data?.description,
             tags: widget.data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
             musicName: "Dangdut koplo remix",
             authorName: widget.data?.username,
             userName: widget.data?.username,
+            location: widget.data?.location,
+            postID: widget.data?.postID,
+            storyController: _storyController,
+            tagPeople: widget.data!.tagPeople,
           ),
         ],
       );
