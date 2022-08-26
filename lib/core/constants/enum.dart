@@ -6,7 +6,7 @@ enum ReportAction { report, hide, block }
 enum SourceFile { internet, local }
 enum SearchCategory { vid, diary, pic, account, htags }
 enum PostView { viewed, notViewed }
-enum NotificationCategory { all, like, comment, follower, following, mention, general }
+enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid }
 enum UserType { verified, notVerified }
 enum MethodType { get, post, download, postUploadProfile, postUploadContent, delete }
 enum ErrorType {
@@ -48,7 +48,7 @@ enum WalletEventEnum { miniDana, acquiring }
 enum WalletResourceType { maskDanaId, balance, userKYC, transactionUrl, topUpUrl, oauthUrl }
 enum NotificationActionType { read, hidden }
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
-enum InteractiveEventType { unfollow, following, follower, view, reaction, none }
+enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, none }
 enum InteractiveEvent { initial, accept, request, done, revoke, none }
 enum DiscussEventType { directMsg, comment }
 enum IdProofStatus { initial, inProgress, complete, revoke }

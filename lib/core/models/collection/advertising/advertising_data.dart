@@ -72,7 +72,8 @@ class AdvertisingData {
       for (var i = 0; i < (midRoll?.length ?? 0); i++) {
         ads.add(Roll(
           rollUri: midRoll?[i].midRollUri,
-          playingAt: metadata!.midRoll,
+          // playingAt: metadata!.midRoll,
+          playingAt: 0,
           rollDuration: midRoll?[i].midRollDuration,
         ));
       }

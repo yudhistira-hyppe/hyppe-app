@@ -61,12 +61,8 @@ class Component extends StatelessWidget {
                       ),
                       sixPx,
                       CustomTextWidget(
-                        textToDisplay: data?.createdAt != null
-                            ? System().readTimestamp(
-                                DateFormat("yyyy-MM-dd hh:mm:ss").parse(data!.createdAt!).millisecondsSinceEpoch,
-                                context,
-                                fullCaption: true)
-                            : '',
+                        textToDisplay:
+                            data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true) : '',
                         textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                       ),
                     ],

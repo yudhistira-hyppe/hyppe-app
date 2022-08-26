@@ -139,7 +139,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       if (_clipsData == null) {
         // / Dummy Data
         final _dummyAds = {
-          "postID": "8c010081-910b-4d5f-a5a6-43fab040a1ce",
+          "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
           "preRoll": [
             // {
             // "preRollDuration": 3,
@@ -150,14 +150,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           "midRoll": [
             {
               "midRollDuration": 5,
-              "midRollUri": "http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4",
+              "midRollUri": "https://staging.hyppe.app/stream/784a719c-f67e-46d6-b601-2ee49687655a.m3u8",
               // "midRollUri": "https://moctobpltc-i.akamaihd.net/hls/live/571329/eight/playlist.m3u8",
             }
           ],
           "postRoll": [
             {
               "postRollDuration": 9,
-              "postRollUri": "https://staging.hyppe.app/stream/67bebeb5-fc7b-4d65-8206-62d48dbad2a0.m3u8",
+              "postRollUri": "http://www.exit109.com/~dnn/clips/RW20seconds_1.mp4 ",
             }
           ]
         };
@@ -212,13 +212,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     getCountVid();
     print(countAds);
-    if (countAds < 1) {
-      await _initAds();
-    } else {
-      _clipsData = AdvertisingData.fromJson({}, widget.videoData?.metadata);
-      _eventType = (_clipsData?.preRoll?.isNotEmpty ?? false) ? BetterPlayerEventType.showingAds : null;
-      _awaitInitial.value = true;
-    }
+    await _initAds();
+    // if (countAds < 1) {
+    //   await _initAds();
+    // } else {
+    //   _clipsData = AdvertisingData.fromJson({}, widget.videoData?.metadata);
+    //   _eventType = (_clipsData?.preRoll?.isNotEmpty ?? false) ? BetterPlayerEventType.showingAds : null;
+    //   _awaitInitial.value = true;
+    // }
     _userVideo(_eventType == null);
   }
 
@@ -251,7 +252,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       autoDetectFullscreenDeviceOrientation: true,
       controlsConfiguration: const BetterPlayerControlsConfiguration(
         enableFullscreen: true,
-        controlBarColor: Colors.black26,
+        controlBarColor: Color.fromARGB(10, 0, 0, 1),
       ),
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(

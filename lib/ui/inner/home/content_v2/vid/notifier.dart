@@ -91,6 +91,8 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       }
 
       final res = await _resFuture;
+      print('isi vidio');
+      print(res);
       if (reload) {
         vidData = res;
         if (pageController.hasClients) {

@@ -304,6 +304,10 @@ class System {
         return InteractiveEventType.view;
       case "REACTION":
         return InteractiveEventType.reaction;
+      case "VERIFICATIONID":
+        return InteractiveEventType.verificationid;
+      case "TRANSACTIONS":
+        return InteractiveEventType.transactions;
       default:
         return InteractiveEventType.none;
     }
@@ -603,6 +607,10 @@ class System {
         return 'REACTION';
       case NotificationCategory.general:
         return 'GENERAL';
+      case NotificationCategory.verificationid:
+        return 'VERIFICATIONID';
+      case NotificationCategory.transactions:
+        return 'TRANSACTIONS';
     }
   }
 
@@ -934,5 +942,9 @@ class System {
 
   String currencyFormat({required int? amount}) {
     return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ').format(amount);
+  }
+
+  Future adsPopUp(BuildContext context) async {
+    return ShowGeneralDialog.adsPopUp(context);
   }
 }

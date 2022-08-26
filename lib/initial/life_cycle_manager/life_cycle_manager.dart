@@ -12,6 +12,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/permanently_denied_permisson_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 
@@ -61,6 +62,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         try {
           await activity.activityAwake(context);
           //cek version aplikasi
+          System().adsPopUp(context);
           await CheckVersion().check(context, activity.deviceFetch.version);
         } catch (e) {
           e.logger();
