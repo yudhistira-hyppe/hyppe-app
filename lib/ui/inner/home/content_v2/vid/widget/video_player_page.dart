@@ -234,13 +234,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     // print(_clipsData!.ads[2].playingAt);
     // print(_clipsData!.ads[2].rollDuration);
     // print(_clipsData!.ads[2].rollUri);
-    setStateIfMounted(() {
-      countAds += 1;
-      if (countAds > 4) {
-        countAds = 0;
-      }
-      SharedPreference().writeStorage(SpKeys.countAds, countAds.toString());
-    });
+    // setStateIfMounted(() {
+    //   countAds += 1;
+    //   if (countAds > 4) {
+    //     countAds = 0;
+    //   }
+    //   SharedPreference().writeStorage(SpKeys.countAds, countAds.toString());
+    // });
 
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
       autoDispose: false,
@@ -307,7 +307,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         'Ads video controller already exists'.logger();
         return;
       }
-      BetterPlayerConfiguration betterPlayerConfigurationAds = const BetterPlayerConfiguration(
+      BetterPlayerConfiguration betterPlayerConfigurationAds = BetterPlayerConfiguration(
         autoPlay: true,
         autoDispose: false,
         fit: BoxFit.contain,
@@ -316,11 +316,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           enablePip: false,
           enableMute: false,
           enableSkips: false,
-          skipAdsButtonAt: 5,
+          skipAdsButtonAt: 11,
           enableQualities: false,
           enableAudioTracks: false,
           enableProgressBarDrag: false,
           controlBarColor: Colors.black26,
+          imagesAdsVid: widget.videoData?.fullThumbPath,
         ),
       );
       BetterPlayerDataSource dataSource = BetterPlayerDataSource(

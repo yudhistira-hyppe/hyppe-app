@@ -62,7 +62,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         try {
           await activity.activityAwake(context);
           //cek version aplikasi
-          System().adsPopUp(context);
+          // System().adsPopUp(context);
           await CheckVersion().check(context, activity.deviceFetch.version);
         } catch (e) {
           e.logger();
