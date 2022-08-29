@@ -166,14 +166,14 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.certified = widget.contentData.certified ?? false;
                     if (widget.contentData.location != null) {
                       notifier.locationName = widget.contentData.location!;
+                    } else {
+                      notifier.locationName = notifier.language.addLocation!;
                     }
 
                     notifier.privacyTitle = widget.contentData.visibility!;
 
                     notifier.privacyValue = widget.contentData.visibility!;
                     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
-                    print('widget.contentData.visibility');
-                    print(widget.contentData.visibility);
                     if (_isoCodeCache == 'id') {
                       switch (widget.contentData.visibility!) {
                         case 'PUBLIC':
