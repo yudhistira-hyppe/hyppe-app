@@ -1,4 +1,4 @@
-import 'package:deepar_flutter/deepar_flutter.dart';
+// import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
