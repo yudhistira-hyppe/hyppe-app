@@ -3,10 +3,12 @@ import 'package:hyppe/core/arguments/register_referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
 import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/referral/model_referral.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
@@ -112,7 +114,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
 
       await notifier.registerReferral(
         context,
-        data: RegisterReferralArgument(username: _nameReferral, imei: realDeviceID),
+        data: RegisterReferralArgument(username: _nameReferral, imei: realDeviceID ?? SharedPreference().readStorage(SpKeys.fcmToken)),
         // function: () => onClickLogin(context),
       );
       setLoading(false);
