@@ -169,6 +169,8 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
 
                     if (widget.contentData.location != null) {
                       notifier.locationName = widget.contentData.location!;
+                    } else {
+                      notifier.locationName = notifier.language.addLocation!;
                     }
 
                     notifier.privacyTitle = widget.contentData.visibility!;

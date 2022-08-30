@@ -28,6 +28,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
@@ -202,6 +203,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const Transaction());
       case Routes.bankAccount:
         return MaterialPageRoute(builder: (_) => const BankAccount());
+      case Routes.addBankAccount:
+        return MaterialPageRoute(builder: (_) => const AddBankAccount());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

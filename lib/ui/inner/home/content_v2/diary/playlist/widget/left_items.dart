@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:readmore/readmore.dart';
 
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:story_view/controller/story_controller.dart';
+import 'package:provider/provider.dart';
 
 class LeftItems extends StatefulWidget {
   final String? userName;
@@ -10,6 +15,10 @@ class LeftItems extends StatefulWidget {
   final String? tags;
   final String? musicName;
   final String? authorName;
+  final StoryController? storyController;
+  final String? postID;
+  final String? location;
+  final List<TagPeople>? tagPeople;
 
   const LeftItems({
     Key? key,
@@ -18,6 +27,10 @@ class LeftItems extends StatefulWidget {
     this.tags,
     this.musicName,
     this.authorName,
+    this.storyController,
+    this.postID,
+    this.location,
+    this.tagPeople,
   }) : super(key: key);
 
   @override
@@ -51,13 +64,39 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      width: SizeConfig.screenWidth! / 1.5,
+      width: SizeConfig.screenWidth! / 1.3,
       alignment: const Alignment(-1.0, 0.75),
       padding: const EdgeInsets.only(left: 15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          widget.tagPeople!.length != 0 || widget.location != ''
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Row(
+                    children: [
+                      widget.tagPeople!.length != 0
+                          ? PicTagLabel(
+                              icon: 'user',
+                              label: '${widget.tagPeople!.length} people',
+                              function: () {
+                                widget.storyController!.pause();
+                                context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID, storyController: widget.storyController);
+                              },
+                            )
+                          : const SizedBox(),
+                      widget.location == '' || widget.location == null
+                          ? const SizedBox()
+                          : PicTagLabel(
+                              icon: 'maptag',
+                              label: "${widget.location}",
+                              function: () {},
+                            ),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
           Container(
             padding: const EdgeInsets.all(2),
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),

@@ -74,4 +74,5 @@ class Routes {
   //transaction
   static const String transaction = '/transaction';
   static const String bankAccount = '/bank-account';
+  static const String addBankAccount = '/add-bank-account';
 }

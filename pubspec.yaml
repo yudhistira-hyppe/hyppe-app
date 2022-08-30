@@ -5,7 +5,7 @@ homepage: https://www.hyppe.id
 publish_to: "none"
 
  
-version: 1.0.12+58
+version: 1.0.13+58
  
 
 environment:
@@ -62,15 +62,14 @@ dependencies:
   url_launcher: ^6.1.4
   sign_in_with_apple: ^4.0.0
   crypto: ^3.0.0
-  http: ^0.13.4
-  multi_select_flutter: ^4.1.2
-  
+  http: ^0.13.4 
   geolocator: ^8.0.5
   geocoding: ^2.0.4
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
   light_compressor: ^1.2.2 
   deepar_flutter: ^0.0.2
+
 
   dynamic_widget: # Dynamic widget builder
     git:
@@ -118,7 +117,6 @@ flutter:
     - assets/vector/
     - assets/dummy_md/
  
-
   fonts:
     - family: Lato
       fonts:

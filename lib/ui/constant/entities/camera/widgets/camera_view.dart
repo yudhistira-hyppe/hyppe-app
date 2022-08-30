@@ -1,4 +1,3 @@
-// import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -59,6 +58,7 @@ class CameraView extends StatelessWidget {
     //     ),
     //   ),
     // );
+<<<<<<< HEAD
  */
 
 // import 'dart:io';
@@ -345,3 +345,4 @@ class CameraView extends StatelessWidget {
 //     return _filterList[_filterIndex];
 //   }
 // }
+ 

@@ -231,20 +231,21 @@ class System {
   Future<String> getDeviceIdentifier() async {
     String deviceIdentifier = "unknown";
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    final deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
 
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceIdentifier = androidInfo.androidId ?? 'unknown';
+      deviceIdentifier = androidInfo.androidId ?? deviceID;
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceIdentifier = iosInfo.identifierForVendor ?? 'unknown';
+      deviceIdentifier = iosInfo.identifierForVendor ?? deviceID;
     } else if (kIsWeb) {
       // The web doesnt have a device UID, so use a combination fingerprint as an example
       WebBrowserInfo webInfo = await deviceInfo.webBrowserInfo;
       deviceIdentifier = (webInfo.vendor ?? '') + (webInfo.userAgent ?? '') + webInfo.hardwareConcurrency.toString();
     } else if (Platform.isLinux) {
       LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
-      deviceIdentifier = linuxInfo.machineId ?? 'unknown';
+      deviceIdentifier = linuxInfo.machineId ?? deviceID;
     }
     return deviceIdentifier;
   }

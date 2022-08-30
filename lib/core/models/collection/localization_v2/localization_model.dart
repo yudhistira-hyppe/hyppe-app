@@ -476,7 +476,6 @@ class LocalizationModelV2 {
   String? deletePost;
   String? deleteComment;
   String? commentWillPermanentlyDeletedContinue;
-
   String? addPostDescription;
   String? privacy;
   String? selectLocation;
@@ -553,7 +552,10 @@ class LocalizationModelV2 {
   String? keepThisAccount;
   String? youWillAdd;
   String? accountWithAccountNumber;
+  String? aboutBankAccount;
+  String? aboutBankAccountContent;
   String? ownedBy;
+  String? help;
   String? bankAccount;
 
   LocalizationModelV2({
@@ -1110,7 +1112,10 @@ class LocalizationModelV2 {
     this.keepThisAccount,
     this.youWillAdd,
     this.accountWithAccountNumber,
+    this.aboutBankAccount,
+    this.aboutBankAccountContent,
     this.ownedBy,
+    this.help,
     this.bankAccount,
   });
 
@@ -1686,7 +1691,10 @@ class LocalizationModelV2 {
     keepThisAccount = json['keepThisAccount'];
     youWillAdd = json['youWillAdd'];
     accountWithAccountNumber = json['accountWithAccountNumber'];
+    aboutBankAccount = json['aboutBankAccount'];
+    aboutBankAccountContent = json['aboutBankAccountContent'];
     ownedBy = json['ownedBy'];
+    help = json['help'];
     bankAccount = json['bankAccount'];
   }
 }

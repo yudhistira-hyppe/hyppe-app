@@ -131,6 +131,9 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
           if (reload) {
             _provinceData.clear();
             fetch2.data.forEach((v) => _provinceData.add(ProvinceData.fromJSON(v)));
+            _provinceData.sort((a, b) {
+              return a.stateName!.compareTo(b.stateName!);
+            });
           } else {
             fetch2.data.forEach((v) => _provinceData.add(ProvinceData.fromJSON(v)));
           }
