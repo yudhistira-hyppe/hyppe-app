@@ -208,7 +208,7 @@ class RegisterNotifier with ChangeNotifier {
             final notifier = UserBloc();
             await notifier.signUpBlocV2(
               context,
-              data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId ?? deviceId, platForm: platForm),
+              data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != '' ? realDeviceId : deviceId, platForm: platForm),
             );
             final fetch = notifier.userFetch;
             loading = false;

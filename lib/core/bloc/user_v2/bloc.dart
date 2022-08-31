@@ -107,7 +107,7 @@ class UserBloc {
       "deviceId": deviceID,
       "langIso": "en",
       "referral": referralEmail,
-      "imei": realDeviceId ?? deviceID,
+      "imei": realDeviceId != '' ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {
         "longitude": latitude ?? "${double.parse("0.0")}",
@@ -152,7 +152,7 @@ class UserBloc {
       "deviceId": deviceID,
       "langIso": "en",
       "referral": referralEmail,
-      "imei": realDeviceId ?? deviceID,
+      "imei": realDeviceId != '' ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {
         "longitude": latitude ?? "${double.parse("0.0")}",
@@ -195,7 +195,7 @@ class UserBloc {
       'email': email.toLowerCase(),
       "password": password,
       "deviceId": deviceID,
-      "imei": realDeviceID ?? deviceID,
+      "imei": realDeviceID != '' ? realDeviceID : deviceID,
       "regSrc": platForm,
       "location": {
         "longitude": latitude ?? "${double.parse("0.0")}",

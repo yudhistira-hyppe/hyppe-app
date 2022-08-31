@@ -17,8 +17,7 @@ class MakeContentScreen extends StatefulWidget {
   _MakeContentScreenState createState() => _MakeContentScreenState();
 }
 
-class _MakeContentScreenState extends State<MakeContentScreen>
-    with AfterFirstLayoutMixin, RouteAware {
+class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLayoutMixin, RouteAware {
   @override
   void afterFirstLayout(BuildContext context) {
     context.read<MakeContentNotifier>().onInitialUploadContent();
@@ -33,15 +32,13 @@ class _MakeContentScreenState extends State<MakeContentScreen>
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -80,9 +77,7 @@ class _MakeContentScreenState extends State<MakeContentScreen>
           }
         },
         child: Scaffold(
-          body: notifier.featureType != null
-              ? UploadContent(notifier: notifier, mounted: mounted)
-              : UploadIDVerification(notifier: notifier, mounted: mounted),
+          body: notifier.featureType != null ? UploadContent(notifier: notifier, mounted: mounted) : UploadIDVerification(notifier: notifier, mounted: mounted),
         ),
       ),
     );

@@ -15,7 +15,9 @@ class TransactionNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  TextEditingController nameAccount = TextEditingController();
   TextEditingController noBankAccount = TextEditingController();
+  TextEditingController accountOwnerName = TextEditingController();
 
   BankData? _bankDataSelected;
   BankData? get bankDataSelected => _bankDataSelected;
@@ -40,7 +42,7 @@ class TransactionNotifier with ChangeNotifier {
 
   void bankInsert(BankData data) {
     bankDataSelected = data;
+    nameAccount.text = data.bankname!;
     navigateToAddBankAccount();
-    print(bankDataSelected!.bankname);
   }
 }

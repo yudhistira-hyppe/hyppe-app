@@ -559,5 +559,6 @@
   "ownedBy" : "milik",
   "help" : "Bantuan",
   "aboutBankAccount":"Tentang Rekening Bank",
-  "aboutBankAccountContent": "1. Anda dapat menambahkan hingga 5 (lima) nomor rekening bank. Anda dapat menambah, mengubah dan/atau menghapus rekening bank dari daftar Anda \n\n2. Pastikan nama yang tertera pada rekening bank sesuai dengan nama asli pada KTP yang telah anda unggah pada aplikasi. Jika nama Anda tidak cocok, proses transaksi tidak akan dapat dilanjutkan. \n\n3. Pastikan Anda sudah mengatur pin Anda untuk transaksi yang aman di dalam aplikasi, jika Anda belum membuat pin, Anda dapat pergi ke Pengaturan > Privasi & Keamanan > Pin \n\nJika sudah mengikuti cara di atas, tetapi tidak berhasil, Anda bisa mengadukan masalah ini ke Hyppe Help Center 081398582108"
+  "aboutBankAccountContent": "1. Anda dapat menambahkan hingga 5 (lima) nomor rekening bank. Anda dapat menambah, mengubah dan/atau menghapus rekening bank dari daftar Anda \n\n2. Pastikan nama yang tertera pada rekening bank sesuai dengan nama asli pada KTP yang telah anda unggah pada aplikasi. Jika nama Anda tidak cocok, proses transaksi tidak akan dapat dilanjutkan. \n\n3. Pastikan Anda sudah mengatur pin Anda untuk transaksi yang aman di dalam aplikasi, jika Anda belum membuat pin, Anda dapat pergi ke Pengaturan > Privasi & Keamanan > Pin \n\nJika sudah mengikuti cara di atas, tetapi tidak berhasil, Anda bisa mengadukan masalah ini ke Hyppe Help Center 081398582108",
+  "makeSureTheName" : "*Pastikan nama pemilik akun sama dengan KTP yang digunakan untuk verifikasi di Hyppe App"
 }

@@ -23,6 +23,7 @@ const kHyppeLightSuccess = Color(0xff237804);
 const kHyppeLightInfo = Color(0xff0095F2);
 
 const kHyppeLightActiveChip = Color(0xFFF5E7F5);
+const kHyppeDisabled = Color(0xffbababa);
 
 /// Dark Mode
 const kHyppeBackground = Color(0xff121212);

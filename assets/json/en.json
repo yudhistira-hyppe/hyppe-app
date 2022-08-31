@@ -553,10 +553,11 @@
   "noBankAccount" : "No Bank Account",
   "accountOwnerName":"Account Owner Name",
   "keepThisAccount?":"Keep This Account?",
-  "youWillAdd ":"you will add",
+  "youWillAdd":"you will add",
   "accountWithAccountNumber" : "account with account number",
   "ownedBy" : "owned by ",
   "help" :"Help",
   "aboutBankAccount":"About Bank Account",
-  "aboutBankAccountContent": "1. You can add up to 5 (five) bank account numbers. You can add, change and/or delete the bank account from your list \n\n2. Make sure that the name listed on the bank account is matched with the real name on your ID that you have uploaded on application. If your name does not match, the transaction process will not be able to continue.\n\n3. Make sure you already set up your pin for a secure transactions within the application, if you haven't created a pin yet, you can go to Settings > Privacy & Security > Pin \n\nIf you have followed the method above, but it doesn't work, you can complain about this problem to the Hyppe Help Center 081398582108"
+  "aboutBankAccountContent": "1. You can add up to 5 (five) bank account numbers. You can add, change and/or delete the bank account from your list \n\n2. Make sure that the name listed on the bank account is matched with the real name on your ID that you have uploaded on application. If your name does not match, the transaction process will not be able to continue.\n\n3. Make sure you already set up your pin for a secure transactions within the application, if you haven't created a pin yet, you can go to Settings > Privacy & Security > Pin \n\nIf you have followed the method above, but it doesn't work, you can complain about this problem to the Hyppe Help Center 081398582108",
+  "makeSureTheName" : "*Make sure the name of the account holder is the same as the ID card used for verification on the Hyppe App"
 }

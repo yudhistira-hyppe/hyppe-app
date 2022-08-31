@@ -557,6 +557,7 @@ class LocalizationModelV2 {
   String? ownedBy;
   String? help;
   String? bankAccount;
+  String? makeSureTheName;
 
   LocalizationModelV2({
     this.login,
@@ -1117,6 +1118,7 @@ class LocalizationModelV2 {
     this.ownedBy,
     this.help,
     this.bankAccount,
+    this.makeSureTheName,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1692,9 +1694,9 @@ class LocalizationModelV2 {
     youWillAdd = json['youWillAdd'];
     accountWithAccountNumber = json['accountWithAccountNumber'];
     aboutBankAccount = json['aboutBankAccount'];
-    aboutBankAccountContent = json['aboutBankAccountContent'];
     ownedBy = json['ownedBy'];
     help = json['help'];
     bankAccount = json['bankAccount'];
+    makeSureTheName = json['makeSureTheName'];
   }
 }

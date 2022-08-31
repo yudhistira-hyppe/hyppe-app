@@ -38,6 +38,7 @@ class CameraView extends StatelessWidget {
             child: Transform(
               alignment: Alignment.center,
               child: CameraPreview(notifier.cameraController!), //for camera
+
               transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
             ),
           ),

@@ -77,8 +77,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void onWillPop(bool mounted) {
     if (mounted) {
       if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
+        print('ada postid');
         Routing().moveAndPop(Routes.lobby);
       } else {
+        print('tanpa postid');
         Routing().moveBack();
       }
     }
@@ -89,7 +91,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     required ContentData data,
     required bool mounted,
   }) {
-    onWillPop(mounted);
+    // onWillPop(mounted);
     // System().increaseViewCount(context, data).whenComplete(() => notifyListeners());
     System().increaseViewCount(context, data);
   }

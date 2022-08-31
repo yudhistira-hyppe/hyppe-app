@@ -177,9 +177,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (Platform.isIOS && int.parse(_iOSVersion!.replaceAll('.', '')) <= minIphoneVersionForResolutionCamera) {
       return ResolutionPreset.high;
     } else {
-      return onStoryIsPhoto != null && onStoryIsPhoto == true
-          ? ResolutionPreset.veryHigh
-          : ResolutionPreset.max;
+      return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
     }
   }
 
