@@ -35,7 +35,7 @@ class _VerificationIDStepSupportingDocsState
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "Upload Supporting Document",
+            textToDisplay: notifier.language.uploadSupportDoc!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -57,25 +57,16 @@ class _VerificationIDStepSupportingDocsState
                 const SizedBox(
                   height: 16,
                 ),
-                unorderedList(
-                    "You can upload supporting documents such as, Family Identity Card, Passport, and Driver’s License issued legally by the country"),
-                unorderedList(
-                    "Make sure your full name is listed on your family identity card"),
-                unorderedList(
-                    "Make sure your name and ID Number on the family identity card can be read clearly and in matches with the ID card that you uploaded earlier"),
-                unorderedList(
-                    "Supporting documents such as a passport, you can upload the front page of your passport which displays your photo and full name"),
-                unorderedList(
-                    "Make sure your Driver’s License full name matches the ID card that you uploaded earlier"),
-                unorderedList(
-                    "Make sure your supporting documents are original"),
-                unorderedList(
-                    "Upload a original supporting document, not a copy"),
-                unorderedList(
-                    "The photo of the supporting document is not damaged, for example torn, cracked, blurry, broken, and/or dirty"),
-                unorderedList("Do not use flash for taking the photo"),
-                unorderedList(
-                    "If you have followed the method above, but it doesn't work, you can complain about this problem to the Hyppe Help Center 081398582108"),
+                unorderedList(notifier.language.supportDocNotice1!),
+                unorderedList(notifier.language.supportDocNotice2!),
+                unorderedList(notifier.language.supportDocNotice3!),
+                unorderedList(notifier.language.supportDocNotice4!),
+                unorderedList(notifier.language.supportDocNotice5!),
+                unorderedList(notifier.language.supportDocNotice6!),
+                unorderedList(notifier.language.supportDocNotice7!),
+                unorderedList(notifier.language.supportDocNotice8!),
+                unorderedList(notifier.language.supportDocNotice9!),
+                unorderedList(notifier.language.supportDocNotice10!),
                 const SizedBox(
                   height: 50,
                 ),
@@ -91,7 +82,7 @@ class _VerificationIDStepSupportingDocsState
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => notifier.onPickSupportedDocument(context, true),
             child: CustomTextWidget(
-              textToDisplay: "Continue",
+              textToDisplay: notifier.language.continueStep!,
               textStyle:
                   textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),

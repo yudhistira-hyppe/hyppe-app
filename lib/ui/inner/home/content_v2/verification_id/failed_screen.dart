@@ -35,7 +35,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: notifier.language.idVerification!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -52,33 +52,28 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                       image: AssetImage(
                           "${AssetPath.pngPath}verification-failed.png")),
                 ),
-                const CustomTextWidget(
+                CustomTextWidget(
                     textOverflow: TextOverflow.visible,
                     textAlign: TextAlign.left,
-                    textToDisplay:
-                        "We're sorry, your previous request was not able to be processed"),
+                    textToDisplay: notifier.language.failedIdCardInfoTitle!),
                 _buildDivider(context),
-                const CustomTextWidget(
-                  textToDisplay: "Verification may fail if:",
-                  textStyle: TextStyle(fontWeight: FontWeight.bold),
+                CustomTextWidget(
+                  textToDisplay: notifier.language.failedIdCardInfoSubTitle!,
+                  textStyle: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-                _unorderedList(
-                    "E-KTP is blurred or damaged beyond recognition."),
-                _unorderedList("Selfie doesn't match with E-KTP."),
-                _unorderedList(
-                    "NIK and selfie doesn't match with E-KTP photo."),
-                _unorderedList(
-                    "Supporting documents doesn't match with E-KTP photo and selfie."),
-                _unorderedList("E-KTP is already registered in Hyppe App."),
-                _unorderedList(
-                    "Fraudulent and/or malicious attempts against the law is detected."),
+                _unorderedList(notifier.language.failedIdCardInfo1!),
+                _unorderedList(notifier.language.failedIdCardInfo2!),
+                _unorderedList(notifier.language.failedIdCardInfo3!),
+                _unorderedList(notifier.language.failedIdCardInfo4!),
+                _unorderedList(notifier.language.failedIdCardInfo5!),
+                _unorderedList(notifier.language.failedIdCardInfo6!),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: const [
-                    CustomTextWidget(textToDisplay: "Help"),
-                    SizedBox(width: 10),
-                    CustomIconWidget(
+                  children: [
+                    CustomTextWidget(textToDisplay: notifier.language.help!),
+                    const SizedBox(width: 10),
+                    const CustomIconWidget(
                         iconData: "${AssetPath.vectorPath}help.svg"),
                   ],
                 ),
@@ -98,7 +93,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
               GestureDetector(
                 onTap: () => notifier.retryTakeIdCard(),
                 child: Text(
-                  "Retry",
+                  notifier.language.retry!,
                   style: textTheme.titleMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primaryVariant),
                 ),
@@ -110,7 +105,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                 function: () =>
                     Routing().move(Routes.verificationIDStepSupportingDocs),
                 child: CustomTextWidget(
-                  textToDisplay: "Upload Supporting Document",
+                  textToDisplay: notifier.language.uploadSupportDoc!,
                   textStyle:
                       textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),

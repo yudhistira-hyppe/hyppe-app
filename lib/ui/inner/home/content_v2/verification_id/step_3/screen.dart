@@ -34,7 +34,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: notifier.language.idVerification!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -55,19 +55,14 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
                 const SizedBox(
                   height: 16,
                 ),
-                unorderedList(
-                    "Make sure you upload an E-KTP photo taken directly from the cellphone camera"),
-                unorderedList("Original E-KTP photo or in your own name"),
-                unorderedList("Upload a physical E-KTP photo, not a photocopy"),
-                unorderedList(
-                    "The photo of the E-KTP is not damaged, for example cracked or broken"),
-                unorderedList(
-                    "The photo of the E-KTP is clear, not blurry, the light is bright enough and not cut off"),
-                unorderedList("Photo E-KTP does not use flask"),
-                unorderedList(
-                    "Make sure the selfie you take is facing the front with sufficient lighting, without flash and not cropped"),
-                unorderedList(
-                    "If you have followed the method above, but it doesn't work, you can complain about this problem to the Hyppe Help Center 081398582108"),
+                unorderedList(notifier.language.uploadIdCardNotice1!),
+                unorderedList(notifier.language.uploadIdCardNotice2!),
+                unorderedList(notifier.language.uploadIdCardNotice3!),
+                unorderedList(notifier.language.uploadIdCardNotice4!),
+                unorderedList(notifier.language.uploadIdCardNotice5!),
+                unorderedList(notifier.language.uploadIdCardNotice6!),
+                unorderedList(notifier.language.uploadIdCardNotice7!),
+                unorderedList(notifier.language.uploadIdCardNotice8!),
                 const SizedBox(
                   height: 50,
                 ),
@@ -83,7 +78,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => Routing().moveAndPop(Routes.verificationIDStep4),
             child: CustomTextWidget(
-              textToDisplay: "Continue",
+              textToDisplay: notifier.language.continueStep!,
               textStyle:
                   textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),

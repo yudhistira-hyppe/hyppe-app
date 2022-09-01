@@ -34,7 +34,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: notifier.language.idVerification!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -49,7 +49,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: "Real Name",
+                    textToDisplay: notifier.language.realName!,
                     textStyle: textTheme.titleMedium,
                   ),
                   Container(
@@ -85,8 +85,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       textAlign: TextAlign.left,
                       textStyle:
                           textTheme.caption!.copyWith(color: Colors.black26),
-                      textToDisplay:
-                          "Ensure to use your full name as stated in E-KTP, this cannot be edited at later stage")
+                      textToDisplay: notifier.language.reaNameNotice!)
                 ],
               ),
               Visibility(
@@ -96,7 +95,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                   height: 44.0 * SizeConfig.scaleDiagonal,
                   function: () => notifier.submitStep2(context),
                   child: CustomTextWidget(
-                    textToDisplay: "Continue",
+                    textToDisplay: notifier.language.continueStep!,
                     textStyle: textTheme.button
                         ?.copyWith(color: kHyppeLightButtonText),
                   ),

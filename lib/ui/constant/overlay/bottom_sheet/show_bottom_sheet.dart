@@ -460,7 +460,7 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-            height: 300,
+            height: 330,
             decoration: BoxDecoration(
               color: Theme.of(ctx).colorScheme.surface,
               borderRadius: const BorderRadius.only(

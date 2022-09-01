@@ -34,7 +34,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: notifier.language.idVerification!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -47,14 +47,14 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: "End User License Agreement",
+                  textToDisplay: notifier.language.endUserLicenseAgreement!,
                   textStyle: textTheme.titleMedium,
                 ),
                 const SizedBox(
                   height: 8,
                 ),
                 CustomTextWidget(
-                  textToDisplay: "About ID Verification",
+                  textToDisplay: notifier.language.aboutIdVerification!,
                   textStyle: textTheme.titleLarge,
                 ),
                 const SizedBox(
@@ -89,7 +89,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
               GestureDetector(
                 onTap: () => Routing().moveBack(),
                 child: Text(
-                  "Cancel",
+                  notifier.language.cancel!,
                   style: textTheme.titleMedium!.copyWith(
                       color: Theme.of(context).colorScheme.primaryVariant),
                 ),
@@ -101,7 +101,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                 function: () =>
                     Routing().moveAndPop(Routes.verificationIDStep2),
                 child: CustomTextWidget(
-                  textToDisplay: "Agree",
+                  textToDisplay: notifier.language.agreeAndContinue!,
                   textStyle:
                       textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),

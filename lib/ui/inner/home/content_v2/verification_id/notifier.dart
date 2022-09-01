@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/progress_upload_argument.dart';
+import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/verification_id/bloc.dart';
 import 'package:hyppe/core/bloc/verification_id/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -73,6 +74,7 @@ class VerificationIDNotifier extends LoadingNotifier
   TextEditingController _realNameController = TextEditingController();
   TextEditingController _birtDateController = TextEditingController();
   TextEditingController _birtPlaceController = TextEditingController();
+  TextEditingController _genderController = TextEditingController();
 
   TextEditingController get realNameController => _realNameController;
   set realNameController(TextEditingController val) {
@@ -89,6 +91,12 @@ class VerificationIDNotifier extends LoadingNotifier
   TextEditingController get birtPlaceController => _birtPlaceController;
   set birtPlaceController(TextEditingController val) {
     _birtPlaceController = val;
+    notifyListeners();
+  }
+
+  TextEditingController get genderController => _genderController;
+  set genderController(TextEditingController val) {
+    _genderController = val;
     notifyListeners();
   }
 
@@ -499,9 +507,42 @@ class VerificationIDNotifier extends LoadingNotifier
       error++;
     }
 
+    if (genderController.text == "") {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        "Silahkan pilih jenis kelamin",
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 1,
+      );
+      error++;
+    }
+
     if (error == 0) {
       Routing().moveAndPop(Routes.verificationIDStep6);
     }
+  }
+
+  void genderOnTap(BuildContext context) {
+    ShowBottomSheet.onShowOptionGender(
+      context,
+      onSave: () {
+        Routing().moveBack();
+        Provider.of<VerificationIDNotifier>(context, listen: false)
+            .genderController
+            .text = genderController.text;
+        notifyListeners();
+      },
+      onCancel: () {
+        Routing().moveBack();
+        FocusScope.of(context).unfocus();
+      },
+      onChange: (value) {
+        genderController.text = value;
+        notifyListeners();
+      },
+      value: genderController.text,
+      initFuture: UtilsBlocV2().getGenderBloc(context),
+    );
   }
 
   @override

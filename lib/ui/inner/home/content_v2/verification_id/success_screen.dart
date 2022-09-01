@@ -7,7 +7,6 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
-import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -35,7 +34,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: notifier.language.idVerification!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -52,18 +51,16 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
                       image: AssetImage(
                           "${AssetPath.pngPath}verification-success.png")),
                 ),
-                const CustomTextWidget(
+                CustomTextWidget(
                     textOverflow: TextOverflow.visible,
                     textAlign: TextAlign.left,
-                    textToDisplay:
-                        "Your account is now Premium. Now you can enjoy these greats benefits:"),
+                    textToDisplay: notifier.language.successIdCardTitle!),
                 _buildDivider(context),
                 const SizedBox(height: 10),
-                _unorderedList(
-                    "Register Content Ownership to get Ownership Certificate"),
-                _unorderedList("Sell and Buying Content"),
-                _unorderedList("Put Ads in Hyppe Apps"),
-                _unorderedList("Send balance to your Bank Account"),
+                _unorderedList(notifier.language.successIdCard1!),
+                _unorderedList(notifier.language.successIdCard2!),
+                _unorderedList(notifier.language.successIdCard3!),
+                _unorderedList(notifier.language.successIdCard4!),
                 const SizedBox(height: 70)
               ],
             ),
@@ -77,7 +74,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => notifier.clearAndMoveToLobby(),
             child: CustomTextWidget(
-              textToDisplay: "Close",
+              textToDisplay: notifier.language.close!,
               textStyle:
                   textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),

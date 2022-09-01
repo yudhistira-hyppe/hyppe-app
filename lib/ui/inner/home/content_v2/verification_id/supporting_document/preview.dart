@@ -36,7 +36,7 @@ class _VerificationIDStepSupportingDocsPreviewState
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "Supporting Document",
+            textToDisplay: notifier.language.supportDoc!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -75,7 +75,7 @@ class _VerificationIDStepSupportingDocsPreviewState
                   ),
                 const SizedBox(width: 10),
                 CustomTextWidget(
-                  textToDisplay: "Save",
+                  textToDisplay: notifier.language.save!,
                   textStyle:
                       textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),

@@ -12,8 +12,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDStep4 extends StatefulWidget {
@@ -90,7 +88,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4>
                             iconData: "${AssetPath.vectorPath}close.svg",
                             defaultColor: false)),
                     CustomTextWidget(
-                      textToDisplay: "ID Verification",
+                      textToDisplay: notifier.language.idVerification!,
                       textStyle:
                           textTheme.subtitle1?.copyWith(color: Colors.white),
                     ),
@@ -120,7 +118,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4>
             Align(
               alignment: const Alignment(0.0, 0.6),
               child: CustomTextWidget(
-                  textToDisplay: "Place your KTP within the frame",
+                  textToDisplay: notifier.language.cameraTakeIdCardInfo!,
                   textStyle:
                       textTheme.subtitle1?.copyWith(color: Colors.white)),
             )

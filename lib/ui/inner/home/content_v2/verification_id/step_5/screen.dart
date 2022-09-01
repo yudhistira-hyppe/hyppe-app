@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -51,7 +52,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: "ID Verification",
+            textToDisplay: notifier.language.idVerification!,
             textStyle:
                 Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
@@ -69,13 +70,13 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     _disabledInputText(
-                        title: "Real Name",
-                        value: notifier.realName.toUpperCase() +
-                            (notifier.isNameMatch ? '' : ' (Not Match)')),
+                        title: notifier.language.realName!,
+                        value: notifier.realName.toUpperCase()),
                     _disabledInputText(
-                        title: "E-KTP Number", value: notifier.idCardNumber),
+                        title: notifier.language.eKtpNumber!,
+                        value: notifier.idCardNumber),
                     CustomTextWidget(
-                      textToDisplay: "Place of Birth",
+                      textToDisplay: notifier.language.placeBirth!,
                       textStyle:
                           textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                     ),
@@ -83,7 +84,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       maxLines: 1,
                       validator: (String? input) {
                         if (input?.isEmpty ?? true) {
-                          return "Please enter your place of birth as stated in E-KTP";
+                          return notifier.language.placeBirthNote!;
                         } else {
                           return null;
                         }
@@ -108,13 +109,67 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                     ),
                     _buildDivider(context),
                     CustomTextWidget(
-                      textToDisplay:
-                          "Please enter your place of birth as stated in E-KTP",
+                      textToDisplay: notifier.language.placeBirthNote!,
                       textStyle: textTheme.bodySmall,
                     ),
                     const SizedBox(height: 24),
                     CustomTextWidget(
-                      textToDisplay: "Date of Birth",
+                      textToDisplay: notifier.language.gender!,
+                      textStyle:
+                          textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        notifier.genderOnTap(context);
+                      },
+                      child: Stack(
+                        children: [
+                          const Align(
+                            alignment: Alignment(0.975, 1),
+                            heightFactor: 1,
+                            child: RotatedBox(
+                              quarterTurns: -45,
+                              child: CustomIconWidget(
+                                  iconData:
+                                      "${AssetPath.vectorPath}back-arrow.svg"),
+                            ),
+                          ),
+                          TextFormField(
+                            maxLines: 1,
+                            validator: (String? input) {
+                              if (input?.isEmpty ?? true) {
+                                return notifier.language.selectGenderInfo!;
+                              } else {
+                                return null;
+                              }
+                            },
+                            enabled: false,
+                            keyboardAppearance: Brightness.dark,
+                            cursorColor: const Color(0xff8A3181),
+                            textInputAction: TextInputAction.newline,
+                            style: textTheme.bodyText2,
+                            controller: notifier.genderController,
+                            decoration: InputDecoration(
+                              errorBorder: InputBorder.none,
+                              hintStyle: textTheme.bodyText2,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
+                              counterText: "",
+                              contentPadding:
+                                  const EdgeInsets.symmetric(vertical: 5),
+                              isDense: true,
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    _buildDivider(context),
+                    const SizedBox(height: 24),
+                    CustomTextWidget(
+                      textToDisplay: notifier.language.dateOfBirth!,
                       textStyle:
                           textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                     ),
@@ -175,16 +230,12 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                     ),
                     _buildDivider(context),
                     CustomTextWidget(
-                      textToDisplay:
-                          "Please enter your date of birth as stated in E-KTP (hh-bb-tttt)",
+                      textToDisplay: notifier.language.selectDateBirthInfo!,
                       textStyle: textTheme.bodySmall,
                     ),
                     const SizedBox(height: 24),
                     Row(
                       children: [
-                        // child: CustomTextWidget(
-                        //     textToDisplay:
-                        //         "By Continuing I hereby declare that the data I have filled in is accurate and genuine"),
                         Expanded(
                           child: CustomRichTextWidget(
                             maxLines: 3,
@@ -192,8 +243,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                             textSpan: TextSpan(
                                 style: textTheme.bodyText2!
                                     .copyWith(color: kHyppeLightSecondary),
-                                text:
-                                    "By Continuing I hereby declare that the data I have filled in is accurate and genuine"),
+                                text: notifier.language.confirmIdGenuine!),
                           ),
                         ),
                         Checkbox(
@@ -204,6 +254,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                         )
                       ],
                     ),
+                    const SizedBox(height: 100),
                   ],
                 ),
               ),
@@ -220,16 +271,30 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                 textSpan: TextSpan(
                     style: textTheme.bodyText2!
                         .copyWith(color: kHyppeLightSecondary),
-                    text:
-                        "This verification process can only be made once, make sure the data is matched with your ID."),
+                    text: notifier.language.confirmIdNotice!),
               ),
               const SizedBox(height: 10),
+              CustomElevatedButton(
+                child: CustomTextWidget(
+                  textToDisplay: notifier.language.uploadSupportDoc!,
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .button!
+                      .copyWith(color: kHyppePrimary),
+                ),
+                width: double.infinity,
+                height: 50 * SizeConfig.scaleDiagonal,
+                function: () => Routing().moveAndRemoveUntil(
+                    Routes.verificationIDStepSupportingDocs,
+                    Routes.verificationIDStepSupportingDocs),
+              ),
+              const SizedBox(height: 5),
               CustomElevatedButton(
                 width: SizeConfig.screenWidth,
                 height: 44.0 * SizeConfig.scaleDiagonal,
                 function: () => notifier.continueSelfie(context),
                 child: CustomTextWidget(
-                  textToDisplay: "Continue Selfie",
+                  textToDisplay: notifier.language.continueSelfie!,
                   textStyle:
                       textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),

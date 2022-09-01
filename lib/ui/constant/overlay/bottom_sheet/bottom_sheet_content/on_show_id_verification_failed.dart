@@ -25,17 +25,31 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
               iconData: "${AssetPath.vectorPath}handler.svg"),
           Image.asset("assets/png/warning.png"),
           CustomTextWidget(
-            textToDisplay: "ID Card Number",
+            textToDisplay: "Please Try Again",
             textStyle: Theme.of(context).textTheme.subtitle1,
           ),
           CustomTextWidget(
               textOverflow: TextOverflow.visible,
               textStyle: Theme.of(context).textTheme.bodyMedium,
               textToDisplay:
-                  "The ID card number must be contain 16 digits number, the ID card photo that you uploaded did not match with the requirement. Please try again"),
+                  "The ID card number and/or your Real Name did not match. Make sure the lighting sufficient and the ID card is in a good condition. Please try again"),
           CustomElevatedButton(
             child: CustomTextWidget(
-              textToDisplay: "Re-Take Picture",
+              textToDisplay: "Upload Supporting Document",
+              textStyle: Theme.of(context)
+                  .textTheme
+                  .button!
+                  .copyWith(color: kHyppePrimary),
+            ),
+            width: double.infinity,
+            height: 50 * SizeConfig.scaleDiagonal,
+            function: () => Routing().moveAndRemoveUntil(
+                Routes.verificationIDStepSupportingDocs,
+                Routes.verificationIDStepSupportingDocs),
+          ),
+          CustomElevatedButton(
+            child: CustomTextWidget(
+              textToDisplay: "Re-Take ID Picture",
               textStyle: Theme.of(context)
                   .textTheme
                   .button!
