@@ -105,6 +105,7 @@ class StoryVideoState extends State<StoryVideo> {
       fit: BoxFit.fill,
       autoPlay: false,
       showPlaceholderUntilPlay: true,
+      looping: true,
       controlsConfiguration: BetterPlayerControlsConfiguration(
         showControls: false,
         enableFullscreen: false,
@@ -138,8 +139,7 @@ class StoryVideoState extends State<StoryVideo> {
         _setupPlayerController(
           callback: (dataSource) {
             playerController?.setupDataSource(dataSource).then((_) {
-              overridenAspectRatio =
-                  playerController!.videoPlayerController!.value.size!.height / playerController!.videoPlayerController!.value.size!.width;
+              overridenAspectRatio = playerController!.videoPlayerController!.value.size!.height / playerController!.videoPlayerController!.value.size!.width;
 
               _width = playerController?.videoPlayerController?.value.size?.width ?? 0;
               _height = playerController?.videoPlayerController?.value.size?.height ?? 0;

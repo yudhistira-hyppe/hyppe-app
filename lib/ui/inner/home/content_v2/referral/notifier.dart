@@ -114,7 +114,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
 
       await notifier.registerReferral(
         context,
-        data: RegisterReferralArgument(username: _nameReferral, imei: realDeviceID ?? SharedPreference().readStorage(SpKeys.fcmToken)),
+        data: RegisterReferralArgument(username: _nameReferral, imei: realDeviceID != "" ? realDeviceID : SharedPreference().readStorage(SpKeys.fcmToken)),
         // function: () => onClickLogin(context),
       );
       setLoading(false);

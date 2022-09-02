@@ -30,6 +30,11 @@ class UserBloc {
   UserFetch get userFetch => _userFetch;
   setUserFetch(UserFetch val) => _userFetch = val;
 
+  String? deviceID = "";
+  String realDeviceId = "";
+  String referralEmail = "";
+  String platForm = "";
+
   Future recoverPasswordBloc(BuildContext context, {required String email}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
@@ -97,17 +102,17 @@ class UserBloc {
 
   Future googleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
-    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    String realDeviceId = await System().getDeviceIdentifier();
-    String referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
-    String platForm = Platform.isAndroid ? "android" : "ios";
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
+    referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    platForm = Platform.isAndroid ? "android" : "ios";
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "GMAIL",
       "deviceId": deviceID,
       "langIso": "en",
       "referral": referralEmail,
-      "imei": realDeviceId ?? deviceID,
+      "imei": realDeviceId != "" ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {
         "longitude": latitude ?? "${double.parse("0.0")}",
@@ -142,17 +147,17 @@ class UserBloc {
 
   Future appleSignInBlocV2(BuildContext context, {required Function() function, required String email, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
-    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    String realDeviceId = await System().getDeviceIdentifier();
-    String referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
-    String platForm = Platform.isAndroid ? "android" : "ios";
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
+    referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    platForm = Platform.isAndroid ? "android" : "ios";
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "APPLE",
       "deviceId": deviceID,
       "langIso": "en",
       "referral": referralEmail,
-      "imei": realDeviceId ?? deviceID,
+      "imei": realDeviceId != "" ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {
         "longitude": latitude ?? "${double.parse("0.0")}",
@@ -187,15 +192,15 @@ class UserBloc {
 
   Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
-    String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    String realDeviceID = await System().getDeviceIdentifier();
-    String platForm = Platform.isAndroid ? "android" : "ios";
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
+    platForm = Platform.isAndroid ? "android" : "ios";
     // print('ini plat $platForm');
     dynamic payload = {
       'email': email.toLowerCase(),
       "password": password,
       "deviceId": deviceID,
-      "imei": realDeviceID ?? deviceID,
+      "imei": realDeviceId != "" ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {
         "longitude": latitude ?? "${double.parse("0.0")}",

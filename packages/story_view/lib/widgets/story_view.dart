@@ -423,6 +423,7 @@ class StoryView extends StatefulWidget {
 
   final Color progressColor;
   final Color durationColor;
+  final bool? nextDebouncer;
 
   StoryView({
     Key? key,
@@ -436,6 +437,7 @@ class StoryView extends StatefulWidget {
     this.repeat = false,
     this.inline = false,
     this.onVerticalSwipeComplete,
+    this.nextDebouncer = true,
   })  : assert(storyItems.isNotEmpty, "[storyItems] should not be empty"),
         super(key: key);
 
@@ -782,11 +784,15 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                   widget.controller.play();
                 },
                 onTapUp: (details) {
+                  print(details.globalPosition);
+                  print(details.kind);
+                  print(details.localPosition);
                   // if debounce timed out (not active) then continue anim
-                  if (_nextDebouncer?.isActive == false) {
-                    widget.controller.play();
-                  } else {
+                  if (_nextDebouncer?.isActive == true && widget.nextDebouncer == true) {
                     widget.controller.next();
+                  } else {
+                    widget.controller.play();
+                    // widget.controller.pause();
                   }
                 },
                 onVerticalDragStart: widget.onVerticalSwipeComplete == null
@@ -825,7 +831,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
             heightFactor: 1,
             child: SizedBox(
                 child: GestureDetector(onTap: () {
-                  widget.controller.previous();
+                  if (widget.nextDebouncer == true) widget.controller.previous();
                 }),
                 width: 70),
           ),

@@ -57,7 +57,7 @@ class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomShee
             mainAxisSize: MainAxisSize.max,
             children: [
               CustomSearchBar(
-                hintText: notifier.language.whatAreYouFindOut,
+                hintText: notifier.language.search,
                 contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                 controller: notifier.location,
                 onChanged: (val) => notifier.searchLocation(context, input: val),

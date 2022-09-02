@@ -67,6 +67,9 @@ class OtherProfileNotifier with ChangeNotifier {
   String? get userEmail => _userEmail;
   String? get username => _username;
 
+  bool _isCheckLoading = false;
+  bool get isCheckLoading => _isCheckLoading;
+
   int get vidCount => user.vids?.length ?? 0;
   bool get vidHasNext => vidContentsQuery.hasNext;
 
@@ -110,6 +113,11 @@ class OtherProfileNotifier with ChangeNotifier {
 
   set userID(String? val) {
     _userID = val;
+    notifyListeners();
+  }
+
+  set isCheckLoading(bool val) {
+    _isCheckLoading = val;
     notifyListeners();
   }
 
@@ -191,7 +199,7 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  initialOtherProfile(BuildContext context, {OtherProfileArgument? argument}) async {
+  initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
     print('ini argument');
     print(argument?.postID);
     print(argument?.postID);
@@ -220,6 +228,10 @@ class OtherProfileNotifier with ChangeNotifier {
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       user.profile = usersFetch.data;
       notifyListeners();
+    }
+
+    if (refresh) {
+      checkFollowingToUser(context, userEmail!);
     }
 
     user.vids = await vidContentsQuery.reload(context, otherContent: true);
@@ -338,6 +350,7 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   Future<void> checkFollowingToUser(BuildContext context, String email) async {
+    _isCheckLoading = true;
     userEmail = email;
     statusFollowing = StatusFollowing.rejected;
     try {
@@ -353,8 +366,11 @@ class OtherProfileNotifier with ChangeNotifier {
           statusFollowing = StatusFollowing.requested;
         }
       }
+      isCheckLoading = false;
     } catch (e) {
       'load following request list: ERROR: $e'.logger();
+      isCheckLoading = false;
     }
+    notifyListeners();
   }
 }

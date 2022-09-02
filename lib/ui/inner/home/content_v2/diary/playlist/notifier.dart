@@ -89,7 +89,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     required ContentData data,
     required bool mounted,
   }) {
-    onWillPop(mounted);
+    // onWillPop(mounted);
     // System().increaseViewCount(context, data).whenComplete(() => notifyListeners());
     System().increaseViewCount(context, data);
   }

@@ -197,7 +197,7 @@ class DynamicLinkService {
         await notifier.referralUserBloc(
           context,
           withAlertConnection: false,
-          data: ReferralUserArgument(email: _referralEmail, imei: realDeviceID ?? _sharedPrefs.readStorage(SpKeys.fcmToken)),
+          data: ReferralUserArgument(email: _referralEmail, imei: realDeviceID != "" ? realDeviceID : _sharedPrefs.readStorage(SpKeys.fcmToken)),
         );
         final fetch = notifier.referralFetch;
         if (fetch.referralState == ReferralState.referralUserSuccess) {

@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -228,17 +229,19 @@ class PicDetailBottom extends StatelessWidget {
               }
               return Column(
                 children: [
-                  CustomFollowButton(
-                    caption: value3.translate.follow!,
-                    onPressed: () async {
-                      try {
-                        await value.followUser(context);
-                      } catch (e) {
-                        e.logger();
-                      }
-                    },
-                    isFollowing: value.statusFollowing,
-                  ),
+                  value.checkIsLoading
+                      ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
+                      : CustomFollowButton(
+                          caption: value3.translate.follow!,
+                          onPressed: () async {
+                            try {
+                              await value.followUser(context);
+                            } catch (e) {
+                              e.logger();
+                            }
+                          },
+                          isFollowing: value.statusFollowing,
+                        ),
                 ],
               );
             },

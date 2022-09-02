@@ -41,6 +41,13 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   PicDetailScreenArgument? _routeArgument;
 
   StatusFollowing get statusFollowing => _statusFollowing;
+  bool _checkIsLoading = false;
+  bool get checkIsLoading => _checkIsLoading;
+
+  set checkIsLoading(bool val) {
+    _checkIsLoading = val;
+    notifyListeners();
+  }
 
   set statusFollowing(StatusFollowing statusFollowing) {
     _statusFollowing = statusFollowing;
@@ -147,12 +154,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
-    print('autofollow');
     final _sharedPrefs = SharedPreference();
-    print(_sharedPrefs.readStorage(SpKeys.email));
-    print(_data?.email);
     if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
       try {
+        _checkIsLoading = true;
         _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
         final _resFuture = _usersFollowingQuery.reload(context);
         final _resRequest = await _resFuture;
@@ -167,6 +172,8 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
             }
           }
         }
+        _checkIsLoading = false;
+        notifyListeners();
       } catch (e) {
         'load following request list: ERROR: $e'.logger();
       }

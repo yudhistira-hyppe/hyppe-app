@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -214,17 +215,19 @@ class VidDetailBottom extends StatelessWidget {
           Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
             builder: (context, value, value2, value3, child) {
               if (data?.email == SharedPreference().readStorage(SpKeys.email)) return const SizedBox.shrink();
-              return CustomFollowButton(
-                caption: value3.translate.follow!,
-                onPressed: () async {
-                  try {
-                    await value.followUser(context);
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                isFollowing: value.statusFollowing,
-              );
+              return value.checkIsLoading
+                  ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
+                  : CustomFollowButton(
+                      caption: value3.translate.follow!,
+                      onPressed: () async {
+                        try {
+                          await value.followUser(context);
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
+                      isFollowing: value.statusFollowing,
+                    );
             },
           ),
         ],
