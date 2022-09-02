@@ -254,77 +254,93 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                         )
                       ],
                     ),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 70),
+                    CustomRichTextWidget(
+                      maxLines: 3,
+                      textAlign: TextAlign.left,
+                      textSpan: TextSpan(
+                          style: textTheme.bodyText2!
+                              .copyWith(color: kHyppeLightSecondary),
+                          text: notifier.language.confirmIdNotice!),
+                    ),
+                    const SizedBox(height: 20),
+                    CustomElevatedButton(
+                      child: CustomTextWidget(
+                        textToDisplay: notifier.language.retakeIdPicture!,
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: kHyppePrimary),
+                      ),
+                      width: double.infinity,
+                      height: 50 * SizeConfig.scaleDiagonal,
+                      function: () => notifier.retryTakeIdCard(),
+                      buttonStyle: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white)),
+                    ),
+                    const SizedBox(height: 5),
+                    CustomElevatedButton(
+                      width: SizeConfig.screenWidth,
+                      height: 44.0 * SizeConfig.scaleDiagonal,
+                      function: () => notifier.continueSelfie(context),
+                      child: CustomTextWidget(
+                        textToDisplay: notifier.language.continueSelfie!,
+                        textStyle: textTheme.button
+                            ?.copyWith(color: kHyppeLightButtonText),
+                      ),
+                      buttonStyle: notifier.step5CanNext
+                          ? ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.primaryVariant),
+                              shadowColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.primaryVariant),
+                              overlayColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.primaryVariant),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.primaryVariant),
+                            )
+                          : ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.secondary),
+                              shadowColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.secondary),
+                              overlayColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.secondary),
+                              backgroundColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.secondary),
+                            ),
+                    ),
+                    const SizedBox(height: 20),
+                    Center(
+                      child: CustomTextWidget(
+                        textToDisplay: notifier.language.dataDidntShow!,
+                      ),
+                    ),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () => notifier.retryTakeIdCard(),
+                        child: RichText(
+                          text: TextSpan(
+                            text: notifier.language.tapHere!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: kHyppePrimary),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: notifier.language.toAppeal!,
+                                style: const TextStyle(
+                                    color: kHyppeTextLightPrimary),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
-        floatingActionButton: Container(
-          height: 100,
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              CustomRichTextWidget(
-                maxLines: 3,
-                textAlign: TextAlign.left,
-                textSpan: TextSpan(
-                    style: textTheme.bodyText2!
-                        .copyWith(color: kHyppeLightSecondary),
-                    text: notifier.language.confirmIdNotice!),
-              ),
-              const SizedBox(height: 10),
-              CustomElevatedButton(
-                child: CustomTextWidget(
-                  textToDisplay: notifier.language.uploadSupportDoc!,
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .button!
-                      .copyWith(color: kHyppePrimary),
-                ),
-                width: double.infinity,
-                height: 50 * SizeConfig.scaleDiagonal,
-                function: () => Routing().moveAndRemoveUntil(
-                    Routes.verificationIDStepSupportingDocs,
-                    Routes.verificationIDStepSupportingDocs),
-              ),
-              const SizedBox(height: 5),
-              CustomElevatedButton(
-                width: SizeConfig.screenWidth,
-                height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () => notifier.continueSelfie(context),
-                child: CustomTextWidget(
-                  textToDisplay: notifier.language.continueSelfie!,
-                  textStyle:
-                      textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                ),
-                buttonStyle: notifier.step5CanNext
-                    ? ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primaryVariant),
-                        shadowColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primaryVariant),
-                        overlayColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primaryVariant),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primaryVariant),
-                      )
-                    : ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                        shadowColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                        overlayColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                      ),
-              ),
-              const SizedBox(height: 10),
-            ],
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }

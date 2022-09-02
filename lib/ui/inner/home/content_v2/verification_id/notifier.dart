@@ -7,9 +7,12 @@ import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/verification_id/bloc.dart';
 import 'package:hyppe/core/bloc/verification_id/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
@@ -67,6 +70,7 @@ class VerificationIDNotifier extends LoadingNotifier
   String _idVerificationResponse = "";
   bool _acceptTos = false;
   bool _step5CanNext = false;
+  bool _selfieOnSupportDocs = false;
   DateTime _selectedBirthDate = DateTime.now();
   List<File>? _pickedSupportingDocs = [];
 
@@ -179,6 +183,12 @@ class VerificationIDNotifier extends LoadingNotifier
   bool get step5CanNext => _step5CanNext;
   set step5CanNext(bool val) {
     _step5CanNext = val;
+    notifyListeners();
+  }
+
+  bool get selfieOnSupportDocs => _selfieOnSupportDocs;
+  set selfieOnSupportDocs(bool val) {
+    _selfieOnSupportDocs = val;
     notifyListeners();
   }
 
@@ -298,7 +308,11 @@ class VerificationIDNotifier extends LoadingNotifier
           print("Camera Path => " + imagePath);
         }
 
-        await postVerificationData(context);
+        if (selfieOnSupportDocs) {
+          onPickSupportedDocument(context, true);
+        } else {
+          await postVerificationData(context);
+        }
       }
     });
   }
@@ -307,13 +321,20 @@ class VerificationIDNotifier extends LoadingNotifier
     setLoading(true);
     try {
       final bloc = VerificationIDBloc();
-      await bloc.postVerificationIDBloc(
+      await bloc.postVerificationIDWithSupportDocsBloc(
         context,
-        idCardFile: imagePath,
-        selfieFile: selfiePath,
         idcardnumber: idCardNumber,
         nama: realName,
         tempatLahir: birtPlaceController.text,
+        idCardFile: imagePath,
+        selfieFile: selfiePath,
+        alamat: '',
+        agama: '',
+        statusPerkawinan: '',
+        pekerjaan: '',
+        kewarganegaraan: '',
+        jenisKelamin: genderController.text,
+        docFiles: [],
         onReceiveProgress: (count, total) async {
           await _eventService.notifyUploadReceiveProgress(
               ProgressUploadArgument(count: count, total: total));
@@ -329,6 +350,9 @@ class VerificationIDNotifier extends LoadingNotifier
         'verification ID success'.logger();
         setLoading(false);
         _eventService.notifyUploadSuccess(fetch.data);
+
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, VERIFIED);
+
         Routing().moveAndPop(Routes.verificationIDSuccess);
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {
@@ -387,9 +411,19 @@ class VerificationIDNotifier extends LoadingNotifier
     setLoading(true);
     try {
       final bloc = VerificationIDBloc();
-      await bloc.postVerificationIDSupportDocsBloc(
+      await bloc.postVerificationIDWithSupportDocsBloc(
         context,
-        id: idVerificationResponse,
+        idcardnumber: idCardNumber,
+        nama: realName,
+        tempatLahir: birtPlaceController.text,
+        idCardFile: imagePath,
+        selfieFile: selfiePath,
+        alamat: '',
+        agama: '',
+        statusPerkawinan: '',
+        pekerjaan: '',
+        kewarganegaraan: '',
+        jenisKelamin: genderController.text,
         docFiles: pickedSupportingDocs,
         onReceiveProgress: (count, total) async {
           await _eventService.notifyUploadReceiveProgress(
@@ -406,6 +440,9 @@ class VerificationIDNotifier extends LoadingNotifier
         'verification ID Docs success'.logger();
         setLoading(false);
         _eventService.notifyUploadSuccess(fetch.data);
+
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
+
         bool? _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
           context,
           "Success Upload",
@@ -453,8 +490,20 @@ class VerificationIDNotifier extends LoadingNotifier
     step5CanNext = false;
     selectedBirthDate = DateTime.now();
     pickedSupportingDocs = [];
+    genderController.clear();
 
     Routing().moveAndPop(Routes.verificationIDStep4);
+  }
+
+  void retrySelfie(BuildContext context, bool isSupportDocument) {
+    selfiePath = "";
+    pickedSupportingDocs = [];
+
+    if (isSupportDocument) {
+      selfieOnSupportDocs = true;
+    }
+
+    Routing().moveAndPop(Routes.verificationIDStep6);
   }
 
   void clearAndMoveToLobby() {

@@ -557,6 +557,12 @@ class LocalizationModelV2 {
   String? successIdCard4;
   String? help;
   String? retry;
+  String? retakeSelfie;
+  String? dataDidntShow;
+  String? tapHere;
+  String? toAppeal;
+  String? unverified;
+  String? review;
 
   LocalizationModelV2(
       {this.login,
@@ -1115,7 +1121,13 @@ class LocalizationModelV2 {
       this.successIdCard3,
       this.successIdCard4,
       this.help,
-      this.retry});
+      this.retry,
+      this.retakeSelfie,
+      this.dataDidntShow,
+      this.tapHere,
+      this.toAppeal,
+      this.unverified,
+      this.review});
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1746,5 +1758,11 @@ class LocalizationModelV2 {
     successIdCard4 = json["successIdCard4"];
     help = json["help"];
     retry = json["retry"];
+    retakeSelfie = json["retakeSelfie"];
+    dataDidntShow = json["dataDidntShow"];
+    tapHere = json["tapHere"];
+    toAppeal = json["toAppeal"];
+    unverified = json["unverified"];
+    review = json["review"];
   }
 }

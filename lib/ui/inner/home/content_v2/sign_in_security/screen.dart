@@ -1,8 +1,12 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -47,10 +51,35 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
               ),
               SettingTile(
                 icon: 'verification-icon.svg',
-                onTap: () => Routing().move(Routes.verificationIDStep1),
+                onTap: () {
+                  switch (SharedPreference()
+                      .readStorage(SpKeys.statusVerificationId)) {
+                    case REVIEW:
+                      ShowBottomSheet().onShowColouredSheet(
+                        context,
+                        "Your kyc request under review",
+                        color: Theme.of(context).colorScheme.error,
+                        maxLines: 2,
+                      );
+                      break;
+                    case VERIFIED:
+                      ShowBottomSheet().onShowColouredSheet(
+                        context,
+                        "Your kyc status is verified",
+                        color: Theme.of(context).colorScheme.error,
+                        maxLines: 2,
+                      );
+                      break;
+                    default:
+                      Routing().move(Routes.verificationIDStep1);
+                  }
+                },
                 caption: '${notifier.translate.idVerification}',
                 trailing: verificationStatus(
-                    context, 'unverified'), //verified, unverified, review
+                    context,
+                    SharedPreference()
+                            .readStorage(SpKeys.statusVerificationId) ??
+                        UNVERIFIED), //verified, unverified, review
               ),
             ],
           ),
@@ -64,17 +93,17 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     Color? statusColor;
     Color? bgColor;
     switch (status) {
-      case "verified":
+      case VERIFIED:
         statusText = "Verified";
         statusColor = Colors.black87;
         bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
         break;
-      case "unverified":
+      case UNVERIFIED:
         statusText = "Unerified";
         statusColor = Colors.white;
         bgColor = kHyppePrimary;
         break;
-      case "review":
+      case REVIEW:
         statusText = "Under Review";
         statusColor = Colors.yellow[900];
         bgColor = Colors.yellow[200];

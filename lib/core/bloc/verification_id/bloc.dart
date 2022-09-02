@@ -139,4 +139,92 @@ class VerificationIDBloc {
       errorServiceType: System().getErrorTypeV2(FeatureType.other),
     );
   }
+
+  Future postVerificationIDWithSupportDocsBloc(
+    BuildContext context, {
+    required String idcardnumber,
+    required String nama,
+    required String tempatLahir,
+    required String idCardFile,
+    required String selfieFile,
+    String? alamat,
+    String? agama,
+    String? statusPerkawinan,
+    String? pekerjaan,
+    String? kewarganegaraan,
+    String? jenisKelamin,
+    List<File>? docFiles,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    FormData formData = FormData.fromMap({
+      "cardPict": await MultipartFile.fromFile(
+        File(idCardFile).path,
+        filename: File(idCardFile).path.split('/').last,
+        contentType: MediaType("image", "jpeg"),
+      ),
+      "selfiepict": await MultipartFile.fromFile(
+        File(selfieFile).path,
+        filename: File(selfieFile).path.split('/').last,
+        contentType: MediaType("image", "jpeg"),
+      ),
+      "idcardnumber": idcardnumber,
+      "nama": nama,
+      "tempatLahir": tempatLahir,
+      "alamat": alamat,
+      "agama": agama,
+      "statusPerkawinan": statusPerkawinan,
+      "pekerjaan": pekerjaan,
+      "kewarganegaraan": kewarganegaraan,
+      "jenisKelamin": jenisKelamin,
+    });
+
+    if (docFiles != null) {
+      for (File docFile in docFiles) {
+        formData.files.add(MapEntry(
+            "supportFile",
+            await MultipartFile.fromFile(docFile.path,
+                filename: System().basenameFiles(docFile.path),
+                contentType: MediaType(
+                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ??
+                      '',
+                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ??
+                      "",
+                ))));
+      }
+    }
+
+    setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setVerificationIDFetch(VerificationIDFetch(
+              VerificationIDState.postVerificationIDError,
+              data: GenericResponse.fromJson(onResult.data).responseData));
+        } else {
+          setVerificationIDFetch(VerificationIDFetch(
+              VerificationIDState.postVerificationIDSuccess,
+              data: onResult));
+        }
+      },
+      (errorData) {
+        setVerificationIDFetch(VerificationIDFetch(
+            VerificationIDState.postVerificationIDError,
+            data: errorData));
+      },
+      data: formData,
+      headers: {
+        'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: UrlConstants.verificationIDWithSupportDocs,
+      onSendProgress: onSendProgress,
+      onReceiveProgress: onReceiveProgress,
+      methodType: MethodType.postUploadContent,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
+  }
 }

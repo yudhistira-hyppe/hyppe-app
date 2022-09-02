@@ -80,9 +80,13 @@ class _VerificationIDStepSupportingDocsState
           child: CustomElevatedButton(
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
-            function: () => notifier.onPickSupportedDocument(context, true),
+            function: () => notifier.selfiePath == ''
+                ? notifier.retrySelfie(context, true)
+                : notifier.onPickSupportedDocument(context, true),
             child: CustomTextWidget(
-              textToDisplay: notifier.language.continueStep!,
+              textToDisplay: notifier.selfiePath == ''
+                  ? notifier.language.continueSelfie!
+                  : notifier.language.continueStep!,
               textStyle:
                   textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),

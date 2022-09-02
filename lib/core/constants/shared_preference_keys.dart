@@ -22,9 +22,12 @@ class SpKeys {
   static const String profileCacheData = 'profileCacheData';
   static const String oldUserID = 'oldUserId';
   static const String cacheTimeStamp = 'cacheTimeStamp';
-  static const String isUserRequestRecoverPassword = 'isUserRequestRecoverPassword';
+  static const String isUserRequestRecoverPassword =
+      'isUserRequestRecoverPassword';
   static const String isUserInOTP = 'isUserInOTP';
-  static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
+  static const String lastTimeStampReachMaxAttempRecoverPassword =
+      'reachMaxAttempRecoverPassword';
 
   static const String onlineVersion = 'onlineVersion';
+  static const String statusVerificationId = 'statusVerificationId';
 }

@@ -558,5 +558,11 @@
   "successIdCard3":"Put Ads in Hyppe Apps",
   "successIdCard4":"Send balance to your Bank Account",
   "help":"Help",
-  "retry":"Retry"
+  "retry":"Retry",
+  "retakeSelfie": "Re-take Selfie",
+  "dataDidntShow":"The data shown did not match with your ID?",
+  "tapHere":"Tap Here",
+  "toAppeal":" to appeal",
+  "unverified":"Belum Terverifikasi",
+  "review":"Dalam Review"
 }
