@@ -509,5 +509,6 @@
   "anotherReason":"Another Reason",
   "tappingDeleteAccountWillDelete":"Tapping “Delete Account” will delete Hyppe Account ",
   "accountWillBeDeletedProccessAfter24Hours":"Account will be deleted proccess after 24 hours.",
-  "deletingYourAccountIsPermanent":"Deleting your account is permanent. Your profile, messages, friends, likes, and post will be permanently deleted."
+  "deletingYourAccountIsPermanent":"Deleting your account is permanent. Your profile, messages, friends, likes, and post will be permanently deleted.",
+  "min4second" : "Minimum duration of the Hyppe Diary is 4 seconds"
 }

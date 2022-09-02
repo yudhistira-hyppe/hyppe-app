@@ -70,7 +70,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                     ],
                   ),
                   IconButton(
-                    icon: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
+                    icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
                     onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
                   ),
                 ],

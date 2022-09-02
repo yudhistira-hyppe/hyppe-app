@@ -509,5 +509,6 @@
   "anotherReason":"Alasan lain",
   "tappingDeleteAccountWillDelete":"Setelah mengklik “Hapus Akun” akun kamu ",
   "accountWillBeDeletedProccessAfter24Hours":" akan terhapus secara permanen. Proses akan memakan waktu selama 24 jam. Aksi ini tidak dapat di batalkan",
-  "deletingYourAccountIsPermanent":"Menghapus akun Kamu bersifat permanen. Profil, pesan, teman, suka, dan kiriman Anda akan dihapus secara permanen."
+  "deletingYourAccountIsPermanent":"Menghapus akun Kamu bersifat permanen. Profil, pesan, teman, suka, dan kiriman Anda akan dihapus secara permanen.",
+  "min4second" : "Minimal durasi Hyppe Diary adalah 4 detik"
 }

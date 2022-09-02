@@ -84,11 +84,12 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
       try {
+        checkIsLoading = true;
         if (checkIdCard) {
           // System().actionReqiredIdCard(
           //   context,
           //   action: () async {
-          statusFollowing = StatusFollowing.requested;
+          // statusFollowing = StatusFollowing.requested;
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(
             context,
@@ -107,7 +108,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           //   uploadContentAction: false,
           // );
         } else {
-          statusFollowing = StatusFollowing.requested;
+          // statusFollowing = StatusFollowing.requested;
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(
             context,
@@ -123,6 +124,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
             statusFollowing = StatusFollowing.none;
           }
         }
+        checkIsLoading = false;
+        notifyListeners();
       } catch (e) {
         'follow user: ERROR: $e'.logger();
       }
@@ -131,7 +134,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
     try {
-      _checkIsLoading = true;
+      checkIsLoading = true;
       _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;
@@ -147,7 +150,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           }
         }
       }
-      _checkIsLoading = false;
+      checkIsLoading = false;
       notifyListeners();
     } catch (e) {
       'load following request list: ERROR: $e'.logger();

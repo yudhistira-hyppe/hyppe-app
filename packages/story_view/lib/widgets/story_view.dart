@@ -653,9 +653,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
         }
       }
     });
-
     _currentAnimation = Tween(begin: 0.0, end: 1.0).animate(_animationController!);
-
     widget.controller.play();
   }
 
@@ -674,7 +672,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       for (var it in widget.storyItems) {
         it!.shown = false;
       }
-
       _beginPlay();
     }
   }

@@ -212,24 +212,27 @@ class VidDetailBottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildProfilePicture(context),
-          Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
-            builder: (context, value, value2, value3, child) {
-              if (data?.email == SharedPreference().readStorage(SpKeys.email)) return const SizedBox.shrink();
-              return value.checkIsLoading
-                  ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
-                  : CustomFollowButton(
-                      caption: value3.translate.follow!,
-                      onPressed: () async {
-                        try {
-                          await value.followUser(context);
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      isFollowing: value.statusFollowing,
-                    );
-            },
-          ),
+          data != null
+              ? Consumer3<VidDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
+                  builder: (context, value, value2, value3, child) {
+                    if (data?.email == SharedPreference().readStorage(SpKeys.email)) return const SizedBox.shrink();
+                    return value.checkIsLoading
+                        ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
+                        : CustomFollowButton(
+                            caption: value3.translate.follow!,
+                            onPressed: () async {
+                              try {
+                                await value.followUser(context);
+                              } catch (e) {
+                                print(e);
+                              }
+                            },
+                            isFollowing: value.statusFollowing,
+                            checkIsLoading: value.checkIsLoading,
+                          );
+                  },
+                )
+              : const Center(child: SizedBox(height: 40, child: CustomLoading())),
         ],
       ),
     );

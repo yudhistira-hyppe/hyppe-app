@@ -50,6 +50,7 @@ class SearchNotifier with ChangeNotifier {
   final searchController = TextEditingController();
   final searchController1 = TextEditingController();
   int _pageIndex = 0;
+  int _skip = 0;
 
   UserInfoModel? get allContents => _allContents;
   List<ContentData>? get listContentData => _listContentData;
@@ -112,54 +113,28 @@ class SearchNotifier with ChangeNotifier {
   onScrollListener(BuildContext context, ScrollController scrollController) async {
     print("scroll");
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-      switch (pageIndex) {
-        case 0:
-          {
-            if (!vidContentsQuery.loading && vidHasNext) {
-              vidContentsQuery.limit = 6;
-              List<ContentData> _res = await vidContentsQuery.loadNext(context);
-              if (_res.isNotEmpty) {
-                allContents!.vids = [...allContents!.vids!, ..._res];
-              } else {
-                print("Post Vid Dah Mentok");
-              }
-              notifyListeners();
-            }
-          }
-          break;
-        case 1:
-          {
-            if (!diaryContentsQuery.loading && diaryHasNext) {
-              diaryContentsQuery.limit = 6;
-              List<ContentData> _res = await diaryContentsQuery.loadNext(context);
-              if (_res.isNotEmpty) {
-                allContents!.diaries = [...allContents!.diaries!, ..._res];
-              } else {
-                print("Post Diary Dah Mentok");
-              }
-              notifyListeners();
-            }
-          }
-          break;
-        case 2:
-          {
-            if (!picContentsQuery.loading && picHasNext) {
-              picContentsQuery.limit = 6;
-              List<ContentData> _res = await picContentsQuery.loadNext(context);
-              if (_res.isNotEmpty) {
-                allContents!.pics = [...allContents!.pics!, ..._res];
-              } else {
-                print("Post Pic Dah Mentok");
-              }
-              notifyListeners();
-            }
-          }
-          break;
+      _skip += 10;
+
+      String search = searchController.text;
+      focusNode.unfocus();
+
+      final notifier = SearchContentBloc();
+
+      await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 10);
+      final fetch = notifier.searchContentFetch;
+      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+        SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
+        _searchContent!.users!.data!.addAll(_res.users!.data!);
+        _searchContent!.diary!.data!.addAll(_res.diary!.data!);
+        _searchContent!.pict!.data!.addAll(_res.pict!.data!);
+        _searchContent!.vid!.data!.addAll(_res.vid!.data!);
       }
+
+      notifyListeners();
     }
   }
 
-  void onSearchPost(BuildContext context, {String? value}) async {
+  void onSearchPost(BuildContext context, {String? value, int skip = 0}) async {
     _routing.moveReplacement(Routes.searcMoreComplete);
     String search = value ?? searchController.text;
     focusNode.unfocus();
@@ -168,7 +143,7 @@ class SearchNotifier with ChangeNotifier {
 
     isLoading = true;
     _searchContent = null;
-    await notifier.getSearchContent(context, keys: search, skip: 0, limit: 10);
+    await notifier.getSearchContent(context, keys: search, skip: skip, limit: 10);
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       _searchContent = SearchContentModel.fromJson(fetch.data);
@@ -176,15 +151,6 @@ class SearchNotifier with ChangeNotifier {
       _searchContent = null;
     }
     isLoading = false;
-
-    // // vidContentsQuery.searchText = search;
-    // // diaryContentsQuery.searchText = search;
-    // // picContentsQuery.searchText = search;
-    // // focusNode.unfocus();
-
-    // allContents!.vids = await vidContentsQuery.reload(context);
-    // allContents!.diaries = await diaryContentsQuery.reload(context);
-    // allContents!.pics = await picContentsQuery.reload(context);
     notifyListeners();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -9,12 +10,14 @@ class CustomFollowButton extends StatelessWidget {
   final String caption;
   final Function() onPressed;
   final StatusFollowing isFollowing;
+  final bool checkIsLoading;
 
   const CustomFollowButton({
     Key? key,
     required this.caption,
     required this.onPressed,
     required this.isFollowing,
+    required this.checkIsLoading,
   }) : super(key: key);
 
   @override
@@ -39,12 +42,14 @@ class CustomFollowButton extends StatelessWidget {
         onTap: _isNotFollowing ? onPressed : null,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: CustomTextWidget(
-            textToDisplay: title,
-            textStyle: Theme.of(context).textTheme.button?.copyWith(
-                  color: _isNotFollowing ? Theme.of(context).colorScheme.primaryVariant : null,
+          child: checkIsLoading
+              ? const CustomLoading()
+              : CustomTextWidget(
+                  textToDisplay: title,
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(
+                        color: _isNotFollowing ? Theme.of(context).colorScheme.primaryVariant : null,
+                      ),
                 ),
-          ),
           // width: 50.0 * SizeConfig.scaleDiagonal,
         ),
       );

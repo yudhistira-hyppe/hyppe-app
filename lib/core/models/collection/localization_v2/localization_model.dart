@@ -507,6 +507,7 @@ class LocalizationModelV2 {
   String? tappingDeleteAccountWillDelete;
   String? accountWillBeDeletedProccessAfter24Hours;
   String? deletingYourAccountIsPermanent;
+  String? min4second;
 
   LocalizationModelV2({
     this.login,
@@ -1017,6 +1018,7 @@ class LocalizationModelV2 {
     this.tappingDeleteAccountWillDelete,
     this.accountWillBeDeletedProccessAfter24Hours,
     this.deletingYourAccountIsPermanent,
+    this.min4second,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1541,5 +1543,6 @@ class LocalizationModelV2 {
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     deletingYourAccountIsPermanent = json['deletingYourAccountIsPermanent'];
+    min4second = json['min4second'];
   }
 }

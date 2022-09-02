@@ -245,7 +245,8 @@ class OtherProfileNotifier with ChangeNotifier {
       // _system.actionReqiredIdCard(
       //   context,
       //   action: () async {
-      statusFollowing = StatusFollowing.requested;
+      // statusFollowing = StatusFollowing.requested;
+      isCheckLoading = true;
       final notifier = FollowBloc();
       await notifier.followUserBlocV2(
         context,
@@ -263,6 +264,8 @@ class OtherProfileNotifier with ChangeNotifier {
       //   },
       //   uploadContentAction: false,
       // );
+      isCheckLoading = false;
+      notifyListeners();
     } catch (e) {
       print(e);
       statusFollowing = StatusFollowing.none;

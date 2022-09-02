@@ -100,11 +100,12 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future followUser(BuildContext context, {bool checkIdCard = true}) async {
     try {
+      checkIsLoading = true;
       if (checkIdCard) {
         // System().actionReqiredIdCard(
         //   context,
         //   action: () async {
-        statusFollowing = StatusFollowing.requested;
+        // statusFollowing = StatusFollowing.requested;
         final notifier = FollowBloc();
         await notifier.followUserBlocV2(
           context,
@@ -123,7 +124,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
         //   uploadContentAction: false,
         // );
       } else {
-        statusFollowing = StatusFollowing.requested;
+        // statusFollowing = StatusFollowing.requested;
         final notifier = FollowBloc();
         await notifier.followUserBlocV2(
           context,
@@ -139,6 +140,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
           statusFollowing = StatusFollowing.none;
         }
       }
+      checkIsLoading = false;
       notifyListeners();
     } catch (e) {
       'follow user: ERROR: $e'.logger();
@@ -157,7 +159,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     final _sharedPrefs = SharedPreference();
     if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
       try {
-        _checkIsLoading = true;
+        checkIsLoading = true;
         _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
         final _resFuture = _usersFollowingQuery.reload(context);
         final _resRequest = await _resFuture;
@@ -172,7 +174,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
             }
           }
         }
-        _checkIsLoading = false;
+        checkIsLoading = false;
         notifyListeners();
       } catch (e) {
         'load following request list: ERROR: $e'.logger();

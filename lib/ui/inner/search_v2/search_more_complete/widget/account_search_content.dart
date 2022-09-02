@@ -1,23 +1,12 @@
-import 'package:dynamic_widget/dynamic_widget/basic/icon_widget_parser.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
-import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/vid_search_content.dart';
-import 'package:hyppe/ui/inner/search_v2/widget/search_shimmer.dart';
 import 'package:provider/provider.dart';
 
 class AccountSearchContent extends StatefulWidget {

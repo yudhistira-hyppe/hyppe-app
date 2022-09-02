@@ -49,7 +49,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
     );
 
     _videoPlayerController = BetterPlayerController(betterPlayerConfiguration);
-
     try {
       await _videoPlayerController?.setupDataSource(dataSource).then((_) {
         setState(() {
@@ -60,6 +59,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
       });
 
       _videoPlayerController?.addEventsListener((_) {
+        notifier.totalDuration = _.parameters!['duration'];
+
         if (_videoPlayerController?.isVideoInitialized() ?? false) if (_videoPlayerController!.videoPlayerController!.value.position >=
             _videoPlayerController!.videoPlayerController!.value.duration!) {
           notifier.nextVideo = true;
