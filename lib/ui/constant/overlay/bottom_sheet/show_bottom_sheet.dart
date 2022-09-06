@@ -41,6 +41,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stor
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
@@ -459,17 +460,25 @@ class ShowBottomSheet {
       isDismissible: false,
       backgroundColor: Colors.transparent,
       builder: (builder) {
-        return Container(
-            height: 330,
-            decoration: BoxDecoration(
-              color: Theme.of(ctx).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-            ),
-            padding: const EdgeInsets.all(0),
-            child: const OnShowIDVerificationFailedBottomSheet());
+        return Consumer<VerificationIDNotifier>(
+          builder: (_, notifier, __) => WillPopScope(
+            onWillPop: () async {
+              notifier.retryTakeIdCard();
+              return false;
+            },
+            child: Container(
+                height: 330,
+                decoration: BoxDecoration(
+                  color: Theme.of(ctx).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                padding: const EdgeInsets.all(0),
+                child: const OnShowIDVerificationFailedBottomSheet()),
+          ),
+        );
       },
     );
   }

@@ -8,7 +8,6 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDStepSupportingDocsPreview extends StatefulWidget {
@@ -32,7 +31,7 @@ class _VerificationIDStepSupportingDocsPreviewState
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
+            onPressed: () => notifier.retrySelfie(context, true),
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
@@ -69,9 +68,11 @@ class _VerificationIDStepSupportingDocsPreviewState
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 if (notifier.isLoading)
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: CircularProgressIndicator(color: Colors.white),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    height: 30,
+                    width: 30,
+                    child: const CircularProgressIndicator(color: Colors.white),
                   ),
                 const SizedBox(width: 10),
                 CustomTextWidget(

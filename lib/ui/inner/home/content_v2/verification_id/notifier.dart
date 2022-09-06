@@ -62,12 +62,16 @@ class VerificationIDNotifier extends LoadingNotifier
   String _selfiePath = "";
   String _scannedText = "";
   double _aspectRatio = 1;
-  bool _isNameMatch = false;
   String _idCardNumber = "";
   String _idCardName = "";
   String _idCardDateBirth = "";
   String _idCardPlaceBirth = "";
   String _idVerificationResponse = "";
+  String _errorName = "";
+  String _errorKtp = "";
+  String _errorGender = "";
+  String _errorPlaceBirth = "";
+  String _errorDateBirth = "";
   bool _acceptTos = false;
   bool _step5CanNext = false;
   bool _selfieOnSupportDocs = false;
@@ -128,12 +132,6 @@ class VerificationIDNotifier extends LoadingNotifier
     notifyListeners();
   }
 
-  bool get isNameMatch => _isNameMatch;
-  set isNameMatch(bool val) {
-    _isNameMatch = val;
-    notifyListeners();
-  }
-
   String get idCardNumber => _idCardNumber;
   set idCardNumber(String val) {
     _idCardNumber = val;
@@ -167,6 +165,36 @@ class VerificationIDNotifier extends LoadingNotifier
   String get idVerificationResponse => _idVerificationResponse;
   set idVerificationResponse(String val) {
     _idVerificationResponse = val;
+    notifyListeners();
+  }
+
+  String get errorName => _errorName;
+  set errorName(String val) {
+    _errorName = val;
+    notifyListeners();
+  }
+
+  String get errorKtp => _errorKtp;
+  set errorKtp(String val) {
+    _errorKtp = val;
+    notifyListeners();
+  }
+
+  String get errorGender => _errorGender;
+  set errorGender(String val) {
+    _errorGender = val;
+    notifyListeners();
+  }
+
+  String get errorPlaceBirth => _errorPlaceBirth;
+  set errorPlaceBirth(String val) {
+    _errorPlaceBirth = val;
+    notifyListeners();
+  }
+
+  String get errorDateBirth => _errorDateBirth;
+  set errorDateBirth(String val) {
+    _errorDateBirth = val;
     notifyListeners();
   }
 
@@ -227,7 +255,7 @@ class VerificationIDNotifier extends LoadingNotifier
     return double.tryParse(s) != null;
   }
 
-  Future<bool> validateIDCard() async {
+  Future<void> validateIDCard() async {
     setLoading(true);
     final inputImage = InputImage.fromFilePath(imagePath);
     final textDetector = GoogleMlKit.vision.textRecognizer();
@@ -253,7 +281,6 @@ class VerificationIDNotifier extends LoadingNotifier
         }
 
         if (realName.toLowerCase().trim() == trimText.toLowerCase()) {
-          isNameMatch = true;
           idCardName = trimText.toUpperCase();
         }
 
@@ -273,14 +300,7 @@ class VerificationIDNotifier extends LoadingNotifier
       }
     }
 
-    sleep(const Duration(seconds: 1));
-    if (idCardNumber != "" && isNameMatch) {
-      setLoading(false);
-      return true;
-    }
-
     setLoading(false);
-    return false;
   }
 
   @override
@@ -290,6 +310,7 @@ class VerificationIDNotifier extends LoadingNotifier
       if (filePath != null) {
         imagePath = filePath.path;
         aspectRatio = cameraNotifier.cameraAspectRatio;
+        validateIDCard();
         Routing().moveAndPop(Routes.verificationIDStep5);
       }
     });
@@ -321,7 +342,7 @@ class VerificationIDNotifier extends LoadingNotifier
     setLoading(true);
     try {
       final bloc = VerificationIDBloc();
-      await bloc.postVerificationIDWithSupportDocsBloc(
+      await bloc.postVerificationIDBloc(
         context,
         idcardnumber: idCardNumber,
         nama: realName,
@@ -334,7 +355,6 @@ class VerificationIDNotifier extends LoadingNotifier
         pekerjaan: '',
         kewarganegaraan: '',
         jenisKelamin: genderController.text,
-        docFiles: [],
         onReceiveProgress: (count, total) async {
           await _eventService.notifyUploadReceiveProgress(
               ProgressUploadArgument(count: count, total: total));
@@ -396,9 +416,15 @@ class VerificationIDNotifier extends LoadingNotifier
           .getLocalMedia(featureType: FeatureType.other, context: context)
           .then((value) async {
         debugPrint('Pick => ' + value.toString());
-        pickedSupportingDocs = value.values.single;
-        setLoading(false);
-        Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
+        if (value.values.single != null) {
+          pickedSupportingDocs = value.values.single;
+          setLoading(false);
+          Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
+        } else {
+          setLoading(false);
+          if (value.keys.single.isNotEmpty)
+            ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
+        }
       });
     } catch (e) {
       setLoading(false);
@@ -408,7 +434,7 @@ class VerificationIDNotifier extends LoadingNotifier
   }
 
   void onSaveSupportedDocument(BuildContext context) async {
-    setLoading(true);
+    setLoading(true, setState: true);
     try {
       final bloc = VerificationIDBloc();
       await bloc.postVerificationIDWithSupportDocsBloc(
@@ -438,7 +464,7 @@ class VerificationIDNotifier extends LoadingNotifier
       if (fetch.verificationIDState ==
           VerificationIDState.postVerificationIDSuccess) {
         'verification ID Docs success'.logger();
-        setLoading(false);
+        setLoading(false, setState: true);
         _eventService.notifyUploadSuccess(fetch.data);
 
         SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
@@ -453,10 +479,10 @@ class VerificationIDNotifier extends LoadingNotifier
         }
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {
-          setLoading(true);
+          setLoading(true, setState: true);
         }
       } else {
-        setLoading(false);
+        setLoading(false, setState: true);
         'verification ID Docs failed: ${fetch.data}'.logger();
         ShowBottomSheet().onShowColouredSheet(
           context,
@@ -466,7 +492,7 @@ class VerificationIDNotifier extends LoadingNotifier
         );
       }
     } catch (e) {
-      setLoading(false);
+      setLoading(false, setState: true);
       'verification ID Docs: ERROR: $e'.logger();
       ShowBottomSheet().onShowColouredSheet(
         context,
@@ -481,7 +507,6 @@ class VerificationIDNotifier extends LoadingNotifier
     imagePath = "";
     selfiePath = "";
     scannedText = "";
-    isNameMatch = false;
     idCardNumber = "";
     idCardName = "";
     idCardDateBirth = "";
@@ -507,62 +532,61 @@ class VerificationIDNotifier extends LoadingNotifier
   }
 
   void clearAndMoveToLobby() {
+    clearAllTempData();
+
+    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+  }
+
+  void clearAllTempData() {
     realName = "";
     imagePath = "";
     selfiePath = "";
     scannedText = "";
-    isNameMatch = false;
     idCardNumber = "";
     idCardName = "";
     idCardDateBirth = "";
     idCardPlaceBirth = "";
+    genderController.clear();
+    realNameController.clear();
+    birtDateController.clear();
+    birtPlaceController.clear();
     acceptTos = false;
     step5CanNext = false;
     selectedBirthDate = DateTime.now();
     pickedSupportingDocs = [];
 
-    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+    // clear all error
+    errorName = "";
+    errorKtp = "";
+    errorGender = "";
+    errorPlaceBirth = "";
+    errorDateBirth = "";
   }
 
   void continueSelfie(BuildContext context) {
     var error = 0;
+    if (idCardName == "") {
+      errorName = "Nama tidak sesuai KTP";
+      error++;
+    }
+
     if (idCardNumber == "") {
-      ShowBottomSheet().onShowColouredSheet(
-        context,
-        "Silahkan masukan nomor KTP",
-        color: Theme.of(context).colorScheme.error,
-        maxLines: 2,
-      );
-      error++;
-    }
-
-    if (birtPlaceController.text == "") {
-      ShowBottomSheet().onShowColouredSheet(
-        context,
-        "Silahkan masukan tempat lahir",
-        color: Theme.of(context).colorScheme.error,
-        maxLines: 2,
-      );
-      error++;
-    }
-
-    if (birtDateController.text == "") {
-      ShowBottomSheet().onShowColouredSheet(
-        context,
-        "Silahkan masukan tanggal lahir",
-        color: Theme.of(context).colorScheme.error,
-        maxLines: 2,
-      );
+      errorKtp = "Nomor KTP tidak terbaca";
       error++;
     }
 
     if (genderController.text == "") {
-      ShowBottomSheet().onShowColouredSheet(
-        context,
-        "Silahkan pilih jenis kelamin",
-        color: Theme.of(context).colorScheme.error,
-        maxLines: 1,
-      );
+      errorGender = "Jenis kelamin harus diisi";
+      error++;
+    }
+
+    if (birtPlaceController.text == "") {
+      errorPlaceBirth = "Tempat lahir harus diisi";
+      error++;
+    }
+
+    if (birtDateController.text == "") {
+      errorDateBirth = "Tanggal lahir harus diisi";
       error++;
     }
 

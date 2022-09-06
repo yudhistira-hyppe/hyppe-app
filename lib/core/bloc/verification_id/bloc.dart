@@ -31,6 +31,7 @@ class VerificationIDBloc {
     String? statusPerkawinan,
     String? pekerjaan,
     String? kewarganegaraan,
+    String? jenisKelamin,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
     required String idCardFile,
@@ -47,7 +48,15 @@ class VerificationIDBloc {
         filename: File(selfieFile).path.split('/').last,
         contentType: MediaType("image", "jpeg"),
       ),
-      "idcardnumber": idcardnumber
+      "idcardnumber": idcardnumber,
+      "nama": nama,
+      "tempatLahir": tempatLahir,
+      "alamat": alamat,
+      "agama": agama,
+      "statusPerkawinan": statusPerkawinan,
+      "pekerjaan": pekerjaan,
+      "kewarganegaraan": kewarganegaraan,
+      "jenisKelamin": jenisKelamin,
     });
 
     setVerificationIDFetch(VerificationIDFetch(VerificationIDState.loading));

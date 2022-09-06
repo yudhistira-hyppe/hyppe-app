@@ -419,12 +419,14 @@ class System {
         List<File>? imageFileList = [];
         final List<XFile>? selectedImages =
             await _imagePicker.pickMultiImage(imageQuality: 90);
-        if (selectedImages!.isNotEmpty) {
+        if (selectedImages!.isNotEmpty && selectedImages.length <= 3) {
           for (XFile file in selectedImages) {
             debugPrint(file.path);
             imageFileList.add(File(file.path));
           }
           _filePickerResult = imageFileList;
+        } else {
+          _errorMsg = "Please select one or max 3 image";
         }
       }
 

@@ -20,6 +20,14 @@ class VerificationIDStep1 extends StatefulWidget {
 
 class _VerificationIDStep1State extends State<VerificationIDStep1> {
   @override
+  void initState() {
+    final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
+    ntfr.clearAllTempData();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
