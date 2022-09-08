@@ -16,7 +16,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
-import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ux/path.dart';
@@ -46,9 +45,7 @@ class UploadVerificationIDResult {
       };
 }
 
-class VerificationIDNotifier extends LoadingNotifier
-    with ChangeNotifier
-    implements CameraInterface {
+class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   final _eventService = EventService();
 
   LocalizationModelV2 language = LocalizationModelV2();
@@ -75,8 +72,10 @@ class VerificationIDNotifier extends LoadingNotifier
   bool _acceptTos = false;
   bool _step5CanNext = false;
   bool _selfieOnSupportDocs = false;
-  DateTime _selectedBirthDate = DateTime.now();
+  DateTime _selectedBirthDate = DateTime(1990, 1, 1, 0, 0);
   List<File>? _pickedSupportingDocs = [];
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   CameraNotifier cameraNotifier = CameraNotifier();
   TextEditingController _realNameController = TextEditingController();
@@ -233,6 +232,11 @@ class VerificationIDNotifier extends LoadingNotifier
     notifyListeners();
   }
 
+  set isLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
+
   void submitStep2(BuildContext context) {
     var nameText = realNameController.text.toString();
     if (nameText == "") {
@@ -256,7 +260,7 @@ class VerificationIDNotifier extends LoadingNotifier
   }
 
   Future<void> validateIDCard() async {
-    setLoading(true);
+    isLoading = true;
     final inputImage = InputImage.fromFilePath(imagePath);
     final textDetector = GoogleMlKit.vision.textRecognizer();
     RecognizedText recognizedText = await textDetector.processImage(inputImage);
@@ -296,11 +300,25 @@ class VerificationIDNotifier extends LoadingNotifier
               trimText.replaceAll(match, "").replaceAll(",", "").trim();
         }
 
+        if (trimText.toLowerCase().contains("laki")) {
+          if (kDebugMode) {
+            print("Gender => $trimText\n");
+          }
+          genderController.text = "Laki-Laki";
+        }
+
+        if (trimText.toLowerCase().contains("perempuan")) {
+          if (kDebugMode) {
+            print("Gender => $trimText\n");
+          }
+          genderController.text = "Perempuan";
+        }
+
         lines++;
       }
     }
 
-    setLoading(false);
+    isLoading = false;
   }
 
   @override
@@ -339,7 +357,7 @@ class VerificationIDNotifier extends LoadingNotifier
   }
 
   Future<void> postVerificationData(BuildContext context) async {
-    setLoading(true);
+    isLoading = true;
     try {
       final bloc = VerificationIDBloc();
       await bloc.postVerificationIDBloc(
@@ -368,7 +386,7 @@ class VerificationIDNotifier extends LoadingNotifier
       if (fetch.verificationIDState ==
           VerificationIDState.postVerificationIDSuccess) {
         'verification ID success'.logger();
-        setLoading(false);
+        isLoading = false;
         _eventService.notifyUploadSuccess(fetch.data);
 
         SharedPreference().writeStorage(SpKeys.statusVerificationId, VERIFIED);
@@ -376,10 +394,10 @@ class VerificationIDNotifier extends LoadingNotifier
         Routing().moveAndPop(Routes.verificationIDSuccess);
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {
-          setLoading(true);
+          isLoading = true;
         }
       } else {
-        setLoading(false);
+        isLoading = false;
         // _eventService.notifyUploadFailed(
         //   DioError(
         //     requestOptions: RequestOptions(
@@ -395,7 +413,7 @@ class VerificationIDNotifier extends LoadingNotifier
         Routing().moveAndPop(Routes.verificationIDFailed);
       }
     } catch (e) {
-      setLoading(false);
+      isLoading = false;
       // _eventService.notifyUploadFailed(
       //   DioError(
       //     requestOptions: RequestOptions(
@@ -410,7 +428,7 @@ class VerificationIDNotifier extends LoadingNotifier
   }
 
   void onPickSupportedDocument(BuildContext context, mounted) async {
-    setLoading(true);
+    isLoading = true;
     try {
       await System()
           .getLocalMedia(featureType: FeatureType.other, context: context)
@@ -418,23 +436,24 @@ class VerificationIDNotifier extends LoadingNotifier
         debugPrint('Pick => ' + value.toString());
         if (value.values.single != null) {
           pickedSupportingDocs = value.values.single;
-          setLoading(false);
+          isLoading = false;
           Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
         } else {
-          setLoading(false);
-          if (value.keys.single.isNotEmpty)
+          isLoading = false;
+          if (value.keys.single.isNotEmpty) {
             ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
+          }
         }
       });
     } catch (e) {
-      setLoading(false);
+      isLoading = false;
       ShowGeneralDialog.pickFileErrorAlert(
           context, language.sorryUnexpectedErrorHasOccurred!);
     }
   }
 
   void onSaveSupportedDocument(BuildContext context) async {
-    setLoading(true, setState: true);
+    isLoading = true;
     try {
       final bloc = VerificationIDBloc();
       await bloc.postVerificationIDWithSupportDocsBloc(
@@ -464,7 +483,7 @@ class VerificationIDNotifier extends LoadingNotifier
       if (fetch.verificationIDState ==
           VerificationIDState.postVerificationIDSuccess) {
         'verification ID Docs success'.logger();
-        setLoading(false, setState: true);
+        isLoading = false;
         _eventService.notifyUploadSuccess(fetch.data);
 
         SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
@@ -479,10 +498,10 @@ class VerificationIDNotifier extends LoadingNotifier
         }
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {
-          setLoading(true, setState: true);
+          isLoading = true;
         }
       } else {
-        setLoading(false, setState: true);
+        isLoading = false;
         'verification ID Docs failed: ${fetch.data}'.logger();
         ShowBottomSheet().onShowColouredSheet(
           context,
@@ -492,7 +511,7 @@ class VerificationIDNotifier extends LoadingNotifier
         );
       }
     } catch (e) {
-      setLoading(false, setState: true);
+      isLoading = false;
       'verification ID Docs: ERROR: $e'.logger();
       ShowBottomSheet().onShowColouredSheet(
         context,
@@ -513,11 +532,11 @@ class VerificationIDNotifier extends LoadingNotifier
     idCardPlaceBirth = "";
     acceptTos = false;
     step5CanNext = false;
-    selectedBirthDate = DateTime.now();
+    selectedBirthDate = DateTime(1990, 1, 1, 0, 0);
     pickedSupportingDocs = [];
     genderController.clear();
 
-    Routing().moveAndPop(Routes.verificationIDStep4);
+    Routing().moveAndPop(Routes.verificationIDStep2);
   }
 
   void retrySelfie(BuildContext context, bool isSupportDocument) {
@@ -552,7 +571,7 @@ class VerificationIDNotifier extends LoadingNotifier
     birtPlaceController.clear();
     acceptTos = false;
     step5CanNext = false;
-    selectedBirthDate = DateTime.now();
+    selectedBirthDate = DateTime(1990, 1, 1, 0, 0);
     pickedSupportingDocs = [];
 
     // clear all error
@@ -575,20 +594,20 @@ class VerificationIDNotifier extends LoadingNotifier
       error++;
     }
 
-    if (genderController.text == "") {
-      errorGender = "Jenis kelamin harus diisi";
-      error++;
-    }
+    // if (genderController.text == "") {
+    //   errorGender = "Jenis kelamin harus diisi";
+    //   error++;
+    // }
 
-    if (birtPlaceController.text == "") {
-      errorPlaceBirth = "Tempat lahir harus diisi";
-      error++;
-    }
+    // if (birtPlaceController.text == "") {
+    //   errorPlaceBirth = "Tempat lahir harus diisi";
+    //   error++;
+    // }
 
-    if (birtDateController.text == "") {
-      errorDateBirth = "Tanggal lahir harus diisi";
-      error++;
-    }
+    // if (birtDateController.text == "") {
+    //   errorDateBirth = "Tanggal lahir harus diisi";
+    //   error++;
+    // }
 
     if (error == 0) {
       Routing().moveAndPop(Routes.verificationIDStep6);

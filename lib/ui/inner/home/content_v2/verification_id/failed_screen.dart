@@ -77,7 +77,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                         iconData: "${AssetPath.vectorPath}help.svg"),
                   ],
                 ),
-                const SizedBox(height: 100)
+                const SizedBox(height: 110)
               ],
             ),
           ),

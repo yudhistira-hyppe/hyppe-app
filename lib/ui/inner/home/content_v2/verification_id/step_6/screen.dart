@@ -64,7 +64,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomTextButton(
-                        onPressed: () => notifier.clearAndMoveToLobby(),
+                        onPressed: () => notifier.retryTakeIdCard(),
                         child: const CustomIconWidget(
                             iconData: "${AssetPath.vectorPath}close.svg",
                             defaultColor: false)),

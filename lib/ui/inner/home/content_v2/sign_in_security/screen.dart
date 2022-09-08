@@ -55,20 +55,20 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
                   switch (SharedPreference()
                       .readStorage(SpKeys.statusVerificationId)) {
                     case REVIEW:
-                      ShowBottomSheet().onShowColouredSheet(
-                        context,
-                        "Your kyc request under review",
-                        color: Theme.of(context).colorScheme.error,
-                        maxLines: 2,
-                      );
+                      // ShowBottomSheet().onShowColouredSheet(
+                      //   context,
+                      //   "Your kyc request under review",
+                      //   color: Theme.of(context).colorScheme.error,
+                      //   maxLines: 2,
+                      // );
                       break;
                     case VERIFIED:
-                      ShowBottomSheet().onShowColouredSheet(
-                        context,
-                        "Your kyc status is verified",
-                        color: Theme.of(context).colorScheme.error,
-                        maxLines: 2,
-                      );
+                      // ShowBottomSheet().onShowColouredSheet(
+                      //   context,
+                      //   "Your kyc status is verified",
+                      //   color: Theme.of(context).colorScheme.error,
+                      //   maxLines: 2,
+                      // );
                       break;
                     default:
                       Routing().move(Routes.verificationIDStep1);

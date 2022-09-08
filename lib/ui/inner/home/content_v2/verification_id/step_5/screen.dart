@@ -11,8 +11,6 @@ import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDStep5 extends StatefulWidget {
@@ -26,14 +24,14 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
   @override
   void initState() {
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
-    ntfr.setLoading(true, setState: true);
+    ntfr.isLoading = true;
     Future.delayed(const Duration(seconds: 2), () {
       print("CARDNAME => " + ntfr.idCardName);
       print("CARDNUM => " + ntfr.idCardNumber);
       if (ntfr.idCardName == "" || ntfr.idCardNumber == "") {
         ShowBottomSheet.onShowIDVerificationFailed(context);
       }
-      ntfr.setLoading(false, setState: true);
+      ntfr.isLoading = false;
     });
 
     super.initState();
@@ -94,7 +92,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       const SizedBox(height: 24),
                       _disabledInputText(
                           title: notifier.language.eKtpNumber!,
-                          value: notifier.idCardNumber),
+                          value: notifier.idCardNumber,
+                          infoIcon: true),
                       if (notifier.errorKtp != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorKtp,
@@ -109,6 +108,35 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                         textStyle:
                             textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                       ),
+                      // TextFormField(
+                      //   maxLines: 1,
+                      //   validator: (String? input) {
+                      //     if (input?.isEmpty ?? true) {
+                      //       return notifier.language.selectGenderInfo!;
+                      //     } else {
+                      //       return null;
+                      //     }
+                      //   },
+                      //   enabled: false,
+                      //   keyboardAppearance: Brightness.dark,
+                      //   cursorColor: const Color(0xff8A3181),
+                      //   textInputAction: TextInputAction.newline,
+                      //   style: textTheme.bodyText2,
+                      //   controller: notifier.genderController,
+                      //   decoration: InputDecoration(
+                      //     errorBorder: InputBorder.none,
+                      //     hintStyle: textTheme.bodyText2,
+                      //     enabledBorder: InputBorder.none,
+                      //     focusedBorder: InputBorder.none,
+                      //     disabledBorder: InputBorder.none,
+                      //     focusedErrorBorder: InputBorder.none,
+                      //     counterText: "",
+                      //     contentPadding:
+                      //         const EdgeInsets.symmetric(vertical: 5),
+                      //     isDense: true,
+                      //     border: InputBorder.none,
+                      //   ),
+                      // ),
                       GestureDetector(
                         onTap: () {
                           notifier.genderOnTap(context);
@@ -409,7 +437,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
     );
   }
 
-  Widget _disabledInputText({required String title, required String value}) {
+  Widget _disabledInputText(
+      {required String title, required String value, bool? infoIcon}) {
     final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,9 +448,20 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
           textToDisplay: title,
           textStyle: textTheme.bodySmall,
         ),
-        CustomTextWidget(
-          textToDisplay: value,
-          textStyle: textTheme.bodyLarge,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CustomTextWidget(
+              textToDisplay: value,
+              textStyle: textTheme.bodyLarge,
+            ),
+            if (infoIcon != null && infoIcon)
+              GestureDetector(
+                onTap: () => ShowBottomSheet.onShowInfoIDCard(context),
+                child: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}info-icon.svg"),
+              )
+          ],
         ),
         const SizedBox(height: 10),
         _buildDivider(context),
