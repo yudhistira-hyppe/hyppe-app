@@ -51,61 +51,67 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
     final textTheme = Theme.of(context).textTheme;
 
     return Consumer<VerificationIDNotifier>(
-      builder: (_, notifier, __) => Scaffold(
-        body: CameraPage(
-          onCameraNotifierUpdate: (cameraNotifier) =>
-              notifier.cameraNotifier = cameraNotifier,
-          additionalViews: <Widget>[
-            SafeArea(
-              top: Platform.isIOS,
-              child: Align(
-                alignment: Alignment.topLeft,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomTextButton(
-                        onPressed: () => notifier.retryTakeIdCard(),
-                        child: const CustomIconWidget(
-                            iconData: "${AssetPath.vectorPath}close.svg",
-                            defaultColor: false)),
-                  ],
-                ),
-              ),
-            ),
-            Align(
-              alignment: const Alignment(0.0, 0.75),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Expanded(flex: 4, child: CameraFlashButton()),
-                  Expanded(
-                    flex: 4,
-                    child: CustomIconButtonWidget(
-                        iconData: "${AssetPath.vectorPath}shutter.svg",
-                        onPressed: () => notifier.onTakeSelfie(context)),
+      builder: (_, notifier, __) => WillPopScope(
+        onWillPop: () async {
+          notifier.backFromSelfie(context);
+          return true;
+        },
+        child: Scaffold(
+          body: CameraPage(
+            onCameraNotifierUpdate: (cameraNotifier) =>
+                notifier.cameraNotifier = cameraNotifier,
+            additionalViews: <Widget>[
+              SafeArea(
+                top: Platform.isIOS,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CustomTextButton(
+                          onPressed: () => notifier.backFromSelfie(context),
+                          child: const CustomIconWidget(
+                              iconData: "${AssetPath.vectorPath}close.svg",
+                              defaultColor: false)),
+                    ],
                   ),
-                  const Expanded(flex: 4, child: CameraSwitchButton())
-                ],
+                ),
               ),
-            ),
-            if (notifier.isLoading)
-              Container(
-                width: SizeConfig.screenWidth,
-                height: SizeConfig.screenHeight,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              Align(
+                alignment: const Alignment(0.0, 0.75),
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    CircularProgressIndicator(
-                      color: kHyppePrimary,
+                  children: [
+                    const Expanded(flex: 4, child: CameraFlashButton()),
+                    Expanded(
+                      flex: 4,
+                      child: CustomIconButtonWidget(
+                          iconData: "${AssetPath.vectorPath}shutter.svg",
+                          onPressed: () => notifier.onTakeSelfie(context)),
                     ),
-                    SizedBox(height: 10),
-                    ProcessUploadComponent(),
+                    const Expanded(flex: 4, child: CameraSwitchButton())
                   ],
                 ),
-              )
-          ],
+              ),
+              if (notifier.isLoading)
+                Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  color: Colors.white,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(
+                        color: kHyppePrimary,
+                      ),
+                      SizedBox(height: 10),
+                      ProcessUploadComponent(),
+                    ],
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );

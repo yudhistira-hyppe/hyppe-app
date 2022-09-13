@@ -91,7 +91,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               GestureDetector(
-                onTap: () => notifier.retrySelfie(context, false),
+                onTap: () => notifier.retrySelfie(context),
                 child: Text(
                   notifier.language.retakeSelfie!,
                   style: textTheme.titleMedium!.copyWith(

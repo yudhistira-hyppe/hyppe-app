@@ -31,7 +31,7 @@ class _VerificationIDStepSupportingDocsPreviewState
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => notifier.retrySelfie(context, true),
+            onPressed: () => notifier.retrySelfie(context),
           ),
           titleSpacing: 0,
           title: CustomTextWidget(

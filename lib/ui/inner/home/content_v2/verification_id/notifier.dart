@@ -237,6 +237,10 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     notifyListeners();
   }
 
+  void initSupportDocs() {
+    selfieOnSupportDocs = true;
+  }
+
   void submitStep2(BuildContext context) {
     var nameText = realNameController.text.toString();
     if (nameText == "") {
@@ -539,13 +543,20 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     Routing().moveAndPop(Routes.verificationIDStep2);
   }
 
-  void retrySelfie(BuildContext context, bool isSupportDocument) {
+  void backFromSelfie(BuildContext context) {
     selfiePath = "";
     pickedSupportingDocs = [];
 
-    if (isSupportDocument) {
-      selfieOnSupportDocs = true;
+    if (selfieOnSupportDocs) {
+      Routing().moveAndPop(Routes.verificationIDStepSupportingDocs);
+    } else {
+      Routing().moveAndPop(Routes.verificationIDStep5);
     }
+  }
+
+  void retrySelfie(BuildContext context) {
+    selfiePath = "";
+    pickedSupportingDocs = [];
 
     Routing().moveAndPop(Routes.verificationIDStep6);
   }

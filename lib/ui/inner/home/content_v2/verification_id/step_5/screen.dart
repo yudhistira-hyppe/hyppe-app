@@ -11,6 +11,8 @@ import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class VerificationIDStep5 extends StatefulWidget {
@@ -410,7 +412,9 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       ),
                       Center(
                         child: GestureDetector(
-                          onTap: () => notifier.retryTakeIdCard(),
+                          onTap: () => Routing().moveAndRemoveUntil(
+                              Routes.verificationIDStepSupportingDocs,
+                              Routes.verificationIDStepSupportingDocs),
                           child: RichText(
                             text: TextSpan(
                               text: notifier.language.tapHere!,

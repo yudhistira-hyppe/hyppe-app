@@ -21,18 +21,25 @@ class VerificationIDStepSupportingDocs extends StatefulWidget {
 class _VerificationIDStepSupportingDocsState
     extends State<VerificationIDStepSupportingDocs> {
   @override
+  void initState() {
+    final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
+    ntfr.initSupportDocs();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
-          leading: CustomIconButtonWidget(
-            defaultColor: true,
-            iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
-          ),
+          // leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+          // leading: CustomIconButtonWidget(
+          //   defaultColor: true,
+          //   iconData: "${AssetPath.vectorPath}back-arrow.svg",
+          //   onPressed: () => Routing().moveBack(),
+          // ),
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.uploadSupportDoc!,
@@ -81,7 +88,7 @@ class _VerificationIDStepSupportingDocsState
             width: SizeConfig.screenWidth,
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => notifier.selfiePath == ''
-                ? notifier.retrySelfie(context, true)
+                ? notifier.retrySelfie(context)
                 : notifier.onPickSupportedDocument(context, true),
             child: CustomTextWidget(
               textToDisplay: notifier.selfiePath == ''
