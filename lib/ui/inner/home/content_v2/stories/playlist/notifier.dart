@@ -191,7 +191,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (data.contentType == ContentType.image) {
       _result.add(
         StoryItem.pageImage(
-          url: data.fullThumbPath ?? '',
+          url: data.isApsara! ? data.mediaThumbUri! : data.fullThumbPath ?? '',
           controller: storyController,
           imageFit: BoxFit.contain,
           requestHeaders: {

@@ -290,4 +290,38 @@ class PostsBloc {
       errorServiceType: System().getErrorTypeV2(type),
     );
   }
+
+  Future getVideoApsaraBlocV2(
+    BuildContext context, {
+    required String apsaraId,
+  }) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
+
+    setPostsFetch(PostsFetch(PostsState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+        } else {
+          print('onResult');
+          print(onResult);
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+      },
+      data: {"apsaraId": apsaraId},
+      headers: {
+        'x-auth-user': email,
+        'x-auth-token': token,
+      },
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: UrlConstants.getVideoApsara,
+      methodType: MethodType.post,
+    );
+  }
 }

@@ -36,7 +36,7 @@ class ContentThumbnail extends StatelessWidget {
           child: CustomThumbImage(
             onTap: fn,
             postId: vidData?.postID,
-            imageUrl: '${vidData?.fullThumbPath}',
+            imageUrl: vidData!.isApsara! ? vidData!.mediaThumbEndPoint : '${vidData?.fullThumbPath}',
           ),
         ),
 

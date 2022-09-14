@@ -44,6 +44,7 @@ class Env {
     UrlConstants.getUserPosts,
     UrlConstants.userPin,
     UrlConstants.getuserprofile,
+    UrlConstants.getVideoApsara,
   ];
 
   static final EnvData dev = EnvData(

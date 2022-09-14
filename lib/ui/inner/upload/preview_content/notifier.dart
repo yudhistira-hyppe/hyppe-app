@@ -263,6 +263,8 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void navigateToPreUploaded(BuildContext context, [GlobalKey? globalKey]) async {
     if (featureType == FeatureType.diary) {
+      print('totalDuration.inMilliseconds');
+      print(totalDuration.inMilliseconds);
       final ms = totalDuration.inMilliseconds;
       int seconds = ms ~/ 1000;
       if (seconds <= 3) {

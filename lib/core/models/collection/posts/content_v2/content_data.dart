@@ -90,15 +90,15 @@ class ContentData {
     mediaBasePath = json['mediaBasePath'];
     postType = json['postType'];
     mediaUri = json['mediaUri'];
-    isLiked = json['isLiked'];
+    isLiked = json['isLiked'] ?? false;
     description = json['description'] ?? '';
-    active = json['active'];
+    active = json['active'] ?? false;
     privacy = json['privacy'] != null ? Privacy.fromJson(json['privacy']) : null;
     mediaType = json['mediaType'];
     mediaThumbEndPoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     title = json['title'];
-    isViewed = json['isViewed'];
+    isViewed = json['isViewed'] ?? false;
     tags = json['tags'] != null ? json['tags'].cast<String>() : [];
     allowComments = json['allowComments'] ?? false;
     certified = json['certified'] ?? false;
@@ -131,7 +131,7 @@ class ContentData {
     saleView = json['saleView'] ?? false;
     saleLike = json['saleLike'] ?? false;
     isApsara = json['isApsara'] ?? false;
-    isApsara = json['apsaraId'] ?? '';
+    apsaraId = json['apsaraId'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

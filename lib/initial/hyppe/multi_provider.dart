@@ -57,13 +57,17 @@ class AppDependencies {
         /// All Dependency Injection
 
         // Root Notifier
-        ChangeNotifierProvider(create: (context) => rootNotifier),
+        // ChangeNotifierProvider(create: (context) => rootNotifier),
+
+        ChangeNotifierProvider.value(value: rootNotifier),
 
         // Translate
-        ChangeNotifierProvider(create: (context) => TranslateNotifierV2()),
+        // ChangeNotifierProvider(create: (context) => TranslateNotifierV2()),
+        ChangeNotifierProvider.value(value: TranslateNotifierV2()),
 
         // Camera
-        ChangeNotifierProvider(create: (context) => CameraNotifier()),
+        // ChangeNotifierProvider(create: (context) => CameraNotifier()),
+        ChangeNotifierProvider.value(value: CameraNotifier()),
 
         // UI && OUTER
         ChangeNotifierProvider(create: (context) => LoginNotifier()),
@@ -196,8 +200,10 @@ class AppDependencies {
 
         ChangeNotifierProvider<PaymentSummaryNotifier>(create: (context) => PaymentSummaryNotifier()),
 
-        ChangeNotifierProvider<TransactionNotifier>(create: (context) => TransactionNotifier()),
-        ChangeNotifierProvider<PinAccountNotifier>(create: (context) => PinAccountNotifier()),
-        ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
+        // ChangeNotifierProvider<TransactionNotifier>(create: (context) => TransactionNotifier()),
+
+        // ChangeNotifierProvider<PinAccountNotifier>(create: (context) => PinAccountNotifier()),
+
+        // ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
       ];
 }

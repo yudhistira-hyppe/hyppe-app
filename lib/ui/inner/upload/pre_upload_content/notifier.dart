@@ -136,7 +136,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
-
   List<InterestData> get interest => _interest;
   List<InterestData> get interestList => _interestList;
   List<UserData> get userList => _userList;
@@ -145,6 +144,14 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String> get interestData => _interestData;
   List<TagPeople> get userTagDataReal => _userTagDataReal;
   int get startSearch => _startSearch;
+
+  bool get toSell => _toSell;
+  bool get includeTotalViews => _includeTotalViews;
+  bool get includeTotalLikes => _includeTotalLikes;
+  bool get priceIsFilled => _priceIsFilled;
+  bool get isSavedPrice => _isSavedPrice;
+  bool get isUpdate => _isUpdate;
+  UpdateContentsArgument get updateArguments => _arguments;
 
   set interestList(List<InterestData> val) {
     _interestList = val;
@@ -205,14 +212,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     _temporarySearch = val;
     notifyListeners();
   }
-
-  bool get toSell => _toSell;
-  bool get includeTotalViews => _includeTotalViews;
-  bool get includeTotalLikes => _includeTotalLikes;
-  bool get priceIsFilled => _priceIsFilled;
-  bool get isSavedPrice => _isSavedPrice;
-  bool get isUpdate => _isUpdate;
-  UpdateContentsArgument get updateArguments => _arguments;
 
   set thumbNail(val) {
     _thumbNail = val;

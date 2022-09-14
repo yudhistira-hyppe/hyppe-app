@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -192,6 +195,22 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     }
   }
 
+  Future getVideoApsara(String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+  }
+
   void getCountVid() async {
     String _countAds = SharedPreference().readStorage(SpKeys.countAds);
     if (_countAds == null) {
@@ -209,6 +228,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
     'Hyppe Vid Email ${SharedPreference().readStorage(SpKeys.email)}'.logger();
     'Hyppe Vid Token ${SharedPreference().readStorage(SpKeys.userToken)}'.logger();
+    if (widget.videoData!.isApsara!) {
+      await getVideoApsara(widget.videoData!.apsaraId!);
+    }
+    'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
 
     getCountVid();
     print(countAds);

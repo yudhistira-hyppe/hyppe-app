@@ -38,7 +38,7 @@ class ContentThumbnail extends StatelessWidget {
             child: Center(
               child: CustomThumbImage(
                 boxFit: BoxFit.cover,
-                imageUrl: '${picData?.fullThumbPath}',
+                imageUrl: picData!.isApsara! ? picData?.mediaThumbEndPoint : '${picData?.fullThumbPath}',
               ),
             ),
           ),

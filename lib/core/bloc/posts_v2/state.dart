@@ -9,6 +9,8 @@ enum PostsState {
   deleteContentsError,
   updateContentsSuccess,
   updateContentsError,
+  videoApsaraSuccess,
+  videoApsaraError,
 }
 
 class PostsFetch {

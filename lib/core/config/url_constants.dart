@@ -360,6 +360,9 @@ class UrlConstants {
   /// get => Get My Contents.
   static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile";
 
+  /// post => Get Apsara Video.
+  static const String getVideoApsara = "$postRouteV2/getvideo";
+
   /// post => Get Contents Qmatic
   static const String qmatic = "$postRouteV2/qmatic";
 
