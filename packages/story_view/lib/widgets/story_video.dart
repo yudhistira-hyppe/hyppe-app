@@ -105,6 +105,7 @@ class StoryVideoState extends State<StoryVideo> {
       fit: BoxFit.fill,
       autoPlay: false,
       showPlaceholderUntilPlay: true,
+      looping: true,
       controlsConfiguration: BetterPlayerControlsConfiguration(
         showControls: false,
         enableFullscreen: false,

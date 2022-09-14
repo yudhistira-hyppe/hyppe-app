@@ -105,7 +105,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                           contentInfo(textTheme, title: notifier.language.type!, value: notifier.data!.postType!),
                           contentInfo(textTheme, title: notifier.language.time!, value: notifier.data!.createdAt!),
                           contentInfo(textTheme, title: "Fee", value: System().currencyFormat(amount: notifier.data!.adminFee!.toInt())),
-                          contentInfo(textTheme, title: notifier.language.price!, value: System().currencyFormat(amount: notifier.data!.price)),
+                          contentInfo(textTheme, title: notifier.language.price!, value: System().currencyFormat(amount: notifier.data!.price!.toInt())),
                           contentInfo(textTheme, title: notifier.language.includeTotalViews!, value: notifier.data!.saleView! ? notifier.language.yes! : notifier.language.no!),
                           contentInfo(textTheme, title: notifier.language.includeTotalLikes!, value: notifier.data!.saleView! ? notifier.language.yes! : notifier.language.no!),
                         ],

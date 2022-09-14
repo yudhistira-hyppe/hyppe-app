@@ -73,6 +73,12 @@ class Routes {
 
   //transaction
   static const String transaction = '/transaction';
+  static const String allTransaction = '/all-transaction';
+  static const String detailTransaction = '/detail-transaction';
   static const String bankAccount = '/bank-account';
   static const String addBankAccount = '/add-bank-account';
+
+  //create pin
+  static const String pinScreen = '/pin-screen';
+  static const String verificationPinScreen = '/verification-pin-screen';
 }

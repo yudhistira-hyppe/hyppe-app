@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -11,6 +12,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_account.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class AddBankAccount extends StatelessWidget {
@@ -19,13 +22,14 @@ class AddBankAccount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Consumer<TransactionNotifier>(
-      builder: (context, notifier, child) => Scaffold(
+    return Consumer2<TransactionNotifier, TranslateNotifierV2>(
+      builder: (context, notifier, notifier2, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
             textStyle: theme.textTheme.subtitle1,
-            textToDisplay: '${notifier.language.addBankAccount}',
+            textToDisplay: '${notifier2.translate.addBankAccount}',
           ),
         ),
         body: Padding(
@@ -44,7 +48,7 @@ class AddBankAccount extends StatelessWidget {
                 },
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(0),
-                  labelText: notifier.language.bankName,
+                  labelText: notifier2.translate.bankName,
                   labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 13),
                   prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
@@ -63,11 +67,11 @@ class AddBankAccount extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.onBackground),
                 textInputType: TextInputType.number,
                 onChanged: (v) {
-                  // notifier.email = v;
+                  notifier.noBank = v;
                 },
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(0),
-                  labelText: notifier.language.noBankAccount,
+                  labelText: notifier2.translate.noBankAccount,
                   labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 13),
                   prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
@@ -84,11 +88,11 @@ class AddBankAccount extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.onBackground),
                 textInputType: TextInputType.text,
                 onChanged: (v) {
-                  // notifier.email = v;
+                  notifier.accountOwner = v;
                 },
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(0),
-                  labelText: notifier.language.accountOwnerName,
+                  labelText: notifier2.translate.accountOwnerName,
                   labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 13),
                   prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
@@ -99,7 +103,7 @@ class AddBankAccount extends StatelessWidget {
               ),
               sixPx,
               CustomTextWidget(
-                textToDisplay: notifier.language.makeSureTheName!,
+                textToDisplay: notifier2.translate.makeSureTheName!,
                 textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeDisabled),
                 textAlign: TextAlign.start,
                 maxLines: 10,
@@ -110,23 +114,14 @@ class AddBankAccount extends StatelessWidget {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomTextButton(
-            onPressed: () {
-              ShowGeneralDialog.generalDialog(
-                context,
-                titleText: notifier.language.keepSignIn,
-                bodyText:
-                    "${notifier.language.youWillAdd} ${notifier.nameAccount.text} ${notifier.language.accountWithAccountNumber} ${notifier.noBankAccount.text} ${notifier.language.ownedBy} ${notifier.accountOwnerName.text}",
-                maxLineTitle: 1,
-                maxLineBody: 10,
-                functionPrimary: () {},
-                functionSecondary: () {},
-                titleButtonPrimary: "${notifier.language.yes}, ${notifier.language.save}",
-                titleButtonSecondary: "${notifier.language.cancel}",
-              );
-            },
-            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+            onPressed: notifier.checkSave()
+                ? () {
+                    notifier.confirmAddBankAccount(context);
+                  }
+                : null,
+            style: ButtonStyle(backgroundColor: notifier.checkSave() ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
             child: CustomTextWidget(
-              textToDisplay: notifier.language.save!,
+              textToDisplay: notifier2.translate.save!,
               textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
             ),
           ),

@@ -80,7 +80,7 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
             mainAxisSize: MainAxisSize.max,
             children: [
               CustomSearchBar(
-                  hintText: notifier.language.whatAreYouFindOut,
+                  hintText: notifier.language.search,
                   contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                   controller: _controller,
                   onChanged: (val) {

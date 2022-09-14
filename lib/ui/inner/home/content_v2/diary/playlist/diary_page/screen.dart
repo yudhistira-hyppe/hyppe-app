@@ -19,13 +19,10 @@ class DiaryPage extends StatefulWidget {
   final bool? isScrolling;
   final Function function;
   final PageController? controller;
+  final int? total;
 
-  const DiaryPage({
-    this.data,
-    this.isScrolling,
-    required this.function,
-    this.controller,
-  });
+  const DiaryPage({this.data, this.isScrolling, required this.function, this.controller, this.total});
+
   @override
   _DiaryPageState createState() => _DiaryPageState();
 }
@@ -34,6 +31,7 @@ class _DiaryPageState extends State<DiaryPage> {
   // bool _postViewAdded = false;
   List<StoryItem> _storyItems = [];
   final StoryController _storyController = StoryController();
+  int _curentPosition = 0;
 
   // void _addPostView() {
   //   if (widget.data!.postView == PostView.notViewed) {
@@ -85,7 +83,7 @@ class _DiaryPageState extends State<DiaryPage> {
         children: [
           StoryView(
             inline: false,
-            repeat: false,
+            repeat: true,
             progressColor: kHyppeLightButtonText,
             durationColor: kHyppeLightButtonText,
             storyItems: _storyItems,
@@ -93,6 +91,7 @@ class _DiaryPageState extends State<DiaryPage> {
             progressPosition: ProgressPosition.top,
             onStoryShow: (storyItem) {
               int pos = _storyItems.indexOf(storyItem);
+
               context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
               // _addPostView();
               _storyController.playbackNotifier.listen((value) {
@@ -105,14 +104,18 @@ class _DiaryPageState extends State<DiaryPage> {
                 }
               });
             },
+            nextDebouncer: false,
             onComplete: () {
-              widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-              final currentIndex = _storyItems.length - 1;
-              final isLastPage = currentIndex == widget.controller!.page;
-              widget.function();
-              if (isLastPage) {
-                // context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
-              }
+              // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+
+              // _storyController.next();
+              // widget.controller!.
+
+              // final isLastPage = widget.total! - 1 == widget.controller!.page;
+              // widget.function();
+              // if (isLastPage) {
+              //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
+              // }
             },
             onVerticalSwipeComplete: (v) {
               if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);

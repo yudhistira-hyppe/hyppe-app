@@ -519,6 +519,7 @@ class LocalizationModelV2 {
   String? orderSummary;
   String? priceIsNotEmpty;
   String? buy;
+  String? sell;
   String? purchaseTerms;
   String? pleaseEnterMessage;
   String? pleaseSetPrice;
@@ -558,6 +559,32 @@ class LocalizationModelV2 {
   String? help;
   String? bankAccount;
   String? makeSureTheName;
+  String? min4second;
+  String? youCanAddUpTo;
+  String? youWillDelete;
+  String? deletedBankAccount;
+  String? totalIncome;
+  String? withdrawalMoney;
+  String? withdrawalAmount;
+  String? fromBalance;
+  String? detailTransaction;
+  String? seeInvoice;
+  String? paymentDetails;
+  String? wtihdrawalTo;
+  String? verificationBankAccount;
+  String? adminFee;
+  String? ballanceAmount;
+  String? contentDetail;
+  String? contentPrice;
+  String? serviceFee;
+  String? totalPrice;
+  String? youDontHaveAnyTransactionsYet;
+  String? enterThePinThatMatchesThePinYouFilledInEarlier;
+  String? thisPageWillAutomaticallyCloseIn;
+  String? allTransaction;
+  String? forr;
+  String? from;
+  String? remove;
 
   LocalizationModelV2({
     this.login,
@@ -1080,6 +1107,7 @@ class LocalizationModelV2 {
     this.orderSummary,
     this.priceIsNotEmpty,
     this.buy,
+    this.sell,
     this.purchaseTerms,
     this.pleaseEnterMessage,
     this.pleaseSetPrice,
@@ -1119,6 +1147,32 @@ class LocalizationModelV2 {
     this.help,
     this.bankAccount,
     this.makeSureTheName,
+    this.min4second,
+    this.youCanAddUpTo,
+    this.youWillDelete,
+    this.deletedBankAccount,
+    this.totalIncome,
+    this.withdrawalMoney,
+    this.withdrawalAmount,
+    this.fromBalance,
+    this.detailTransaction,
+    this.seeInvoice,
+    this.paymentDetails,
+    this.wtihdrawalTo,
+    this.verificationBankAccount,
+    this.adminFee,
+    this.ballanceAmount,
+    this.contentDetail,
+    this.contentPrice,
+    this.serviceFee,
+    this.totalPrice,
+    this.youDontHaveAnyTransactionsYet,
+    this.enterThePinThatMatchesThePinYouFilledInEarlier,
+    this.thisPageWillAutomaticallyCloseIn,
+    this.allTransaction,
+    this.forr,
+    this.from,
+    this.remove,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1479,10 +1533,8 @@ class LocalizationModelV2 {
     areYouSure = json['areYouSure'];
     yesCancelPost = json['yesCancelPost'];
     keepEditing = json['keepEditing'];
-
     descriptionCanOnlyWithMin5Characters = json['descriptionCanOnlyWithMin5Characters'];
     categoryCanOnlyWithMin1Characters = json['categoryCanOnlyWithMin1Characters'];
-
     internalServerError = json['internalServerError'];
     postCanceled = json['postCanceled'];
     postCreatedSuccessfully = json['postCreatedSuccessfully'];
@@ -1646,7 +1698,6 @@ class LocalizationModelV2 {
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     deletingYourAccountIsPermanent = json['deletingYourAccountIsPermanent'];
-
     commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
     notReceivingOTP = json['notReceivingOTP'];
     resendOTP = json['resendOTP'];
@@ -1660,6 +1711,7 @@ class LocalizationModelV2 {
     orderSummary = json['orderSummary'];
     priceIsNotEmpty = json['priceIsNotEmpty'];
     buy = json['buy'];
+    sell = json['sell'];
     purchaseTerms = json['purchaseTerms'];
     pleaseEnterMessage = json['pleaseEnterMessage'];
     pleaseSetPrice = json['pleaseSetPrice'];
@@ -1695,8 +1747,35 @@ class LocalizationModelV2 {
     accountWithAccountNumber = json['accountWithAccountNumber'];
     aboutBankAccount = json['aboutBankAccount'];
     ownedBy = json['ownedBy'];
+    aboutBankAccountContent = json['aboutBankAccountContent'];
     help = json['help'];
     bankAccount = json['bankAccount'];
     makeSureTheName = json['makeSureTheName'];
+    min4second = json['min4second'];
+    youCanAddUpTo = json['youCanAddUpTo'];
+    youWillDelete = json['youWillDelete'];
+    deletedBankAccount = json['deletedBankAccount'];
+    totalIncome = json['totalIncome'];
+    withdrawalMoney = json['withdrawalMoney'];
+    withdrawalAmount = json['withdrawalAmount'];
+    fromBalance = json['fromBalance'];
+    detailTransaction = json['detailTransaction'];
+    seeInvoice = json['seeInvoice'];
+    paymentDetails = json['paymentDetails'];
+    wtihdrawalTo = json['wtihdrawalTo'];
+    verificationBankAccount = json['verificationBankAccount'];
+    adminFee = json['adminFee'];
+    ballanceAmount = json['ballanceAmount'];
+    contentDetail = json['contentDetail'];
+    contentPrice = json['contentPrice'];
+    serviceFee = json['serviceFee'];
+    totalPrice = json['totalPrice'];
+    youDontHaveAnyTransactionsYet = json['youDontHaveAnyTransactionsYet'];
+    enterThePinThatMatchesThePinYouFilledInEarlier = json['enterThePinThatMatchesThePinYouFilledInEarlier'];
+    thisPageWillAutomaticallyCloseIn = json['thisPageWillAutomaticallyCloseIn'];
+    allTransaction = json['allTransaction'];
+    forr = json['forr'];
+    from = json['from'];
+    remove = json['Remove'];
   }
 }

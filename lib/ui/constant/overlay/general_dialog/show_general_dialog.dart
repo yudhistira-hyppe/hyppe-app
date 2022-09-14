@@ -46,35 +46,35 @@ class ShowGeneralDialog {
     showCupertinoDialog(context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PermanentlyDeniedPermissionContent(permissions: permissions));
   }
 
-  static generalDialog(
-    _, {
-    String? titleText,
-    String? bodyText,
-    int? maxLineTitle,
-    int? maxLineBody,
-    required Function functionPrimary,
-    Function? functionSecondary,
-    String? titleButtonPrimary,
-    String? titleButtonSecondary,
-  }) {
+  static generalDialog(_,
+      {String? titleText,
+      String? bodyText,
+      int? maxLineTitle,
+      int? maxLineBody,
+      required Function functionPrimary,
+      Function? functionSecondary,
+      String? titleButtonPrimary,
+      String? titleButtonSecondary,
+      bool? barrierDismissible = false}) {
     showGeneralDialog(
       //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
-      barrierDismissible: true,
+      barrierDismissible: barrierDismissible!,
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => AlertDialog(
         // insetPadding: EdgeInsets.only(top: 30),
         alignment: Alignment.center,
         content: GeneralAlertDialog(
-            titleText: titleText,
-            bodyText: bodyText,
-            maxLineTitle: maxLineTitle,
-            maxLineBody: maxLineBody,
-            functionPrimary: functionPrimary,
-            functionSecondary: functionSecondary,
-            titleButtonPrimary: titleButtonPrimary,
-            titleButtonSecondary: titleButtonSecondary),
+          titleText: titleText,
+          bodyText: bodyText,
+          maxLineTitle: maxLineTitle,
+          maxLineBody: maxLineBody,
+          functionPrimary: functionPrimary,
+          functionSecondary: functionSecondary,
+          titleButtonPrimary: titleButtonPrimary,
+          titleButtonSecondary: titleButtonSecondary,
+        ),
       ),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);

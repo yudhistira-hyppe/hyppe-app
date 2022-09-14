@@ -1,18 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-
 import 'package:hyppe/core/bloc/repos/repos.dart';
-import 'package:hyppe/core/bloc/notifications_v2/state.dart';
 import 'package:hyppe/core/bloc/search_content/state.dart';
-
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-
-import 'package:hyppe/core/arguments/get_user_notifications.dart';
-
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:hyppe/core/response/generic_response.dart';

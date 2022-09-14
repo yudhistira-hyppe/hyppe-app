@@ -75,6 +75,7 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                                 // arguments: widget.argument,
                                 data: notifier.listData![rootIndex],
                                 controller: _pageController,
+                                total: notifier.listData!.length,
                                 function: () {
                                   notifier.onNextPage(
                                     context: context,
@@ -97,6 +98,7 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                                   // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
                                   // arguments: widget.argument,
                                   data: notifier.listData![rootIndex],
+                                  controller: _pageController,
                                   function: () => notifier.onNextPage(
                                     context: context,
                                     data: notifier.listData![rootIndex],
@@ -109,6 +111,7 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                             // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
                             // arguments: widget.argument,
                             data: notifier.listData![rootIndex],
+                            controller: _pageController,
                             function: () => notifier.onNextPage(
                               context: context,
                               data: notifier.listData![rootIndex],

@@ -23,13 +23,17 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_scree
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/verification/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
@@ -201,10 +205,18 @@ class Generate {
 
       case Routes.transaction:
         return MaterialPageRoute(builder: (_) => const Transaction());
+      case Routes.allTransaction:
+        return MaterialPageRoute(builder: (_) => const AllTransaction());
       case Routes.bankAccount:
         return MaterialPageRoute(builder: (_) => const BankAccount());
       case Routes.addBankAccount:
         return MaterialPageRoute(builder: (_) => const AddBankAccount());
+      case Routes.detailTransaction:
+        return MaterialPageRoute(builder: (_) => const DetailTransaction());
+      case Routes.pinScreen:
+        return MaterialPageRoute(builder: (_) => const PinScreen());
+      case Routes.verificationPinScreen:
+        return MaterialPageRoute(builder: (_) => const VerificationPin());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

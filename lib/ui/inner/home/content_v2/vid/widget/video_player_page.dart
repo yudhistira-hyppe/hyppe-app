@@ -195,7 +195,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void getCountVid() async {
     String _countAds = SharedPreference().readStorage(SpKeys.countAds);
     if (_countAds == null) {
-      print('kesini');
+      print('kesini video');
       SharedPreference().writeStorage(SpKeys.countAds, '0');
       countAds = 0;
     } else {

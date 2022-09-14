@@ -15,24 +15,21 @@ import 'package:provider/provider.dart';
 
 class OnBuyContentBottomSheet extends StatelessWidget {
   final ContentData? data;
-  const OnBuyContentBottomSheet({Key? key, required this.data})
-      : super(key: key);
+  const OnBuyContentBottomSheet({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(data!.saleAmount!);
     var f = NumberFormat.decimalPattern('id');
 
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: 8 * SizeConfig.scaleDiagonal,
-            horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}handler.svg"),
+            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -49,59 +46,51 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
-                      textToDisplay: System()
-                          .currencyFormat(amount: data!.saleAmount!.toInt()),
+                      textToDisplay: System().currencyFormat(amount: data!.saleAmount!.toInt()),
                       textStyle: Theme.of(context).textTheme.subtitle1,
                     ),
                   ],
                 ),
                 const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay: "Total Views",
-                      textStyle: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    CustomTextWidget(
-                      textToDisplay: f.format(data?.insight!.views),
-                      textStyle: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay: "Total Likes",
-                      textStyle: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    CustomTextWidget(
-                      textToDisplay: f.format(data?.insight!.likes),
-                      textStyle: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     CustomTextWidget(
+                //       textToDisplay: "Total Views",
+                //       textStyle: Theme.of(context).textTheme.bodyMedium,
+                //     ),
+                //     CustomTextWidget(
+                //       textToDisplay: f.format(data?.insight!.views),
+                //       textStyle: Theme.of(context).textTheme.subtitle1,
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 5),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     CustomTextWidget(
+                //       textToDisplay: "Total Likes",
+                //       textStyle: Theme.of(context).textTheme.bodyMedium,
+                //     ),
+                //     CustomTextWidget(
+                //       textToDisplay: f.format(data?.insight!.likes),
+                //       textStyle: Theme.of(context).textTheme.subtitle1,
+                //     ),
+                //   ],
+                // ),
               ],
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.translate.buy!,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .button!
-                    .copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
-              function: () =>
-                  Routing().move(Routes.reviewBuyContent, argument: data),
+              function: () => Routing().move(Routes.reviewBuyContent, argument: data),
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant)),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
             ),
           ],
         ),

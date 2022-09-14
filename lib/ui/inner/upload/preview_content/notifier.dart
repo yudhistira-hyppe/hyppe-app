@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:better_player/better_player.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
 import 'package:hyppe/core/constants/filter_matrix.dart';
@@ -11,8 +13,11 @@ import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_snackbar.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_field_for_overlay.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -47,6 +52,8 @@ class PreviewContentNotifier with ChangeNotifier {
   double _sizeDragTarget = 60;
   Color? _dragTargetColor;
   bool _addTextItemMode = false;
+  Duration? _totalDuration;
+  Duration get totalDuration => _totalDuration!;
 
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
@@ -78,6 +85,11 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set showNext(bool val) {
     _showNext = val;
+    notifyListeners();
+  }
+
+  set totalDuration(Duration val) {
+    _totalDuration = val;
     notifyListeners();
   }
 
@@ -223,7 +235,45 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void showSnackBar({
+    String? icon,
+    required Color color,
+    required String message,
+  }) {
+    Routing().showSnackBar(
+      snackBar: SnackBar(
+        margin: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: color,
+        content: SafeArea(
+          child: SizedBox(
+            height: 56,
+            child: OnColouredSheet(
+              maxLines: 2,
+              caption: message,
+              fromSnackBar: true,
+              iconSvg: icon != null ? "${AssetPath.vectorPath}$icon" : null,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   void navigateToPreUploaded(BuildContext context, [GlobalKey? globalKey]) async {
+    if (featureType == FeatureType.diary) {
+      final ms = totalDuration.inMilliseconds;
+      int seconds = ms ~/ 1000;
+      if (seconds <= 3) {
+        showSnackBar(
+          color: kHyppeDanger,
+          message: "${language.min4second}",
+        );
+        return;
+      }
+    }
+
     if (_isSheetOpen) closeFilters();
     if (betterPlayerController != null) isForcePaused = true;
     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);

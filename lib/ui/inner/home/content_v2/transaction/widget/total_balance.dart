@@ -5,7 +5,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class TotalBalance extends StatelessWidget {
-  const TotalBalance({Key? key}) : super(key: key);
+  String? accountBalance;
+  TotalBalance({Key? key, this.accountBalance}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +28,14 @@ class TotalBalance extends StatelessWidget {
                 textAlign: TextAlign.start,
               ),
               fivePx,
-              CustomIconWidget(
+              const CustomIconWidget(
                 iconData: "${AssetPath.vectorPath}info-icon.svg",
                 height: 14,
               )
             ],
           ),
           CustomTextWidget(
-            textToDisplay: 'Rp 0',
+            textToDisplay: accountBalance!,
             textStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onBackground),
             textAlign: TextAlign.start,
           ),

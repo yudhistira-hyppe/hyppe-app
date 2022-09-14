@@ -73,6 +73,10 @@ class UrlConstants {
 
   static const String transactionRoute = "/api/transactions";
 
+  static const String userbankaccountsRoute = "/api/userbankaccounts";
+
+  static const String accountBalancesRoutes = "/api/accountbalances";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Wallet */
   /// event.
@@ -194,6 +198,9 @@ class UrlConstants {
 
   /// user => Change Language
   static const String updateLanguage = "$userRoute/updatelang";
+
+  /// user => Change Language
+  static const String userPin = "$userRoute/pin";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Playlist */
@@ -428,9 +435,27 @@ class UrlConstants {
   /// post => Get Buy Content
   static const String postBuyContent = "$transactionRoute/";
 
+  /// post => Get History Transaction
+  static const String transactionHistorys = "$transactionRoute/historys";
+
+  /// post => Get History Transaction
+  static const String detailTransactionHistorys = "$transactionRoute/historys/details";
+
   /// get => Get All Bank
   static const String getAllBank = "$bankRoute/all";
 
   /// get => Get All Bank
   static const String getBankByCode = "$bankRoute/search";
+
+  /// post => Create account Bank
+  static const String userBankAccounts = "$userbankaccountsRoute/";
+
+  /// post => Get List bank account
+  static const String myUserBankAccounts = "$userbankaccountsRoute/byuser";
+
+  /// post => Get List bank account
+  static const String deleteUserBankAccounts = "$userbankaccountsRoute/delete";
+
+  /// post => Get Account Balance
+  static const String accountBalances = "$accountBalancesRoutes/";
 }

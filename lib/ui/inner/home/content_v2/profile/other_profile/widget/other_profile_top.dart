@@ -6,6 +6,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
@@ -132,26 +133,30 @@ class OtherProfileTop extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CustomElevatedButton(
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                          ? notifier.language.following!
-                          : notifier.statusFollowing == StatusFollowing.requested
-                              ? notifier.language.requested!
-                              : notifier.language.follow!,
-                      textStyle: Theme.of(context).textTheme.button!.copyWith(
-                            color: notifier.statusFollowing == StatusFollowing.requested ? null : kHyppeLightButtonText,
+                    child: notifier.isCheckLoading
+                        ? const CustomLoading()
+                        : CustomTextWidget(
+                            textToDisplay: notifier.statusFollowing == StatusFollowing.following
+                                ? notifier.language.following!
+                                : notifier.statusFollowing == StatusFollowing.requested
+                                    ? notifier.language.requested!
+                                    : notifier.language.follow!,
+                            textStyle: Theme.of(context).textTheme.button!.copyWith(
+                                  color: notifier.statusFollowing == StatusFollowing.requested ? null : kHyppeLightButtonText,
+                                ),
                           ),
-                    ),
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
                       backgroundColor: notifier.statusFollowing == StatusFollowing.requested ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                     ),
-                    function: () {
-                      if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
-                        notifier.followUser(context);
-                      }
-                    },
+                    function: notifier.isCheckLoading
+                        ? null
+                        : () {
+                            if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
+                              notifier.followUser(context);
+                            }
+                          },
                   ),
                   CustomElevatedButton(
                     child: CustomTextWidget(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/buy/bloc.dart';
 import 'package:hyppe/core/bloc/buy/state.dart';
@@ -58,6 +60,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
     await notifier.getBank(context);
     final fetch = notifier.buyFetch;
     if (fetch.postsState == BuyState.getContentsError) {
+      print('asdasd00');
       var errorData = ErrorModel.fromJson(fetch.data);
       _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
 
@@ -101,13 +104,24 @@ class PaymentMethodNotifier extends ChangeNotifier {
   }
 
   Future<void> _postSubmitBuy(BuildContext context) async {
+    List<PostId> postId = [
+      PostId(
+        id: reviewBuyNotifier.data!.postId,
+        qty: 1,
+        totalAmount: reviewBuyNotifier.data!.price!.toInt(),
+      ),
+    ];
     var params = BuyRequest(
-        postid: reviewBuyNotifier.data!.postId,
+        postid: postId,
         amount: reviewBuyNotifier.data!.totalAmount!.toInt(),
         bankcode: _bankSelected,
         paymentmethod: 'VA', //TO DO : Other payment method
+        type: 'CONTENT',
         salelike: reviewBuyNotifier.data!.saleLike,
         saleview: reviewBuyNotifier.data!.saleView);
+
+    print(postId[0].totalAmount);
+    inspect(params);
 
     final notifier = BuyBloc();
     await notifier.postContentBuy(context, params: params);
@@ -118,7 +132,6 @@ class PaymentMethodNotifier extends ChangeNotifier {
     } else if (fetch.postsState == BuyState.postContentsSuccess) {
       BuyResponse? res = BuyResponse.fromJson(fetch.data);
       postResponse = res;
-
       _showSnackBar(kHyppeTextSuccess, 'Success', "Request buy conten success, please complete payment");
 
       Future.delayed(const Duration(seconds: 2), () {

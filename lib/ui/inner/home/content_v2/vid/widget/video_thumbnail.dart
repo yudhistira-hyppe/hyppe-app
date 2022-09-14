@@ -41,7 +41,7 @@ class VideoThumbnail extends StatelessWidget {
             child: CustomThumbImage(
               onTap: () {},
               postId: videoData?.postID,
-              imageUrl: '${videoData?.fullThumbPath}',
+              imageUrl: videoData!.isApsara! ? videoData!.mediaThumbEndPoint : '${videoData?.fullThumbPath}',
             ),
           ),
         ),

@@ -66,9 +66,7 @@ class PreviewIDVerification extends StatelessWidget {
                       children: [
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}camera.svg", defaultColor: false),
                         const SizedBox(width: 8),
-                        CustomTextWidget(textToDisplay: notifier.language.retake!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(
-                          color: Colors.white
-                        )),
+                        CustomTextWidget(textToDisplay: notifier.language.retake!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                       ],
                     ),
                   ),
@@ -98,10 +96,7 @@ class PreviewIDVerification extends StatelessWidget {
                     onPressed: () async => await notifier.onUploadProofPicture(context, picture),
                     child: Row(
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.upload!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(
-                          color: Colors.white
-                          
-                        )),
+                        CustomTextWidget(textToDisplay: notifier.language.upload!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                         const SizedBox(width: 8),
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}arrow.svg", defaultColor: false),
                       ],

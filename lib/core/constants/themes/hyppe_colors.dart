@@ -9,7 +9,7 @@ const kHyppeTextLightPrimary = Color(0xff3F3F3F);
 const kHyppeLightSurface = Color(0xffF5F5F5);
 const kHyppeLightSecondary = Color(0xff737373);
 const kHyppeLightIcon = Color(0xff717171);
-const kHyppeLightInactive1 = Color(0xffEDEDED);
+const kHyppeLightInactive1 = Color(0xFFEDEDED);
 const kHyppeLightInactive2 = Color(0xffE0E0E0);
 const kHyppeLightButtonText = Color(0xffFFFFFF);
 const kHyppeLightAds = Color(0xffFFBC20);
@@ -52,3 +52,15 @@ const kSkeleton = LinearGradient(
     kSkeletonBaseColor,
   ],
 );
+
+const kHyppeCyan = Color(0xff00A3FF);
+const kHyppeCyanLight = Color(0xffD6EFFD);
+const kHyppeRed = Color(0xffDD0000);
+const kHyppeRedLight = Color(0xffFDE2D6);
+const kHyppeGreen = Color(0xff2D8D36);
+const kHyppeGreenLight = Color(0xffD7FDD6);
+const kHyppePurple = Color(0xff7028CB);
+const kHyppePurpleLight = Color(0xffF6EEFF);
+const kHyppeGrey = Color(0xff737373);
+const kHyppeGreyLight = Color(0xffF1F1F1);
+const kHyppePrimaryLight = Color(0xfff6ebf7);

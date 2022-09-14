@@ -11,6 +11,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+// import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
@@ -112,7 +113,7 @@ class TranslateNotifierV2 with ChangeNotifier {
   }
 
   Future initTranslate(BuildContext context, {int? index}) async {
-    print('kesini');
+    print('kesini translate');
     await loadLanguage(index: index);
 
     /// Outer
@@ -148,7 +149,8 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<PaymentMethodNotifier>().translate(translate);
     context.read<PaymentNotifier>().translate(translate);
     context.read<PaymentSummaryNotifier>().translate(translate);
-    context.read<TransactionNotifier>().translate(translate);
+    // context.read<TransactionNotifier>().translate(translate);
+    // context.read<PinAccountNotifier>().translate(translate);
 
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {

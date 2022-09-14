@@ -29,32 +29,37 @@ class UserProfileModel {
   String? refreshToken;
   String? idProofNumber;
   IdProofStatus? idProofStatus;
+  bool? pinCreate;
+  bool? pinVerified;
 
-  UserProfileModel(
-      {this.country,
-      this.area,
-      this.city,
-      this.gender,
-      this.mobileNumber,
-      this.roles,
-      this.fullName,
-      this.bio,
-      this.avatar,
-      this.insight,
-      this.isEmailVerified,
-      this.token,
-      this.langIso,
-      this.interest,
-      this.profileID,
-      this.dob,
-      this.event,
-      this.email,
-      this.username,
-      this.isComplete,
-      this.isIdVerified,
-      this.status,
-      this.refreshToken,
-      this.idProofNumber});
+  UserProfileModel({
+    this.country,
+    this.area,
+    this.city,
+    this.gender,
+    this.mobileNumber,
+    this.roles,
+    this.fullName,
+    this.bio,
+    this.avatar,
+    this.insight,
+    this.isEmailVerified,
+    this.token,
+    this.langIso,
+    this.interest,
+    this.profileID,
+    this.dob,
+    this.event,
+    this.email,
+    this.username,
+    this.isComplete,
+    this.isIdVerified,
+    this.status,
+    this.refreshToken,
+    this.idProofNumber,
+    this.pinCreate,
+    this.pinVerified,
+  });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
     country = json['country'];
@@ -95,6 +100,8 @@ class UserProfileModel {
     status = json['status'];
     refreshToken = json['refreshToken'];
     idProofStatus = _serializeIdProofStatus(json['idProofStatus']);
+    pinVerified = json['pin_verified'] ?? false;
+    pinCreate = json['pin_create'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -128,6 +135,8 @@ class UserProfileModel {
     data['isIdVerified'] = isIdVerified;
     data['status'] = status;
     data['refreshToken'] = refreshToken;
+    data['pin_verified'] = pinVerified;
+    data['pin_create'] = pinCreate;
     return data;
   }
 

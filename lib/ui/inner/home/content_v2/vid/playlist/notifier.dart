@@ -32,6 +32,14 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentData? get data => _data;
   StatusFollowing get statusFollowing => _statusFollowing;
 
+  bool _checkIsLoading = false;
+  bool get checkIsLoading => _checkIsLoading;
+
+  set checkIsLoading(bool val) {
+    _checkIsLoading = val;
+    notifyListeners();
+  }
+
   set statusFollowing(StatusFollowing statusFollowing) {
     _statusFollowing = statusFollowing;
     notifyListeners();
@@ -76,11 +84,12 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
       try {
+        checkIsLoading = true;
         if (checkIdCard) {
           // System().actionReqiredIdCard(
           //   context,
           //   action: () async {
-          statusFollowing = StatusFollowing.requested;
+          // statusFollowing = StatusFollowing.requested;
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(
             context,
@@ -99,7 +108,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           //   uploadContentAction: false,
           // );
         } else {
-          statusFollowing = StatusFollowing.requested;
+          // statusFollowing = StatusFollowing.requested;
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(
             context,
@@ -115,6 +124,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
             statusFollowing = StatusFollowing.none;
           }
         }
+        checkIsLoading = false;
+        notifyListeners();
       } catch (e) {
         'follow user: ERROR: $e'.logger();
       }
@@ -123,6 +134,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
     try {
+      checkIsLoading = true;
       _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;
@@ -138,6 +150,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           }
         }
       }
+      checkIsLoading = false;
+      notifyListeners();
     } catch (e) {
       'load following request list: ERROR: $e'.logger();
     }

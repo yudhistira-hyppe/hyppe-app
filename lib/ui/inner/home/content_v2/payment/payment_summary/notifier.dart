@@ -47,10 +47,8 @@ class PaymentSummaryNotifier extends ChangeNotifier {
 
   String strDigits(int n) => n.toString().padLeft(2, '0');
   String get hours => strDigits(payDuration.inHours.remainder(24)).toString();
-  String get minutes =>
-      strDigits(payDuration.inMinutes.remainder(60)).toString();
-  String get seconds =>
-      strDigits(payDuration.inSeconds.remainder(60)).toString();
+  String get minutes => strDigits(payDuration.inMinutes.remainder(60)).toString();
+  String get seconds => strDigits(payDuration.inSeconds.remainder(60)).toString();
 
   //String get durationString => '($hours:$minutes:$seconds)';
   String get durationString {
@@ -64,14 +62,12 @@ class PaymentSummaryNotifier extends ChangeNotifier {
   }
 
   void initState(BuildContext context) {
-    paymentMethodNotifier =
-        Provider.of<PaymentMethodNotifier>(context, listen: false);
+    paymentMethodNotifier = Provider.of<PaymentMethodNotifier>(context, listen: false);
     print("Selected Bank" + paymentMethodNotifier.bankSelected);
     _getBankDetail(context);
 
     DateTime dt1 = DateTime.now();
-    DateTime dt2 =
-        DateTime.parse(paymentMethodNotifier.postResponse!.expiredtimeva!);
+    DateTime dt2 = DateTime.parse(paymentMethodNotifier.postResponse!.expiredtimeva!);
     DateTime dt3 = dt2.subtract(const Duration(hours: 7)); //convert to utc+7
     payDuration = dt3.difference(dt1);
     durationString = '($hours:$minutes:$seconds)';
@@ -81,8 +77,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
 
   Future<void> _getBankDetail(BuildContext context) async {
     final notifier = BuyBloc();
-    await notifier.getBankByCode(context,
-        codeBank: paymentMethodNotifier.bankSelected);
+    await notifier.getBankByCode(context, codeBank: paymentMethodNotifier.bankSelected);
     final fetch = notifier.buyFetch;
     if (fetch.postsState == BuyState.getContentsError) {
       var errorData = ErrorModel.fromJson(fetch.data);
@@ -97,8 +92,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
     }
   }
 
-  void _showSnackBar(Color color, String message, String desc,
-      {Function? function}) {
+  void _showSnackBar(Color color, String message, String desc, {Function? function}) {
     Routing().showSnackBar(
       snackBar: SnackBar(
         margin: EdgeInsets.zero,
@@ -130,8 +124,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
   }
 
   void startTimer() {
-    countdownTimer =
-        Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
   }
 
   // Step 4
@@ -144,8 +137,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
     stopTimer();
 
     DateTime dt1 = DateTime.now();
-    DateTime dt2 =
-        DateTime.parse(paymentMethodNotifier.postResponse!.expiredtimeva!);
+    DateTime dt2 = DateTime.parse(paymentMethodNotifier.postResponse!.expiredtimeva!);
     DateTime dt3 = dt2.subtract(const Duration(hours: 7));
     payDuration = dt3.difference(dt1);
     durationString = '($hours:$minutes:$seconds)';

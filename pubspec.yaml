@@ -68,7 +68,7 @@ dependencies:
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
   light_compressor: ^1.2.2 
-  deepar_flutter: ^0.0.2
+  # deepar_flutter: ^0.0.2
 
 
   dynamic_widget: # Dynamic widget builder

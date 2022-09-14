@@ -423,6 +423,7 @@ class StoryView extends StatefulWidget {
 
   final Color progressColor;
   final Color durationColor;
+  final bool? nextDebouncer;
 
   StoryView({
     Key? key,
@@ -436,6 +437,7 @@ class StoryView extends StatefulWidget {
     this.repeat = false,
     this.inline = false,
     this.onVerticalSwipeComplete,
+    this.nextDebouncer = true,
   })  : assert(storyItems.isNotEmpty, "[storyItems] should not be empty"),
         super(key: key);
 
@@ -456,8 +458,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   // BetterPlayerController? _videoPlayerController;
 
   StreamSubscription<PlaybackState>? _playbackSubscription;
-
   VerticalDragInfo? verticalDragInfo;
+  bool statusPlay = false;
+  bool statusPlayOnPress = false;
 
   // StoryItem? get _currentStory => widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => null);
   StoryItem? get _currentStory => widget.storyItems.firstWhereOrNull((it) => !it!.shown);
@@ -543,11 +546,13 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
         case PlaybackState.play:
           _removeNextHold();
           _animationController?.forward();
+          statusPlay = true;
           break;
 
         case PlaybackState.pause:
           _holdNext(); // then pause animation
           _animationController?.stop(canceled: false);
+          statusPlay = false;
           break;
 
         case PlaybackState.next:
@@ -651,9 +656,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
         }
       }
     });
-
     _currentAnimation = Tween(begin: 0.0, end: 1.0).animate(_animationController!);
-
     widget.controller.play();
   }
 
@@ -672,7 +675,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       for (var it in widget.storyItems) {
         it!.shown = false;
       }
-
       _beginPlay();
     }
   }
@@ -775,20 +777,75 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
               alignment: Alignment.centerRight,
               heightFactor: 1,
               child: GestureDetector(
-                onTapDown: (details) {
-                  widget.controller.pause();
-                },
+                // onTapDown: (details) {
+                //   print('onTapDown');
+                //   widget.controller.pause();
+                // },
                 onTapCancel: () {
+                  print('onTapCancel');
                   widget.controller.play();
                 },
-                onTapUp: (details) {
-                  // if debounce timed out (not active) then continue anim
-                  if (_nextDebouncer?.isActive == false) {
-                    widget.controller.play();
-                  } else {
+                onTap: () {
+                  if (widget.nextDebouncer == true) {
                     widget.controller.next();
+                  } else {
+                    if (statusPlay) {
+                      widget.controller.pause();
+                    } else {
+                      widget.controller.play();
+                    }
                   }
                 },
+                onLongPress: () {
+                  widget.controller.pause();
+                },
+                onLongPressEnd: (de) {
+                  widget.controller.play();
+                },
+                // onTapDown: (details) {
+                //   Future.delayed(const Duration(seconds: 2), () {
+                //     // deleayed code here
+                //     statusPlayOnPress = true;
+                //     widget.controller.pause();
+                //   });
+                // },
+                // onTapUp: (details) {
+                //   if (statusPlayOnPress) {
+                //     statusPlayOnPress = false;
+                //     widget.controller.play();
+                //   }
+                // },
+                // onTapUp: (details) {
+                //   print('onTapUp');
+                //   // if debounce timed out (not active) then continue anim
+                //   if (_nextDebouncer?.isActive == true && widget.nextDebouncer == true) {
+                //     widget.controller.next();
+                //   } else {
+                //     if (widget.controller.playbackNotifier.isPaused) {
+                //       widget.controller.pause();
+                //     } else {
+                //       widget.controller.play();
+                //     }
+                //     print(widget.controller.playbackNotifier.isPaused);
+                //     // widget.controller.playbackNotifier.listen((playbackStatus) {
+                //     //   switch (playbackStatus) {
+                //     //     case PlaybackState.play:
+                //     //       widget.controller.pause();
+                //     //       break;
+
+                //     //     case PlaybackState.pause:
+                //     //       widget.controller.play();
+                //     //       break;
+                //     //     case PlaybackState.next:
+                //     //       // TODO: Handle this case.
+                //     //       break;
+                //     //     case PlaybackState.previous:
+                //     //       // TODO: Handle this case.
+                //     //       break;
+                //     //   }
+                //     // });
+                //   }
+                // },
                 onVerticalDragStart: widget.onVerticalSwipeComplete == null
                     ? null
                     : (details) {
@@ -825,7 +882,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
             heightFactor: 1,
             child: SizedBox(
                 child: GestureDetector(onTap: () {
-                  widget.controller.previous();
+                  if (widget.nextDebouncer == true) widget.controller.previous();
                 }),
                 width: 70),
           ),

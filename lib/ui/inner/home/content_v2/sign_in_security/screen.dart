@@ -31,16 +31,21 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
           centerTitle: false,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 8, left: 16, right: 16),
+          padding: const EdgeInsets.only(top: 24),
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingTile(
-                icon: 'setting.svg',
+                icon: 'lock.svg',
                 onTap: () => Routing().move(Routes.changePassword),
-                caption: '${notifier.translate.changePassword}',
+                caption: '${notifier.translate.password}',
+              ),
+              SettingTile(
+                icon: 'lock-pin.svg',
+                onTap: () => Routing().move(Routes.pinScreen),
+                caption: 'PIN',
               ),
             ],
           ),

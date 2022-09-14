@@ -70,7 +70,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                     ],
                   ),
                   IconButton(
-                    icon: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
+                    icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
                     onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
                   ),
                 ],
@@ -82,7 +82,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
             strokeWidth: 2.0,
             color: Colors.purple,
             onRefresh: () async {
-              await notifier.initialOtherProfile(context);
+              await notifier.initialOtherProfile(context, refresh: true);
             },
             child: CustomScrollView(
               controller: _scrollController,

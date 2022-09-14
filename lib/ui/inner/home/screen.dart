@@ -30,18 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     print('ini iniststate home');
-    final _language = TranslateNotifierV2();
-    Provider.of<HomeNotifier>(context, listen: false).setSessionID();
+    final _language = context.read<TranslateNotifierV2>().translate;
+    context.read<HomeNotifier>().setSessionID();
 
-    final notifierFollow = Provider.of<FollowRequestUnfollowNotifier>(context, listen: false);
+    final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
     if (notifierFollow.listFollow.isEmpty) {
       notifierFollow.listFollow = [
-        {'name': "${_language.translate.follow}", 'code': 'TOFOLLOW'},
-        {'name': "${_language.translate.following}", 'code': 'FOLLOWING'},
+        {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
+        {'name': "${_language.following}", 'code': 'FOLLOWING'},
       ];
     }
-    Provider.of<PreUploadContentNotifier>(context, listen: false).onGetInterest(context);
+    context.read<PreUploadContentNotifier>().onGetInterest(context);
 
     if (mounted) {
       setState(() => {});

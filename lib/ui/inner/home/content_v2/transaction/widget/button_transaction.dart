@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -11,8 +12,8 @@ class ButtonTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<TransactionNotifier>(
-      builder: (context, notifier, child) => Row(
+    return Consumer2<TransactionNotifier, TranslateNotifierV2>(
+      builder: (context, notifier, notifier2, child) => Row(
         children: [
           Expanded(
             child: CustomTextButton(
@@ -23,7 +24,7 @@ class ButtonTransaction extends StatelessWidget {
                 side: BorderSide(width: 1.0, color: kHyppePrimary),
               ),
               child: CustomTextWidget(
-                textToDisplay: notifier.language.addBankAccount!,
+                textToDisplay: notifier2.translate.addBankAccount!,
                 textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary),
               ),
             ),
@@ -34,7 +35,7 @@ class ButtonTransaction extends StatelessWidget {
               onPressed: () {},
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(
-                textToDisplay: notifier.language.withdrawal!,
+                textToDisplay: notifier2.translate.withdrawal!,
                 textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
               ),
             ),

@@ -39,7 +39,7 @@ class OnShowUserViewContentBottomSheet extends StatefulWidget {
 class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContentBottomSheet> with GeneralMixin {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final _notifier = PreUploadContentNotifier();
+
   String? lastInputValue;
 
   @override

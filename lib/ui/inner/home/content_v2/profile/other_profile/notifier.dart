@@ -67,6 +67,9 @@ class OtherProfileNotifier with ChangeNotifier {
   String? get userEmail => _userEmail;
   String? get username => _username;
 
+  bool _isCheckLoading = false;
+  bool get isCheckLoading => _isCheckLoading;
+
   int get vidCount => user.vids?.length ?? 0;
   bool get vidHasNext => vidContentsQuery.hasNext;
 
@@ -110,6 +113,11 @@ class OtherProfileNotifier with ChangeNotifier {
 
   set userID(String? val) {
     _userID = val;
+    notifyListeners();
+  }
+
+  set isCheckLoading(bool val) {
+    _isCheckLoading = val;
     notifyListeners();
   }
 
@@ -191,7 +199,7 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  initialOtherProfile(BuildContext context, {OtherProfileArgument? argument}) async {
+  initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
     print('ini argument');
     print(argument?.postID);
     print(argument?.postID);
@@ -222,6 +230,10 @@ class OtherProfileNotifier with ChangeNotifier {
       notifyListeners();
     }
 
+    if (refresh) {
+      checkFollowingToUser(context, userEmail!);
+    }
+
     user.vids = await vidContentsQuery.reload(context, otherContent: true);
     user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
     user.pics = await picContentsQuery.reload(context, otherContent: true);
@@ -233,7 +245,8 @@ class OtherProfileNotifier with ChangeNotifier {
       // _system.actionReqiredIdCard(
       //   context,
       //   action: () async {
-      statusFollowing = StatusFollowing.requested;
+      // statusFollowing = StatusFollowing.requested;
+      isCheckLoading = true;
       final notifier = FollowBloc();
       await notifier.followUserBlocV2(
         context,
@@ -251,6 +264,8 @@ class OtherProfileNotifier with ChangeNotifier {
       //   },
       //   uploadContentAction: false,
       // );
+      isCheckLoading = false;
+      notifyListeners();
     } catch (e) {
       print(e);
       statusFollowing = StatusFollowing.none;
@@ -338,6 +353,7 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   Future<void> checkFollowingToUser(BuildContext context, String email) async {
+    _isCheckLoading = true;
     userEmail = email;
     statusFollowing = StatusFollowing.rejected;
     try {
@@ -353,8 +369,11 @@ class OtherProfileNotifier with ChangeNotifier {
           statusFollowing = StatusFollowing.requested;
         }
       }
+      isCheckLoading = false;
     } catch (e) {
       'load following request list: ERROR: $e'.logger();
+      isCheckLoading = false;
     }
+    notifyListeners();
   }
 }

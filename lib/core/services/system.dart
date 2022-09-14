@@ -224,6 +224,10 @@ class System {
       value = DateFormat('hh:mm a').format(DateTime.parse(dateParams));
     } else if (displayOption == 2) {
       value = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(dateParams));
+    } else if (displayOption == 3) {
+      value = DateFormat('d MMM yyyy').format(DateTime.parse(dateParams));
+    } else if (displayOption == 4) {
+      value = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -360,6 +364,34 @@ class System {
         return "DONE";
       case InteractiveEvent.revoke:
         return "REVOKE";
+      default:
+        return "";
+    }
+  }
+
+  TransactionType convertTransactionType(String? type) {
+    switch (type) {
+      case "Sell":
+        return TransactionType.sell;
+      case "Buy":
+        return TransactionType.buy;
+      case "Withdrawal":
+        return TransactionType.withdrawal;
+      default:
+        return TransactionType.none;
+    }
+  }
+
+  String convertTransactionTypeToString(TransactionType? event) {
+    switch (event) {
+      case TransactionType.sell:
+        return "Sell";
+      case TransactionType.buy:
+        return "Buy";
+      case TransactionType.withdrawal:
+        return "Withdrawal";
+      case TransactionType.none:
+        return "";
       default:
         return "";
     }

@@ -24,9 +24,7 @@ class BuyBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.getContentsError, data: onResult.data));
         } else {
-          setBuyFetch(BuyFetch(BuyState.getContentsSuccess,
-              version: onResult.data['version'],
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setBuyFetch(BuyFetch(BuyState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -50,9 +48,7 @@ class BuyBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.getContentsError, data: onResult.data));
         } else {
-          setBuyFetch(BuyFetch(BuyState.getContentsSuccess,
-              version: onResult.data['version'],
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setBuyFetch(BuyFetch(BuyState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -66,8 +62,7 @@ class BuyBloc {
     );
   }
 
-  Future getBankByCode(BuildContext context,
-      {required String? codeBank}) async {
+  Future getBankByCode(BuildContext context, {required String? codeBank}) async {
     var type = FeatureType.other;
     setBuyFetch(BuyFetch(BuyState.loading));
     await _repos.reposPost(
@@ -76,9 +71,7 @@ class BuyBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.getContentsError, data: onResult.data));
         } else {
-          setBuyFetch(BuyFetch(BuyState.getContentsSuccess,
-              version: onResult.data['version'],
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setBuyFetch(BuyFetch(BuyState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -93,25 +86,44 @@ class BuyBloc {
     );
   }
 
-  Future postContentBuy(BuildContext context,
-      {required BuyRequest? params}) async {
+  Future postContentBuy(BuildContext context, {required BuyRequest? params}) async {
     var type = FeatureType.other;
     setBuyFetch(BuyFetch(BuyState.loading));
     await _repos.reposPost(
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setBuyFetch(
-              BuyFetch(BuyState.postContentsError, data: onResult.data));
+          setBuyFetch(BuyFetch(BuyState.postContentsError, data: onResult.data));
         } else {
-          setBuyFetch(BuyFetch(BuyState.postContentsSuccess,
-              version: onResult.data['version'],
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setBuyFetch(BuyFetch(BuyState.postContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        setBuyFetch(
-            BuyFetch(BuyState.postContentsError, data: errorData.error));
+        setBuyFetch(BuyFetch(BuyState.postContentsError, data: errorData.error));
+      },
+      data: params,
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: UrlConstants.postBuyContent,
+      methodType: MethodType.post,
+      errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
+
+  Future createBankAccount(BuildContext context, {required BuyRequest? params}) async {
+    var type = FeatureType.other;
+    setBuyFetch(BuyFetch(BuyState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setBuyFetch(BuyFetch(BuyState.postContentsError, data: onResult.data));
+        } else {
+          setBuyFetch(BuyFetch(BuyState.postContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setBuyFetch(BuyFetch(BuyState.postContentsError, data: errorData.error));
       },
       data: params,
       withAlertMessage: true,

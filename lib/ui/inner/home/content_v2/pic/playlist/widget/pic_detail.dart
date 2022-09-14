@@ -62,14 +62,14 @@ class _PicDetailState extends State<PicDetail> {
                 sigmaX: 30,
                 sigmaY: 30,
                 // thumbnail: picData!.content[arguments].contentUrl,
-                thumbnail: widget.arguments?.fullThumbPath,
+                thumbnail: widget.arguments!.isApsara! ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
               ),
               // Content
               InteractiveViewer(
                 transformationController: transformationController,
                 child: CustomCacheImage(
                   // imageUrl: picData.content[arguments].contentUrl,
-                  imageUrl: widget.arguments?.fullThumbPath,
+                  imageUrl: widget.arguments!.isApsara! ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
                   imageBuilder: (_, imageProvider) {
                     return Container(
                       decoration: BoxDecoration(

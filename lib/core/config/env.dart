@@ -33,6 +33,17 @@ class Env {
     UrlConstants.postBuyContent,
     UrlConstants.getAllBank,
     UrlConstants.getBankByCode,
+    UrlConstants.createuserposts,
+    UrlConstants.userBankAccounts,
+    UrlConstants.myUserBankAccounts,
+    UrlConstants.transactionHistorys,
+    UrlConstants.detailTransactionHistorys,
+    UrlConstants.deleteUserBankAccounts,
+    UrlConstants.accountBalances,
+    UrlConstants.getuserposts,
+    UrlConstants.getUserPosts,
+    UrlConstants.userPin,
+    UrlConstants.getuserprofile,
   ];
 
   static final EnvData dev = EnvData(

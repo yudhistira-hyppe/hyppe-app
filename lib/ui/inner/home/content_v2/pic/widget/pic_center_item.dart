@@ -26,7 +26,7 @@ class PicCenterItem extends StatelessWidget {
       child: CustomBaseCacheImage(
         widthPlaceHolder: 80,
         heightPlaceHolder: 80,
-        imageUrl: "${data?.fullThumbPath}",
+        imageUrl: data!.isApsara! ? data!.mediaThumbEndPoint : "${data?.fullThumbPath}",
         imageBuilder: (context, imageProvider) => Container(
           margin: margin,
           // const EdgeInsets.symmetric(horizontal: 4.5),

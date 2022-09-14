@@ -41,7 +41,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/repo
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stories/screen.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
@@ -1163,6 +1163,28 @@ class ShowBottomSheet {
             ),
             padding: const EdgeInsets.all(0),
             child: onShowAllBankBottomSheet(),
+          );
+        });
+  }
+
+  onShowFilterAllTransaction(BuildContext _) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return Container(
+            margin: EdgeInsets.only(top: 30),
+            // height: height ?? SizeConfig.screenHeight! / 4,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: AllTransactionFilter(),
           );
         });
   }

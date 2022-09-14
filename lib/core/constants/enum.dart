@@ -43,6 +43,7 @@ enum ErrorType {
   register,
   login
 }
+enum TransactionType { sell, buy, withdrawal, none }
 enum VideoOrientation { landscape, portrait }
 enum WalletEventEnum { miniDana, acquiring }
 enum WalletResourceType { maskDanaId, balance, userKYC, transactionUrl, topUpUrl, oauthUrl }

@@ -2,9 +2,7 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/privacy.dart';
-
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
@@ -42,9 +40,11 @@ class ContentData {
   List<Cats>? cats;
   List<TagPeople>? tagPeople;
   int? likes;
-  double? saleAmount;
+  int? saleAmount;
   bool? saleView;
   bool? saleLike;
+  bool? isApsara;
+  String? apsaraId;
 
   ContentData(
       {this.metadata,
@@ -81,7 +81,9 @@ class ContentData {
       this.likes,
       this.saleAmount,
       this.saleView,
-      this.saleLike});
+      this.saleLike,
+      this.isApsara,
+      this.apsaraId});
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -106,7 +108,7 @@ class ContentData {
     mediaEndpoint = json['mediaEndpoint'];
     email = json['email'];
     updatedAt = json['updatedAt'];
-    username = json['username'];
+    username = json['username'] ?? '';
     fullThumbPath = concatThumbUri();
     fullContentPath = concatContentUri();
     contentType = _translateType(mediaType);
@@ -128,6 +130,8 @@ class ContentData {
     saleAmount = json['saleAmount'] ?? 0;
     saleView = json['saleView'] ?? false;
     saleLike = json['saleLike'] ?? false;
+    isApsara = json['isApsara'] ?? false;
+    isApsara = json['apsaraId'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -172,6 +176,8 @@ class ContentData {
     data['tagPeople'] = List<dynamic>.from(tagPeople!.map((x) => x.toJson()));
 
     data['likes'] = likes;
+    data['isApsara'] = isApsara;
+    data['apsaraId'] = apsaraId;
 
     return data;
   }
