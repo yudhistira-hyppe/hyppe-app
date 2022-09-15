@@ -48,7 +48,7 @@ import 'package:path_provider/path_provider.dart' as path;
 class PreUploadContentNotifier with ChangeNotifier {
   final _eventService = EventService();
   final _socketService = SocketService();
-  late UpdateContentsArgument _arguments;
+  UpdateContentsArgument? _arguments;
 
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -151,7 +151,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
-  UpdateContentsArgument get updateArguments => _arguments;
+  UpdateContentsArgument get updateArguments => _arguments!;
 
   set interestList(List<InterestData> val) {
     _interestList = val;

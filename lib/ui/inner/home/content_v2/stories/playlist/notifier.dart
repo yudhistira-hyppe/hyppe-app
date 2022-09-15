@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
@@ -8,6 +9,8 @@ import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 
 import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/reaction/bloc.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
@@ -187,6 +190,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
+    String urlApsara = '';
+    if (data.isApsara!) {
+      getVideoApsara(context, data.apsaraId!).then((value) {
+        urlApsara = value;
+      });
+    }
     List<StoryItem> _result = [];
     if (data.contentType == ContentType.image) {
       _result.add(
@@ -205,7 +214,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (data.contentType == ContentType.video) {
       _result.add(
         StoryItem.pageVideo(
-          data.fullContentPath ?? '',
+          urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
           controller: storyController,
           requestHeaders: {
             'post-id': data.postID ?? '',
@@ -218,6 +227,23 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
     notifyListeners();
     return _result;
+  }
+
+  Future getVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        return jsonMap['PlayUrl'].toString();
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+      return '';
+    }
   }
 
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {

@@ -189,7 +189,6 @@ class AppDependencies {
 
         ChangeNotifierProvider<ProfileCompletionNotifier>(create: (context) => ProfileCompletionNotifier()),
 
-        //ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier())
         ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
 
         ChangeNotifierProvider<ReviewBuyNotifier>(create: (context) => ReviewBuyNotifier()),
@@ -200,10 +199,10 @@ class AppDependencies {
 
         ChangeNotifierProvider<PaymentSummaryNotifier>(create: (context) => PaymentSummaryNotifier()),
 
-        // ChangeNotifierProvider<TransactionNotifier>(create: (context) => TransactionNotifier()),
+        ChangeNotifierProvider<TransactionNotifier>(create: (context) => TransactionNotifier()),
 
-        // ChangeNotifierProvider<PinAccountNotifier>(create: (context) => PinAccountNotifier()),
+        ChangeNotifierProvider<PinAccountNotifier>(create: (context) => PinAccountNotifier()),
 
-        // ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
+        ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
       ];
 }

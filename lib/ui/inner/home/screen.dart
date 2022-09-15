@@ -43,9 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     context.read<PreUploadContentNotifier>().onGetInterest(context);
 
-    if (mounted) {
-      setState(() => {});
-    }
+    // if (mounted) {
+    //   setState(() => {});
+    // }
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {
     //     final notifier = Provider.of<CacheService>(context, listen: false);
