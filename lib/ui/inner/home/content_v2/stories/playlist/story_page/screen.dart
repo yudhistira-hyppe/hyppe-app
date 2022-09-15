@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
@@ -37,13 +38,17 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
   List<StoryItem> _storyItems = [];
   AnimationController? _animationController;
   final StoryController _storyController = StoryController();
+  bool isLoading = false;
 
   @override
   void initState() {
+    isLoading = true;
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _storyItems = notifier.initializeData(context, _storyController, widget.data!);
+      notifier.initializeData(context, _storyController, widget.data!);
+      _storyItems = notifier.result;
+      isLoading = false;
     });
     if (widget.data != null) {
       _when = '${System().readTimestamp(
@@ -53,6 +58,8 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
       )}';
     }
     _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
+
+    setState(() {});
     super.initState();
   }
 
@@ -95,107 +102,141 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     // }
 
     if (_storyItems.isEmpty) {
-      return Center(
-        child: GestureDetector(
-          onTap: () => notifier.onCloseStory(mounted),
-          child: const CustomDynamicLinkErrorWidget(),
-        ),
-      );
+      return isLoading
+          ? Container(
+              color: Colors.black,
+              width: 100,
+              height: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                    height: 90,
+                    child: SizedBox(
+                      height: 10,
+                      child: CustomLoading(),
+                    ),
+                  ),
+                ],
+              ))
+          : Center(
+              child: GestureDetector(
+                onTap: () => notifier.onCloseStory(mounted),
+                child: const CustomDynamicLinkErrorWidget(),
+              ),
+            );
     }
 
-    return Stack(
-      children: [
-        StoryView(
-          inline: false,
-          repeat: false,
-          progressColor: kHyppeLightButtonText,
-          durationColor: kHyppeLightButtonText,
-          controller: _storyController,
-          storyItems: _storyItems,
-          progressPosition: ProgressPosition.top,
-          onStoryShow: (storyItem) async {
-            int pos = _storyItems.indexOf(storyItem);
-            notifier.setCurrentStory(pos);
-            if (pos > 0) {
-              // notifier.when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), fullCaption: true);
-              // setState(() => _when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), context, fullCaption: true));
-              setState(() {
-                _when = '${System().readTimestamp(
-                  DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
-                  context,
-                  fullCaption: true,
-                )}';
-              });
-            }
+    return isLoading
+        ? Container(
+            color: Colors.black,
+            width: 100,
+            height: 100,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                SizedBox(
+                  height: 90,
+                  child: SizedBox(
+                    height: 10,
+                    child: CustomLoading(),
+                  ),
+                ),
+              ],
+            ))
+        : Stack(
+            children: [
+              StoryView(
+                inline: false,
+                repeat: false,
+                progressColor: kHyppeLightButtonText,
+                durationColor: kHyppeLightButtonText,
+                controller: _storyController,
+                storyItems: _storyItems,
+                progressPosition: ProgressPosition.top,
+                onStoryShow: (storyItem) async {
+                  int pos = _storyItems.indexOf(storyItem);
+                  notifier.setCurrentStory(pos);
+                  if (pos > 0) {
+                    // notifier.when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), fullCaption: true);
+                    // setState(() => _when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), context, fullCaption: true));
+                    setState(() {
+                      _when = '${System().readTimestamp(
+                        DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
+                        context,
+                        fullCaption: true,
+                      )}';
+                    });
+                  }
 
-            _storyController.playbackNotifier.listen((value) {
-              if (value == PlaybackState.previous) {
-                if (widget.controller!.page == 0) {
-                  notifier.onCloseStory(mounted);
-                } else {
-                  widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                }
-              }
-            });
+                  _storyController.playbackNotifier.listen((value) {
+                    if (value == PlaybackState.previous) {
+                      if (widget.controller!.page == 0) {
+                        notifier.onCloseStory(mounted);
+                      } else {
+                        widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                      }
+                    }
+                  });
 
-            // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
-          },
-          onComplete: () {
-            widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-            final currentIndex = notifier.dataUserStories.length - 1;
-            final isLastPage = currentIndex == widget.controller!.page;
-            // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-            // notifier.pageController =
+                  // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
+                },
+                onComplete: () {
+                  widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                  final currentIndex = notifier.dataUserStories.length - 1;
+                  final isLastPage = currentIndex == widget.controller!.page;
+                  // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                  // notifier.pageController =
 
-            Timer(const Duration(seconds: 1), () {
-              // widget.onNextPage!();
-              // notifier.onCloseStory(mounted);
-              // notifier.nextPage();
-              // _storyController.next();
-              System().increaseViewCount(context, widget.data!).whenComplete(() {});
-            });
-            if (isLastPage) {
-              notifier.onCloseStory(mounted);
-            }
-          },
-          onVerticalSwipeComplete: (v) {
-            // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
-            if (v == Direction.down) notifier.onCloseStory(mounted);
-          },
-        ),
-        BuildTopView(
-          when: _when,
-          data: widget.data,
-          storyController: _storyController,
-        ),
-        Form(
-          child: BuildBottomView(
-            data: widget.data,
-            storyController: _storyController,
-            currentStory: notifier.currentStory,
-            animationController: _animationController,
-          ),
-        ),
-        AnimatedSwitcher(
-          duration: const Duration(milliseconds: 800),
-          transitionBuilder: (child, animation) {
-            animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
+                  Timer(const Duration(seconds: 1), () {
+                    // widget.onNextPage!();
+                    // notifier.onCloseStory(mounted);
+                    // notifier.nextPage();
+                    // _storyController.next();
+                    System().increaseViewCount(context, widget.data!).whenComplete(() {});
+                  });
+                  if (isLastPage) {
+                    notifier.onCloseStory(mounted);
+                  }
+                },
+                onVerticalSwipeComplete: (v) {
+                  // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
+                  if (v == Direction.down) notifier.onCloseStory(mounted);
+                },
+              ),
+              BuildTopView(
+                when: _when,
+                data: widget.data,
+                storyController: _storyController,
+              ),
+              Form(
+                child: BuildBottomView(
+                  data: widget.data,
+                  storyController: _storyController,
+                  currentStory: notifier.currentStory,
+                  animationController: _animationController,
+                ),
+              ),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 800),
+                transitionBuilder: (child, animation) {
+                  animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
 
-            return ScaleTransition(
-              scale: animation,
-              alignment: Alignment.center,
-              child: child,
-            );
-          },
-          child: notifier.linkCopied
-              ? const Center(
-                  child: LinkCopied(),
-                )
-              : const SizedBox.shrink(),
-        ),
-        BuildReplayCaption(data: widget.data),
-        ...notifier.buildItems(_animationController)
-      ],
-    );
+                  return ScaleTransition(
+                    scale: animation,
+                    alignment: Alignment.center,
+                    child: child,
+                  );
+                },
+                child: notifier.linkCopied
+                    ? const Center(
+                        child: LinkCopied(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+              BuildReplayCaption(data: widget.data),
+              ...notifier.buildItems(_animationController)
+            ],
+          );
   }
 }

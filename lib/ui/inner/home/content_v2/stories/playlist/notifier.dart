@@ -62,6 +62,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _fadeReaction = false;
   String? _reaction;
   final List<Item> _items = <Item>[];
+  List<StoryItem> _result = [];
+  List<StoryItem> get result => _result;
 
   int _currentStory = 0;
   int _storyParentIndex = 0;
@@ -92,6 +94,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   PageController? get pageController => _pageController;
   List<ContentData> get dataUserStories => _dataUserStories;
   TextEditingController get textEditingController => _textEditingController;
+
+  set result(List<StoryItem> val) {
+    _result = val;
+    notifyListeners();
+  }
 
   set reaction(String? val) {
     _reaction = val;
@@ -189,14 +196,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     animationController.forward();
   }
 
-  List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
-    String urlApsara = '';
-    if (data.isApsara!) {
-      getVideoApsara(context, data.apsaraId!).then((value) {
-        urlApsara = value;
-      });
-    }
-    List<StoryItem> _result = [];
+  // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
+  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
+    // List<StoryItem> _result = [];
+    _result = [];
     if (data.contentType == ContentType.image) {
       _result.add(
         StoryItem.pageImage(
@@ -212,6 +215,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       );
     }
     if (data.contentType == ContentType.video) {
+      String urlApsara = '';
+      if (data.isApsara!) {
+        await getVideoApsara(context, data.apsaraId!).then((value) {
+          urlApsara = value;
+        });
+      }
       _result.add(
         StoryItem.pageVideo(
           urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
@@ -226,7 +235,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       );
     }
     notifyListeners();
-    return _result;
   }
 
   Future getVideoApsara(BuildContext context, String apsaraId) async {

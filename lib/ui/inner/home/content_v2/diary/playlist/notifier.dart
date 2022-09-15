@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
+import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
@@ -33,6 +36,9 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   double? get currentPage => _currentPage;
   bool get forcePause => _forcePause;
 
+  List<StoryItem> _result = [];
+  List<StoryItem> get result => _result;
+
   setCurrentDiary(int val) => _currentDiary = val;
 
   set currentPage(double? val) {
@@ -50,14 +56,25 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  set result(List<StoryItem> val) {
+    _result = val;
+    notifyListeners();
+  }
+
   ////////////////////////////////////////////////////////
   void onUpdate() => notifyListeners();
 
-  List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
-    List<StoryItem> _result = [];
+  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
+    _result = [];
+    String urlApsara = '';
+    if (data.isApsara!) {
+      await getVideoApsara(context, data.apsaraId!).then((value) {
+        urlApsara = value;
+      });
+    }
     _result.add(
       StoryItem.pageVideo(
-        data.fullContentPath ?? '',
+        urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
         // 'https://multiplatform-f.akamaihd.net/i/multi/will/bunny/big_buck_bunny_,640x360_400,640x360_700,640x360_1000,950x540_1500,.f4v.csmil/master.m3u8',
         requestHeaders: {
           'post-id': data.postID ?? '',
@@ -69,7 +86,23 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       ),
     );
     notifyListeners();
-    return _result;
+  }
+
+  Future getVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        return jsonMap['PlayUrl'].toString();
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+      return '';
+    }
   }
 
   double degreeToRadian(double deg) => deg * pi / 180;
