@@ -46,7 +46,6 @@ class _SearchContentState extends State<SearchContent> {
             try {
               return GestureDetector(
                 onTap: () {
-                  print('asdasd');
                   context.read<SearchNotifier>().navigateToSeeAllScreen(context, widget.content!, index);
                 },
                 child: Container(
@@ -58,7 +57,9 @@ class _SearchContentState extends State<SearchContent> {
                       height: double.infinity,
                       featureType: widget.featureType!,
                       isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                      thumbnail: System().showUserPicture(widget.featureType != FeatureType.pic ? widget.content![index].mediaThumbEndPoint : widget.content![index].mediaEndpoint)!,
+                      thumbnail: widget.content![index].isApsara!
+                          ? widget.content![index].mediaThumbEndPoint!
+                          : System().showUserPicture(widget.featureType != FeatureType.pic ? widget.content![index].mediaThumbEndPoint : widget.content![index].mediaEndpoint)!,
                     ),
                   ),
                 ),

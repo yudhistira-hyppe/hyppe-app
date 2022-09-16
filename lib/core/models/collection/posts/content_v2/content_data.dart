@@ -40,7 +40,7 @@ class ContentData {
   List<Cats>? cats;
   List<TagPeople>? tagPeople;
   int? likes;
-  int? saleAmount;
+  num? saleAmount;
   bool? saleView;
   bool? saleLike;
   bool? isApsara;

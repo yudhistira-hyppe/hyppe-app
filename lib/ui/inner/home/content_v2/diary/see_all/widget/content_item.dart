@@ -67,7 +67,7 @@ class ContentItem extends StatelessWidget {
                       return InkWell(
                         onTap: () => notifier.navigateToShortVideoPlayer(context, index),
                         child: CustomBaseCacheImage(
-                          imageUrl: "${data?.fullThumbPath}",
+                          imageUrl: data!.isApsara! ? data.mediaThumbEndPoint : "${data.fullThumbPath}",
                           imageBuilder: (context, imageProvider) => Container(
                             alignment: Alignment.bottomLeft,
                             child: CustomBalloonWidget(
@@ -81,7 +81,7 @@ class ContentItem extends StatelessWidget {
                                   ),
                                   fourPx,
                                   CustomTextWidget(
-                                    textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
+                                    textToDisplay: System().formatterNumber(data.insight?.likes ?? 0),
                                     textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
                                   )
                                 ],

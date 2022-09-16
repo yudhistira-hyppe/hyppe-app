@@ -1,15 +1,14 @@
 import 'dart:async';
-
 import 'package:flutter_countdown_timer/countdown_controller.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -29,13 +28,6 @@ class PinAccountNotifier extends ChangeNotifier {
   Timer? _myTimer2;
   bool _loading = false;
   bool pinCreate = false;
-
-  LocalizationModelV2 language = LocalizationModelV2();
-
-  translate(LocalizationModelV2 translate) {
-    language = translate;
-    notifyListeners();
-  }
 
   CountdownController? get countdownController => _countdownController;
   bool get confirm => _confirm;
@@ -99,6 +91,7 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   void pinChecking(context, String val) {
+    var setPin = SharedPreference().readStorage(SpKeys.setPin);
     if (confirm == false) {
       _pin1 = val;
       if (_pin1.length == 6) {
@@ -173,7 +166,7 @@ class PinAccountNotifier extends ChangeNotifier {
     }
   }
 
-  Future checkOtp(context) async {
+  Future checkOtp(BuildContext context) async {
     bool connect = await System().checkConnections();
     if (connect) {
       loading = true;
@@ -190,7 +183,7 @@ class PinAccountNotifier extends ChangeNotifier {
 
       if (fetch.postsState == TransactionState.sendVerificationSuccess) {
         pinCreate = true;
-        context.read<SelfProfileNotifier>().user.profile!.pinCreate = true;
+        SharedPreference().writeStorage(SpKeys.setPin, 'true');
         backHome();
         ShowBottomSheet().onShowColouredSheet(
           context,
@@ -215,11 +208,12 @@ class PinAccountNotifier extends ChangeNotifier {
     }
   }
 
-  String resendString() {
+  String resendString(BuildContext context) {
+    var lang = context.read<TranslateNotifierV2>().translate;
     if (_timer != "00:00") {
-      return "${language.pleaseWaitFor}" " $_timer";
+      return "${lang.pleaseWaitFor}" " $_timer";
     } else {
-      return "${language.resendNewCode}";
+      return "${lang.resendNewCode}";
     }
   }
 

@@ -28,4 +28,5 @@ class SpKeys {
 
   static const String onlineVersion = 'onlineVersion';
   static const String countAds = '0';
+  static const String setPin = 'setPin';
 }

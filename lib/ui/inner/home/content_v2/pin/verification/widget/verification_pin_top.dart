@@ -1,12 +1,14 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/widget/custom_rectangle_v_input.dart';
-
 import 'package:provider/provider.dart';
 
 class VerificationPinTop extends StatefulWidget {
@@ -19,8 +21,8 @@ class VerificationPinTop extends StatefulWidget {
 class _VerificationPinTopState extends State<VerificationPinTop> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<PinAccountNotifier>(
-      builder: (_, notifier, __) => Column(
+    return Consumer2<PinAccountNotifier, TranslateNotifierV2>(
+      builder: (_, notifier, notifier2, __) => Column(
         // mainAxisSize: MainAxisSize.min,
         children: [
           const CustomIconWidget(
@@ -30,7 +32,7 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
           twentyPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: notifier.language.pinTopText! + " ${notifier.email}",
+            textToDisplay: notifier2.translate.pinTopText! + " ${notifier.email}",
           ),
           fortyTwoPx,
           CustomRectangleVInput(),
@@ -40,45 +42,46 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
             children: [
               CustomTextWidget(
                 textStyle: Theme.of(context).textTheme.caption,
-                textToDisplay: notifier.language.didntReceiveTheCode ?? '',
+                textToDisplay: notifier2.translate.didntReceiveTheCode ?? '',
               ),
               fourPx,
               InkWell(
                 onTap: notifier.resendCode(context),
                 child: CustomTextWidget(
                   textOverflow: TextOverflow.visible,
-                  textToDisplay: notifier.resendString(),
+                  textToDisplay: notifier.resendString(context),
                   textStyle: notifier.resendStyle(context),
                 ),
               )
             ],
           ),
           twentyFourPx,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomTextWidget(
-                textStyle: Theme.of(context).textTheme.bodyText1,
-                textToDisplay: notifier.language.thisPageWillAutomaticallyCloseIn!,
-              ),
-              TweenAnimationBuilder<Duration>(
-                  duration: Duration(minutes: 1),
-                  tween: Tween(begin: Duration(minutes: 1), end: Duration.zero),
-                  onEnd: () {
-                    notifier.backHome();
-                  },
-                  builder: (BuildContext context, Duration value, Widget? child) {
-                    final minutes = value.inMinutes;
-                    final seconds = value.inSeconds % 60;
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: CustomTextWidget(
-                        textToDisplay: ' ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds',
-                        textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }),
-            ],
+          SizedBox(
+            width: 300 * SizeConfig.scaleDiagonal,
+            child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: "${notifier2.translate.thisPageWillAutomaticallyCloseIn}",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  WidgetSpan(
+                    child: TweenAnimationBuilder<Duration>(
+                        duration: const Duration(minutes: 10),
+                        tween: Tween(begin: const Duration(minutes: 10), end: Duration.zero),
+                        onEnd: () {
+                          notifier.backHome();
+                        },
+                        builder: (BuildContext context, Duration value, Widget? child) {
+                          final minutes = value.inMinutes;
+                          final seconds = value.inSeconds % 60;
+                          return CustomTextWidget(
+                            textToDisplay: ' ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds',
+                            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                          );
+                        }),
+                  ),
+                ])),
           ),
         ],
       ),

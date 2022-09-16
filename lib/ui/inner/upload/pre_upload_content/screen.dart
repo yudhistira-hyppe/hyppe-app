@@ -43,13 +43,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     super.dispose();
   }
 
-  @override
-  void initState() {
-    final _notifier = context.read<PreUploadContentNotifier>();
-    // Provider.of<PreUploadContentNotifier>(context, listen: false);
-    _notifier.setUpdateArguments = widget.arguments;
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   final _notifier = context.read<PreUploadContentNotifier>();
+  //   // Provider.of<PreUploadContentNotifier>(context, listen: false);
+  //   _notifier.setUpdateArguments = widget.arguments;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

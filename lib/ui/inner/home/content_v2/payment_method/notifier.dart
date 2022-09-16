@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/buy/bloc.dart';
 import 'package:hyppe/core/bloc/buy/state.dart';
@@ -120,8 +118,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
         salelike: reviewBuyNotifier.data!.saleLike,
         saleview: reviewBuyNotifier.data!.saleView);
 
-    print(postId[0].totalAmount);
-    inspect(params);
+    print('data: ${params.toJson()}.');
 
     final notifier = BuyBloc();
     await notifier.postContentBuy(context, params: params);

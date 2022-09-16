@@ -180,6 +180,7 @@ class SelfProfileNotifier with ChangeNotifier {
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       user.profile = usersFetch.data;
+      SharedPreference().writeStorage(SpKeys.setPin, user.profile!.pinCreate!.toString());
       notifyListeners();
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);

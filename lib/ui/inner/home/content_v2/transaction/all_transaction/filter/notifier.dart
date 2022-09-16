@@ -134,18 +134,18 @@ class FilterTransactionNotifier extends ChangeNotifier {
     DateTime dateToday = DateTime.now();
     String date = dateToday.toString().substring(0, 10);
     if (last7DaysSelect) {
-      var endDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 7);
-      final newEndDate = endDate.toString().substring(0, 10);
-      _param.addAll({"startdate": date, "enddate": newEndDate});
+      var start = DateTime(dateToday.year, dateToday.month, dateToday.day - 7);
+      final newStartDate = start.toString().substring(0, 10);
+      _param.addAll({"startdate": newStartDate, "enddate": date});
       newFilterList.add(
         {'id': 1, 'selected': true, 'name': 'Last 7 Days'},
       );
     }
 
     if (last30DaysSelect) {
-      var endDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
-      final newEndDate = endDate.toString().substring(0, 10);
-      _param.addAll({"startdate": date, "enddate": newEndDate});
+      var startDate = DateTime(dateToday.year, dateToday.month, dateToday.day - 30);
+      final newStartDate = startDate.toString().substring(0, 10);
+      _param.addAll({"startdate": newStartDate, "enddate": date});
       newFilterList.add(
         {'id': 1, 'selected': true, 'name': 'Last 30 Days'},
       );

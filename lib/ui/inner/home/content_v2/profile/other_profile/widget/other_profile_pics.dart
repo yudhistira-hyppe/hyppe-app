@@ -26,10 +26,10 @@ class OtherProfilePics extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
                         child: CustomContentModeratedWidget(
-                            width: double.infinity,
-                            height: double.infinity,
-                            isSafe: true,//notifier.postData!.data.listPic[index].isSafe!,
-                            thumbnail: System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint)!,
+                          width: double.infinity,
+                          height: double.infinity,
+                          isSafe: true, //notifier.postData!.data.listPic[index].isSafe!,
+                          thumbnail: notifier.item1!.pics![index].isApsara! ? notifier.item1!.pics![index].mediaThumbEndPoint! : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint)!,
                         ),
                       ),
                     );
@@ -39,8 +39,7 @@ class OtherProfilePics extends StatelessWidget {
                       width: double.infinity,
                       height: double.infinity,
                       decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
+                        image: DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
                       ),
                     );
                   }

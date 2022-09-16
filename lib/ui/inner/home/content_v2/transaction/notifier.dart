@@ -141,6 +141,7 @@ class TransactionNotifier extends ChangeNotifier {
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.getHistorySuccess) {
+        if (_skip == 0) dataTransaction = [];
         if (dataAllTransaction!.isEmpty) {
           fetch.data.forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
           context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;

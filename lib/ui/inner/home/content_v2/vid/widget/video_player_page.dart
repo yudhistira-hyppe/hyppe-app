@@ -136,6 +136,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   Future _initAds() async {
+    print('masuk iklan');
     final email = SharedPreference().readStorage(SpKeys.email);
 
     try {
@@ -233,7 +234,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     }
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
 
-    getCountVid();
+    // getCountVid();
     print(countAds);
     await _initAds();
     // if (countAds < 1) {
@@ -247,10 +248,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   void _userVideo(bool autoPlay) async {
-    // print('test iklan data');
-    // print(_clipsData!.ads[0].playingAt);
+    print('test iklan data');
+    print(widget.videoData?.postID);
     // print(_clipsData!.ads[0].rollDuration);
-    // print(_clipsData!.ads[0].rollUri);
+    print(_clipsData!.ads[1].rollUri);
+    print(_clipsData!.ads[1].playingAt);
     // print(_clipsData!.ads[1].playingAt);
     // print(_clipsData!.ads[1].rollDuration);
     // print(_clipsData!.ads[1].rollUri);
@@ -266,7 +268,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     // });
 
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
-      autoDispose: false,
+      autoDispose: true,
       autoPlay: autoPlay,
       fit: BoxFit.contain,
       showPlaceholderUntilPlay: true,
@@ -298,6 +300,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       ),
     );
 
+    print('ini dataSource');
+    print(dataSource.adsConfiguration!.postID);
+    print(dataSource.adsConfiguration!.rolls);
+
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
 
     try {
@@ -309,6 +315,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     _betterPlayerController?.addEventsListener(
       (event) {
+        print('ini event');
+        print(event.betterPlayerEventType);
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
         } else if (event.betterPlayerEventType == BetterPlayerEventType.openFullscreen) {
@@ -325,6 +333,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   void _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll? roll) async {
+    print('roll roll');
+    print(roll);
     if (roll != null) {
       if (_betterPlayerControllerMap.containsKey(roll.rollUri)) {
         'Ads video controller already exists'.logger();
@@ -339,7 +349,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           enablePip: false,
           enableMute: false,
           enableSkips: false,
-          skipAdsButtonAt: 11,
+          skipAdsButtonAt: 7,
           enableQualities: false,
           enableAudioTracks: false,
           enableProgressBarDrag: false,

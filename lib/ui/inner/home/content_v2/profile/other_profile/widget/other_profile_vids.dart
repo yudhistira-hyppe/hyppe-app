@@ -27,11 +27,12 @@ class OtherProfileVids extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
                         child: CustomContentModeratedWidget(
-                            width: double.infinity,
-                            height: double.infinity,
-                            featureType: FeatureType.vid,
-                            isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                            thumbnail: System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint)!,
+                          width: double.infinity,
+                          height: double.infinity,
+                          featureType: FeatureType.vid,
+                          isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
+                          thumbnail:
+                              notifier.item1!.vids![index].isApsara! ? notifier.item1!.vids![index].mediaThumbEndPoint! : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint)!,
                         ),
                       ),
                     );
@@ -41,8 +42,7 @@ class OtherProfileVids extends StatelessWidget {
                       width: double.infinity,
                       height: double.infinity,
                       decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
+                        image: DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
                       ),
                     );
                   }

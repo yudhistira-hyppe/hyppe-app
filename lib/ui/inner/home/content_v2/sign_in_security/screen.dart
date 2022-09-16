@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HyppeHomeSignAndSecurity extends StatelessWidget {
+  var setPin = SharedPreference().readStorage(SpKeys.setPin);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -45,7 +48,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
               SettingTile(
                 icon: 'lock-pin.svg',
                 onTap: () => Routing().move(Routes.pinScreen),
-                caption: 'PIN',
+                caption: setPin == 'true' ? notifier.translate.changePin! : notifier.translate.setPin!,
               ),
             ],
           ),

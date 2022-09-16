@@ -1,10 +1,10 @@
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
-import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:provider/provider.dart';
 
 class VerificationPinBottom extends StatelessWidget {
@@ -12,8 +12,8 @@ class VerificationPinBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PinAccountNotifier>(
-      builder: (_, notifier, __) => Padding(
+    return Consumer2<PinAccountNotifier, TranslateNotifierV2>(
+      builder: (_, notifier, notifier2, __) => Padding(
         padding: const EdgeInsets.all(16.0),
         child: CustomElevatedButton(
           width: SizeConfig.screenWidth,
@@ -31,7 +31,7 @@ class VerificationPinBottom extends StatelessWidget {
           child: notifier.loading
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: notifier.language.verify!,
+                  textToDisplay: notifier2.translate.verify!,
                   textStyle: notifier.verifyTextColor(context),
                 ),
         ),

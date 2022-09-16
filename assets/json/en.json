@@ -586,6 +586,15 @@
   "youDontHaveAnyTransactionsYet" : "You don't have any transactions yet",
   "enterThePinThatMatchesThePinYouFilledInEarlier" : "*Enter the PIN that matches the PIN you filled in earlier",
   "thisPageWillAutomaticallyCloseIn" : "This page will automatically close in ",
-  "allTransaction":"All Transactions"
+  "allTransaction":"All Transactions",
+  "setPin" : "Set PIN",
+  "changePin" : "Change PIN",
+  "forgotPin" : "Forgot PIN?",
+  "enterYourCurrentPin" : "Enter Your Current PIN",
+  "enterYour6DigitHyppePin" : "Enter your 6 digit Hyppe PIN",
+  "confirmNewPin" : "Confirm New PIN",
+  "confirmPin" : "Confirm PIN",
+  "enterNewPin" : "Enter New PIN"
+  
 
 }

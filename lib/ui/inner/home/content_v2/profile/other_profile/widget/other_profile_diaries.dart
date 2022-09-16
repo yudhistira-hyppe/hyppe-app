@@ -27,11 +27,13 @@ class OtherProfileDiaries extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
                         child: CustomContentModeratedWidget(
-                            width: double.infinity,
-                            height: double.infinity,
-                            featureType: FeatureType.diary,
-                            isSafe: true,//notifier.postData!.data.listDiary[index].isSafe!,
-                            thumbnail: System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint)!,
+                          width: double.infinity,
+                          height: double.infinity,
+                          featureType: FeatureType.diary,
+                          isSafe: true, //notifier.postData!.data.listDiary[index].isSafe!,
+                          thumbnail: notifier.item1!.diaries![index].isApsara!
+                              ? notifier.item1!.diaries![index].mediaThumbEndPoint!
+                              : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint)!,
                         ),
                       ),
                     );
@@ -41,8 +43,7 @@ class OtherProfileDiaries extends StatelessWidget {
                       width: double.infinity,
                       height: double.infinity,
                       decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
+                        image: DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.fill),
                       ),
                     );
                   }

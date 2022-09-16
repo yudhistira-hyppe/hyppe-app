@@ -582,6 +582,14 @@ class LocalizationModelV2 {
   String? enterThePinThatMatchesThePinYouFilledInEarlier;
   String? thisPageWillAutomaticallyCloseIn;
   String? allTransaction;
+  String? setPin;
+  String? changePin;
+  String? forgotPin;
+  String? enterYourCurrentPin;
+  String? enterYour6DigitHyppePin;
+  String? confirmNewPin;
+  String? enterNewPin;
+  String? confirmPin;
   String? forr;
   String? from;
   String? remove;
@@ -1170,6 +1178,14 @@ class LocalizationModelV2 {
     this.enterThePinThatMatchesThePinYouFilledInEarlier,
     this.thisPageWillAutomaticallyCloseIn,
     this.allTransaction,
+    this.setPin,
+    this.changePin,
+    this.forgotPin,
+    this.enterYourCurrentPin,
+    this.enterYour6DigitHyppePin,
+    this.confirmNewPin,
+    this.enterNewPin,
+    this.confirmPin,
     this.forr,
     this.from,
     this.remove,
@@ -1774,6 +1790,14 @@ class LocalizationModelV2 {
     enterThePinThatMatchesThePinYouFilledInEarlier = json['enterThePinThatMatchesThePinYouFilledInEarlier'];
     thisPageWillAutomaticallyCloseIn = json['thisPageWillAutomaticallyCloseIn'];
     allTransaction = json['allTransaction'];
+    setPin = json['setPin'];
+    changePin = json['changePin'];
+    forgotPin = json['forgotPin'];
+    enterYourCurrentPin = json['enterYourCurrentPin'];
+    enterYour6DigitHyppePin = json['enterYour6DigitHyppePin'];
+    confirmNewPin = json['confirmNewPin'];
+    enterNewPin = json['enterNewPin'];
+    confirmPin = json['confirmPin'];
     forr = json['forr'];
     from = json['from'];
     remove = json['Remove'];

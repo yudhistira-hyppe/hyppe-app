@@ -585,5 +585,14 @@
   "youDontHaveAnyTransactionsYet" : "Anda belum memiliki transaksi apapun",
   "enterThePinThatMatchesThePinYouFilledInEarlier": "Masukkan PIN yang sesuai dengan PIN yang Anda isi tadi",
   "thisPageWillAutomaticallyCloseIn" : "Halaman ini akan ditutup secara otomatis di",
-  "allTransaction" : "Semua Transaction"
+  "allTransaction" : "Semua Transaction",
+  "setPin" : "Atur PIN",
+  "changePin" : "Ubah PIN",
+  "forgotPin" : "Lupa PIN?",
+  "enterYourCurrentPin" : "Masukkan PIN Anda Saat Ini",
+  "enterYour6DigitHyppePin" : "Masukkan 6 digit Hyppe PIN Anda",
+  "confirmNewPin" : "Konfirmasi PIN Baru",
+  "confirmPin" : "Konfirmasi PIN",
+  "enterNewPin" : "Masukan PIN Baru"
+  
 }

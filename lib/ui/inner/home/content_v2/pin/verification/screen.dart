@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/widget/verification_pin_bottom.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/widget/verification_pin_top.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
-import 'package:hyppe/ui/outer/sign_up/contents/pin/widget/sign_up_pin_top.dart';
-import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
 import 'package:provider/provider.dart';
-
 // import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 
 // import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -47,8 +44,8 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Consumer<PinAccountNotifier>(
-      builder: (_, notifier, __) => KeyboardDisposal(
+    return Consumer2<PinAccountNotifier, TranslateNotifierV2>(
+      builder: (_, notifier, notifier2, __) => KeyboardDisposal(
         // onTap: () => notifier.unFocusingNode(),
         child: Scaffold(
           extendBodyBehindAppBar: true,
@@ -59,7 +56,7 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
             ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.verificationCode!,
+              textToDisplay: notifier2.translate.verificationCode!,
               textStyle: Theme.of(context).textTheme.headline6,
             ),
           ),

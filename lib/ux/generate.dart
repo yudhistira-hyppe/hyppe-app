@@ -194,6 +194,7 @@ class Generate {
 
       case Routes.reviewBuyContent:
         return MaterialPageRoute(builder: (_) => ReviewBuyContentScreen(arguments: settings.arguments as ContentData));
+
       case Routes.paymentScreen:
         return MaterialPageRoute(builder: (_) => const PaymentScreen());
 
@@ -205,16 +206,22 @@ class Generate {
 
       case Routes.transaction:
         return MaterialPageRoute(builder: (_) => const Transaction());
+
       case Routes.allTransaction:
         return MaterialPageRoute(builder: (_) => const AllTransaction());
+
       case Routes.bankAccount:
         return MaterialPageRoute(builder: (_) => const BankAccount());
+
       case Routes.addBankAccount:
         return MaterialPageRoute(builder: (_) => const AddBankAccount());
+
       case Routes.detailTransaction:
         return MaterialPageRoute(builder: (_) => const DetailTransaction());
+
       case Routes.pinScreen:
         return MaterialPageRoute(builder: (_) => const PinScreen());
+
       case Routes.verificationPinScreen:
         return MaterialPageRoute(builder: (_) => const VerificationPin());
     }
