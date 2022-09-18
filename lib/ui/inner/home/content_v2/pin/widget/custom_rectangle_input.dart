@@ -13,7 +13,11 @@ class CustomRectangleInput extends StatelessWidget {
           children: [
             OtpFieldWidget(
               lengthPinCode: 6,
-              controller: !notifier.confirm ? notifier.pin1Controller : notifier.pin2Controller,
+              controller: !notifier.checkPin && !notifier.confirm
+                  ? notifier.pin3Controller
+                  : !notifier.confirm
+                      ? notifier.pin1Controller
+                      : notifier.pin2Controller,
               onCompleted: (w) {},
               onChanged: (val) {
                 notifier.pinChecking(context, val);

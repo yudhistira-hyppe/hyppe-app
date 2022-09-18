@@ -63,7 +63,7 @@ class _PinScreenState extends State<PinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: setPin == 'true' && !notifier.confirm
+                textToDisplay: setPin == 'true' && !notifier.confirm && !notifier.checkPin
                     ? notifier2.translate.enterYourCurrentPin!
                     : !notifier.confirm
                         ? notifier2.translate.enterNewPin!

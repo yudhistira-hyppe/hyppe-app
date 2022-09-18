@@ -22,12 +22,14 @@ class PinAccountNotifier extends ChangeNotifier {
   bool _matchingPin = true;
   String _pin1 = '';
   String _pin2 = '';
+  String _pin3 = '';
   String _timer = "";
   String _timer2 = "";
   Timer? _myTimer;
   Timer? _myTimer2;
   bool _loading = false;
   bool pinCreate = false;
+  bool checkPin = false;
 
   CountdownController? get countdownController => _countdownController;
   bool get confirm => _confirm;
@@ -38,6 +40,7 @@ class PinAccountNotifier extends ChangeNotifier {
   String get timer2 => _timer2;
   TextEditingController pin1Controller = TextEditingController();
   TextEditingController pin2Controller = TextEditingController();
+  TextEditingController pin3Controller = TextEditingController();
   TextEditingController _otpController = TextEditingController();
   TextEditingController get otpController => _otpController;
 
@@ -93,10 +96,28 @@ class PinAccountNotifier extends ChangeNotifier {
   void pinChecking(context, String val) {
     var setPin = SharedPreference().readStorage(SpKeys.setPin);
     if (confirm == false) {
-      _pin1 = val;
-      if (_pin1.length == 6) {
-        Routing().move(Routes.pinScreen);
-        confirm = true;
+      if (setPin == 'true') {
+        if (checkPin) {
+          _pin1 = val;
+          if (_pin1.length == 6) {
+            Routing().move(Routes.pinScreen);
+            confirm = true;
+          }
+        } else {
+          _pin3 = val;
+          if (_pin3.length == 6) {
+            sendVerificationMail(context, checkPin: true).then((value) {
+              checkPin = value;
+              Routing().move(Routes.pinScreen);
+            });
+          }
+        }
+      } else {
+        _pin1 = val;
+        if (_pin1.length == 6) {
+          Routing().move(Routes.pinScreen);
+          confirm = true;
+        }
       }
     } else {
       _pin2 = val;
@@ -126,11 +147,12 @@ class PinAccountNotifier extends ChangeNotifier {
       pin1Controller.clear();
     }
     matchingPin = true;
+    checkPin = false;
     resetTimer();
     Routing().moveBack();
   }
 
-  Future sendVerificationMail(BuildContext context, {bool resend = false}) async {
+  Future sendVerificationMail(BuildContext context, {bool resend = false, bool checkPin = false}) async {
     bool connect = await System().checkConnections();
     if (connect) {
       startTimer();
@@ -141,8 +163,11 @@ class PinAccountNotifier extends ChangeNotifier {
         type = 'CREATE_PIN';
       }
       Map param = {};
+
       if (resend) {
         param = {"type": "CHANGE_PIN", "event": "NOTIFY_OTP", "status": "NOTIFY"};
+      } else if (checkPin) {
+        param = {"pin": _pin3, "type": "CECK_PIN", "event": "CECK_PIN", "status": "INITIAL"};
       } else {
         param = {"pin": _pin2, "type": type, "event": type, "status": "INITIAL"};
       }
@@ -151,7 +176,11 @@ class PinAccountNotifier extends ChangeNotifier {
       await notifier.sendVerificationPin(context, params: param);
       final fetch = notifier.transactionFetch;
 
-      if (fetch.postsState == TransactionState.sendVerificationSuccess) {}
+      if (fetch.postsState == TransactionState.sendVerificationSuccess) {
+        if (checkPin) {
+          return true;
+        }
+      }
 
       // if (fetch.postsState == TransactionState.getHistoryError) {
       //   if (fetch.data != null) {
