@@ -418,6 +418,9 @@ class StoryView extends StatefulWidget {
   /// a [ListView] or [Column]) then set this to `true`.
   final bool inline;
 
+  ///Callback when you double click the view story
+  final Function? onDouble;
+
   // Controls the playback of the stories
   final StoryController controller;
 
@@ -431,6 +434,7 @@ class StoryView extends StatefulWidget {
     required this.controller,
     required this.progressColor,
     required this.durationColor,
+    this.onDouble,
     this.onComplete,
     this.onStoryShow,
     this.progressPosition = ProgressPosition.top,
@@ -784,6 +788,13 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 onTapCancel: () {
                   print('onTapCancel');
                   widget.controller.play();
+                },
+                onDoubleTap: (){
+                  if(widget.onDouble != null){
+                    widget.onDouble!();
+                  }
+
+                  print('onDouble');
                 },
                 onTap: () {
                   if (widget.nextDebouncer == true) {

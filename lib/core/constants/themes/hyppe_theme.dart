@@ -34,7 +34,7 @@ ThemeData hyppeLightTheme() {
     chipTheme: _lightChipThemeData,
     bottomSheetTheme: _lightBottomSheetThemeData,
     visualDensity: VisualDensity.adaptivePlatformDensity,
-    textSelectionHandleColor: kHyppePrimary,
+    // textSelectionHandleColor: kHyppePrimary,
   );
 }
 
