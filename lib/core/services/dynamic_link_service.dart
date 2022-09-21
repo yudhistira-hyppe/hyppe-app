@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
@@ -115,6 +116,14 @@ class DynamicLinkService {
             _routing.moveReplacement(
               _path,
               argument: PicDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
+            );
+            break;
+          case Routes.picSlideDetailPreview:
+            _routing.moveReplacement(
+              _path,
+              argument: SlidedPicDetailScreenArgument()
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );

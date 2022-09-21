@@ -23,6 +23,8 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 
+import '../slide/notifier.dart';
+
 class PicDetailSlider extends StatelessWidget {
   final ContentData? picData;
   final bool onDetail;
@@ -38,7 +40,7 @@ class PicDetailSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     // final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
-    return Consumer<PicDetailNotifier>(
+    return Consumer<SlidedPicDetailNotifier>(
       builder: (_, notifier, __) => AspectRatio(
         aspectRatio: 16 / 9,
         child: Stack(
@@ -56,6 +58,7 @@ class PicDetailSlider extends StatelessWidget {
                   ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
+                // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
               ),
             ),
 

@@ -793,16 +793,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                   if(widget.onDouble != null){
                     widget.onDouble!();
                   }
-
-                  print('onDouble');
                 },
                 onTap: () {
                   if (widget.nextDebouncer == true) {
                     widget.controller.next();
                   } else {
                     if (statusPlay) {
+                      print('pause');
                       widget.controller.pause();
                     } else {
+                      print('play');
                       widget.controller.play();
                     }
                   }
@@ -811,6 +811,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                   widget.controller.pause();
                 },
                 onLongPressEnd: (de) {
+                  print('play1');
                   widget.controller.play();
                 },
                 // onTapDown: (details) {
@@ -860,11 +861,14 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 onVerticalDragStart: widget.onVerticalSwipeComplete == null
                     ? null
                     : (details) {
+                  print("pause1");
                         widget.controller.pause();
                       },
                 onVerticalDragCancel: widget.onVerticalSwipeComplete == null
                     ? null
                     : () {
+                  print('play2');
+                  if (statusPlay)
                         widget.controller.play();
                       },
                 onVerticalDragUpdate: widget.onVerticalSwipeComplete == null
@@ -879,6 +883,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 onVerticalDragEnd: widget.onVerticalSwipeComplete == null
                     ? null
                     : (details) {
+                  print('play3');
                         widget.controller.play();
                         // finish up drag cycle
                         if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {

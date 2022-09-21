@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
@@ -95,7 +97,9 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
 
                               return PicCenterItem(
                                 data: notifier.pic?[index],
-                                onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
+                                // onTap: () => context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, notifier.pic![index]),
+                                // onTap: () => context.read<PicDetailNotifier>().navigateToDetailPic(notifier.pic![index]),
+                                onTap: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index),
                                 margin: const EdgeInsets.symmetric(horizontal: 4.5),
                               );
 

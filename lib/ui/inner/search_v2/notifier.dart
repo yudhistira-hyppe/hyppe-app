@@ -22,6 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 
+import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+
 class SearchNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -160,7 +162,7 @@ class SearchNotifier with ChangeNotifier {
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data[index]));
       if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble()));
-      if (pageIndex == 2) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: data[index]));
+      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble()));
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         _routing.moveBack();
