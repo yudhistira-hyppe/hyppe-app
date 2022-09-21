@@ -28,6 +28,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_r
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_ID_verification.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_complete_profile_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_support_docs.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_id_verification_failed.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_idcard_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
@@ -503,6 +504,30 @@ class ShowBottomSheet {
           ),
           padding: const EdgeInsets.all(0),
           child: const OnShowInfoIdCardBottomSheet(),
+        );
+      },
+    );
+  }
+
+  static onShowHelpSupportDocs(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          height: 64,
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: const OnShowHelpSupportDocsBottomSheet(),
         );
       },
     );

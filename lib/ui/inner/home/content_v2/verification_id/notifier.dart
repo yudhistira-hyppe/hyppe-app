@@ -252,7 +252,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       );
     } else {
       realName = nameText;
-      Routing().moveAndPop(Routes.verificationIDStep3);
+      Routing().move(Routes.verificationIDStep3);
     }
   }
 
@@ -552,6 +552,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     } else {
       Routing().moveAndPop(Routes.verificationIDStep5);
     }
+  }
+
+  void backToVerificationID() {
+    selfiePath = "";
+    pickedSupportingDocs = [];
+    selfieOnSupportDocs = false;
+    Routing().moveAndPop(Routes.verificationIDStep5);
   }
 
   void retrySelfie(BuildContext context) {

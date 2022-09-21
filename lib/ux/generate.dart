@@ -34,6 +34,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/screen.dar
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
@@ -256,6 +257,9 @@ class Generate {
       case Routes.verificationIDStepSupportingDocsPreview:
         return MaterialPageRoute(
             builder: (_) => const VerificationIDStepSupportingDocsPreview());
+      case Routes.verificationIDStepSupportDocsEula:
+        return MaterialPageRoute(
+            builder: (_) => const VerificationIDStepSupportDocsEula());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

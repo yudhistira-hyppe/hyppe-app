@@ -79,4 +79,6 @@ class Routes {
       '/verification-id-docs';
   static const String verificationIDStepSupportingDocsPreview =
       '/verification-id-docs-preview';
+  static const String verificationIDStepSupportDocsEula =
+      '/verification-id-docs-eula';
 }

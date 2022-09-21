@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/initial/hyppe/screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 // void mainApp(EnvType env) async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -36,6 +38,8 @@ import 'package:flutter/services.dart';
 // }
 // }
 
+final InAppLocalhostServer localhostServer = new InAppLocalhostServer();
+
 void mainApp(EnvType env) async {
   WidgetsFlutterBinding.ensureInitialized();
   Env.init(env);
@@ -49,6 +53,14 @@ void mainApp(EnvType env) async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+
+    // start the localhost server
+    await localhostServer.start();
+
+    if (Platform.isAndroid) {
+      await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
+    }
+
     runApp(Hyppe());
     if (kDebugMode) {
       // Force disable Crashlytics collection while doing every day development.

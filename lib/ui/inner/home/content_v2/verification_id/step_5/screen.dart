@@ -413,8 +413,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       Center(
                         child: GestureDetector(
                           onTap: () => Routing().moveAndRemoveUntil(
-                              Routes.verificationIDStepSupportingDocs,
-                              Routes.verificationIDStepSupportingDocs),
+                              Routes.verificationIDStepSupportDocsEula,
+                              Routes.verificationIDStepSupportDocsEula),
                           child: RichText(
                             text: TextSpan(
                               text: notifier.language.tapHere!,

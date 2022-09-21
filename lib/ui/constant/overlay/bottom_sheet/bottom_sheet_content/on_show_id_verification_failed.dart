@@ -47,8 +47,8 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveAndRemoveUntil(
-                  Routes.verificationIDStepSupportingDocs,
-                  Routes.verificationIDStepSupportingDocs),
+                  Routes.verificationIDStepSupportDocsEula,
+                  Routes.verificationIDStepSupportDocsEula),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(

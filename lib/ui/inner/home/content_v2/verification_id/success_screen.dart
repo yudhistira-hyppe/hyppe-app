@@ -24,69 +24,76 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
     bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Consumer<VerificationIDNotifier>(
-      builder: (_, notifier, __) => Scaffold(
-        appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
-          leading: CustomIconButtonWidget(
-            defaultColor: true,
-            iconData: "${AssetPath.vectorPath}back-arrow.svg",
-            onPressed: () => Routing().moveBack(),
-          ),
-          titleSpacing: 0,
-          title: CustomTextWidget(
-            textToDisplay: notifier.language.idVerification!,
-            textStyle:
-                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
-          ),
-          centerTitle: false,
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Image(
-                      image: AssetImage(
-                          "${AssetPath.pngPath}verification-success.png")),
-                ),
-                CustomTextWidget(
-                    textOverflow: TextOverflow.visible,
-                    textAlign: TextAlign.left,
-                    textToDisplay: notifier.language.successIdCardTitle!),
-                _buildDivider(context),
-                const SizedBox(height: 10),
-                _unorderedList(notifier.language.successIdCard1!),
-                _unorderedList(notifier.language.successIdCard2!),
-                _unorderedList(notifier.language.successIdCard3!),
-                _unorderedList(notifier.language.successIdCard4!),
-                const SizedBox(height: 70)
-              ],
+      builder: (_, notifier, __) => WillPopScope(
+        onWillPop: () async {
+          notifier.clearAndMoveToLobby();
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leading: CustomIconButtonWidget(
+              defaultColor: true,
+              iconData: "${AssetPath.vectorPath}back-arrow.svg",
+              onPressed: () => notifier.clearAndMoveToLobby(),
             ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(16),
-          child: CustomElevatedButton(
-            width: SizeConfig.screenWidth,
-            height: 44.0 * SizeConfig.scaleDiagonal,
-            function: () => notifier.clearAndMoveToLobby(),
-            child: CustomTextWidget(
-              textToDisplay: notifier.language.close!,
+            titleSpacing: 0,
+            title: CustomTextWidget(
+              textToDisplay: notifier.language.idVerification!,
               textStyle:
-                  textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
             ),
-            buttonStyle: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
-              shadowColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
-              overlayColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
-              backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
+            centerTitle: false,
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Center(
+                    child: Image(
+                        image: AssetImage(
+                            "${AssetPath.pngPath}verification-success.png")),
+                  ),
+                  CustomTextWidget(
+                      textOverflow: TextOverflow.visible,
+                      textAlign: TextAlign.left,
+                      textToDisplay: notifier.language.successIdCardTitle!),
+                  _buildDivider(context),
+                  const SizedBox(height: 10),
+                  _unorderedList(notifier.language.successIdCard1!),
+                  _unorderedList(notifier.language.successIdCard2!),
+                  _unorderedList(notifier.language.successIdCard3!),
+                  _unorderedList(notifier.language.successIdCard4!),
+                  const SizedBox(height: 70)
+                ],
+              ),
+            ),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Padding(
+            padding: const EdgeInsets.all(16),
+            child: CustomElevatedButton(
+              width: SizeConfig.screenWidth,
+              height: 44.0 * SizeConfig.scaleDiagonal,
+              function: () => notifier.clearAndMoveToLobby(),
+              child: CustomTextWidget(
+                textToDisplay: notifier.language.close!,
+                textStyle:
+                    textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              ),
+              buttonStyle: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+                shadowColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+                backgroundColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primaryVariant),
+              ),
             ),
           ),
         ),
