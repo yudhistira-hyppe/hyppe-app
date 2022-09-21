@@ -68,7 +68,7 @@ dependencies:
   uuid: ^3.0.6
   google_maps_flutter: ^2.1.8
   light_compressor: ^1.2.2 
-  # deepar_flutter: ^0.0.2
+  deepar_flutter: ^0.0.2
 
 
   dynamic_widget: # Dynamic widget builder
@@ -116,6 +116,12 @@ flutter:
     - assets/png/
     - assets/vector/
     - assets/dummy_md/
+    - assets/effect/
+    - assets/effect/BurningEffect/
+    - assets/effect/DevilNeonHorns/
+    - assets/effect/ElephantTrunk/
+    - assets/effect/EmotionMeter/
+    - assets/effect/EmotionsExaggerator/
  
   fonts:
     - family: Lato

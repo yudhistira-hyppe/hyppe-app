@@ -18,9 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-class MakeContentNotifier extends LoadingNotifier
-    with ChangeNotifier
-    implements CameraInterface {
+class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements CameraInterface {
   static final _routing = Routing();
 
   LocalizationModelV2 language = LocalizationModelV2();
@@ -85,12 +83,7 @@ class MakeContentNotifier extends LoadingNotifier
   onInitialUploadContent() {
     _selectedDuration = 15;
     if (_featureType == FeatureType.vid) {
-      _durationOptions = {
-        15: "15${language.timerSecond!}",
-        30: "30${language.timerSecond!}",
-        60: "60${language.timerSecond!}",
-        0: "1m>"
-      }; // ignore this
+      _durationOptions = {15: "15${language.timerSecond!}", 30: "30${language.timerSecond!}", 60: "60${language.timerSecond!}", 0: "1m>"}; // ignore this
     } else if (_featureType == FeatureType.diary) {
       _durationOptions = {
         15: "15${language.timerSecond!}",
@@ -108,16 +101,13 @@ class MakeContentNotifier extends LoadingNotifier
   onActionChange(BuildContext context, bool photo) {
     isVideo = !photo;
     final notifier = Provider.of<CameraNotifier>(context, listen: false);
-    notifier.setLoading(true,
-        loadingObject: CameraNotifier.loadingForSwitching);
-    Future.delayed(const Duration(milliseconds: 250),
-        () => notifier.onStoryPhotoVideo(photo));
+    // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
+    Future.delayed(const Duration(milliseconds: 250), () => notifier.onStoryPhotoVideo(photo));
   }
 
   bool conditionalShowingOkButton() {
     if (featureType != FeatureType.pic && isRecordingVideo) {
-      return isRecordingPaused ||
-          (progressHuman >= selectedDuration && selectedDuration != 0);
+      return isRecordingPaused || (progressHuman >= selectedDuration && selectedDuration != 0);
     } else {
       return isRecordingPaused;
     }
@@ -125,9 +115,8 @@ class MakeContentNotifier extends LoadingNotifier
 
   bool conditionalCaptureVideoIcon() {
     if (featureType != FeatureType.pic) {
-      return isRecordingVideo &&
-          !isRecordingPaused &&
-          (progressHuman < selectedDuration || selectedDuration == 0);
+      // return isRecordingVideo && !isRecordingPaused && (progressHuman < selectedDuration || selectedDuration == 0);
+      return isRecordingVideo && (progressHuman < selectedDuration || selectedDuration == 0);
     } else {
       return isRecordingPaused;
     }
@@ -135,8 +124,7 @@ class MakeContentNotifier extends LoadingNotifier
 
   bool conditionalOnClose() {
     if (featureType != FeatureType.pic && isRecordingVideo) {
-      return isRecordingPaused ||
-          (progressHuman >= selectedDuration && selectedDuration != 0);
+      return isRecordingPaused || (progressHuman >= selectedDuration && selectedDuration != 0);
     } else {
       return true;
     }
@@ -173,10 +161,10 @@ class MakeContentNotifier extends LoadingNotifier
       const Duration(seconds: 1),
       (Timer timerIn) {
         // check if user paused recording and then update the state
-        if (isRecordingPaused) {
-          timerIn.cancel();
-          cancelTimer();
-        }
+        // if (isRecordingPaused) {
+        //   timerIn.cancel();
+        //   cancelTimer();
+        // }
 
         if (_timer != null && _timer!.isActive && timerIn.isActive) {
           _elapsedProgress++;
@@ -188,8 +176,7 @@ class MakeContentNotifier extends LoadingNotifier
           _progressHuman += 1;
         }
 
-        if (_progressHuman >= _selectedDuration &&
-            (featureType != FeatureType.vid || _selectedDuration != 0)) {
+        if (_progressHuman >= _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
           timerIn.cancel();
           cancelTimer();
         }
@@ -238,27 +225,14 @@ class MakeContentNotifier extends LoadingNotifier
 
   void thumbnailLocalMedia() async {
     String? _dir;
-    List<String> _folderToSearch = [
-      '/Pictures/',
-      '/pictures/',
-      '/DCIM/Camera/',
-      '/Download/',
-      '/download/',
-      '/DCIM/',
-      '/Camera/',
-      '/Picture/',
-      '/picture/'
-    ];
+    List<String> _folderToSearch = ['/Pictures/', '/pictures/', '/DCIM/Camera/', '/Download/', '/download/', '/DCIM/', '/Camera/', '/Picture/', '/picture/'];
     if (Platform.isAndroid) {
       _thumbnailImageLocal = null;
 
       void _getFirstFile(FileSystemEntity element) {
-        String _extFile =
-            System().extensionFiles(element.absolute.path) as String;
+        String _extFile = System().extensionFiles(element.absolute.path) as String;
         _extFile = _extFile.replaceAll('.', '');
-        if (element is File && _extFile.endsWith(JPG) ||
-            _extFile.endsWith(JPEG) ||
-            _extFile.endsWith(PNG)) {
+        if (element is File && _extFile.endsWith(JPG) || _extFile.endsWith(JPEG) || _extFile.endsWith(PNG)) {
           _thumbnailImageLocal = element.absolute.path;
         }
       }
@@ -267,17 +241,13 @@ class MakeContentNotifier extends LoadingNotifier
 
       // loop for move back to root
       for (int count = 0; count < 4; count++) {
-        _dir =
-            Directory(_dir ?? _directory!.absolute.path).parent.absolute.path;
+        _dir = Directory(_dir ?? _directory!.absolute.path).parent.absolute.path;
       }
 
       // loop for get first file picture
       for (String folder in _folderToSearch) {
         if (_thumbnailImageLocal != null) break;
-        if (Directory('$_dir$folder').existsSync())
-          Directory('$_dir$folder')
-              .listSync(recursive: true)
-              .forEach(_getFirstFile);
+        if (Directory('$_dir$folder').existsSync()) Directory('$_dir$folder').listSync(recursive: true).forEach(_getFirstFile);
       }
 
       notifyListeners();
@@ -287,33 +257,25 @@ class MakeContentNotifier extends LoadingNotifier
   void onTapOnFrameLocalMedia(BuildContext context, mounted) async {
     setLoading(true);
     try {
-      await System()
-          .getLocalMedia(featureType: featureType, context: context)
-          .then((value) async {
+      await System().getLocalMedia(featureType: featureType, context: context).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
-            Future.delayed(
-                const Duration(milliseconds: 1000), () => setLoading(false));
-            final notifier =
-                Provider.of<PreviewContentNotifier>(context, listen: false);
-            notifier.fileContent =
-                value.values.single!.map((e) => e.path).toList();
-            notifier.aspectRation =
-                context.read<CameraNotifier>().cameraAspectRatio;
+            Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
+            final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+            notifier.fileContent = value.values.single!.map((e) => e.path).toList();
+            notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
             notifier.featureType = featureType;
             notifier.showNext = false;
             await _routing.move(Routes.previewContent);
           } else {
             setLoading(false);
-            if (value.keys.single.isNotEmpty)
-              ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
+            if (value.keys.single.isNotEmpty) ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
           }
         });
       });
     } catch (e) {
       setLoading(false);
-      ShowGeneralDialog.pickFileErrorAlert(
-          context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
     }
   }
 
@@ -341,8 +303,7 @@ class MakeContentNotifier extends LoadingNotifier
     _elapsedProgress = 0;
 
     cameraNotifier.stopVideoRecording().then((file) async {
-      final notifier =
-          Provider.of<PreviewContentNotifier>(context, listen: false);
+      final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
       notifier.fileContent = [file!.path];
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
@@ -377,8 +338,7 @@ class MakeContentNotifier extends LoadingNotifier
     final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
-        final notifier =
-            Provider.of<PreviewContentNotifier>(context, listen: false);
+        final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
         notifier.fileContent = [filePath.path];
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
         notifier.featureType = featureType;

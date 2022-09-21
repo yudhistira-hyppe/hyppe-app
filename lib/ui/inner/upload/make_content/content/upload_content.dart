@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/make_content/widget/build_effect.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_ok_button.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_timer.dart';
 import 'package:hyppe/ui/inner/upload/make_content/widget/build_capture_icon.dart';
@@ -81,7 +82,8 @@ class UploadContent extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (!notifier!.isRecordingVideo) Expanded(flex: 4, child: BuildStorage(mounted: mounted)),
+              if (!notifier!.isRecordingVideo) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
+              BuildEffect(mounted: mounted),
               Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
               if (!notifier!.isRecordingVideo) const Expanded(flex: 4, child: CameraSwitchButton())
             ],

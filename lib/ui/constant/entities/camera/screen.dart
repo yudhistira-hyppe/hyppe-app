@@ -70,29 +70,30 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
   Widget build(BuildContext context) {
     final notifier = context.select((CameraNotifier value) => Tuple3(value.isInitialized, value.hasError, value.loadingForObject(CameraNotifier.loadingForSwitching)));
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 200),
-      transitionBuilder: (child, animation) => SlideTransition(
-        child: child,
-        position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation),
-      ),
-      child: notifier.item2
-          ? Center(
-              child: SizedBox(
-                height: 198,
-                child: CustomErrorWidget(
-                  errorType: null,
-                  function: () => context.read<CameraNotifier>().initCamera(context, mounted),
+        duration: const Duration(milliseconds: 200),
+        transitionBuilder: (child, animation) => SlideTransition(
+              child: child,
+              position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation),
+            ),
+        child: notifier.item2
+            ? Center(
+                child: SizedBox(
+                  height: 198,
+                  child: CustomErrorWidget(
+                    errorType: null,
+                    function: () => context.read<CameraNotifier>().initCamera(context, mounted),
+                  ),
                 ),
-              ),
-            )
-          : notifier.item1 && !notifier.item3
-              ? Stack(
-                  children: [
-                    const CameraView(),
-                    ...widget.additionalViews,
-                  ],
-                )
-              : const Center(child: CustomLoading()),
-    );
+              )
+            // : notifier.item1 && !notifier.item3
+            // ?
+            : Stack(
+                children: [
+                  const CameraView(),
+                  ...widget.additionalViews,
+                ],
+              )
+        // : const Center(child: CustomLoading()),
+        );
   }
 }

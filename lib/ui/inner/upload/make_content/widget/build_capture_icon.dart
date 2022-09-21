@@ -21,11 +21,12 @@ class BuildCaptureIcon extends StatelessWidget {
             if (notifier.isRecordingVideo) {
               if (notifier.featureType != FeatureType.pic && notifier.selectedDuration != 0) {
                 if (notifier.progressHuman < notifier.selectedDuration) {
-                  if (!notifier.isRecordingPaused) {
-                    notifier.onPauseRecordedVideo(context);
-                  } else {
-                    notifier.onResumeRecordedVideo(context);
-                  }
+                  context.read<MakeContentNotifier>().onStopRecordedVideo(context);
+                  // if (!notifier.isRecordingPaused) {
+                  //   notifier.onPauseRecordedVideo(context);
+                  // } else {
+                  //   notifier.onResumeRecordedVideo(context);
+                  // }
                 } else {
                   ShowBottomSheet().onShowColouredSheet(context, notifier.language.isThisOkayClickOkToContinue!).then((value) {
                     if (value) notifier.onStopRecordedVideo(context);
@@ -33,7 +34,8 @@ class BuildCaptureIcon extends StatelessWidget {
                 }
               } else {
                 if (!notifier.isRecordingPaused) {
-                  notifier.onPauseRecordedVideo(context);
+                  context.read<MakeContentNotifier>().onStopRecordedVideo(context);
+                  // notifier.onPauseRecordedVideo(context);
                 } else {
                   notifier.onResumeRecordedVideo(context);
                 }

@@ -71,9 +71,7 @@ class _BuildSwitchButtonState extends State<BuildSwitchButton> {
                             Padding(
                               padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
                               child: GestureDetector(
-                                onTap: notifier.featureType == FeatureType.story && notifier.isVideo
-                                    ? () => notifier.onActionChange(context, true)
-                                    : null,
+                                onTap: notifier.featureType == FeatureType.story && notifier.isVideo ? () => notifier.onActionChange(context, true) : null,
                                 child: CustomTextWidget(
                                   textToDisplay: notifier.language.photo!,
                                   textStyle: Theme.of(context).textTheme.bodyText2,
@@ -94,9 +92,7 @@ class _BuildSwitchButtonState extends State<BuildSwitchButton> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GestureDetector(
-                                onTap: notifier.featureType == FeatureType.story && !notifier.isVideo
-                                    ? () => notifier.onActionChange(context, false)
-                                    : null,
+                                onTap: notifier.featureType == FeatureType.story && !notifier.isVideo ? () => notifier.onActionChange(context, false) : null,
                                 child: CustomTextWidget(textToDisplay: notifier.language.video!, textStyle: Theme.of(context).textTheme.bodyText2),
                               ),
                               notifier.isVideo ? const CustomIconWidget(iconData: "${AssetPath.vectorPath}spike.svg") : const SizedBox.shrink()
