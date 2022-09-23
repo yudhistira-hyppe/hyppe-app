@@ -459,6 +459,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onSaveSupportedDocument(BuildContext context) async {
     isLoading = true;
     try {
+      debugPrint('idCardFile => ' + imagePath);
+      debugPrint('selfieFile => ' + selfiePath);
       final bloc = VerificationIDBloc();
       await bloc.postVerificationIDWithSupportDocsBloc(
         context,
@@ -527,7 +529,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   void retryTakeIdCard() {
-    imagePath = "";
+    // imagePath = "";
     selfiePath = "";
     scannedText = "";
     idCardNumber = "";
@@ -612,20 +614,20 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       error++;
     }
 
-    // if (genderController.text == "") {
-    //   errorGender = "Jenis kelamin harus diisi";
-    //   error++;
-    // }
+    if (genderController.text == "") {
+      errorGender = "Jenis kelamin harus diisi";
+      error++;
+    }
 
-    // if (birtPlaceController.text == "") {
-    //   errorPlaceBirth = "Tempat lahir harus diisi";
-    //   error++;
-    // }
+    if (birtPlaceController.text == "") {
+      errorPlaceBirth = "Tempat lahir harus diisi";
+      error++;
+    }
 
-    // if (birtDateController.text == "") {
-    //   errorDateBirth = "Tanggal lahir harus diisi";
-    //   error++;
-    // }
+    if (birtDateController.text == "") {
+      errorDateBirth = "Tanggal lahir harus diisi";
+      error++;
+    }
 
     if (error == 0) {
       Routing().moveAndPop(Routes.verificationIDStep6);

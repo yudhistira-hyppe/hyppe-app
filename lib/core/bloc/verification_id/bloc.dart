@@ -190,6 +190,7 @@ class VerificationIDBloc {
 
     if (docFiles != null) {
       for (File docFile in docFiles) {
+        debugPrint('supportFile => ' + docFile.path);
         formData.files.add(MapEntry(
             "supportFile",
             await MultipartFile.fromFile(docFile.path,

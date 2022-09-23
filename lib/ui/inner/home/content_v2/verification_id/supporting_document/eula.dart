@@ -23,14 +23,6 @@ class VerificationIDStepSupportDocsEula extends StatefulWidget {
 class _VerificationIDStepSupportDocsEulaState
     extends State<VerificationIDStepSupportDocsEula> {
   @override
-  void initState() {
-    final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
-    ntfr.clearAllTempData();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
 
@@ -60,6 +52,8 @@ class _VerificationIDStepSupportDocsEulaState
               child: Column(children: <Widget>[
             Expanded(
               child: InAppWebView(
+                initialOptions: InAppWebViewGroupOptions(
+                    crossPlatform: InAppWebViewOptions(supportZoom: false)),
                 initialUrlRequest: URLRequest(
                     url: Uri.parse("http://localhost:8080/assets/eula.html")),
                 onWebViewCreated: (controller) {},

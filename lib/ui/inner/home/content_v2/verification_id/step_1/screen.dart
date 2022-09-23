@@ -53,6 +53,8 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
             child: Column(children: <Widget>[
           Expanded(
             child: InAppWebView(
+              initialOptions: InAppWebViewGroupOptions(
+                  crossPlatform: InAppWebViewOptions(supportZoom: false)),
               initialUrlRequest: URLRequest(
                   url: Uri.parse("http://localhost:8080/assets/eula.html")),
               onWebViewCreated: (controller) {},

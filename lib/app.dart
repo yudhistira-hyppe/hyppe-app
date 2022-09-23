@@ -38,7 +38,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 // }
 // }
 
-final InAppLocalhostServer localhostServer = new InAppLocalhostServer();
+final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 
 void mainApp(EnvType env) async {
   WidgetsFlutterBinding.ensureInitialized();
