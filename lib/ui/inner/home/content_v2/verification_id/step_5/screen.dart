@@ -27,7 +27,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
   void initState() {
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
     ntfr.isLoading = true;
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       print("CARDNAME => " + ntfr.idCardName);
       print("CARDNUM => " + ntfr.idCardNumber);
       if (ntfr.idCardName == "" || ntfr.idCardNumber == "") {

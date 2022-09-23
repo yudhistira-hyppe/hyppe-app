@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/progress_upload_argument.dart';
@@ -252,7 +253,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       );
     } else {
       realName = nameText;
-      Routing().move(Routes.verificationIDStep3);
+      Routing().moveAndPop(Routes.verificationIDStep3);
     }
   }
 
@@ -326,16 +327,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   @override
-  void onTakePicture(BuildContext context) {
+  Future<void> onTakePicture(BuildContext context) async {
     final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-    cameraNotifier.takePicture().then((filePath) async {
-      if (filePath != null) {
-        imagePath = filePath.path;
-        aspectRatio = cameraNotifier.cameraAspectRatio;
-        validateIDCard();
-        Routing().moveAndPop(Routes.verificationIDStep5);
-      }
-    });
+    XFile? filePath = await cameraNotifier.takePicture();
+    if (filePath != null) {
+      imagePath = filePath.path;
+      aspectRatio = cameraNotifier.cameraAspectRatio;
+      await validateIDCard();
+      Routing().moveAndPop(Routes.verificationIDStep5);
+    }
   }
 
   void onTakeSelfie(BuildContext context) {
