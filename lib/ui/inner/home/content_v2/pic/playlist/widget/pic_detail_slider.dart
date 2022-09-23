@@ -40,7 +40,7 @@ class PicDetailSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     // final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
-    return Consumer<SlidedPicDetailNotifier>(
+    return Consumer<PicDetailNotifier>(
       builder: (_, notifier, __) => AspectRatio(
         aspectRatio: 16 / 9,
         child: Stack(

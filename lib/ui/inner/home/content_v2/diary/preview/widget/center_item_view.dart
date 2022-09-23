@@ -6,6 +6,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_
 // import 'package:hyppe/ui/inner/home/content/diary/preview/widget/top_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
 
 class CenterItemView extends StatelessWidget {
   final Function? onTap;
@@ -61,7 +62,7 @@ class CenterItemView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        // TopItemView(data: data),
+        TopItemView(data: data),
         BottomItemView(data: data),
         data!.tagPeople!.isNotEmpty ? BottomUserView(data: data) : const SizedBox(),
       ],

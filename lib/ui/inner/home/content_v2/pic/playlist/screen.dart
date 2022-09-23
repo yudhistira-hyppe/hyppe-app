@@ -26,7 +26,7 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
 
   @override
   void afterFirstLayout(BuildContext context) {
-    // _notifier.initState(context, widget.arguments);
+    _notifier.initState(context, widget.arguments);
   }
 
   @override

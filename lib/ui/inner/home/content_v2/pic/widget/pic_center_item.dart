@@ -6,6 +6,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 
 // import 'package:hyppe/ui/inner/home/content/pic/widget/pic_top_item.dart';
 
@@ -23,45 +24,48 @@ class PicCenterItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap as void Function()?,
-      child: CustomBaseCacheImage(
-        widthPlaceHolder: 80,
-        heightPlaceHolder: 80,
-        imageUrl: data!.isApsara! ? data!.mediaThumbEndPoint : "${data?.fullThumbPath}",
-        imageBuilder: (context, imageProvider) => Container(
-          margin: margin,
-          // const EdgeInsets.symmetric(horizontal: 4.5),
-          width: _scaling,
-          height: 168,
-          decoration: BoxDecoration(
-            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: _buildBody(),
-        ),
-        errorWidget: (context, url, error) => Container(
-          margin: margin,
-          // const EdgeInsets.symmetric(horizontal: 4.5),
-          width: _scaling,
-          height: 186,
-          child: _buildBody(),
-          decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: AssetImage('${AssetPath.pngPath}content-error.png'),
-              fit: BoxFit.cover,
+      child: Stack(
+        children: [
+          CustomBaseCacheImage(
+            widthPlaceHolder: 80,
+            heightPlaceHolder: 80,
+            imageUrl: data!.isApsara! ? data!.mediaThumbEndPoint : "${data?.fullThumbPath}",
+            imageBuilder: (context, imageProvider) => Container(
+              margin: margin,
+              // const EdgeInsets.symmetric(horizontal: 4.5),
+              width: _scaling,
+              height: 168,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: _buildBody(),
             ),
-            borderRadius: BorderRadius.circular(8.0),
+            errorWidget: (context, url, error) => Container(
+              margin: margin,
+              // const EdgeInsets.symmetric(horizontal: 4.5),
+              width: _scaling,
+              height: 186,
+              child: _buildBody(),
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildBody() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+    return Stack(
       children: [
-        // PicTopItem(data: data),
-        PicBottomItem(data: data),
+        PicTopItem(data: data),
+        Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
       ],
     );
   }
