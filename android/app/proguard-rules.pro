@@ -1,3 +1,10 @@
+ 
+
+-keepclassmembers class ai.deepar.ar.DeepAR { *; }
+-keepclassmembers class ai.deepar.ar.core.videotexture.VideoTextureAndroidJava { *; }
+-keep class ai.deepar.ar.core.videotexture.VideoTextureAndroidJava
+-dontwarn android.**
+
 ## Flutter wrapper
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.**  { *; }

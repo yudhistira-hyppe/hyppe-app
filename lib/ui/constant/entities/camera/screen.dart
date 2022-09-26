@@ -33,9 +33,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
 
   @override
   void afterFirstLayout(BuildContext context) {
-    // notifier = Provider.of<CameraNotifier>(context, listen: false);
-    // notifier.initCamera(context, mounted);
-    context.read<CameraNotifier>().initCamera(context, mounted);
+    notifier = Provider.of<CameraNotifier>(context, listen: false);
+    notifier.initCamera(context, mounted);
   }
 
   @override
@@ -62,8 +61,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
 
   @override
   void didChangeDependencies() {
-    var cameraNotifier = Provider.of<CameraNotifier>(context);
-    widget.onCameraNotifierUpdate(cameraNotifier);
+    // var cameraNotifier = Provider.of<CameraNotifier>(context);
+    // widget.onCameraNotifierUpdate(cameraNotifier);
     super.didChangeDependencies();
   }
 

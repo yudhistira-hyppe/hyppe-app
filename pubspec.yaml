@@ -122,6 +122,17 @@ flutter:
     - assets/effect/ElephantTrunk/
     - assets/effect/EmotionMeter/
     - assets/effect/EmotionsExaggerator/
+    - assets/effect/FireEffect/
+    - assets/effect/FlowerFace/
+    - assets/effect/Hope/
+    - assets/effect/Humanoid/
+    - assets/effect/MakeupLookw_Slipt/
+    - assets/effect/PingPongMinigame/
+    - assets/effect/PixelHeartParticles/
+    - assets/effect/Snail/
+    - assets/effect/Stallone/
+    - assets/effect/VendettaMask/
+    - assets/effect/VikingHelmetPBR/
  
   fonts:
     - family: Lato

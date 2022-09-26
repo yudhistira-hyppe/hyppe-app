@@ -59,7 +59,7 @@
     //     ),
     //   ),
     // );
-<<<<<<< HEAD
+
  */
 
 import 'dart:io';
@@ -80,7 +80,7 @@ class CameraView extends StatefulWidget {
 }
 
 class _CameraViewState extends State<CameraView> {
-  late final DeepArController _controller;
+  // late final DeepArController _controller;
   String version = '';
   bool _isFaceMask = false;
   bool _isFilter = false;
@@ -98,55 +98,84 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   void initState() {
-    final _notifier = context.read<CameraNotifier>();
-    final _notifier2 = context.read<MakeContentNotifier>();
-    _controller = DeepArController();
-    _controller
-        .initialize(
-          androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
-          iosLicenseKey: "64896fe04955aa98c7c268edc133f80ccd63090ac80f327a5a5f72f5a60de30658a3af7c3a531bd8",
-          resolution: _notifier.configureResolutionDeepArPreset(onStoryIsPhoto: _notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
-        )
-        .then((value) => setState(() {}));
+    // final _notifier = context.read<CameraNotifier>();
+    // final _notifier2 = context.read<MakeContentNotifier>();
+    // _controller = DeepArController();
+    // _controller
+    //     .initialize(
+    //         androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
+    //         iosLicenseKey: "64896fe04955aa98c7c268edc133f80ccd63090ac80f327a5a5f72f5a60de30658a3af7c3a531bd8",
+    //         resolution: Resolution.high
+    //         // resolution: _notifier.configureResolutionDeepArPreset(onStoryIsPhoto: _notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
+    //         )
+    //     .then((value) => setState(() {}));
     _effectsList2 = [
       {"path": "BurningEffect", "efect": "burning_effect.deepar", "preview": "preview.png"},
       {"path": "DevilNeonHorns", "efect": "Neon_Devil_Horns.deepar", "preview": "preview.png"},
       {"path": "ElephantTrunk", "efect": "Elephant_Trunk.deepar", "preview": "preview.png"},
       {"path": "EmotionMeter", "efect": "Emotion_Meter.deepar", "preview": "preview.png"},
       {"path": "EmotionsExaggerator", "efect": "Emotions_Exaggerator.deepar", "preview": "preview.png"},
+      {"path": "FireEffect", "efect": "Fire_Effect.deepar", "preview": "preview.png"},
+      {"path": "FlowerFace", "efect": "flower_face.deepar", "preview": "preview.png"},
+      {"path": "Hope", "efect": "Hope.deepar", "preview": "preview.png"},
+      {"path": "Humanoid", "efect": "Humanoid.deepar", "preview": "preview.png"},
+      {"path": "MakeupLookw_Slipt", "efect": "Split_View_Look.deepar", "preview": "preview.png"},
+      {"path": "PingPongMinigame", "efect": "Ping_Pong.deepar", "preview": "preview.png"},
+      {"path": "PixelHeartParticles", "efect": "8bitHearts.deepar", "preview": "preview.png"},
+      {"path": "Snail", "efect": "Snail.deepar", "preview": "preview.png"},
+      {"path": "Stallone", "efect": "Stallone.deepar", "preview": "preview.png"},
+      {"path": "VendettaMask", "efect": "Vendetta_Mask.deepar", "preview": "preview.png"},
+      {"path": "VikingHelmetPBR", "efect": "viking_helmet.deepar", "preview": "preview.png"},
     ];
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    _initEffects();
+    // _initEffects();
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
+    // final _notifier = context.read<CameraNotifier>();
+    // if (_notifier.deepArController!.isInitialized) {
+    //   _notifier.deepArController!.destroy();
+    // }
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final notifier = context.watch<CameraNotifier>();
+    // final notifier = context.watch<CameraNotifier>();
     final deviceRatio = SizeConfig.screenWidth! / SizeConfig.screenHeight!;
-    return Scaffold(
-        body: Stack(
-      children: [
-        notifier.deepArController!.isInitialized
-            ? DeepArPreview(_controller)
-            : const Center(
-                child: Text("Loading..."),
-              ),
-        notifier.showEffected ? listEfect(_controller) : const SizedBox(),
-        // _topMediaOptions(notifier.deepArController!),
-        // _bottomMediaOptions(notifier.deepArController!),
-      ],
-    ));
+
+    return Consumer<CameraNotifier>(
+      builder: (_, notifier, __) => Scaffold(
+          body: Stack(
+        children: [
+          notifier.deepArController!.isInitialized
+              ? Container(
+                  child: AspectRatio(
+                    aspectRatio: deviceRatio,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
+                      child: DeepArPreview(notifier.deepArController!),
+                    ),
+                  ),
+                )
+              : const Center(
+                  child: Text("Loading..."),
+                ),
+          notifier.deepArController!.isInitialized ? listEfect(notifier.deepArController!) : const SizedBox(),
+          // _topMediaOptions(notifier.deepArController!),
+          // _bottomMediaOptions(notifier.deepArController!),
+        ],
+      )),
+    );
   }
 
   Positioned listEfect(DeepArController _controller) {
@@ -169,7 +198,7 @@ class _CameraViewState extends State<CameraView> {
                   child: GestureDetector(
                     onTap: () {
                       effected = index;
-                      _controller.switchFaceMask(_assetEffectsPath + _effectsList2[index]['efect']);
+                      _controller.switchFaceMask(_assetEffectsPath + _effectsList2[index]['path'] + "/" + _effectsList2[index]['efect']);
                       setState(() {});
                     },
                     child: Container(
@@ -193,6 +222,7 @@ class _CameraViewState extends State<CameraView> {
   }
 
   // flip, face mask, filter, flash
+  // not used
   Positioned _topMediaOptions(DeepArController _controller) {
     return Positioned(
       bottom: 10,
@@ -257,6 +287,7 @@ class _CameraViewState extends State<CameraView> {
 
   // prev, record, screenshot, next
   /// Sample option which can be performed
+  /// not used
   Positioned _bottomMediaOptions(DeepArController _controller) {
     return Positioned(
       bottom: 0,
@@ -336,23 +367,25 @@ class _CameraViewState extends State<CameraView> {
 
   /// Add effects which are rendered via DeepAR sdk
   void _initEffects() {
+    // print('initEffects()');
     // Either get all effects
-    _getEffectsFromAssets(context).then((values) {
-      _effectsList.clear();
-      _effectsList.addAll(values);
+    // _getEffectsFromAssets(context).then((values) {
+    // _effectsList.clear();
+    // _effectsList.addAll(values);
 
-      _maskList.clear();
-      _maskList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
-      _maskList.add(_assetEffectsPath + 'flower_face.deepar');
+    // _maskList.clear();
+    // _maskList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
+    // _maskList.add(_assetEffectsPath + 'flower_face.deepar');
 
-      _filterList.clear();
-      _filterList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
-      _filterList.add(_assetEffectsPath + 'flower_face.deepar');
+    // _filterList.clear();
+    // _filterList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
+    // _filterList.add(_assetEffectsPath + 'flower_face.deepar');
 
-      _effectsList.removeWhere((element) => _maskList.contains(element));
+    // _effectsList.removeWhere((element) => _maskList.contains(element));
 
-      _effectsList.removeWhere((element) => _filterList.contains(element));
-    });
+    // _effectsList.removeWhere((element) => _filterList.contains(element));
+    // });
+    // print(_effectsList2);
 
     // OR
 

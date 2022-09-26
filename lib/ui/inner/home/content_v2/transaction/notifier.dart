@@ -186,7 +186,6 @@ class TransactionNotifier extends ChangeNotifier {
       notifyListeners();
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-        Routing().moveBack();
         initBankAccount(context);
       });
     }

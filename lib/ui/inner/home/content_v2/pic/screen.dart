@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_header_feature.dart';
-
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_center_item.dart';
 
