@@ -16,7 +16,7 @@ class CustomRectangleVInput extends StatelessWidget {
               controller: notifier.otpController,
               onCompleted: (w) {},
               onChanged: (val) {
-                notifier.pinChecking(context, val);
+                // notifier.pinChecking(context, val);
                 // notifier.isOTPCodeFullFilled = notifier.pinController.text.length == 4;
               },
             ),

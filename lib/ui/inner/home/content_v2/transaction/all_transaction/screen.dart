@@ -3,13 +3,11 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/widget/shimmer_all_transaction_history.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/buysell_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_account.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/witdhdrawal_widget.dart';
@@ -65,6 +63,7 @@ class _AllTransactionState extends State<AllTransaction> {
                           GestureDetector(
                             onTap: () {
                               notifier.resetFilter(context, back: false);
+                              _select = 0;
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(5.0),
@@ -83,6 +82,7 @@ class _AllTransactionState extends State<AllTransaction> {
                             (index) => GestureDetector(
                               onTap: () {
                                 notifier.filter(context, notifier.newFilterList[index]['id']);
+                                notifier.filterSelected(context, notifier.newFilterList[index]['id']);
                                 if (notifier.newFilterList[index]['id'] != 1) {
                                   selected(notifier.newFilterList[index]['id']);
                                 }
@@ -94,7 +94,7 @@ class _AllTransactionState extends State<AllTransaction> {
                                     backgroundColor: notifier.newFilterList[index]['selected'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
                                     shape: StadiumBorder(
                                         side: BorderSide(
-                                      color: notifier.newFilterList[index]['selected'] ? Theme.of(context).colorScheme.onSecondaryContainer : kHyppeLightSecondary,
+                                      color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeLightSecondary,
                                     )),
                                     label: CustomTextWidget(
                                       textToDisplay: notifier.newFilterList[index]['name'],
@@ -133,7 +133,7 @@ class _AllTransactionState extends State<AllTransaction> {
                                     backgroundColor: _select == notifier.filterList[index]['id'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
                                     shape: StadiumBorder(
                                         side: BorderSide(
-                                      color: _select == notifier.filterList[index]['id'] ? Theme.of(context).colorScheme.onSecondaryContainer : kHyppeLightSecondary,
+                                      color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeLightSecondary,
                                     )),
                                     label: CustomTextWidget(
                                       textToDisplay: notifier.filterList[index]['name'],
@@ -148,37 +148,39 @@ class _AllTransactionState extends State<AllTransaction> {
                         ],
                       ),
               ),
-              notifier.dataAllTransaction!.isEmpty
-                  ? EmptyBankAccount(
-                      textWidget: Column(
-                      children: [
-                        CustomTextWidget(
-                          textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
-                          maxLines: 4,
-                        ),
-                      ],
-                    ))
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: notifier.dataAllTransaction!.length,
-                      itemBuilder: (context, index) {
-                        String title = '';
-                        switch (notifier.dataAllTransaction![index].type) {
-                          case TransactionType.withdrawal:
-                            title = notifier2.translate.withdrawal!;
-                            return WithdrawalWidget(
-                              title: title,
-                              language: notifier2.translate,
-                              data: notifier.dataAllTransaction![index],
-                            );
-                          default:
-                            return BuySellWidget(
-                              data: notifier.dataAllTransaction![index],
-                              language: notifier2.translate,
-                            );
-                        }
-                      }),
+              notifier.isLoading
+                  ? const ShimmerAllTransactionHistory()
+                  : notifier.dataAllTransaction!.isEmpty
+                      ? EmptyBankAccount(
+                          textWidget: Column(
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
+                              maxLines: 4,
+                            ),
+                          ],
+                        ))
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: notifier.dataAllTransaction!.length,
+                          itemBuilder: (context, index) {
+                            String title = '';
+                            switch (notifier.dataAllTransaction![index].type) {
+                              case TransactionType.withdrawal:
+                                title = notifier2.translate.withdrawal!;
+                                return WithdrawalWidget(
+                                  title: title,
+                                  language: notifier2.translate,
+                                  data: notifier.dataAllTransaction![index],
+                                );
+                              default:
+                                return BuySellWidget(
+                                  data: notifier.dataAllTransaction![index],
+                                  language: notifier2.translate,
+                                );
+                            }
+                          }),
               notifier.isScrollLoading ? const CustomLoading() : const SizedBox(),
             ]),
           ),

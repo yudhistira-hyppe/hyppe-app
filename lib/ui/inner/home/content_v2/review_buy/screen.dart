@@ -70,7 +70,8 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                               borderRadius: BorderRadius.circular(2),
                               image: DecorationImage(
                                 scale: 1,
-                                image: NetworkImage(System().showUserPicture('/pict/' + notifier.data!.postId!)!),
+                                // image: NetworkImage(System().showUserPicture('/pict/' + notifier.data!.postId!)!),
+                                image: NetworkImage(widget.arguments!.isApsara! ? widget.arguments!.mediaThumbUri! : widget.arguments!.fullThumbPath!),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -94,7 +95,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
                       child: Column(
                         children: [
-                          contentInfo(textTheme, title: notifier.language.orderNumber!, value: "12912596495"),
+                          contentInfo(textTheme, title: notifier.language.certificateNumber!, value: notifier.data!.postId!),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: SizedBox(
@@ -102,12 +103,13 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                               child: Container(color: Colors.black12),
                             ),
                           ),
-                          contentInfo(textTheme, title: notifier.language.type!, value: notifier.data!.postType!),
+                          contentInfo(textTheme, title: notifier.language.type!, value: System().convertTypeContent(notifier.data!.postType!)),
+                          contentInfo(textTheme, title: System().capitalizeFirstLetter(notifier.language.from!), value: widget.arguments!.username!),
                           contentInfo(textTheme, title: notifier.language.time!, value: notifier.data!.createdAt!),
-                          contentInfo(textTheme, title: "Fee", value: System().currencyFormat(amount: notifier.data!.adminFee!.toInt())),
                           contentInfo(textTheme, title: notifier.language.price!, value: System().currencyFormat(amount: notifier.data!.price!.toInt())),
                           contentInfo(textTheme, title: notifier.language.includeTotalViews!, value: notifier.data!.saleView! ? notifier.language.yes! : notifier.language.no!),
                           contentInfo(textTheme, title: notifier.language.includeTotalLikes!, value: notifier.data!.saleView! ? notifier.language.yes! : notifier.language.no!),
+                          contentInfo(textTheme, title: "Fee", value: System().currencyFormat(amount: notifier.data!.adminFee!.toInt())),
                         ],
                       ),
                     ),
@@ -116,7 +118,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
               ),
         floatingActionButton: notifier.data != null
             ? Container(
-                height: 80,
+                height: 100,
                 color: Theme.of(context).appBarTheme.backgroundColor,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -132,17 +134,17 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                           ),
                           CustomTextWidget(
                             textToDisplay: System().currencyFormat(amount: notifier.data!.totalAmount!.toInt()),
-                            textStyle: textTheme.titleMedium,
+                            textStyle: Theme.of(context).primaryTextTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 20),
                       CustomElevatedButton(
                         width: 375.0 * SizeConfig.scaleDiagonal,
                         height: 44.0 * SizeConfig.scaleDiagonal,
                         function: () => Routing().move(Routes.paymentMethodScreen),
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.proceedPayment!,
+                          textToDisplay: notifier.language.choosePaymentMethods!,
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                         buttonStyle: ButtonStyle(
@@ -172,12 +174,12 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
           CustomTextWidget(
             textAlign: TextAlign.left,
             textToDisplay: title,
-            textStyle: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
           ),
           CustomTextWidget(
             textAlign: TextAlign.right,
             textToDisplay: value,
-            textStyle: textTheme.bodyMedium?.copyWith(color: Theme.of(context).hintColor),
+            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
           ),
         ],
       ),

@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_account.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class AddBankAccount extends StatelessWidget {
@@ -93,7 +87,7 @@ class AddBankAccount extends StatelessWidget {
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(0),
                   labelText: notifier2.translate.accountOwnerName,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 13),
+                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: notifier.messageAddBankError != '' ? kHyppeDanger : Theme.of(context).colorScheme.secondaryVariant, fontSize: 13),
                   prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
                   enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
@@ -103,8 +97,8 @@ class AddBankAccount extends StatelessWidget {
               ),
               sixPx,
               CustomTextWidget(
-                textToDisplay: notifier2.translate.makeSureTheName!,
-                textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeDisabled),
+                textToDisplay: notifier.messageAddBankError != '' ? notifier.messageAddBankError : notifier2.translate.makeSureTheName!,
+                textStyle: Theme.of(context).textTheme.caption!.copyWith(color: notifier.messageAddBankError != '' ? kHyppeDanger : kHyppeDisabled),
                 textAlign: TextAlign.start,
                 maxLines: 10,
               )

@@ -46,6 +46,8 @@ class Env {
     UrlConstants.getuserprofile,
     UrlConstants.getVideoApsara,
     UrlConstants.getOtherUserPosts,
+    UrlConstants.updateLanguage,
+    UrlConstants.referralCount,
   ];
 
   static final EnvData dev = EnvData(

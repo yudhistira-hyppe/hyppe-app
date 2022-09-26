@@ -34,6 +34,8 @@
     <!-- Used for access user location. -->
     <uses-permission
     android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="Manifest.permission.CAPTURE_AUDIO_OUTPUT"  /> 
 
 
     <uses-permission tools:node="remove" android:name="android.permission.READ_PHONE_STATE"/>

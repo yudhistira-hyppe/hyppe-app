@@ -318,7 +318,7 @@
   "unblock": "Unblock",
   "selfieWithIDCard": "Selfie With ID Card",
   "settings": "Settings",
-  "signInAndSecurity": "Sign In & Security",
+  "signInAndSecurity": "Security & Privacy",
   "version": "VERSION",
   "logOut": "Log out",
   "muteMessage": "Mute Messages",
@@ -479,7 +479,6 @@
   "deletePost": "Delete post?",
   "deleteComment": "Delete Comment",
   "commentWillPermanentlyDeletedContinue": "Comment will permanently deleted, continue?",
- 
   "addPostDescription" : "Add post description, @friends, and  join # topic (max 2500 characters)",
   "privacy" : "Privacy",
   "selectLocation": "Select Location",
@@ -594,7 +593,13 @@
   "enterYour6DigitHyppePin" : "Enter your 6 digit Hyppe PIN",
   "confirmNewPin" : "Confirm New PIN",
   "confirmPin" : "Confirm PIN",
-  "enterNewPin" : "Enter New PIN"
-  
-
+  "enterNewPin" : "Enter New PIN",
+  "transactionInProgress" : "Transaction In Progress",
+  "contentOwnershipRegistration" : "Content Ownership Registration",
+  "byRegisteringYourContent":"By registering your content, you hereby responsible for the authenticity of this content. All forms of legal issues related to the authenticity of the content will be resolved by both parties. This certificate is valid until it changes ownership by selling this content.",
+  "yesIUnderstand" : "Yes, I Understand",
+  "ownershipSelling" : "Ownership & Selling",
+  "sellContent" : "Sell Content",
+  "certificateNumber" : "Certificate Number",
+  "choosePaymentMethods" : "Choose Payment Methods"
 }

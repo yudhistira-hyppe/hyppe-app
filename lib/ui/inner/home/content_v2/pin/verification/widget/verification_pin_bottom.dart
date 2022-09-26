@@ -24,10 +24,11 @@ class VerificationPinBottom extends StatelessWidget {
             foregroundColor: MaterialStateProperty.all<Color>(notifier.verifyButtonColor(context)),
             shadowColor: MaterialStateProperty.all<Color>(notifier.verifyButtonColor(context)),
           ),
-          function: () {
-            notifier.checkOtp(context);
-            print('asdasd');
-          },
+          function: !notifier.checkSubmitButtonOTP()
+              ? null
+              : () {
+                  notifier.checkOtp(context);
+                },
           child: notifier.loading
               ? const CustomLoading()
               : CustomTextWidget(

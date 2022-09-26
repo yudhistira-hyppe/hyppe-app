@@ -36,7 +36,11 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
             Expanded(
               flex: 4,
               child: CustomCacheImage(
-                imageUrl: data?.fullThumbPath,
+                imageUrl: data!.apsara!
+                    ? data!.media!.imageInfo!.isEmpty
+                        ? data!.media!.videoList![0].coverURL
+                        : data!.media!.imageInfo![0].url
+                    : data?.fullThumbPath,
                 imageBuilder: (_, imageProvider) {
                   return Container(
                     height: 90,

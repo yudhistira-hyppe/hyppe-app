@@ -2,7 +2,10 @@ import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/my_balance.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -42,6 +45,10 @@ class SettingScreen extends StatelessWidget {
                 icon: 'transaction-icon.svg',
                 onTap: () => Routing().move(Routes.transaction),
                 caption: '${notifier.translate.transaction}',
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: MyBalance(),
               ),
               Divider(
                 thickness: 1,

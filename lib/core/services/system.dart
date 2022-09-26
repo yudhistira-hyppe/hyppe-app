@@ -10,6 +10,7 @@ import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/locations.dart';
@@ -364,6 +365,19 @@ class System {
         return "DONE";
       case InteractiveEvent.revoke:
         return "REVOKE";
+      default:
+        return "";
+    }
+  }
+
+  String convertTypeContent(String type) {
+    switch (type) {
+      case 'pict':
+        return 'HyppePic';
+      case 'vid':
+        return 'HyppeVid';
+      case 'diary':
+        return 'HyppeDiary';
       default:
         return "";
     }

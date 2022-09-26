@@ -7,6 +7,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dar
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_bottom.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_top.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
 
@@ -65,7 +66,11 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
                   ),
                   IconButton(
                     // onPressed: () => notifier.routing.move(profileSettings),
-                    onPressed: () => notifier.routing.move(Routes.appSettings),
+                    onPressed: () async {
+                      notifier.routing.move(Routes.appSettings);
+                      await context.read<TransactionNotifier>().getAccountBalance(context);
+                      context.read<TransactionNotifier>().isLoading = false;
+                    },
                     icon: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}setting.svg",
                     ),

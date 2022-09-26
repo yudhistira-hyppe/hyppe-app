@@ -17,8 +17,8 @@ import 'package:provider/provider.dart';
 
 class PinAccountNotifier extends ChangeNotifier {
   CountdownController? _countdownController;
-  String email = SharedPreference().readStorage(SpKeys.email);
   bool _confirm = false;
+  bool _changeSetNewPin = false;
   bool _matchingPin = true;
   String _pin1 = '';
   String _pin2 = '';
@@ -43,9 +43,15 @@ class PinAccountNotifier extends ChangeNotifier {
   TextEditingController pin3Controller = TextEditingController();
   TextEditingController _otpController = TextEditingController();
   TextEditingController get otpController => _otpController;
+  bool get changeSetNewPin => _changeSetNewPin;
 
   set confirm(bool val) {
     _confirm = val;
+    notifyListeners();
+  }
+
+  set changeSetNewPin(bool val) {
+    _changeSetNewPin = val;
     notifyListeners();
   }
 
@@ -90,49 +96,80 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   void cekUserPin(BuildContext context) {
-    pinCreate = context.read<SelfProfileNotifier>().user.profile!.pinCreate!;
+    pinCreate = SharedPreference().readStorage(SpKeys.setPin) == "true";
   }
 
   void pinChecking(context, String val) {
-    var setPin = SharedPreference().readStorage(SpKeys.setPin);
-    if (confirm == false) {
-      if (setPin == 'true') {
-        if (checkPin) {
-          _pin1 = val;
-          if (_pin1.length == 6) {
-            Routing().move(Routes.pinScreen);
-            confirm = true;
-          }
-        } else {
-          _pin3 = val;
-          if (_pin3.length == 6) {
-            sendVerificationMail(context, checkPin: true).then((value) {
-              checkPin = value;
-              Routing().move(Routes.pinScreen);
-            });
-          }
-        }
-      } else {
-        _pin1 = val;
-        if (_pin1.length == 6) {
-          Routing().move(Routes.pinScreen);
-          confirm = true;
-        }
-      }
-    } else {
-      _pin2 = val;
-      if (_pin2.length == 6) {
-        if (_pin2 == _pin1) {
-          matchingPin = true;
-          Routing().move(Routes.verificationPinScreen);
-          startTimer2();
-          sendVerificationMail(context);
-        } else {
-          matchingPin = false;
-        }
-      }
+    _pin1 = val;
+    if (_pin1.length == 6) {
+      print('asdads');
+      Routing().move(Routes.confirmPinScreen);
     }
   }
+
+  void pinConfirmChecking(context, String val) {
+    _pin2 = val;
+    if (_pin2 == _pin1) {
+      matchingPin = true;
+      resetTimer();
+      Routing().move(Routes.verificationPinScreen);
+      sendVerificationMail(context);
+    } else {
+      matchingPin = false;
+    }
+  }
+
+  void pinCurentCheking(context, String val) {
+    _pin3 = val;
+    if (_pin3.length == 6) {
+      sendVerificationMail(context, checkPin: true).then((value) {
+        checkPin = value;
+        changeSetNewPin = true;
+        Routing().move(Routes.pinScreen);
+      });
+    }
+  }
+
+  // void pinChecking(context, String val) {
+  //   var setPin = SharedPreference().readStorage(SpKeys.setPin);
+  //   if (confirm == false) {
+  //     if (setPin == 'true') {
+  //       if (checkPin) {
+  //         _pin1 = val;
+  //         if (_pin1.length == 6) {
+  //           confirm = true;
+  //           Routing().move(Routes.pinScreen);
+  //           _pin2 = '';
+  //         }
+  //       } else {
+  //         _pin3 = val;
+  //         if (_pin3.length == 6) {
+  //           sendVerificationMail(context, checkPin: true).then((value) {
+  //             checkPin = value;
+  //             Routing().move(Routes.pinScreen);
+  //           });
+  //         }
+  //       }
+  //     } else {
+  //       _pin1 = val;
+  //       if (_pin1.length == 6) {
+  //         Routing().move(Routes.pinScreen);
+  //         confirm = true;
+  //       }
+  //     }
+  //   } else {
+  //     _pin2 = val;
+  //     if (_pin2.length == 6) {
+  //       if (_pin2 == _pin1) {
+  //         matchingPin = true;
+  //         Routing().move(Routes.verificationPinScreen);
+  //         sendVerificationMail(context);
+  //       } else {
+  //         matchingPin = false;
+  //       }
+  //     }
+  //   }
+  // }
 
   onBack() {
     resetTimer();
@@ -155,6 +192,7 @@ class PinAccountNotifier extends ChangeNotifier {
   Future sendVerificationMail(BuildContext context, {bool resend = false, bool checkPin = false}) async {
     bool connect = await System().checkConnections();
     if (connect) {
+      final havePin = SharedPreference().readStorage(SpKeys.setPin);
       startTimer();
       String type = '';
       if (pinCreate) {
@@ -165,12 +203,14 @@ class PinAccountNotifier extends ChangeNotifier {
       Map param = {};
 
       if (resend) {
-        param = {"type": "CHANGE_PIN", "event": "NOTIFY_OTP", "status": "NOTIFY"};
+        param = {"type": type, "event": "NOTIFY_OTP", "status": "NOTIFY"};
       } else if (checkPin) {
         param = {"pin": _pin3, "type": "CECK_PIN", "event": "CECK_PIN", "status": "INITIAL"};
       } else {
         param = {"pin": _pin2, "type": type, "event": type, "status": "INITIAL"};
       }
+      print('param');
+      print(param);
 
       final notifier = TransactionBloc();
       await notifier.sendVerificationPin(context, params: param);
@@ -194,6 +234,8 @@ class PinAccountNotifier extends ChangeNotifier {
       });
     }
   }
+
+  bool checkSubmitButtonOTP() => otpController.text.length >= 4 ? true : false;
 
   Future checkOtp(BuildContext context) async {
     bool connect = await System().checkConnections();
@@ -257,13 +299,11 @@ class PinAccountNotifier extends ChangeNotifier {
   Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
     if (_timer != "00:00") {
       // ignore: avoid_print
-      print('resendCode');
       return null;
     } else {
       return () async {
-        if (withStartTimer) {
-          startTimer();
-        }
+        resetTimer();
+        startTimer();
         sendVerificationMail(context, resend: true);
       };
     }
@@ -271,36 +311,27 @@ class PinAccountNotifier extends ChangeNotifier {
 
   startTimer() {
     int _start = 60;
-    // if (_timer != "00:00") {
-    _myTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (Timer t) {
-        if (_start != 0) {
-          _start--;
-          if (_start.toString().length == 2) {
-            timer = "00:${_start.toString()}";
+    if (_timer != "00:00") {
+      _myTimer = Timer.periodic(
+        const Duration(seconds: 1),
+        (Timer t) {
+          if (_start != 0) {
+            _start--;
+            if (_start.toString().length == 2) {
+              timer = "00:${_start.toString()}";
+            } else {
+              timer = "00:0${_start.toString()}";
+            }
+            notifyListeners();
           } else {
-            timer = "00:0${_start.toString()}";
+            t.cancel();
+            _myTimer?.cancel();
+            timer = "00:00";
+            notifyListeners();
           }
-          notifyListeners();
-        } else {
-          t.cancel();
-          _myTimer?.cancel();
-          timer = "00:00";
-          notifyListeners();
-        }
-      },
-    );
-    // }
-  }
-
-  startTimer2() {
-    _countdownController = CountdownController(
-        duration: Duration(seconds: 30),
-        onEnd: () {
-          print('onEnd');
-        });
-    notifyListeners();
+        },
+      );
+    }
   }
 
   resetTimer() {
@@ -309,7 +340,7 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   Color verifyButtonColor(BuildContext context) {
-    if (otpController.text.length >= 3 && !loading) {
+    if (checkSubmitButtonOTP() && !loading) {
       return Theme.of(context).colorScheme.primaryVariant;
     } else {
       return Theme.of(context).colorScheme.surface;
@@ -327,11 +358,14 @@ class PinAccountNotifier extends ChangeNotifier {
   void backHome() {
     _pin1 = '';
     _pin2 = '';
+    _pin3 = '';
     pin1Controller.clear();
     pin2Controller.clear();
+    pin3Controller.clear();
     _otpController.clear();
     matchingPin = true;
     confirm = false;
+    checkPin = false;
     resetTimer();
     Routing().moveBack();
     Routing().moveBack();

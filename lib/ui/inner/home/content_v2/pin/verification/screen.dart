@@ -6,6 +6,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/widget/verification_pin_bottom.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/widget/verification_pin_top.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 // import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -38,7 +39,7 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
 
   @override
   void afterFirstLayout(BuildContext context) {
-    _notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+    // _notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
   }
 
   @override
@@ -51,7 +52,7 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             leading: GestureDetector(
-              onTap: () => notifier.onBack(),
+              onTap: () => Routing().moveBack(),
               child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             ),
             automaticallyImplyLeading: false,

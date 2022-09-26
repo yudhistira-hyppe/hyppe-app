@@ -10,6 +10,7 @@ class Routes {
   static const String makeContent = '/make-content';
   static const String previewContent = '/preview-content';
   static const String preUploadContent = '/pre-upload-content';
+  static const String ownershipSelling = '/ownership-selling';
   static const String homePageSignInSecurity = '/home-page-sign-in-security';
   static const String accountPreferences = '/account-preferences';
   static const String changePassword = '/change-password';
@@ -75,10 +76,13 @@ class Routes {
   static const String transaction = '/transaction';
   static const String allTransaction = '/all-transaction';
   static const String detailTransaction = '/detail-transaction';
+  static const String transactionInProgress = '/transaction-inprogress';
   static const String bankAccount = '/bank-account';
   static const String addBankAccount = '/add-bank-account';
 
   //create pin
   static const String pinScreen = '/pin-screen';
+  static const String confirmPinScreen = '/confirm-pin-screen';
   static const String verificationPinScreen = '/verification-pin-screen';
+  static const String forgotPinScreen = '/forgot-pin-screen';
 }

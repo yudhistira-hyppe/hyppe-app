@@ -44,7 +44,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.payment!,
+            textToDisplay: notifier.language.paymentMethods!,
             textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
           centerTitle: false,

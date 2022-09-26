@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
@@ -21,6 +23,7 @@ class VerificationPinTop extends StatefulWidget {
 class _VerificationPinTopState extends State<VerificationPinTop> {
   @override
   Widget build(BuildContext context) {
+    String email = SharedPreference().readStorage(SpKeys.email);
     return Consumer2<PinAccountNotifier, TranslateNotifierV2>(
       builder: (_, notifier, notifier2, __) => Column(
         // mainAxisSize: MainAxisSize.min,
@@ -32,7 +35,7 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
           twentyPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: notifier2.translate.pinTopText! + " ${notifier.email}",
+            textToDisplay: notifier2.translate.pinTopText! + " $email",
           ),
           fortyTwoPx,
           CustomRectangleVInput(),

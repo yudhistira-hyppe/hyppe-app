@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
@@ -37,6 +40,12 @@ class _TransactionState extends State<Transaction> {
   }
 
   @override
+  void dispose() {
+    context.read<TransactionNotifier>().isLoading = false;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
@@ -58,6 +67,55 @@ class _TransactionState extends State<Transaction> {
                       children: [
                         TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance!.totalsaldo ?? 0)),
                         const ButtonTransaction(),
+                        sixPx,
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                          ),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () => Routing().move(Routes.transactionInProgress),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                                child: Row(
+                                  children: [
+                                    const CustomIconWidget(
+                                      iconData: "${AssetPath.vectorPath}hitory-inprogress.svg",
+                                      defaultColor: false,
+                                    ),
+                                    sixPx,
+                                    CustomTextWidget(
+                                      textToDisplay: notifier2.translate.transactionInProgress!,
+                                      textStyle: Theme.of(context).textTheme.caption,
+                                    ),
+                                    Expanded(
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            color: notifier.countTransactionProgress! > 0 ? kHyppeDanger : kHyppeLightSecondary,
+                                          ),
+                                          child: CustomTextWidget(
+                                            textToDisplay: "${notifier.countTransactionProgress}",
+                                            textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightBackground),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

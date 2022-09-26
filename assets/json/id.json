@@ -318,7 +318,7 @@
   "unblock": "Buka Blokir",
   "selfieWithIDCard": "Foto Diri Dengan Kartu Identitas",
   "settings": "Pengaturan",
-  "signInAndSecurity": "Masuk akun & Keamanan",
+  "signInAndSecurity": "Kemanan & Privasi",
   "version": "VERSI",
   "logOut": "Keluar",
   "muteMessage": "Senyapkan Pesan",
@@ -539,7 +539,7 @@
   "no":"Tidak",
   "pay": "Bayar",
   "seePaymentInstruction": "Lihat panduan pembayaran",
-  "checkPaymentStatus": "Check payment status",
+  "checkPaymentStatus": "Periksa status pembayaran",
   "vaCopyToClipboard": "Nomor virtual account telah di salin ke clipboard",
   "expired": "Kedaluarsa",
   "transaction": "Transaksi",
@@ -593,6 +593,13 @@
   "enterYour6DigitHyppePin" : "Masukkan 6 digit Hyppe PIN Anda",
   "confirmNewPin" : "Konfirmasi PIN Baru",
   "confirmPin" : "Konfirmasi PIN",
-  "enterNewPin" : "Masukan PIN Baru"
-  
+  "enterNewPin" : "Masukan PIN Baru",
+  "transactionInProgress" : "Transaksi Sedang Berlangsung",
+  "contentOwnershipRegistration" :  "Pendaftaran Kepemilikan Konten",
+  "byRegisteringYourContent":"Dengan mendaftarkan konten Anda, Anda dengan ini bertanggung jawab atas keaslian konten ini. Segala bentuk permasalahan hukum terkait keaslian konten akan diselesaikan oleh kedua belah pihak. Sertifikat ini berlaku hingga berubah kepemilikan dengan menjual konten ini.",
+  "yesIUnderstand" : "Ya saya mengerti",
+  "ownershipSelling" : "Kepemilikan & Penjualan",
+  "sellContent" : "Jual Konten",
+  "certificateNumber" : "Nomor sertifikat",
+  "choosePaymentMethods" : "Pilih Metode Pembayaran"
 }

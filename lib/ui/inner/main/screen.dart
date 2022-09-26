@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/main/widget/notification_circle.dart';
 

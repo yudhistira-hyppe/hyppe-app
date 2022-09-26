@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
@@ -8,7 +7,6 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +25,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
   bool _isLoading = false;
   bool _isScrollLoading = false;
   int _skip = 0;
-  int _limit = 2;
+  final int _limit = 6;
 
   bool get showDate => _showDate;
   bool get showType => _showType;
@@ -85,7 +83,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {'id': 1, 'name': language.buy},
       {'id': 2, 'name': language.sell},
       {'id': 3, 'name': language.withdrawal},
-      {'id': 4, 'name': language.ownership},
+      // {'id': 4, 'name': language.ownership},
     ];
   }
 
@@ -95,7 +93,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {'id': 2, 'selected': false, 'name': language.buy},
       {'id': 3, 'selected': false, 'name': language.sell},
       {'id': 4, 'selected': false, 'name': language.withdrawal},
-      {'id': 5, 'selected': false, 'name': language.ownership},
+      // {'id': 5, 'selected': false, 'name': language.ownership},
     ];
   }
 
@@ -122,10 +120,23 @@ class FilterTransactionNotifier extends ChangeNotifier {
       (id == 3) ? _param.addAll({"sell": true}) : _param.addAll({"sell": false});
       (id == 4) ? _param.addAll({"withdrawal": true}) : _param.addAll({"withdrawal": false});
       final email = SharedPreference().readStorage(SpKeys.email);
-      _param.addAll({"skip": 0, "limit": _limit, "email": email});
+      _skip = 0;
+      _param.addAll({"skip": _skip, "limit": _limit, "email": email});
       dataAllTransaction = [];
       getAllTransaction(context, param2: _param);
     }
+  }
+
+  void filterSelected(BuildContext context, int id) {
+    newFilterList.forEach((element) {
+      if (element['id'] != 1) {
+        element['selected'] = false;
+      }
+
+      if (element['id'] == id) element['selected'] = true;
+    });
+
+    notifyListeners();
   }
 
   void submitFilter(BuildContext context) {
@@ -184,16 +195,13 @@ class FilterTransactionNotifier extends ChangeNotifier {
     final email = SharedPreference().readStorage(SpKeys.email);
     _param.addAll({"skip": 0, "limit": _limit, "email": email});
     newFilterList.sort((a, b) => a['id'].compareTo(b['id']));
-
-    print('test');
-    print(newFilterList);
     Routing().moveBack();
     dataAllTransaction = [];
     getAllTransaction(context, param2: _param);
   }
 
-  Future getAllTransaction(BuildContext context, {Map? param2}) async {
-    isLoading = true;
+  Future getAllTransaction(BuildContext context, {Map? param2, bool loading = true}) async {
+    if (loading) isLoading = true;
 
     bool connect = await System().checkConnections();
     if (connect) {
@@ -206,7 +214,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.getHistorySuccess) {
-        fetch.data.forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+        fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
       }
 
       if (fetch.postsState == TransactionState.getHistoryError) {
@@ -224,13 +232,13 @@ class FilterTransactionNotifier extends ChangeNotifier {
   }
 
   void resetFilter(BuildContext context, {bool back = true}) {
-    filterChecked = [];
     allSelect = false;
     last7DaysSelect = false;
     last30DaysSelect = false;
     dataAllTransaction = [];
     _skip = 0;
     newFilterList = [];
+    filterChecked = [];
     getAllTransaction(context);
     if (back) {
       Routing().moveBack();
@@ -242,7 +250,8 @@ class FilterTransactionNotifier extends ChangeNotifier {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       _skip += _limit;
       isScrollLoading = true;
-      await getAllTransaction(context);
+      _param.addAll({"skip": _skip});
+      await getAllTransaction(context, loading: false, param2: _param);
       isScrollLoading = false;
     }
   }

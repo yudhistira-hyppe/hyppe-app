@@ -149,9 +149,12 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                             const SizedBox(height: 10),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 16),
-                              child: Text(
-                                notifier.language.checkPaymentStatus!,
-                                style: textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                              child: GestureDetector(
+                                onTap: () => Routing().move(Routes.transaction),
+                                child: Text(
+                                  notifier.language.checkPaymentStatus!,
+                                  style: textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                                ),
                               ),
                             )
                           ],

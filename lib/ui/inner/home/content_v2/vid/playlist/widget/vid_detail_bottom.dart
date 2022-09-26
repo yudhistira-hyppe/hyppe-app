@@ -164,7 +164,7 @@ class VidDetailBottom extends StatelessWidget {
               value2.translate.share!,
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
-            if (data!.saleAmount! > 0)
+            if (data!.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != data!.email)
               _buildButton(
                 context,
                 '${AssetPath.vectorPath}cart.svg',

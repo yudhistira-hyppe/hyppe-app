@@ -23,6 +23,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_scree
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
@@ -35,6 +37,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/scree
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/transaction_inprogress/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -44,6 +47,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
@@ -102,6 +106,9 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
       case Routes.preUploadContent:
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
+      case Routes.ownershipSelling:
+        return MaterialPageRoute(builder: (_) => const OwnershipSellingScreen());
+
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => HyppeChangePassword());
       case Routes.accountPreferences:
@@ -207,6 +214,9 @@ class Generate {
       case Routes.transaction:
         return MaterialPageRoute(builder: (_) => const Transaction());
 
+      case Routes.transactionInProgress:
+        return MaterialPageRoute(builder: (_) => const TransactionHistoryInProgress());
+
       case Routes.allTransaction:
         return MaterialPageRoute(builder: (_) => const AllTransaction());
 
@@ -224,6 +234,12 @@ class Generate {
 
       case Routes.verificationPinScreen:
         return MaterialPageRoute(builder: (_) => const VerificationPin());
+
+      case Routes.confirmPinScreen:
+        return MaterialPageRoute(builder: (_) => const ConfirmPin());
+
+      case Routes.forgotPinScreen:
+        return MaterialPageRoute(builder: (_) => const ForgotPinScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

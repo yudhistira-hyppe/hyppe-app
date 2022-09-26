@@ -68,11 +68,10 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
       // await cameraController?.initialize();
 
-      /// TODO: Resolved by backend
-      if (Platform.isIOS) {
-        await cameraController?.lockCaptureOrientation();
-      }
-      await cameraController?.setFlashMode(flashMode);
+      // if (Platform.isIOS) {
+      //   await cameraController?.lockCaptureOrientation();
+      // }
+      // await cameraController?.setFlashMode(flashMode);
     } on CameraException catch (e) {
       e.description.logger();
     }

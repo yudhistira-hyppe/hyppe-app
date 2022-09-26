@@ -67,6 +67,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -97,6 +98,16 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   void initState() {
+    final _notifier = context.read<CameraNotifier>();
+    final _notifier2 = context.read<MakeContentNotifier>();
+    _controller = DeepArController();
+    _controller
+        .initialize(
+          androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
+          iosLicenseKey: "64896fe04955aa98c7c268edc133f80ccd63090ac80f327a5a5f72f5a60de30658a3af7c3a531bd8",
+          resolution: _notifier.configureResolutionDeepArPreset(onStoryIsPhoto: _notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
+        )
+        .then((value) => setState(() {}));
     _effectsList2 = [
       {"path": "BurningEffect", "efect": "burning_effect.deepar", "preview": "preview.png"},
       {"path": "DevilNeonHorns", "efect": "Neon_Devil_Horns.deepar", "preview": "preview.png"},
@@ -106,17 +117,6 @@ class _CameraViewState extends State<CameraView> {
     ];
     super.initState();
   }
-  // void initState() {
-  //   _controller = DeepArController();
-  //   _controller
-  //       .initialize(
-  //         androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
-  //         iosLicenseKey: "64896fe04955aa98c7c268edc133f80ccd63090ac80f327a5a5f72f5a60de30658a3af7c3a531bd8 ",
-  //         resolution: Resolution.high,
-  //       )
-  //       .then((value) => setState(() {}));
-  //   super.initState();
-  // }
 
   @override
   void didChangeDependencies() {
@@ -138,12 +138,11 @@ class _CameraViewState extends State<CameraView> {
         body: Stack(
       children: [
         notifier.deepArController!.isInitialized
-            ? DeepArPreview(notifier.deepArController!)
+            ? DeepArPreview(_controller)
             : const Center(
                 child: Text("Loading..."),
               ),
-        notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox(),
-        Text("${notifier.showEffected}"),
+        notifier.showEffected ? listEfect(_controller) : const SizedBox(),
         // _topMediaOptions(notifier.deepArController!),
         // _bottomMediaOptions(notifier.deepArController!),
       ],

@@ -10,6 +10,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/widget/custom_rectangle_input.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class PinScreen extends StatefulWidget {
@@ -36,16 +38,18 @@ class _PinScreenState extends State<PinScreen> {
             icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             splashRadius: 1,
             onPressed: () {
-              notifier.onExit();
+              Routing().moveBack();
+              if (notifier.changeSetNewPin) notifier.changeSetNewPin = false;
+              if (setPin == 'true' && notifier.checkPin) {
+                notifier.checkPin = false;
+                notifier.pin1Controller.clear();
+              }
+              // if (notifier.pin3Controller.text != '') notifier.pin3Controller.clear();
             },
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: setPin == 'true'
-                ? notifier2.translate.changePin!
-                : notifier.confirm
-                    ? notifier2.translate.confirmPin!
-                    : 'Set New Pin',
+            textToDisplay: setPin == 'true' ? notifier2.translate.changePin! : 'Set New Pin',
             textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
           ),
           centerTitle: false,
@@ -63,11 +67,7 @@ class _PinScreenState extends State<PinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: setPin == 'true' && !notifier.confirm && !notifier.checkPin
-                    ? notifier2.translate.enterYourCurrentPin!
-                    : !notifier.confirm
-                        ? notifier2.translate.enterNewPin!
-                        : notifier2.translate.confirmNewPin!,
+                textToDisplay: setPin == 'true' && !notifier.checkPin ? notifier2.translate.enterYourCurrentPin! : notifier2.translate.enterNewPin!,
                 textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
@@ -75,17 +75,16 @@ class _PinScreenState extends State<PinScreen> {
               sixPx,
               CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
               twelvePx,
-              CustomRectangleInput(),
-              notifier.confirm && !notifier.matchingPin
-                  ? CustomTextWidget(
-                      textToDisplay: notifier2.translate.enterThePinThatMatchesThePinYouFilledInEarlier!,
-                      maxLines: 3,
-                      textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeRed),
-                    )
-                  : Container(),
-              setPin == 'true' && !notifier.confirm
+              CustomRectangleInput(setPin == 'true' && !notifier.checkPin ? notifier.pin3Controller : notifier.pin1Controller, onChanged: (value) {
+                if (setPin == 'true' && !notifier.checkPin) {
+                  notifier.pinCurentCheking(context, value);
+                } else {
+                  notifier.pinChecking(context, value);
+                }
+              }),
+              setPin == 'true' && !notifier.changeSetNewPin
                   ? GestureDetector(
-                      onTap: () {},
+                      onTap: () => Routing().move(Routes.forgotPinScreen),
                       child: CustomTextWidget(
                         textToDisplay: notifier2.translate.forgotPin!,
                         maxLines: 3,

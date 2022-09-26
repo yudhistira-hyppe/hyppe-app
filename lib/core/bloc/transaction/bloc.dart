@@ -9,6 +9,8 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ux/routing.dart';
 
 class TransactionBloc {
   final _repos = Repos();
@@ -23,10 +25,11 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
+        print(onResult.statusCode);
         if (onResult.statusCode! > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.addBankAccontError, message: onResult.data['message'], data: onResult.data));
         } else {
-          setTransactionFetch(TransactionFetch(TransactionState.addBankAccontSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setTransactionFetch(TransactionFetch(TransactionState.addBankAccontSuccess, message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -101,10 +104,12 @@ class TransactionBloc {
         if (onResult.statusCode! > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.getHistoryError, message: onResult.data['message'], data: onResult.data));
         } else {
-          setTransactionFetch(TransactionFetch(TransactionState.getHistorySuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          // setTransactionFetch(TransactionFetch(TransactionState.getHistorySuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setTransactionFetch(TransactionFetch(TransactionState.getHistorySuccess, data: onResult.data));
         }
       },
       (errorData) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setTransactionFetch(TransactionFetch(TransactionState.getHistoryError, data: errorData.error));
       },
       data: params,

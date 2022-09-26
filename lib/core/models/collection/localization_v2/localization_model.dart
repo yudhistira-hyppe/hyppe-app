@@ -593,6 +593,14 @@ class LocalizationModelV2 {
   String? forr;
   String? from;
   String? remove;
+  String? transactionInProgress;
+  String? contentOwnershipRegistration;
+  String? byRegisteringYourContent;
+  String? yesIUnderstand;
+  String? ownershipSelling;
+  String? sellContent;
+  String? certificateNumber;
+  String? choosePaymentMethods;
 
   LocalizationModelV2({
     this.login,
@@ -1189,6 +1197,14 @@ class LocalizationModelV2 {
     this.forr,
     this.from,
     this.remove,
+    this.transactionInProgress,
+    this.contentOwnershipRegistration,
+    this.byRegisteringYourContent,
+    this.yesIUnderstand,
+    this.ownershipSelling,
+    this.sellContent,
+    this.certificateNumber,
+    this.choosePaymentMethods,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1746,7 +1762,7 @@ class LocalizationModelV2 {
     no = json['no'];
     pay = json['pay'];
     seePaymentInstruction = json['seePaymentInstruction'];
-    checkPaymentStatus = json['seePaymentInstruction'];
+    checkPaymentStatus = json['checkPaymentStatus'];
     vaCopyToClipboard = json['vaCopyToClipboard'];
     expired = json['expired'];
     transaction = json['transaction'];
@@ -1801,5 +1817,13 @@ class LocalizationModelV2 {
     forr = json['forr'];
     from = json['from'];
     remove = json['Remove'];
+    transactionInProgress = json['transactionInProgress'];
+    contentOwnershipRegistration = json['contentOwnershipRegistration'];
+    byRegisteringYourContent = json['byRegisteringYourContent'];
+    yesIUnderstand = json['yesIUnderstand'];
+    ownershipSelling = json['ownershipSelling'];
+    sellContent = json['sellContent'];
+    certificateNumber = json['certificateNumber'];
+    choosePaymentMethods = json['choosePaymentMethods'];
   }
 }

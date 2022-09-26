@@ -4,6 +4,16 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 
+// class TransactionModel {
+//   List<TransactionHistoryModel> data = [];
+//   int? dataCount;
+
+//   TransactionModel.fromJSON(dynamic json) {
+//     data = List<TransactionHistoryModel>.from(json["data"].map((x) => TransactionHistoryModel.fromJSON(x)));
+//     dataCount = json['dataCount'];
+//   }
+// }
+
 class TransactionHistoryModel {
   String? id;
   String? iduser;
@@ -45,6 +55,8 @@ class TransactionHistoryModel {
   int? adminFee;
   int? totalview;
   int? totallike;
+  bool? apsara;
+  MediaModel? media;
 
   TransactionHistoryModel.fromJSON(dynamic json) {
     id = json['_id'];
@@ -87,9 +99,47 @@ class TransactionHistoryModel {
     adminFee = json['adminFee'] ?? 0;
     totallike = json['totallike'] ?? 0;
     totalview = json['totalview'] ?? 0;
+    apsara = json['apsara'] ?? false;
+    media = json['media'] != null ? MediaModel.fromJSON(json['media']) : null;
   }
 
   String? concatThumbUri() {
     return Env.data.baseUrl + (mediaEndpoint ?? '') + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+  }
+}
+
+class MediaModel {
+  List<ImageInfo>? imageInfo = [];
+  List<VideoList>? videoList = [];
+
+  MediaModel({this.imageInfo = const [], this.videoList = const []});
+
+  MediaModel.fromJSON(dynamic json) {
+    imageInfo = json["ImageInfo"] != null ? List<ImageInfo>.from(json["ImageInfo"].map((x) => ImageInfo.fromJSON(x))) : [];
+    videoList = json["VideoList"] != null ? List<VideoList>.from(json["VideoList"].map((x) => VideoList.fromJSON(x))) : [];
+  }
+}
+
+class ImageInfo {
+  String? url;
+  ImageInfo({this.url = ''});
+  ImageInfo.fromJSON(dynamic json) {
+    url = json['URL'];
+  }
+}
+
+class VideoList {
+  String? coverURL;
+  VideoList({this.coverURL = ''});
+  VideoList.fromJSON(dynamic json) {
+    coverURL = json['CoverURL'];
+  }
+}
+
+class CountTransactionProgress {
+  int? datacount;
+  CountTransactionProgress({this.datacount});
+  CountTransactionProgress.fromJSON(dynamic json) {
+    datacount = json['datacount'];
   }
 }

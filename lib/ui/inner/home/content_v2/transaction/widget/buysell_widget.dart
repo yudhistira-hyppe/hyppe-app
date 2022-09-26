@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -115,7 +114,11 @@ class BuySellWidget extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: CustomCacheImage(
-                        imageUrl: data?.fullThumbPath,
+                        imageUrl: data!.apsara!
+                            ? data!.media!.imageInfo!.isEmpty
+                                ? data!.media!.videoList![0].coverURL
+                                : data!.media!.imageInfo![0].url
+                            : data?.fullThumbPath,
                         imageBuilder: (_, imageProvider) {
                           return Container(
                             height: 50,

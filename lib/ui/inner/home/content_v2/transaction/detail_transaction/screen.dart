@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/bottom_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/middle_buysell_widget.dart';
@@ -58,7 +54,7 @@ class DetailTransaction extends StatelessWidget {
               ),
             ),
             body: SingleChildScrollView(
-              child: notifier.isLoading
+              child: notifier.isDetailLoading
                   ? const ShimmerDetailTransactionHistory()
                   : Padding(
                       padding: const EdgeInsets.all(16.0),

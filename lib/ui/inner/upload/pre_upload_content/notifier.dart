@@ -719,6 +719,19 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
+  void onOwnershipEULA(BuildContext context) {
+    ShowBottomSheet.onShowOwnerEULA(
+      context,
+      onSave: () {
+        Routing().moveBack();
+        Routing().move(Routes.ownershipSelling);
+      },
+      onCancel: () {
+        Routing().moveBack();
+      },
+    );
+  }
+
   void showPeopleSearch(BuildContext context) {
     ShowBottomSheet.onShowSearchPeople(
       context,
@@ -785,10 +798,6 @@ class PreUploadContentNotifier with ChangeNotifier {
           getVideoSize();
           _progressCompress = 100;
           notifyListeners();
-
-          // print('sukses');
-          // print('${File(fileContent![0]!).path}');
-          // print("size ${File(fileContent![0]!).path}");
         } else if (response is OnFailure) {
           // print('failed');
           // print(response.message);
@@ -839,7 +848,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   void insertInterest(BuildContext context, int index) {
     if (interest.isNotEmpty) {
       String tile = interest[index].interestName!;
-      print(tile);
       if (tile == 'See More') {
         showInterest(context);
       } else {

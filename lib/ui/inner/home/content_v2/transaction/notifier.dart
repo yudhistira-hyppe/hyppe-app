@@ -25,12 +25,12 @@ class TransactionNotifier extends ChangeNotifier {
   List<BankAccount>? dataAcccount = [];
   List<TransactionHistoryModel>? dataTransaction = [];
   List<TransactionHistoryModel>? dataAllTransaction = [];
+  List<TransactionHistoryModel>? dataTransactionInProgress = [];
   TransactionHistoryModel? dataTransactionDetail;
+  int? countTransactionProgress = 0;
 
   AccountBalanceModel? _accountBalance;
   AccountBalanceModel? get accountBalance => _accountBalance;
-
-  String email = SharedPreference().readStorage(SpKeys.email);
 
   String? bankcode;
   TextEditingController _nameAccount = TextEditingController();
@@ -41,6 +41,8 @@ class TransactionNotifier extends ChangeNotifier {
   TextEditingController get noBankAccount => _noBankAccount;
   TextEditingController get accountOwnerName => _accountOwnerName;
 
+  String _messageAddBankError = '';
+  String get messageAddBankError => _messageAddBankError;
   String _noBank = "";
   String get noBank => _noBank;
 
@@ -52,11 +54,20 @@ class TransactionNotifier extends ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool _isLoadingInProgress = false;
+  bool get isLoadingInProgress => _isLoadingInProgress;
   bool _isScrollLoading = false;
   bool get isScrollLoading => _isScrollLoading;
+  bool _isDetailLoading = false;
+  bool get isDetailLoading => _isDetailLoading;
 
   set accountBalance(AccountBalanceModel? val) {
     _accountBalance = val;
+    notifyListeners();
+  }
+
+  set messageAddBankError(String val) {
+    _messageAddBankError = val;
     notifyListeners();
   }
 
@@ -65,8 +76,18 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  set isDetailLoading(bool val) {
+    _isDetailLoading = val;
+    notifyListeners();
+  }
+
   set isLoading(bool val) {
     _isLoading = val;
+    notifyListeners();
+  }
+
+  set isLoadingInProgress(bool val) {
+    _isLoadingInProgress = val;
     notifyListeners();
   }
 
@@ -131,30 +152,71 @@ class TransactionNotifier extends ChangeNotifier {
 
     bool connect = await System().checkConnections();
     if (connect) {
-      getAccountBalance(context);
-      DateTime dateToday = DateTime.now();
-      String date = dateToday.toString().substring(0, 10);
-      // String email = 'freeman27@getnada.com';
-      final param = {"email": email, "sell": true, "buy": true, "withdrawal": true, "startdate": "2020-08-12", "enddate": date, "skip": _skip, "limit": _limit};
-      final notifier = TransactionBloc();
-      await notifier.getHistoryTransaction(context, params: param);
-      final fetch = notifier.transactionFetch;
+      try {
+        getAccountBalance(context);
+        DateTime dateToday = DateTime.now();
+        String date = dateToday.toString().substring(0, 10);
+        // String email = 'freeman27@getnada.com';
+        String email = SharedPreference().readStorage(SpKeys.email);
+        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, "skip": _skip, "limit": _limit};
+        final notifier = TransactionBloc();
+        await notifier.getHistoryTransaction(context, params: param);
+        final fetch = notifier.transactionFetch;
 
-      if (fetch.postsState == TransactionState.getHistorySuccess) {
-        if (_skip == 0) dataTransaction = [];
-        if (dataAllTransaction!.isEmpty) {
-          fetch.data.forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
-          context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
+        if (fetch.postsState == TransactionState.getHistorySuccess) {
+          if (_skip == 0) dataTransaction = [];
+          if (dataAllTransaction!.isEmpty) {
+            fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+            context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
+          }
+          fetch.data['data'].forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+          countTransactionProgress = fetch.data['datacount'];
         }
-        fetch.data.forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
-      }
-
-      if (fetch.postsState == TransactionState.getHistoryError) {
-        if (fetch.data != null) {
-          ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+        if (fetch.postsState == TransactionState.getHistoryError) {
+          if (fetch.data != null) {
+            ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+          } else {
+            // ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+          }
         }
+      } catch (e) {
+        print(e);
       }
       isLoading = false;
+      notifyListeners();
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        initBankAccount(context);
+      });
+    }
+  }
+
+  Future initTransactionHistoryInProgress(BuildContext context) async {
+    if (dataTransactionInProgress!.isEmpty) isLoadingInProgress = true;
+
+    bool connect = await System().checkConnections();
+    if (connect) {
+      try {
+        String email = SharedPreference().readStorage(SpKeys.email);
+        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, "status": "WAITING_PAYMENT", "skip": _skip, "limit": _limit};
+        final notifier = TransactionBloc();
+        await notifier.getHistoryTransaction(context, params: param);
+        final fetch = notifier.transactionFetch;
+
+        if (fetch.postsState == TransactionState.getHistorySuccess) {
+          if (_skip == 0) dataTransactionInProgress = [];
+          fetch.data['data'].forEach((v) => dataTransactionInProgress?.add(TransactionHistoryModel.fromJSON(v)));
+        }
+        if (fetch.postsState == TransactionState.getHistoryError) {
+          if (fetch.data != null) {
+            ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+          }
+        }
+      } catch (e) {
+        print(e);
+      }
+      isLoadingInProgress = false;
       notifyListeners();
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -169,6 +231,7 @@ class TransactionNotifier extends ChangeNotifier {
 
     bool connect = await System().checkConnections();
     if (connect) {
+      String email = SharedPreference().readStorage(SpKeys.email);
       final param = {"email": email};
       final notifier = TransactionBloc();
       await notifier.getAccountBalance(context, params: param);
@@ -226,7 +289,8 @@ class TransactionNotifier extends ChangeNotifier {
 
   Future getDetailTransactionHistory(BuildContext context, {required String id, type, jenis}) async {
     bool connect = await System().checkConnections();
-    isLoading = true;
+    isDetailLoading = true;
+    String email = SharedPreference().readStorage(SpKeys.email);
     if (connect) {
       final param = {
         "id": id,
@@ -253,7 +317,7 @@ class TransactionNotifier extends ChangeNotifier {
         initBankAccount(context);
       });
     }
-    isLoading = false;
+    isDetailLoading = false;
     notifyListeners();
   }
 
@@ -261,29 +325,32 @@ class TransactionNotifier extends ChangeNotifier {
 
   Future createBankAccount(BuildContext context) async {
     final language = context.read<TranslateNotifierV2>().translate;
+    final langIso = SharedPreference().readStorage(SpKeys.isoCode);
     bool connect = await System().checkConnections();
     if (connect) {
-      final email = SharedPreference().readStorage(SpKeys.email);
-      final Map params = {
-        "email": email,
-        "noRek": noBankAccount.text,
-        "bankcode": bankcode,
-        "nama": accountOwnerName.text,
-      };
+      // final email = SharedPreference().readStorage(SpKeys.email);
+      const email = 'freeman27@getnada.com';
+      final Map params = {"email": email, "noRek": noBankAccount.text, "bankcode": bankcode, "nama": accountOwnerName.text, "language": langIso};
+
       final notifier = TransactionBloc();
       await notifier.createBankAccount(context, params: params);
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.addBankAccontSuccess) {
-        dataAcccount?.add(BankAccount.fromJSON(fetch.data));
-        dataAcccount!.last.bankName = _nameAccount.text;
-        Routing().moveBack();
-        Routing().moveBack();
-        ShowBottomSheet().onShowColouredSheet(context, language.successfully!, color: kHyppeLightSuccess);
-        _nameAccount.clear();
-        noBankAccount.clear();
-        accountOwnerName.clear();
-        bankcode = '';
+        if (fetch.data == null) {
+          messageAddBankError = fetch.message;
+          Routing().moveBack();
+        } else {
+          dataAcccount?.add(BankAccount.fromJSON(fetch.data));
+          dataAcccount!.last.bankName = _nameAccount.text;
+          Routing().moveBack();
+          Routing().moveBack();
+          ShowBottomSheet().onShowColouredSheet(context, language.successfully!, color: kHyppeLightSuccess);
+          _nameAccount.clear();
+          noBankAccount.clear();
+          accountOwnerName.clear();
+          bankcode = '';
+        }
       }
 
       if (fetch.postsState == TransactionState.addBankAccontError) {
@@ -375,6 +442,15 @@ class TransactionNotifier extends ChangeNotifier {
       _skip += _limit;
       isScrollLoading = true;
       await initTransactionHistory(context);
+      isScrollLoading = false;
+    }
+  }
+
+  void scrollListInProgress(BuildContext context, ScrollController scrollController) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      _skip += _limit;
+      isScrollLoading = true;
+      await initTransactionHistoryInProgress(context);
       isScrollLoading = false;
     }
   }
