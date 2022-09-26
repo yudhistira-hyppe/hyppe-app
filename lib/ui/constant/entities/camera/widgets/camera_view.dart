@@ -59,7 +59,7 @@
     //     ),
     //   ),
     // );
-<<<<<<< HEAD
+
  */
 
 import 'dart:io';
@@ -120,7 +120,7 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   void didChangeDependencies() {
-    _initEffects();
+    // _initEffects();
     super.didChangeDependencies();
   }
 
@@ -134,6 +134,7 @@ class _CameraViewState extends State<CameraView> {
     SizeConfig().init(context);
     final notifier = context.watch<CameraNotifier>();
     final deviceRatio = SizeConfig.screenWidth! / SizeConfig.screenHeight!;
+    print('DeepAR: camera open');
     return Scaffold(
         body: Stack(
       children: [
@@ -170,7 +171,7 @@ class _CameraViewState extends State<CameraView> {
                   child: GestureDetector(
                     onTap: () {
                       effected = index;
-                      _controller.switchFaceMask(_assetEffectsPath + _effectsList2[index]['efect']);
+                      _controller.switchFaceMask(_assetEffectsPath + _effectsList2[index]['path'] + "/" +_effectsList2[index]['efect']);
                       setState(() {});
                     },
                     child: Container(
@@ -194,6 +195,7 @@ class _CameraViewState extends State<CameraView> {
   }
 
   // flip, face mask, filter, flash
+  // not used
   Positioned _topMediaOptions(DeepArController _controller) {
     return Positioned(
       bottom: 10,
@@ -258,6 +260,7 @@ class _CameraViewState extends State<CameraView> {
 
   // prev, record, screenshot, next
   /// Sample option which can be performed
+  /// not used
   Positioned _bottomMediaOptions(DeepArController _controller) {
     return Positioned(
       bottom: 0,
@@ -337,23 +340,25 @@ class _CameraViewState extends State<CameraView> {
 
   /// Add effects which are rendered via DeepAR sdk
   void _initEffects() {
+    // print('initEffects()');
     // Either get all effects
-    _getEffectsFromAssets(context).then((values) {
-      _effectsList.clear();
-      _effectsList.addAll(values);
+    // _getEffectsFromAssets(context).then((values) {
+      // _effectsList.clear();
+      // _effectsList.addAll(values);
 
-      _maskList.clear();
-      _maskList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
-      _maskList.add(_assetEffectsPath + 'flower_face.deepar');
+      // _maskList.clear();
+      // _maskList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
+      // _maskList.add(_assetEffectsPath + 'flower_face.deepar');
 
-      _filterList.clear();
-      _filterList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
-      _filterList.add(_assetEffectsPath + 'flower_face.deepar');
+      // _filterList.clear();
+      // _filterList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
+      // _filterList.add(_assetEffectsPath + 'flower_face.deepar');
 
-      _effectsList.removeWhere((element) => _maskList.contains(element));
+      // _effectsList.removeWhere((element) => _maskList.contains(element));
 
-      _effectsList.removeWhere((element) => _filterList.contains(element));
-    });
+      // _effectsList.removeWhere((element) => _filterList.contains(element));
+    // });
+    // print(_effectsList2);
 
     // OR
 

@@ -48,17 +48,21 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> initCamera(BuildContext context, bool mounted) async {
+    print('DeepAR: initCamera, mounted: ');print(mounted);
     try {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
       flashMode = FlashMode.off;
       deepArController = DeepArController();
       await deepArController!
-          .initialize(
-            androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
-            iosLicenseKey: "64896fe04955aa98c7c268edc133f80ccd63090ac80f327a5a5f72f5a60de30658a3af7c3a531bd8 ",
-            resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
-          )
-          .then((value) {});
+      .initialize(
+        androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
+        iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117 ",
+        // resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
+        resolution:Resolution.high
+      )
+      .then((value) {
+        print('DeepAR: DeepAR done initialized');
+      });
 
       // cameraController = CameraController(
       //   camera[0],
@@ -133,7 +137,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onNewCameraSelected() async {
-    print('balik kamera');
+    print('DeepAR: balik kamera');
     deepArController!.flipCamera();
   }
 
@@ -282,7 +286,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   void showEffect() {
-    print('asdasd');
+    print('DeepAR: Show Effect');
     _showEffected = !_showEffected;
     notifyListeners();
   }

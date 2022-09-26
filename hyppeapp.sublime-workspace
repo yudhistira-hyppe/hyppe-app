@@ -13,9 +13,6 @@
 			]
 		]
 	},
-	"buffers":
-	[
-	],
 	"build_system": "",
 	"build_system_choices":
 	[
@@ -54,25 +51,12 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/search_v2",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload/pre_upload_content",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/forgot_password",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/login",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/view",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/view/follower",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ux"
-	],
 	"file_history":
 	[
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/url_constants.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/account_preferences/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/hyppe_version.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/url_constants.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/sign_up/contents/user_agreement/user_agreement_demo_screen.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/locations.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/login/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/app.dart",
@@ -123,6 +107,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"terms_of",
+			"Lisensi",
+			"Android",
+			"Google Play",
+			"Google",
+			"photo",
+			"media",
+			"Media",
 			"getting location",
 			"isBackgroundMode",
 			"isBackgroundMode]",
@@ -168,14 +160,6 @@
 		"whole_word": false,
 		"wrap": true
 	},
-	"groups":
-	[
-		{
-			"sheets":
-			[
-			]
-		}
-	],
 	"incremental_find":
 	{
 		"height": 24.0
@@ -184,38 +168,15 @@
 	{
 		"height": 36.0
 	},
-	"layout":
-	{
-		"cells":
-		[
-			[
-				0,
-				0,
-				1,
-				1
-			]
-		],
-		"cols":
-		[
-			0.0,
-			1.0
-		],
-		"rows":
-		[
-			0.0,
-			1.0
-		]
-	},
 	"menu_visible": true,
 	"output.find_results":
 	{
 		"height": 0.0
 	},
 	"pinned_build_system": "",
-	"project": "hyppeapp.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 68.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -224,6 +185,18 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"url",
+				"core/config/url_constants.dart"
+			],
+			[
+				"urlco",
+				"core/config/url_constants.dart"
+			],
+			[
+				"vers",
+				"core/constants/hyppe_version.dart"
+			],
 			[
 				"urls",
 				"core/config/url_constants.dart"
@@ -417,7 +390,6 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
 	"settings":
 	{
 	},

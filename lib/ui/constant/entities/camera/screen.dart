@@ -33,6 +33,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
 
   @override
   void afterFirstLayout(BuildContext context) {
+    print('DeepAR: after First Layout');
     notifier = Provider.of<CameraNotifier>(context, listen: false);
     notifier.initCamera(context, mounted);
   }
