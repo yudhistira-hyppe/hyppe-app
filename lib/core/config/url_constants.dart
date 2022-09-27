@@ -71,6 +71,9 @@ class UrlConstants {
   /* User Content route */
   static const String bankRoute = "/api/banks";
 
+  /* v3 user ads */
+  static const String adsRoute = "/api/ads";
+
   static const String transactionRoute = "/api/transactions";
 
   static const String userbankaccountsRoute = "/api/userbankaccounts";
@@ -461,4 +464,10 @@ class UrlConstants {
 
   /// post => Get Account Balance
   static const String accountBalances = "$accountBalancesRoutes/";
+
+  /// get => Get Ads User
+  static const String getAdsVideo = "$adsRoute/getAds/user?type=Video";
+
+  /// post => View Ads User
+  static const String viewAds = "$adsRoute/viewads";
 }

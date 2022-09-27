@@ -94,7 +94,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                             ),
                           ],
                         ),
-                        AutoCompleteSearch(),
+                        Expanded(child: AutoCompleteSearch()),
                       ],
                     ),
                   ),

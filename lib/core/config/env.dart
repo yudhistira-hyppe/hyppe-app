@@ -46,6 +46,8 @@ class Env {
     UrlConstants.getuserprofile,
     UrlConstants.getVideoApsara,
     UrlConstants.getOtherUserPosts,
+    UrlConstants.getAdsVideo,
+    UrlConstants.viewAds
   ];
 
   static final EnvData dev = EnvData(

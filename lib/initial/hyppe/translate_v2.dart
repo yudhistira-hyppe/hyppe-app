@@ -17,6 +17,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/hashtag/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -142,6 +143,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<OtherProfileNotifier>().translate(translate);
     context.read<ChangePasswordNotifier>().translate(translate);
     context.read<SearchNotifier>().translate(translate);
+    context.read<HashtagNotifier>().translate(translate);
     context.read<NotificationNotifier>().translate(translate);
     context.read<ProfileCompletionNotifier>().translate(translate);
     context.read<ReferralNotifier>().translate(translate);

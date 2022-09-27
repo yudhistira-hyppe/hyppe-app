@@ -6,12 +6,13 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
-// import 'package:hyppe/ui/inner/search_v2/filter_search/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/option_bar.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_content.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
+
+import 'hashtag/screen.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -52,6 +53,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         body: Column(
           children: [
             const ProcessUploadComponent(topMargin: 0.0),
+            const HashtagScreen(),
             Flexible(
               child: DefaultTabController(
                 length: 3,

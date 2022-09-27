@@ -26,7 +26,9 @@ class CenterItemView extends StatelessWidget {
       child: CustomBaseCacheImage(
         widthPlaceHolder: 112,
         heightPlaceHolder: 40,
-        imageUrl: data!.isApsara! ? data!.mediaThumbEndPoint! : "${data?.fullThumbPath}",
+        imageUrl: data!.isApsara!
+            ? data!.mediaThumbEndPoint!
+            : "${data?.fullThumbPath}",
         imageBuilder: (context, imageProvider) => Container(
           width: _scaling,
           height: 181,
@@ -58,13 +60,23 @@ class CenterItemView extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
+    return Stack(
       children: [
-        TopItemView(data: data),
-        BottomItemView(data: data),
-        data!.tagPeople!.isNotEmpty ? BottomUserView(data: data) : const SizedBox(),
+        Positioned(top: 0, right: 0, child: TopItemView(data: data)),
+        Positioned(
+          bottom: 0,
+          left: 5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              BottomItemView(data: data),
+              data!.tagPeople!.isNotEmpty
+                  ? BottomUserView(data: data)
+                  : const SizedBox(),
+            ],
+          ),
+        ),
       ],
     );
   }

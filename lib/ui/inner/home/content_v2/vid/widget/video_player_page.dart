@@ -225,10 +225,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   void _initialize() async {
-    'Hyppe Vid Post Id ${widget.videoData?.postID}'.logger();
+    'Hyppe Vid Post ID ${widget.videoData?.postID}'.logger();
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
     'Hyppe Vid Email ${SharedPreference().readStorage(SpKeys.email)}'.logger();
     'Hyppe Vid Token ${SharedPreference().readStorage(SpKeys.userToken)}'.logger();
+    'Hyppe Vid isApsara ${widget.videoData!.isApsara!}'.logger();
     if (widget.videoData!.isApsara!) {
       await getVideoApsara(widget.videoData!.apsaraId!);
     }
@@ -244,15 +245,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     //   _eventType = (_clipsData?.preRoll?.isNotEmpty ?? false) ? BetterPlayerEventType.showingAds : null;
     //   _awaitInitial.value = true;
     // }
-    _userVideo(_eventType == null);
+
+    _userVideo(_eventType == null, true);
   }
 
-  void _userVideo(bool autoPlay) async {
+  void _userVideo(bool autoPlay, bool isAds) async {
     print('test iklan data');
     print(widget.videoData?.postID);
     // print(_clipsData!.ads[0].rollDuration);
-    print(_clipsData!.ads[1].rollUri);
-    print(_clipsData!.ads[1].playingAt);
+    // print(_clipsData!.ads[1].rollUri);
+    // print(_clipsData!.ads[1].playingAt);
     // print(_clipsData!.ads[1].playingAt);
     // print(_clipsData!.ads[1].rollDuration);
     // print(_clipsData!.ads[1].rollUri);
@@ -283,10 +285,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       widget.videoData?.fullContentPath ?? '',
-      adsConfiguration: BetterPlayerAdsConfiguration(
+      adsConfiguration: isAds ? BetterPlayerAdsConfiguration(
         postID: widget.videoData?.postID ?? '',
         rolls: _clipsData?.ads.map((e) => BetterPlayerRoll(rollUri: e.rollUri, rollDuration: e.playingAt)).toList(),
-      ),
+      ): BetterPlayerAdsConfiguration(),
       headers: {
         'post-id': widget.videoData?.postID ?? '',
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
@@ -412,7 +414,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     // resume user video
     setStateIfMounted(() {
       _eventType = null;
+      _userVideo(_eventType == null, false);
       _betterPlayerController?.play();
+      print('play video');
     });
   }
 
@@ -502,6 +506,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                     if (!value) {
                       return const CircularProgressIndicator();
                     } else {
+                      print('_eventType $_eventType');
                       if (_eventType == BetterPlayerEventType.showingAds) {
                         if (_betterPlayerControllerMap[_betterPlayerRollUri] != null && (_betterPlayerControllerMap[_betterPlayerRollUri]?.isVideoInitialized() ?? false)) {
                           return BetterPlayer(
@@ -515,7 +520,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                           );
                         }
                       }
-
                       return BetterPlayer(
                         controller: _betterPlayerController!,
                       );

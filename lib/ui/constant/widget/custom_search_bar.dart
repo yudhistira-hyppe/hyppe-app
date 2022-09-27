@@ -9,6 +9,7 @@ class CustomSearchBar extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String>? onChanged;
   final Function? onPressedIcon;
+  final Function? onPressedRightIcon;
   final TextEditingController? controller;
   final Function()? onTap;
   final FocusNode? focusNode;
@@ -30,6 +31,7 @@ class CustomSearchBar extends StatelessWidget {
     this.hintText,
     this.contentPadding,
     this.onPressedIcon,
+    this.onPressedRightIcon,
     this.heightText,
     this.focusNode,
     this.inputDecoration,
@@ -51,6 +53,11 @@ class CustomSearchBar extends StatelessWidget {
         autofocus: autoFocus,
         decoration: inputDecoration ??
             InputDecoration(
+              suffixIcon: onPressedRightIcon != null ? CustomIconButtonWidget(
+                defaultColor: false,
+                onPressed: onPressedRightIcon,
+                iconData: "${AssetPath.vectorPath}filter.svg",
+              ) : null,
                 prefixIcon: CustomIconButtonWidget(
                   defaultColor: false,
                   onPressed: onPressedIcon,
