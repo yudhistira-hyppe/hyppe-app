@@ -228,6 +228,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> startVideoRecording() async {
+    print('play video');
     if (!isInitialized) {
       return;
     }

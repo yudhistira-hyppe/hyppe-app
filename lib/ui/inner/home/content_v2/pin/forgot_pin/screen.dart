@@ -48,7 +48,7 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: setPin == 'true' ? notifier2.translate.changePin! : 'Set New Pin',
+            textToDisplay: 'Set New Pin dari forgot',
             textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
           ),
           centerTitle: false,
@@ -66,7 +66,7 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: setPin == 'true' && !notifier.checkPin ? notifier2.translate.enterYourCurrentPin! : notifier2.translate.enterNewPin!,
+                textToDisplay: notifier2.translate.enterNewPin!,
                 textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
@@ -74,23 +74,9 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
               sixPx,
               CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
               twelvePx,
-              CustomRectangleInput(setPin == 'true' && !notifier.checkPin ? notifier.pin3Controller : notifier.pin1Controller, onChanged: (value) {
-                if (setPin == 'true' && !notifier.checkPin) {
-                  notifier.pinCurentCheking(context, value);
-                } else {
-                  notifier.pinChecking(context, value);
-                }
+              CustomRectangleInput(notifier.pin4Controller, onChanged: (value) {
+                notifier.setPinInForgot(context, value);
               }),
-              setPin == 'true' && !notifier.changeSetNewPin
-                  ? GestureDetector(
-                      onTap: () {},
-                      child: CustomTextWidget(
-                        textToDisplay: notifier2.translate.forgotPin!,
-                        maxLines: 3,
-                        textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
-                      ),
-                    )
-                  : Container(),
             ],
           ),
         ),

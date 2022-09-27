@@ -44,6 +44,7 @@ class _PinScreenState extends State<PinScreen> {
                 notifier.checkPin = false;
                 notifier.pin1Controller.clear();
               }
+              notifier.isForgotPin = false;
               // if (notifier.pin3Controller.text != '') notifier.pin3Controller.clear();
             },
           ),
@@ -84,7 +85,7 @@ class _PinScreenState extends State<PinScreen> {
               }),
               setPin == 'true' && !notifier.changeSetNewPin
                   ? GestureDetector(
-                      onTap: () => Routing().move(Routes.forgotPinScreen),
+                      onTap: () => notifier.forgotPin(context),
                       child: CustomTextWidget(
                         textToDisplay: notifier2.translate.forgotPin!,
                         maxLines: 3,

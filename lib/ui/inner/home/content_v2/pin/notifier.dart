@@ -23,6 +23,7 @@ class PinAccountNotifier extends ChangeNotifier {
   String _pin1 = '';
   String _pin2 = '';
   String _pin3 = '';
+  String _pin4 = '';
   String _timer = "";
   String _timer2 = "";
   Timer? _myTimer;
@@ -30,20 +31,27 @@ class PinAccountNotifier extends ChangeNotifier {
   bool _loading = false;
   bool pinCreate = false;
   bool checkPin = false;
+  bool _isForgotPin = false;
+  bool _isSetPinInForgot = false;
 
   CountdownController? get countdownController => _countdownController;
   bool get confirm => _confirm;
   bool get matchingPin => _matchingPin;
   String get pin1 => _pin1;
   String get pin2 => _pin2;
+  String get pin3 => _pin3;
+  String get pin4 => _pin4;
   bool get loading => _loading;
   String get timer2 => _timer2;
-  TextEditingController pin1Controller = TextEditingController();
-  TextEditingController pin2Controller = TextEditingController();
-  TextEditingController pin3Controller = TextEditingController();
+  TextEditingController pin1Controller = TextEditingController(); //set new pin
+  TextEditingController pin2Controller = TextEditingController(); //confirm pin
+  TextEditingController pin3Controller = TextEditingController(); //curent pin
+  TextEditingController pin4Controller = TextEditingController(); //set new pin in forgot pin
   TextEditingController _otpController = TextEditingController();
   TextEditingController get otpController => _otpController;
   bool get changeSetNewPin => _changeSetNewPin;
+  bool get isForgotPin => _isForgotPin;
+  bool get isSetPinInForgot => _isSetPinInForgot;
 
   set confirm(bool val) {
     _confirm = val;
@@ -66,7 +74,17 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   set pin2(String val) {
-    _pin1 = val;
+    _pin2 = val;
+    notifyListeners();
+  }
+
+  set pin3(String val) {
+    _pin3 = val;
+    notifyListeners();
+  }
+
+  set pin4(String val) {
+    _pin4 = val;
     notifyListeners();
   }
 
@@ -82,6 +100,16 @@ class PinAccountNotifier extends ChangeNotifier {
 
   set loading(bool val) {
     _loading = val;
+    notifyListeners();
+  }
+
+  set isForgotPin(bool val) {
+    _isForgotPin = val;
+    notifyListeners();
+  }
+
+  set isSetPinInForgot(bool val) {
+    _isSetPinInForgot = val;
     notifyListeners();
   }
 
@@ -102,20 +130,27 @@ class PinAccountNotifier extends ChangeNotifier {
   void pinChecking(context, String val) {
     _pin1 = val;
     if (_pin1.length == 6) {
-      print('asdads');
       Routing().move(Routes.confirmPinScreen);
     }
   }
 
   void pinConfirmChecking(context, String val) {
     _pin2 = val;
-    if (_pin2 == _pin1) {
-      matchingPin = true;
-      resetTimer();
-      Routing().move(Routes.verificationPinScreen);
-      sendVerificationMail(context);
+    if (isSetPinInForgot) {
+      if (_pin2 == _pin4) {
+        checkOtp(context, fromForgot: true);
+      } else {
+        matchingPin = false;
+      }
     } else {
-      matchingPin = false;
+      if (_pin2 == _pin1) {
+        matchingPin = true;
+        resetTimer();
+        Routing().move(Routes.verificationPinScreen);
+        sendVerificationMail(context);
+      } else {
+        matchingPin = false;
+      }
     }
   }
 
@@ -129,47 +164,6 @@ class PinAccountNotifier extends ChangeNotifier {
       });
     }
   }
-
-  // void pinChecking(context, String val) {
-  //   var setPin = SharedPreference().readStorage(SpKeys.setPin);
-  //   if (confirm == false) {
-  //     if (setPin == 'true') {
-  //       if (checkPin) {
-  //         _pin1 = val;
-  //         if (_pin1.length == 6) {
-  //           confirm = true;
-  //           Routing().move(Routes.pinScreen);
-  //           _pin2 = '';
-  //         }
-  //       } else {
-  //         _pin3 = val;
-  //         if (_pin3.length == 6) {
-  //           sendVerificationMail(context, checkPin: true).then((value) {
-  //             checkPin = value;
-  //             Routing().move(Routes.pinScreen);
-  //           });
-  //         }
-  //       }
-  //     } else {
-  //       _pin1 = val;
-  //       if (_pin1.length == 6) {
-  //         Routing().move(Routes.pinScreen);
-  //         confirm = true;
-  //       }
-  //     }
-  //   } else {
-  //     _pin2 = val;
-  //     if (_pin2.length == 6) {
-  //       if (_pin2 == _pin1) {
-  //         matchingPin = true;
-  //         Routing().move(Routes.verificationPinScreen);
-  //         sendVerificationMail(context);
-  //       } else {
-  //         matchingPin = false;
-  //       }
-  //     }
-  //   }
-  // }
 
   onBack() {
     resetTimer();
@@ -189,10 +183,11 @@ class PinAccountNotifier extends ChangeNotifier {
     Routing().moveBack();
   }
 
-  Future sendVerificationMail(BuildContext context, {bool resend = false, bool checkPin = false}) async {
+  Future sendVerificationMail(BuildContext context, {bool resend = false, bool checkPin = false, bool forgotPin = false}) async {
     bool connect = await System().checkConnections();
     if (connect) {
       final havePin = SharedPreference().readStorage(SpKeys.setPin);
+      resetTimer();
       startTimer();
       String type = '';
       if (pinCreate) {
@@ -201,16 +196,19 @@ class PinAccountNotifier extends ChangeNotifier {
         type = 'CREATE_PIN';
       }
       Map param = {};
-
       if (resend) {
-        param = {"type": type, "event": "NOTIFY_OTP", "status": "NOTIFY"};
+        if (isForgotPin) {
+          param = {"type": 'FORGOT_PIN', "event": "NOTIFY_OTP", "status": "NOTIFY"};
+        } else {
+          param = {"type": type, "event": "NOTIFY_OTP", "status": "NOTIFY"};
+        }
       } else if (checkPin) {
         param = {"pin": _pin3, "type": "CECK_PIN", "event": "CECK_PIN", "status": "INITIAL"};
+      } else if (forgotPin) {
+        param = {"type": "FORGOT_PIN", "event": "FORGOT_PIN", "status": "INITIAL"};
       } else {
         param = {"pin": _pin2, "type": type, "event": type, "status": "INITIAL"};
       }
-      print('param');
-      print(param);
 
       final notifier = TransactionBloc();
       await notifier.sendVerificationPin(context, params: param);
@@ -235,34 +233,68 @@ class PinAccountNotifier extends ChangeNotifier {
     }
   }
 
-  bool checkSubmitButtonOTP() => otpController.text.length >= 4 ? true : false;
+  bool checkSubmitButtonOTP() {
+    if (otpController.text.length >= 4) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  Future checkOtp(BuildContext context) async {
+  Future checkOtp(BuildContext context, {bool fromForgot = false}) async {
     bool connect = await System().checkConnections();
     if (connect) {
       loading = true;
       String type = '';
-      if (pinCreate) {
+      Map param = {};
+
+      if (isForgotPin) {
+        type = 'FORGOT_PIN';
+      } else if (pinCreate) {
         type = 'CHANGE_PIN';
       } else {
         type = 'CREATE_PIN';
       }
-      final param = {"otp": otpController.text, "type": type, "event": "VERIFY_OTP", "status": "REPLY"};
+      if (fromForgot) {
+        param = {"otp": _pin4, "type": 'FORGOT_PIN', "event": "CREATE_PIN", "status": "REPLY"};
+      } else {
+        param = {"otp": otpController.text, "type": type, "event": "VERIFY_OTP", "status": "REPLY"};
+      }
+      print('param');
+      print(param);
       final notifier = TransactionBloc();
       await notifier.sendVerificationPin(context, params: param);
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.sendVerificationSuccess) {
-        pinCreate = true;
-        SharedPreference().writeStorage(SpKeys.setPin, 'true');
-        backHome();
-        ShowBottomSheet().onShowColouredSheet(
-          context,
-          'PIN successful created',
-          color: kHyppeTextSuccess,
-          iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
-          subCaption: 'Your PIN has been successfully created',
-        );
+        if (isForgotPin) {
+          if (fromForgot) {
+            pinCreate = true;
+            _isSetPinInForgot = false;
+            SharedPreference().writeStorage(SpKeys.setPin, 'true');
+            backHome();
+            ShowBottomSheet().onShowColouredSheet(
+              context,
+              'PIN successful created',
+              color: kHyppeTextSuccess,
+              iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
+              subCaption: 'Your PIN has been successfully created',
+            );
+          } else {
+            Routing().move(Routes.forgotPinScreen);
+          }
+        } else {
+          pinCreate = true;
+          SharedPreference().writeStorage(SpKeys.setPin, 'true');
+          backHome();
+          ShowBottomSheet().onShowColouredSheet(
+            context,
+            'PIN successful created',
+            color: kHyppeTextSuccess,
+            iconSvg: "${AssetPath.vectorPath}valid-invert.svg",
+            subCaption: 'Your PIN has been successfully created',
+          );
+        }
       }
 
       if (fetch.postsState == TransactionState.getHistoryError) {
@@ -359,17 +391,36 @@ class PinAccountNotifier extends ChangeNotifier {
     _pin1 = '';
     _pin2 = '';
     _pin3 = '';
+    _pin4 = '';
     pin1Controller.clear();
     pin2Controller.clear();
     pin3Controller.clear();
+    pin4Controller.clear();
     _otpController.clear();
     matchingPin = true;
     confirm = false;
     checkPin = false;
+    isForgotPin = false;
     resetTimer();
     Routing().moveBack();
     Routing().moveBack();
     Routing().moveBack();
     Routing().moveBack();
+  }
+
+  void forgotPin(BuildContext context) {
+    sendVerificationMail(context, forgotPin: true);
+    _isForgotPin = true;
+    Routing().move(Routes.verificationPinScreen);
+    notifyListeners();
+  }
+
+  void setPinInForgot(BuildContext context, val) {
+    _pin4 = val;
+    if (_pin4.length == 6) {
+      _isSetPinInForgot = true;
+      notifyListeners();
+      Routing().move(Routes.confirmPinScreen);
+    }
   }
 }

@@ -61,8 +61,8 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
 
   @override
   void didChangeDependencies() {
-    // var cameraNotifier = Provider.of<CameraNotifier>(context);
-    // widget.onCameraNotifierUpdate(cameraNotifier);
+    var cameraNotifier = Provider.of<CameraNotifier>(context);
+    widget.onCameraNotifierUpdate(cameraNotifier);
     super.didChangeDependencies();
   }
 
