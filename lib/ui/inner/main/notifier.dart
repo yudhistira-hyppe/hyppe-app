@@ -82,6 +82,7 @@ class MainNotifier with ChangeNotifier {
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
+      // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')
       notifyListeners();
     }
 

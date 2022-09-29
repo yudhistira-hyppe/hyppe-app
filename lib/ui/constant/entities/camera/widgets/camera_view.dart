@@ -67,6 +67,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
@@ -155,20 +156,22 @@ class _CameraViewState extends State<CameraView> {
       builder: (_, notifier, __) => Scaffold(
           body: Stack(
         children: [
-          notifier.deepArController!.isInitialized
-              ? Container(
-                  child: AspectRatio(
-                    aspectRatio: deviceRatio,
-                    child: Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
-                      child: DeepArPreview(notifier.deepArController!),
+          notifier.deepArController == null
+              ? CustomLoading()
+              : notifier.deepArController!.isInitialized
+                  ? Platform.isIOS
+                      ? DeepArPreview(notifier.deepArController!)
+                      : AspectRatio(
+                          aspectRatio: deviceRatio,
+                          child: Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
+                            child: DeepArPreview(notifier.deepArController!),
+                          ),
+                        )
+                  : const Center(
+                      child: Text("Loading..."),
                     ),
-                  ),
-                )
-              : const Center(
-                  child: Text("Loading..."),
-                ),
           notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox(),
           // _topMediaOptions(notifier.deepArController!),
           // _bottomMediaOptions(notifier.deepArController!),

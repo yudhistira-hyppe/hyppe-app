@@ -206,6 +206,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 child: CustomTextWidget(
                                                   maxLines: 2,
                                                   textAlign: TextAlign.left,
+                                                  // textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                                                   textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                                                   textStyle: Theme.of(context).textTheme.caption,
                                                 ),

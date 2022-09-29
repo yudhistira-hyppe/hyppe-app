@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
@@ -109,8 +110,12 @@ class TransactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
-        setTransactionFetch(TransactionFetch(TransactionState.getHistoryError, data: errorData.error));
+        if (errorData.type == DioErrorType.cancel) {
+          setTransactionFetch(TransactionFetch(TransactionState.getHistorySuccess));
+        } else {
+          ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+          setTransactionFetch(TransactionFetch(TransactionState.getHistoryError, data: errorData.error));
+        }
       },
       data: params,
       withAlertMessage: true,

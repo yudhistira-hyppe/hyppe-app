@@ -110,6 +110,7 @@ class ApiAction {
     responseType = ResponseType.json,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    CancelToken? cancelToken,
     String contentType = 'application/json',
   }) async {
     Map<String, dynamic> _headers = <String, dynamic>{};
@@ -133,6 +134,7 @@ class ApiAction {
             ),
             onSendProgress: onSendProgress,
             onReceiveProgress: onReceiveProgress,
+            cancelToken: cancelToken,
           )
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),

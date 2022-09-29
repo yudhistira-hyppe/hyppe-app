@@ -64,6 +64,7 @@ class Repos {
           data: data,
           token: token,
           headers: headers,
+          cancelToken: cancelToken,
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress,
         );
@@ -121,6 +122,7 @@ class Repos {
     required bool withCheckConnection,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool? postLogsError = false,
   }) async {
     // print('kkkkkk');
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
@@ -173,7 +175,7 @@ class Repos {
       logic(_response);
 
       /// show message if any error
-      if (_response.statusCode! > HTTP_CODE) {
+      if (_response.statusCode! > HTTP_CODE && !postLogsError!) {
         'Error communicate with host $host'.logger();
 
         /// serialize error data from backend
@@ -204,7 +206,7 @@ class Repos {
           dataError['log'] = _errorData.message;
           'Error data ddddd' + dataError.logger();
 
-          final responError = await postLogError(dataError, headers, onReceiveProgress);
+          final responError = await postLogError(context, dataError, headers, onReceiveProgress);
           'Actual response error data ${responError.data}'.logger();
         }
       } else {
@@ -239,7 +241,7 @@ class Repos {
       }
       'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'.logger();
       dataError['log'] = 'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host';
-      final responError = await postLogError(dataError, headers, onReceiveProgress);
+      final responError = await postLogError(context, dataError, headers, onReceiveProgress);
       'Actual response error data ${responError.data}'.logger();
       onDioError(e);
     } catch (e) {
@@ -258,22 +260,34 @@ class Repos {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
       dataError['log'] = 'Error detail with no alertMessage ${e.toString()} and host $host';
-      final responError = await postLogError(dataError, headers, onReceiveProgress);
+      final responError = await postLogError(context, dataError, headers, onReceiveProgress);
       'Actual response error data ${responError.data}'.logger();
     }
   }
 
-  Future postLogError(data, headers, onReceiveProgress) async {
+  Future postLogError(context, data, headers, onReceiveProgress) async {
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? realDeviceId = await System().getDeviceIdentifier();
     data['imei'] = realDeviceId;
-    return _apiAction.post(
-      UrlConstants.postLogDevice,
+    return reposPost(
+      context,
+      (onResult) {},
+      (errorData) {},
       data: data,
-      token: token,
-      headers: headers,
-      onReceiveProgress: onReceiveProgress,
+      withAlertMessage: false,
+      withCheckConnection: false,
+      host: UrlConstants.postLogDevice,
+      methodType: MethodType.post,
+      postLogsError: true,
     );
+
+    // return _apiAction.post(
+    //   UrlConstants.postLogDevice,
+    //   data: data,
+    //   token: token,
+    //   headers: headers,
+    //   onReceiveProgress: onReceiveProgress,
+    // );
   }
 
   void _showSnackBar(Color color, String message, String desc, {Function? function}) {

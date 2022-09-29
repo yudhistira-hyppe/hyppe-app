@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
@@ -123,7 +124,8 @@ class FilterTransactionNotifier extends ChangeNotifier {
       _skip = 0;
       _param.addAll({"skip": _skip, "limit": _limit, "email": email});
       dataAllTransaction = [];
-      getAllTransaction(context, param2: _param);
+
+      getAllTransaction(context, param2: _param, fromNewFilter: true);
     }
   }
 
@@ -196,39 +198,41 @@ class FilterTransactionNotifier extends ChangeNotifier {
     _param.addAll({"skip": 0, "limit": _limit, "email": email});
     newFilterList.sort((a, b) => a['id'].compareTo(b['id']));
     Routing().moveBack();
-    dataAllTransaction = [];
-    getAllTransaction(context, param2: _param);
+
+    getAllTransaction(context, param2: _param, fromNewFilter: true);
   }
 
-  Future getAllTransaction(BuildContext context, {Map? param2, bool loading = true}) async {
+  Future getAllTransaction(BuildContext context, {Map? param2, bool loading = true, bool fromNewFilter = false}) async {
     if (loading) isLoading = true;
-
     bool connect = await System().checkConnections();
-    if (connect) {
-      final email = SharedPreference().readStorage(SpKeys.email);
-      DateTime dateToday = DateTime.now();
-      String date = dateToday.toString().substring(0, 10);
-      final param = {"email": email, "sell": true, "buy": true, "withdrawal": true, "startdate": "2020-08-12", "enddate": date, "skip": _skip, "limit": _limit};
-      final notifier = TransactionBloc();
-      await notifier.getHistoryTransaction(context, params: param2 ?? param);
-      final fetch = notifier.transactionFetch;
+    try {
+      if (connect) {
+        final email = SharedPreference().readStorage(SpKeys.email);
+        DateTime dateToday = DateTime.now();
+        String date = dateToday.toString().substring(0, 10);
+        final param = {"email": email, "sell": true, "buy": true, "withdrawal": true, "startdate": "2020-08-12", "enddate": date, "skip": _skip, "limit": _limit};
+        final notifier = TransactionBloc();
+        await notifier.getHistoryTransaction(context, params: param2 ?? param);
+        final fetch = notifier.transactionFetch;
 
-      if (fetch.postsState == TransactionState.getHistorySuccess) {
-        fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
-      }
-
-      if (fetch.postsState == TransactionState.getHistoryError) {
-        if (fetch.data != null) {
-          ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+        if (fetch.postsState == TransactionState.getHistorySuccess) {
+          if (fromNewFilter) dataAllTransaction = [];
+          fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
         }
+
+        if (fetch.postsState == TransactionState.getHistoryError) {
+          if (fetch.data != null) {
+            ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+          }
+        }
+      } else {
+        ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+          Routing().moveBack();
+        });
       }
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-        Routing().moveBack();
-      });
-    }
-    isLoading = false;
-    notifyListeners();
+      isLoading = false;
+      notifyListeners();
+    } catch (e) {}
   }
 
   void resetFilter(BuildContext context, {bool back = true}) {
