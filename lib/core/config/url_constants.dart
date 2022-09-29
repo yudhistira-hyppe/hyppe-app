@@ -466,7 +466,7 @@ class UrlConstants {
   static const String accountBalances = "$accountBalancesRoutes/";
 
   /// get => Get Ads User
-  static const String getAdsVideo = "$adsRoute/getAds/user?type=Video";
+  static const String getAdsVideo = "$adsRoute/getAds/user?type=Content%20Ads";
 
   /// post => View Ads User
   static const String viewAds = "$adsRoute/viewads";
