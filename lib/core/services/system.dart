@@ -10,8 +10,12 @@ import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
+
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
+
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -449,6 +453,22 @@ class System {
         _filePickerResult = [File(_pickerResult.path)];
       }
     } else {
+      // used for KYC pick multi image
+      if (featureType == FeatureType.other) {
+        debugPrint("Masuk KYC");
+        List<File>? imageFileList = [];
+        final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
+        if (selectedImages!.isNotEmpty && selectedImages.length <= 3) {
+          for (XFile file in selectedImages) {
+            debugPrint(file.path);
+            imageFileList.add(File(file.path));
+          }
+          _filePickerResult = imageFileList;
+        } else {
+          _errorMsg = "Please select one or max 3 image";
+        }
+      }
+
       // used for picking content posts
       if (featureType == FeatureType.vid) {
         await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
@@ -553,32 +573,43 @@ class System {
     required Function() action,
     bool uploadContentAction = true,
   }) async {
-    bool _permissionStatus = true;
+    // bool _permissionStatus = true;
 
-    if (uploadContentAction) {
-      // request permission
-      _permissionStatus = await requestPrimaryPermission(context);
-    }
+    final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
 
-    if (!_permissionStatus) {
-      ShowGeneralDialog.permanentlyDeniedPermission(context);
-    } else {
-      final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
-      if (notifier.user.profile != null) {
-        // debugPrint(notifier.user.profile!.isComplete.toString());
-        // debugPrint(notifier.user.profile!.isIdVerified.toString());
-        // if (!notifier.user.profile!.isComplete!) {
-        //   ShowBottomSheet.onShowCompleteProfile(context);
-        // } else if (!notifier.user.profile!.isIdVerified!) {
-        if (!notifier.user.profile!.isIdVerified!) {
-          ShowBottomSheet.onShowIDVerification(context);
-        } else {
-          action();
-        }
+    if (notifier.user.profile != null) {
+      if (!notifier.user.profile!.isIdVerified!) {
+        ShowBottomSheet.onShowIDVerification(context);
       } else {
-        ShowBottomSheet.onShowSomethingWhenWrong(context);
+        action();
       }
     }
+
+    // if (uploadContentAction) {
+    //   // request permission
+    //   _permissionStatus = await requestPrimaryPermission(context);
+    // }
+
+    // if (!_permissionStatus) {
+    //   ShowGeneralDialog.permanentlyDeniedPermission(context);
+    // } else {
+    //   final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+
+    //   if (notifier.user.profile != null) {
+    //     // debugPrint(notifier.user.profile!.isComplete.toString());
+    //     // debugPrint(notifier.user.profile!.isIdVerified.toString());
+    //     // if (!notifier.user.profile!.isComplete!) {
+    //     //   ShowBottomSheet.onShowCompleteProfile(context);
+    //     // } else if (!notifier.user.profile!.isIdVerified!) {
+    //     if (!notifier.user.profile!.isIdVerified!) {
+    //       ShowBottomSheet.onShowIDVerification(context);
+    //     } else {
+    //       action();
+    //     }
+    //   } else {
+    //     ShowBottomSheet.onShowSomethingWhenWrong(context);
+    //   }
+    // }
   }
 
   Future<bool> requestPermission(BuildContext context, {required List<Permission> permissions}) async {

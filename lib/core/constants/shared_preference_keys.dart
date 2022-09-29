@@ -25,8 +25,8 @@ class SpKeys {
   static const String isUserRequestRecoverPassword = 'isUserRequestRecoverPassword';
   static const String isUserInOTP = 'isUserInOTP';
   static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
-
   static const String onlineVersion = 'onlineVersion';
   static const String countAds = '0';
   static const String setPin = 'setPin';
+  static const String statusVerificationId = 'statusVerificationId';
 }

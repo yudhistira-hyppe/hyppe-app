@@ -59,11 +59,21 @@ class Routes {
 
   static const String testAliPlayer = '/test-ali-player';
 
-//search
+  //search
   static const String searcMore = '/search-more';
   static const String searcMoreComplete = '/search-more-complete';
 
-//delete account
+  static const String verificationIDStep1 = '/verification-id-step-1';
+  static const String verificationIDStep2 = '/verification-id-step-2';
+  static const String verificationIDStep3 = '/verification-id-step-3';
+  static const String verificationIDStep4 = '/verification-id-step-4';
+  static const String verificationIDStep5 = '/verification-id-step-5';
+  static const String verificationIDStep6 = '/verification-id-step-6';
+  static const String verificationIDFailed = '/verification-id-failed';
+  static const String verificationIDSuccess = '/verification-id-success';
+  static const String verificationIDLoading = '/verification-id-loading';
+
+  //delete account
   static const String deleteAccount = '/delete-account';
   static const String confirmDeleteAccount = '/confirm-delete-account';
 
@@ -85,4 +95,8 @@ class Routes {
   static const String confirmPinScreen = '/confirm-pin-screen';
   static const String verificationPinScreen = '/verification-pin-screen';
   static const String forgotPinScreen = '/forgot-pin-screen';
+
+  static const String verificationIDStepSupportingDocs = '/verification-id-docs';
+  static const String verificationIDStepSupportingDocsPreview = '/verification-id-docs-preview';
+  static const String verificationIDStepSupportDocsEula = '/verification-id-docs-eula';
 }

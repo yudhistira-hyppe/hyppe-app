@@ -32,10 +32,10 @@ class MyBalance extends StatelessWidget {
                   textAlign: TextAlign.start,
                 ),
                 fivePx,
-                const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}info-icon.svg",
-                  height: 14,
-                )
+                // const CustomIconWidget(
+                //   iconData: "${AssetPath.vectorPath}info-icon.svg",
+                //   height: 14,
+                // )
               ],
             ),
             fivePx,

@@ -601,6 +601,68 @@ class LocalizationModelV2 {
   String? sellContent;
   String? certificateNumber;
   String? choosePaymentMethods;
+  String? retakeIdPicture;
+  String? aboutIdVerification;
+  String? realName;
+  String? reaNameNotice;
+  String? continueStep;
+  String? uploadIdCardNotice1;
+  String? uploadIdCardNotice2;
+  String? uploadIdCardNotice3;
+  String? uploadIdCardNotice4;
+  String? uploadIdCardNotice5;
+  String? uploadIdCardNotice6;
+  String? uploadIdCardNotice7;
+  String? uploadIdCardNotice8;
+  String? cameraTakeIdCardInfo;
+  String? eKtpNumber;
+  String? placeBirth;
+  String? placeBirthNote;
+  String? selectGenderInfo;
+  String? selectDateBirthInfo;
+  String? confirmIdGenuine;
+  String? confirmIdNotice;
+  String? uploadSupportDoc;
+  String? continueSelfie;
+  String? supportDoc;
+  String? supportDocNotice1;
+  String? supportDocNotice2;
+  String? supportDocNotice3;
+  String? supportDocNotice4;
+  String? supportDocNotice5;
+  String? supportDocNotice6;
+  String? supportDocNotice7;
+  String? supportDocNotice8;
+  String? supportDocNotice9;
+  String? supportDocNotice10;
+  String? failedIdCardInfoTitle;
+  String? failedIdCardInfoSubTitle;
+  String? failedIdCardInfo1;
+  String? failedIdCardInfo2;
+  String? failedIdCardInfo3;
+  String? failedIdCardInfo4;
+  String? failedIdCardInfo5;
+  String? failedIdCardInfo6;
+  String? successIdCardTitle;
+  String? successIdCard1;
+  String? successIdCard2;
+  String? successIdCard3;
+  String? successIdCard4;
+  String? retry;
+  String? retakeSelfie;
+  String? dataDidntShow;
+  String? tapHere;
+  String? toAppeal;
+  String? unverified;
+  String? addYourHyppePinFirst;
+  String? review;
+  String? verificationYourIDFirst;
+  String? toAccessTransactionPageYouNeedToSetYourPin;
+  String? toAccessTransactionPageYouNeedToVerificationYourID;
+  String? goToSecurityPrivacy;
+  String? youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue;
+  String? yesPostAnyway;
+  String? noIWantToRegister;
 
   LocalizationModelV2({
     this.login,
@@ -1205,6 +1267,68 @@ class LocalizationModelV2 {
     this.sellContent,
     this.certificateNumber,
     this.choosePaymentMethods,
+    this.retakeIdPicture,
+    this.aboutIdVerification,
+    this.realName,
+    this.reaNameNotice,
+    this.continueStep,
+    this.uploadIdCardNotice1,
+    this.uploadIdCardNotice2,
+    this.uploadIdCardNotice3,
+    this.uploadIdCardNotice4,
+    this.uploadIdCardNotice5,
+    this.uploadIdCardNotice6,
+    this.uploadIdCardNotice7,
+    this.uploadIdCardNotice8,
+    this.cameraTakeIdCardInfo,
+    this.eKtpNumber,
+    this.placeBirth,
+    this.placeBirthNote,
+    this.selectGenderInfo,
+    this.selectDateBirthInfo,
+    this.confirmIdGenuine,
+    this.confirmIdNotice,
+    this.uploadSupportDoc,
+    this.continueSelfie,
+    this.supportDoc,
+    this.supportDocNotice1,
+    this.supportDocNotice2,
+    this.supportDocNotice3,
+    this.supportDocNotice4,
+    this.supportDocNotice5,
+    this.supportDocNotice6,
+    this.supportDocNotice7,
+    this.supportDocNotice8,
+    this.supportDocNotice9,
+    this.supportDocNotice10,
+    this.failedIdCardInfoTitle,
+    this.failedIdCardInfoSubTitle,
+    this.failedIdCardInfo1,
+    this.failedIdCardInfo2,
+    this.failedIdCardInfo3,
+    this.failedIdCardInfo4,
+    this.failedIdCardInfo5,
+    this.failedIdCardInfo6,
+    this.successIdCardTitle,
+    this.successIdCard1,
+    this.successIdCard2,
+    this.successIdCard3,
+    this.successIdCard4,
+    this.retry,
+    this.retakeSelfie,
+    this.dataDidntShow,
+    this.tapHere,
+    this.toAppeal,
+    this.unverified,
+    this.addYourHyppePinFirst,
+    this.review,
+    this.verificationYourIDFirst,
+    this.toAccessTransactionPageYouNeedToSetYourPin,
+    this.toAccessTransactionPageYouNeedToVerificationYourID,
+    this.goToSecurityPrivacy,
+    this.youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue,
+    this.yesPostAnyway,
+    this.noIWantToRegister,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1687,6 +1811,7 @@ class LocalizationModelV2 {
     deleteComment = json['deleteComment'];
 
     commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
+
     addPostDescription = json['addPostDescription'];
     privacy = json['privacy'];
     selectLocation = json['selectLocation'];
@@ -1730,6 +1855,7 @@ class LocalizationModelV2 {
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     deletingYourAccountIsPermanent = json['deletingYourAccountIsPermanent'];
+
     commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
     notReceivingOTP = json['notReceivingOTP'];
     resendOTP = json['resendOTP'];
@@ -1825,5 +1951,68 @@ class LocalizationModelV2 {
     sellContent = json['sellContent'];
     certificateNumber = json['certificateNumber'];
     choosePaymentMethods = json['choosePaymentMethods'];
+    retakeIdPicture = json["retakeIdPicture"];
+    aboutIdVerification = json["aboutIdVerification"];
+    realName = json["realName"];
+    reaNameNotice = json["reaNameNotice"];
+    continueStep = json["continueStep"];
+    uploadIdCardNotice1 = json["uploadIdCardNotice1"];
+    uploadIdCardNotice2 = json["uploadIdCardNotice2"];
+    uploadIdCardNotice3 = json["uploadIdCardNotice3"];
+    uploadIdCardNotice4 = json["uploadIdCardNotice4"];
+    uploadIdCardNotice5 = json["uploadIdCardNotice5"];
+    uploadIdCardNotice6 = json["uploadIdCardNotice6"];
+    uploadIdCardNotice7 = json["uploadIdCardNotice7"];
+    uploadIdCardNotice8 = json["uploadIdCardNotice8"];
+    cameraTakeIdCardInfo = json["cameraTakeIdCardInfo"];
+    eKtpNumber = json["eKtpNumber"];
+    placeBirth = json["placeBirth"];
+    placeBirthNote = json["placeBirthNote"];
+    selectGenderInfo = json["selectGenderInfo"];
+    selectDateBirthInfo = json["selectDateBirthInfo"];
+    confirmIdGenuine = json["confirmIdGenuine"];
+    confirmIdNotice = json["confirmIdNotice"];
+    uploadSupportDoc = json["uploadSupportDoc"];
+    continueSelfie = json["continueSelfie"];
+    supportDoc = json["supportDoc"];
+    supportDocNotice1 = json["supportDocNotice1"];
+    supportDocNotice2 = json["supportDocNotice2"];
+    supportDocNotice3 = json["supportDocNotice3"];
+    supportDocNotice4 = json["supportDocNotice4"];
+    supportDocNotice5 = json["supportDocNotice5"];
+    supportDocNotice6 = json["supportDocNotice6"];
+    supportDocNotice7 = json["supportDocNotice7"];
+    supportDocNotice8 = json["supportDocNotice8"];
+    supportDocNotice9 = json["supportDocNotice9"];
+    supportDocNotice10 = json["supportDocNotice10"];
+    failedIdCardInfoTitle = json["failedIdCardInfoTitle"];
+    failedIdCardInfoSubTitle = json["failedIdCardInfoSubTitle"];
+    failedIdCardInfo1 = json["failedIdCardInfo1"];
+    failedIdCardInfo2 = json["failedIdCardInfo2"];
+    failedIdCardInfo3 = json["failedIdCardInfo3"];
+    failedIdCardInfo4 = json["failedIdCardInfo4"];
+    failedIdCardInfo5 = json["failedIdCardInfo5"];
+    failedIdCardInfo6 = json["failedIdCardInfo6"];
+    successIdCardTitle = json["successIdCardTitle"];
+    successIdCard1 = json["successIdCard1"];
+    successIdCard2 = json["successIdCard2"];
+    successIdCard3 = json["successIdCard3"];
+    successIdCard4 = json["successIdCard4"];
+    help = json["help"];
+    retry = json["retry"];
+    retakeSelfie = json["retakeSelfie"];
+    dataDidntShow = json["dataDidntShow"];
+    tapHere = json["tapHere"];
+    toAppeal = json["toAppeal"];
+    unverified = json["unverified"];
+    review = json["review"];
+    addYourHyppePinFirst = json["addYourHyppePinFirst"];
+    verificationYourIDFirst = json["verificationYourIDFirst"];
+    toAccessTransactionPageYouNeedToSetYourPin = json["toAccessTransactionPageYouNeedToSetYourPin"];
+    toAccessTransactionPageYouNeedToVerificationYourID = json["toAccessTransactionPageYouNeedToVerificationYourID"];
+    goToSecurityPrivacy = json["goToSecurityPrivacy"];
+    youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue = json["youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue"];
+    yesPostAnyway = json["yesPostAnyway"];
+    noIWantToRegister = json["noIWantToRegister"];
   }
 }

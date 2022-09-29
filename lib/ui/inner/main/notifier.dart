@@ -187,14 +187,16 @@ class MainNotifier with ChangeNotifier {
 
   Future takeSelfie(BuildContext context) async {
     _openValidationIDCamera = false;
-    final _statusPermission = await System().requestPrimaryPermission(context);
-    final _makeContentNotifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    if (_statusPermission) {
-      _makeContentNotifier.featureType = null;
-      _makeContentNotifier.isVideo = false;
-      Routing().move(Routes.makeContent);
-    } else {
-      return ShowGeneralDialog.permanentlyDeniedPermission(context);
-    }
+    Routing().move(Routes.verificationIDStep1);
+    // final _statusPermission = await System().requestPrimaryPermission(context);
+    // final _makeContentNotifier = Provider.of<MakeContentNotifier>(context, listen: false);
+    // if (_statusPermission) {
+    //   _makeContentNotifier.featureType = null;
+    //   _makeContentNotifier.isVideo = false;
+
+    //   // Routing().move(Routes.makeContent);
+    // } else {
+    //   return ShowGeneralDialog.permanentlyDeniedPermission(context);
+    // }
   }
 }

@@ -71,7 +71,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                               image: DecorationImage(
                                 scale: 1,
                                 // image: NetworkImage(System().showUserPicture('/pict/' + notifier.data!.postId!)!),
-                                image: NetworkImage(widget.arguments!.isApsara! ? widget.arguments!.mediaThumbUri! : widget.arguments!.fullThumbPath!),
+                                image: NetworkImage(widget.arguments!.isApsara! ? widget.arguments!.mediaThumbEndPoint! : widget.arguments!.fullThumbPath!),
                                 fit: BoxFit.cover,
                               ),
                             ),

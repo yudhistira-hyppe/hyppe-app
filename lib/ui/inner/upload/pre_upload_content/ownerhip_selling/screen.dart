@@ -27,7 +27,9 @@ class OwnershipSellingScreen extends StatelessWidget {
           elevation: 0,
           centerTitle: false,
           leading: CustomIconButtonWidget(
-            onPressed: () => Routing().moveBack(),
+            onPressed: () {
+              notifier.submitOwnership();
+            },
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
             color: Theme.of(context).colorScheme.onSurface,
@@ -51,7 +53,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                   ),
                   CustomCheckButton(
                     value: notifier.certified,
-                    onChanged: (value) => notifier.certified = value!,
+                    onChanged: (value) => notifier.onOwnershipEULA(context),
                   ),
                 ],
               ),
@@ -222,7 +224,7 @@ class OwnershipSellingScreen extends StatelessWidget {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomTextButton(
-            onPressed: notifier.certified && notifier.toSell && notifier.priceController.text != ''
+            onPressed: notifier.certified
                 ? () {
                     Routing().moveBack();
                   }

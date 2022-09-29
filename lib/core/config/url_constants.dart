@@ -430,6 +430,9 @@ class UrlConstants {
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";
 
+  // verification ID
+  static const String verificationID = "$postsRoute/verificationid";
+
   //delete Account
   static const String deleteAccount = "$userRoute/noneactive";
 
@@ -462,4 +465,10 @@ class UrlConstants {
 
   /// post => Get Account Balance
   static const String accountBalances = "$accountBalancesRoutes/";
+
+  //old upload support file
+  static const String verificationIDSupportingDocs = "$postsRoute/supportfile";
+
+  // new verification ID Upload
+  static const String verificationIDWithSupportDocs = "$postsRoute/upload";
 }

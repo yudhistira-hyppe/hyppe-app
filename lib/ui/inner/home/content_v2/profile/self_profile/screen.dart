@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
@@ -64,17 +65,19 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
                       ),
                     ],
                   ),
-                  IconButton(
-                    // onPressed: () => notifier.routing.move(profileSettings),
-                    onPressed: () async {
-                      notifier.routing.move(Routes.appSettings);
-                      await context.read<TransactionNotifier>().getAccountBalance(context);
-                      context.read<TransactionNotifier>().isLoading = false;
-                    },
-                    icon: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}setting.svg",
-                    ),
-                  ),
+                  notifier.isLoading
+                      ? const CustomLoading()
+                      : IconButton(
+                          // onPressed: () => notifier.routing.move(profileSettings),
+                          onPressed: () async {
+                            notifier.routing.move(Routes.appSettings);
+                            await context.read<TransactionNotifier>().getAccountBalance(context);
+                            context.read<TransactionNotifier>().isLoading = false;
+                          },
+                          icon: const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}setting.svg",
+                          ),
+                        ),
                 ],
               ),
             ),

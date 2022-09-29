@@ -17,16 +17,13 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PreUploadContentNotifier>(
       builder: (_, notifier, __) => Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: 8 * SizeConfig.scaleDiagonal,
-            horizontal: 16 * SizeConfig.scaleDiagonal),
+        padding: EdgeInsets.symmetric(vertical: 8 * SizeConfig.scaleDiagonal, horizontal: 16 * SizeConfig.scaleDiagonal),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}handler.svg"),
-            Image.asset("assets/png/verification-idcard.png"),
+            const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+            Image.asset("assets/png/verification-need.png"),
             CustomTextWidget(
               textToDisplay: notifier.language.needVerifyId!,
               textStyle: Theme.of(context).textTheme.subtitle1,
@@ -40,43 +37,31 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("• "),
-                    SizedBox(
-                      width: 330 * SizeConfig.scaleDiagonal,
+                    Expanded(
                       child: CustomRichTextWidget(
+                        maxLines: 20,
                         textAlign: TextAlign.start,
                         textOverflow: TextOverflow.clip,
-                        textSpan: TextSpan(
-                            text: notifier.language
-                                .needVerifyIdDescriptions!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption!.copyWith(height: 1.6)),
+                        textSpan: TextSpan(text: notifier.language.needVerifyIdDescriptions!, style: Theme.of(context).textTheme.caption!.copyWith(height: 1.6)),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                    height: 10 * SizeConfig.scaleDiagonal),
+                SizedBox(height: 10 * SizeConfig.scaleDiagonal),
                 Row(
-                  crossAxisAlignment:
-                  CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("• "),
-                    SizedBox(
-                      width: 330 * SizeConfig.scaleDiagonal,
+                    Expanded(
                       child: CustomRichTextWidget(
                         textAlign: TextAlign.start,
                         textOverflow: TextOverflow.clip,
                         textSpan: TextSpan(
-                          text: notifier.language
-                              .needVerifyIdDescriptions2!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption!.copyWith(height: 1.6),
+                          text: notifier.language.needVerifyIdDescriptions2!,
+                          style: Theme.of(context).textTheme.caption!.copyWith(height: 1.6),
                         ),
                       ),
                     ),
@@ -87,10 +72,7 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: notifier.language.verify!,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .button!
-                    .copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
@@ -107,23 +89,17 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                 notifier.validateIdCard();
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant)),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.language.noLater!,
+                textToDisplay: notifier.language.cancel!,
                 textStyle: Theme.of(context).textTheme.button,
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
               function: () => Routing().moveBack(),
-              buttonStyle: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.transparent),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent)),
+              buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
             )
           ],
         ),

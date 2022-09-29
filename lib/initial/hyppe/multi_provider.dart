@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -204,5 +205,9 @@ class AppDependencies {
         ChangeNotifierProvider<PinAccountNotifier>(create: (context) => PinAccountNotifier()),
 
         ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
+
+        ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
+
+        ChangeNotifierProvider<VerificationIDNotifier>(create: (context) => VerificationIDNotifier()),
       ];
 }

@@ -53,6 +53,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
       flashMode = FlashMode.off;
       deepArController = DeepArController();
+      deepArController!.destroy();
       await deepArController!
           .initialize(
         androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
@@ -141,6 +142,11 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   disposeCamera() async {
     try {
+      deepArController = DeepArController();
+      deepArController!.initialize(
+          androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
+          iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117 ",
+          resolution: Resolution.high);
       deepArController!.destroy();
     } catch (e) {
       e.logger();

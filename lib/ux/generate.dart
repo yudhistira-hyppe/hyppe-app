@@ -31,6 +31,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
+
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
@@ -38,6 +39,20 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.d
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/transaction_inprogress/screen.dart';
+
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/failed_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_1/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_2/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_3/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
+
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
@@ -108,7 +123,6 @@ class Generate {
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
       case Routes.ownershipSelling:
         return MaterialPageRoute(builder: (_) => const OwnershipSellingScreen());
-
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => HyppeChangePassword());
       case Routes.accountPreferences:
@@ -194,6 +208,24 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
       case Routes.searcMoreComplete:
         return MaterialPageRoute(builder: (_) => const SearchMoreCompleteScreen());
+      case Routes.verificationIDStep1:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep1());
+      case Routes.verificationIDStep2:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep2());
+      case Routes.verificationIDStep3:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep3());
+      case Routes.verificationIDStep4:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep4());
+      case Routes.verificationIDStep5:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep5());
+      case Routes.verificationIDStep6:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep6());
+      case Routes.verificationIDFailed:
+        return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
+      case Routes.verificationIDSuccess:
+        return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
+      case Routes.verificationIDLoading:
+        return MaterialPageRoute(builder: (_) => const VerificationIDLoading());
       case Routes.deleteAccount:
         return MaterialPageRoute(builder: (_) => const HyppeDeleteAccoount());
       case Routes.confirmDeleteAccount:
@@ -240,6 +272,13 @@ class Generate {
 
       case Routes.forgotPinScreen:
         return MaterialPageRoute(builder: (_) => const ForgotPinScreen());
+
+      case Routes.verificationIDStepSupportingDocs:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportingDocs());
+      case Routes.verificationIDStepSupportingDocsPreview:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportingDocsPreview());
+      case Routes.verificationIDStepSupportDocsEula:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportDocsEula());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

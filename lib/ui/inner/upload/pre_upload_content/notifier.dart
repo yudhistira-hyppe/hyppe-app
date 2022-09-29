@@ -651,6 +651,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   validateIdCard() async {
     _onExit();
+    // Routing().move(Routes.verificationIDStep1);
     final BuildContext context = Routing.navigatorKey.currentContext!;
     Provider.of<MainNotifier>(context, listen: false).openValidationIDCamera = true;
     notifyListeners();
@@ -719,8 +720,8 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void onOwnershipEULA(BuildContext context) {
-    ShowBottomSheet.onShowOwnerEULA(
+  void onShowStatement(BuildContext context) {
+    ShowBottomSheet.onShowStatementOwnership(
       context,
       onSave: () {
         Routing().moveBack();
@@ -730,6 +731,23 @@ class PreUploadContentNotifier with ChangeNotifier {
         Routing().moveBack();
       },
     );
+  }
+
+  void onOwnershipEULA(BuildContext context) {
+    if (!certified) {
+      ShowBottomSheet.onShowOwnerEULA(
+        context,
+        onSave: () {
+          Routing().moveBack();
+          certified = !certified;
+        },
+        onCancel: () {
+          Routing().moveBack();
+        },
+      );
+    } else {
+      certified = false;
+    }
   }
 
   void showPeopleSearch(BuildContext context) {
@@ -1004,6 +1022,13 @@ class PreUploadContentNotifier with ChangeNotifier {
       selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
     );
     notifyListeners();
+  }
+
+  void submitOwnership() {
+    if (toSell && priceController.text == '') {
+      toSell = false;
+    }
+    Routing().moveBack();
   }
 
   // void showDeleteMyTag(BuildContext context, postId) {

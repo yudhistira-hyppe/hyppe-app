@@ -16,6 +16,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_vids.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,9 @@ class SelfProfileNotifier with ChangeNotifier {
   int _maxLine = 2;
   bool _descTextShowFlag = false;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   UserInfoModel get user => _user;
   Routing get routing => _routing;
 
@@ -62,6 +66,11 @@ class SelfProfileNotifier with ChangeNotifier {
 
   set user(UserInfoModel val) {
     _user = val;
+    notifyListeners();
+  }
+
+  set isLoading(bool val) {
+    _isLoading = val;
     notifyListeners();
   }
 
@@ -162,6 +171,7 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   initialSelfProfile(BuildContext context) async {
+    if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     vidContentsQuery.featureType = FeatureType.vid;
     diaryContentsQuery.featureType = FeatureType.diary;
     picContentsQuery.featureType = FeatureType.pic;
@@ -186,11 +196,16 @@ class SelfProfileNotifier with ChangeNotifier {
     user.vids = await vidContentsQuery.reload(context, myContent: true);
     user.diaries = await diaryContentsQuery.reload(context, myContent: true);
     user.pics = await picContentsQuery.reload(context, myContent: true);
+    _isLoading = false;
     notifyListeners();
   }
 
   Widget optionButton() {
-    List pages = const [SelfProfileVids(), SelfProfileDiaries(), SelfProfilePics()];
+    List pages = [
+      !isLoading ? const SelfProfileVids() : BothProfileContentShimmer(),
+      !isLoading ? const SelfProfileDiaries() : BothProfileContentShimmer(),
+      !isLoading ? const SelfProfilePics() : BothProfileContentShimmer()
+    ];
     return pages[pageIndex];
   }
 

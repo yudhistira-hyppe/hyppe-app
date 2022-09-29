@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/status_code.dart';
@@ -24,6 +25,7 @@ class ApiAction {
         requestHeader: true,
         responseHeader: true,
       ));
+      // _dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
     }
   }
 

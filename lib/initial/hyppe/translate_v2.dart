@@ -14,8 +14,12 @@ import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
+
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -151,6 +155,8 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<PaymentSummaryNotifier>().translate(translate);
     // context.read<TransactionNotifier>().translate(translate);
     // context.read<PinAccountNotifier>().translate(translate);
+
+    context.read<VerificationIDNotifier>().translate(translate);
 
     notifyListeners();
     if (index != null && _listLanguage.isNotEmpty) {

@@ -31,9 +31,13 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_complete_profile_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_bank_account.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_support_docs.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_id_verification_failed.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_idcard_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_ownership.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
@@ -43,6 +47,8 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stor
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
@@ -418,6 +424,85 @@ class ShowBottomSheet {
             ),
             padding: const EdgeInsets.all(0),
             child: const OnShowIDVerificationBottomSheet());
+      },
+    );
+  }
+
+  static onShowIDVerificationFailed(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Consumer<VerificationIDNotifier>(
+          builder: (_, notifier, __) => WillPopScope(
+            onWillPop: () async {
+              notifier.retryTakeIdCard();
+              return false;
+            },
+            child: Container(
+                height: 330,
+                decoration: BoxDecoration(
+                  color: Theme.of(ctx).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                padding: const EdgeInsets.all(0),
+                child: const OnShowIDVerificationFailedBottomSheet()),
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowInfoIDCard(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: const OnShowInfoIdCardBottomSheet(),
+        );
+      },
+    );
+  }
+
+  static onShowHelpSupportDocs(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          height: 64,
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: const OnShowHelpSupportDocsBottomSheet(),
+        );
       },
     );
   }
@@ -1211,6 +1296,35 @@ class ShowBottomSheet {
             ),
           ),
           child: OnOwnershipEULABottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowStatementOwnership(
+    BuildContext context, {
+    required Function() onSave,
+    required Function() onCancel,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnStatementOwnershipBottomSheet(
             onSave: onSave,
             onCancel: onCancel,
           ),

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -441,6 +442,8 @@ class UserBloc {
     setUserFetch(UserFetch(UserState.loading));
     var formData = FormData();
     formData.fields.add(MapEntry('search', search ?? SharedPreference().readStorage(SpKeys.email)));
+    print('formData.fields');
+    print(formData.fields);
     await Repos().reposPost(
       context,
       (onResult) {

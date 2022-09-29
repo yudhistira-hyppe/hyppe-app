@@ -105,8 +105,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         _buildDivider(context),
                         eightPx,
                         ownershipSellingWidget(textTheme, notifier),
+                        notifier.certified ? detailTotalPrice(notifier) : Container(),
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
 
+                        twentyFourPx,
                         twentyFourPx,
                         twentyFourPx,
                       ],
@@ -130,20 +132,22 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   //   data: widget.arguments.contentData,
                   //   content: widget.arguments.content,
                   // ),
-                  function: () => notifier.certified
-                      ? System().actionReqiredIdCard(context,
-                          action: () => notifier.onClickPost(
-                                context,
-                                onEdit: widget.arguments.onEdit,
-                                data: widget.arguments.contentData,
-                                content: widget.arguments.content,
-                              ))
-                      : notifier.onClickPost(
-                          context,
-                          onEdit: widget.arguments.onEdit,
-                          data: widget.arguments.contentData,
-                          content: widget.arguments.content,
-                        ),
+                  function: () =>
+                      // notifier.certified
+                      //     ? System().actionReqiredIdCard(context,
+                      //         action: () => notifier.onClickPost(
+                      //               context,
+                      //               onEdit: widget.arguments.onEdit,
+                      //               data: widget.arguments.contentData,
+                      //               content: widget.arguments.content,
+                      //             ))
+                      //     :
+                      notifier.onClickPost(
+                    context,
+                    onEdit: widget.arguments.onEdit,
+                    data: widget.arguments.contentData,
+                    content: widget.arguments.content,
+                  ),
                   child: widget.arguments.onEdit && notifier.updateContent
                       ? const CustomLoading()
                       : CustomTextWidget(
@@ -438,7 +442,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget ownershipSellingWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: () => notifier.onOwnershipEULA(context),
+      onTap: () => !notifier.certified
+          ? System().actionReqiredIdCard(context, action: () {
+              notifier.onShowStatement(context);
+            })
+          : notifier.onShowStatement(context),
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling!,
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
@@ -456,6 +464,51 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           const Icon(Icons.arrow_forward_ios_rounded),
         ],
       ),
+    );
+  }
+
+  Widget detailTotalPrice(PreUploadContentNotifier notifier) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      child: Column(
+        children: [
+          detailText('Certificate Ownership Fee', 'Rp 15.000'),
+          sixteenPx,
+          detailText('Discount', 'Rp 15.000'),
+          sixteenPx,
+          detailText('Total Price', 'Rp 0'),
+          notifier.toSell
+              ? const Divider(
+                  height: 30,
+                  color: kHyppeLightIcon,
+                )
+              : Container(),
+          notifier.toSell
+              ? Column(
+                  children: [
+                    detailText('Sell Content', notifier.toSell ? 'Yes' : 'No'),
+                    sixteenPx,
+                    detailText('Include Total Views', notifier.includeTotalViews ? 'Yes' : 'No'),
+                    sixteenPx,
+                    detailText('Include Total Likes', notifier.includeTotalLikes ? 'Yes' : 'No'),
+                    sixteenPx,
+                    detailText('Sell Price', 'Rp ' + notifier.priceController.text),
+                  ],
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  Widget detailText(text1, text2) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [CustomTextWidget(textToDisplay: text1), CustomTextWidget(textToDisplay: text2)],
     );
   }
 
