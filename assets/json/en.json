@@ -663,5 +663,6 @@
   "goToSecurityPrivacy" : "Go To  Security & Privacy",
   "youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue" : "You need a certificate to market your content, you can register it later. Do you want to continue?",
   "yesPostAnyway" : "Yes, Post Anyway",
-  "noIWantToRegister" : "No, I Want To Register"
+  "noIWantToRegister" : "No, I Want To Register",
+  "sellingPrice" : "Selling Price"
 }

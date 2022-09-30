@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -13,6 +14,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaymentSummaryScreen extends StatefulWidget {
   const PaymentSummaryScreen({Key? key}) : super(key: key);
@@ -72,10 +75,24 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                             textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', 'en_US').format(DateTime.parse(notifier.paymentMethodNotifier.postResponse!.expiredtimeva!)),
                             textStyle: textTheme.bodyMedium,
                           ),
-                          CustomTextWidget(
-                            textToDisplay: notifier.durationString,
-                            textStyle: textTheme.bodyLarge!.copyWith(color: const Color.fromRGBO(201, 29, 29, 1)),
-                          ),
+                          TweenAnimationBuilder<Duration>(
+                              duration: const Duration(minutes: 15),
+                              tween: Tween(begin: const Duration(minutes: 15), end: Duration.zero),
+                              onEnd: () {
+                                // notifier.backHome();
+                              },
+                              builder: (BuildContext context, Duration value, Widget? child) {
+                                final minutes = value.inMinutes;
+                                final seconds = value.inSeconds % 60;
+                                return CustomTextWidget(
+                                  textToDisplay: '( ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds )',
+                                  textStyle: textTheme.bodyLarge!.copyWith(color: const Color.fromRGBO(201, 29, 29, 1), fontWeight: FontWeight.bold),
+                                );
+                              }),
+                          // CustomTextWidget(
+                          //   textToDisplay: notifier.durationString,
+                          //   textStyle: textTheme.bodyLarge!.copyWith(color: const Color.fromRGBO(201, 29, 29, 1)),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 32),
@@ -123,8 +140,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                       ),
                       CustomTextWidget(textToDisplay: notifier.language.seePaymentInstruction!, textStyle: textTheme.bodyMedium!.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
                       expansionLists(context, textTheme, 'Via ATM', notifier.bankData!.atm!),
-                      expansionLists(context, textTheme, 'Via Internet Banking', notifier.bankData!.internetBanking!),
                       expansionLists(context, textTheme, 'Via m-Banking', notifier.bankData!.mobileBanking!),
+                      expansionLists(context, textTheme, 'Via Internet Banking', notifier.bankData!.internetBanking!),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         color: Theme.of(context).backgroundColor,
@@ -185,7 +202,20 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
-            child: RichText(text: TextSpan(text: body, style: textTheme.bodyMedium!.copyWith(height: 1.5)), textAlign: TextAlign.left),
+            child: Html(
+                data: body,
+                style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
+                onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
+                  print(url);
+                  if (await canLaunchUrl(Uri.parse(url!))) {
+                    await launchUrl(
+                      Uri.parse(url),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    throw "Could not launch $url";
+                  }
+                }),
           )
         ],
       );

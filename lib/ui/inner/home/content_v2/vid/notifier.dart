@@ -4,13 +4,16 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -91,10 +94,10 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       }
 
       final res = await _resFuture;
-      print('isi vidio');
-      print(res);
+
       if (reload) {
         vidData = res;
+
         if (pageController.hasClients) {
           pageController.animateToPage(
             0,
@@ -103,8 +106,21 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
           );
         }
       } else {
+        print('initial video');
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;
       }
+      final _searchData = context.read<SearchNotifier>();
+      _searchData.allContents = UserInfoModel();
+      print('ini video data');
+      print(_searchData);
+      print(_searchData.allContents);
+      // print(_searchData.allContents!.vids);
+      if (_searchData.allContents!.vids == null) {
+        _searchData.vidContentsQuery.featureType = FeatureType.vid;
+        _searchData.allContents?.vids = vidData;
+      }
+      print('ini video data22');
+      print(_searchData.allContents?.vids);
     } catch (e) {
       'load vid list: ERROR: $e'.logger();
     }

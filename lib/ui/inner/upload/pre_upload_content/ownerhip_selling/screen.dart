@@ -4,7 +4,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_check_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -53,7 +52,12 @@ class OwnershipSellingScreen extends StatelessWidget {
                   ),
                   CustomCheckButton(
                     value: notifier.certified,
-                    onChanged: (value) => notifier.onOwnershipEULA(context),
+                    onChanged: (value) {
+                      if (!notifier.isEdit && !notifier.certified) {
+                        notifier.onOwnershipEULA(context);
+                      }
+                    },
+                    disable: notifier.isEdit && notifier.certified,
                   ),
                 ],
               ),
@@ -206,11 +210,11 @@ class OwnershipSellingScreen extends StatelessWidget {
                             right: 4,
                             top: 8,
                             child: Container(
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeDisabled),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
                               padding: EdgeInsets.all(8),
                               child: Text(
                                 notifier.language.setPrice!,
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.caption!.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
                               ),
                             ),
                           ),
@@ -229,8 +233,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                     Routing().moveBack();
                   }
                 : null,
-            style: ButtonStyle(
-                backgroundColor: notifier.certified && notifier.toSell && notifier.priceController.text != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+            style: ButtonStyle(backgroundColor: notifier.certified ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
             child: CustomTextWidget(
               textToDisplay: notifier.language.confirm!,
               textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),

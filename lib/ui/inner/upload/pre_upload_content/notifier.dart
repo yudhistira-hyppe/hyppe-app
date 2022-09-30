@@ -88,7 +88,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<Map<String, dynamic>> _searchPeopleACData = [];
   List<Map<String, dynamic>> get searchPeopleACData => _searchPeopleACData;
 
-  final TextEditingController priceController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
   TextEditingController _captionController = TextEditingController();
   TextEditingController _location = TextEditingController();
   final TextEditingController tagsController = TextEditingController();
@@ -122,6 +122,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _isSavedPrice = false;
   bool _isUpdate = false;
 
+  TextEditingController get priceController => _priceController;
   TextEditingController get captionController => _captionController;
   TextEditingController get location => _location;
 
@@ -185,6 +186,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set locationName(String val) {
     _locationName = val;
+    notifyListeners();
+  }
+
+  set priceController(TextEditingController val) {
+    _priceController = val;
     notifyListeners();
   }
 
@@ -720,16 +726,17 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void onShowStatement(BuildContext context) {
+  void onShowStatement(
+    BuildContext context, {
+    required Function() onCancel,
+  }) {
     ShowBottomSheet.onShowStatementOwnership(
       context,
       onSave: () {
         Routing().moveBack();
         Routing().move(Routes.ownershipSelling);
       },
-      onCancel: () {
-        Routing().moveBack();
-      },
+      onCancel: onCancel,
     );
   }
 

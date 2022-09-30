@@ -147,7 +147,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       if (Platform.isAndroid) {
         deepArController = DeepArController();
         deepArController = null;
-        // deepArController!.initialize(androidLicenseKey: "a", iosLicenseKey: "a ", resolution: Resolution.high);
       }
       deepArController!.destroy();
       deepArController = null;

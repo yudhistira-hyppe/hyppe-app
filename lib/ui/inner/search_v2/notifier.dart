@@ -93,6 +93,9 @@ class SearchNotifier with ChangeNotifier {
   }
 
   onInitialSearch(BuildContext context) async {
+    print('initial search');
+    print(allContents?.diaries);
+    print(allContents?.diaries![0].isApsara);
     if (allContents?.vids == null && allContents?.diaries == null && allContents?.pics == null) {
       vidContentsQuery.featureType = FeatureType.vid;
       diaryContentsQuery.featureType = FeatureType.diary;

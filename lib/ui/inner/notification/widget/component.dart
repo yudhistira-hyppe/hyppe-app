@@ -58,6 +58,7 @@ class Component extends StatelessWidget {
                         //textToDisplay: data?.body ?? '',
                         textToDisplay: System().bodyMultiLang(bodyEn: data?.body, bodyId: data?.bodyId) ?? '',
                         textStyle: Theme.of(context).textTheme.caption,
+                        maxLines: 4,
                       ),
                       sixPx,
                       CustomTextWidget(

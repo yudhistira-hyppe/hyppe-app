@@ -663,6 +663,7 @@ class LocalizationModelV2 {
   String? youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue;
   String? yesPostAnyway;
   String? noIWantToRegister;
+  String? sellingPrice;
 
   LocalizationModelV2({
     this.login,
@@ -1329,6 +1330,7 @@ class LocalizationModelV2 {
     this.youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue,
     this.yesPostAnyway,
     this.noIWantToRegister,
+    this.sellingPrice,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2014,5 +2016,6 @@ class LocalizationModelV2 {
     youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue = json["youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue"];
     yesPostAnyway = json["yesPostAnyway"];
     noIWantToRegister = json["noIWantToRegister"];
+    sellingPrice = json["sellingPrice"];
   }
 }

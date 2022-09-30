@@ -157,7 +157,7 @@ class _CameraViewState extends State<CameraView> {
           body: Stack(
         children: [
           notifier.deepArController == null
-              ? CustomLoading()
+              ? const CustomLoading()
               : notifier.deepArController!.isInitialized
                   ? Platform.isIOS
                       ? DeepArPreview(notifier.deepArController!)

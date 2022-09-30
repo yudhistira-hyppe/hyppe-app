@@ -35,6 +35,7 @@ class BuyData {
   String? prosentaseAdminFee;
   num? price;
   num? totalAmount;
+  num? serviceFee;
   bool? monetize;
 
   BuyData({
@@ -66,6 +67,7 @@ class BuyData {
     this.prosentaseAdminFee,
     this.price,
     this.totalAmount,
+    this.serviceFee,
     this.monetize,
   });
 
@@ -98,6 +100,7 @@ class BuyData {
     prosentaseAdminFee = json["prosentaseAdminFee"];
     price = json["price"];
     totalAmount = json["totalAmount"];
+    serviceFee = json["serviceFee"];
     monetize = json["monetize"];
   }
 
@@ -131,6 +134,7 @@ class BuyData {
     data['prosentaseAdminFee'] = prosentaseAdminFee;
     data['price'] = price;
     data['totalAmount'] = totalAmount;
+    data['serviceFee'] = serviceFee;
     data['monetize'] = monetize;
     return data;
   }

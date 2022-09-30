@@ -663,5 +663,6 @@
   "goToSecurityPrivacy" : "Buka Keamanan & Privasi",
   "youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue" : "Anda memerlukan sertifikat untuk memasarkan konten Anda, Anda dapat mendaftarkannya nanti. Apakah Anda ingin melanjutkan?",
   "yesPostAnyway" : "Ya, Tetap Posting",
-  "noIWantToRegister" : "Tidak, Saya Ingin Mendaftar"
+  "noIWantToRegister" : "Tidak, Saya Ingin Mendaftar",
+  "sellingPrice" : "Harga penjualan"
 }

@@ -52,33 +52,34 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 5),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     CustomTextWidget(
-                //       textToDisplay: "Total Views",
-                //       textStyle: Theme.of(context).textTheme.bodyMedium,
-                //     ),
-                //     CustomTextWidget(
-                //       textToDisplay: f.format(data?.insight!.views),
-                //       textStyle: Theme.of(context).textTheme.subtitle1,
-                //     ),
-                //   ],
-                // ),
-                // const SizedBox(height: 5),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     CustomTextWidget(
-                //       textToDisplay: "Total Likes",
-                //       textStyle: Theme.of(context).textTheme.bodyMedium,
-                //     ),
-                //     CustomTextWidget(
-                //       textToDisplay: f.format(data?.insight!.likes),
-                //       textStyle: Theme.of(context).textTheme.subtitle1,
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: "Total Views",
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    CustomTextWidget(
+                      textToDisplay: data!.saleView! ? notifier.translate.yes! : notifier.translate.no!,
+                      textStyle: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: "Total Likes",
+                      textStyle: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    CustomTextWidget(
+                      // textToDisplay: f.format(data?.saleLike),
+                      textToDisplay: data!.saleLike! ? notifier.translate.yes! : notifier.translate.no!,
+                      textStyle: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ],
+                ),
               ],
             ),
             CustomElevatedButton(

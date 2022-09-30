@@ -4,13 +4,14 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 class CustomCheckButton extends StatelessWidget {
   final ValueChanged<bool?> onChanged;
   final bool value;
+  final bool disable;
 
-  const CustomCheckButton({Key? key, required this.onChanged, required this.value}) : super(key: key);
+  const CustomCheckButton({Key? key, required this.onChanged, required this.value, this.disable = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Checkbox(
-      activeColor: kHyppePrimary,
+      activeColor: disable ? kHyppeDisabled : kHyppePrimary,
       checkColor: Colors.white,
       // activeTrackColor: const Color(0xffb72290),
       // inactiveThumbColor: const Color(0xff9f9f9f),

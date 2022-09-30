@@ -14,6 +14,8 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_compl
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class PreUploadContentScreen extends StatefulWidget {
@@ -132,22 +134,23 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   //   data: widget.arguments.contentData,
                   //   content: widget.arguments.content,
                   // ),
-                  function: () =>
-                      // notifier.certified
-                      //     ? System().actionReqiredIdCard(context,
-                      //         action: () => notifier.onClickPost(
-                      //               context,
-                      //               onEdit: widget.arguments.onEdit,
-                      //               data: widget.arguments.contentData,
-                      //               content: widget.arguments.content,
-                      //             ))
-                      //     :
-                      notifier.onClickPost(
-                    context,
-                    onEdit: widget.arguments.onEdit,
-                    data: widget.arguments.contentData,
-                    content: widget.arguments.content,
-                  ),
+                  function: () => !notifier.certified
+                      ? System().actionReqiredIdCard(context, action: () {
+                          notifier.onShowStatement(context, onCancel: () {
+                            notifier.onClickPost(
+                              context,
+                              onEdit: widget.arguments.onEdit,
+                              data: widget.arguments.contentData,
+                              content: widget.arguments.content,
+                            );
+                          });
+                        })
+                      : notifier.onClickPost(
+                          context,
+                          onEdit: widget.arguments.onEdit,
+                          data: widget.arguments.contentData,
+                          content: widget.arguments.content,
+                        ),
                   child: widget.arguments.onEdit && notifier.updateContent
                       ? const CustomLoading()
                       : CustomTextWidget(
@@ -444,9 +447,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     return ListTile(
       onTap: () => !notifier.certified
           ? System().actionReqiredIdCard(context, action: () {
-              notifier.onShowStatement(context);
+              Routing().move(Routes.ownershipSelling);
             })
-          : notifier.onShowStatement(context),
+          : Routing().move(Routes.ownershipSelling),
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling!,
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),

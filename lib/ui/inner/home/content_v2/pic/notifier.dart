@@ -15,9 +15,12 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+
+import 'package:provider/provider.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
@@ -59,8 +62,11 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       }
 
       final res = await _resFuture;
+
+      print('ini pict initial 3');
       if (reload) {
         pic = res;
+
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -71,16 +77,21 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       } else {
         pic = [...(pic ?? [] as List<ContentData>)] + res;
       }
+      final _searchData = context.read<SearchNotifier>();
+      print('ini pict initial');
+      if (_searchData.allContents!.pics == null) {
+        print('ini pict initial 2');
+
+        _searchData.picContentsQuery.featureType = FeatureType.pic;
+        _searchData.allContents!.pics = pic;
+      }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();
     }
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialPic(context);
     }
   }

@@ -65,7 +65,7 @@ dependencies:
   uuid: ^3.0.6
   light_compressor: ^1.2.2 
   deepar_flutter: ^0.0.2
- 
+  flutter_html: ^3.0.0-alpha.3
 
   dynamic_widget: # Dynamic widget builder
     git:
@@ -109,6 +109,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/eula.html
+    - assets/bca-internet-banking.html
     - assets/fonts/
     - assets/json/
     - assets/png/

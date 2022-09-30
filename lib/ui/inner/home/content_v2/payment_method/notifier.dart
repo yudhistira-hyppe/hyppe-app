@@ -23,9 +23,16 @@ class PaymentMethodNotifier extends ChangeNotifier {
   }
 
   BuyResponse? _postResponse;
-  String _bankSelected = '014';
+  String _bankSelected = '0';
 
   String get bankSelected => _bankSelected;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  set isLoading(bool val) {
+    _isLoading = val;
+    notifyListeners();
+  }
 
   set bankSelected(String val) {
     _bankSelected = val;
@@ -58,7 +65,6 @@ class PaymentMethodNotifier extends ChangeNotifier {
     await notifier.getBank(context);
     final fetch = notifier.buyFetch;
     if (fetch.postsState == BuyState.getContentsError) {
-      print('asdasd00');
       var errorData = ErrorModel.fromJson(fetch.data);
       _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
 
@@ -98,10 +104,24 @@ class PaymentMethodNotifier extends ChangeNotifier {
   }
 
   void submitPay(BuildContext context) {
-    _postSubmitBuy(context);
+    var cek = data!.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
+
+    if (cek) _postSubmitBuy(context);
+  }
+
+  Color colorButton(context) {
+    Color _color = Theme.of(context).colorScheme.primaryVariant;
+    var cek = data!.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
+    if (cek) {
+      _color = Theme.of(context).colorScheme.primaryVariant;
+    } else {
+      _color = Theme.of(context).colorScheme.surface;
+    }
+    return _color;
   }
 
   Future<void> _postSubmitBuy(BuildContext context) async {
+    isLoading = true;
     List<PostId> postId = [
       PostId(
         id: reviewBuyNotifier.data!.postId,
@@ -120,20 +140,27 @@ class PaymentMethodNotifier extends ChangeNotifier {
 
     print('data: ${params.toJson()}.');
 
-    final notifier = BuyBloc();
-    await notifier.postContentBuy(context, params: params);
-    final fetch = notifier.buyFetch;
-    if (fetch.postsState == BuyState.postContentsError) {
-      var errorData = ErrorModel.fromJson(fetch.data);
-      _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
-    } else if (fetch.postsState == BuyState.postContentsSuccess) {
-      BuyResponse? res = BuyResponse.fromJson(fetch.data);
-      postResponse = res;
-      _showSnackBar(kHyppeTextSuccess, 'Success', "Request buy conten success, please complete payment");
-
-      Future.delayed(const Duration(seconds: 2), () {
-        Routing().move(Routes.paymentSummaryScreen);
-      });
+    try {
+      final notifier = BuyBloc();
+      await notifier.postContentBuy(context, params: params);
+      final fetch = notifier.buyFetch;
+      if (fetch.postsState == BuyState.postContentsError) {
+        isLoading = false;
+        var errorData = ErrorModel.fromJson(fetch.data);
+        _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
+      } else if (fetch.postsState == BuyState.postContentsSuccess) {
+        BuyResponse? res = BuyResponse.fromJson(fetch.data);
+        postResponse = res;
+        // _showSnackBar(kHyppeTextSuccess, 'Success', "Request buy conten success, please complete payment");
+        Future.delayed(const Duration(seconds: 2), () {
+          Routing().move(Routes.paymentSummaryScreen);
+        });
+        _isLoading = false;
+      }
+    } catch (e) {
+      print(e);
+      _showSnackBar(kHyppeDanger, 'Error', 'Somethink Wrong');
     }
+    notifyListeners();
   }
 }

@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
@@ -25,6 +26,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
   void initState() {
     var nn = Provider.of<PaymentMethodNotifier>(context, listen: false);
     nn.initState(context);
+    nn.bankSelected = '0';
     super.initState();
   }
 
@@ -85,15 +87,17 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           height: 44.0 * SizeConfig.scaleDiagonal,
           function: () => notifier.submitPay(context),
           // function: () => Routing().move(Routes.paymentSummaryScreen),
-          child: CustomTextWidget(
-            textToDisplay: notifier.language.pay!,
-            textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-          ),
+          child: notifier.isLoading
+              ? const CustomLoading()
+              : CustomTextWidget(
+                  textToDisplay: notifier.language.pay!,
+                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                ),
           buttonStyle: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-            shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-            overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+            foregroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            shadowColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            overlayColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            backgroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

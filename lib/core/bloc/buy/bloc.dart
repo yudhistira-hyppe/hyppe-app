@@ -102,7 +102,7 @@ class BuyBloc {
         setBuyFetch(BuyFetch(BuyState.postContentsError, data: errorData.error));
       },
       data: params,
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.postBuyContent,
       methodType: MethodType.post,
