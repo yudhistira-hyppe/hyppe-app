@@ -1,4 +1,7 @@
+import '../../../config/env.dart';
+import '../../../constants/shared_preference_keys.dart';
 import '../../../response/generic_response.dart';
+import '../../../services/shared_preference.dart';
 
 class AdsVideo{
   int? responseCode;
@@ -20,6 +23,8 @@ class AdsVideo{
 
 class AdsData{
   String? adsId;
+  String? adsUrlLink;
+  String? adsDescription;
   String? useradsId;
   String? idUser;
   String? fullName;
@@ -32,6 +37,8 @@ class AdsData{
 
   AdsData({
     this.adsId,
+    this.adsUrlLink,
+    this.adsDescription,
     this.useradsId,
     this.idUser,
     this.fullName,
@@ -45,6 +52,8 @@ class AdsData{
 
   AdsData.fromJson(Map<String, dynamic> json){
     adsId = json['adsId'] ?? '';
+    adsUrlLink = json['adsUrlLink'] ?? '';
+    adsDescription = json['adsDescription'] ?? '';
     useradsId = json['useradsId'] ?? '';
     idUser = json['idUser'] ?? '';
     fullName = json['fullName'] ?? '';
@@ -59,6 +68,8 @@ class AdsData{
   Map<String, dynamic> toJson(){
     final Map<String, dynamic> data = <String, dynamic>{};
     data['adsId'] = adsId ?? '';
+    data['adsUrlLink'] =  adsUrlLink ?? '';
+    data['adsDescription'] = adsDescription ?? '';
     data['useradsId'] = useradsId ?? '';
     data['idUser'] = idUser ?? '';
     data['fullName'] = fullName ?? '';
@@ -70,6 +81,8 @@ class AdsData{
     return data;
   }
 
+
+
 }
 
 class AdsAvatar{
@@ -77,6 +90,7 @@ class AdsAvatar{
   String? mediaUri;
   String? mediaType;
   String? mediaEndpoint;
+  String? fullLinkURL;
 
   AdsAvatar({
     this.mediaBasePath,
@@ -90,6 +104,7 @@ class AdsAvatar{
     mediaUri = json['mediaUri'] ?? '';
     mediaType = json['mediaType'] ?? '';
     mediaEndpoint = json['mediaEndpoint'] ?? '';
+    fullLinkURL = concatThumbUri();
   }
 
   Map<String, dynamic> toJson(){
@@ -99,5 +114,11 @@ class AdsAvatar{
     data['mediaType'] = mediaType;
     data['mediaEndpoint'] = mediaEndpoint;
     return data;
+  }
+
+  String? concatThumbUri() {
+    return Env.data.baseUrl +
+        (mediaBasePath ?? mediaEndpoint ?? '') +
+        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 }

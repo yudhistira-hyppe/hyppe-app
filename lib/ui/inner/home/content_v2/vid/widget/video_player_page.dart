@@ -11,9 +11,6 @@ import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
-import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 
 import 'package:better_player/better_player.dart';
@@ -34,9 +31,12 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/arguments/advertising_argument.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../constant/widget/custom_base_cache_image.dart';
+import '../../../../../constant/widget/custom_spacer.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final ContentData? videoData;
@@ -54,8 +54,7 @@ class VideoPlayerPage extends StatefulWidget {
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
 }
 
-class _VideoPlayerPageState extends State<VideoPlayerPage>
-    with RouteAware, AfterFirstLayoutMixin {
+class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, AfterFirstLayoutMixin {
   BetterPlayerController? _betterPlayerController;
   final ValueNotifier<bool> _awaitInitial = ValueNotifier(false);
   final ValueNotifier<bool> _initializeVideo = ValueNotifier(false);
@@ -69,15 +68,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   bool _startWithOrientationCondition = false;
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
-  final _nativeDeviceOrientationCommunicator =
-      NativeDeviceOrientationCommunicator();
+  final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
 
   int countAds = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void _resetOrintationStream() {
     _orientationStream?.cancel();
@@ -92,14 +85,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     _nativeDeviceOrientationCommunicator.resume();
   }
 
-  void _orientationCondition(NativeDeviceOrientation orientation, bool isAds) {
-    final controller =
-        (isAds ? _betterPlayerControllerMap : _betterPlayerController);
+  void _orientationCondition(NativeDeviceOrientation orientation) {
     if (orientation == NativeDeviceOrientation.portraitUp) {
-      if (controller != null) {
+      if (_betterPlayerController != null) {
         if (_eventType != BetterPlayerEventType.showingAds) {
-          if (controller.isFullScreen) {
-            controller.exitFullScreen();
+          if (_betterPlayerController?.isFullScreen ?? false) {
+            _betterPlayerController?.exitFullScreen();
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
@@ -110,12 +101,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
       }
     }
 
-    if (orientation == NativeDeviceOrientation.landscapeLeft ||
-        orientation == NativeDeviceOrientation.landscapeRight) {
-      if (controller != null) {
+    if (orientation == NativeDeviceOrientation.landscapeLeft || orientation == NativeDeviceOrientation.landscapeRight) {
+      if (_betterPlayerController != null) {
         if (_eventType != BetterPlayerEventType.showingAds) {
-          if (controller.isFullScreen == false) {
-            controller.enterFullScreen();
+          if (_betterPlayerController?.isFullScreen == false) {
+            _betterPlayerController?.enterFullScreen();
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
@@ -127,19 +117,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     }
   }
 
-  void _listenToNativeDeviceOrientation(bool isAds) {
-    _orientationStream = _nativeDeviceOrientationCommunicator
-        .onOrientationChanged(useSensor: true)
-        .listen((orientation) {
+  void _listenToNativeDeviceOrientation() {
+    _orientationStream = _nativeDeviceOrientationCommunicator.onOrientationChanged(useSensor: true).listen((orientation) {
       if (_startWithOrientationCondition && _isMostBottomRouteInRouteStack) {
-        _orientationCondition(orientation, isAds);
+        _orientationCondition(orientation);
       }
     });
   }
 
-  void _handleOpenFullScreenEvent(bool isAds) {
+  void _handleOpenFullScreenEvent() {
     if (_orientationStream == null) {
-      _listenToNativeDeviceOrientation(isAds);
+      _listenToNativeDeviceOrientation();
     } else {
       _pauseOrientationListener();
       Future.delayed(const Duration(seconds: 2), () {
@@ -159,34 +147,36 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     });
   }
 
-  Future _newInitAds() async {
-    try {
+  Future _newInitAds() async{
+    try{
       if (_newClipData == null) {
         await getAdsVideo();
       }
-    } catch (e) {
+    }catch(e){
       'Failed to fetch ads data : $e'.logger();
     }
   }
 
-  Future getAdsVideo() async {
-    try {
+
+
+  Future getAdsVideo() async{
+    try{
       final notifier = AdsVideoBloc();
       await notifier.adsVideoBloc(context);
       final fetch = notifier.adsVideoFetch;
 
-      if (fetch.adsVideoState == AdsVideoState.getAdsVideoBlocSuccess) {
+      if(fetch.adsVideoState == AdsVideoState.getAdsVideoBlocSuccess){
         // print('data : ${fetch.data.toString()}');
         _newClipData = fetch.data;
         print('videoId : ${_newClipData?.data?.videoId}');
         await getAdsVideoApsara(_newClipData!.data!.videoId!);
       }
-    } catch (e) {
+    } catch (e){
       'Failed to fetch ads data $e'.logger();
     }
   }
 
-  Future getAdsVideoApsara(String apsaraId) async {
+  Future getAdsVideoApsara(String apsaraId) async{
     try {
       final notifier = PostsBloc();
       await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
@@ -197,7 +187,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
         Map jsonMap = json.decode(fetch.data.toString());
         print('jsonMap video Apsara : $jsonMap');
         _betterPlayerRollUri = jsonMap['PlayUrl'];
+        // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
         print('get Ads Video');
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
       'Failed to fetch ads data ${e}'.logger();
@@ -221,16 +213,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     }
   }
 
-  Future adsView(AdsData data, int time) async {
-    try {
+  Future adsView(AdsData data, int time) async{
+    try{
       final notifier = AdsVideoBloc();
-      final request = ViewAdsRequest(
-          watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
+      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
       await notifier.viewAdsBloc(context, request);
 
       // final fetch = notifier.adsVideoFetch;
 
-    } catch (e) {
+    }catch(e){
       'Failed hit view ads ${e}'.logger();
     }
   }
@@ -251,8 +242,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     'Hyppe Vid Post ID ${widget.videoData?.postID}'.logger();
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
     'Hyppe Vid Email ${SharedPreference().readStorage(SpKeys.email)}'.logger();
-    'Hyppe Vid Token ${SharedPreference().readStorage(SpKeys.userToken)}'
-        .logger();
+    'Hyppe Vid Token ${SharedPreference().readStorage(SpKeys.userToken)}'.logger();
     'Hyppe Vid isApsara ${widget.videoData!.isApsara!}'.logger();
     if (widget.videoData!.isApsara!) {
       await getVideoApsara(widget.videoData!.apsaraId!);
@@ -270,7 +260,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     // } else {
     //
     //   _clipsData = AdvertisingData.fromJson({}, widget.videoData?.metadata);
-    // _eventType = (_newClipData != null) ? BetterPlayerEventType.showingAds : null;
+      // _eventType = (_newClipData != null) ? BetterPlayerEventType.showingAds : null;
     //   print('get Ads Video1');
     // }
     print('ready to play');
@@ -278,11 +268,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     _awaitInitial.value = true;
   }
 
-  int secondOfAds(AdsData data) {
+  int secondOfAds(AdsData data){
     var result = 0;
     final mid = widget.videoData?.metadata?.midRoll ?? 0;
     final duration = widget.videoData?.metadata?.duration ?? 2;
-    switch (data.adsPlace) {
+    switch(data.adsPlace){
       case 'First':
         result = widget.videoData?.metadata?.preRoll ?? 0;
         break;
@@ -290,9 +280,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
         result = mid != 0 ? 0 : (duration / 2).toInt();
         break;
       case 'End':
-        result = (widget.videoData?.metadata?.postRoll ?? 0) != 0
-            ? widget.videoData!.metadata!.postRoll!
-            : duration - 1;
+        result = (widget.videoData?.metadata?.postRoll ?? 0) != 0 ? widget.videoData!.metadata!.postRoll! : duration - 1;
         break;
       default:
         result = 0;
@@ -320,69 +308,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     //   }
     //   SharedPreference().writeStorage(SpKeys.countAds, countAds.toString());
     // });
-    final keyAdsOverlay = GlobalKey();
-    BetterPlayerConfiguration betterPlayerConfiguration =
-        BetterPlayerConfiguration(
-          overlay: (_betterPlayerController?.isFullScreen ?? false) ? Expanded(
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10,
-                  bottom: 20,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: context.getWidth() * 0.5,
-                        child: const Text(
-                          'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ),
-                      eightPx,
-                      Container(
-                        key: keyAdsOverlay,
-                        padding: EdgeInsets.all(10),
-                        color: Colors.white,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              iconData: '${AssetPath.vectorPath}fujifilm.svg',
-                              width: 27,
-                              height: 27,
-                            ),
-                            sixteenPx,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text('Fujifilm', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),),
-                                fourPx,
-                                Text('fujifilmindonesia.co.id', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),)
-                              ],
-                            ),
-                            twelvePx,
-                            InkWell(
-                              onTap: (){
 
-                              },
-                              child: Container(
-                                child: Text('Learn more', style: TextStyle(color: Colors.white, fontSize: 7,),),
-                                padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ) : null,
+    BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
       autoDispose: true,
       autoPlay: autoPlay,
+      fullScreenByDefault: true,
       fit: BoxFit.contain,
       showPlaceholderUntilPlay: true,
       deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
@@ -395,16 +325,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
-      widget.videoData?.fullContentPath ??
-          'https://outin-c01c93ffe24211ec9bf900163e013357.oss-ap-southeast-5.aliyuncs.com/5d92f36afb3d4a75b7ecef398107278e/780a82f6569143c591c1c2afeca8e968-c4535eb7cbd8313949f96a6a946ef25d-fd.mp4?Expires=1664346280&OSSAccessKeyId=LTAI3DkxtsbUyNYV&Signature=0%2FOBtRvwz06egP4znSAvQ1AfQqE%3D',
+      widget.videoData?.fullContentPath ?? 'https://outin-c01c93ffe24211ec9bf900163e013357.oss-ap-southeast-5.aliyuncs.com/5d92f36afb3d4a75b7ecef398107278e/780a82f6569143c591c1c2afeca8e968-c4535eb7cbd8313949f96a6a946ef25d-fd.mp4?Expires=1664346280&OSSAccessKeyId=LTAI3DkxtsbUyNYV&Signature=0%2FOBtRvwz06egP4znSAvQ1AfQqE%3D',
       adsConfiguration: BetterPlayerAdsConfiguration(
         postID: widget.videoData?.postID ?? '',
-        rolls: [
-          if(_betterPlayerRollUri != null)
-          BetterPlayerRoll(
-              rollUri: _betterPlayerRollUri,
-              rollDuration: secondOfAds(_newClipData?.data ?? AdsData()))
-        ],
+        rolls: [BetterPlayerRoll(rollUri: _betterPlayerRollUri, rollDuration: secondOfAds(_newClipData?.data ?? AdsData()))],
       ),
       headers: {
         'post-id': widget.videoData?.postID ?? '',
@@ -414,10 +338,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
         maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
-        bufferForPlaybackMs:
-            BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
-        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration
-            .defaultBufferForPlaybackAfterRebufferMs,
+        bufferForPlaybackMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
+        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackAfterRebufferMs,
       ),
     );
 
@@ -429,25 +351,24 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
     try {
       await _betterPlayerController?.setupDataSource(dataSource);
-      _betterPlayerController?.setOverriddenAspectRatio(
-          _betterPlayerController!.videoPlayerController!.value.aspectRatio);
+      _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController!.videoPlayerController!.value.aspectRatio);
     } catch (e) {
       'Setup user data source error: $e'.logger();
     }
 
+
+
+
     _betterPlayerController?.addEventsListener(
-      (event) {
+          (event) {
         print('ini event');
         print(event.betterPlayerEventType);
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           print('event ads : ${event.parameters}');
-          _initializeAdsBetterPlayerControllerMap(
-              BetterPlayerRoll.fromJson(event.parameters ?? {}));
-        } else if (event.betterPlayerEventType ==
-            BetterPlayerEventType.openFullscreen) {
-          _handleOpenFullScreenEvent(false);
-        } else if (event.betterPlayerEventType ==
-            BetterPlayerEventType.hideFullscreen) {
+          _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
+        } else if (event.betterPlayerEventType == BetterPlayerEventType.openFullscreen) {
+          _handleOpenFullScreenEvent();
+        } else if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
           _handleHideFullScreenEvent();
         }
 
@@ -462,10 +383,97 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
     print('roll roll');
     print(roll);
     if (roll != null) {
-      BetterPlayerConfiguration betterPlayerConfigurationAds =
-          BetterPlayerConfiguration(
 
+      BetterPlayerConfiguration betterPlayerConfigurationAds =
+      BetterPlayerConfiguration(
+        overlay: (_betterPlayerController?.isFullScreen ?? false) ? Expanded(
+          child: Stack(
+            children: [
+              Positioned(
+                left: 10,
+                bottom: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Container(
+                    //   width: context.getWidth() * 0.4,
+                    //   child: const Text(
+                    //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
+                    //     style: TextStyle(color: Colors.white, fontSize: 10),
+                    //   ),
+                    // ),
+                    eightPx,
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      color: Colors.white,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomBaseCacheImage(
+                            imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
+                            memCacheWidth: 200,
+                            memCacheHeight: 200,
+                            imageBuilder: (_, imageProvider) {
+                              return Container(
+                                width: 27,
+                                height: 27,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: imageProvider,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return Container(
+                                width: 27,
+                                height: 27,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          sixteenPx,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_newClipData?.data?.adsDescription ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),),
+                              fourPx,
+                              Text(_newClipData?.data?.adsUrlLink ?? '', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),)
+                            ],
+                          ),
+                          twelvePx,
+                          InkWell(
+                            onTap: ()async{
+                              final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                              if (await canLaunchUrl(uri))
+                                await launchUrl(uri, mode: LaunchMode.externalApplication,);
+                              else
+                                // can't launch url, there is some error
+                                throw "Could not launch $uri";
+                            },
+                            child: Container(
+                              child: Text('Learn more', style: TextStyle(color: Colors.white, fontSize: 7,),),
+                              padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ) : Container(),
         autoPlay: true,
+        fullScreenByDefault: _betterPlayerController?.isFullScreen ?? false,
         autoDispose: false,
         fit: BoxFit.contain,
         deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
@@ -478,25 +486,21 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
           enableAudioTracks: false,
           enableProgressBarDrag: false,
           controlBarColor: Colors.black26,
-          imagesAdsVid: (widget.videoData?.isApsara ?? false)
-              ? widget.videoData?.mediaThumbEndPoint
-              : widget.videoData?.fullThumbPath,
+          imagesAdsVid: (widget.videoData?.isApsara ?? false) ? widget.videoData?.mediaThumbEndPoint :  widget.videoData?.fullThumbPath,
         ),
       );
       BetterPlayerDataSource dataSource = BetterPlayerDataSource(
         BetterPlayerDataSourceType.network,
         roll.rollUri ?? _betterPlayerRollUri ?? '',
         headers: {
-          'post-id':
-              widget.videoData!.postID!, //. widget.videoData?.postID ?? '',
+          'post-id': widget.videoData!.postID!, //. widget.videoData?.postID ?? '',
           'x-auth-user': SharedPreference().readStorage(SpKeys.email),
           'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
         },
       );
       print('rollUri ${roll.rollUri}');
       _betterPlayerRollUri = roll.rollUri;
-      _betterPlayerControllerMap =
-          BetterPlayerController(betterPlayerConfigurationAds);
+      _betterPlayerControllerMap = BetterPlayerController(betterPlayerConfigurationAds);
       setStateIfMounted(() {
         _eventType = BetterPlayerEventType.showingAds;
         // pause user video
@@ -507,19 +511,23 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
       try {
         await _betterPlayerControllerMap?.setupDataSource(dataSource);
 
-        setStateIfMounted(() {
-          if (_betterPlayerController?.isFullScreen ?? false) {
+        setStateIfMounted(() async{
+
+          if(_betterPlayerController?.isFullScreen ?? false){
             print('play iklan fullscreen');
-            _betterPlayerControllerMap?.play();
+            _betterPlayerControllerMap?.enterFullScreen();
+
+
+            Future.delayed(const Duration(seconds: 3), () {
+              _betterPlayerControllerMap?.play();
+            });
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
             });
-          } else {
+          }else{
             print('play iklan');
-            _betterPlayerControllerMap?.setOverriddenAspectRatio(
-                _betterPlayerControllerMap!
-                    .videoPlayerController!.value.aspectRatio);
+            _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap!.videoPlayerController!.value.aspectRatio);
             _betterPlayerControllerMap?.play();
           }
         });
@@ -529,13 +537,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
       _betterPlayerControllerMap?.addEventsListener((event) {
         // final second = _betterPlayerControllerMap?.videoPlayerController?.value.duration?.inSeconds ?? 0;
-        final second = _betterPlayerControllerMap
-                ?.videoPlayerController?.value.position.inSeconds ??
-            0;
-        if (event.betterPlayerEventType ==
-            BetterPlayerEventType.openFullscreen) {
-          _handleOpenFullScreenEvent(true);
-        }
+        final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
         if (event.betterPlayerEventType == BetterPlayerEventType.showSkipAds) {
           'Show skip ads'.logger();
 
@@ -550,33 +552,32 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
           'Ads finished'.logger();
-          'Delaay for 3 second'.logger();
+           'Delaay for 3 second'.logger();
           'second end ads3 $second'.logger();
           adsView(_newClipData?.data ?? AdsData(), second);
           Future.delayed(const Duration(seconds: 3), () {
             _handleClosingAdsEvent(roll);
           });
         }
-        final position =
-            _betterPlayerControllerMap?.videoPlayerController?.position;
+        final position = _betterPlayerControllerMap?.videoPlayerController?.position;
       });
     }
   }
 
-  void getPosition() async {
-    final result =
-        await _betterPlayerControllerMap?.videoPlayerController?.value.position;
+  void getPosition() async{
+    final result = await _betterPlayerControllerMap?.videoPlayerController?.value.position;
     // 'duration ${result.inSeconds}'.logger();
   }
 
   void _handleClosingAdsEvent(BetterPlayerRoll? roll) async {
     _removeAdsBetterPlayerControllerMap();
+    _betterPlayerController?.enterFullScreen();
     // resume user video
     setStateIfMounted(() {
       _eventType = null;
       // _userVideo(_eventType == null);
       _betterPlayerController?.play();
-      print('play video');
+      print('play video after ads');
     });
   }
 
@@ -608,8 +609,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    CustomRouteObserver.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 
   @override
@@ -647,47 +647,46 @@ class _VideoPlayerPageState extends State<VideoPlayerPage>
       valueListenable: _initializeVideo,
       builder: (_, value, __) => !value
           ? VideoThumbnail(
-              videoData: widget.videoData,
-              onDetail: widget.onDetail,
-              fn: () {
-                _initializeVideo.value = true;
-                _initialize();
-              },
-            )
+        videoData: widget.videoData,
+        onDetail: widget.onDetail,
+        fn: () {
+          _initializeVideo.value = true;
+          _initialize();
+        },
+      )
           : Stack(
-              children: [
-                ValueListenableBuilder<bool>(
-                  valueListenable: _awaitInitial,
-                  builder: (context, value, child) {
-                    if (!value) {
-                      print('progressBarVideo false');
-                      return const CircularProgressIndicator();
-                    } else {
-                      print('_eventType $_eventType');
-                      if (_eventType == BetterPlayerEventType.showingAds) {
-                        print('url ads : ${_betterPlayerControllerMap}');
-                        if (_betterPlayerControllerMap != null) {
-                          return BetterPlayer(
-                            controller: _betterPlayerControllerMap!,
-                          );
-                        } else {
-                          print('progressBarVideo true');
-                          return Center(
-                            child: CircularProgressIndicator(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primaryVariant,
-                            ),
-                          );
-                        }
-                      }
-                      return BetterPlayer(
-                        controller: _betterPlayerController!,
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: _awaitInitial,
+            builder: (context, value, child) {
+              if (!value) {
+                print('progressBarVideo false');
+                return const CircularProgressIndicator();
+              } else {
+                print('_eventType $_eventType');
+                if (_eventType == BetterPlayerEventType.showingAds) {
+                  print('url ads : ${_betterPlayerControllerMap}');
+                  if (_betterPlayerControllerMap != null) {
+                    return BetterPlayer(
+                      controller: _betterPlayerControllerMap!,
+                    );
+                  } else {
+                    print('progressBarVideo true');
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                      ),
+                    );
+                  }
+                }
+                return BetterPlayer(
+                  controller: _betterPlayerController!,
+                );
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -53,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         body: Column(
           children: [
             const ProcessUploadComponent(topMargin: 0.0),
-            const HashtagScreen(),
+            // const HashtagScreen(),
             Flexible(
               child: DefaultTabController(
                 length: 3,
