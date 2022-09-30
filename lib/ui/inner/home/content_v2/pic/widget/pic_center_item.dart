@@ -8,6 +8,9 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 
+import '../../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../../core/services/shared_preference.dart';
+
 // import 'package:hyppe/ui/inner/home/content/pic/widget/pic_top_item.dart';
 
 class PicCenterItem extends StatelessWidget {
@@ -62,8 +65,11 @@ class PicCenterItem extends StatelessWidget {
   }
 
   Widget _buildBody() {
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final isSale = data?.email != email;
     return Stack(
       children: [
+        if(isSale)
         PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
       ],

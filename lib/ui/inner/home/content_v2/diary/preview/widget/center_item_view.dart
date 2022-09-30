@@ -8,6 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
 
+import '../../../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../../../core/services/shared_preference.dart';
+
 class CenterItemView extends StatelessWidget {
   final Function? onTap;
   final ContentData? data;
@@ -60,8 +63,12 @@ class CenterItemView extends StatelessWidget {
   }
 
   Widget _buildBody() {
+
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final isSale = data?.email != email;
     return Stack(
       children: [
+        if(isSale)
         Positioned(top: 0, right: 0, child: TopItemView(data: data)),
         Positioned(
           bottom: 0,

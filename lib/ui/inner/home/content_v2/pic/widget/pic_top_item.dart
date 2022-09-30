@@ -9,7 +9,6 @@ import '../../../../../constant/widget/custom_icon_widget.dart';
 class PicTopItem extends StatelessWidget {
   final ContentData? data;
   const PicTopItem({Key? key, this.data}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

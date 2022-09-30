@@ -67,6 +67,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   BetterPlayerController? _betterPlayerControllerMap;
 
   bool _startWithOrientationCondition = false;
+  bool _isStartFullScreen = false;
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
 
@@ -312,7 +313,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
       autoDispose: true,
       autoPlay: autoPlay,
-      fullScreenByDefault: true,
       fit: BoxFit.contain,
       showPlaceholderUntilPlay: true,
       deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
@@ -383,7 +383,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     print('roll roll');
     print(roll);
     if (roll != null) {
-
+      _isStartFullScreen = _betterPlayerController?.isFullScreen ?? false;
       BetterPlayerConfiguration betterPlayerConfigurationAds =
       BetterPlayerConfiguration(
         overlay: (_betterPlayerController?.isFullScreen ?? false) ? Expanded(
@@ -517,7 +517,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
             print('play iklan fullscreen');
             _betterPlayerControllerMap?.enterFullScreen();
 
-
             Future.delayed(const Duration(seconds: 3), () {
               _betterPlayerControllerMap?.play();
             });
@@ -571,7 +570,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
   void _handleClosingAdsEvent(BetterPlayerRoll? roll) async {
     _removeAdsBetterPlayerControllerMap();
-    _betterPlayerController?.enterFullScreen();
+    if(_isStartFullScreen){
+      Future.delayed(Duration.zero, (){
+        setState(() {
+          _betterPlayerController?.enterFullScreen();
+          _isStartFullScreen = false;
+        });
+      });
+    }
+
     // resume user video
     setStateIfMounted(() {
       _eventType = null;
