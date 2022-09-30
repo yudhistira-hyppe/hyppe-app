@@ -50,9 +50,17 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     final activity = DeviceBloc();
-
+    print("Status Lifecycle: $state");
     if (state == AppLifecycleState.inactive) {
       "App Inactive".logger();
+      final _userToken = SharedPreference().readStorage(SpKeys.userToken);
+      if(_userToken != null){
+        try{
+          await activity.activitySleep(context);
+        }catch(e){
+          e.logger();
+        }
+      }
     }
     if (state == AppLifecycleState.resumed) {
       "App Resumed".logger();

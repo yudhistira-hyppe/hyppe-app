@@ -418,6 +418,9 @@ class StoryView extends StatefulWidget {
   /// a [ListView] or [Column]) then set this to `true`.
   final bool inline;
 
+  ///Callback when you double click the view story
+  final Function? onDouble;
+
   // Controls the playback of the stories
   final StoryController controller;
 
@@ -431,6 +434,7 @@ class StoryView extends StatefulWidget {
     required this.controller,
     required this.progressColor,
     required this.durationColor,
+    this.onDouble,
     this.onComplete,
     this.onStoryShow,
     this.progressPosition = ProgressPosition.top,
@@ -785,13 +789,20 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                   print('onTapCancel');
                   widget.controller.play();
                 },
+                onDoubleTap: (){
+                  if(widget.onDouble != null){
+                    widget.onDouble!();
+                  }
+                },
                 onTap: () {
                   if (widget.nextDebouncer == true) {
                     widget.controller.next();
                   } else {
                     if (statusPlay) {
+                      print('pause');
                       widget.controller.pause();
                     } else {
+                      print('play');
                       widget.controller.play();
                     }
                   }
@@ -800,6 +811,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                   widget.controller.pause();
                 },
                 onLongPressEnd: (de) {
+                  print('play1');
                   widget.controller.play();
                 },
                 // onTapDown: (details) {
@@ -849,11 +861,14 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 onVerticalDragStart: widget.onVerticalSwipeComplete == null
                     ? null
                     : (details) {
+                  print("pause1");
                         widget.controller.pause();
                       },
                 onVerticalDragCancel: widget.onVerticalSwipeComplete == null
                     ? null
                     : () {
+                  print('play2');
+                  if (statusPlay)
                         widget.controller.play();
                       },
                 onVerticalDragUpdate: widget.onVerticalSwipeComplete == null
@@ -868,6 +883,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 onVerticalDragEnd: widget.onVerticalSwipeComplete == null
                     ? null
                     : (details) {
+                  print('play3');
                         widget.controller.play();
                         // finish up drag cycle
                         if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {

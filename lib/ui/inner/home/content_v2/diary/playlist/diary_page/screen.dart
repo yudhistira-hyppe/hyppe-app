@@ -15,6 +15,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 
+import '../../../../../../constant/entities/like/notifier.dart';
+
 class DiaryPage extends StatefulWidget {
   final ContentData? data;
   final bool? isScrolling;
@@ -109,6 +111,9 @@ class _DiaryPageState extends State<DiaryPage> {
                   progressColor: kHyppeLightButtonText,
                   durationColor: kHyppeLightButtonText,
                   storyItems: _storyItems,
+                  onDouble: (){
+                    context.read<LikeNotifier>().likePost(context, widget.data!);
+                  },
                   controller: _storyController,
                   progressPosition: ProgressPosition.top,
                   onStoryShow: (storyItem) {

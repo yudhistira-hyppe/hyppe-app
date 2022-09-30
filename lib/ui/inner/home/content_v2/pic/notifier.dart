@@ -21,6 +21,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import 'package:provider/provider.dart';
+import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
@@ -103,6 +104,17 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
+  }
+
+  void navigateToSlidedDetailPic(BuildContext context, int index) async {
+    final connect = await _system.checkConnections();
+    if (connect) {
+      print(pic);
+      Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble()));
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context);
+    }
+    // Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: _listData, index: index));
   }
 
   void navigateToSeeAll(BuildContext context) async {

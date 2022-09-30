@@ -67,26 +67,31 @@ class _PicDetailState extends State<PicDetail> {
               // Content
               InteractiveViewer(
                 transformationController: transformationController,
-                child: CustomCacheImage(
-                  // imageUrl: picData.content[arguments].contentUrl,
-                  imageUrl: widget.arguments!.isApsara! ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
-                  imageBuilder: (_, imageProvider) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                      ),
-                    );
+                child: InkWell(
+                  onDoubleTap: (){
+                    context.read<LikeNotifier>().likePost(context, widget.arguments!);
                   },
-                  errorWidget: (_, __, ___) {
-                    return Container(
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.contain,
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                  child: CustomCacheImage(
+                    // imageUrl: picData.content[arguments].contentUrl,
+                    imageUrl: widget.arguments!.isApsara! ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                    imageBuilder: (_, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                    errorWidget: (_, __, ___) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               // Top action

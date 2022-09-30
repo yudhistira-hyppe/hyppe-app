@@ -14,6 +14,8 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widge
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_replay_caption.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_top_view.dart';
 
+import '../../../../../../constant/entities/like/notifier.dart';
+
 class StoryPage extends StatefulWidget {
   final ContentData? data;
   final int? storyParentIndex;
@@ -146,11 +148,16 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             ))
         : Stack(
             children: [
+
               StoryView(
                 inline: false,
                 repeat: false,
                 progressColor: kHyppeLightButtonText,
                 durationColor: kHyppeLightButtonText,
+                onDouble: (){
+                  print('testtttt');
+                  context.read<LikeNotifier>().likePost(context, widget.data!);
+                },
                 controller: _storyController,
                 storyItems: _storyItems,
                 progressPosition: ProgressPosition.top,

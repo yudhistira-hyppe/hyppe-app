@@ -6,6 +6,10 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_
 // import 'package:hyppe/ui/inner/home/content/diary/preview/widget/top_item_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
+
+import '../../../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../../../core/services/shared_preference.dart';
 
 class CenterItemView extends StatelessWidget {
   final Function? onTap;
@@ -25,7 +29,9 @@ class CenterItemView extends StatelessWidget {
       child: CustomBaseCacheImage(
         widthPlaceHolder: 112,
         heightPlaceHolder: 40,
-        imageUrl: data!.isApsara! ? data!.mediaThumbEndPoint! : "${data?.fullThumbPath}",
+        imageUrl: data!.isApsara!
+            ? data!.mediaThumbEndPoint!
+            : "${data?.fullThumbPath}",
         imageBuilder: (context, imageProvider) => Container(
           width: _scaling,
           height: 181,
@@ -57,13 +63,27 @@ class CenterItemView extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
+
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final isSale = data?.email != email;
+    return Stack(
       children: [
-        // TopItemView(data: data),
-        BottomItemView(data: data),
-        data!.tagPeople!.isNotEmpty ? BottomUserView(data: data) : const SizedBox(),
+        if(isSale)
+        Positioned(top: 0, right: 0, child: TopItemView(data: data)),
+        Positioned(
+          bottom: 0,
+          left: 5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              BottomItemView(data: data),
+              data!.tagPeople!.isNotEmpty
+                  ? BottomUserView(data: data)
+                  : const SizedBox(),
+            ],
+          ),
+        ),
       ],
     );
   }

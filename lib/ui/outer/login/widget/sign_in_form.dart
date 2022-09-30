@@ -14,7 +14,7 @@ import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 
-class SignInForm extends StatefulWidget {
+class  SignInForm extends StatefulWidget {
   @override
   _SignInFormState createState() => _SignInFormState();
 }

@@ -1,6 +1,7 @@
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
@@ -22,6 +23,7 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_accoun
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
@@ -94,6 +96,8 @@ import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
+import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
+
 class Generate {
   static List<Route<dynamic>> initialRoute(_) {
     return [MaterialPageRoute(builder: (_) => OpeningLogo())];
@@ -160,6 +164,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => PicDetailScreen(arguments: settings.arguments as PicDetailScreenArgument));
       case Routes.picDetailPreview:
         return MaterialPageRoute(builder: (_) => PicDetail(arguments: settings.arguments as ContentData));
+      case Routes.picSlideDetailPreview:
+        return MaterialPageRoute(builder: (_) => SlidedPicDetail(arguments: settings.arguments as SlidedPicDetailScreenArgument));
 
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => HyppePlaylistDiaries(argument: settings.arguments as DiaryDetailScreenArgument));

@@ -23,6 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+
 class SelfProfileNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -214,7 +216,7 @@ class SelfProfileNotifier with ChangeNotifier {
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
       if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble()));
-      if (pageIndex == 2) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: user.pics?[index]));
+      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble()));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

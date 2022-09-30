@@ -20,6 +20,8 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 
+import '../slide/notifier.dart';
+
 class PicDetailSlider extends StatelessWidget {
   final ContentData? picData;
   final bool onDetail;
@@ -53,6 +55,7 @@ class PicDetailSlider extends StatelessWidget {
                   ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
+                // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
               ),
             ),
 

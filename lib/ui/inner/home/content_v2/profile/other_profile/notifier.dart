@@ -28,10 +28,13 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/othe
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_vids.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
 class OtherProfileNotifier with ChangeNotifier {
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
@@ -49,6 +52,9 @@ class OtherProfileNotifier with ChangeNotifier {
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
 
   UserInfoModel _user = UserInfoModel();
   StatusFollowing _statusFollowing = StatusFollowing.rejected;
@@ -83,6 +89,11 @@ class OtherProfileNotifier with ChangeNotifier {
 
   set user(UserInfoModel val) {
     _user = val;
+    notifyListeners();
+  }
+
+  set isLoading(bool val) {
+    _isLoading = val;
     notifyListeners();
   }
 
@@ -204,6 +215,7 @@ class OtherProfileNotifier with ChangeNotifier {
     print(argument?.postID);
     print(argument?.postID);
     user = UserInfoModel();
+    if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
 
     if (argument?.senderEmail != null) {
       userEmail = argument?.senderEmail;
@@ -237,6 +249,7 @@ class OtherProfileNotifier with ChangeNotifier {
     user.vids = await vidContentsQuery.reload(context, otherContent: true);
     user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
     user.pics = await picContentsQuery.reload(context, otherContent: true);
+    _isLoading = false;
     notifyListeners();
   }
 
@@ -274,7 +287,11 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   Widget optionButton() {
-    List pages = [const OtherProfileVids(), const OtherProfileDiaries(), const OtherProfilePics()];
+    List pages = [
+      !isLoading ? const OtherProfileVids() : BothProfileContentShimmer(),
+      !isLoading ? const OtherProfileDiaries() : BothProfileContentShimmer(),
+      !isLoading ? const OtherProfilePics() : BothProfileContentShimmer()
+    ];
     return pages[pageIndex];
   }
 
@@ -283,7 +300,7 @@ class OtherProfileNotifier with ChangeNotifier {
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
       if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble()));
-      if (pageIndex == 2) _routing.move(Routes.picDetail, argument: PicDetailScreenArgument(picData: user.pics?[index]));
+      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble()));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

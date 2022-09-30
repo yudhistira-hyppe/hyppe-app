@@ -72,6 +72,9 @@ class UrlConstants {
   /* User Content route */
   static const String bankRoute = "/api/banks";
 
+  /* v3 user ads */
+  static const String adsRoute = "/api/ads";
+
   static const String transactionRoute = "/api/transactions";
 
   static const String userbankaccountsRoute = "/api/userbankaccounts";
@@ -471,4 +474,10 @@ class UrlConstants {
 
   // new verification ID Upload
   static const String verificationIDWithSupportDocs = "$postsRoute/upload";
+
+  /// get => Get Ads User
+  static const String getAdsVideo = "$adsRoute/getAds/user?type=Content%20Ads";
+
+  /// post => View Ads User
+  static const String viewAds = "$adsRoute/viewads";
 }

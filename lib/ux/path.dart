@@ -44,6 +44,7 @@ class Routes {
   static const String picDetail = '/pic-detail';
   static const String picSeeAllScreen = '/pic-see-all-screen';
   static const String picDetailPreview = '/pic-detail-preview';
+  static const String picSlideDetailPreview = '/pic-slide-detail-preview';
 
   static const String diaryDetail = '/diary-detail';
   static const String diarySeeAllScreen = '/diary-see-all-screen';
