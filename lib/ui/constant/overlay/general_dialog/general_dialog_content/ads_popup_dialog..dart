@@ -116,7 +116,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
             ],
           ) : StoryView(
             inline: false,
-            repeat: true,
+            repeat: false,
             progressColor: kHyppeLightButtonText,
             durationColor: kHyppeLightButtonText,
             storyItems: _storyItems,
