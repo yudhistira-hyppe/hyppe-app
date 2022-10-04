@@ -1,3 +1,4 @@
+import 'package:hive/hive.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -7,43 +8,117 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
-class ContentData {
+@HiveType(typeId: 0)
+class ContentData extends HiveObject{
+  @HiveField(0)
   Metadata? metadata;
+
+  @HiveField(1)
   String? mediaBasePath;
+
+  @HiveField(2)
   String? postType;
+
+  @HiveField(3)
   String? mediaUri;
+
+  @HiveField(4)
   bool? isLiked;
+
+  @HiveField(5)
   String? description;
+
+  @HiveField(6)
   bool? active;
+
+  @HiveField(7)
   Privacy? privacy;
+
+  @HiveField(8)
   String? mediaType;
+
+  @HiveField(9)
   String? mediaThumbEndPoint;
+
+  @HiveField(10)
   String? postID;
+
+  @HiveField(11)
   String? title;
+
+  @HiveField(12)
   bool? isViewed;
+
+  @HiveField(13)
   List<String>? tags;
+
+  @HiveField(14)
   bool? allowComments;
+
+  @HiveField(15)
   bool? certified;
+
+  @HiveField(16)
   String? createdAt;
+
+  @HiveField(17)
   ContentDataInsight? insight;
+
+  @HiveField(18)
   String? mediaThumbUri;
+
+  @HiveField(19)
   String? mediaEndpoint;
+
+  @HiveField(20)
   String? email;
+
+  @HiveField(21)
   String? updatedAt;
+
+  @HiveField(22)
   String? username;
+
+  @HiveField(23)
   String? fullThumbPath;
+
+  @HiveField(24)
   String? fullContentPath;
+
+  @HiveField(25)
   ContentType? contentType;
+
+  @HiveField(26)
   UserProfileAvatarModel? avatar;
+
+  @HiveField(27)
   String? visibility;
+
+  @HiveField(28)
   String? location;
+
+  @HiveField(29)
   List<Cats>? cats;
+
+  @HiveField(30)
   List<TagPeople>? tagPeople;
+
+  @HiveField(31)
   int? likes;
+
+  @HiveField(32)
   num? saleAmount;
+
+  @HiveField(33)
   bool? saleView;
+
+  @HiveField(34)
   bool? saleLike;
+
+  @HiveField(35)
   bool? isApsara;
+
+  @HiveField(36)
   String? apsaraId;
 
   ContentData(
@@ -202,12 +277,24 @@ class ContentData {
   }
 }
 
+@HiveType(typeId: 1)
 class Metadata {
+  @HiveField(0)
   int? duration;
+
+  @HiveField(1)
   int? postRoll;
+
+  @HiveField(2)
   int? preRoll;
+
+  @HiveField(3)
   int? midRoll;
+
+  @HiveField(4)
   String? postID;
+
+  @HiveField(5)
   String? email;
 
   Metadata({
@@ -240,9 +327,15 @@ class Metadata {
   }
 }
 
+@HiveType(typeId: 2)
 class Privacy {
+  @HiveField(0)
   bool? isPostPrivate;
+
+  @HiveField(1)
   bool? isCelebrity;
+
+  @HiveField(2)
   bool? isPrivate;
 
   Privacy({

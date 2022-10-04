@@ -1,13 +1,36 @@
-class ContentDataInsight {
+
+import 'package:hive/hive.dart';
+
+@HiveType(typeId: 3)
+class ContentDataInsight extends HiveObject {
+  @HiveField(0)
   int? shares;
+
+  @HiveField(1)
   int? follower;
+
+  @HiveField(2)
   int? comments;
+
+  @HiveField(3)
   int? following;
+
+  @HiveField(4)
   int? reactions;
+
+  @HiveField(5)
   int? views;
+
+  @HiveField(6)
   int? likes;
+
+  @HiveField(7)
   bool isPostLiked = false;
+
+  @HiveField(8)
   bool isView = false;
+
+  @HiveField(9)
   List<InsightLogs>? insightLogs;
 
   ContentDataInsight({
@@ -54,14 +77,30 @@ class ContentDataInsight {
   }
 }
 
-class InsightLogs {
+@HiveType(typeId: 4)
+class InsightLogs extends HiveObject {
+  @HiveField(0)
   String? sId;
+
+  @HiveField(1)
   String? insightID;
+
+  @HiveField(2)
   bool? active;
+
+  @HiveField(3)
   String? createdAt;
+
+  @HiveField(4)
   String? updatedAt;
+
+  @HiveField(5)
   String? mate;
+
+  @HiveField(6)
   String? postID;
+
+  @HiveField(7)
   String? eventInsight;
 
   InsightLogs({

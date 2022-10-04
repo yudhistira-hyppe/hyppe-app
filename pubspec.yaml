@@ -66,6 +66,7 @@ dependencies:
   light_compressor: ^1.2.2 
   deepar_flutter: ^0.0.2
   flutter_html: ^3.0.0-alpha.3
+  hive: ^2.2.3
 
   dynamic_widget: # Dynamic widget builder
     git:
