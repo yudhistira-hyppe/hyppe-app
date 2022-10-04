@@ -30,6 +30,7 @@ class Transaction extends StatefulWidget {
 
 class _TransactionState extends State<Transaction> {
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
     final _notifier = context.read<TransactionNotifier>();
@@ -57,119 +58,127 @@ class _TransactionState extends State<Transaction> {
               textToDisplay: '${notifier2.translate.transaction}',
             ),
           ),
-          body: SingleChildScrollView(
-            controller: _scrollController,
-            child: notifier.isLoading
-                ? const ShimmerTransactionHistory()
-                : Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance!.totalsaldo ?? 0)),
-                        const ButtonTransaction(),
-                        sixPx,
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
-                            borderRadius: BorderRadius.circular(5),
-                            boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                          ),
-                          child: Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () => Routing().move(Routes.transactionInProgress),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                                child: Row(
-                                  children: [
-                                    const CustomIconWidget(
-                                      iconData: "${AssetPath.vectorPath}hitory-inprogress.svg",
-                                      defaultColor: false,
-                                    ),
-                                    sixPx,
-                                    CustomTextWidget(
-                                      textToDisplay: notifier2.translate.transactionInProgress!,
-                                      textStyle: Theme.of(context).textTheme.caption,
-                                    ),
-                                    Expanded(
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(8),
-                                            color: notifier.countTransactionProgress! > 0 ? kHyppeDanger : kHyppeLightSecondary,
-                                          ),
-                                          child: CustomTextWidget(
-                                            textToDisplay: "${notifier.countTransactionProgress}",
-                                            textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightBackground),
+          body: RefreshIndicator(
+            strokeWidth: 2.0,
+            color: Colors.purple,
+            key: _refreshIndicatorKey,
+            onRefresh: () async {
+              await notifier.initTransactionHistory(context);
+            },
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              child: notifier.isLoading
+                  ? const ShimmerTransactionHistory()
+                  : Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance!.totalsaldo ?? 0)),
+                          const ButtonTransaction(),
+                          sixPx,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.background,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                            ),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: () => Routing().move(Routes.transactionInProgress),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                                  child: Row(
+                                    children: [
+                                      const CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}hitory-inprogress.svg",
+                                        defaultColor: false,
+                                      ),
+                                      sixPx,
+                                      CustomTextWidget(
+                                        textToDisplay: notifier2.translate.transactionInProgress!,
+                                        textStyle: Theme.of(context).textTheme.caption,
+                                      ),
+                                      Expanded(
+                                        child: Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(8),
+                                              color: notifier.countTransactionProgress! > 0 ? kHyppeDanger : kHyppeLightSecondary,
+                                            ),
+                                            child: CustomTextWidget(
+                                              textToDisplay: "${notifier.countTransactionProgress}",
+                                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightBackground),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const CustomTextWidget(textToDisplay: 'Recent Transaction'),
-                            CustomTextButton(
-                              onPressed: () {
-                                context.read<FilterTransactionNotifier>().getTypeFilter(context);
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const CustomTextWidget(textToDisplay: 'Recent Transaction'),
+                              CustomTextButton(
+                                onPressed: () {
+                                  context.read<FilterTransactionNotifier>().getTypeFilter(context);
 
-                                Routing().move(Routes.allTransaction);
-                              },
-                              child: CustomTextWidget(
-                                  textToDisplay: notifier2.translate.seeMore!,
-                                  textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-                                        color: kHyppePrimary,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                            )
-                          ],
-                        ),
-                        notifier.dataTransaction!.isEmpty
-                            ? EmptyBankAccount(
-                                textWidget: Column(
-                                children: [
-                                  CustomTextWidget(
-                                    textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
-                                    maxLines: 4,
-                                  ),
-                                ],
-                              ))
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: notifier.dataTransaction!.length,
-                                itemBuilder: (context, index) {
-                                  String title = '';
-                                  switch (notifier.dataTransaction![index].type) {
-                                    case TransactionType.withdrawal:
-                                      title = notifier2.translate.withdrawal!;
-                                      return WithdrawalWidget(
-                                        title: title,
-                                        language: notifier2.translate,
-                                        data: notifier.dataTransaction![index],
-                                      );
-                                    default:
-                                      return BuySellWidget(
-                                        data: notifier.dataTransaction![index],
-                                        language: notifier2.translate,
-                                      );
-                                  }
-                                }),
-                        notifier.isScrollLoading ? const CustomLoading() : const SizedBox()
-                      ],
+                                  Routing().move(Routes.allTransaction);
+                                },
+                                child: CustomTextWidget(
+                                    textToDisplay: notifier2.translate.seeMore!,
+                                    textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                          color: kHyppePrimary,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                              )
+                            ],
+                          ),
+                          notifier.dataTransaction!.isEmpty
+                              ? EmptyBankAccount(
+                                  textWidget: Column(
+                                  children: [
+                                    CustomTextWidget(
+                                      textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
+                                      maxLines: 4,
+                                    ),
+                                  ],
+                                ))
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: notifier.dataTransaction!.length,
+                                  itemBuilder: (context, index) {
+                                    String title = '';
+                                    switch (notifier.dataTransaction![index].type) {
+                                      case TransactionType.withdrawal:
+                                        title = notifier2.translate.withdrawal!;
+                                        return WithdrawalWidget(
+                                          title: title,
+                                          language: notifier2.translate,
+                                          data: notifier.dataTransaction![index],
+                                        );
+                                      default:
+                                        return BuySellWidget(
+                                          data: notifier.dataTransaction![index],
+                                          language: notifier2.translate,
+                                        );
+                                    }
+                                  }),
+                          notifier.isScrollLoading ? const CustomLoading() : const SizedBox()
+                        ],
+                      ),
                     ),
-                  ),
+            ),
           )),
     );
   }

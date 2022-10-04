@@ -398,6 +398,8 @@ class StoryView extends StatefulWidget {
   /// each time the full story completes when [repeat] is set to `true`.
   final VoidCallback? onComplete;
 
+  final Function(Duration)? onEverySecond;
+
   /// Callback for when a vertical swipe gesture is detected. If you do not
   /// want to listen to such event, do not provide it. For instance,
   /// for inline stories inside ListViews, it is preferrable to not to
@@ -437,6 +439,7 @@ class StoryView extends StatefulWidget {
     this.onDouble,
     this.onComplete,
     this.onStoryShow,
+    this.onEverySecond,
     this.progressPosition = ProgressPosition.top,
     this.repeat = false,
     this.inline = false,
@@ -465,6 +468,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   VerticalDragInfo? verticalDragInfo;
   bool statusPlay = false;
   bool statusPlayOnPress = false;
+
+  Duration? duration = Duration();
+  Timer? timer;
 
   // StoryItem? get _currentStory => widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => null);
   StoryItem? get _currentStory => widget.storyItems.firstWhereOrNull((it) => !it!.shown);
@@ -503,10 +509,47 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   //   }
   // }
 
+  void reset(){
+    setState(() =>
+    duration = null);
+  }
+
+  void playTimer(){
+    timer = Timer.periodic(Duration(seconds: 1), (real){
+      addTimer();
+    });
+  }
+
+  void addTimer(){
+    if(duration != null){
+      setState(() {
+        final seconds = duration!.inSeconds + 1;
+        if (seconds < 0){
+          timer?.cancel();
+        } else{
+          duration = Duration(seconds: seconds);
+          if(widget.onEverySecond != null){
+            widget.onEverySecond!(duration!);
+          }
+        }
+      });
+    }
+
+  }
+
+  void pauseTimer({bool isReset = false}){
+    if(isReset){
+      reset();
+    }
+
+    setState(() => timer?.cancel());
+  }
+
   @override
   void initState() {
     super.initState();
     _eventService.addVideoHandler(kVideoEventKey, this);
+
 
     // All pages after the first unshown page should have their shown value as
     // false
@@ -549,6 +592,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       switch (playbackStatus) {
         case PlaybackState.play:
           _removeNextHold();
+
+          playTimer();
           _animationController?.forward();
           statusPlay = true;
           break;
@@ -556,6 +601,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
         case PlaybackState.pause:
           _holdNext(); // then pause animation
           _animationController?.stop(canceled: false);
+          pauseTimer();
           statusPlay = false;
           break;
 
@@ -576,6 +622,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
   @override
   void dispose() {
+    pauseTimer(isReset: true);
     _clearDebouncer();
 
     _animationController?.dispose();
@@ -597,6 +644,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   void onBetterPlayerEventChange(event) {
     if (event.betterPlayerEventType == BetterPlayerEventType.bufferingStart) {
       _animationController?.stop(canceled: false);
+      pauseTimer();
       setState(() {});
     } else if (event.betterPlayerEventType == BetterPlayerEventType.bufferingEnd) {
       _animationController?.forward();
@@ -673,6 +721,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     if (widget.onComplete != null) {
       widget.controller.pause();
       widget.onComplete!();
+      pauseTimer(isReset: true);
     }
 
     if (widget.repeat) {

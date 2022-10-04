@@ -120,6 +120,68 @@ class PostsBloc {
     );
   }
 
+  Future getAllContentsBlocV2(
+    BuildContext context, {
+    int pageRows = 5,
+    String searchText = "",
+    String? postID,
+    required int pageNumber,
+    required FeatureType type,
+    String? visibility,
+    bool onlyMyData = false,
+    bool myContent = false,
+    bool otherContent = false,
+  }) async {
+    final formData = FormData();
+    final email = SharedPreference().readStorage(SpKeys.email);
+    String url = '';
+
+    formData.fields.add(const MapEntry('withExp', 'true'));
+    formData.fields.add(const MapEntry('withActive', 'true'));
+    formData.fields.add(const MapEntry('withDetail', 'true'));
+    formData.fields.add(const MapEntry('withInsight', 'true'));
+    if (searchText == '') {
+      formData.fields.add(MapEntry('visibility', '$visibility'));
+    }
+
+    url = UrlConstants.getuserposts;
+    if (otherContent) {
+      formData.fields.add(MapEntry('email', searchText));
+      url = UrlConstants.getOtherUserPosts;
+    }
+
+    if (myContent) {
+      url = UrlConstants.getMyUserPosts;
+    }
+
+    print('hahahahahahahaha getUserPostsLandingPage');
+    print(formData.fields.map((e) => e).join(','));
+    setPostsFetch(PostsFetch(PostsState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        print(onResult);
+        if (onResult.statusCode! > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+      },
+      data: formData,
+      headers: {
+        'x-auth-user': email,
+      },
+      host: UrlConstants.getUserPostsLandingPage,
+      withAlertMessage: false,
+      withCheckConnection: false,
+      methodType: MethodType.post,
+      errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
+
   Future postContentsBlocV2(BuildContext context,
       {List<String>? tags,
       List<String>? cats,

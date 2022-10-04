@@ -79,7 +79,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                   sixPx,
                   CustomTextWidget(
                     textToDisplay:
-                        '${data!.totallike! > 0 ? data!.totallike! : ''}${data!.totallike! > 0 ? ' ${language!.like}' : ''}${data!.totallike! > 0 && data!.totalview! > 0 ? ' | ' : ''}${data!.totalview! > 0 ? data!.totalview! : ''}${data!.totalview! > 0 ? ' ${language!.views}' : ''}',
+                        '${data!.like! ? data!.totallike! : ''}${data!.like! ? ' ${language!.like}' : ''} ${data!.like! && data!.view! ? ' | ' : ''}${data!.view! ? data!.totalview! : ''}${data!.view! ? ' ${language!.views}' : ''}',
                     textStyle: Theme.of(context).textTheme.caption!,
                   ),
                   twelvePx,
@@ -94,7 +94,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                                 boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                               ),
                               child: CustomTextWidget(
-                                textToDisplay: 'Like',
+                                textToDisplay: '${language!.like}',
                                 textStyle: Theme.of(context).textTheme.caption!,
                                 textAlign: TextAlign.start,
                               ),
@@ -110,7 +110,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                                 boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                               ),
                               child: CustomTextWidget(
-                                textToDisplay: 'View',
+                                textToDisplay: '${language!.views}',
                                 textStyle: Theme.of(context).textTheme.caption!,
                                 textAlign: TextAlign.start,
                               ),

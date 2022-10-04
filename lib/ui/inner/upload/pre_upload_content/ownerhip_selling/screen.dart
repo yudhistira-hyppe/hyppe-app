@@ -42,6 +42,7 @@ class OwnershipSellingScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,7 +212,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                             top: 8,
                             child: Container(
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.all(8),
                               child: Text(
                                 notifier.language.setPrice!,
                                 style: Theme.of(context).textTheme.caption!.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
@@ -219,6 +220,13 @@ class OwnershipSellingScreen extends StatelessWidget {
                             ),
                           ),
                         ],
+                      )
+                    : Container(),
+                notifier.toSell && notifier.priceController.text == ''
+                    ? CustomTextWidget(
+                        textAlign: TextAlign.start,
+                        textToDisplay: notifier.language.mustFilledFirst!,
+                        textStyle: const TextStyle(color: kHyppeDanger),
                       )
                     : Container()
               ]
@@ -230,7 +238,11 @@ class OwnershipSellingScreen extends StatelessWidget {
           child: CustomTextButton(
             onPressed: notifier.certified
                 ? () {
-                    Routing().moveBack();
+                    if (notifier.toSell && notifier.priceController.text == '') {
+                      return null;
+                    } else {
+                      notifier.submitOwnership();
+                    }
                   }
                 : null,
             style: ButtonStyle(backgroundColor: notifier.certified ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),

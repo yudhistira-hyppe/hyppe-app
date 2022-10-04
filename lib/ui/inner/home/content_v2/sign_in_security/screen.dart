@@ -98,7 +98,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
         break;
       case UNVERIFIED:
-        statusText = "Unerified";
+        statusText = "Unverified";
         statusColor = Colors.white;
         bgColor = kHyppePrimary;
         break;
@@ -108,7 +108,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         bgColor = Colors.yellow[200];
         break;
       default:
-        statusText = "Unerified";
+        statusText = "Unverified";
         statusColor = Colors.white;
     }
 

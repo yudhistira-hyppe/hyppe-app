@@ -65,19 +65,17 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
                       ),
                     ],
                   ),
-                  notifier.isLoading
-                      ? const CustomLoading()
-                      : IconButton(
-                          // onPressed: () => notifier.routing.move(profileSettings),
-                          onPressed: () async {
-                            notifier.routing.move(Routes.appSettings);
-                            await context.read<TransactionNotifier>().getAccountBalance(context);
-                            context.read<TransactionNotifier>().isLoading = false;
-                          },
-                          icon: const CustomIconWidget(
-                            iconData: "${AssetPath.vectorPath}setting.svg",
-                          ),
-                        ),
+                  IconButton(
+                    // onPressed: () => notifier.routing.move(profileSettings),
+                    onPressed: () async {
+                      notifier.routing.move(Routes.appSettings);
+                      await context.read<TransactionNotifier>().getAccountBalance(context);
+                      context.read<TransactionNotifier>().isLoading = false;
+                    },
+                    icon: const CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}setting.svg",
+                    ),
+                  ),
                 ],
               ),
             ),

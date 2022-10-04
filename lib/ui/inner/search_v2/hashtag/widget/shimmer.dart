@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../../core/constants/themes/hyppe_colors.dart';
@@ -25,7 +26,10 @@ class HashtagShimmer extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(25))
               ),
             ),
+            eightPx,
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   height: 15,
@@ -35,6 +39,7 @@ class HashtagShimmer extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(5))
                   ),
                 ),
+                eightPx,
                 Container(
                   height: 15,
                   width: 0.5 * context.getWidth(),

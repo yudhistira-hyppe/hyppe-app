@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -14,6 +15,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widge
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_replay_caption.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_top_view.dart';
 
+import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
 
 class StoryPage extends StatefulWidget {
@@ -148,13 +150,12 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             ))
         : Stack(
             children: [
-
               StoryView(
                 inline: false,
                 repeat: false,
                 progressColor: kHyppeLightButtonText,
                 durationColor: kHyppeLightButtonText,
-                onDouble: (){
+                onDouble: () {
                   print('testtttt');
                   context.read<LikeNotifier>().likePost(context, widget.data!);
                 },
@@ -194,7 +195,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                   final isLastPage = currentIndex == widget.controller!.page;
                   // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                   // notifier.pageController =
-
+                  print('onComplete Diary');
                   Timer(const Duration(seconds: 1), () {
                     // widget.onNextPage!();
                     // notifier.onCloseStory(mounted);
@@ -205,6 +206,9 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                   if (isLastPage) {
                     notifier.onCloseStory(mounted);
                   }
+                },
+                onEverySecond: (duration){
+
                 },
                 onVerticalSwipeComplete: (v) {
                   // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
@@ -246,4 +250,6 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             ],
           );
   }
+
+
 }

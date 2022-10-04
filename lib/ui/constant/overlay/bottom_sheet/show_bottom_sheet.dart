@@ -38,6 +38,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_ownership.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_pin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
@@ -452,7 +453,7 @@ class ShowBottomSheet {
                   ),
                 ),
                 padding: const EdgeInsets.all(0),
-                child: const OnShowIDVerificationFailedBottomSheet()),
+                child: OnShowIDVerificationFailedBottomSheet()),
           ),
         );
       },
@@ -1327,6 +1328,39 @@ class ShowBottomSheet {
           child: OnStatementOwnershipBottomSheet(
             onSave: onSave,
             onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowStatementPin(
+    BuildContext context, {
+    required Function() onSave,
+    required Function() onCancel,
+    title = '',
+    bodyText = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnStatementPinBottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+            title: title,
+            bodyText: bodyText,
           ),
         );
       },

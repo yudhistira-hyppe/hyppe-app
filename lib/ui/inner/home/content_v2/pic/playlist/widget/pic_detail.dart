@@ -68,7 +68,7 @@ class _PicDetailState extends State<PicDetail> {
               InteractiveViewer(
                 transformationController: transformationController,
                 child: InkWell(
-                  onDoubleTap: (){
+                  onDoubleTap: () {
                     context.read<LikeNotifier>().likePost(context, widget.arguments!);
                   },
                   child: CustomCacheImage(
@@ -204,7 +204,7 @@ class _PicDetailState extends State<PicDetail> {
                           iconData: '${AssetPath.vectorPath}share.svg',
                           function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
                         ),
-                        if (widget.arguments!.saleAmount! > 0)
+                        if (widget.arguments!.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments!.email)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',

@@ -43,7 +43,7 @@ class SettingScreen extends StatelessWidget {
             children: [
               SettingTile(
                 icon: 'transaction-icon.svg',
-                onTap: () => Routing().move(Routes.transaction),
+                onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
                 caption: '${notifier.translate.transaction}',
               ),
               Padding(

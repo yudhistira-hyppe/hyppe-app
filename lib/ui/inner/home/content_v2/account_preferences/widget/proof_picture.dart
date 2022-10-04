@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -20,7 +23,7 @@ class ProofPicture extends StatelessWidget {
     return Selector<SelfProfileNotifier, UserInfoModel>(
       selector: (context, user) => user.user,
       builder: (context, user, child) {
-        bool isIDVerified = user.profile?.isIdVerified ?? false;
+        bool isIDVerified = SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED;
         return isIDVerified
             ? SizedBox(
                 width: double.infinity,
@@ -31,10 +34,7 @@ class ProofPicture extends StatelessWidget {
                     twelvePx,
                     CustomTextWidget(
                       textToDisplay: notifier.language.idVerification!,
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(fontWeight: FontWeight.bold),
+                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                     ),
                     // eightPx,
                     // CustomTextWidget(
@@ -52,10 +52,7 @@ class ProofPicture extends StatelessWidget {
                         eightPx,
                         CustomTextWidget(
                           textToDisplay: "${notifier.language.verified}",
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyText2
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                          textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     )

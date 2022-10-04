@@ -1,209 +1,294 @@
 import 'dart:io';
-import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_player_page.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:story_view/controller/story_controller.dart';
+import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/bloc/ads_video/bloc.dart';
+import '../../../../../core/constants/asset_path.dart';
+import '../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../core/models/collection/advertising/view_ads_request.dart';
+import '../../../../../core/services/shared_preference.dart';
+import '../../../widget/custom_background_layer.dart';
+import '../../../widget/custom_base_cache_image.dart';
+import '../../../widget/custom_cache_image.dart';
+
 class AdsPopUpDialog extends StatefulWidget {
-  const AdsPopUpDialog({Key? key}) : super(key: key);
+  final AdsData data;
+  final String urlAds;
+
+  const AdsPopUpDialog({Key? key, required this.data, required this.urlAds}) : super(key: key);
 
   @override
   State<AdsPopUpDialog> createState() => _AdsPopUpDialogState();
 }
 
 class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
-  final _routing = Routing();
+  List<StoryItem> _storyItems = [];
+  final StoryController _storyController = StoryController();
 
-  bool _isLoading = false;
-  List<ContentData>? _vidData;
+  final _sharedPrefs = SharedPreference();
+  var secondsSkip = 0;
+  var secondsVideo = 0;
+  // List<ContentData>? _vidData;
 
   @override
   void initState() {
-    const jsonDataAsString = {
-      "data": [
-        {
-          "rotate": 0,
-          "metadata": {"duration": 7, "postRoll": 7, "postType": "vid", "preRoll": 0, "midRoll": 4, "postID": "b40d0927-b41d-4702-8da6-f99138675c96", "email": "movaz@dropjar.com"},
-          "description": "wkwkwkwkwk",
-          "privacy": {"isPostPrivate": false, "isCelebrity": false, "isPrivate": false},
-          "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-          "title": "wkwkwkwkwk",
-          "isViewed": false,
-          "createdAt": "2022-08-05 14:32:43",
-          "certified": false,
-          "saleLike": false,
-          "email": "movaz@dropjar.com",
-          "updatedAt": "2022-08-05 14:32:43",
-          "saleAmount": null,
-          "visibility": "PUBLIC",
-          "mediaBasePath": "62d7ad156bdb2f0e669b0265/vid/b40d0927-b41d-4702-8da6-f99138675c96/",
-          "postType": "vid",
-          "isApsara": false,
-          "mediaUri": "784a719c-f67e-46d6-b601-2ee49687655a.m3u8",
-          "isLiked": false,
-          "active": true,
-          "mediaType": "video",
-          "saleView": false,
-          "mediaThumbEndpoint": "/thumb/b40d0927-b41d-4702-8da6-f99138675c96",
-          "tags": null,
-          "allowComments": true,
-          "insight": {
-            "shares": 0,
-            "insightLogs": [
-              {
-                "_id": "7d067393-15df-472f-8df0-a24d8dba5ba9",
-                "insightID": "db6d476a-ae1e-b0bf-fdb8-cb8366b61f8f",
-                "active": true,
-                "createdAt": "2022-08-05 14:34:00",
-                "updatedAt": "2022-08-05 14:34:00",
-                "mate": "ilhamarahman97@gmail.com",
-                "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-                "eventInsight": "VIEW"
-              },
-              {
-                "_id": "cf1ab3ad-ed62-466a-9f39-adc7b8824681",
-                "insightID": "db6d476a-ae1e-b0bf-fdb8-cb8366b61f8f",
-                "active": true,
-                "createdAt": "2022-08-08 13:47:52",
-                "updatedAt": "2022-08-08 13:47:52",
-                "mate": "ilhamarahman97@gmail.com",
-                "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-                "eventInsight": "COMMENT"
-              },
-              {
-                "_id": "166513d3-a43d-4157-bbc5-eaded2f41afd",
-                "insightID": "db6d476a-ae1e-b0bf-fdb8-cb8366b61f8f",
-                "active": true,
-                "createdAt": "2022-08-08 13:48:25",
-                "updatedAt": "2022-08-08 13:48:25",
-                "mate": "ilhamarahman97@gmail.com",
-                "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-                "eventInsight": "COMMENT"
-              },
-              {
-                "_id": "f78f64f2-ec5b-40ec-b10f-7ec8e0dd116d",
-                "insightID": "db6d476a-ae1e-b0bf-fdb8-cb8366b61f8f",
-                "active": true,
-                "createdAt": "2022-08-08 13:51:46",
-                "updatedAt": "2022-08-08 13:51:46",
-                "mate": "ilhamarahman97@gmail.com",
-                "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-                "eventInsight": "COMMENT"
-              },
-              {
-                "_id": "9e43963f-6a3a-48b9-b5d7-5ed9c84bd7fe",
-                "insightID": "db6d476a-ae1e-b0bf-fdb8-cb8366b61f8f",
-                "active": true,
-                "createdAt": "2022-08-08 13:52:16",
-                "updatedAt": "2022-08-08 13:52:16",
-                "mate": "ilhamarahman97@gmail.com",
-                "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-                "eventInsight": "COMMENT"
-              },
-              {
-                "_id": "1f800fd1-18ab-4235-8c0c-2171b465b0a1",
-                "insightID": "db6d476a-ae1e-b0bf-fdb8-cb8366b61f8f",
-                "active": true,
-                "createdAt": "2022-08-08 13:53:17",
-                "updatedAt": "2022-08-08 13:53:17",
-                "mate": "ilhamarahman97@gmail.com",
-                "postID": "b40d0927-b41d-4702-8da6-f99138675c96",
-                "eventInsight": "COMMENT"
-              }
-            ],
-            "follower": 10,
-            "comments": 6,
-            "following": 9,
-            "reactions": 0,
-            "views": 1,
-            "likes": 1
-          },
-          "cats": [
-            {
-              "_id": "613bc4da9ec319617aa6c38e",
-              "interestName": "Entertainment",
-              "langIso": "en",
-              "icon": "https://prod.hyppe.app/images/icon_interest/entertainment.svg",
-              "createdAt": "2021-09-11 03:49:30",
-              "updatedAt": "2021-09-11 03:49:30"
-            },
-            {
-              "_id": "613bc4da9ec319617aa6c397",
-              "interestName": "Hobby",
-              "langIso": "en",
-              "icon": "https://prod.hyppe.app/images/icon_interest/hobby.svg",
-              "createdAt": "2021-09-11 03:49:30",
-              "updatedAt": "2021-09-11 03:49:30"
-            }
-          ],
-          "tagPeople": [
-            {
-              "avatar": {
-                "mediaBasePath": "62bc0ee11140b677c847cf1c/profilepict/",
-                "mediaUri": "5565285e-bfa4-485b-8c44-833084ff8c45_0001.jpeg",
-                "mediaType": "image",
-                "mediaEndpoint": "/profilepict/5565285e-bfa4-485b-8c44-833084ff8c45"
-              },
-              "email": "ilhamarahman97@gmail.com",
-              "username": "testinglagi12",
-              "status": "FOLLOWING"
-            },
-            {
-              "avatar": {
-                "mediaBasePath": "62a6a0b4547ff22190452520/profilepict/",
-                "mediaUri": "b54ba9c6-fbe7-4489-86ce-6da90de2bd40_0001.jpeg",
-                "mediaType": "image",
-                "mediaEndpoint": "/profilepict/b54ba9c6-fbe7-4489-86ce-6da90de2bd40"
-              },
-              "email": "taslimahmad0708@gmail.com",
-              "username": "taslimahmad0708",
-              "status": "FOLLOWING"
-            }
-          ],
-          "mediaThumbUri": "784a719c-f67e-46d6-b601-2ee49687655a_thumb.jpeg",
-          "location": "Jakarta, Daerah Khusus Ibukota Jakarta, Indonesia",
-          "mediaEndpoint": "/stream/784a719c-f67e-46d6-b601-2ee49687655a.m3u8",
-          "username": "movaz"
-        },
-      ]
-    };
+    _storyItems.add(StoryItem.pageVideo(widget.urlAds, controller: _storyController, requestHeaders: {
+      'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+      'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+    },
+    duration: Duration(
+      milliseconds: ((widget.data.duration ?? 15) * 1000).toInt()
+    )));
 
-    _vidData = (jsonDataAsString['data'] as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
-
-    print('_vidData');
-    print(_vidData);
+    secondsSkip = widget.data.adsSkip ?? 0;
     super.initState();
+  }
+
+  Future adsView(AdsData data, int time) async{
+    try{
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
+      await notifier.viewAdsBloc(context, request);
+
+      // final fetch = notifier.adsVideoFetch;
+
+    }catch(e){
+      'Failed hit view ads ${e}'.logger();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
-    final _language = context.watch<TranslateNotifierV2>().translate;
     return Container(
       decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: VideoPlayerPage(
-          onDetail: false,
-          videoData: _vidData?[0],
-          key: ValueKey(PostsState.postContentsSuccess),
-          afterView: () => System().increaseViewCount(context, _vidData![0]),
-        ),
-      ),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          widget.data == 'image' ?
+          Stack(
+            children: [
+              // Background
+              CustomBackgroundLayer(
+                sigmaX: 30,
+                sigmaY: 30,
+                // thumbnail: picData!.content[arguments].contentUrl,
+                thumbnail: widget.urlAds,
+              ),
+              // Content
+              InteractiveViewer(
+                child: InkWell(
+                  child: CustomCacheImage(
+                    imageUrl: widget.urlAds,
+                    imageBuilder: (ctx, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.contain),
+                        ),
+                      );
+                    },
+                    errorWidget: (_, __, ___) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: AssetImage(
+                                '${AssetPath
+                                    .pngPath}content-error.png'),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ) : StoryView(
+            inline: false,
+            repeat: false,
+            progressColor: kHyppeLightButtonText,
+            durationColor: kHyppeLightButtonText,
+            storyItems: _storyItems,
+            controller: _storyController,
+            progressPosition: ProgressPosition.top,
+            onStoryShow: (storyItem) {
+              // int pos = _storyItems.indexOf(storyItem);
+              //
+              // context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
+              // // _addPostView();
+              // _storyController.playbackNotifier.listen((value) {
+              //   if (value == PlaybackState.previous) {
+              //     if (widget.controller!.page == 0) {
+              //       // context.read<DiariesPlaylistNotifier>().onWillPop(true);
+              //     } else {
+              //       widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+              //     }
+              //   }
+              // });
+            },
+            onEverySecond: (dur){
+
+              print('second of video ${dur.inSeconds}');
+              setState(() {
+                secondsSkip -= 1;
+                secondsVideo += 1;
+              });
+            },
+            nextDebouncer: false,
+            onComplete: () {
+              _storyController.pause();
+
+              // Navigator.pop(context);
+              // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+
+              // _storyController.next();
+              // widget.controller!.
+
+              // final isLastPage = widget.total! - 1 == widget.controller!.page;
+              // widget.function();
+              // if (isLastPage) {
+              //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
+              // }
+            },
+          ),
+          Positioned(
+            left: 0,
+              top: 50,
+              right: 0,
+              child: topAdsLayout(widget.data)),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: bottomAdsLayout(widget.data),
+          )
+        ],
+      )
       // Image.network(
       //   'https://www.pocarisweat.com.sg//assets/uploads/2020/11/3aaf07f26dc43575fb5406f4901dac63.jpg',
       //   fit: BoxFit.contain,
       // ),
+    );
+  }
+
+  Widget topAdsLayout(AdsData data){
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        color: Colors.transparent,
+        margin: EdgeInsets.only(left: 18, right: 18),
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CustomBaseCacheImage(
+                  imageUrl: data.avatar?.fullLinkURL,
+                  memCacheWidth: 200,
+                  memCacheHeight: 200,
+                  imageBuilder: (_, imageProvider) {
+                    return Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(18)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: imageProvider,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (_, __, ___) {
+                    return Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(18)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                twelvePx,
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        CustomIconWidget(defaultColor: false,
+                          iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",),
+                        fourPx,
+                        Text(data.adsDescription ?? 'Nike', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),)
+                      ],
+                    ),
+                    sixPx,
+                    Text('Sponsored', style: TextStyle(color: Colors.white, fontSize: 12,),)
+                  ],
+                )
+              ],
+            ),
+            secondsSkip > 0 ? Container(
+              height: 30,
+              width: 30,
+              child: Text('$secondsSkip', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                color: Colors.grey
+              ),
+            ):InkWell(
+              onTap: (){
+                adsView(widget.data, secondsVideo);
+                Navigator.pop(context);
+              },
+              child: CustomIconWidget(defaultColor: false,
+                iconData: "${AssetPath.vectorPath}close_ads.svg",),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget bottomAdsLayout(AdsData data){
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
+        child: InkWell(
+          onTap: ()async{
+            final uri = Uri.parse(data.adsUrlLink ?? '');
+            if (await canLaunchUrl(uri))
+              await launchUrl(uri, mode: LaunchMode.externalApplication,);
+            else
+              // can't launch url, there is some error
+              throw "Could not launch $uri";
+          },
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            child: Text('Learn more', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700,),),
+            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+          ),
+        ),
+      ),
     );
   }
 
@@ -228,5 +313,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
         backgroundColor: MaterialStateProperty.all(color),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _storyController.dispose();
+    super.dispose();
   }
 }

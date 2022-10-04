@@ -287,6 +287,7 @@ class LocalizationModelV2 {
   String? somethingsWrong;
   String? tag;
   String? popularHashtag;
+  String? findYourInterests;
   String? username;
   String? week;
   String? yourFullName;
@@ -955,6 +956,7 @@ class LocalizationModelV2 {
     this.somethingsWrong,
     this.tag,
     this.popularHashtag,
+    this.findYourInterests,
     this.username,
     this.week,
     this.yourFullName,
@@ -1625,6 +1627,7 @@ class LocalizationModelV2 {
     somethingsWrong = json['somethingsWrong'];
     tag = json['tag'];
     popularHashtag = json['popularHashtag'];
+    findYourInterests = json['findYourInterests'];
     username = json['username'];
     week = json['week'];
     yourFullName = json['yourFullName'];

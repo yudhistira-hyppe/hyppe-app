@@ -17,8 +17,10 @@ class BottomDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data!.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
+    } else if (data!.type == TransactionType.buy) {
+      return buyWidget(context);
     } else {
-      return buySellWidget(context);
+      return sellWidget(context);
     }
   }
 
@@ -47,7 +49,7 @@ class BottomDetailWidget extends StatelessWidget {
     ]);
   }
 
-  Widget buySellWidget(context) {
+  Widget sellWidget(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,8 +66,33 @@ class BottomDetailWidget extends StatelessWidget {
                 ),
           ),
         ),
-        TwoColumnWidget(language!.totalPrice!, text2: System().currencyFormat(amount: data!.amount)),
-        TwoColumnWidget(language!.totalIncome!, text2: System().currencyFormat(amount: data!.amount)),
+        TwoColumnWidget(language!.totalPrice!, text2: System().currencyFormat(amount: data!.totalamount)),
+        TwoColumnWidget(language!.totalIncome!, text2: System().currencyFormat(amount: data!.totalamount)),
+      ],
+    );
+  }
+
+  Widget buyWidget(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        twelvePx,
+        const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
+        twelvePx,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: CustomTextWidget(
+            textToDisplay: language!.paymentDetails!,
+            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+        TwoColumnWidget(language!.contentPrice!, text2: System().currencyFormat(amount: data!.amount)),
+        TwoColumnWidget(language!.adminFee!, text2: System().currencyFormat(amount: data!.adminFee)),
+        TwoColumnWidget(language!.serviceFee!, text2: System().currencyFormat(amount: data!.serviceFee)),
+        TwoColumnWidget(language!.totalPrice!, text2: System().currencyFormat(amount: data!.totalamount)),
       ],
     );
   }

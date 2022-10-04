@@ -24,13 +24,14 @@ class UserProfileModel {
   String? email;
   String? username;
   bool? isComplete;
-  bool? isIdVerified;
+  String? isIdVerified;
   String? status;
   String? refreshToken;
   String? idProofNumber;
   IdProofStatus? idProofStatus;
   bool? pinCreate;
   bool? pinVerified;
+  String? statusKyc;
 
   UserProfileModel({
     this.country,
@@ -59,6 +60,7 @@ class UserProfileModel {
     this.idProofNumber,
     this.pinCreate,
     this.pinVerified,
+    this.statusKyc,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -92,16 +94,13 @@ class UserProfileModel {
         : json['isComplete'] == "true"
             ? true
             : false;
-    isIdVerified = json['isIdVerified'] is bool
-        ? json['isIdVerified']
-        : json['isIdVerified'] == "true"
-            ? true
-            : false;
+    isIdVerified = json['isIdVerified'] ?? false;
     status = json['status'];
     refreshToken = json['refreshToken'];
     idProofStatus = _serializeIdProofStatus(json['idProofStatus']);
     pinVerified = json['pin_verified'] ?? false;
     pinCreate = json['pin_create'] ?? false;
+    statusKyc = json['statusKyc'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -137,6 +136,7 @@ class UserProfileModel {
     data['refreshToken'] = refreshToken;
     data['pin_verified'] = pinVerified;
     data['pin_create'] = pinCreate;
+    data['statusKyc'] = statusKyc;
     return data;
   }
 

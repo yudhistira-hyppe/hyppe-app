@@ -24,6 +24,7 @@ class _AllTransactionState extends State<AllTransaction> {
   List filterList = [];
   int _select = 0;
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   void selected(val) {
     setState(() {

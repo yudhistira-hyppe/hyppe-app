@@ -1,6 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/stream_service.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
@@ -82,5 +86,24 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   void setLoading(bool val, {bool setState = true, Object? loadingObject}) {
     super.setLoading(val, loadingObject: loadingObject);
     if (setState) notifyListeners();
+  }
+
+  Future validateUser(context, TranslateNotifierV2 language) async {
+    final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    // final userPin = SharedPreference().readStorage(SpKeys.setPin);
+
+    // if (userPin != 'true') {
+    //   return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+    //     Routing().moveAndPop(Routes.homePageSignInSecurity);
+    //   }, title: language.translate.addYourHyppePinFirst!, bodyText: language.translate.toAccessTransactionPageYouNeedToSetYourPin!);
+    // }
+
+    if (userKyc != VERIFIED) {
+      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+        Routing().moveAndPop(Routes.homePageSignInSecurity);
+      }, title: language.translate.verificationYourIDFirst!, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID!);
+    }
+
+    Routing().move(Routes.transaction);
   }
 }
