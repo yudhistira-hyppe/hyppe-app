@@ -90,13 +90,13 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
 
   Future validateUser(context, TranslateNotifierV2 language) async {
     final userKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
-    final userPin = SharedPreference().readStorage(SpKeys.setPin);
+    // final userPin = SharedPreference().readStorage(SpKeys.setPin);
 
-    if (userPin != 'true') {
-      return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
-        Routing().moveAndPop(Routes.homePageSignInSecurity);
-      }, title: language.translate.addYourHyppePinFirst!, bodyText: language.translate.toAccessTransactionPageYouNeedToSetYourPin!);
-    }
+    // if (userPin != 'true') {
+    //   return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
+    //     Routing().moveAndPop(Routes.homePageSignInSecurity);
+    //   }, title: language.translate.addYourHyppePinFirst!, bodyText: language.translate.toAccessTransactionPageYouNeedToSetYourPin!);
+    // }
 
     if (userKyc != VERIFIED) {
       return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {

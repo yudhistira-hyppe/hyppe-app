@@ -336,7 +336,7 @@ class SelfProfileNotifier with ChangeNotifier {
         break;
       case IdProofStatus.complete:
         user.profile?.idProofStatus = IdProofStatus.complete;
-        user.profile?.isIdVerified = VERIFIED;
+        user.profile?.statusKyc = VERIFIED;
         SharedPreference().writeStorage(SpKeys.statusVerificationId, VERIFIED);
         break;
       default:

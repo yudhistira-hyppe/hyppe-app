@@ -1042,8 +1042,6 @@ class System {
   }
 
   Future userVerified(status) async {
-    print('ini status idperfied');
-    print(status);
     switch (status) {
       case VERIFIED:
         print('1');
