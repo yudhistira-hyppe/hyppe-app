@@ -2,6 +2,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
@@ -56,6 +57,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
 
   @override
   void initState() {
+    context.incrementAdsCount();
     _pageController =
         PageController(initialPage: widget.arguments.index.toInt());
     _pageController
@@ -88,10 +90,20 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
           onDoubleTap: () => resetZooming(),
           child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(
               builder: (context, value, child) {
+                Future.delayed(Duration.zero, () {
+                  if(value.adsUrl.isNotEmpty && value.adsData.adsId != null){
+                    System().adsPopUp(context, value.adsData, value.adsUrl);
+                  }
+                });
+
             return _notifier.listData != null
                 ? PageView.builder(
                         controller: _pageController,
                         itemCount: _notifier.listData?.length ?? 0,
+                        onPageChanged: (value) async {
+                          await _notifier.initAdsVideo(context);
+                          context.incrementAdsCount();
+                        },
                         itemBuilder: (context, indexRoot) {
                           return PageView.builder(
                               controller: _mainPageController,
@@ -130,7 +142,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                             .listData![indexRoot].mediaThumbUri
                                             : _notifier
                                             .listData![indexRoot].fullThumbPath,
-                                        imageBuilder: (_, imageProvider) {
+                                        imageBuilder: (ctx, imageProvider) {
                                           return Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
@@ -224,14 +236,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                                   context,
                                                   fullCaption: true,
                                                 )}',
-                                                // username: picData.username,
-                                                // spaceProfileAndId: eightPx,
-                                                // isCelebrity: picData.isCelebrity,
-                                                // haveStory: picData.isHaveStory ?? false,
-                                                // imageUrl: '${picData.profilePic}$VERYBIG',
-                                                // featureType: context.read<SeeAllNotifier>().featureType!,
-                                                // onTapOnProfileImage: () => System().navigateToProfileScreen(context, picData),
-                                                // createdAt: '${System().readTimestamp(int.parse(picData.createdAt!), context, fullCaption: true)}',
                                               ),
                                             ],
                                           ),
@@ -277,15 +281,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                       ),
                                     ),
                                   ),
-
-                                  // _buildButton(
-                                  //   context,
-                                  //   iconData: '${AssetPath.vectorPath}bookmark.svg',
-                                  //   function: () => context
-                                  //       .read<PlaylistNotifier>()
-                                  //       .showMyPlaylistBottomSheet(context, indexRoot: arguments, data: picData, featureType: FeatureType.pic),
-                                  //   alignment: const Alignment(0.8, -0.98),
-                                  // ),
 
                                   // Bottom action
                                   Align(
@@ -373,17 +368,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                                         data: _notifier
                                                             .listData![indexRoot]),
                                               ),
-                                            // _buildButtonV2(
-                                            //   context: context,
-                                            //   iconData: '${AssetPath.vectorPath}bookmark.svg',
-                                            //   function: () {},
-                                            //   function: () => context.read<PlaylistNotifier>().showMyPlaylistBottomSheet(
-                                            //         context,
-                                            //         data: picData,
-                                            //         featureType: FeatureType.pic,
-                                            //         indexRoot: context.read<SeeAllNotifier>().contentindexRoot,
-                                            //       ),
-                                            // )
                                           ],
                                         ),
                                         _notifier.listData![indexRoot]
@@ -512,20 +496,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail>
                                       ],
                                     ),
                                   ),
-
-                                  // Description
-                                  // Align(
-                                  //   alignment: const Alignment(-1.0, 0.9),
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  //     child: CustomTextWidget(
-                                  //       textAlign: TextAlign.left,
-                                  //       textOverflow: TextOverflow.visible,
-                                  //       textToDisplay: "${picData.description}",
-                                  //       textStyle: Theme.of(context).textTheme.bodyText1,
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ) : PicDetailScreen(
                                   arguments: PicDetailScreenArgument(

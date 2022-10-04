@@ -47,6 +47,8 @@ import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../models/collection/advertising/ads_video_data.dart';
+
 class System {
   System._private();
 
@@ -977,7 +979,7 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ').format(amount);
   }
 
-  Future adsPopUp(BuildContext context) async {
-    return ShowGeneralDialog.adsPopUp(context);
+  Future adsPopUp(BuildContext context, AdsData data, String url) async {
+    return ShowGeneralDialog.adsPopUp(context, data, url);
   }
 }

@@ -8,6 +8,7 @@ import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -21,6 +22,10 @@ import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:story_view/story_view.dart';
 
+import '../../../../../../core/bloc/ads_video/bloc.dart';
+import '../../../../../../core/bloc/ads_video/state.dart';
+import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
+
 class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   final _sharedPrefs = SharedPreference();
   ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.diary;
@@ -30,6 +35,12 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   int _currentDiary = 0;
   double? _currentPage = 0;
   bool _forcePause = false;
+
+
+  AdsData _adsData = AdsData();
+  AdsData get adsData => _adsData;
+  String _adsUrl = '';
+  String get adsUrl => _adsUrl;
 
   List<ContentData>? get listData => _listData;
   int get currentDiary => _currentDiary;
@@ -64,9 +75,30 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ////////////////////////////////////////////////////////
   void onUpdate() => notifyListeners();
 
+  Future initAdsVideo(BuildContext context) async{
+    _adsUrl = '';
+    final count = context.getAdsCount();
+    String? urlAds;
+
+    if(count == null){
+      context.setAdsCount(0);
+    }else{
+      if(count == 4){
+        urlAds = await getAdsVideo(context, true);
+      }else if(count == 2){
+        urlAds = await getAdsVideo(context, false);
+      }
+    }
+    if(urlAds != null){
+      _adsUrl = urlAds;
+    }
+  }
+
   Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
     _result = [];
     String urlApsara = '';
+    initAdsVideo(context);
+
     if (data.isApsara!) {
       await getVideoApsara(context, data.apsaraId!).then((value) {
         urlApsara = value;
@@ -103,6 +135,45 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       'Failed to fetch ads data ${e}'.logger();
       return '';
     }
+  }
+
+  Future<String?> getAdsVideo(BuildContext context, bool isContent) async{
+    try{
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBloc(context, isContent);
+      final fetch = notifier.adsDataFetch;
+
+      if(fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess){
+        // print('data : ${fetch.data.toString()}');
+        final _newClipData = fetch.data;
+        _adsData = _newClipData!.data;
+        return await getAdsVideoApsara(context, _newClipData!.data!.videoId!);
+      }
+    } catch (e){
+      'Failed to fetch ads data $e'.logger();
+    }
+    return null;
+  }
+
+  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async{
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        return jsonMap['PlayUrl'];
+        // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+        print('get Ads Video');
+        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
   }
 
   double degreeToRadian(double deg) => deg * pi / 180;

@@ -36,6 +36,7 @@ class HashtagNotifier with ChangeNotifier{
       isLoading = false;
       listHashtag = [Hashtag("#WisataIndonesia", 600), Hashtag('#WisataJakarta', 700), Hashtag('#WisataBandung', 300)];
     });
+    notifyListeners();
   }
 
 }

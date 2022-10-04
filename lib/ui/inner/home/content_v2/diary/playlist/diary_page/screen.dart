@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -15,6 +16,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 
+import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
+import '../../../../../../../core/services/system.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
 
 class DiaryPage extends StatefulWidget {
@@ -75,7 +78,7 @@ class _DiaryPageState extends State<DiaryPage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _forcePause = context.select((DiariesPlaylistNotifier value) => value.forcePause);
-
+    final notifier = Provider.of<DiariesPlaylistNotifier>(context);
     // logic when list isScrolled, pause the story
     if (widget.isScrolling!) {
       _storyController.pause();
@@ -132,7 +135,9 @@ class _DiaryPageState extends State<DiaryPage> {
                     });
                   },
                   nextDebouncer: false,
-                  onComplete: () {
+                  onComplete: () async{
+                    await notifier.initAdsVideo(context);
+                    context.incrementAdsCount();
                     // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
                     // _storyController.next();
@@ -143,6 +148,15 @@ class _DiaryPageState extends State<DiaryPage> {
                     // if (isLastPage) {
                     //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                     // }
+                  },
+                  onEverySecond: (duration) async{
+                    if(duration.inSeconds == secondOfAds(notifier.adsData)){
+                      if(notifier.adsUrl.isNotEmpty){
+                        _storyController.pause();
+                        await System().adsPopUp(context, notifier.adsData, notifier.adsUrl);
+                        _storyController.play();
+                      }
+                    }
                   },
                   onVerticalSwipeComplete: (v) {
                     if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
@@ -208,5 +222,26 @@ class _DiaryPageState extends State<DiaryPage> {
               ),
             ),
           );
+  }
+
+  int secondOfAds(AdsData data){
+    var result = 0;
+    final mid = widget.data?.metadata?.midRoll ?? 0;
+    final duration = widget.data?.metadata?.duration ?? 2;
+    switch(data.adsPlace){
+      case 'First':
+        result = widget.data?.metadata?.preRoll ?? 0;
+        break;
+      case 'Mid':
+        result = mid != 0 ? 0 : (duration / 2).toInt();
+        break;
+      case 'End':
+        result = (widget.data?.metadata?.postRoll ?? 0) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;
+        break;
+      default:
+        result = 0;
+        break;
+    }
+    return result;
   }
 }

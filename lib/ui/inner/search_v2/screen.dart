@@ -53,7 +53,6 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         body: Column(
           children: [
             const ProcessUploadComponent(topMargin: 0.0),
-            // const HashtagScreen(),
             Flexible(
               child: DefaultTabController(
                 length: 3,
@@ -72,6 +71,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                         // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
                       ),
                     ),
+                    // const HashtagScreen(),
                     TabBar(
                       controller: _tabController,
                       // physics: const BouncingScrollPhysics(),

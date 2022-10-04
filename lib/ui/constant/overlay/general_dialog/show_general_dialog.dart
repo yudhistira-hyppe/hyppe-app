@@ -18,6 +18,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
 
+import '../../../../core/models/collection/advertising/ads_video_data.dart';
+
 class ShowGeneralDialog {
   ShowGeneralDialog._private();
 
@@ -288,18 +290,14 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future adsPopUp(BuildContext context) async {
+  static Future adsPopUp(BuildContext context, AdsData data, String url) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
       barrierDismissible: true,
       transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (context, animation, secondAnimation) => AlertDialog(
-        // insetPadding: EdgeInsets.only(top: 30),
-        alignment: Alignment.center,
-        content: AdsPopUpDialog(),
-      ),
+      pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(data: data, urlAds: url,),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);

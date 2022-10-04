@@ -47,6 +47,8 @@ class Env {
     UrlConstants.getVideoApsara,
     UrlConstants.getOtherUserPosts,
     UrlConstants.getAdsVideo,
+    UrlConstants.getSponsoredAds,
+    UrlConstants.getInAppAds,
     UrlConstants.viewAds
   ];
 
