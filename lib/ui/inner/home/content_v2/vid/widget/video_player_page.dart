@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
@@ -15,20 +16,14 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 
 import 'package:better_player/better_player.dart';
 
-import 'package:hyppe/core/bloc/advertising/bloc.dart';
-import 'package:hyppe/core/bloc/advertising/state.dart';
-
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
-import 'package:hyppe/core/models/collection/advertising/advertising_data.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/services/shared_preference.dart';
-
-import 'package:hyppe/core/arguments/advertising_argument.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -70,8 +65,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   bool _isStartFullScreen = false;
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
-
-  int countAds = 0;
 
   void _resetOrintationStream() {
     _orientationStream?.cancel();
@@ -148,25 +141,26 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     });
   }
 
-  Future _newInitAds() async{
+  Future _newInitAds(bool isContent) async{
+    if(isContent){
+      context.setAdsCount(0);
+    }
     try{
       if (_newClipData == null) {
-        await getAdsVideo();
+        await getAdsVideo(isContent);
       }
     }catch(e){
       'Failed to fetch ads data : $e'.logger();
     }
   }
 
-
-
-  Future getAdsVideo() async{
+  Future getAdsVideo(bool isContent) async{
     try{
-      final notifier = AdsVideoBloc();
-      await notifier.adsVideoBloc(context);
-      final fetch = notifier.adsVideoFetch;
+      final notifier = AdsDataBloc();
+      await notifier.adsVideoBloc(context, isContent);
+      final fetch = notifier.adsDataFetch;
 
-      if(fetch.adsVideoState == AdsVideoState.getAdsVideoBlocSuccess){
+      if(fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess){
         // print('data : ${fetch.data.toString()}');
         _newClipData = fetch.data;
         print('videoId : ${_newClipData?.data?.videoId}');
@@ -216,7 +210,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
   Future adsView(AdsData data, int time) async{
     try{
-      final notifier = AdsVideoBloc();
+      final notifier = AdsDataBloc();
       final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
       await notifier.viewAdsBloc(context, request);
 
@@ -224,18 +218,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     }catch(e){
       'Failed hit view ads ${e}'.logger();
-    }
-  }
-
-  void getCountVid() async {
-    String _countAds = SharedPreference().readStorage(SpKeys.countAds);
-    if (_countAds == null) {
-      print('kesini video');
-      SharedPreference().writeStorage(SpKeys.countAds, '0');
-      countAds = 0;
-    } else {
-      print('kesono');
-      countAds = int.parse(_countAds);
     }
   }
 
@@ -251,8 +233,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
 
     // getCountVid();
-    print('count Ads $countAds');
-    await _newInitAds();
+    if(context.getAdsCount() == null){
+      context.setAdsCount(0);
+    }else{
+      if(context.getAdsCount() == 4){
+        await _newInitAds(true);
+      }else if(context.getAdsCount() == 2){
+        await _newInitAds(false);
+      }
+    }
+
+
     print('post metadata : ${widget.videoData?.metadata?.toJson().toString()}');
     // if (countAds < 0) {
     //
@@ -261,7 +252,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     // } else {
     //
     //   _clipsData = AdvertisingData.fromJson({}, widget.videoData?.metadata);
-      // _eventType = (_newClipData != null) ? BetterPlayerEventType.showingAds : null;
+    //   _eventType = (_newClipData != null) ? BetterPlayerEventType.showingAds : null;
     //   print('get Ads Video1');
     // }
     print('ready to play');
@@ -326,10 +317,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       widget.videoData?.fullContentPath ?? 'https://outin-c01c93ffe24211ec9bf900163e013357.oss-ap-southeast-5.aliyuncs.com/5d92f36afb3d4a75b7ecef398107278e/780a82f6569143c591c1c2afeca8e968-c4535eb7cbd8313949f96a6a946ef25d-fd.mp4?Expires=1664346280&OSSAccessKeyId=LTAI3DkxtsbUyNYV&Signature=0%2FOBtRvwz06egP4znSAvQ1AfQqE%3D',
-      adsConfiguration: BetterPlayerAdsConfiguration(
+      adsConfiguration: _betterPlayerRollUri != null ? BetterPlayerAdsConfiguration(
         postID: widget.videoData?.postID ?? '',
         rolls: [BetterPlayerRoll(rollUri: _betterPlayerRollUri, rollDuration: secondOfAds(_newClipData?.data ?? AdsData()))],
-      ),
+      ): BetterPlayerAdsConfiguration(),
       headers: {
         'post-id': widget.videoData?.postID ?? '',
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
@@ -373,6 +364,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         }
 
         if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
+          context.incrementAdsCount();
           widget.afterView!();
         }
       },
@@ -418,6 +410,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                 width: 27,
                                 height: 27,
                                 decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: imageProvider,
@@ -430,6 +423,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                 width: 27,
                                 height: 27,
                                 decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: const AssetImage('${AssetPath.pngPath}content-error.png'),
@@ -603,14 +597,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   void _dispose() {
+    print('dispose video Ads');
     _resetOrintationStream();
     _betterPlayerController?.pause();
     _betterPlayerController?.dispose();
-    try {
+    if((_betterPlayerControllerMap?.isPlaying() ?? false) || (_betterPlayerControllerMap?.isBuffering() ?? false)){
       _betterPlayerControllerMap?.pause();
-    } catch (e) {
-      'Pause Ads error: $e'.logger();
     }
+    // try {
+    //   _betterPlayerControllerMap?.pause();
+    // } catch (e) {
+    //   'Pause Ads error: $e'.logger();
+    // }
     _betterPlayerControllerMap?.dispose();
   }
 

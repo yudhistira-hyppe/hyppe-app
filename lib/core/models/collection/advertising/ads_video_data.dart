@@ -33,7 +33,9 @@ class AdsData{
   String? adsPlace;
   String? adsType;
   int? adsSkip;
+  String? mediaType;
   String? videoId;
+  double? duration;
 
   AdsData({
     this.adsId,
@@ -47,7 +49,9 @@ class AdsData{
     this.adsPlace,
     this.adsType,
     this.adsSkip,
-    this.videoId
+    this.mediaType,
+    this.videoId,
+    this.duration,
   });
 
   AdsData.fromJson(Map<String, dynamic> json){
@@ -62,7 +66,9 @@ class AdsData{
     adsPlace = json['adsPlace'];
     adsType = json['adsType'];
     adsSkip = json['adsSkip'];
+    mediaType = json['mediaType'];
     videoId = json['videoId'];
+    duration = json['duration'];
   }
 
   Map<String, dynamic> toJson(){
@@ -77,12 +83,11 @@ class AdsData{
     data['avartar'] = avatar?.toJson();
     data['adsPlace'] = adsPlace ?? '';
     data['adsSkip'] = adsSkip ?? '';
+    data['mediaType'] = mediaType ?? '';
     data['videoId'] = videoId ?? '';
+    data['duration'] = duration ?? 0.0;
     return data;
   }
-
-
-
 }
 
 class AdsAvatar{
@@ -118,7 +123,7 @@ class AdsAvatar{
 
   String? concatThumbUri() {
     return Env.data.baseUrl +
-        (mediaBasePath ?? mediaEndpoint ?? '') +
+        (mediaEndpoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 }

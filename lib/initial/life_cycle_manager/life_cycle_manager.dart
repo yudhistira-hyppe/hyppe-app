@@ -1,4 +1,5 @@
 import 'dart:async' show Timer;
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -15,6 +16,12 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/permanently_denied_permisson_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+
+import '../../core/bloc/ads_video/bloc.dart';
+import '../../core/bloc/ads_video/state.dart';
+import '../../core/bloc/posts_v2/bloc.dart';
+import '../../core/bloc/posts_v2/state.dart';
+import '../../core/models/collection/advertising/ads_video_data.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget? child;
@@ -50,6 +57,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     final activity = DeviceBloc();
+
     print("Status Lifecycle: $state");
     if (state == AppLifecycleState.inactive) {
       "App Inactive".logger();
@@ -69,14 +77,57 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       if (_userToken != null) {
         try {
           await activity.activityAwake(context);
+          await getAdsApsara();
           //cek version aplikasi
-          // System().adsPopUp(context);
           await CheckVersion().check(context, activity.deviceFetch.version);
         } catch (e) {
           e.logger();
         }
       }
       _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
+    }
+  }
+
+  Future<AdsData> getPopUpAds() async{
+    var data = AdsData();
+    try{
+      final notifier = AdsDataBloc();
+      await notifier.appAdsBloc(context);
+      final fetch = notifier.adsDataFetch;
+
+      if(fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess){
+        // print('data : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e){
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
+  }
+
+  Future getAdsApsara() async{
+    final ads = await getPopUpAds();
+    final id = ads.videoId;
+    if(id != null && ads.adsType != null){
+      try {
+        final notifier = PostsBloc();
+        await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+
+        final fetch = notifier.postsFetch;
+
+        if (fetch.postsState == PostsState.videoApsaraSuccess) {
+          Map jsonMap = json.decode(fetch.data.toString());
+          print('jsonMap video Apsara : $jsonMap');
+          final adsUrl = jsonMap['PlayUrl'];
+          // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+          print('get Ads Video');
+
+          System().adsPopUp(context, ads, adsUrl);
+          // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+        }
+      } catch (e) {
+        'Failed to fetch ads data ${e}'.logger();
+      }
     }
   }
 

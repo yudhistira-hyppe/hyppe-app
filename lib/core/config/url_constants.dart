@@ -481,6 +481,12 @@ class UrlConstants {
   /// get => Get Ads User
   static const String getAdsVideo = "$adsRoute/getAds/user?type=Content%20Ads";
 
+  /// get => Get Sponsored Ads
+  static const String getSponsoredAds = "$adsRoute/getAds/user?type=Sponsor%20Ads";
+
+  /// get => Get In App Ads
+  static const String getInAppAds = "$adsRoute/getAds/user?type=In%20App%20Ads";
+
   /// post => View Ads User
   static const String viewAds = "$adsRoute/viewads";
 }

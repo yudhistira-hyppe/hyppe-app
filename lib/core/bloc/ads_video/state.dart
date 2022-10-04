@@ -1,13 +1,13 @@
-enum AdsVideoState {
+enum AdsDataState {
   init,
   loading,
   getAdsVideoBlocSuccess,
   getAdsVideoBlocError,
 }
 
-class AdsVideoFetch {
+class AdsDataFetch {
   // ignore: prefer_typing_uninitialized_variables
   final data;
-  final AdsVideoState adsVideoState;
-  AdsVideoFetch(this.adsVideoState, {this.data});
+  final AdsDataState adsDataState;
+  AdsDataFetch(this.adsDataState, {this.data});
 }

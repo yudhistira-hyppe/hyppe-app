@@ -11,28 +11,54 @@ import 'package:hyppe/core/services/shared_preference.dart';
 
 import '../../constants/status_code.dart';
 
-class AdsVideoBloc {
-  AdsVideoFetch _adsVideoFetch = AdsVideoFetch(AdsVideoState.init);
-  AdsVideoFetch get adsVideoFetch => _adsVideoFetch;
-  setCommentFetch(AdsVideoFetch val) => _adsVideoFetch = val;
+class AdsDataBloc {
+  AdsDataFetch _adsDataFetch = AdsDataFetch(AdsDataState.init);
+  AdsDataFetch get adsDataFetch => _adsDataFetch;
+  setCommentFetch(AdsDataFetch val) => _adsDataFetch = val;
 
-  Future adsVideoBloc(BuildContext context) async {
-    setCommentFetch(AdsVideoFetch(AdsVideoState.loading));
+  Future adsVideoBloc(BuildContext context, bool isContent) async {
+    setCommentFetch(AdsDataFetch(AdsDataState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
     await Repos().reposPost(context, (onResult) {
       if (onResult.statusCode! > HTTP_CODE) {
-        setCommentFetch(AdsVideoFetch(AdsVideoState.getAdsVideoBlocError));
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
       } else {
         print('data: ${onResult.data}');
         final response = AdsVideo.fromJson(onResult.data);
-        setCommentFetch(AdsVideoFetch(AdsVideoState.getAdsVideoBlocSuccess,
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess,
             data: response));
       }
     },
         (errorData) =>
-            setCommentFetch(AdsVideoFetch(AdsVideoState.getAdsVideoBlocError)),
-        host: UrlConstants.getAdsVideo,
+            setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+        host: isContent ? UrlConstants.getAdsVideo : UrlConstants.getSponsoredAds,
+        withAlertMessage: false,
+        withCheckConnection: false,
+        methodType: MethodType.get,
+        headers: {
+          'x-auth-user': email,
+          'x-auth-token': token,
+        });
+  }
+  
+  Future appAdsBloc(BuildContext context) async{
+    setCommentFetch(AdsDataFetch(AdsDataState.loading));
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
+    await Repos().reposPost(context, (onResult) {
+      if (onResult.statusCode! > HTTP_CODE) {
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
+      } else {
+        print('data: ${onResult.data}');
+        final response = AdsVideo.fromJson(onResult.data);
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess,
+            data: response));
+      }
+    },
+            (errorData) =>
+            setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+        host: UrlConstants.getInAppAds,
         withAlertMessage: false,
         withCheckConnection: false,
         methodType: MethodType.get,
@@ -43,24 +69,24 @@ class AdsVideoBloc {
   }
 
   Future viewAdsBloc(BuildContext context, ViewAdsRequest request) async {
-    setCommentFetch(AdsVideoFetch(AdsVideoState.loading));
+    setCommentFetch(AdsDataFetch(AdsDataState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
     await Repos().reposPost(context, (onResult) {
       if (onResult.statusCode! > HTTP_CODE) {
-        setCommentFetch(AdsVideoFetch(AdsVideoState.getAdsVideoBlocError));
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
       } else {
         print('data: ${onResult.data}');
         final response = GenericResponse.fromJson(onResult.data);
-        setCommentFetch(AdsVideoFetch(AdsVideoState.getAdsVideoBlocSuccess,
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess,
             data: response));
       }
     },
         (errorData) =>
-            setCommentFetch(AdsVideoFetch(AdsVideoState.getAdsVideoBlocError)),
+            setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
         host: UrlConstants.viewAds,
         withAlertMessage: false,
-        data: request,
+        data: request.toJson(),
         methodType: MethodType.post,
         withCheckConnection: false,
         headers: {
