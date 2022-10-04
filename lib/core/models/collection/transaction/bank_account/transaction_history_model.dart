@@ -53,6 +53,7 @@ class TransactionHistoryModel {
   String? noRek;
   int? bankverificationcharge;
   int? adminFee;
+  int? serviceFee;
   int? totalview;
   int? totallike;
   bool? apsara;
@@ -97,6 +98,7 @@ class TransactionHistoryModel {
     noRek = json['noRek'] ?? '';
     bankverificationcharge = json['bankverificationcharge'] ?? 0;
     adminFee = json['adminFee'] ?? 0;
+    serviceFee = json['serviceFee'] ?? 0;
     totallike = json['totallike'] ?? 0;
     totalview = json['totalview'] ?? 0;
     apsara = json['apsara'] ?? false;

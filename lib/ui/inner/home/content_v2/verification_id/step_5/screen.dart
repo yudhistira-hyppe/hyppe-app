@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
@@ -22,21 +23,11 @@ class VerificationIDStep5 extends StatefulWidget {
   State<VerificationIDStep5> createState() => _VerificationIDStep5State();
 }
 
-class _VerificationIDStep5State extends State<VerificationIDStep5> {
+class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFirstLayoutMixin {
   @override
-  void initState() {
-    final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
-    ntfr.isLoading = true;
-    Future.delayed(const Duration(seconds: 1), () {
-      print("CARDNAME => " + ntfr.idCardName);
-      print("CARDNUM => " + ntfr.idCardNumber);
-      if (ntfr.idCardName == "" || ntfr.idCardNumber == "") {
-        ShowBottomSheet.onShowIDVerificationFailed(context);
-      }
-      ntfr.isLoading = false;
-    });
-
-    super.initState();
+  void afterFirstLayout(BuildContext context) {
+    final ntfr = context.read<VerificationIDNotifier>();
+    ntfr.initStep5(context);
   }
 
 //ShowBottomSheet.onShowIDVerificationFailed(context);
@@ -64,8 +55,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.idVerification!,
-              textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -80,35 +70,23 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _disabledInputText(
-                          title: notifier.language.realName!,
-                          value: notifier.idCardName.toUpperCase()),
+                      _disabledInputText(title: notifier.language.realName!, value: notifier.idCardName.toUpperCase()),
                       if (notifier.errorName != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorName,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
-                      _disabledInputText(
-                          title: notifier.language.eKtpNumber!,
-                          value: notifier.idCardNumber,
-                          infoIcon: true),
+                      _disabledInputText(title: notifier.language.eKtpNumber!, value: notifier.idCardNumber, infoIcon: true),
                       if (notifier.errorKtp != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorKtp,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       CustomTextWidget(
                         textToDisplay: notifier.language.gender!,
-                        textStyle:
-                            textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                        textStyle: textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                       ),
                       // TextFormField(
                       //   maxLines: 1,
@@ -150,9 +128,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                               heightFactor: 1,
                               child: RotatedBox(
                                 quarterTurns: -45,
-                                child: CustomIconWidget(
-                                    iconData:
-                                        "${AssetPath.vectorPath}back-arrow.svg"),
+                                child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                               ),
                             ),
                             TextFormField(
@@ -178,8 +154,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                                 disabledBorder: InputBorder.none,
                                 focusedErrorBorder: InputBorder.none,
                                 counterText: "",
-                                contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 5),
+                                contentPadding: const EdgeInsets.symmetric(vertical: 5),
                                 isDense: true,
                                 border: InputBorder.none,
                               ),
@@ -191,16 +166,12 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       if (notifier.errorGender != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorGender,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       CustomTextWidget(
                         textToDisplay: notifier.language.placeBirth!,
-                        textStyle:
-                            textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                        textStyle: textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                       ),
                       TextFormField(
                         maxLines: 1,
@@ -224,8 +195,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                           disabledBorder: InputBorder.none,
                           focusedErrorBorder: InputBorder.none,
                           counterText: "",
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 5),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
                           isDense: true,
                           border: InputBorder.none,
                         ),
@@ -238,16 +208,12 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       if (notifier.errorPlaceBirth != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorPlaceBirth,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       CustomTextWidget(
                         textToDisplay: notifier.language.dateOfBirth!,
-                        textStyle:
-                            textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                        textStyle: textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                       ),
                       TextFormField(
                         onTap: () async {
@@ -255,23 +221,18 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                               context: context,
                               initialDate: notifier.selectedBirthDate,
                               firstDate: DateTime(1900),
-                              lastDate:
-                                  DateTime.now().add(const Duration(days: 1)),
+                              lastDate: DateTime.now().add(const Duration(days: 1)),
                               builder: (context, child) {
                                 return Theme(
                                   data: Theme.of(context).copyWith(
                                     colorScheme: const ColorScheme.light(
-                                      primary:
-                                          kHyppePrimary, // header background color
-                                      onPrimary:
-                                          Colors.white, // header text color
-                                      onSurface:
-                                          kHyppeTextLightPrimary, // body text color
+                                      primary: kHyppePrimary, // header background color
+                                      onPrimary: Colors.white, // header text color
+                                      onSurface: kHyppeTextLightPrimary, // body text color
                                     ),
                                     textButtonTheme: TextButtonThemeData(
                                       style: TextButton.styleFrom(
-                                        primary:
-                                            kHyppePrimary, // button text color
+                                        primary: kHyppePrimary, // button text color
                                       ),
                                     ),
                                   ),
@@ -279,8 +240,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                                 );
                               });
 
-                          if (pickedDate != null &&
-                              pickedDate != notifier.selectedBirthDate) {
+                          if (pickedDate != null && pickedDate != notifier.selectedBirthDate) {
                             notifier.selectedBirthDate = pickedDate;
                           }
                         },
@@ -299,8 +259,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                           disabledBorder: InputBorder.none,
                           focusedErrorBorder: InputBorder.none,
                           counterText: "",
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 5),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 5),
                           isDense: true,
                           border: InputBorder.none,
                         ),
@@ -313,10 +272,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       if (notifier.errorDateBirth != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorDateBirth,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       Row(
@@ -325,44 +281,28 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                             child: CustomRichTextWidget(
                               maxLines: 3,
                               textAlign: TextAlign.left,
-                              textSpan: TextSpan(
-                                  style: textTheme.bodyText2!
-                                      .copyWith(color: kHyppeLightSecondary),
-                                  text: notifier.language.confirmIdGenuine!),
+                              textSpan: TextSpan(style: textTheme.bodyText2!.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdGenuine!),
                             ),
                           ),
-                          Checkbox(
-                            checkColor: Colors.white,
-                            value: notifier.acceptTos,
-                            onChanged: (e) =>
-                                notifier.acceptTos = !notifier.acceptTos,
-                          )
+                          Checkbox(checkColor: Colors.white, value: notifier.acceptTos, onChanged: (e) => notifier.checked())
                         ],
                       ),
                       const SizedBox(height: 70),
                       CustomRichTextWidget(
                         maxLines: 3,
                         textAlign: TextAlign.left,
-                        textSpan: TextSpan(
-                            style: textTheme.bodyText2!
-                                .copyWith(color: kHyppeLightSecondary),
-                            text: notifier.language.confirmIdNotice!),
+                        textSpan: TextSpan(style: textTheme.bodyText2!.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdNotice!),
                       ),
                       const SizedBox(height: 20),
                       CustomElevatedButton(
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.retakeIdPicture!,
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .button!
-                              .copyWith(color: kHyppePrimary),
+                          textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary),
                         ),
                         width: double.infinity,
                         height: 50 * SizeConfig.scaleDiagonal,
                         function: () => notifier.retryTakeIdCard(),
-                        buttonStyle: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white)),
+                        buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white)),
                       ),
                       const SizedBox(height: 5),
                       CustomElevatedButton(
@@ -371,37 +311,20 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                         function: () => notifier.continueSelfie(context),
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.continueSelfie!,
-                          textStyle: textTheme.button
-                              ?.copyWith(color: kHyppeLightButtonText),
+                          textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                         buttonStyle: notifier.step5CanNext
                             ? ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all(
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .primaryVariant),
-                                shadowColor: MaterialStateProperty.all(
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .primaryVariant),
-                                overlayColor: MaterialStateProperty.all(
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .primaryVariant),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context)
-                                        .colorScheme
-                                        .primaryVariant),
+                                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                               )
                             : ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.secondary),
-                                shadowColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.secondary),
-                                overlayColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.secondary),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.secondary),
+                                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
                               ),
                       ),
                       const SizedBox(height: 20),
@@ -412,21 +335,15 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
                       ),
                       Center(
                         child: GestureDetector(
-                          onTap: () => Routing().moveAndRemoveUntil(
-                              Routes.verificationIDStepSupportDocsEula,
-                              Routes.verificationIDStepSupportDocsEula),
+                          onTap: () => Routing().moveAndRemoveUntil(Routes.verificationIDStepSupportDocsEula, Routes.verificationIDStepSupportDocsEula),
                           child: RichText(
                             text: TextSpan(
                               text: notifier.language.tapHere!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(color: kHyppePrimary),
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kHyppePrimary),
                               children: <TextSpan>[
                                 TextSpan(
                                   text: notifier.language.toAppeal!,
-                                  style: const TextStyle(
-                                      color: kHyppeTextLightPrimary),
+                                  style: const TextStyle(color: kHyppeTextLightPrimary),
                                 ),
                               ],
                             ),
@@ -441,8 +358,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
     );
   }
 
-  Widget _disabledInputText(
-      {required String title, required String value, bool? infoIcon}) {
+  Widget _disabledInputText({required String title, required String value, bool? infoIcon}) {
     final textTheme = Theme.of(context).textTheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -462,8 +378,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
             if (infoIcon != null && infoIcon)
               GestureDetector(
                 onTap: () => ShowBottomSheet.onShowInfoIDCard(context),
-                child: const CustomIconWidget(
-                    iconData: "${AssetPath.vectorPath}info-icon.svg"),
+                child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}info-icon.svg"),
               )
           ],
         ),
@@ -473,7 +388,5 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> {
     );
   }
 
-  Widget _buildDivider(context) => Divider(
-      thickness: 1.0,
-      color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
 }

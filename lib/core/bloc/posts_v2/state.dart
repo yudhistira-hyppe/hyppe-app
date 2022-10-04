@@ -1,6 +1,8 @@
 enum PostsState {
   init,
   loading,
+  getAllContentsSuccess,
+  getAllContentsError,
   getContentsSuccess,
   getContentsError,
   postContentsSuccess,

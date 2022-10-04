@@ -3,6 +3,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -192,7 +193,6 @@ class SelfProfileNotifier with ChangeNotifier {
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       user.profile = usersFetch.data;
-      SharedPreference().writeStorage(SpKeys.setPin, user.profile!.pinCreate!.toString());
       notifyListeners();
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);
@@ -336,7 +336,8 @@ class SelfProfileNotifier with ChangeNotifier {
         break;
       case IdProofStatus.complete:
         user.profile?.idProofStatus = IdProofStatus.complete;
-        user.profile?.isIdVerified = true;
+        user.profile?.isIdVerified = VERIFIED;
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, VERIFIED);
         break;
       default:
         break;

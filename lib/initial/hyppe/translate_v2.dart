@@ -155,8 +155,8 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<PaymentMethodNotifier>().translate(translate);
     context.read<PaymentNotifier>().translate(translate);
     context.read<PaymentSummaryNotifier>().translate(translate);
-    // context.read<TransactionNotifier>().translate(translate);
-    // context.read<PinAccountNotifier>().translate(translate);
+    // await context.read<TransactionNotifier>().translate(translate);
+    // await context.read<PinAccountNotifier>().translate(translate);
 
     context.read<VerificationIDNotifier>().translate(translate);
 

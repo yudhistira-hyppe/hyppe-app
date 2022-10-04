@@ -9,6 +9,7 @@ import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/core/constants/utils.dart';
@@ -578,7 +579,19 @@ class System {
     final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
 
     if (notifier.user.profile != null) {
-      if (!notifier.user.profile!.isIdVerified!) {
+      final _status = SharedPreference().readStorage(SpKeys.statusVerificationId);
+
+      if (_status == REVIEW) {
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          'Harap Menunggu Sedang Proses Pemeriksaan',
+          maxLines: 2,
+          enableDrag: false,
+          dismissible: false,
+          color: Theme.of(context).colorScheme.error,
+          iconSvg: "${AssetPath.vectorPath}close.svg",
+        );
+      } else if (_status == UNVERIFIED) {
         ShowBottomSheet.onShowIDVerification(context);
       } else {
         action();
@@ -1024,5 +1037,31 @@ class System {
 
   Future adsPopUp(BuildContext context) async {
     return ShowGeneralDialog.adsPopUp(context);
+  }
+
+  Future userVerified(status) async {
+    print('ini status idperfied');
+    print(status);
+    switch (status) {
+      case VERIFIED:
+        print('1');
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, VERIFIED);
+        break;
+      case UNVERIFIED:
+        print('2');
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, UNVERIFIED);
+        break;
+      case REVIEW:
+        print('3');
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
+        break;
+      case 'true':
+        print('4');
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, VERIFIED);
+        break;
+      default:
+        print('5');
+        SharedPreference().writeStorage(SpKeys.statusVerificationId, UNVERIFIED);
+    }
   }
 }

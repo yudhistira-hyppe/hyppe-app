@@ -69,7 +69,8 @@ class Env {
     UrlConstants.uploadProfilePictureV2,
     UrlConstants.recoverPassword,
     UrlConstants.getAdsVideo,
-    UrlConstants.viewAds
+    UrlConstants.viewAds,
+    UrlConstants.getUserPostsLandingPage,
   ];
 
   static final EnvData dev = EnvData(

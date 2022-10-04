@@ -24,7 +24,7 @@ class UserProfileModel {
   String? email;
   String? username;
   bool? isComplete;
-  bool? isIdVerified;
+  String? isIdVerified;
   String? status;
   String? refreshToken;
   String? idProofNumber;
@@ -92,11 +92,7 @@ class UserProfileModel {
         : json['isComplete'] == "true"
             ? true
             : false;
-    isIdVerified = json['isIdVerified'] is bool
-        ? json['isIdVerified']
-        : json['isIdVerified'] == "true"
-            ? true
-            : false;
+    isIdVerified = json['isIdVerified'] ?? false;
     status = json['status'];
     refreshToken = json['refreshToken'];
     idProofStatus = _serializeIdProofStatus(json['idProofStatus']);

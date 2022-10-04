@@ -7,6 +7,31 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
+class AllContentData {
+  List<ContentData>? video;
+  List<ContentData>? pict;
+  List<ContentData>? diary;
+  List<ContentData>? story;
+
+  AllContentData({this.video, this.diary, this.pict, this.story});
+
+  AllContentData.fromJson(Map<String, dynamic> json) {
+    video = json['video'] != null ? List<ContentData>.from(json["video"].map((x) => ContentData.fromJson(x))) : [];
+    pict = json['pict'] != null ? List<ContentData>.from(json["pict"].map((x) => ContentData.fromJson(x))) : [];
+    diary = json['diary'] != null ? List<ContentData>.from(json["diary"].map((x) => ContentData.fromJson(x))) : [];
+    story = json['story'] != null ? List<ContentData>.from(json["story"].map((x) => ContentData.fromJson(x))) : [];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['video'] = List<dynamic>.from(video!.map((x) => x.toJson()));
+    data['pict'] = List<dynamic>.from(pict!.map((x) => x.toJson()));
+    data['diary'] = List<dynamic>.from(diary!.map((x) => x.toJson()));
+    data['story'] = List<dynamic>.from(story!.map((x) => x.toJson()));
+    return data;
+  }
+}
+
 class ContentData {
   Metadata? metadata;
   String? mediaBasePath;

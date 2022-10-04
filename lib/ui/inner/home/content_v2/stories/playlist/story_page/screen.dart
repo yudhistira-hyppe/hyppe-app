@@ -148,13 +148,12 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             ))
         : Stack(
             children: [
-
               StoryView(
                 inline: false,
                 repeat: false,
                 progressColor: kHyppeLightButtonText,
                 durationColor: kHyppeLightButtonText,
-                onDouble: (){
+                onDouble: () {
                   print('testtttt');
                   context.read<LikeNotifier>().likePost(context, widget.data!);
                 },

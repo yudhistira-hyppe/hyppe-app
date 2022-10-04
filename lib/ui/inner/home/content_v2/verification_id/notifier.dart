@@ -275,6 +275,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     var lines = 0;
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
+        print("line =>${lines}");
         var cleanText = line.text.replaceAll(":", "");
         var trimText = cleanText.trim();
 
@@ -323,6 +324,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
 
     isLoading = false;
+    notifyListeners();
   }
 
   @override
@@ -357,6 +359,27 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         }
       }
     });
+  }
+
+  Future initStep5(BuildContext context) async {
+    print('kesini');
+    // isLoading = true;
+    Future.delayed(const Duration(seconds: 1), () {
+      print("CARDNAME => " + idCardName);
+      print("CARDNUM => " + idCardNumber);
+      if (idCardName == "" || idCardNumber == "") {
+        ShowBottomSheet.onShowIDVerificationFailed(context);
+      }
+      isLoading = false;
+    });
+    notifyListeners();
+  }
+
+  void checked() {
+    acceptTos = !acceptTos;
+    print('_acceptTos');
+    print(_acceptTos);
+    notifyListeners();
   }
 
   Future<void> postVerificationData(BuildContext context) async {

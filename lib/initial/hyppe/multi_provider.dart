@@ -189,6 +189,7 @@ class AppDependencies {
         ChangeNotifierProvider<UploadNotifier>(
           create: (context) => UploadNotifier(),
         ),
+        ChangeNotifierProvider<VerificationIDNotifier>(create: (context) => VerificationIDNotifier()),
 
         ChangeNotifierProvider<ProfileCompletionNotifier>(create: (context) => ProfileCompletionNotifier()),
 
@@ -209,7 +210,5 @@ class AppDependencies {
         ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
 
         ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
-
-        ChangeNotifierProvider<VerificationIDNotifier>(create: (context) => VerificationIDNotifier()),
       ];
 }
