@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           key: _globalKey,
           strokeWidth: 2.0,
           color: Colors.purple,
-          onRefresh: () => notifier.onRefresh(context),
+          onRefresh: () => notifier.onRefresh(context, false),
           child: Stack(
             children: [
               notifier.isLoadingVid

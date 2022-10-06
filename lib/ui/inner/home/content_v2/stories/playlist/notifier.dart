@@ -18,6 +18,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
@@ -200,7 +201,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
     // List<StoryItem> _result = [];
     _result = [];
-    if (data.contentType == ContentType.image) {
+    if (data.mediaType?.translateType() == ContentType.image) {
       _result.add(
         StoryItem.pageImage(
           url: data.isApsara! ? data.mediaThumbUri! : data.fullThumbPath ?? '',
@@ -214,7 +215,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         ),
       );
     }
-    if (data.contentType == ContentType.video) {
+    if (data.mediaType?.translateType() == ContentType.video) {
       String urlApsara = '';
       if (data.isApsara!) {
         await getVideoApsara(context, data.apsaraId!).then((value) {
@@ -281,6 +282,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     myContentsQuery.onlyMyData = false;
 
     try {
+      print('test13');
       _resFuture = myContentsQuery.reload(context);
 
       final res = await _resFuture;

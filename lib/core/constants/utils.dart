@@ -7,3 +7,7 @@ const hyppeDiary = 'Hyppediary';
 const hyppePic = 'Hyppepic';
 const minIphoneVersionForResolutionCamera = 1246;
 const googleMapApiKey = "AIzaSyCdDXmkb4LyPu7s2LfIuUW5srrQ6vB_Yns";
+const storyIndex = 0;
+const vidIndex = 1;
+const diaryIndex = 2;
+const pictIndex = 3;

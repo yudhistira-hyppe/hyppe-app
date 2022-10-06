@@ -48,6 +48,7 @@ class SharedPreference {
     await _preferences!.remove(SpKeys.userToken);
     await _preferences!.remove(SpKeys.email);
     await _preferences!.remove(SpKeys.userID);
+    await _preferences!.remove(SpKeys.lastHitPost);
     await _preferences!.remove(SpKeys.fcmToken);
     await _preferences!.remove(SpKeys.countAds);
   }

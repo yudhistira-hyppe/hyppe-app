@@ -1,39 +1,64 @@
 import 'package:hive/hive.dart';
 import 'package:hyppe/core/config/env.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/privacy.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
-class AllContentData {
-  List<ContentData>? video;
-  List<ContentData>? pict;
-  List<ContentData>? diary;
+part 'content_data.g.dart';
+
+@HiveType(typeId: 0)
+class AllContents extends HiveObject{
+  @HiveField(0)
   List<ContentData>? story;
 
-  AllContentData({this.video, this.diary, this.pict, this.story});
+  @HiveField(1)
+  List<ContentData>? video;
 
-  AllContentData.fromJson(Map<String, dynamic> json) {
-    video = json['video'] != null ? List<ContentData>.from(json["video"].map((x) => ContentData.fromJson(x))) : [];
-    pict = json['pict'] != null ? List<ContentData>.from(json["pict"].map((x) => ContentData.fromJson(x))) : [];
-    diary = json['diary'] != null ? List<ContentData>.from(json["diary"].map((x) => ContentData.fromJson(x))) : [];
-    story = json['story'] != null ? List<ContentData>.from(json["story"].map((x) => ContentData.fromJson(x))) : [];
+  @HiveField(2)
+  List<ContentData>? diary;
+
+  @HiveField(3)
+  List<ContentData>? pict;
+
+  AllContents({this.story, this.video, this.diary, this.pict});
+
+  AllContents.fromJson(Map<String, dynamic> json){
+    if (json['story'] != null) {
+      story = [];
+      json['story'].forEach((v) => story!.add(ContentData.fromJson(v)));
+    }
+
+    if (json['diary'] != null) {
+      diary = [];
+      json['diary'].forEach((v) => diary!.add(ContentData.fromJson(v)));
+    }
+
+    if (json['video'] != null) {
+      video = [];
+      json['video'].forEach((v) => video!.add(ContentData.fromJson(v)));
+    }
+
+    if (json['pict'] != null) {
+      pict = [];
+      json['pict'].forEach((v) => pict!.add(ContentData.fromJson(v)));
+    }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['video'] = List<dynamic>.from(video!.map((x) => x.toJson()));
-    data['pict'] = List<dynamic>.from(pict!.map((x) => x.toJson()));
-    data['diary'] = List<dynamic>.from(diary!.map((x) => x.toJson()));
-    data['story'] = List<dynamic>.from(story!.map((x) => x.toJson()));
-    return data;
+  Map<String, dynamic> toJson(){
+    final result = <String, dynamic>{};
+
+    result['story'] = List<dynamic>.from(story!.map((x) => x.toJson()));
+    result['diary'] = List<dynamic>.from(diary!.map((x) => x.toJson()));
+    result['video'] = List<dynamic>.from(video!.map((x) => x.toJson()));
+    result['pict'] = List<dynamic>.from(pict!.map((x) => x.toJson()));
+
+    return result;
   }
 }
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class ContentData extends HiveObject{
   @HiveField(0)
   Metadata? metadata;
@@ -111,39 +136,36 @@ class ContentData extends HiveObject{
   String? fullContentPath;
 
   @HiveField(25)
-  ContentType? contentType;
-
-  @HiveField(26)
   UserProfileAvatarModel? avatar;
 
-  @HiveField(27)
+  @HiveField(26)
   String? visibility;
 
-  @HiveField(28)
+  @HiveField(27)
   String? location;
 
-  @HiveField(29)
+  @HiveField(28)
   List<Cats>? cats;
 
-  @HiveField(30)
+  @HiveField(29)
   List<TagPeople>? tagPeople;
 
-  @HiveField(31)
+  @HiveField(30)
   int? likes;
 
-  @HiveField(32)
+  @HiveField(31)
   num? saleAmount;
 
-  @HiveField(33)
+  @HiveField(32)
   bool? saleView;
 
-  @HiveField(34)
+  @HiveField(33)
   bool? saleLike;
 
-  @HiveField(35)
+  @HiveField(34)
   bool? isApsara;
 
-  @HiveField(36)
+  @HiveField(35)
   String? apsaraId;
 
   ContentData(
@@ -172,7 +194,6 @@ class ContentData extends HiveObject{
       this.username,
       this.fullThumbPath,
       this.fullContentPath,
-      this.contentType,
       this.avatar,
       this.location,
       this.visibility,
@@ -211,7 +232,6 @@ class ContentData extends HiveObject{
     username = json['username'] ?? '';
     fullThumbPath = concatThumbUri();
     fullContentPath = concatContentUri();
-    contentType = _translateType(mediaType);
 
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
     location = json['location'];
@@ -292,17 +312,12 @@ class ContentData extends HiveObject{
     return Env.data.baseUrl + (mediaEndpoint ?? '');
   }
 
-  ContentType? _translateType(String? type) {
-    if (type == "video") {
-      return ContentType.video;
-    } else if (type == "image") {
-      return ContentType.image;
-    }
-    return null;
-  }
+
 }
 
-@HiveType(typeId: 1)
+
+
+@HiveType(typeId: 2)
 class Metadata {
   @HiveField(0)
   int? duration;
@@ -352,7 +367,7 @@ class Metadata {
   }
 }
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 4)
 class Privacy {
   @HiveField(0)
   bool? isPostPrivate;
@@ -385,12 +400,24 @@ class Privacy {
 }
 
 //Category
-class Cats {
+@HiveType(typeId: 7)
+class Cats extends HiveObject{
+  @HiveField(0)
   String? id;
+
+  @HiveField(1)
   String? interestName;
+
+  @HiveField(2)
   String? langIso;
+
+  @HiveField(3)
   String? icon;
+
+  @HiveField(4)
   String? createdAt;
+
+  @HiveField(5)
   String? updatedAt;
 
   Cats({this.id, this.interestName, this.langIso, this.icon, this.createdAt, this.updatedAt});
@@ -405,10 +432,18 @@ class Cats {
   }
 }
 
-class TagPeople {
+@HiveType(typeId: 8)
+class TagPeople extends HiveObject{
+  @HiveField(0)
   String? email;
+
+  @HiveField(1)
   String? username;
+
+  @HiveField(2)
   String? status;
+
+  @HiveField(3)
   Avatar? avatar;
 
   TagPeople({this.email, this.username, this.status, this.avatar});

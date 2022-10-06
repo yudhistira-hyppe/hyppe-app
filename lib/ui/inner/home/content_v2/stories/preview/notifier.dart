@@ -11,6 +11,10 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 
+import '../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../core/services/check_version.dart';
+import '../../../notifier_v2.dart';
+
 class PreviewStoriesNotifier with ChangeNotifier {
   final _routing = Routing();
   ScrollController scrollController = ScrollController();
@@ -72,7 +76,10 @@ class PreviewStoriesNotifier with ChangeNotifier {
     Future<List<ContentData>> _resFuture;
 
     try {
-      _resFuture = myContentsQuery.reload(context);
+      print('test14');
+      final notifier = Provider.of<HomeNotifier>(context);
+      await notifier.allReload(context, isStartAgain: true);
+      _resFuture = myContentsQuery.reload(context, isCache: true);
       final res = await _resFuture;
       myStoriesData = res;
       if (myStoriesData != null) {
@@ -86,6 +93,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
+  Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async{
+  }
+
   Future<void> initialPeopleStories(
     BuildContext context, {
     bool reload = false,
@@ -94,7 +104,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
     try {
       if (reload) {
-        _resFuture = peopleContentsQuery.reload(context);
+        print('test16');
+        _resFuture = peopleContentsQuery.reload(context, isCache: true);
       } else {
         _resFuture = peopleContentsQuery.loadNext(context);
       }

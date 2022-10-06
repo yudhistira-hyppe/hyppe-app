@@ -117,6 +117,7 @@ class FollowerNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
+        print('test25');
         _resFuture = _usersFollowersQuery.reload(context);
       } else {
         _resFuture = _usersFollowersQuery.loadNext(context);
@@ -152,6 +153,7 @@ class FollowerNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
+        print('test25');
         _resFuture = _usersFollowingQuery.reload(context);
       } else {
         _resFuture = _usersFollowingQuery.loadNext(context);

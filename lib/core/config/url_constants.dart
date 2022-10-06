@@ -238,7 +238,7 @@ class UrlConstants {
   static const String getUserPosts = "$postRoute/getUserPosts";
 
   /// get => Get User Post.
-  static const String getUserPostsLandingPage = "$postRoute/getUserPosts/landing-page";
+  static const String getUserPostsLandingPage = "$postsRoute/getuserposts/landing-page";
 
   /// get => Add Post Report.
   static const String reportOnPost = "$postRoute/report/reportOnPost";

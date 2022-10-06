@@ -79,7 +79,9 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
     try {
       if (reload) {
-        _resFuture = contentsQuery.reload(context);
+
+        print('test2');
+        _resFuture = contentsQuery.reload(context, isCache: true);
       } else {
         _resFuture = contentsQuery.loadNext(context);
       }

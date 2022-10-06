@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -14,6 +17,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+
+import 'core/constants/utils.dart';
+import 'core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 
 // void mainApp(EnvType env) async {
 //   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +51,18 @@ void mainApp(EnvType env) async {
   Env.init(env);
   NotificationService().initializeLocalNotification();
   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+  await Hive.initFlutter();
+  Hive.registerAdapter(AllContentsAdapter());
+  Hive.registerAdapter(ContentDataAdapter());
+  Hive.registerAdapter(MetadataAdapter());
+  Hive.registerAdapter(ContentDataInsightAdapter());
+  Hive.registerAdapter(PrivacyAdapter());
+  Hive.registerAdapter(InsightLogsAdapter());
+  Hive.registerAdapter(UserProfileAvatarModelAdapter());
+  Hive.registerAdapter(CatsAdapter());
+  Hive.registerAdapter(TagPeopleAdapter());
+
+  await Hive.openBox<AllContents>('data_contents');
   await SharedPreference.onInitialSharedPreferences();
   await FcmService().firebaseCloudMessagingListeners();
   System().systemUIOverlayTheme();

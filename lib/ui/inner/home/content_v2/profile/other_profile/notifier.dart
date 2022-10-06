@@ -246,6 +246,7 @@ class OtherProfileNotifier with ChangeNotifier {
       checkFollowingToUser(context, userEmail!);
     }
 
+    print('test10');
     user.vids = await vidContentsQuery.reload(context, otherContent: true);
     user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
     user.pics = await picContentsQuery.reload(context, otherContent: true);
@@ -376,6 +377,7 @@ class OtherProfileNotifier with ChangeNotifier {
     try {
       _usersFollowingQuery.senderOrReceiver = email;
       _usersFollowingQuery.limit = 200;
+      print('test11');
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;
 

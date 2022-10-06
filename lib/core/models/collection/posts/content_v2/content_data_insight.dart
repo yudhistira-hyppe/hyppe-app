@@ -1,6 +1,8 @@
 
 import 'package:hive/hive.dart';
 
+part 'content_data_insight.g.dart';
+
 @HiveType(typeId: 3)
 class ContentDataInsight extends HiveObject {
   @HiveField(0)
@@ -77,7 +79,7 @@ class ContentDataInsight extends HiveObject {
   }
 }
 
-@HiveType(typeId: 4)
+@HiveType(typeId: 5)
 class InsightLogs extends HiveObject {
   @HiveField(0)
   String? sId;

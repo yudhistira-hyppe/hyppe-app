@@ -129,6 +129,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
     try {
       if (reload) {
+        print('test21');
         _resFuture = discussQuery.reload(context);
       } else {
         _resFuture = discussQuery.loadNext(context);
