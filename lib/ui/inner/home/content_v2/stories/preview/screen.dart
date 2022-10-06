@@ -44,6 +44,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo is ScrollStartNotification) {
             Future.delayed(const Duration(milliseconds: 100), () {
+              print('hariyanto1');
               notifier.initialPeopleStories(context);
             });
           }

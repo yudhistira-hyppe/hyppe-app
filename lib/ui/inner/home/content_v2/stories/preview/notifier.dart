@@ -1,3 +1,4 @@
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 
 import '../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../core/models/hive_box/boxes.dart';
 import '../../../../../../core/services/check_version.dart';
 import '../../../notifier_v2.dart';
 
@@ -69,6 +71,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future initialStories(BuildContext context) async {
     initialMyStories(context);
+    print('hariyanto3');
     initialPeopleStories(context, reload: true);
   }
 
@@ -77,9 +80,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
     try {
       print('test14');
-      final notifier = Provider.of<HomeNotifier>(context);
-      await notifier.allReload(context, isStartAgain: true);
-      _resFuture = myContentsQuery.reload(context, isCache: true);
+      _resFuture = myContentsQuery.reload(context);
       final res = await _resFuture;
       myStoriesData = res;
       if (myStoriesData != null) {
@@ -93,8 +94,108 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
+
+
   Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async{
   }
+
+  // Future allReload(BuildContext context, {bool isStartAgain = false, bool myContent = false, bool otherContent = false}) async {
+  //   AllContents? res;
+  //   const page = 0;
+  //   final box = Boxes.boxDataContents;
+  //   try {
+  //     final visi = 'PUBLIC';
+  //     final allContent = box.get(visi);
+  //     if(allContent != null){
+  //       'allContent is not null'.logger();
+  //       if(!isStartAgain){
+  //         final isHit =_availableToHitAgain(allContent, 12);
+  //         if(isHit){
+  //           final notifier = PostsBloc();
+  //           await notifier.getAllContentsBlocV2(
+  //               context,
+  //               pageNumber: page,
+  //               visibility: visi,
+  //               isStartAgain: isStartAgain,
+  //               myContent: myContent,
+  //               otherContent: otherContent);
+  //           final fetch = notifier.postsFetch;
+  //
+  //           res = AllContents.fromJson(fetch.data);
+  //           if((res.story ?? []).isNotEmpty){
+  //             allContent.story!.addAll(res.story!);
+  //           }
+  //           if((res.video ?? []).isNotEmpty){
+  //             allContent.video!.addAll(res.video!);
+  //           }
+  //           if((res.diary ?? []).isNotEmpty){
+  //             allContent.diary!.addAll(res.diary!);
+  //           }
+  //           if((res.pict ?? []).isNotEmpty){
+  //             allContent.pict!.addAll(res.pict!);
+  //           }
+  //           await allContent.save();
+  //         }
+  //       }else{
+  //         final notifier = PostsBloc();
+  //         await notifier.getAllContentsBlocV2(
+  //             context,
+  //             pageNumber: page,
+  //             visibility: visi,
+  //             isStartAgain: isStartAgain,
+  //             myContent: myContent,
+  //             otherContent: otherContent);
+  //         final fetch = notifier.postsFetch;
+  //
+  //         res = AllContents.fromJson(fetch.data);
+  //
+  //         await box.put(visi, res);
+  //       }
+  //
+  //     }else{
+  //       'allContent is null'.logger();
+  //       final notifier = PostsBloc();
+  //       await notifier.getAllContentsBlocV2(
+  //           context,
+  //           pageNumber: page,
+  //           visibility: visi,
+  //           isStartAgain: isStartAgain,
+  //           myContent: myContent,
+  //           otherContent: otherContent);
+  //       final fetch = notifier.postsFetch;
+  //       if(fetch.postsState == PostsState.getAllContentsError){
+  //
+  //       }else{
+  //
+  //       }
+  //       '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+  //       res = AllContents.fromJson(fetch.data);
+  //       await box.put(visi, res);
+  //     }
+  //
+  //
+  //   } catch (e) {
+  //     '$e'.logger();
+  //     rethrow;
+  //   }
+  // }
+  //
+  // bool _availableToHitAgain(AllContents all, int limit){
+  //   if((all.story?.length ?? 0) < limit){
+  //     return true;
+  //   }
+  //   if((all.diary?.length ?? 0) < limit){
+  //     return true;
+  //   }
+  //   if((all.video?.length ?? 0) < limit){
+  //     return true;
+  //   }
+  //   if((all.pict?.length ?? 0) < limit){
+  //     return true;
+  //   }
+  //
+  //   return false;
+  // }
 
   Future<void> initialPeopleStories(
     BuildContext context, {
@@ -132,6 +233,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !peopleContentsQuery.loading && hasNext) {
+
+      print('hariyanto2');
       initialPeopleStories(context);
     }
   }

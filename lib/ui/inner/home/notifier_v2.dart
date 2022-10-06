@@ -131,12 +131,8 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
-      try{
-        'allContent landing-page'.logger();
-        await allReload(context, isStartAgain: isStartAgain);
-      }catch(e){
-        print(e);
-      }
+      await allReload(context, isStartAgain: isStartAgain);
+
       // Refresh content
       try {
         await stories.initialStories(context).then((value) => totLoading += 1);
@@ -180,7 +176,6 @@ class HomeNotifier with ChangeNotifier {
   Future allReload(BuildContext context, {bool isStartAgain = false, bool myContent = false, bool otherContent = false}) async {
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
-    const row = 15;
     const page = 0;
     final box = Boxes.boxDataContents;
     try {
@@ -188,12 +183,11 @@ class HomeNotifier with ChangeNotifier {
       if(allContent != null){
         'allContent is not null'.logger();
         if(!isStartAgain){
-          final isHit =_availableToHitAgain(allContent, row);
+          final isHit =_availableToHitAgain(allContent, 12);
           if(isHit){
             final notifier = PostsBloc();
             await notifier.getAllContentsBlocV2(
                 context,
-                pageRows: row,
                 pageNumber: page,
                 visibility: notifierMain.visibilty,
                 isStartAgain: isStartAgain,
@@ -220,7 +214,6 @@ class HomeNotifier with ChangeNotifier {
           final notifier = PostsBloc();
           await notifier.getAllContentsBlocV2(
               context,
-              pageRows: row,
               pageNumber: page,
               visibility: notifierMain.visibilty,
               isStartAgain: isStartAgain,
@@ -238,7 +231,6 @@ class HomeNotifier with ChangeNotifier {
         final notifier = PostsBloc();
         await notifier.getAllContentsBlocV2(
             context,
-            pageRows: row,
             pageNumber: page,
             visibility: notifierMain.visibilty,
             isStartAgain: isStartAgain,
@@ -249,8 +241,6 @@ class HomeNotifier with ChangeNotifier {
         res = AllContents.fromJson(fetch.data);
         await box.put(notifierMain.visibilty, res);
       }
-
-
     } catch (e) {
       '$e'.logger();
       rethrow;

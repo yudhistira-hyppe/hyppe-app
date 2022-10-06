@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -27,11 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
 
   @override
-  void initState() {
-    super.initState();
-    print('ini iniststate home');
+  void initState(){
+    print('allReload deui');
+    context.read<HomeNotifier>().onRefresh(context, !context.isLandPageNotEmpty());
+
     final _language = context.read<TranslateNotifierV2>().translate;
     context.read<HomeNotifier>().setSessionID();
+
 
     final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
@@ -43,9 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     context.read<PreUploadContentNotifier>().onGetInterest(context);
 
+
     if (mounted) {
       setState(() => {});
     }
+    super.initState();
+    print('ini iniststate home');
+
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {
     //     final notifier = Provider.of<CacheService>(context, listen: false);

@@ -16,6 +16,8 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 
+import '../../models/collection/posts/content_v2/content_data.dart';
+
 class PostsBloc {
   final _repos = Repos();
 
@@ -127,7 +129,7 @@ class PostsBloc {
 
   Future getAllContentsBlocV2(
     BuildContext context, {
-    int pageRows = 15,
+    int pageRows = 12,
     bool isStartAgain = false,
     bool myContent = false,
     bool otherContent = false,
@@ -154,12 +156,11 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        print(onResult);
+        print("test $onResult");
         if (onResult.statusCode! > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess,
-              version: onResult.data['version'],
               data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
@@ -176,6 +177,8 @@ class PostsBloc {
       methodType: MethodType.post,
     );
   }
+
+
 
   Future postContentsBlocV2(BuildContext context,
       {List<String>? tags,
