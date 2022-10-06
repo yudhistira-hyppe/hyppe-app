@@ -52,7 +52,6 @@ class _SearchContentState extends State<SearchContent> {
                 },
                 child: Container(
                   padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
-                  color: Colors.amber,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: CustomContentModeratedWidget(

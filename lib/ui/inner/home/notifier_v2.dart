@@ -130,12 +130,8 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
-      try {
-        'allContent landing-page'.logger();
-        await allReload(context, isStartAgain: isStartAgain);
-      } catch (e) {
-        print(e);
-      }
+      await allReload(context, isStartAgain: isStartAgain);
+
       // Refresh content
       try {
         await stories.initialStories(context).then((value) => totLoading += 1);
@@ -180,19 +176,19 @@ class HomeNotifier with ChangeNotifier {
     print('ambil semua data');
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
-    const row = 15;
     const page = 0;
     final box = Boxes.boxDataContents;
     try {
       final allContent = box.get(notifierMain.visibilty);
       if (allContent != null) {
         'allContent is not null'.logger();
+
         if (!isStartAgain) {
-          final isHit = _availableToHitAgain(allContent, row);
+          final isHit = _availableToHitAgain(allContent, 12);
           if (isHit) {
             final notifier = PostsBloc();
-            await notifier.getAllContentsBlocV2(context,
-                pageRows: row, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+            await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+
             final fetch = notifier.postsFetch;
 
             res = AllContents.fromJson(fetch.data);
@@ -212,8 +208,8 @@ class HomeNotifier with ChangeNotifier {
           }
         } else {
           final notifier = PostsBloc();
-          await notifier.getAllContentsBlocV2(context,
-              pageRows: row, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+
+          await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
           final fetch = notifier.postsFetch;
 
           res = AllContents.fromJson(fetch.data);
@@ -223,14 +219,13 @@ class HomeNotifier with ChangeNotifier {
       } else {
         'allContent is null'.logger();
         final notifier = PostsBloc();
-        await notifier.getAllContentsBlocV2(context, pageRows: row, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+
+        await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
         final fetch = notifier.postsFetch;
         '${AllContents.fromJson(fetch.data).toJson()}'.logger();
         res = AllContents.fromJson(fetch.data);
         await box.put(notifierMain.visibilty, res);
       }
-
-      notifyListeners();
     } catch (e) {
       '$e'.logger();
       rethrow;

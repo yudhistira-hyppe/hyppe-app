@@ -61,6 +61,7 @@ void mainApp(EnvType env) async {
   Hive.registerAdapter(UserProfileAvatarModelAdapter());
   Hive.registerAdapter(CatsAdapter());
   Hive.registerAdapter(TagPeopleAdapter());
+  Hive.registerAdapter(AvatarAdapter());
 
   await Hive.openBox<AllContents>('data_contents');
   await SharedPreference.onInitialSharedPreferences();

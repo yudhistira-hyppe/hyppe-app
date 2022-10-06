@@ -9,7 +9,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insig
 part 'content_data.g.dart';
 
 @HiveType(typeId: 0)
-class AllContents extends HiveObject{
+class AllContents extends HiveObject {
   @HiveField(0)
   List<ContentData>? story;
 
@@ -24,7 +24,7 @@ class AllContents extends HiveObject{
 
   AllContents({this.story, this.video, this.diary, this.pict});
 
-  AllContents.fromJson(Map<String, dynamic> json){
+  AllContents.fromJson(Map<String, dynamic> json) {
     if (json['story'] != null) {
       story = [];
       json['story'].forEach((v) => story!.add(ContentData.fromJson(v)));
@@ -46,7 +46,7 @@ class AllContents extends HiveObject{
     }
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
 
     result['story'] = List<dynamic>.from(story!.map((x) => x.toJson()));
@@ -59,7 +59,7 @@ class AllContents extends HiveObject{
 }
 
 @HiveType(typeId: 1)
-class ContentData extends HiveObject{
+class ContentData extends HiveObject {
   @HiveField(0)
   Metadata? metadata;
 
@@ -311,11 +311,7 @@ class ContentData extends HiveObject{
   String? concatContentUri() {
     return Env.data.baseUrl + (mediaEndpoint ?? '');
   }
-
-
 }
-
-
 
 @HiveType(typeId: 2)
 class Metadata {
@@ -401,7 +397,7 @@ class Privacy {
 
 //Category
 @HiveType(typeId: 7)
-class Cats extends HiveObject{
+class Cats extends HiveObject {
   @HiveField(0)
   String? id;
 
@@ -433,7 +429,7 @@ class Cats extends HiveObject{
 }
 
 @HiveType(typeId: 8)
-class TagPeople extends HiveObject{
+class TagPeople extends HiveObject {
   @HiveField(0)
   String? email;
 

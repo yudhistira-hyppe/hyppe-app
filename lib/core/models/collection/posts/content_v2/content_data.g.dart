@@ -42,7 +42,11 @@ class AllContentsAdapter extends TypeAdapter<AllContents> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AllContentsAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AllContentsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class ContentDataAdapter extends TypeAdapter<ContentData> {
@@ -177,7 +181,11 @@ class ContentDataAdapter extends TypeAdapter<ContentData> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is ContentDataAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ContentDataAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class MetadataAdapter extends TypeAdapter<Metadata> {
@@ -222,7 +230,11 @@ class MetadataAdapter extends TypeAdapter<Metadata> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is MetadataAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MetadataAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class PrivacyAdapter extends TypeAdapter<Privacy> {
@@ -258,7 +270,11 @@ class PrivacyAdapter extends TypeAdapter<Privacy> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is PrivacyAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PrivacyAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class CatsAdapter extends TypeAdapter<Cats> {
@@ -303,7 +319,11 @@ class CatsAdapter extends TypeAdapter<Cats> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is CatsAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CatsAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }
 
 class TagPeopleAdapter extends TypeAdapter<TagPeople> {
@@ -342,5 +362,52 @@ class TagPeopleAdapter extends TypeAdapter<TagPeople> {
   int get hashCode => typeId.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is TagPeopleAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TagPeopleAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class AvatarAdapter extends TypeAdapter<Avatar> {
+  @override
+  final int typeId = 9;
+
+  @override
+  Avatar read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return Avatar(
+      mediaBasePath: fields[0] as String?,
+      mediaUri: fields[1] as String?,
+      mediaType: fields[2] as String?,
+      mediaEndpoint: fields[3] as String?,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Avatar obj) {
+    writer
+      ..writeByte(4)
+      ..writeByte(0)
+      ..write(obj.mediaBasePath)
+      ..writeByte(1)
+      ..write(obj.mediaUri)
+      ..writeByte(2)
+      ..write(obj.mediaType)
+      ..writeByte(3)
+      ..write(obj.mediaEndpoint);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AvatarAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -28,9 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    super.initState();
-    context.read<HomeNotifier>().allReload(context, isStartAgain: true);
-    print('ini iniststate home');
+    print('allReload deui');
+    context.read<HomeNotifier>().onRefresh(context, !context.isLandPageNotEmpty());
+
     final _language = context.read<TranslateNotifierV2>().translate;
     context.read<HomeNotifier>().setSessionID();
 
@@ -47,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) {
       setState(() => {});
     }
+    super.initState();
+    print('ini iniststate home');
+
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {
     //     final notifier = Provider.of<CacheService>(context, listen: false);
@@ -70,32 +74,18 @@ class _HomeScreenState extends State<HomeScreen> {
           onRefresh: () => notifier.onRefresh(context, false),
           child: Stack(
             children: [
-              notifier.isLoadingVid
-                  ? ListView(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: const [
-                        ProcessUploadComponent(),
-                        HyppePreviewStories(),
-                        FilterLanding(),
-                        Padding(
-                          padding: EdgeInsets.only(top: 100.0),
-                          child: CustomLoading(),
-                        ),
-                      ],
-                    )
-                  : ListView(
-                      controller: _scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: const [
-                        ProcessUploadComponent(),
-                        HyppePreviewStories(),
-                        FilterLanding(),
-                        HyppePreviewVid(),
-                        HyppePreviewDiary(),
-                        HyppePreviewPic(),
-                      ],
-                    ),
+              ListView(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: const [
+                  ProcessUploadComponent(),
+                  HyppePreviewStories(),
+                  FilterLanding(),
+                  HyppePreviewVid(),
+                  HyppePreviewDiary(),
+                  HyppePreviewPic(),
+                ],
+              ),
               // CustomPopUpNotification()
             ],
           ),
