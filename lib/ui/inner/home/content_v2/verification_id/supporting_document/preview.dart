@@ -3,6 +3,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:path/path.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -16,12 +18,10 @@ class VerificationIDStepSupportingDocsPreview extends StatefulWidget {
   const VerificationIDStepSupportingDocsPreview({Key? key}) : super(key: key);
 
   @override
-  State<VerificationIDStepSupportingDocsPreview> createState() =>
-      _VerificationIDStepSupportingDocsPreviewState();
+  State<VerificationIDStepSupportingDocsPreview> createState() => _VerificationIDStepSupportingDocsPreviewState();
 }
 
-class _VerificationIDStepSupportingDocsPreviewState
-    extends State<VerificationIDStepSupportingDocsPreview> {
+class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationIDStepSupportingDocsPreview> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -43,8 +43,7 @@ class _VerificationIDStepSupportingDocsPreviewState
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.supportDoc!,
-              textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
             ),
             centerTitle: false,
             actions: [
@@ -52,29 +51,65 @@ class _VerificationIDStepSupportingDocsPreviewState
                 padding: const EdgeInsets.only(right: 20),
                 child: GestureDetector(
                   onTap: () => ShowBottomSheet.onShowHelpSupportDocs(context),
-                  child: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}info-icon.svg"),
+                  child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}info-icon.svg"),
                 ),
               )
             ],
           ),
-          body: ListView.separated(
-            itemCount: notifier.pickedSupportingDocs!.length,
-            itemBuilder: (context, index) => ListTile(
-              title: Text(basename(notifier.pickedSupportingDocs![index].path)),
-              subtitle: Text(notifier.pickedSupportingDocs![index]
-                  .lengthSync()
-                  .toString()),
-              leading: Image.file(notifier.pickedSupportingDocs![index]),
-            ),
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider(
-                color: Colors.black12,
-              );
-            },
+          body: Column(
+            children: [
+              ListView.separated(
+                shrinkWrap: true,
+                itemCount: notifier.pickedSupportingDocs!.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(basename(notifier.pickedSupportingDocs![index].path)),
+                  subtitle: Text(notifier.pickedSupportingDocs![index].lengthSync().toString()),
+                  leading: Image.file(notifier.pickedSupportingDocs![index]),
+                  trailing: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        notifier.pickedSupportingDocs!.removeAt(index);
+                      });
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
+                        child: Text(
+                          notifier.language.delete!,
+                          style: const TextStyle(color: kHyppePrimary),
+                        )),
+                  ),
+                ),
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(
+                    color: Colors.black12,
+                  );
+                },
+              ),
+              GestureDetector(
+                onTap: () {
+                  Routing().moveAndPop(Routes.verificationIDStep6);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Add Document',
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                      ),
+                      const Icon(
+                        Icons.add,
+                        color: kHyppePrimary,
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Container(
             color: kHyppeLightBackground,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -91,26 +126,20 @@ class _VerificationIDStepSupportingDocsPreviewState
                       padding: const EdgeInsets.all(5),
                       height: 30,
                       width: 30,
-                      child:
-                          const CircularProgressIndicator(color: Colors.white),
+                      child: const CircularProgressIndicator(color: Colors.white),
                     ),
                   const SizedBox(width: 10),
                   CustomTextWidget(
                     textToDisplay: notifier.language.save!,
-                    textStyle: textTheme.button
-                        ?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],
               ),
               buttonStyle: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primaryVariant),
-                shadowColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primaryVariant),
-                overlayColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primaryVariant),
-                backgroundColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primaryVariant),
+                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
               ),
             ),
           ),

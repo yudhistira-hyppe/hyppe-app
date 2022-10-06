@@ -189,19 +189,20 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onUpdateSelfPostContent(
-    BuildContext context, {
-    required String postID,
-    required String content,
-    String? description,
-    String? visibility,
-    bool? allowComment,
-    bool? certified,
-    List<String>? tags,
-    List<String>? cats,
-    List<TagPeople>? tagPeople,
-    String? location,
-  }) {
+  void onUpdateSelfPostContent(BuildContext context,
+      {required String postID,
+      required String content,
+      String? description,
+      String? visibility,
+      bool? allowComment,
+      bool? certified,
+      List<String>? tags,
+      List<String>? cats,
+      List<TagPeople>? tagPeople,
+      String? location,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView}) {
     ContentData? _updatedData;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
@@ -232,6 +233,9 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.allowComments = allowComment;
       _updatedData.visibility = visibility;
       _updatedData.location = location;
+      _updatedData.saleAmount = num.parse(saleAmount!);
+      _updatedData.saleLike = saleLike;
+      _updatedData.saleView = saleView;
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
       // _updatedData.tagPeople = tagPeople;

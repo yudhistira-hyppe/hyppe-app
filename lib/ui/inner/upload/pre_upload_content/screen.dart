@@ -1,4 +1,7 @@
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -134,23 +137,32 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   //   data: widget.arguments.contentData,
                   //   content: widget.arguments.content,
                   // ),
-                  function: () => !notifier.certified
-                      ? System().actionReqiredIdCard(context, action: () {
-                          notifier.onShowStatement(context, onCancel: () {
-                            notifier.onClickPost(
+                  function: () {
+                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED) {
+                      notifier.onClickPost(
+                        context,
+                        onEdit: widget.arguments.onEdit,
+                        data: widget.arguments.contentData,
+                        content: widget.arguments.content,
+                      );
+                    } else {
+                      !notifier.certified
+                          ? notifier.onShowStatement(context, onCancel: () {
+                              notifier.onClickPost(
+                                context,
+                                onEdit: widget.arguments.onEdit,
+                                data: widget.arguments.contentData,
+                                content: widget.arguments.content,
+                              );
+                            })
+                          : notifier.onClickPost(
                               context,
                               onEdit: widget.arguments.onEdit,
                               data: widget.arguments.contentData,
                               content: widget.arguments.content,
                             );
-                          });
-                        })
-                      : notifier.onClickPost(
-                          context,
-                          onEdit: widget.arguments.onEdit,
-                          data: widget.arguments.contentData,
-                          content: widget.arguments.content,
-                        ),
+                    }
+                  },
                   child: widget.arguments.onEdit && notifier.updateContent
                       ? const CustomLoading()
                       : CustomTextWidget(

@@ -92,12 +92,28 @@ class ContentItem extends StatelessWidget {
                               //     ),
                             ),
                             twelvePx,
-                            AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: ContentThumbnail(
-                                picData: data,
-                                fn: () => notifier.navigateToHyppePicDetail(context, data),
-                              ),
+                            Stack(
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: ContentThumbnail(
+                                    picData: data,
+                                    fn: () => notifier.navigateToHyppePicDetail(context, data),
+                                  ),
+                                ),
+                                data.saleAmount! > 0
+                                    ? const Align(
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}sale.svg",
+                                            height: 20,
+                                            defaultColor: false,
+                                          ),
+                                        ))
+                                    : Container()
+                              ],
                             ),
                             data.tagPeople!.length != 0 || data.location != ''
                                 ? Padding(

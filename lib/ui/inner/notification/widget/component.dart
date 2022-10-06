@@ -54,11 +54,15 @@ class Component extends StatelessWidget {
                         textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
-                      CustomTextWidget(
-                        //textToDisplay: data?.body ?? '',
-                        textToDisplay: System().bodyMultiLang(bodyEn: data?.body, bodyId: data?.bodyId) ?? '',
-                        textStyle: Theme.of(context).textTheme.caption,
-                        maxLines: 4,
+                      SizedBox(
+                        width: data!.body!.length < 30 ? null : SizeConfig.screenWidth! / 1.5,
+                        child: CustomTextWidget(
+                          //textToDisplay: data?.body ?? '',
+                          textToDisplay: System().bodyMultiLang(bodyEn: data?.body, bodyId: data?.bodyId) ?? '',
+                          textStyle: Theme.of(context).textTheme.caption,
+                          maxLines: 4,
+                          textAlign: TextAlign.start,
+                        ),
                       ),
                       sixPx,
                       CustomTextWidget(

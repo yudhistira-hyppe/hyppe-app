@@ -225,10 +225,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('tagDescription', tagDescription!.join(',')));
     // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
-    formData.fields.add(MapEntry(
-        // sell content
-        'saleAmount',
-        saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
 
@@ -296,19 +293,20 @@ class PostsBloc {
     );
   }
 
-  Future updateContentBlocV2(
-    BuildContext context, {
-    required String postId,
-    required String description,
-    String? tags,
-    String visibility = "PUBLIC",
-    required bool allowComment,
-    required bool certified,
-    required FeatureType type,
-    List<String>? cats,
-    List<String>? tagPeople,
-    String? location,
-  }) async {
+  Future updateContentBlocV2(BuildContext context,
+      {required String postId,
+      required String description,
+      String? tags,
+      String visibility = "PUBLIC",
+      required bool allowComment,
+      required bool certified,
+      required FeatureType type,
+      List<String>? cats,
+      List<String>? tagPeople,
+      String? location,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     final formData = FormData();
@@ -323,6 +321,9 @@ class PostsBloc {
     formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('location', location!));
+    formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
 
     print('hahahahahahahaha');
     print(type);

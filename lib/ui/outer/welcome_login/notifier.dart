@@ -19,11 +19,9 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
-import 'package:hyppe/core/services/api_action.dart';
 import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
-import 'package:hyppe/core/services/locations.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
@@ -234,6 +232,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
+      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'true');
       DeviceBloc().activityAwake(context);
       if (signData.interest!.isEmpty) {
         Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
@@ -249,6 +248,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
+      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'false');
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       DeviceBloc().activityAwake(context);
       Routing().moveReplacement(Routes.lobby);

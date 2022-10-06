@@ -64,6 +64,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  bool _ownershipEULA = false;
+  bool get ownershipEULA => _ownershipEULA;
+
   bool _isLoadingLoadMore = false;
   bool get isLoadingLoadMore => _isLoadingLoadMore;
   bool _isShowAutoComplete = false;
@@ -153,6 +156,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
   // UpdateContentsArgument get updateArguments => _arguments!;
+
+  set ownershipEULA(bool val) {
+    _ownershipEULA = val;
+    notifyListeners();
+  }
 
   set interestList(List<InterestData> val) {
     _interestList = val;
@@ -510,6 +518,9 @@ class PreUploadContentNotifier with ChangeNotifier {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
+    print('hargaaa');
+    print(priceController.text.replaceAll(',', '').replaceAll('.', ''));
+
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
       context,
@@ -522,6 +533,9 @@ class PreUploadContentNotifier with ChangeNotifier {
       description: captionController.text,
       cats: _interestData,
       tagPeople: userTagData,
+      saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+      saleLike: _includeTotalLikes,
+      saleView: _includeTotalViews,
       location: locationName == language.addLocation ? '' : locationName,
     );
     final fetch = notifier.postsFetch;
@@ -539,6 +553,9 @@ class PreUploadContentNotifier with ChangeNotifier {
             location: locationName == language.addLocation ? '' : locationName,
             tagPeople: userTagDataReal,
             cats: _interestData,
+            saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+            saleLike: _includeTotalLikes,
+            saleView: _includeTotalViews,
           );
 
       context.read<HomeNotifier>().onUpdateSelfPostContent(
@@ -553,6 +570,9 @@ class PreUploadContentNotifier with ChangeNotifier {
             location: locationName == language.addLocation ? '' : locationName,
             tagPeople: userTagDataReal,
             cats: _interestData,
+            saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+            saleLike: _includeTotalLikes,
+            saleView: _includeTotalViews,
           );
 
       updateContent = false;
@@ -733,8 +753,10 @@ class PreUploadContentNotifier with ChangeNotifier {
     ShowBottomSheet.onShowStatementOwnership(
       context,
       onSave: () {
-        Routing().moveBack();
-        Routing().move(Routes.ownershipSelling);
+        System().actionReqiredIdCard(context, action: () {
+          Routing().moveBack();
+          Routing().move(Routes.ownershipSelling);
+        });
       },
       onCancel: onCancel,
     );

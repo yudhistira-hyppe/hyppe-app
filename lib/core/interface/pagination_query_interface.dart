@@ -5,7 +5,7 @@ abstract class PaginationQueryInterface {
 
   bool hasNext = true;
 
-  int page = 0;
+  int page = 1;
 
   int limit = 18;
 

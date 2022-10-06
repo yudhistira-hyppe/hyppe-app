@@ -16,6 +16,8 @@ import 'package:hyppe/ui/inner/notification/content/follow.dart';
 import 'package:hyppe/ui/inner/notification/content/comment.dart';
 import 'package:hyppe/ui/inner/notification/content/mention.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 
 class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -180,6 +182,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     if (!_data![indexP].isRead!) {
       _data![indexP].isRead = true;
       notifyListeners();
+    }
+    if (data.eventType == 'TRANSACTION') {
+      Routing().move(Routes.transaction);
     }
   }
 

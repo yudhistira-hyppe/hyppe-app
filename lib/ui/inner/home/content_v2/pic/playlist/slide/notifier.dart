@@ -37,9 +37,7 @@ import '../../../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 
-
 class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
-
   final _system = System();
   final _sharedPrefs = SharedPreference();
   ScrollController scrollController = ScrollController();
@@ -96,23 +94,22 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void onUpdate() => notifyListeners();
 
-  Future initAdsVideo(BuildContext context) async{
+  Future initAdsVideo(BuildContext context) async {
     _adsUrl = '';
     final count = context.getAdsCount();
     String? urlAds;
 
-    if(count == null){
+    if (count == null) {
       context.setAdsCount(0);
-    }else{
-      if(count == 4){
+    } else {
+      if (count == 4) {
         urlAds = await getAdsVideo(context, true);
-      }else if(count == 2){
+      } else if (count == 2) {
         urlAds = await getAdsVideo(context, false);
       }
     }
-    if(urlAds != null){
+    if (urlAds != null) {
       _adsUrl = urlAds;
-
     }
   }
 
@@ -134,8 +131,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> _initialPic(
-      BuildContext context,
-      ) async {
+    BuildContext context,
+  ) async {
     Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = _routeArgument?.postID;
@@ -166,25 +163,25 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<String?> getAdsVideo(BuildContext context, bool isContent) async{
-    try{
+  Future<String?> getAdsVideo(BuildContext context, bool isContent) async {
+    try {
       final notifier = AdsDataBloc();
       await notifier.adsVideoBloc(context, isContent);
       final fetch = notifier.adsDataFetch;
 
-      if(fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess){
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         final _newClipData = fetch.data;
         _adsData = _newClipData!.data;
         return await getAdsVideoApsara(context, _newClipData!.data!.videoId!);
       }
-    } catch (e){
+    } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
     return null;
   }
 
-  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async{
+  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async {
     try {
       final notifier = PostsBloc();
       await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
@@ -254,7 +251,6 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
         'follow user: ERROR: $e'.logger();
       }
     }
-
   }
 
   Future<void> _increaseViewCount(BuildContext context) async {
@@ -297,12 +293,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: data));
   }
 
-
-
   Future<void> createdDynamicLink(
-      context, {
-        ContentData? data,
-      }) async {
+    context, {
+    ContentData? data,
+  }) async {
     await createdDynamicLinkMixin(
       context,
       data: DynamicLinkData(

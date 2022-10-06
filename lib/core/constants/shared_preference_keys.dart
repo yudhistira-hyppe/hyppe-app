@@ -11,6 +11,7 @@ class SpKeys {
   static const String userID = "userID";
   static const String fcmToken = 'fcmToken';
   static const String userToken = "userToken";
+  static const String isLoginSosmed = 'false';
 
   static const String isoCode = "isoCode";
   static const String themeData = 'themeData';

@@ -54,11 +54,12 @@ class OwnershipSellingScreen extends StatelessWidget {
                   CustomCheckButton(
                     value: notifier.certified,
                     onChanged: (value) {
-                      if (!notifier.isEdit && !notifier.certified) {
+                      if (notifier.isEdit && notifier.certified && notifier.ownershipEULA) {
+                      } else {
                         notifier.onOwnershipEULA(context);
                       }
                     },
-                    disable: notifier.isEdit && notifier.certified,
+                    disable: notifier.isEdit && notifier.certified && notifier.ownershipEULA,
                   ),
                 ],
               ),

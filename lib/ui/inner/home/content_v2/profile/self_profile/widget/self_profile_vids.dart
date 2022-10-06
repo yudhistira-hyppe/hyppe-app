@@ -32,14 +32,32 @@ class SelfProfileVids extends StatelessWidget {
                               onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
                               child: Padding(
                                 padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                                child: CustomContentModeratedWidget(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  featureType: FeatureType.vid,
-                                  isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                                  thumbnail: notifier.item1!.vids![index].isApsara!
-                                      ? notifier.item1!.vids![index].mediaThumbEndPoint!
-                                      : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint)!,
+                                child: Stack(
+                                  children: [
+                                    Center(
+                                      child: CustomContentModeratedWidget(
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        featureType: FeatureType.vid,
+                                        isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
+                                        thumbnail: notifier.item1!.vids![index].isApsara!
+                                            ? notifier.item1!.vids![index].mediaThumbEndPoint!
+                                            : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint)!,
+                                      ),
+                                    ),
+                                    notifier.item1!.vids![index].saleAmount! > 0
+                                        ? const Align(
+                                            alignment: Alignment.topRight,
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(2.0),
+                                              child: CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}sale.svg",
+                                                height: 15,
+                                                defaultColor: false,
+                                              ),
+                                            ))
+                                        : Container()
+                                  ],
                                 ),
                               ),
                             );

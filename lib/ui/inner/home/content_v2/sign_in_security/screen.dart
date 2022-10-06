@@ -43,16 +43,20 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SettingTile(
-                icon: 'lock.svg',
-                onTap: () => Routing().move(Routes.changePassword),
-                caption: '${notifier.translate.password}',
-              ),
-              SettingTile(
-                icon: 'lock-pin.svg',
-                onTap: () => Routing().move(Routes.pinScreen),
-                caption: setPin == 'true' ? notifier.translate.changePin! : notifier.translate.setPin!,
-              ),
+              SharedPreference().readStorage(SpKeys.isLoginSosmed) == 'true'
+                  ? Container()
+                  : SettingTile(
+                      icon: 'lock.svg',
+                      onTap: () => Routing().move(Routes.changePassword),
+                      caption: '${notifier.translate.password}',
+                    ),
+              SharedPreference().readStorage(SpKeys.statusVerificationId) == VERIFIED
+                  ? SettingTile(
+                      icon: 'lock-pin.svg',
+                      onTap: () => Routing().move(Routes.pinScreen),
+                      caption: setPin == 'true' ? notifier.translate.changePin! : notifier.translate.setPin!,
+                    )
+                  : Container(),
               SettingTile(
                 icon: 'verification-icon.svg',
                 onTap: () {

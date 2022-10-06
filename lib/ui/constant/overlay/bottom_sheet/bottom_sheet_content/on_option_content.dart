@@ -166,6 +166,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.thumbNail = widget.contentData.fullThumbPath;
                     notifier.allowComment = widget.contentData.allowComments ?? false;
                     notifier.certified = widget.contentData.certified ?? false;
+                    notifier.ownershipEULA = widget.contentData.certified ?? false;
 
                     if (widget.contentData.location != null) {
                       notifier.locationName = widget.contentData.location!;

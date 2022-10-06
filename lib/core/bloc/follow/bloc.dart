@@ -134,7 +134,7 @@ class FollowBloc {
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
         'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: false,
       host: UrlConstants.getInnteractives,
       methodType: MethodType.post,

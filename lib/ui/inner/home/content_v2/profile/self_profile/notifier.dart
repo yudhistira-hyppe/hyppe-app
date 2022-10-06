@@ -241,19 +241,20 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onUpdateSelfPostContent(
-    BuildContext context, {
-    required String postID,
-    required String content,
-    String? description,
-    String? visibility,
-    bool? allowComment,
-    bool? certified,
-    List<String>? tags,
-    List<String>? cats,
-    List<TagPeople>? tagPeople,
-    String? location,
-  }) {
+  void onUpdateSelfPostContent(BuildContext context,
+      {required String postID,
+      required String content,
+      String? description,
+      String? visibility,
+      bool? allowComment,
+      bool? certified,
+      List<String>? tags,
+      List<String>? cats,
+      List<TagPeople>? tagPeople,
+      String? location,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView}) {
     ContentData? _updatedData;
     switch (content) {
       case hyppeVid:
@@ -283,8 +284,10 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.certified = certified;
       _updatedData.visibility = visibility;
       _updatedData.location = location;
+      _updatedData.saleAmount = num.parse(saleAmount!);
+      _updatedData.saleLike = saleLike;
+      _updatedData.saleLike = saleView;
       _updatedData.cats = [];
-
       _updatedData.tagPeople = [];
       // _updatedData.tagPeople = tagPeople;
       _updatedData.tagPeople!.addAll(tagPeople!);

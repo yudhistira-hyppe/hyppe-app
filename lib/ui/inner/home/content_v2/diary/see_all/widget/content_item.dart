@@ -66,46 +66,62 @@ class ContentItem extends StatelessWidget {
                       final data = notifier.diaryData?[index];
                       return InkWell(
                         onTap: () => notifier.navigateToShortVideoPlayer(context, index),
-                        child: CustomBaseCacheImage(
-                          imageUrl: data!.isApsara! ? data.mediaThumbEndPoint : "${data.fullThumbPath}",
-                          imageBuilder: (context, imageProvider) => Container(
-                            alignment: Alignment.bottomLeft,
-                            child: CustomBalloonWidget(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const CustomIconWidget(
-                                    defaultColor: false,
-                                    color: kHyppeLightButtonText,
-                                    iconData: '${AssetPath.vectorPath}like.svg',
+                        child: Stack(
+                          children: [
+                            CustomBaseCacheImage(
+                              imageUrl: data!.isApsara! ? data.mediaThumbEndPoint : "${data.fullThumbPath}",
+                              imageBuilder: (context, imageProvider) => Container(
+                                alignment: Alignment.bottomLeft,
+                                child: CustomBalloonWidget(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const CustomIconWidget(
+                                        defaultColor: false,
+                                        color: kHyppeLightButtonText,
+                                        iconData: '${AssetPath.vectorPath}like.svg',
+                                      ),
+                                      fourPx,
+                                      CustomTextWidget(
+                                        textToDisplay: System().formatterNumber(data.insight?.likes ?? 0),
+                                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                                      )
+                                    ],
                                   ),
-                                  fourPx,
-                                  CustomTextWidget(
-                                    textToDisplay: System().formatterNumber(data.insight?.likes ?? 0),
-                                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-                                  )
-                                ],
+                                ),
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
                               ),
                             ),
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
+                            data.saleAmount! > 0
+                                ? const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 3, right: 6.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        height: 20,
+                                        defaultColor: false,
+                                      ),
+                                    ))
+                                : Container(),
+                          ],
                         ),
                       );
                     },

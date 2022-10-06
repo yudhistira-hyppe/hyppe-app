@@ -49,7 +49,7 @@ enum WalletEventEnum { miniDana, acquiring }
 enum WalletResourceType { maskDanaId, balance, userKYC, transactionUrl, topUpUrl, oauthUrl }
 enum NotificationActionType { read, hidden }
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
-enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, none }
+enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none }
 enum InteractiveEvent { initial, accept, request, done, revoke, none }
 enum DiscussEventType { directMsg, comment }
 enum IdProofStatus { initial, inProgress, complete, revoke }

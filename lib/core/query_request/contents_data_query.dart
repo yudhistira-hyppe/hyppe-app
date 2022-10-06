@@ -73,7 +73,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
     loading = true;
 
-    page = 0;
+    page = 1;
 
     List<ContentData>? res;
 

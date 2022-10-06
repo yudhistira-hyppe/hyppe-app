@@ -241,8 +241,8 @@ class Repos {
       }
       'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'.logger();
       dataError['log'] = 'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host';
-      final responError = await postLogError(context, dataError, headers, onReceiveProgress);
-      'Actual response error data ${responError.data}'.logger();
+      // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+      // 'Actual response error data ${responError.data}'.logger();
       onDioError(e);
     } catch (e) {
       e.toString().logger();
@@ -260,8 +260,8 @@ class Repos {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
       dataError['log'] = 'Error detail with no alertMessage ${e.toString()} and host $host';
-      final responError = await postLogError(context, dataError, headers, onReceiveProgress);
-      'Actual response error data ${responError.data}'.logger();
+      // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+      // 'Actual response error data ${responError.data}'.logger();
     }
   }
 

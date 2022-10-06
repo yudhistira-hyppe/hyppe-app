@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +29,31 @@ class SelfProfilePics extends StatelessWidget {
                           onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
                           child: Padding(
                             padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                            child: CustomContentModeratedWidget(
-                              width: double.infinity,
-                              height: double.infinity,
-                              isSafe: true, //notifier.postData!.data.listPic[index].isSafe!,
-                              thumbnail:
-                                  notifier.item1!.pics![index].isApsara! ? notifier.item1!.pics![index].mediaThumbEndPoint! : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint)!,
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: CustomContentModeratedWidget(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    isSafe: true, //notifier.postData!.data.listPic[index].isSafe!,
+                                    thumbnail: notifier.item1!.pics![index].isApsara!
+                                        ? notifier.item1!.pics![index].mediaThumbEndPoint!
+                                        : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint)!,
+                                  ),
+                                ),
+                                notifier.item1!.pics![index].saleAmount! > 0
+                                    ? const Align(
+                                        alignment: Alignment.topRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: CustomIconWidget(
+                                            iconData: "${AssetPath.vectorPath}sale.svg",
+                                            height: 15,
+                                            defaultColor: false,
+                                          ),
+                                        ))
+                                    : Container()
+                              ],
                             ),
                           ),
                         );

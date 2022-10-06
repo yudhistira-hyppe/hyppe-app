@@ -24,6 +24,7 @@ class ImageComponent extends StatelessWidget {
   const ImageComponent({Key? key, required this.data, this.width = 50, this.height = 50, this.borderRadiusGeometry}) : super(key: key);
 
   Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback) async {
+    print('ini imagecomponen');
     final getStory = PostsBloc();
     final List<ContentData> _listContentData = [];
     await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: data!.postID!);

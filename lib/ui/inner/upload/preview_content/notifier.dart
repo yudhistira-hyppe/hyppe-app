@@ -284,7 +284,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public! : notifier.privacyTitle = notifier.privacyTitle;
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation! : notifier.locationName = notifier.locationName;
 
-    notifier.compressVideo();
+    // notifier.compressVideo();
 
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }
