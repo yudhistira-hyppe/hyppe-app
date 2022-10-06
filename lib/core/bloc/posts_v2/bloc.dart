@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -122,39 +123,28 @@ class PostsBloc {
 
   Future getAllContentsBlocV2(
     BuildContext context, {
-    int pageRows = 5,
-    String searchText = "",
-    String? postID,
-    required int pageNumber,
-    required FeatureType type,
-    String? visibility,
-    bool onlyMyData = false,
+    int pageRows = 15,
+    bool isStartAgain = false,
     bool myContent = false,
     bool otherContent = false,
+    required String visibility,
+    required int pageNumber,
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
-    String url = '';
-
+    final lastHit = SharedPreference().readStorage(SpKeys.lastHitPost);
+    final currentDate = context.getCurrentDate();
     formData.fields.add(const MapEntry('withExp', 'true'));
     formData.fields.add(const MapEntry('withActive', 'true'));
     formData.fields.add(const MapEntry('withDetail', 'true'));
     formData.fields.add(const MapEntry('withInsight', 'true'));
-    if (searchText == '') {
-      formData.fields.add(MapEntry('visibility', '$visibility'));
-    }
+    formData.fields.add(MapEntry('visibility', visibility));
+    formData.fields.add(MapEntry('startDate', isStartAgain ? '' : lastHit));
+    formData.fields.add(MapEntry('endDate', currentDate));
+    formData.fields.add(MapEntry('pageRow', '$pageRows'));
+    formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
+    SharedPreference().writeStorage(SpKeys.lastHitPost, currentDate);
 
-    url = UrlConstants.getuserposts;
-    if (otherContent) {
-      formData.fields.add(MapEntry('email', searchText));
-      url = UrlConstants.getOtherUserPosts;
-    }
-
-    if (myContent) {
-      url = UrlConstants.getMyUserPosts;
-    }
-
-    print('hahahahahahahaha getUserPostsLandingPage');
     print(formData.fields.map((e) => e).join(','));
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
@@ -178,7 +168,6 @@ class PostsBloc {
       withAlertMessage: false,
       withCheckConnection: false,
       methodType: MethodType.post,
-      errorServiceType: System().getErrorTypeV2(type),
     );
   }
 
@@ -224,6 +213,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('location', location!));
     formData.fields.add(MapEntry('tagDescription', tagDescription!.join(',')));
     // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
+
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
     formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));

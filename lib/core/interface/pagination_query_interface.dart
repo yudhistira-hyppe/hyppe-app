@@ -7,7 +7,7 @@ abstract class PaginationQueryInterface {
 
   int page = 1;
 
-  int limit = 18;
+  int limit = 15;
 
   Future<List> loadNext(BuildContext context) async {
     throw UnimplementedError();
@@ -16,4 +16,5 @@ abstract class PaginationQueryInterface {
   Future<List> reload(BuildContext context) async {
     throw UnimplementedError();
   }
+
 }

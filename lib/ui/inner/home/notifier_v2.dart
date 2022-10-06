@@ -1,12 +1,8 @@
-import 'dart:io';
-
-import 'package:deepar_flutter/deepar_flutter.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
-import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +17,9 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+
+import '../../../core/bloc/posts_v2/bloc.dart';
+import '../../../core/models/hive_box/boxes.dart';
 
 class HomeNotifier with ChangeNotifier {
   //for visibilty
@@ -55,6 +54,8 @@ class HomeNotifier with ChangeNotifier {
 
   // bool get isHaveSomethingNew => _isHaveSomethingNew;
   String? get sessionID => _sessionID;
+
+  final box = Boxes.boxDataContents;
 
   // set isHaveSomethingNew(bool val) {
   //   _isHaveSomethingNew = val;
@@ -110,7 +111,7 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future onRefresh(BuildContext context) async {
+  Future onRefresh(BuildContext context, bool isStartAgain) async {
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       isLoadingVid = true;
@@ -125,6 +126,13 @@ class HomeNotifier with ChangeNotifier {
       // Refresh profile
       try {
         await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
+      } catch (e) {
+        print(e);
+      }
+
+      try {
+        'allContent landing-page'.logger();
+        await allReload(context, isStartAgain: isStartAgain);
       } catch (e) {
         print(e);
       }
@@ -158,10 +166,92 @@ class HomeNotifier with ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
-        onRefresh(context);
+        if (context.isLandPageNotEmpty()) {
+          onRefresh(context, false);
+        } else {
+          onRefresh(context, true);
+        }
       });
     }
     // isHaveSomethingNew = false;
+  }
+
+  Future allReload(BuildContext context, {bool isStartAgain = false, bool myContent = false, bool otherContent = false}) async {
+    print('ambil semua data');
+    AllContents? res;
+    final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
+    const row = 15;
+    const page = 0;
+    final box = Boxes.boxDataContents;
+    try {
+      final allContent = box.get(notifierMain.visibilty);
+      if (allContent != null) {
+        'allContent is not null'.logger();
+        if (!isStartAgain) {
+          final isHit = _availableToHitAgain(allContent, row);
+          if (isHit) {
+            final notifier = PostsBloc();
+            await notifier.getAllContentsBlocV2(context,
+                pageRows: row, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+            final fetch = notifier.postsFetch;
+
+            res = AllContents.fromJson(fetch.data);
+            if ((res.story ?? []).isNotEmpty) {
+              allContent.story!.addAll(res.story!);
+            }
+            if ((res.video ?? []).isNotEmpty) {
+              allContent.video!.addAll(res.video!);
+            }
+            if ((res.diary ?? []).isNotEmpty) {
+              allContent.diary!.addAll(res.diary!);
+            }
+            if ((res.pict ?? []).isNotEmpty) {
+              allContent.pict!.addAll(res.pict!);
+            }
+            await allContent.save();
+          }
+        } else {
+          final notifier = PostsBloc();
+          await notifier.getAllContentsBlocV2(context,
+              pageRows: row, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+          final fetch = notifier.postsFetch;
+
+          res = AllContents.fromJson(fetch.data);
+
+          await box.put(notifierMain.visibilty, res);
+        }
+      } else {
+        'allContent is null'.logger();
+        final notifier = PostsBloc();
+        await notifier.getAllContentsBlocV2(context, pageRows: row, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
+        final fetch = notifier.postsFetch;
+        '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+        res = AllContents.fromJson(fetch.data);
+        await box.put(notifierMain.visibilty, res);
+      }
+
+      notifyListeners();
+    } catch (e) {
+      '$e'.logger();
+      rethrow;
+    }
+  }
+
+  bool _availableToHitAgain(AllContents all, int limit) {
+    if ((all.story?.length ?? 0) < limit) {
+      return true;
+    }
+    if ((all.diary?.length ?? 0) < limit) {
+      return true;
+    }
+    if ((all.video?.length ?? 0) < limit) {
+      return true;
+    }
+    if ((all.pict?.length ?? 0) < limit) {
+      return true;
+    }
+
+    return false;
   }
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
@@ -291,7 +381,12 @@ class HomeNotifier with ChangeNotifier {
   void changeVisibility(BuildContext context, index) {
     _visibilty = _visibiltyList[index]['code'];
     _visibilitySelect = _visibiltyList[index]['code'];
-    onRefresh(context);
+    if (box.get(_visibilty) != null) {
+      onRefresh(context, false);
+    } else {
+      onRefresh(context, true);
+    }
+
     notifyListeners();
   }
 

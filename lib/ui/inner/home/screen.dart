@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<HomeNotifier>().allReload(context, isStartAgain: true);
     print('ini iniststate home');
     final _language = context.read<TranslateNotifierV2>().translate;
     context.read<HomeNotifier>().setSessionID();
@@ -66,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           key: _globalKey,
           strokeWidth: 2.0,
           color: Colors.purple,
-          onRefresh: () => notifier.onRefresh(context),
+          onRefresh: () => notifier.onRefresh(context, false),
           child: Stack(
             children: [
               notifier.isLoadingVid

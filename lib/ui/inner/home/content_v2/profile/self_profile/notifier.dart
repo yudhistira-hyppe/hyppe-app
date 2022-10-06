@@ -195,6 +195,7 @@ class SelfProfileNotifier with ChangeNotifier {
       user.profile = usersFetch.data;
       notifyListeners();
     }
+    print('test12');
     user.vids = await vidContentsQuery.reload(context, myContent: true);
     user.diaries = await diaryContentsQuery.reload(context, myContent: true);
     user.pics = await picContentsQuery.reload(context, myContent: true);

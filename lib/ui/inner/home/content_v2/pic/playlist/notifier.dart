@@ -83,6 +83,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
+      print('test6');
       _resFuture = contentsQuery.reload(context);
 
       final res = await _resFuture;
@@ -160,6 +161,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       try {
         checkIsLoading = true;
         _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
+        print('test7');
         final _resFuture = _usersFollowingQuery.reload(context);
         final _resRequest = await _resFuture;
         if (_resRequest.isNotEmpty) {

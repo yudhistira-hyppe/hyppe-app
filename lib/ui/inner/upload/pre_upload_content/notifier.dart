@@ -11,6 +11,7 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -378,7 +379,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       () {
         _socketService.events(SocketService.eventNotif, (result) {
           '$result'.logger();
-          homeNotifier.onRefresh(context);
+          context.isLandPageNotEmpty() ? homeNotifier.onRefresh(context, false) : homeNotifier.onRefresh(context, true);
           // homeNotifier.isHaveSomethingNew = true;
           _socketService.closeSocket();
         });

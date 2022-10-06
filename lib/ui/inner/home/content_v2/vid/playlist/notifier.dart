@@ -69,6 +69,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
+
+      print('test18');
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
       _data = res.firstOrNull;
@@ -135,6 +137,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
     try {
       checkIsLoading = true;
+      print('test19');
       _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;

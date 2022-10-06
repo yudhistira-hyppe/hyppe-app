@@ -57,7 +57,9 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       if (reload) {
-        _resFuture = contentsQuery.reload(context);
+
+        print('test4');
+        _resFuture = contentsQuery.reload(context, isCache: true);
       } else {
         _resFuture = contentsQuery.loadNext(context);
       }

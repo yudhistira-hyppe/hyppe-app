@@ -1,11 +1,10 @@
-import 'dart:io';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
-import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -31,7 +30,7 @@ class AdsPopUpDialog extends StatefulWidget {
 }
 
 class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
-  List<StoryItem> _storyItems = [];
+  final List<StoryItem> _storyItems = [];
   final StoryController _storyController = StoryController();
 
   final _sharedPrefs = SharedPreference();
@@ -62,7 +61,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
       // final fetch = notifier.adsVideoFetch;
 
     }catch(e){
-      'Failed hit view ads ${e}'.logger();
+      'Failed hit view ads $e'.logger();
     }
   }
 
@@ -74,7 +73,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          widget.data == 'image' ?
+          (widget.data.mediaType ?? '').translateType() == ContentType.image ?
           Stack(
             children: [
               // Background
@@ -123,23 +122,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
             controller: _storyController,
             progressPosition: ProgressPosition.top,
             onStoryShow: (storyItem) {
-              // int pos = _storyItems.indexOf(storyItem);
-              //
-              // context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
-              // // _addPostView();
-              // _storyController.playbackNotifier.listen((value) {
-              //   if (value == PlaybackState.previous) {
-              //     if (widget.controller!.page == 0) {
-              //       // context.read<DiariesPlaylistNotifier>().onWillPop(true);
-              //     } else {
-              //       widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-              //     }
-              //   }
-              // });
+
             },
             onEverySecond: (dur){
 
-              print('second of video ${dur.inSeconds}');
+              'second of video ${dur.inSeconds}'.logger();
               setState(() {
                 secondsSkip -= 1;
                 secondsVideo += 1;
@@ -148,18 +135,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
             nextDebouncer: false,
             onComplete: () {
               _storyController.pause();
-
-              // Navigator.pop(context);
-              // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-
-              // _storyController.next();
-              // widget.controller!.
-
-              // final isLastPage = widget.total! - 1 == widget.controller!.page;
-              // widget.function();
-              // if (isLastPage) {
-              //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
-              // }
             },
           ),
           Positioned(
@@ -175,10 +150,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
           )
         ],
       )
-      // Image.network(
-      //   'https://www.pocarisweat.com.sg//assets/uploads/2020/11/3aaf07f26dc43575fb5406f4901dac63.jpg',
-      //   fit: BoxFit.contain,
-      // ),
     );
   }
 
@@ -187,7 +158,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
       color: Colors.transparent,
       child: Container(
         color: Colors.transparent,
-        margin: EdgeInsets.only(left: 18, right: 18),
+        margin: const EdgeInsets.only(left: 18, right: 18),
         width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -217,11 +188,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                     return Container(
                       width: 36,
                       height: 36,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(18)),
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(18)),
                         image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
                         ),
                       ),
                     );
@@ -232,14 +203,14 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                   children: [
                     Row(
                       children: [
-                        CustomIconWidget(defaultColor: false,
+                        const CustomIconWidget(defaultColor: false,
                           iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",),
                         fourPx,
-                        Text(data.adsDescription ?? 'Nike', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),)
+                        Text(data.adsDescription ?? 'Nike', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),)
                       ],
                     ),
                     sixPx,
-                    Text('Sponsored', style: TextStyle(color: Colors.white, fontSize: 12,),)
+                    const Text('Sponsored', style: TextStyle(color: Colors.white, fontSize: 12,),)
                   ],
                 )
               ],
@@ -249,7 +220,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
               width: 30,
               child: Text('$secondsSkip', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 color: Colors.grey
               ),
@@ -258,7 +229,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                 adsView(widget.data, secondsVideo);
                 Navigator.pop(context);
               },
-              child: CustomIconWidget(defaultColor: false,
+              child: const CustomIconWidget(defaultColor: false,
                 iconData: "${AssetPath.vectorPath}close_ads.svg",),
             )
           ],
@@ -275,42 +246,23 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
         child: InkWell(
           onTap: ()async{
             final uri = Uri.parse(data.adsUrlLink ?? '');
-            if (await canLaunchUrl(uri))
+            if (await canLaunchUrl(uri)) {
+              adsView(widget.data, secondsVideo);
+              Navigator.pop(context);
               await launchUrl(uri, mode: LaunchMode.externalApplication,);
-            else
-              // can't launch url, there is some error
+            }else{
               throw "Could not launch $uri";
+            }
+              // can't launch url, there is some error
+
           },
           child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.only(top: 10, bottom: 10),
-            child: Text('Learn more', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700,),),
-            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+            child: const Text('Learn more', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w700,),),
+            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
-    return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button!.copyWith(color: textColor)),
-      width: 220,
-      height: 42,
-      function: () async {
-        if (Platform.isAndroid || Platform.isIOS) {
-          final appId = Platform.isAndroid ? 'com.hyppe.hyppeapp' : 'id1545595684';
-          final url = Uri.parse(
-            Platform.isAndroid ? "market://details?id=$appId" : "https://apps.apple.com/app/id$appId",
-          );
-          launchUrl(
-            url,
-            mode: LaunchMode.externalApplication,
-          );
-        }
-      },
-      buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
-        backgroundColor: MaterialStateProperty.all(color),
       ),
     );
   }

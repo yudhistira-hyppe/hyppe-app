@@ -309,6 +309,7 @@ class SignUpPinNotifier with ChangeNotifier {
               SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
               SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
               SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
+              SharedPreference().writeStorage(SpKeys.lastHitPost, '');
               SharedPreference().removeValue(SpKeys.isUserInOTP);
 
               DynamicLinkService.hitReferralBackend(context);

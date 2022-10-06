@@ -16,12 +16,14 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/permanently_denied_permisson_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
+import '../../ui/inner/home/notifier_v2.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget? child;
@@ -121,6 +123,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           final adsUrl = jsonMap['PlayUrl'];
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
+          Provider.of<HomeNotifier>(context, listen: false).onRefresh(context, true);
 
           System().adsPopUp(context, ads, adsUrl);
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];

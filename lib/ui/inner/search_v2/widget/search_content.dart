@@ -43,6 +43,8 @@ class _SearchContentState extends State<SearchContent> {
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemCount: widget.content?.length,
           itemBuilder: (context, index) {
+            print('ini cari');
+            print(index);
             try {
               return GestureDetector(
                 onTap: () {
@@ -50,6 +52,7 @@ class _SearchContentState extends State<SearchContent> {
                 },
                 child: Container(
                   padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
+                  color: Colors.amber,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4),
                     child: CustomContentModeratedWidget(

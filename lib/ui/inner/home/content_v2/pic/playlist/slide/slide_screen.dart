@@ -1,12 +1,14 @@
+import 'dart:async';
+
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,6 @@ import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:readmore/readmore.dart';
@@ -27,7 +28,6 @@ import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_ar
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
 import '../../../diary/playlist/widget/right_items_shimmer.dart';
-import '../../notifier.dart';
 import '../screen.dart';
 import 'notifier.dart';
 
@@ -55,7 +55,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
 
   @override
   void initState() {
-    context.incrementAdsCount();
     _pageController = PageController(initialPage: widget.arguments.index.toInt());
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
@@ -85,11 +84,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
         child: GestureDetector(
           onDoubleTap: () => resetZooming(),
           child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(builder: (context, value, child) {
-            Future.delayed(Duration.zero, () {
-              if (value.adsUrl.isNotEmpty && value.adsData.adsId != null) {
-                System().adsPopUp(context, value.adsData, value.adsUrl);
-              }
-            });
 
             return _notifier.listData != null
                 ? PageView.builder(
@@ -97,7 +91,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     itemCount: _notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
                       await _notifier.initAdsVideo(context);
-                      context.incrementAdsCount();
                     },
                     itemBuilder: (context, indexRoot) {
                       return PageView.builder(
@@ -115,35 +108,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       thumbnail: _notifier.listData![indexRoot].isApsara ?? false ? _notifier.listData![indexRoot].mediaThumbUri : _notifier.listData![indexRoot].fullThumbPath,
                                     ),
                                     // Content
-                                    InteractiveViewer(
-                                      transformationController: transformationController,
-                                      child: InkWell(
-                                        onDoubleTap: () {
-                                          context.read<LikeNotifier>().likePost(context, _notifier.listData![indexRoot]);
-                                        },
-                                        child: CustomCacheImage(
-                                          // imageUrl: picData.content[arguments].contentUrl,
-                                          imageUrl: _notifier.listData![indexRoot].isApsara! ? _notifier.listData![indexRoot].mediaThumbUri : _notifier.listData![indexRoot].fullThumbPath,
-                                          imageBuilder: (ctx, imageProvider) {
-                                            return Container(
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                                              ),
-                                            );
-                                          },
-                                          errorWidget: (_, __, ___) {
-                                            return Container(
-                                              decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  fit: BoxFit.contain,
-                                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                    PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: _notifier.listData![indexRoot], transformationController: transformationController),
                                     // Top action
                                     SafeArea(
                                       child: Padding(
@@ -202,14 +167,14 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                       onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                                                     ),
                                                   )
-                                                : SizedBox(),
+                                                : const SizedBox(),
                                             _notifier.listData![indexRoot].email != SharedPreference().readStorage(SpKeys.email)
                                                 ? _buildButtonV2(
                                                     context: context,
                                                     iconData: '${AssetPath.vectorPath}more.svg',
                                                     function: () => ShowBottomSheet.onReportContent(context),
                                                   )
-                                                : SizedBox(),
+                                                : const SizedBox(),
                                           ],
                                         ),
                                       ),
@@ -235,7 +200,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                               _buildButtonV2(
                                                 context: context,
                                                 iconData: '${AssetPath.vectorPath}comment.svg',
-                                                function: _notifier.listData![indexRoot] != null
+                                                function: _notifier.listData?[indexRoot] != null
                                                     ? () {
                                                         ShowBottomSheet.onShowCommentV2(context, postID: _notifier.listData![indexRoot].postID);
                                                       }
@@ -244,7 +209,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                               _buildButtonV2(
                                                 context: context,
                                                 iconData: '${AssetPath.vectorPath}share.svg',
-                                                function: _notifier.listData![indexRoot] != null
+                                                function: _notifier.listData?[indexRoot] != null
                                                     ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: _notifier.listData![indexRoot])
                                                     : () {},
                                               ),
@@ -256,12 +221,12 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                 ),
                                             ],
                                           ),
-                                          _notifier.listData![indexRoot].tagPeople!.length != 0 || _notifier.listData![indexRoot].location != ''
+                                          _notifier.listData![indexRoot].tagPeople!.isNotEmpty || _notifier.listData![indexRoot].location != ''
                                               ? Padding(
                                                   padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                                                   child: Row(
                                                     children: [
-                                                      _notifier.listData![indexRoot].tagPeople!.length != 0
+                                                      _notifier.listData![indexRoot].tagPeople!.isNotEmpty
                                                           ? PicTagLabel(
                                                               icon: 'user',
                                                               label: '${_notifier.listData![indexRoot].tagPeople!.length} people',
@@ -301,10 +266,10 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                     textAlign: TextAlign.left,
                                                     trimExpandedText: 'Show less',
                                                     trimCollapsedText: 'Show more',
-                                                    colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                                                    colorClickableText: Theme.of(context).colorScheme.primaryContainer,
                                                     style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                                                    moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                                                    lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                                                    moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                    lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                   ),
                                                 ],
                                               )),
