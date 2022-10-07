@@ -52,11 +52,11 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
     super.initState();
   }
 
-  Future adsView(AdsData data, int time) async{
+  Future adsView(AdsData data, int time, {bool isClick = false}) async{
     try{
       final notifier = AdsDataBloc();
-      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
+      final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId,);
+      await notifier.viewAdsBloc(context, request, isClick: isClick);
 
       // final fetch = notifier.adsVideoFetch;
 
@@ -247,7 +247,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
           onTap: ()async{
             final uri = Uri.parse(data.adsUrlLink ?? '');
             if (await canLaunchUrl(uri)) {
-              adsView(widget.data, secondsVideo);
+              adsView(widget.data, secondsVideo, isClick: true);
               Navigator.pop(context);
               await launchUrl(uri, mode: LaunchMode.externalApplication,);
             }else{

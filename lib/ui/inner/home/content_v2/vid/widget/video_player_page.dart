@@ -445,8 +445,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                           InkWell(
                             onTap: ()async{
                               final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                              if (await canLaunchUrl(uri))
+                              final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                              if (await canLaunchUrl(uri)){
+                                adsView(_newClipData?.data ?? AdsData(), second);
                                 await launchUrl(uri, mode: LaunchMode.externalApplication,);
+                              }
+
                               else
                                 // can't launch url, there is some error
                                 throw "Could not launch $uri";

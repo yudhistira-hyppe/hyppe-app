@@ -111,7 +111,7 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future onRefresh(BuildContext context, bool isStartAgain) async {
+  Future onRefresh(BuildContext context) async {
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       isLoadingVid = true;
@@ -130,26 +130,26 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
-      await allReload(context, isStartAgain: isStartAgain);
+      final allContents = await allReload(context);
 
       // Refresh content
       try {
-        await stories.initialStories(context).then((value) => totLoading += 1);
+        await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        await vid.initialVid(context, reload: true).then((value) => totLoading += 1);
+        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        await diary.initialDiary(context, reload: true).then((value) => totLoading += 1);
+        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        await pic.initialPic(context, reload: true).then((value) => totLoading += 1);
+        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
@@ -162,70 +162,25 @@ class HomeNotifier with ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
-        if (context.isLandPageNotEmpty()) {
-          onRefresh(context, false);
-        } else {
-          onRefresh(context, true);
-        }
+        onRefresh(context);
       });
     }
     // isHaveSomethingNew = false;
   }
 
-  Future allReload(BuildContext context, {bool isStartAgain = false, bool myContent = false, bool otherContent = false}) async {
+  Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     print('ambil semua data');
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
     const page = 0;
-    final box = Boxes.boxDataContents;
     try {
-      final allContent = box.get(notifierMain.visibilty);
-      if (allContent != null) {
-        'allContent is not null'.logger();
+      final notifier = PostsBloc();
 
-        if (!isStartAgain) {
-          final isHit = _availableToHitAgain(allContent, 12);
-          if (isHit) {
-            final notifier = PostsBloc();
-            await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
-
-            final fetch = notifier.postsFetch;
-
-            res = AllContents.fromJson(fetch.data);
-            if ((res.story ?? []).isNotEmpty) {
-              allContent.story!.addAll(res.story!);
-            }
-            if ((res.video ?? []).isNotEmpty) {
-              allContent.video!.addAll(res.video!);
-            }
-            if ((res.diary ?? []).isNotEmpty) {
-              allContent.diary!.addAll(res.diary!);
-            }
-            if ((res.pict ?? []).isNotEmpty) {
-              allContent.pict!.addAll(res.pict!);
-            }
-            await allContent.save();
-          }
-        } else {
-          final notifier = PostsBloc();
-
-          await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
-          final fetch = notifier.postsFetch;
-
-          res = AllContents.fromJson(fetch.data);
-
-          await box.put(notifierMain.visibilty, res);
-        }
-      } else {
-        'allContent is null'.logger();
-        final notifier = PostsBloc();
-
-        await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, isStartAgain: isStartAgain, myContent: myContent, otherContent: otherContent);
-        final fetch = notifier.postsFetch;
-        '${AllContents.fromJson(fetch.data).toJson()}'.logger();
-        res = AllContents.fromJson(fetch.data);
-        await box.put(notifierMain.visibilty, res);
-      }
+      await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+      final fetch = notifier.postsFetch;
+      '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+      res = AllContents.fromJson(fetch.data);
+      return res;
     } catch (e) {
       '$e'.logger();
       rethrow;
@@ -376,11 +331,7 @@ class HomeNotifier with ChangeNotifier {
   void changeVisibility(BuildContext context, index) {
     _visibilty = _visibiltyList[index]['code'];
     _visibilitySelect = _visibiltyList[index]['code'];
-    if (box.get(_visibilty) != null) {
-      onRefresh(context, false);
-    } else {
-      onRefresh(context, true);
-    }
+    onRefresh(context);
 
     notifyListeners();
   }

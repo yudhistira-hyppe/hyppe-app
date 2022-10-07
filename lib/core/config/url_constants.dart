@@ -492,4 +492,7 @@ class UrlConstants {
 
   //setting
   static const String settingApps = "$utilsRoute/getSetting";
+
+  /// post => Click Learn More Ads
+  static const String clickAds = "$adsRoute/clickads";
 }

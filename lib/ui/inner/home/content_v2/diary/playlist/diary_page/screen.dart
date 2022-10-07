@@ -135,9 +135,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     });
                   },
                   nextDebouncer: false,
-                  onComplete: () async{
-                    await notifier.initAdsVideo(context);
-                    context.incrementAdsCount();
+                  onComplete: () {
                     // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
                     // _storyController.next();
@@ -148,8 +146,13 @@ class _DiaryPageState extends State<DiaryPage> {
                     // if (isLastPage) {
                     //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                     // }
+                    context.incrementAdsCount();
                   },
                   onEverySecond: (duration) async{
+                    final secondAds = secondOfAds(notifier.adsData);
+                    print(' ZT secondAds : $secondAds');
+                    print(' ZT secondVid : ${duration.inSeconds}');
+                    print(' ZT URL : ${notifier.adsUrl}');
                     if(duration.inSeconds == secondOfAds(notifier.adsData)){
                       if(notifier.adsUrl.isNotEmpty){
                         _storyController.pause();
@@ -225,12 +228,12 @@ class _DiaryPageState extends State<DiaryPage> {
   }
 
   int secondOfAds(AdsData data){
-    var result = 0;
+    var result = 1;
     final mid = widget.data?.metadata?.midRoll ?? 0;
     final duration = widget.data?.metadata?.duration ?? 2;
     switch(data.adsPlace){
       case 'First':
-        result = widget.data?.metadata?.preRoll ?? 0;
+        result = (widget.data?.metadata?.preRoll ?? 1) == 0 ? 1 : widget.data!.metadata!.preRoll!;
         break;
       case 'Mid':
         result = mid != 0 ? 0 : (duration / 2).toInt();
@@ -239,7 +242,7 @@ class _DiaryPageState extends State<DiaryPage> {
         result = (widget.data?.metadata?.postRoll ?? 0) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;
         break;
       default:
-        result = 0;
+        result = 1;
         break;
     }
     return result;

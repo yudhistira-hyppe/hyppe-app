@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     print('allReload deui');
-    context.read<HomeNotifier>().onRefresh(context, !context.isLandPageNotEmpty());
+    context.read<HomeNotifier>().onRefresh(context);
 
     final _language = context.read<TranslateNotifierV2>().translate;
     context.read<HomeNotifier>().setSessionID();
@@ -73,9 +73,24 @@ class _HomeScreenState extends State<HomeScreen> {
           key: _globalKey,
           strokeWidth: 2.0,
           color: Colors.purple,
-          onRefresh: () => notifier.onRefresh(context, false),
+          onRefresh: () => notifier.onRefresh(context),
           child: Stack(
             children: [
+              // notifier.isLoadingVid
+              // ? ListView(
+              //     controller: _scrollController,
+              //     physics: const AlwaysScrollableScrollPhysics(),
+              //     children: const [
+              //       ProcessUploadComponent(),
+              //       HyppePreviewStories(),
+              //       FilterLanding(),
+              //       Padding(
+              //         padding: EdgeInsets.only(top: 100.0),
+              //         child: CustomLoading(),
+              //       ),
+              //     ],
+              //   )
+              // :
               ListView(
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),

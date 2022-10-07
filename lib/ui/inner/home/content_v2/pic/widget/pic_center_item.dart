@@ -69,8 +69,7 @@ class PicCenterItem extends StatelessWidget {
     final isSale = data?.email != email;
     return Stack(
       children: [
-        if(isSale)
-        PicTopItem(data: data),
+        if (isSale) PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
       ],
     );

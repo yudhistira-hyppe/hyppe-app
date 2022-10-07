@@ -139,7 +139,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
         }
 
         hasNext = res.length == limit;
-        if (res != null) page++;
+        page++;
       } catch (e) {
         '$e'.logger();
         rethrow;

@@ -126,7 +126,6 @@ class PostsBloc {
   Future getAllContentsBlocV2(
     BuildContext context, {
     int pageRows = 12,
-    bool isStartAgain = false,
     bool myContent = false,
     bool otherContent = false,
     required String visibility,
@@ -134,21 +133,16 @@ class PostsBloc {
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
-    final lastHit = SharedPreference().readStorage(SpKeys.lastHitPost);
     final currentDate = context.getCurrentDate();
-    print('test sini');
-    print(isStartAgain);
-    print(lastHit);
+
     formData.fields.add(const MapEntry('withExp', 'true'));
     formData.fields.add(const MapEntry('withActive', 'true'));
     formData.fields.add(const MapEntry('withDetail', 'true'));
     formData.fields.add(const MapEntry('withInsight', 'true'));
     formData.fields.add(MapEntry('visibility', visibility));
-    // formData.fields.add(MapEntry('startDate', isStartAgain ? '' : lastHit));
-    // formData.fields.add(MapEntry('endDate', currentDate));
+    formData.fields.add(MapEntry('endDate', currentDate));
     formData.fields.add(MapEntry('pageRow', '$pageRows'));
     formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
-    SharedPreference().writeStorage(SpKeys.lastHitPost, currentDate);
 
     print(formData.fields.map((e) => e).join(','));
     setPostsFetch(PostsFetch(PostsState.loading));

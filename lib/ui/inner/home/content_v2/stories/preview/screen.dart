@@ -92,7 +92,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                         errorType: ErrorType.peopleStory,
                         axis: Axis.horizontal,
                         iconSize: 40,
-                        function: () => notifier.initialPeopleStories(context, reload: true),
+                        function: () => notifier.initialPeopleStories(context),
                       ),
                     ),
                   ],
