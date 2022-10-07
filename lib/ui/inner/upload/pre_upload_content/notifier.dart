@@ -379,7 +379,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       () {
         _socketService.events(SocketService.eventNotif, (result) {
           '$result'.logger();
-          context.isLandPageNotEmpty() ? homeNotifier.onRefresh(context, false) : homeNotifier.onRefresh(context, true);
+          homeNotifier.onRefresh(context);
           // homeNotifier.isHaveSomethingNew = true;
           _socketService.closeSocket();
         });

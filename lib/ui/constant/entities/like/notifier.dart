@@ -209,7 +209,7 @@ class LikeNotifier with ChangeNotifier {
     _visibilty = val;
     _visibilitySelect = val;
 
-    Provider.of<HomeNotifier>(context, listen: false).onRefresh(context, true);
+    Provider.of<HomeNotifier>(context, listen: false).onRefresh(context);
     Provider.of<HomeNotifier>(context, listen: false).visibilty = val;
     notifyListeners();
   }

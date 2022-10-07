@@ -68,7 +68,7 @@ class AdsDataBloc {
         });
   }
 
-  Future viewAdsBloc(BuildContext context, ViewAdsRequest request) async {
+  Future viewAdsBloc(BuildContext context, ViewAdsRequest request, {bool isClick = false}) async {
     setCommentFetch(AdsDataFetch(AdsDataState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
@@ -84,7 +84,7 @@ class AdsDataBloc {
     },
         (errorData) =>
             setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
-        host: UrlConstants.viewAds,
+        host: isClick ? UrlConstants.clickAds : UrlConstants.viewAds,
         withAlertMessage: false,
         data: request.toJson(),
         methodType: MethodType.post,

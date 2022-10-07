@@ -489,4 +489,7 @@ class UrlConstants {
 
   /// post => View Ads User
   static const String viewAds = "$adsRoute/viewads";
+
+  /// post => Click Learn More Ads
+  static const String clickAds = "$adsRoute/clickads";
 }

@@ -70,6 +70,7 @@ class Env {
     UrlConstants.recoverPassword,
     UrlConstants.getAdsVideo,
     UrlConstants.viewAds,
+    UrlConstants.clickAds,
     UrlConstants.getUserPostsLandingPage,
     UrlConstants.getSponsoredAds,
     UrlConstants.getInAppAds,

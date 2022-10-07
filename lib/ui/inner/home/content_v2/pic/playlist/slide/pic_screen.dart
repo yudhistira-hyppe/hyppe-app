@@ -35,6 +35,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('image home : ${widget.contentData.toJson().toString()} , ${widget.contentData.isApsara}');
     return InteractiveViewer(
       transformationController: widget.transformationController,
       child: InkWell(

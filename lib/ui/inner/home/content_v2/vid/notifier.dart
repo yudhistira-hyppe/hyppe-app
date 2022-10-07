@@ -82,19 +82,22 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> initialVid(
     BuildContext context, {
-    bool reload = false,
+    bool reload = false, List<ContentData>? list = null
   }) async {
-    Future<List<ContentData>> _resFuture;
+    List<ContentData> res = [];
 
     try {
-      if (reload) {
-        print('test17');
-        _resFuture = contentsQuery.reload(context, isCache: true);
-      } else {
-        _resFuture = contentsQuery.loadNext(context);
+      if(list != null){
+        res.addAll(list);
+      }else{
+        if (reload) {
+          print('test17');
+          res = await contentsQuery.reload(context, isCache: true);
+        } else {
+          res = await contentsQuery.loadNext(context);
+        }
       }
 
-      final res = await _resFuture;
 
       if (reload) {
         vidData = res;

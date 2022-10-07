@@ -69,10 +69,10 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   bool get hasNext => peopleContentsQuery.hasNext;
 
-  Future initialStories(BuildContext context) async {
+  Future initialStories(BuildContext context, {List<ContentData>? list = null}) async {
     initialMyStories(context);
     print('hariyanto3');
-    initialPeopleStories(context, reload: true);
+    initialPeopleStories(context, reload: true, list: list);
   }
 
   Future<void> initialMyStories(BuildContext context) async {
@@ -197,18 +197,23 @@ class PreviewStoriesNotifier with ChangeNotifier {
   Future<void> initialPeopleStories(
     BuildContext context, {
     bool reload = false,
+        List<ContentData>? list = null
   }) async {
-    Future<List<ContentData>> _resFuture;
+    List<ContentData> res = [];
 
     try {
-      if (reload) {
+      if (list != null) {
         print('test16');
-        _resFuture = peopleContentsQuery.reload(context, isCache: true);
+        res.addAll(list);
       } else {
-        _resFuture = peopleContentsQuery.loadNext(context);
+        if(reload){
+          res = await peopleContentsQuery.reload(context);
+        }else{
+          res = await peopleContentsQuery.loadNext(context);
+        }
+
       }
 
-      final res = await _resFuture;
       if (reload) {
         peopleStoriesData = res;
         scrollController.animateTo(
