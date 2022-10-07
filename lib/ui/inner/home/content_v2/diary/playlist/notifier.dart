@@ -37,8 +37,6 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _forcePause = false;
 
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
   AdsData _adsData = AdsData();
   AdsData get adsData => _adsData;
   String _adsUrl = '';
@@ -77,7 +75,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ////////////////////////////////////////////////////////
   void onUpdate() => notifyListeners();
 
-  Future initAdsVideo(BuildContext context) async{
+  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
+    _result = [];
+    String urlApsara = '';
+
     _adsUrl = '';
     final count = context.getAdsCount();
     String? urlAds;
@@ -86,35 +87,21 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       context.setAdsCount(0);
     }else{
       if(count == 4){
-        print('ads type: content ads');
+        'type ads : Content Ads'.logger();
         urlAds = await getAdsVideo(context, true);
       }else if(count == 2){
-        print('ads type: sponsored ads');
+        'type ads : Sponsored Ads'.logger();
         urlAds = await getAdsVideo(context, false);
       }
     }
     if(urlAds != null){
       _adsUrl = urlAds;
     }
-  }
-
-  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
-    _isLoading = true;
-    _result = [];
-    String urlApsara = '';
-    await initAdsVideo(context);
-
     if (data.isApsara!) {
       await getVideoApsara(context, data.apsaraId!).then((value) {
         urlApsara = value;
       });
     }
-    print('fullContentPath diary isApsara : ${data.isApsara}');
-    print('fullContentPath diary urlApsara : $urlApsara');
-    print('fullContentPath diary fullContentPath : ${data.fullContentPath}');
-    print('fullContentPath diary mediaEndpoint : ${data.mediaEndpoint}');
-    print('fullContentPath diary duration : ${data.metadata?.duration}');
-    print('fullContentPath diary postID : ${data.postID}');
     _result.add(
       StoryItem.pageVideo(
         urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
@@ -128,8 +115,6 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         duration: Duration(seconds: data.metadata?.duration ?? 15),
       ),
     );
-
-    _isLoading = false;
     notifyListeners();
   }
 
@@ -221,27 +206,19 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       _initialDiary(context);
     } else {
       _listData = _routeArgument?.diaryData;
-      if(_listData != null){
-        for(var data in _listData!){
-          print("data diary is ${data.toJson().toString()}");
-        }
-      }else{
-        "data diary is null".logger();
-      }
+      _listData.logger();
       notifyListeners();
     }
   }
 
   Future<void> _initialDiary(
-      BuildContext context,
-      ) async {
+    BuildContext context,
+  ) async {
     Future<List<ContentData>> _resFuture;
 
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
-
-      print('test1');
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
       _listData = res;
@@ -253,9 +230,9 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> createdDynamicLink(
-      context, {
-        ContentData? data,
-      }) async {
+    context, {
+    ContentData? data,
+  }) async {
     forcePause = true;
     await createdDynamicLinkMixin(
       context,
