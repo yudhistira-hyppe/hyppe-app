@@ -47,6 +47,8 @@ class TransactionHistoryModel {
   bool? view;
   String? namapembeli;
   String? emailpembeli;
+  String? namapenjual;
+  String? emailpenjual;
   String? time;
   String? namaBank;
   String? namaRek;
@@ -92,6 +94,8 @@ class TransactionHistoryModel {
     view = json['view'] ?? false;
     namapembeli = json['namapembeli'] ?? '';
     emailpembeli = json['emailpembeli'] ?? '';
+    namapenjual = json['namapenjual'] ?? '';
+    emailpenjual = json['emailpenjual'] ?? '';
     time = json['time'] ?? '';
     namaBank = json['namaBank'] ?? '';
     namaRek = json['namaRek'] ?? '';
@@ -101,7 +105,7 @@ class TransactionHistoryModel {
     serviceFee = json['serviceFee'] ?? 0;
     totallike = json['totallike'] ?? 0;
     totalview = json['totalview'] ?? 0;
-    apsara = json['apsara'] ?? false;
+    apsara = json['apsara'] != '' ? json['apsara'] : false;
     media = json['media'] != null ? MediaModel.fromJSON(json['media']) : null;
   }
 

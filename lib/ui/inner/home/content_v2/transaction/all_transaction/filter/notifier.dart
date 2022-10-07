@@ -124,7 +124,6 @@ class FilterTransactionNotifier extends ChangeNotifier {
       _skip = 0;
       _param.addAll({"skip": _skip, "limit": _limit, "email": email});
       dataAllTransaction = [];
-
       getAllTransaction(context, param2: _param, fromNewFilter: true);
     }
   }
@@ -243,6 +242,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
     _skip = 0;
     newFilterList = [];
     filterChecked = [];
+    // _param.clear();
     getAllTransaction(context);
     if (back) {
       Routing().moveBack();
@@ -254,6 +254,10 @@ class FilterTransactionNotifier extends ChangeNotifier {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       _skip += _limit;
       isScrollLoading = true;
+      if (_param.isEmpty) {
+        final email = SharedPreference().readStorage(SpKeys.email);
+        _param.addAll({"skip": _skip, "limit": _limit, "email": email, "buy": false, "sell": false, "withdrawal": false});
+      }
       _param.addAll({"skip": _skip});
       await getAllTransaction(context, loading: false, param2: _param);
       isScrollLoading = false;

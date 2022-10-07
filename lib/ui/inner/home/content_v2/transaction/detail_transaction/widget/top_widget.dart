@@ -16,8 +16,10 @@ class TopDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data!.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
+    } else if (data!.type == TransactionType.buy) {
+      return buyWidget(context);
     } else {
-      return buySellWidget(context);
+      return sellWidget(context);
     }
   }
 
@@ -31,7 +33,28 @@ class TopDetailWidget extends StatelessWidget {
     );
   }
 
-  Widget buySellWidget(context) {
+  Widget buyWidget(context) {
+    return Column(
+      children: [
+        TwoColumnWidget(
+          data!.noinvoice,
+          text2: 'See Invoice',
+          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+        ),
+        TwoColumnWidget(
+          language!.from,
+          text2: data!.namapenjual,
+          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+        ),
+        TwoColumnWidget('Status', text2: data!.status),
+        TwoColumnWidget(language!.time, text2: System().dateFormatter(data!.time!, 4)),
+        TwoColumnWidget('No Virtual Account', text2: data!.nova),
+        TwoColumnWidget('Order ID', text2: data!.id),
+      ],
+    );
+  }
+
+  Widget sellWidget(context) {
     return Column(
       children: [
         TwoColumnWidget(
