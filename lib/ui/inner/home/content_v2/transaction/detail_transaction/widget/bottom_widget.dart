@@ -89,6 +89,7 @@ class BottomDetailWidget extends StatelessWidget {
                 ),
           ),
         ),
+        TwoColumnWidget(language!.paymentMethods!, text2: data!.paymentmethode),
         TwoColumnWidget(language!.contentPrice!, text2: System().currencyFormat(amount: data!.amount)),
         TwoColumnWidget(language!.adminFee!, text2: System().currencyFormat(amount: data!.adminFee)),
         TwoColumnWidget(language!.serviceFee!, text2: System().currencyFormat(amount: data!.serviceFee)),

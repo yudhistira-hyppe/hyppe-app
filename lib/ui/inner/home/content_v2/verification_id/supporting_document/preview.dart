@@ -88,7 +88,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
               ),
               GestureDetector(
                 onTap: () {
-                  Routing().moveAndPop(Routes.verificationIDStep6);
+                  notifier.onPickSupportedDocument(context, true);
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

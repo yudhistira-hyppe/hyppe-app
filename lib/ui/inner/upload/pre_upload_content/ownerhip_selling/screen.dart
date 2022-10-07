@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/custom_check_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
@@ -63,7 +65,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              notifier.certified
+              notifier.certified && SharedPreference().readStorage(SpKeys.settingMarketPlace) == 'true'
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -59,15 +61,10 @@ class RightItems extends StatelessWidget {
                     builder: (context, notifier, child) => _customIcon2(
                       context,
                       '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
-                      (data.insight?.likes ?? 0) > 0
-                          ? _system.formatterNumber((data.insight?.likes ?? 0))
-                          : value2.translate.like!,
-                      colorIcon: data.isLiked == true
-                          ? kHyppePrimary
-                          : kHyppeLightButtonText,
+                      (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like!,
+                      colorIcon: data.isLiked == true ? kHyppePrimary : kHyppeLightButtonText,
                       onTap: () {
-                        context.read<DiariesPlaylistNotifier>().forcePause =
-                            false;
+                        context.read<DiariesPlaylistNotifier>().forcePause = false;
                         notifier.likePost(context, data);
                       },
                     ),
@@ -89,10 +86,8 @@ class RightItems extends StatelessWidget {
                             // } else {
                             //   ShowBottomSheet.onShowSomethingWhenWrong(context);
                             // }
-                            context.read<DiariesPlaylistNotifier>().forcePause =
-                                true;
-                            ShowBottomSheet.onShowCommentV2(context,
-                                postID: data.postID);
+                            context.read<DiariesPlaylistNotifier>().forcePause = true;
+                            ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
                           },
                         )
                       : const SizedBox.shrink(),
@@ -103,14 +98,13 @@ class RightItems extends StatelessWidget {
                     colorIcon: kHyppeLightButtonText,
                     onTap: () => value.createdDynamicLink(context, data: data),
                   ),
-                  if (data.saleAmount! > 0)
+                  if (data.saleAmount! > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
                     _customIcon2(
                       context,
                       "${AssetPath.vectorPath}cart.svg",
                       value2.translate.buy!,
                       colorIcon: kHyppeLightButtonText,
-                      onTap: () =>
-                          ShowBottomSheet.onBuyContent(context, data: data),
+                      onTap: () => ShowBottomSheet.onBuyContent(context, data: data),
                     ),
                 ],
               ),
@@ -140,10 +134,7 @@ class RightItems extends StatelessWidget {
           fourPx,
           CustomTextWidget(
             textToDisplay: caption,
-            textStyle: Theme.of(context)
-                .textTheme
-                .caption!
-                .copyWith(color: kHyppeLightButtonText),
+            textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
           )
         ],
       ),

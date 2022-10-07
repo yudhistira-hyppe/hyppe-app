@@ -222,7 +222,11 @@ class ContentData extends HiveObject {
     isViewed = json['isViewed'] ?? false;
     tags = json['tags'] != null ? json['tags'].cast<String>() : [];
     allowComments = json['allowComments'] ?? false;
-    certified = json['certified'] ?? false;
+    certified = json['saleAmount'] != null
+        ? json['saleAmount'] > 0
+            ? true
+            : json['certified'] ?? false
+        : false;
     createdAt = json['createdAt'];
     insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight']) : null;
     mediaThumbUri = json['mediaThumbUri'];

@@ -74,6 +74,7 @@ class Env {
     UrlConstants.getSponsoredAds,
     UrlConstants.getInAppAds,
     UrlConstants.getInnteractives,
+    UrlConstants.settingApps,
   ];
 
   static final EnvData dev = EnvData(

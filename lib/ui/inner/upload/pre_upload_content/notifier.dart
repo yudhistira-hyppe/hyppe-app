@@ -519,9 +519,6 @@ class PreUploadContentNotifier with ChangeNotifier {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
-    print('hargaaa');
-    print(priceController.text.replaceAll(',', '').replaceAll('.', ''));
-
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
       context,
@@ -540,6 +537,9 @@ class PreUploadContentNotifier with ChangeNotifier {
       location: locationName == language.addLocation ? '' : locationName,
     );
     final fetch = notifier.postsFetch;
+
+    print('update update');
+    print(fetch.postsState);
 
     if (fetch.postsState == PostsState.updateContentsSuccess) {
       context.read<SelfProfileNotifier>().onUpdateSelfPostContent(

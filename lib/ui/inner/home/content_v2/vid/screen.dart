@@ -156,14 +156,28 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                       // ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                                        child: AspectRatio(
-                                          aspectRatio: 16 / 9,
-                                          child: VideoPlayerPage(
-                                            onDetail: false,
-                                            videoData: vidNotifier.vidData?[index],
-                                            key: ValueKey(vidNotifier.vidPostState),
-                                            afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
-                                          ),
+                                        child: Stack(
+                                          children: [
+                                            AspectRatio(
+                                              aspectRatio: 16 / 9,
+                                              child: VideoPlayerPage(
+                                                onDetail: false,
+                                                videoData: vidNotifier.vidData?[index],
+                                                key: ValueKey(vidNotifier.vidPostState),
+                                                afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
+                                              ),
+                                            ),
+                                            vidNotifier.vidData![index].saleAmount! > 0
+                                                ? const Positioned(
+                                                    top: 4,
+                                                    right: 4,
+                                                    child: CustomIconWidget(
+                                                      iconData: "${AssetPath.vectorPath}sale.svg",
+                                                      height: 20,
+                                                      defaultColor: false,
+                                                    ))
+                                                : Container()
+                                          ],
                                         ),
                                       ),
                                       vidData?.tagPeople!.length != 0 || vidData?.location != ''

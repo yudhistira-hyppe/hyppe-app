@@ -90,27 +90,27 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     }
   }
 
-  Future<AdsData> getPopUpAds() async{
+  Future<AdsData> getPopUpAds() async {
     var data = AdsData();
-    try{
+    try {
       final notifier = AdsDataBloc();
       await notifier.appAdsBloc(context);
       final fetch = notifier.adsDataFetch;
 
-      if(fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess){
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         data = fetch.data?.data;
       }
-    } catch (e){
+    } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
     return data;
   }
 
-  Future getAdsApsara() async{
+  Future getAdsApsara() async {
     final ads = await getPopUpAds();
     final id = ads.videoId;
-    if(id != null && ads.adsType != null){
+    if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
         await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');

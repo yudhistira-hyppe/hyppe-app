@@ -31,4 +31,6 @@ class SpKeys {
   static const String countAds = 'countAds';
   static const String setPin = 'setPin';
   static const String statusVerificationId = 'statusVerificationId';
+
+  static const String settingMarketPlace = 'settingMarketPlace';
 }

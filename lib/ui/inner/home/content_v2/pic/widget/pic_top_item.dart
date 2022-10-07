@@ -16,11 +16,10 @@ class PicTopItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         if (data!.saleAmount! > 0)
-          CustomIconWidget(
-          iconData: '${AssetPath.vectorPath}sale.svg',
-          defaultColor: false,
-        ),
-
+          const CustomIconWidget(
+            iconData: '${AssetPath.vectorPath}sale.svg',
+            defaultColor: false,
+          ),
       ],
     );
   }

@@ -33,6 +33,8 @@ enum UtilsState {
   deleteUserTagError,
   updateLangError,
   updateLangSuccess,
+  getSettingSuccess,
+  getSettingError,
 }
 
 class UtilsFetch {

@@ -313,4 +313,33 @@ class UtilsBlocV2 {
       withAlertMessage: false,
     );
   }
+
+  Future<void> settingAppsBloc(BuildContext context) async {
+    setUtilsFetch(UtilsFetch(UtilsState.loading));
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        print(onResult);
+        if (onResult.statusCode! > HTTP_CODE) {
+          setUtilsFetch(UtilsFetch(UtilsState.getSettingError));
+        } else {
+          setUtilsFetch(UtilsFetch(UtilsState.getSettingSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setUtilsFetch(UtilsFetch(UtilsState.getSettingError));
+        print(errorData);
+      },
+      host: UrlConstants.settingApps,
+      headers: {
+        "x-auth-token": token,
+        "x-auth-user": email,
+      },
+      withCheckConnection: false,
+      methodType: MethodType.get,
+      withAlertMessage: false,
+    );
+  }
 }

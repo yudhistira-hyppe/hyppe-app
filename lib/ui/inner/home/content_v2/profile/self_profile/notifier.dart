@@ -257,6 +257,7 @@ class SelfProfileNotifier with ChangeNotifier {
       bool? saleLike,
       bool? saleView}) {
     ContentData? _updatedData;
+
     switch (content) {
       case hyppeVid:
         if (user.vids != null) {
@@ -307,9 +308,8 @@ class SelfProfileNotifier with ChangeNotifier {
           );
         }
       }
+      notifyListeners();
     }
-
-    notifyListeners();
   }
 
   // create generic function that can be detect profile is have story or not

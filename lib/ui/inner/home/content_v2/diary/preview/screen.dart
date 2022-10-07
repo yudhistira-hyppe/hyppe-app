@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
 
@@ -97,12 +99,26 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                               );
                             }
 
-                            return CenterItemView(
-                              data: notifier.diaryData?[index],
-                              onTap: () {
-                                // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-                                context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
-                              },
+                            return Stack(
+                              children: [
+                                CenterItemView(
+                                  data: notifier.diaryData?[index],
+                                  onTap: () {
+                                    // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
+                                    context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
+                                  },
+                                ),
+                                notifier.diaryData![index].saleAmount! > 0
+                                    ? const Positioned(
+                                        top: 3,
+                                        right: 8,
+                                        child: CustomIconWidget(
+                                          iconData: "${AssetPath.vectorPath}sale.svg",
+                                          height: 20,
+                                          defaultColor: false,
+                                        ))
+                                    : Container()
+                              ],
                             );
                           },
                         ),

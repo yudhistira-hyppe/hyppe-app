@@ -84,7 +84,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
         child: GestureDetector(
           onDoubleTap: () => resetZooming(),
           child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(builder: (context, value, child) {
-
             return _notifier.listData != null
                 ? PageView.builder(
                     controller: _pageController,
@@ -162,7 +161,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                     function: () => ShowBottomSheet.onShowOptionContent(
                                                       context,
                                                       contentData: _notifier.listData![indexRoot],
-                                                      captionTitle: hyppeDiary,
+                                                      captionTitle: hyppePic,
                                                       // storyController: widget.storyController,
                                                       onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                                                     ),

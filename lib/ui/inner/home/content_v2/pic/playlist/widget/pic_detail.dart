@@ -155,7 +155,7 @@ class _PicDetailState extends State<PicDetail> {
                               function: () => ShowBottomSheet.onShowOptionContent(
                                 context,
                                 contentData: widget.arguments!,
-                                captionTitle: hyppeDiary,
+                                captionTitle: hyppePic,
                                 // storyController: widget.storyController,
                                 onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                               ),
