@@ -86,6 +86,15 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
             ),
             Row(
               children: [
+                widget.data!.saleAmount! > 0
+                    ? const Padding(
+                        padding: EdgeInsets.all(2.0),
+                        child: CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}sale.svg",
+                          defaultColor: false,
+                        ),
+                      )
+                    : const SizedBox(),
                 widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                     ? CustomBalloonWidget(
                         child: GestureDetector(

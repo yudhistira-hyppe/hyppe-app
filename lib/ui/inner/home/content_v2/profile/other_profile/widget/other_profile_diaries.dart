@@ -5,6 +5,7 @@ import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:provider/provider.dart';
@@ -26,14 +27,32 @@ class OtherProfileDiaries extends StatelessWidget {
                       onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index),
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                        child: CustomContentModeratedWidget(
-                          width: double.infinity,
-                          height: double.infinity,
-                          featureType: FeatureType.diary,
-                          isSafe: true, //notifier.postData!.data.listDiary[index].isSafe!,
-                          thumbnail: notifier.item1!.diaries![index].isApsara!
-                              ? notifier.item1!.diaries![index].mediaThumbEndPoint!
-                              : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint)!,
+                        child: Stack(
+                          children: [
+                            Center(
+                              child: CustomContentModeratedWidget(
+                                width: double.infinity,
+                                height: double.infinity,
+                                featureType: FeatureType.diary,
+                                isSafe: true, //notifier.postData!.data.listDiary[index].isSafe!,
+                                thumbnail: notifier.item1!.diaries![index].isApsara!
+                                    ? notifier.item1!.diaries![index].mediaThumbEndPoint!
+                                    : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint)!,
+                              ),
+                            ),
+                            notifier.item1!.diaries![index].saleAmount! > 0
+                                ? const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(2.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        height: 15,
+                                        defaultColor: false,
+                                      ),
+                                    ))
+                                : Container()
+                          ],
                         ),
                       ),
                     );

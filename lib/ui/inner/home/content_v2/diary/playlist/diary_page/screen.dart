@@ -114,7 +114,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   progressColor: kHyppeLightButtonText,
                   durationColor: kHyppeLightButtonText,
                   storyItems: _storyItems,
-                  onDouble: (){
+                  onDouble: () {
                     context.read<LikeNotifier>().likePost(context, widget.data!);
                   },
                   controller: _storyController,
@@ -135,7 +135,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     });
                   },
                   nextDebouncer: false,
-                  onComplete: () async{
+                  onComplete: () async {
                     await notifier.initAdsData(context);
                     context.incrementAdsCount();
                     // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
@@ -149,13 +149,13 @@ class _DiaryPageState extends State<DiaryPage> {
                     //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                     // }
                   },
-                  onEverySecond: (duration) async{
+                  onEverySecond: (duration) async {
                     final secondAds = secondOfAds(notifier.adsData);
                     print(' ZT secondAds : $secondAds');
                     print(' ZT secondVid : ${duration.inSeconds}');
                     print(' ZT URL : ${notifier.adsUrl}');
-                    if(duration.inSeconds == secondOfAds(notifier.adsData)){
-                      if(notifier.adsUrl.isNotEmpty){
+                    if (duration.inSeconds == secondOfAds(notifier.adsData)) {
+                      if (notifier.adsUrl.isNotEmpty) {
                         _storyController.pause();
                         await System().adsPopUp(context, notifier.adsData, notifier.adsUrl);
                         _storyController.play();
@@ -228,11 +228,11 @@ class _DiaryPageState extends State<DiaryPage> {
           );
   }
 
-  int secondOfAds(AdsData data){
+  int secondOfAds(AdsData data) {
     var result = 1;
     final mid = widget.data?.metadata?.midRoll ?? 0;
     final duration = widget.data?.metadata?.duration ?? 2;
-    switch(data.adsPlace){
+    switch (data.adsPlace) {
       case 'First':
         result = (widget.data?.metadata?.preRoll ?? 1) == 0 ? 1 : widget.data!.metadata!.preRoll!;
         break;

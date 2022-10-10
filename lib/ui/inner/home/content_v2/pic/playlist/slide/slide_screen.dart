@@ -113,47 +113,58 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       child: Padding(
                                         padding: const EdgeInsets.only(top: 8.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                CustomTextButton(
-                                                  onPressed: () {
-                                                    resetZooming();
-                                                    Routing().moveBack();
-                                                  },
-                                                  style: ButtonStyle(
-                                                    alignment: Alignment.topCenter,
-                                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  CustomTextButton(
+                                                    onPressed: () {
+                                                      resetZooming();
+                                                      Routing().moveBack();
+                                                    },
+                                                    style: ButtonStyle(
+                                                      alignment: Alignment.topCenter,
+                                                      padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                                    ),
+                                                    child: const DecoratedIconWidget(
+                                                      Icons.arrow_back_ios,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
-                                                  child: const DecoratedIconWidget(
-                                                    Icons.arrow_back_ios,
-                                                    color: Colors.white,
+                                                  ProfileComponent(
+                                                    isDetail: true,
+                                                    show: true,
+                                                    following: true,
+                                                    onFollow: () {},
+                                                    haveStory: false,
+                                                    onTapOnProfileImage: () => System().navigateToProfile(context, _notifier.listData![indexRoot].email!),
+                                                    spaceProfileAndId: eightPx,
+                                                    featureType: FeatureType.pic,
+                                                    username: _notifier.listData![indexRoot].username,
+                                                    isCelebrity: _notifier.listData![indexRoot].privacy?.isCelebrity,
+                                                    imageUrl: '${System().showUserPicture(_notifier.listData![indexRoot].avatar?.mediaEndpoint)}',
+                                                    createdAt: '${System().readTimestamp(
+                                                      DateTime.parse(_notifier.listData![indexRoot].createdAt!).millisecondsSinceEpoch,
+                                                      context,
+                                                      fullCaption: true,
+                                                    )}',
                                                   ),
-                                                ),
-                                                ProfileComponent(
-                                                  isDetail: true,
-                                                  show: true,
-                                                  following: true,
-                                                  onFollow: () {},
-                                                  haveStory: false,
-                                                  onTapOnProfileImage: () => System().navigateToProfile(context, _notifier.listData![indexRoot].email!),
-                                                  spaceProfileAndId: eightPx,
-                                                  featureType: FeatureType.pic,
-                                                  username: _notifier.listData![indexRoot].username,
-                                                  isCelebrity: _notifier.listData![indexRoot].privacy?.isCelebrity,
-                                                  imageUrl: '${System().showUserPicture(_notifier.listData![indexRoot].avatar?.mediaEndpoint)}',
-                                                  createdAt: '${System().readTimestamp(
-                                                    DateTime.parse(_notifier.listData![indexRoot].createdAt!).millisecondsSinceEpoch,
-                                                    context,
-                                                    fullCaption: true,
-                                                  )}',
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
+                                            _notifier.listData![indexRoot].saleAmount! > 0
+                                                ? const Padding(
+                                                    padding: EdgeInsets.only(top: 10.0),
+                                                    child: CustomIconWidget(
+                                                      iconData: "${AssetPath.vectorPath}sale.svg",
+                                                      defaultColor: false,
+                                                    ),
+                                                  )
+                                                : const SizedBox(),
                                             _notifier.listData![indexRoot].email == SharedPreference().readStorage(SpKeys.email)
                                                 ? _buildButtonV2(
                                                     context: context,

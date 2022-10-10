@@ -160,23 +160,16 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           children: [
                                             AspectRatio(
                                               aspectRatio: 16 / 9,
-                                              child: VideoPlayerPage(
-                                                onDetail: false,
-                                                videoData: vidNotifier.vidData?[index],
-                                                key: ValueKey(vidNotifier.vidPostState),
-                                                afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
+                                              child: Container(
+                                                color: Colors.black,
+                                                child: VideoPlayerPage(
+                                                  onDetail: false,
+                                                  videoData: vidNotifier.vidData?[index],
+                                                  key: ValueKey(vidNotifier.vidPostState),
+                                                  afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
+                                                ),
                                               ),
                                             ),
-                                            vidNotifier.vidData![index].saleAmount! > 0
-                                                ? const Positioned(
-                                                    top: 4,
-                                                    right: 4,
-                                                    child: CustomIconWidget(
-                                                      iconData: "${AssetPath.vectorPath}sale.svg",
-                                                      height: 20,
-                                                      defaultColor: false,
-                                                    ))
-                                                : Container()
                                           ],
                                         ),
                                       ),

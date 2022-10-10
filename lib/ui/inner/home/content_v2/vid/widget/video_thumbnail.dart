@@ -68,19 +68,35 @@ class VideoThumbnail extends StatelessWidget {
                 //   ),
                 // ),
                 Visibility(
-                  visible: videoData?.email == SharedPreference().readStorage(SpKeys.email),
-                  child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet.onShowOptionContent(
-                      context,
-                      contentData: videoData!,
-                      captionTitle: hyppeVid,
-                      onDetail: onDetail,
-                      onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
-                    ),
-                    child: const CustomIconWidget(
+                  visible: videoData!.saleAmount! > 0,
+                  child: Padding(
+                    padding: EdgeInsets.all(videoData?.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13),
+                    child: CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}sale.svg",
                       defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}more.svg',
-                      color: kHyppeLightButtonText,
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: videoData?.email == SharedPreference().readStorage(SpKeys.email),
+                  child: SizedBox(
+                    width: 30,
+                    child: CustomTextButton(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(right: 10)),
+                      ),
+                      onPressed: () => ShowBottomSheet.onShowOptionContent(
+                        context,
+                        contentData: videoData!,
+                        captionTitle: hyppeVid,
+                        onDetail: onDetail,
+                        onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                      ),
+                      child: const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}more.svg',
+                        color: kHyppeLightButtonText,
+                      ),
                     ),
                   ),
                 ),

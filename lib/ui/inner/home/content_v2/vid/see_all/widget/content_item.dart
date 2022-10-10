@@ -100,11 +100,16 @@ class ContentItem extends StatelessWidget {
                             twelvePx,
                             Stack(
                               children: [
-                                AspectRatio(
-                                  aspectRatio: 16 / 9,
-                                  child: ContentThumbnail(
-                                    vidData: data,
-                                    fn: () => notifier.navigateToHyppeVidDetail(context, data),
+                                Container(
+                                  color: Colors.black,
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: Center(
+                                      child: ContentThumbnail(
+                                        vidData: data,
+                                        fn: () => notifier.navigateToHyppeVidDetail(context, data),
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 data.saleAmount! > 0

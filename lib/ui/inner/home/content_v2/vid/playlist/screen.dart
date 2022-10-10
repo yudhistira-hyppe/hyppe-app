@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -54,9 +56,12 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                               children: [
                                 AspectRatio(
                                   aspectRatio: 16 / 9,
-                                  child: VideoPlayerPage(
-                                    videoData: notifier.data,
-                                    afterView: () => notifier.updateView(context),
+                                  child: Container(
+                                    color: Colors.black,
+                                    child: VideoPlayerPage(
+                                      videoData: notifier.data,
+                                      afterView: () => notifier.updateView(context),
+                                    ),
                                   ),
                                 ),
                                 Row(
@@ -73,13 +78,6 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                                         ),
                                       ),
                                     ),
-                                    // CustomTextButton(
-                                    //   onPressed: () => notifier.reportContent(context),
-                                    //   child: const DecoratedIconWidget(
-                                    //     Icons.more_vert,
-                                    //     size: 48 * 0.4,
-                                    //   ),
-                                    // ),
                                   ],
                                 ),
                               ],
