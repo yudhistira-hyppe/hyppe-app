@@ -24,7 +24,6 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   void initState() {
-    context.incrementAdsCount();
     Future.delayed(Duration.zero, () async{
       if (widget.url.isNotEmpty && widget.data.adsId != null) {
         await System().adsPopUp(context, widget.data, widget.url);
@@ -46,6 +45,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
           // imageUrl: picData.content[arguments].contentUrl,
           imageUrl: widget.contentData.isApsara! ? widget.contentData.mediaThumbUri : widget.contentData.fullThumbPath,
           imageBuilder: (ctx, imageProvider) {
+            ctx.incrementAdsCount();
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(image: imageProvider, fit: BoxFit.contain),

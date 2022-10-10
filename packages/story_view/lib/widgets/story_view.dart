@@ -589,6 +589,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     }
 
     _playbackSubscription = widget.controller.playbackNotifier.listen((playbackStatus) {
+      print('playbackStatus : ${playbackStatus}');
       switch (playbackStatus) {
         case PlaybackState.play:
           _removeNextHold();
@@ -642,6 +643,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
   @override
   void onBetterPlayerEventChange(event) {
+    print('betterPlayerEventType : ${event.betterPlayerEventType}');
     if (event.betterPlayerEventType == BetterPlayerEventType.bufferingStart) {
       _animationController?.stop(canceled: false);
       pauseTimer();
