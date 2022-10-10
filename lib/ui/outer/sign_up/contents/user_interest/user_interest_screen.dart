@@ -22,8 +22,8 @@ class UserInterestScreen extends StatefulWidget {
 class _UserInterestScreenState extends State<UserInterestScreen> {
   @override
   void initState() {
-      final notifier = Provider.of<UserInterestNotifier>(context, listen: false);
-      Future.delayed(Duration.zero, () => notifier.initUserInterest(context, widget.arguments));
+    final notifier = Provider.of<UserInterestNotifier>(context, listen: false);
+    Future.delayed(Duration.zero, () => notifier.initUserInterest(context, widget.arguments));
     super.initState();
   }
 

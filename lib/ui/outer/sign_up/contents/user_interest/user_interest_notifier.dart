@@ -50,6 +50,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   Future onTapInterestButton(BuildContext context, bool fromSetting, List<String> userInterested) async {
+    print('simpan kesuakan');
     if (_interestData.isNotEmpty) {
       if (fromSetting) {
         if (!listEquals(_interestData, userInterested)) {

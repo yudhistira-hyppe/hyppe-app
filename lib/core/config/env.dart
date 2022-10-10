@@ -76,6 +76,7 @@ class Env {
     UrlConstants.getInAppAds,
     UrlConstants.getInnteractives,
     UrlConstants.settingApps,
+    UrlConstants.updatepost,
   ];
 
   static final EnvData dev = EnvData(
