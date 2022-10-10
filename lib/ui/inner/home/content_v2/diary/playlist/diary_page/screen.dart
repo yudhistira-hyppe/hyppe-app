@@ -135,7 +135,9 @@ class _DiaryPageState extends State<DiaryPage> {
                     });
                   },
                   nextDebouncer: false,
-                  onComplete: () {
+                  onComplete: () async{
+                    await notifier.initAdsData(context);
+                    context.incrementAdsCount();
                     // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
                     // _storyController.next();
@@ -146,7 +148,6 @@ class _DiaryPageState extends State<DiaryPage> {
                     // if (isLastPage) {
                     //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                     // }
-                    context.incrementAdsCount();
                   },
                   onEverySecond: (duration) async{
                     final secondAds = secondOfAds(notifier.adsData);

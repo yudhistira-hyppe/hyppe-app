@@ -82,7 +82,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
         res.addAll(list);
       }else{
         if (reload) {
-          res = await contentsQuery.reload(context, isCache: true);
+          res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);
         }

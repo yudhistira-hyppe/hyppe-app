@@ -75,10 +75,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ////////////////////////////////////////////////////////
   void onUpdate() => notifyListeners();
 
-  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
-    _result = [];
-    String urlApsara = '';
-
+  Future initAdsData(BuildContext context) async{
     _adsUrl = '';
     final count = context.getAdsCount();
     String? urlAds;
@@ -97,6 +94,14 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if(urlAds != null){
       _adsUrl = urlAds;
     }
+  }
+
+  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
+    _result = [];
+    String urlApsara = '';
+
+    initAdsData(context);
+
     if (data.isApsara!) {
       await getVideoApsara(context, data.apsaraId!).then((value) {
         urlApsara = value;

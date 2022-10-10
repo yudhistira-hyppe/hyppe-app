@@ -61,7 +61,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
         res.addAll(list);
       }else{
         if (reload) {
-          res = await contentsQuery.reload(context, isCache: true);
+          res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);
         }

@@ -24,7 +24,7 @@ class PicCenterItem extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
-
+    print('mediaThumbEndPoint : ${data!.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}');
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Stack(
