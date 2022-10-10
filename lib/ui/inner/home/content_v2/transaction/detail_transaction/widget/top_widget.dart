@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/two_column_widget.dart';
 
 class TopDetailWidget extends StatelessWidget {
@@ -48,7 +51,19 @@ class TopDetailWidget extends StatelessWidget {
         ),
         TwoColumnWidget('Status', text2: data!.status),
         TwoColumnWidget(language!.time, text2: System().dateFormatter(data!.time!, 4)),
-        TwoColumnWidget('No Virtual Account', text2: data!.nova),
+        TwoColumnWidget(
+          'No Virtual Account',
+          text2: data!.nova,
+          widget: const CustomIconWidget(
+            iconData: "${AssetPath.vectorPath}copy-link.svg",
+            defaultColor: false,
+            height: 15,
+          ),
+          function: () {
+            System().copyToClipboard(data!.nova!);
+            ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
+          },
+        ),
         TwoColumnWidget('Order ID', text2: data!.id),
       ],
     );

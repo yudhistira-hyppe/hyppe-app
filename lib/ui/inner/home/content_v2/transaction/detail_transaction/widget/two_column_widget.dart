@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class TwoColumnWidget extends StatelessWidget {
   final String? text1;
   final String? text2;
   final TextStyle? textStyle;
-  const TwoColumnWidget(this.text1, {Key? key, this.text2, this.textStyle}) : super(key: key);
+  final Widget? widget;
+  final Function? function;
+  const TwoColumnWidget(this.text1, {Key? key, this.text2, this.textStyle, this.widget = const SizedBox(), this.function}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +21,17 @@ class TwoColumnWidget extends StatelessWidget {
             textStyle: Theme.of(context).textTheme.caption!,
             textAlign: TextAlign.start,
           ),
-          CustomTextWidget(
-            textToDisplay: text2 ?? '',
-            textStyle: textStyle ?? Theme.of(context).textTheme.caption!,
+          InkWell(
+            onTap: function as void Function()?,
+            child: Row(
+              children: [
+                widget!,
+                CustomTextWidget(
+                  textToDisplay: text2 ?? '',
+                  textStyle: textStyle ?? Theme.of(context).textTheme.caption!,
+                ),
+              ],
+            ),
           ),
         ],
       ),
