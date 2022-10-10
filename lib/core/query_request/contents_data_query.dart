@@ -79,7 +79,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
   }
 
   @override
-  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false, bool isCache = false}) async {
+  Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
@@ -93,61 +93,34 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
     // page = 0;
     List<ContentData>? res;
-    if (!isCache) {
-      try {
-        final notifier = PostsBloc();
-        await notifier.getContentsBlocV2(context,
-            postID: postID,
-            pageRows: limit,
-            pageNumber: page,
-            type: featureType!,
-            searchText: searchText,
-            onlyMyData: onlyMyData,
-            visibility: notifierMain.visibilty,
-            myContent: myContent,
-            otherContent: otherContent);
-        final fetch = notifier.postsFetch;
+    try {
+      final notifier = PostsBloc();
+      await notifier.getContentsBlocV2(context,
+          postID: postID,
+          pageRows: limit,
+          pageNumber: page,
+          type: featureType!,
+          searchText: searchText,
+          onlyMyData: onlyMyData,
+          visibility: notifierMain.visibilty,
+          myContent: myContent,
+          otherContent: otherContent);
+      final fetch = notifier.postsFetch;
 
-        res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+      res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
 
-        if (featureType == FeatureType.vid) {
-          CheckVersion().check(context, fetch.version);
-        }
-        hasNext = res?.length == limit;
-        if (res != null) page++;
-      } catch (e) {
-        '$e'.logger();
-        rethrow;
-      } finally {
-        loading = false;
+      if (featureType == FeatureType.vid) {
+        CheckVersion().check(context, fetch.version);
       }
-
-      return res ?? [];
-    } else {
-      try {
-        final data = box.get(notifierMain.visibilty);
-        if (featureType == FeatureType.story) {
-          res = data?.story ?? [];
-        } else if (featureType == FeatureType.vid) {
-          res = data?.video ?? [];
-        } else if (featureType == FeatureType.diary) {
-          res = data?.diary ?? [];
-        } else if (featureType == FeatureType.pic) {
-          res = data?.pict ?? [];
-        } else {
-          res = [];
-        }
-
-        hasNext = res.length == limit;
-        page++;
-      } catch (e) {
-        '$e'.logger();
-        rethrow;
-      } finally {
-        loading = false;
-      }
-
-      return res;
+      hasNext = res?.length == limit;
+      if (res != null) page++;
+    } catch (e) {
+      '$e'.logger();
+      rethrow;
+    } finally {
+      loading = false;
     }
+
+    return res ?? [];
   }
 }

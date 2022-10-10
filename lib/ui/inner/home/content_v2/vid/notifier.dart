@@ -92,7 +92,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       }else{
         if (reload) {
           print('test17');
-          res = await contentsQuery.reload(context, isCache: true);
+          res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);
         }
