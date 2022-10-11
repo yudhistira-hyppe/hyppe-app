@@ -627,6 +627,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
 
 
+
   @override
   void onBetterPlayerEventChange(event) {
 
@@ -1001,16 +1002,18 @@ class PageBarState extends State<PageBar> {
     spacing = (count > 15) ? 1 : ((count > 10) ? 2 : 4);
 
     widget.animation!.addListener(() {
-      setState(() {});
+      if(mounted){
+        setState(() {});
+      }
     });
   }
 
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
+  // @override
+  // void setState(fn) {
+  //   if (mounted) {
+  //     super.setState(fn);
+  //   }
+  // }
 
   bool isPlaying(PageData page) {
     return widget.pages.firstWhereOrNull((it) => !it.shown) == page;
