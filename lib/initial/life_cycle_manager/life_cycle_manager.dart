@@ -79,7 +79,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       if (_userToken != null) {
         try {
           await activity.activityAwake(context);
-          await getAdsApsara();
+          final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
+          if(isOnHomeScreen){
+            print("isOnHomeScreen hit ads");
+            await getAdsApsara();
+          }
+
           //cek version aplikasi
           await CheckVersion().check(context, activity.deviceFetch.version);
         } catch (e) {

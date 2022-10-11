@@ -13,6 +13,7 @@ class SpKeys {
   static const String userToken = "userToken";
   static const String isLoginSosmed = 'false';
   static const String lastHitPost = "lastHitPost";
+  static const String isOnHomeScreen = "isOnHomeScreen";
 
   static const String isoCode = "isoCode";
   static const String themeData = 'themeData';
