@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_check_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_switch_button.dart';
@@ -244,6 +245,13 @@ class OwnershipSellingScreen extends StatelessWidget {
                     if (notifier.toSell && notifier.priceController.text == '') {
                       return null;
                     } else {
+                      final harga = num.parse(notifier.priceController.text.replaceAll(',', '').replaceAll('.', ''));
+                      if (harga < 50000) {
+                        return ShowBottomSheet().onShowColouredSheet(_, 'Harga minimal Rp. 50.000', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                      }
+                      if (harga > 50000000) {
+                        return ShowBottomSheet().onShowColouredSheet(_, 'Harga maximal Rp. 50.000.000', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                      }
                       notifier.submitOwnership();
                     }
                   }

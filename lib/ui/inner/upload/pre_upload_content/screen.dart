@@ -1,6 +1,8 @@
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -109,7 +111,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         privacyWidget(textTheme, notifier),
                         _buildDivider(context),
                         eightPx,
-                        ownershipSellingWidget(textTheme, notifier),
+                        notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                         notifier.certified ? detailTotalPrice(notifier) : Container(),
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
 

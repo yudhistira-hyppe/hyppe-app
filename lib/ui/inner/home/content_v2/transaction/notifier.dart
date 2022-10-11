@@ -328,8 +328,7 @@ class TransactionNotifier extends ChangeNotifier {
     final langIso = SharedPreference().readStorage(SpKeys.isoCode);
     bool connect = await System().checkConnections();
     if (connect) {
-      // final email = SharedPreference().readStorage(SpKeys.email);
-      const email = 'freeman27@getnada.com';
+      final email = SharedPreference().readStorage(SpKeys.email);
       final Map params = {"email": email, "noRek": noBankAccount.text, "bankcode": bankcode, "nama": accountOwnerName.text, "language": langIso};
 
       final notifier = TransactionBloc();
