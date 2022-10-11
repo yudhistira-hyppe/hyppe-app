@@ -152,9 +152,10 @@ class _DiaryPageState extends State<DiaryPage> {
                   onEverySecond: (duration) async {
                     final secondAds = secondOfAds(notifier.adsData);
                     print(' ZT secondAds : $secondAds');
-                    print(' ZT secondVid : ${duration.inSeconds}');
+                    print(' ZT secondVid : ${duration}');
                     print(' ZT URL : ${notifier.adsUrl}');
-                    if (duration.inSeconds == secondOfAds(notifier.adsData)) {
+
+                    if (duration == secondOfAds(notifier.adsData)) {
                       if (notifier.adsUrl.isNotEmpty) {
                         _storyController.pause();
                         await System().adsPopUp(context, notifier.adsData, notifier.adsUrl);

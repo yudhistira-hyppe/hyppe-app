@@ -29,8 +29,8 @@ class CenterItemView extends StatelessWidget {
       child: CustomBaseCacheImage(
         widthPlaceHolder: 112,
         heightPlaceHolder: 40,
-        imageUrl: data!.isApsara!
-            ? data!.mediaThumbEndPoint!
+        imageUrl: (data?.isApsara ?? false)
+            ? "${data?.mediaThumbEndPoint}"
             : "${data?.fullThumbPath}",
         imageBuilder: (context, imageProvider) => Container(
           width: _scaling,

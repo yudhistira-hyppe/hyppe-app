@@ -121,12 +121,13 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
             storyItems: _storyItems,
             controller: _storyController,
             progressPosition: ProgressPosition.top,
+            isAds: true,
             onStoryShow: (storyItem) {
 
             },
             onEverySecond: (dur){
 
-              'second of video ${dur.inSeconds}'.logger();
+              'second of video $dur'.logger();
               setState(() {
                 secondsSkip -= 1;
                 secondsVideo += 1;
