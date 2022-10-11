@@ -611,6 +611,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     if(widget.isAds){
       print('pause_3');
       pauseTimer(isReset: true);
+    }else{
+      pauseTimer();
     }
 
     _clearDebouncer();
