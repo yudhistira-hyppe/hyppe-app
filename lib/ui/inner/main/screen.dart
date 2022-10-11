@@ -7,6 +7,11 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/main/widget/notification_circle.dart';
 
+import '../../../core/constants/shared_preference_keys.dart';
+import '../../../core/services/route_observer_service.dart';
+import '../../../core/services/shared_preference.dart';
+import '../../constant/widget/after_first_layout_mixin.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
@@ -14,7 +19,7 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayoutMixin {
   late MainNotifier _mainNotifier;
 
   @override
@@ -22,6 +27,49 @@ class _MainScreenState extends State<MainScreen> {
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
     _mainNotifier.initMain(context);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver
+        .subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void didPop() {
+    print('didPop isOnHomeScreen false');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    super.didPop();
+  }
+
+  @override
+  void didPush() {
+    print('didPush isOnHomeScreen true');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    super.didPush();
+  }
+
+  @override
+  void didPopNext() {
+    print('didPopNext isOnHomeScreen true');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    print('didPushNext isOnHomeScreen false');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    super.didPushNext();
+  }
+
+  @override
+  void dispose() {
+    CustomRouteObserver.routeObserver.unsubscribe(this);
+    print('isOnHomeScreen false');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    super.dispose();
   }
 
   @override
@@ -100,5 +148,10 @@ class _MainScreenState extends State<MainScreen> {
         );
       },
     );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 }
