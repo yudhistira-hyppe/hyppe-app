@@ -398,7 +398,7 @@ class StoryView extends StatefulWidget {
   /// each time the full story completes when [repeat] is set to `true`.
   final VoidCallback? onComplete;
 
-  final Function(Duration)? onEverySecond;
+  final Function(int)? onEverySecond;
 
   /// Callback for when a vertical swipe gesture is detected. If you do not
   /// want to listen to such event, do not provide it. For instance,
@@ -414,6 +414,8 @@ class StoryView extends StatefulWidget {
 
   /// Should the story be repeated forever?
   final bool repeat;
+
+  final bool isAds;
 
   /// If you would like to display the story as full-page, then set this to
   /// `false`. But in case you would display this as part of a page (eg. in
@@ -441,6 +443,7 @@ class StoryView extends StatefulWidget {
     this.onStoryShow,
     this.onEverySecond,
     this.progressPosition = ProgressPosition.top,
+    this.isAds = false,
     this.repeat = false,
     this.inline = false,
     this.onVerticalSwipeComplete,
@@ -469,8 +472,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   bool statusPlay = false;
   bool statusPlayOnPress = false;
 
-  Duration? duration = Duration();
-  Timer? timer;
+  // Duration? durationAds = Duration();
+  int durationAds = 0;
+  Timer? timerAds;
 
   // StoryItem? get _currentStory => widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => null);
   StoryItem? get _currentStory => widget.storyItems.firstWhereOrNull((it) => !it!.shown);
@@ -485,64 +489,44 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     }
   }
 
-  // Future _loadVideoFileDuration(String videoFile) async {
-  //   _isInit = true;
-  //   try {
-  //     _videoPlayerController = new VideoPlayerController.network(videoFile);
-  //     await _videoPlayerController!.initialize().then((_) {
-  //       setState(() {
-  //         _fileVideoDuration = _videoPlayerController!.value.duration.inMilliseconds;
-  //         _isInit = false;
-  //         print('Duration is ${_videoPlayerController!.value.duration}');
-  //       });
-  //     });
-
-  //     // check video is initialize or not, if not set [_isInit] to null
-  //     if (!_videoPlayerController!.value.isInitialized) _isInit = null;
-  //   } catch (e) {
-  //     setState(() {
-  //       _isInit = null;
-  //     });
-  //   } finally {
-  //     _videoPlayerController?.dispose();
-  //     _videoPlayerController = null;
-  //   }
-  // }
-
   void reset(){
     setState(() =>
-    duration = null);
+    durationAds = 0);
   }
 
   void playTimer(){
-    timer = Timer.periodic(Duration(seconds: 1), (real){
-      addTimer();
+    timerAds = Timer.periodic(const Duration(seconds: 1), (timer){
+      if(timerAds?.isActive ?? false){
+        print('status periodic $durationAds');
+      }
+
+      setState(() {
+        if(timerAds?.isActive ?? false){
+          final seconds = durationAds + 1;
+          if (seconds > (_currentStory?.duration.inSeconds ?? 15)){
+            durationAds = 0;
+          } else{
+            durationAds = seconds;
+            if(widget.onEverySecond != null){
+              widget.onEverySecond!(durationAds);
+            }
+          }
+          timerAds = timer;
+        }
+      });
     });
   }
 
-  void addTimer(){
-    if(duration != null){
-      setState(() {
-        final seconds = duration!.inSeconds + 1;
-        if (seconds < 0){
-          timer?.cancel();
-        } else{
-          duration = Duration(seconds: seconds);
-          if(widget.onEverySecond != null){
-            widget.onEverySecond!(duration!);
-          }
-        }
-      });
-    }
 
-  }
 
   void pauseTimer({bool isReset = false}){
     if(isReset){
       reset();
     }
+    setState(() {
+      timerAds?.cancel();
+    });
 
-    setState(() => timer?.cancel());
   }
 
   @override
@@ -590,19 +574,20 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     _playbackSubscription = widget.controller.playbackNotifier.listen((playbackStatus) {
       print('playbackStatus : ${playbackStatus}');
+
       switch (playbackStatus) {
         case PlaybackState.play:
           _removeNextHold();
 
-          playTimer();
           _animationController?.forward();
           statusPlay = true;
           break;
 
         case PlaybackState.pause:
+          print('pause_2');
+          pauseTimer();
           _holdNext(); // then pause animation
           _animationController?.stop(canceled: false);
-          pauseTimer();
           statusPlay = false;
           break;
 
@@ -623,7 +608,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
   @override
   void dispose() {
-    pauseTimer(isReset: true);
+    if(widget.isAds){
+      print('pause_3');
+      pauseTimer(isReset: true);
+    }
+
     _clearDebouncer();
 
     _animationController?.dispose();
@@ -634,23 +623,28 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     super.dispose();
   }
 
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
+
 
   @override
   void onBetterPlayerEventChange(event) {
-    print('betterPlayerEventType : ${event.betterPlayerEventType}');
+
     if (event.betterPlayerEventType == BetterPlayerEventType.bufferingStart) {
+      // pauseTimer();
       _animationController?.stop(canceled: false);
-      pauseTimer();
       setState(() {});
     } else if (event.betterPlayerEventType == BetterPlayerEventType.bufferingEnd) {
+
       _animationController?.forward();
       setState(() {});
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.play){
+      final isRunning = timerAds == null ? false : timerAds!.isActive;
+      if(isRunning){
+        pauseTimer();
+      }else{
+        playTimer();
+      }
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.progress){
+      print('betterPlayerEventType : ${event.betterPlayerEventType}');
     }
   }
 
@@ -723,6 +717,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     if (widget.onComplete != null) {
       widget.controller.pause();
       widget.onComplete!();
+      print('pause_1');
       pauseTimer(isReset: true);
     }
 
