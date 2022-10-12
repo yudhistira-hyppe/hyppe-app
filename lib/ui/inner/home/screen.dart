@@ -45,14 +45,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     super.didPop();
   }
 
-  @override
-  void didPush() {
-    Future.delayed(Duration(seconds: 1), (){
-      print('didPush isOnHomeScreen true');
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
-    });
-    super.didPush();
-  }
+  // @override
+  // void didPush() {
+  //   Future.delayed(Duration(seconds: 1), (){
+  //     print('didPush isOnHomeScreen ${!SharedPreference().readStorage(SpKeys.isOnHomeScreen)}');
+  //     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, !SharedPreference().readStorage(SpKeys.isOnHomeScreen));
+  //   });
+  //   super.didPush();
+  // }
 
   @override
   void didPopNext() {

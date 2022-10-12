@@ -566,6 +566,7 @@ class LocalizationModelV2 {
   String? youWillDelete;
   String? deletedBankAccount;
   String? totalIncome;
+  String? totalExpenditure;
   String? withdrawalMoney;
   String? withdrawalAmount;
   String? fromBalance;
@@ -1235,6 +1236,7 @@ class LocalizationModelV2 {
     this.youWillDelete,
     this.deletedBankAccount,
     this.totalIncome,
+    this.totalExpenditure,
     this.withdrawalMoney,
     this.withdrawalAmount,
     this.fromBalance,
@@ -1922,6 +1924,7 @@ class LocalizationModelV2 {
     youWillDelete = json['youWillDelete'];
     deletedBankAccount = json['deletedBankAccount'];
     totalIncome = json['totalIncome'];
+    totalExpenditure = json['totalExpenditure'];
     withdrawalMoney = json['withdrawalMoney'];
     withdrawalAmount = json['withdrawalAmount'];
     fromBalance = json['fromBalance'];
