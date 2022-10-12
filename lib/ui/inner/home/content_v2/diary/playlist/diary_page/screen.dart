@@ -158,7 +158,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     if (duration == secondOfAds(notifier.adsData)) {
                       if (notifier.adsUrl.isNotEmpty) {
                         _storyController.pause();
-                        await System().adsPopUp(context, notifier.adsData, notifier.adsUrl);
+                        await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
                         _storyController.play();
                       }
                     }
@@ -230,18 +230,18 @@ class _DiaryPageState extends State<DiaryPage> {
   }
 
   int secondOfAds(AdsData data) {
-    var result = 1;
-    final mid = widget.data?.metadata?.midRoll ?? 0;
+    var result = 2;
+    final mid = widget.data?.metadata?.midRoll ?? 2;
     final duration = widget.data?.metadata?.duration ?? 2;
     switch (data.adsPlace) {
       case 'First':
-        result = (widget.data?.metadata?.preRoll ?? 1) == 0 ? 1 : widget.data!.metadata!.preRoll!;
+        result = ((widget.data?.metadata?.preRoll ?? 0) == 0) ? 2 : (widget.data?.metadata?.preRoll ?? 1) == 1 ? widget.data!.metadata!.preRoll! + 1: widget.data!.metadata!.preRoll!;
         break;
       case 'Mid':
-        result = mid != 0 ? 0 : (duration / 2).toInt();
+        result = mid != 0 ? mid : (duration / 2).toInt();
         break;
       case 'End':
-        result = (widget.data?.metadata?.postRoll ?? 0) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;
+        result = (widget.data?.metadata?.postRoll ?? 2) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;
         break;
       default:
         result = 1;
