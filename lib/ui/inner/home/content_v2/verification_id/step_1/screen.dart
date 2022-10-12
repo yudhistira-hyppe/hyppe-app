@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/eula.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class VerificationIDStep1 extends StatefulWidget {
   const VerificationIDStep1({Key? key}) : super(key: key);
@@ -24,7 +27,6 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
   void initState() {
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
     ntfr.clearAllTempData();
-
     super.initState();
   }
 
@@ -44,25 +46,31 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.idVerification!,
-            textStyle:
-                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
-        body: Container(
-            child: Column(children: <Widget>[
-          Expanded(
-            child: InAppWebView(
-              initialOptions: InAppWebViewGroupOptions(
-                  crossPlatform: InAppWebViewOptions(supportZoom: false)),
-              initialUrlRequest: URLRequest(
-                  url: Uri.parse("http://localhost:8080/assets/eula.html")),
-              onWebViewCreated: (controller) {},
-              onLoadStart: (controller, url) {},
-              onLoadStop: (controller, url) {},
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
+            Html(
+              data: eulaHtml,
             ),
-          )
-        ])),
+            twentyFourPx,
+            twentyFourPx,
+            twentyFourPx,
+            twentyFourPx,
+
+            // Expanded(
+            //   child: InAppWebView(
+            //     initialOptions: InAppWebViewGroupOptions(crossPlatform: InAppWebViewOptions(supportZoom: false)),
+            //     initialUrlRequest: URLRequest(url: Uri.parse("http://localhost:8080/assets/eula.html")),
+            //     onWebViewCreated: (controller) {},
+            //     onLoadStart: (controller, url) {},
+            //     onLoadStop: (controller, url) {},
+            //   ),
+            // )
+          ]),
+        ),
         floatingActionButton: Container(
           height: 140 * SizeConfig.scaleDiagonal,
           padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
@@ -74,30 +82,23 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                 onTap: () => Routing().moveBack(),
                 child: Text(
                   notifier.language.cancel!,
-                  style: textTheme.titleMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.primaryVariant),
+                  style: textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                 ),
               ),
               const SizedBox(height: 16),
               CustomElevatedButton(
                 width: SizeConfig.screenWidth,
                 height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () =>
-                    Routing().moveAndPop(Routes.verificationIDStep2),
+                function: () => Routing().moveAndPop(Routes.verificationIDStep2),
                 child: CustomTextWidget(
                   textToDisplay: notifier.language.agreeAndContinue!,
-                  textStyle:
-                      textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
                 buttonStyle: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  shadowColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
+                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                 ),
               ),
               const SizedBox(height: 16),

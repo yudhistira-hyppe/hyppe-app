@@ -596,29 +596,29 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   void clearAllTempData() {
-    realName = "";
-    imagePath = "";
-    selfiePath = "";
-    scannedText = "";
-    idCardNumber = "";
-    idCardName = "";
-    idCardDateBirth = "";
-    idCardPlaceBirth = "";
-    genderController.clear();
-    realNameController.clear();
-    birtDateController.clear();
-    birtPlaceController.clear();
-    acceptTos = false;
-    step5CanNext = false;
-    selectedBirthDate = DateTime(1990, 1, 1, 0, 0);
-    pickedSupportingDocs = [];
+    _realName = "";
+    _imagePath = "";
+    _selfiePath = "";
+    _scannedText = "";
+    _idCardNumber = "";
+    _idCardName = "";
+    _idCardDateBirth = "";
+    _idCardPlaceBirth = "";
+    _genderController.clear();
+    _realNameController.clear();
+    _birtDateController.clear();
+    _birtPlaceController.clear();
+    _acceptTos = false;
+    _step5CanNext = false;
+    _selectedBirthDate = DateTime(1990, 1, 1, 0, 0);
+    _pickedSupportingDocs = [];
 
     // clear all error
-    errorName = "";
-    errorKtp = "";
-    errorGender = "";
-    errorPlaceBirth = "";
-    errorDateBirth = "";
+    _errorName = "";
+    _errorKtp = "";
+    _errorGender = "";
+    _errorPlaceBirth = "";
+    _errorDateBirth = "";
     _errorGender = "";
     notifyListeners();
   }
