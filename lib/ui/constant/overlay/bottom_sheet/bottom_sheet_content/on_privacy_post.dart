@@ -41,7 +41,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
     // privacy = ["${_language.translate.public}", "${_language.translate.friends}", "${_language.translate.onlyMe}"];
     privacy = [
       {"title": "${_language.translate.public}", "subtitle": '${_language.translate.anyoneCanView}', "icon": 'globe.svg', 'code': 'PUBLIC'},
-      {"title": "${_language.translate.friends}", "subtitle": '${_language.translate.onlyFriendsCanView}', "icon": 'friend.svg', 'code': 'FRIEND'},
+      // {"title": "${_language.translate.friends}", "subtitle": '${_language.translate.onlyFriendsCanView}', "icon": 'friend.svg', 'code': 'FRIEND'},
       {"title": "${_language.translate.onlyMe}", "subtitle": '${_language.translate.onlyYouCanView}', "icon": 'person.svg', 'code': 'PRIVATE'},
     ];
   }

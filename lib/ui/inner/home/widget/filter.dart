@@ -35,7 +35,7 @@ class _FilterLandingState extends State<FilterLanding> {
     return Consumer2<LikeNotifier, TranslateNotifierV2>(builder: (context, notifier, transNotifier, child) {
       filterList = [
         {"id": '1', 'name': "${transNotifier.translate.all}", 'code': 'PUBLIC'},
-        {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
+        // {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
         {"id": '3', 'name': "${transNotifier.translate.following}", 'code': 'FOLLOWING'},
         {"id": '4', 'name': "${transNotifier.translate.onlyMe}", 'code': 'PRIVATE'},
       ];
