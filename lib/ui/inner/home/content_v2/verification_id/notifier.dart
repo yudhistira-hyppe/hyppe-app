@@ -451,6 +451,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   void onPickSupportedDocument(BuildContext context, mounted) async {
     isLoading = true;
+    print('isOnHomeScreen false');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     try {
       await System().getLocalMedia(featureType: FeatureType.other, context: context).then((value) async {
         debugPrint('Pick => ' + value.toString());
@@ -651,6 +653,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
 
     if (error == 0) {
+      print('isOnHomeScreen false');
+      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
       Routing().moveAndPop(Routes.verificationIDStep6);
     }
   }

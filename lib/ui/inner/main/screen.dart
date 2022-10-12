@@ -45,7 +45,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPush() {
-    Future.delayed(Duration(seconds: 3), (){
+    Future.delayed(Duration(seconds: 1), (){
       print('didPush isOnHomeScreen true');
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
     });
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPopNext() {
-    Future.delayed(Duration(seconds: 3), (){
+    Future.delayed(Duration(seconds: 1), (){
       print('didPopNext isOnHomeScreen true');
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
     });
