@@ -244,7 +244,7 @@ class _DiaryPageState extends State<DiaryPage> {
         result = (widget.data?.metadata?.postRoll ?? 2) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;
         break;
       default:
-        result = 1;
+        result = 2;
         break;
     }
     return result;

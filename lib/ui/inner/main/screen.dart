@@ -45,15 +45,19 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPush() {
-    print('didPush isOnHomeScreen true');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    Future.delayed(Duration(seconds: 3), (){
+      print('didPush isOnHomeScreen true');
+      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    });
     super.didPush();
   }
 
   @override
   void didPopNext() {
-    print('didPopNext isOnHomeScreen true');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    Future.delayed(Duration(seconds: 3), (){
+      print('didPopNext isOnHomeScreen true');
+      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    });
     super.didPopNext();
   }
 
@@ -67,8 +71,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
-    print('isOnHomeScreen false');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    // print('isOnHomeScreen false');
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.dispose();
   }
 
@@ -96,6 +100,8 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
                     notifier.pageIndex = index;
                   } else {
                     notifier.onShowPostContent(context);
+                    print('onShowPostContent isOnHomeScreen false');
+                    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
                   }
                 });
               },
