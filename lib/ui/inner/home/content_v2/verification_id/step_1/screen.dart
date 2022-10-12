@@ -5,7 +5,6 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -71,42 +70,47 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
             // )
           ]),
         ),
-        floatingActionButton: Container(
-          height: 140 * SizeConfig.scaleDiagonal,
-          padding: const EdgeInsets.only(top: 20, left: 16, right: 16),
-          color: Theme.of(context).backgroundColor,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () => Routing().moveBack(),
-                child: Text(
-                  notifier.language.cancel!,
-                  style: textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                ),
+        bottomSheet: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 120 * SizeConfig.scaleDiagonal,
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              color: Theme.of(context).backgroundColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () => Routing().moveBack(),
+                    child: Text(
+                      notifier.language.cancel!,
+                      style: textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  CustomElevatedButton(
+                    width: SizeConfig.screenWidth,
+                    height: 44.0 * SizeConfig.scaleDiagonal,
+                    function: () => Routing().moveAndPop(Routes.verificationIDStep2),
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.language.agreeAndContinue!,
+                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    ),
+                    buttonStyle: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
               ),
-              const SizedBox(height: 16),
-              CustomElevatedButton(
-                width: SizeConfig.screenWidth,
-                height: 44.0 * SizeConfig.scaleDiagonal,
-                function: () => Routing().moveAndPop(Routes.verificationIDStep2),
-                child: CustomTextWidget(
-                  textToDisplay: notifier.language.agreeAndContinue!,
-                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                ),
-                buttonStyle: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        resizeToAvoidBottomInset: true,
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // resizeToAvoidBottomInset: true,
       ),
     );
   }
