@@ -290,14 +290,14 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future adsPopUp(BuildContext context, AdsData data, String url) async {
+  static Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
       barrierDismissible: true,
       transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(data: data, urlAds: url,),
+      pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(data: data, urlAds: url, isSponsored: isSponsored,),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);

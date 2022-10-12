@@ -577,6 +577,12 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
       switch (playbackStatus) {
         case PlaybackState.play:
+          final isRunning = timerAds == null ? false : timerAds!.isActive;
+          if(isRunning){
+            pauseTimer();
+          }else{
+            playTimer();
+          }
           _removeNextHold();
 
           _animationController?.forward();
@@ -625,8 +631,12 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     super.dispose();
   }
 
-
-
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   void onBetterPlayerEventChange(event) {
@@ -639,15 +649,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
       _animationController?.forward();
       setState(() {});
-    } else if (event.betterPlayerEventType == BetterPlayerEventType.play){
-      final isRunning = timerAds == null ? false : timerAds!.isActive;
-      if(isRunning){
-        pauseTimer();
-      }else{
-        playTimer();
-      }
-    } else if (event.betterPlayerEventType == BetterPlayerEventType.progress){
-      print('betterPlayerEventType : ${event.betterPlayerEventType}');
     }
   }
 
@@ -1008,12 +1009,12 @@ class PageBarState extends State<PageBar> {
     });
   }
 
-  // @override
-  // void setState(fn) {
-  //   if (mounted) {
-  //     super.setState(fn);
-  //   }
-  // }
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   bool isPlaying(PageData page) {
     return widget.pages.firstWhereOrNull((it) => !it.shown) == page;

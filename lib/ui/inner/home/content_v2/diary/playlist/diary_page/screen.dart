@@ -158,7 +158,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     if (duration == secondOfAds(notifier.adsData)) {
                       if (notifier.adsUrl.isNotEmpty) {
                         _storyController.pause();
-                        await System().adsPopUp(context, notifier.adsData, notifier.adsUrl);
+                        await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
                         _storyController.play();
                       }
                     }
@@ -238,7 +238,7 @@ class _DiaryPageState extends State<DiaryPage> {
         result = (widget.data?.metadata?.preRoll ?? 1) == 0 ? 1 : widget.data!.metadata!.preRoll!;
         break;
       case 'Mid':
-        result = mid != 0 ? 0 : (duration / 2).toInt();
+        result = mid != 0 ? mid : (duration / 2).toInt();
         break;
       case 'End':
         result = (widget.data?.metadata?.postRoll ?? 0) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;

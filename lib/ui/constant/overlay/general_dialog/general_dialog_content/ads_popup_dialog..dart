@@ -22,8 +22,9 @@ import '../../../widget/custom_cache_image.dart';
 class AdsPopUpDialog extends StatefulWidget {
   final AdsData data;
   final String urlAds;
+  final bool isSponsored;
 
-  const AdsPopUpDialog({Key? key, required this.data, required this.urlAds}) : super(key: key);
+  const AdsPopUpDialog({Key? key, required this.data, required this.urlAds, required this.isSponsored}) : super(key: key);
 
   @override
   State<AdsPopUpDialog> createState() => _AdsPopUpDialogState();
@@ -201,6 +202,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                 ),
                 twelvePx,
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
@@ -211,7 +213,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                       ],
                     ),
                     sixPx,
-                    const Text('Sponsored', style: TextStyle(color: Colors.white, fontSize: 12,),)
+                    Text( widget.isSponsored ? 'Sponsored' : '', style: TextStyle(color: Colors.white, fontSize: 12,),)
                   ],
                 )
               ],

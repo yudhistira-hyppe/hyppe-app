@@ -42,6 +42,9 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   String _adsUrl = '';
   String get adsUrl => _adsUrl;
 
+  bool _isSponsored = false;
+  bool get isSponsored => _isSponsored;
+
   List<ContentData>? get listData => _listData;
   int get currentDiary => _currentDiary;
   double? get currentPage => _currentPage;
@@ -85,9 +88,11 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }else{
       if(count == 4){
         'type ads : Content Ads'.logger();
+        _isSponsored = false;
         urlAds = await getAdsVideo(context, true);
       }else if(count == 2){
         'type ads : Sponsored Ads'.logger();
+        _isSponsored = true;
         urlAds = await getAdsVideo(context, false);
       }
     }

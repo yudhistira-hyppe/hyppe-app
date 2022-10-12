@@ -1037,8 +1037,8 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ').format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String url) async {
-    return ShowGeneralDialog.adsPopUp(context, data, url);
+  Future adsPopUp(BuildContext context, AdsData data, String url,{bool isSponsored = false}) async {
+    return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
   }
 
   Future userVerified(status) async {
