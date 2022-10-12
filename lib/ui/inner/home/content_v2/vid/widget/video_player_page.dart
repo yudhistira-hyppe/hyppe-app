@@ -613,7 +613,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   void _dispose() {
-    print('dispose video Ads');
     _resetOrintationStream();
     _betterPlayerController?.pause();
     _betterPlayerController?.dispose();
