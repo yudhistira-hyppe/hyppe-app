@@ -128,8 +128,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           final adsUrl = jsonMap['PlayUrl'];
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
+          final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+          if(!isShowAds){
+            System().adsPopUp(context, ads, adsUrl);
+          }
 
-          System().adsPopUp(context, ads, adsUrl);
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
         }
       } catch (e) {

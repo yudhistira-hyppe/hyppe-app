@@ -54,11 +54,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPopNext() {
-    print('keluar');
-    Future.delayed(Duration(seconds: 1), () {
-      print('didPopNext isOnHomeScreen true');
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
-    });
+    print('didPopNext isOnHomeScreen true');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+
     super.didPopNext();
   }
 

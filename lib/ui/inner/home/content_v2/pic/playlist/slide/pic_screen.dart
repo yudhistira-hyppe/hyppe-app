@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
@@ -25,9 +27,14 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
   @override
   void initState() {
     context.incrementAdsCount();
+
     Future.delayed(Duration.zero, () async{
       if (widget.url.isNotEmpty && widget.data.adsId != null) {
-        await System().adsPopUp(context, widget.data, widget.url);
+        final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+        if(!isShowAds){
+          await System().adsPopUp(context, widget.data, widget.url);
+        }
+
       }
     });
     super.initState();

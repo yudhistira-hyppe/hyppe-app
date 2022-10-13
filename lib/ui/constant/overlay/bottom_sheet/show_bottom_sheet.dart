@@ -53,6 +53,8 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
+import '../../../../core/constants/shared_preference_keys.dart';
+import '../../../../core/services/shared_preference.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
@@ -101,8 +103,8 @@ class ShowBottomSheet {
   //   ).whenComplete(() => notifier.overview = null);
   // }
 
-  static onUploadContent(_) {
-    showModalBottomSheet(
+  static onUploadContent(_, {bool isHome = false}) async {
+    await showModalBottomSheet(
       context: _,
       isScrollControlled: true,
       enableDrag: true,
@@ -126,6 +128,11 @@ class ShowBottomSheet {
         );
       },
     );
+    if(isHome){
+      print('isHome isOnHomeScreen true');
+      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    }
+
   }
 
   static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
