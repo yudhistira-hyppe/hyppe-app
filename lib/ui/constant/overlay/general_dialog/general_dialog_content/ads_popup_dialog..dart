@@ -231,7 +231,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
               ),
             ):InkWell(
               onTap: (){
-                // adsView(widget.data, secondsVideo);
+                adsView(widget.data, secondsVideo);
                 Navigator.pop(context);
               },
               child: const CustomIconWidget(defaultColor: false,
@@ -252,7 +252,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
           onTap: ()async{
             final uri = Uri.parse(data.adsUrlLink ?? '');
             if (await canLaunchUrl(uri)) {
-              // adsView(widget.data, secondsVideo, isClick: true);
+              adsView(widget.data, secondsVideo, isClick: true);
               Navigator.pop(context);
               await launchUrl(uri, mode: LaunchMode.externalApplication,);
             }else{
