@@ -48,6 +48,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
     duration: Duration(
       milliseconds: ((widget.data.duration ?? 15) * 1000).toInt()
     )));
+    print('isShowPopAds true');
+    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
 
     secondsSkip = widget.data.adsSkip ?? 0;
     super.initState();
@@ -272,6 +274,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
 
   @override
   void dispose() {
+    print('isShowPopAds false');
+    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _storyController.dispose();
     super.dispose();
   }

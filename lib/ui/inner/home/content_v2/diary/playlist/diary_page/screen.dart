@@ -50,7 +50,9 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   void initState() {
-    isLoading = true;
+    setState(() {
+      isLoading = true;
+    });
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       notifier.initializeData(context, _storyController, widget.data!);
@@ -70,7 +72,11 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   void dispose() {
-    _storyController.dispose();
+    print('_storyController dispose');
+    if(!_storyController.playbackNotifier.isClosed){
+      _storyController.dispose();
+    }
+
     super.dispose();
   }
 
@@ -187,10 +193,10 @@ class _DiaryPageState extends State<DiaryPage> {
                 ),
               ],
             );
-    }
-
-    return isLoading
-        ? Container(
+    }else{
+      Future.delayed(Duration(seconds: 2), (){
+        return isLoading
+            ? Container(
             color: Colors.black,
             width: 100,
             height: 100,
@@ -206,27 +212,49 @@ class _DiaryPageState extends State<DiaryPage> {
                 ),
               ],
             ))
-        : Center(
-            child: GestureDetector(
-              // onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(context, widget.arguments),
-              onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
-              child: Container(
-                height: 50,
-                width: double.infinity,
-                alignment: Alignment.center,
-                child: CustomTextWidget(
-                  maxLines: 1,
-                  textToDisplay: context.watch<TranslateNotifierV2>().translate.noData!,
-                  textStyle: Theme.of(context).textTheme.button,
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  color: Theme.of(context).colorScheme.surface,
-                ),
+            : Center(
+          child: GestureDetector(
+            // onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(context, widget.arguments),
+            onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
+            child: Container(
+              height: 50,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: CustomTextWidget(
+                maxLines: 1,
+                textToDisplay: context.watch<TranslateNotifierV2>().translate.noData!,
+                textStyle: Theme.of(context).textTheme.button,
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.0),
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
-          );
+          ),
+        );
+      });
+
+      return Container(
+          color: Colors.black,
+          width: 100,
+          height: 100,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              SizedBox(
+                height: 60,
+                child: SizedBox(
+                  height: 10,
+                  child: CustomLoading(),
+                ),
+              ),
+            ],
+          ));
+
+    }
+
+
   }
 
   int secondOfAds(AdsData data) {

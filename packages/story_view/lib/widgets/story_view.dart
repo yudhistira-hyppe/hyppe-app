@@ -580,7 +580,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
           }
           _removeNextHold();
 
-          _animationController?.forward();
           statusPlay = true;
           break;
 
@@ -628,18 +627,25 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
   @override
   void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
+    try {
+      if (mounted) {
+        super.setState(fn);
+      }
+    } catch (e) {
+      print('error amount $e');
     }
   }
 
   @override
   void onBetterPlayerEventChange(event) {
+    print('betterPlayerEventType : ${event.betterPlayerEventType}');
+
     if (event.betterPlayerEventType == BetterPlayerEventType.bufferingStart) {
       // pauseTimer();
       _animationController?.stop(canceled: false);
       setState(() {});
     } else if (event.betterPlayerEventType == BetterPlayerEventType.bufferingEnd) {
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.play) {
       _animationController?.forward();
       setState(() {});
     }

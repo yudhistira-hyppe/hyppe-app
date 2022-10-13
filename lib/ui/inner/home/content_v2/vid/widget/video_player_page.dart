@@ -512,6 +512,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       print('rollUri ${roll.rollUri}');
       _betterPlayerRollUri = roll.rollUri;
       _betterPlayerControllerMap = BetterPlayerController(betterPlayerConfigurationAds);
+      final ratio = _betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio;
+      // final height = _betterPlayerControllerMap?.videoPlayerController?.value.size?.height;
+      // final width = _betterPlayerControllerMap?.videoPlayerController?.value.size?.width;
+      if(ratio != null){
+        _betterPlayerControllerMap?.setOverriddenAspectRatio(ratio);
+      }
       setStateIfMounted(() {
         _eventType = BetterPlayerEventType.showingAds;
         // pause user video
