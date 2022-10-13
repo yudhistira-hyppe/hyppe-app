@@ -49,21 +49,16 @@ class _MainScreenState extends State<MainScreen> {
               showSelectedLabels: false,
               showUnselectedLabels: false,
               elevation: 0.5,
-              onTap: (int index) {
+              onTap: (int index) async{
                 if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-                setState(() {
-                  if (index != 2) {
+                if (index != 2) {
+                  setState(() {
                     notifier.pageIndex = index;
-                  } else {
-                    final isHome = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
-                    notifier.onShowPostContent(context, isHome);
-                    Future.delayed(Duration(milliseconds: 500), (){
-                      print('onShowPostContent isOnHomeScreen false');
-                      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
-                    });
+                  });
+                } else {
+                  await notifier.onShowPostContent(context);
+                }
 
-                  }
-                });
               },
               currentIndex: notifier.pageIndex,
               type: BottomNavigationBarType.fixed,

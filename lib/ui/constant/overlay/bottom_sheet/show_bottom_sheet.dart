@@ -55,6 +55,7 @@ import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
 import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/services/shared_preference.dart';
+import '../../../inner/main/notifier.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
@@ -103,9 +104,9 @@ class ShowBottomSheet {
   //   ).whenComplete(() => notifier.overview = null);
   // }
 
-  static onUploadContent(_, {bool isHome = false}) async {
+  static onUploadContent(context) async {
     await showModalBottomSheet(
-      context: _,
+      context: context,
       isScrollControlled: true,
       enableDrag: true,
       isDismissible: true,
@@ -116,7 +117,7 @@ class ShowBottomSheet {
           child: Container(
             height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
@@ -128,10 +129,6 @@ class ShowBottomSheet {
         );
       },
     );
-    if(isHome){
-      print('isHome isOnHomeScreen true');
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
-    }
 
   }
 
