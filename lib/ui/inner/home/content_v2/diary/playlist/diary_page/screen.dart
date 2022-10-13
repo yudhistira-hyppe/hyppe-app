@@ -143,6 +143,9 @@ class _DiaryPageState extends State<DiaryPage> {
                       }
                     });
                   },
+                  onRepeat: (){
+                    context.incrementAdsCount();
+                  },
                   nextDebouncer: false,
                   onComplete: () async {
                     await notifier.initAdsData(context);

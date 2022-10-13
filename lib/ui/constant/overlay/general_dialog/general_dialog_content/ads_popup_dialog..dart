@@ -136,6 +136,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                 secondsVideo += 1;
               });
             },
+
             nextDebouncer: false,
             onComplete: () {
               _storyController.pause();
