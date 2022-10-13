@@ -140,7 +140,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   //   content: widget.arguments.content,
                   // ),
                   function: () {
-                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED) {
+                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story) {
                       notifier.onClickPost(
                         context,
                         onEdit: widget.arguments.onEdit,
@@ -461,9 +461,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     return ListTile(
       onTap: () => !notifier.certified
           ? System().actionReqiredIdCard(context, action: () {
-              Routing().move(Routes.ownershipSelling);
+              notifier.navigateToOwnership(context);
             })
-          : Routing().move(Routes.ownershipSelling),
+          : notifier.navigateToOwnership(context),
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling!,
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),

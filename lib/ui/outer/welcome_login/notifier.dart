@@ -238,7 +238,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'true');
       DeviceBloc().activityAwake(context);
-      await getSettingApps(context);
+
       if (signData.interest!.isEmpty) {
         Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
       } else {
@@ -255,7 +255,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'false');
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
-      await getSettingApps(context);
       DeviceBloc().activityAwake(context);
       Routing().moveReplacement(Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
@@ -362,20 +361,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       }
       setLoading(false);
     });
-  }
-
-  Future getSettingApps(BuildContext context) async {
-    print('setting apss');
-    final notifier = UtilsBlocV2();
-    await notifier.settingAppsBloc(context);
-
-    final fetch = notifier.utilsFetch;
-    if (fetch.utilsState == UtilsState.getSettingSuccess) {
-      print(fetch.data);
-      final SettingModel _result = SettingModel.fromJson(fetch.data);
-      print(_result.settingMP);
-      SharedPreference().writeStorage(SpKeys.settingMarketPlace, _result.settingMP.toString());
-    }
   }
 
   /// Generates a cryptographically secure random nonce, to be included in a

@@ -207,9 +207,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                     notifier.onCloseStory(mounted);
                   }
                 },
-                onEverySecond: (duration){
-
-                },
+                onEverySecond: (duration) {},
                 onVerticalSwipeComplete: (v) {
                   // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
                   if (v == Direction.down) notifier.onCloseStory(mounted);
@@ -250,6 +248,4 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             ],
           );
   }
-
-
 }

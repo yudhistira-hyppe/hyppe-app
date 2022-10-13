@@ -4,19 +4,18 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
-import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
+import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
@@ -61,6 +60,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isEdit => _isEdit;
 
   //final priceController = MoneyMaskedTextController(decimalSeparator: ',', thousandSeparator: '.');
+  bool _canSale = false;
+  bool get canSale => _canSale;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -1092,4 +1093,24 @@ class PreUploadContentNotifier with ChangeNotifier {
   //   }
   // }
 
+  void navigateToOwnership(BuildContext context) {
+    Routing().move(Routes.ownershipSelling);
+    _getSettingApps(context);
+  }
+
+  Future _getSettingApps(BuildContext context) async {
+    _isLoading = true;
+    print('setting apss');
+    final notifier = UtilsBlocV2();
+    await notifier.settingAppsBloc(context);
+
+    final fetch = notifier.utilsFetch;
+    if (fetch.utilsState == UtilsState.getSettingSuccess) {
+      final SettingModel _result = SettingModel.fromJson(fetch.data);
+      print(_result.settingMP);
+      _canSale = _result.settingMP!;
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

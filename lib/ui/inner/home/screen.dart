@@ -26,15 +26,13 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin{
+class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin {
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
 
-
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -56,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPopNext() {
-    Future.delayed(Duration(seconds: 1), (){
+    print('keluar');
+    Future.delayed(Duration(seconds: 1), () {
       print('didPopNext isOnHomeScreen true');
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
     });
