@@ -55,9 +55,13 @@ class _MainScreenState extends State<MainScreen> {
                   if (index != 2) {
                     notifier.pageIndex = index;
                   } else {
-                    notifier.onShowPostContent(context);
-                    print('onShowPostContent isOnHomeScreen false');
-                    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+                    final isHome = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
+                    notifier.onShowPostContent(context, isHome);
+                    Future.delayed(Duration(milliseconds: 500), (){
+                      print('onShowPostContent isOnHomeScreen false');
+                      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+                    });
+
                   }
                 });
               },

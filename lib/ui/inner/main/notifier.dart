@@ -143,10 +143,10 @@ class MainNotifier with ChangeNotifier {
 
   void setNotification() => FcmService().setHaveNotification(false);
 
-  void onShowPostContent(BuildContext context) {
+  void onShowPostContent(BuildContext context, bool isHome) {
     // System().actionReqiredIdCard(context,
     //    action: () => ShowBottomSheet.onUploadContent(context));
-    ShowBottomSheet.onUploadContent(context);
+    ShowBottomSheet.onUploadContent(context, isHome: isHome);
     //ShowBottomSheet.onShowSuccessPostContentOwnership(context);
   }
 
