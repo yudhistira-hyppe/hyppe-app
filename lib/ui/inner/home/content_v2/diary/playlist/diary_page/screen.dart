@@ -60,6 +60,7 @@ class _DiaryPageState extends State<DiaryPage> {
       notifier.initializeData(context, _storyController, widget.data!);
       _storyItems = notifier.result;
       isLoading = false;
+      context.incrementAdsCount();
     });
 
     super.initState();
@@ -145,7 +146,6 @@ class _DiaryPageState extends State<DiaryPage> {
                   nextDebouncer: false,
                   onComplete: () async {
                     await notifier.initAdsData(context);
-                    context.incrementAdsCount();
                     // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
                     // _storyController.next();
@@ -158,10 +158,10 @@ class _DiaryPageState extends State<DiaryPage> {
                     // }
                   },
                   onEverySecond: (duration) async {
-                    final secondAds = secondOfAds(notifier.adsData);
-                    print(' ZT secondAds : $secondAds');
-                    print(' ZT secondVid : ${duration}');
-                    print(' ZT URL : ${notifier.adsUrl}');
+                    // final secondAds = secondOfAds(notifier.adsData);
+                    // print(' ZT secondAds : $secondAds');
+                    // print(' ZT secondVid : ${duration}');
+                    // print(' ZT URL : ${notifier.adsUrl}');
 
                     if (duration == secondOfAds(notifier.adsData)) {
                       if (notifier.adsUrl.isNotEmpty) {
