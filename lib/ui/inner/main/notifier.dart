@@ -107,26 +107,19 @@ class MainNotifier with ChangeNotifier {
   Widget mainScreen(BuildContext context) {
     List pages = [const HomeScreen(), SearchScreen(), NotificationScreen(), MessageScreen()];
     late Widget screen;
+
     switch (pageIndex) {
       case 0:
-        print('tab0 isOnHomeScreen true');
-        SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
         return screen = pages[0];
       case 1:
-        print('tab2 isOnHomeScreen false');
-        SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
         return screen = pages[1];
       case 3:
         {
-          print('tab3 isOnHomeScreen false');
-          SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
           setNotification();
           screen = pages[2];
         }
         break;
       case 4:
-        print('tab4 isOnHomeScreen false');
-        SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
         return screen = pages[3];
     }
     return screen;
@@ -143,10 +136,10 @@ class MainNotifier with ChangeNotifier {
 
   void setNotification() => FcmService().setHaveNotification(false);
 
-  void onShowPostContent(BuildContext context, bool isHome) {
+  Future onShowPostContent(BuildContext context) async{
     // System().actionReqiredIdCard(context,
     //    action: () => ShowBottomSheet.onUploadContent(context));
-    ShowBottomSheet.onUploadContent(context, isHome: isHome);
+    await ShowBottomSheet.onUploadContent(context);
     //ShowBottomSheet.onShowSuccessPostContentOwnership(context);
   }
 

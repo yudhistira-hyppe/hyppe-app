@@ -54,10 +54,16 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   //   super.didPush();
   // }
 
+
+
   @override
   void didPopNext() {
-    print('didPopNext isOnHomeScreen true');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+
+    Future.delayed(Duration(milliseconds: 500), (){
+      print('didPopNext isOnHomeScreen true');
+      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    });
+
     super.didPopNext();
   }
 
@@ -77,8 +83,23 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   }
 
   @override
+  void deactivate() {
+    print('deactivate isOnHomeScreen false');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    super.deactivate();
+  }
+
+
+  @override
+  void didPush() {
+    print('didPush isOnHomeScreen true');
+    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+  }
+
+  @override
   void initState() {
     print('allReload deui');
+
     context.read<HomeNotifier>().onRefresh(context);
 
     final _language = context.read<TranslateNotifierV2>().translate;
