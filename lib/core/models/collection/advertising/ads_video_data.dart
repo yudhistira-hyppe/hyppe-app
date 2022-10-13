@@ -68,7 +68,16 @@ class AdsData{
     adsSkip = json['adsSkip'];
     mediaType = json['mediaType'];
     videoId = json['videoId'];
-    duration = json['duration'];
+    final value = json['duration'];
+    try{
+      if(value is int){
+        duration = value.toDouble();
+      }else{
+        duration = value;
+      }
+    }catch(e){
+      print('$e');
+    }
   }
 
   Map<String, dynamic> toJson(){

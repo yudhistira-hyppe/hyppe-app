@@ -171,7 +171,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
       final fetch = notifier.adsDataFetch;
 
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
-        // print('data : ${fetch.data.toString()}');
+        print('getAdsVideo : ${fetch.data.toString()}');
         final _newClipData = fetch.data;
         _adsData = _newClipData!.data;
         return await getAdsVideoApsara(context, _newClipData!.data!.videoId!);

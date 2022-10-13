@@ -295,7 +295,7 @@ class ShowGeneralDialog {
       //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
-      barrierDismissible: true,
+      barrierDismissible: false,
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(data: data, urlAds: url, isSponsored: isSponsored,),
       transitionBuilder: (context, animation, secondaryAnimation, child) {

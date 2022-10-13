@@ -48,6 +48,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
     duration: Duration(
       milliseconds: ((widget.data.duration ?? 15) * 1000).toInt()
     )));
+    print('isShowPopAds true');
+    SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
 
     secondsSkip = widget.data.adsSkip ?? 0;
     super.initState();
@@ -229,7 +231,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
               ),
             ):InkWell(
               onTap: (){
-                adsView(widget.data, secondsVideo);
+                // adsView(widget.data, secondsVideo);
                 Navigator.pop(context);
               },
               child: const CustomIconWidget(defaultColor: false,
@@ -250,7 +252,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
           onTap: ()async{
             final uri = Uri.parse(data.adsUrlLink ?? '');
             if (await canLaunchUrl(uri)) {
-              adsView(widget.data, secondsVideo, isClick: true);
+              // adsView(widget.data, secondsVideo, isClick: true);
               Navigator.pop(context);
               await launchUrl(uri, mode: LaunchMode.externalApplication,);
             }else{
@@ -272,6 +274,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
 
   @override
   void dispose() {
+    print('isShowPopAds false');
+    SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     _storyController.dispose();
     super.dispose();
   }
