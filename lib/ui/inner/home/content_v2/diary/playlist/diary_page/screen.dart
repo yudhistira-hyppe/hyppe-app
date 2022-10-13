@@ -235,7 +235,11 @@ class _DiaryPageState extends State<DiaryPage> {
     final duration = widget.data?.metadata?.duration ?? 2;
     switch (data.adsPlace) {
       case 'First':
-        result = ((widget.data?.metadata?.preRoll ?? 0) == 0) ? 2 : (widget.data?.metadata?.preRoll ?? 1) == 1 ? widget.data!.metadata!.preRoll! + 1: widget.data!.metadata!.preRoll!;
+        result = ((widget.data?.metadata?.preRoll ?? 0) == 0)
+            ? 2
+            : (widget.data?.metadata?.preRoll ?? 1) == 1
+                ? widget.data!.metadata!.preRoll! + 1
+                : widget.data!.metadata!.preRoll!;
         break;
       case 'Mid':
         result = mid != 0 ? mid : (duration / 2).toInt();

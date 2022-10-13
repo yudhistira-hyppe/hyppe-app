@@ -23,6 +23,8 @@ class BuySellWidget extends StatelessWidget {
     String title = '';
     String titleContent = '';
     String keterangan = '';
+    String fullname = '';
+    String email = '';
     switch (data!.postType) {
       case FeatureType.pic:
         titleContent = 'HyppePict';
@@ -48,14 +50,18 @@ class BuySellWidget extends StatelessWidget {
         titleColor = kHyppeRed;
         blockColor = kHyppeRedLight;
         title = language!.buy!;
+        fullname = data!.penjual!;
+        email = data!.emailpenjual!;
         break;
       default:
         keterangan = language!.forr!;
         titleColor = kHyppeGreen;
         blockColor = kHyppeGreenLight;
         title = language!.sell!;
+        fullname = data!.pembeli!;
+        email = data!.emailpembeli!;
     }
-    final desc = '$titleContent $keterangan  ${data!.fullName} ( ${data!.email} )';
+    final desc = '$titleContent $keterangan $fullname ( $email )';
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
@@ -162,7 +168,7 @@ class BuySellWidget extends StatelessWidget {
                 ),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: data!.type!!= TransactionType.buy ? language!.totalIncome! : language!.totalExpenditure!,
+                  textToDisplay: data!.type! != TransactionType.buy ? language!.totalIncome! : language!.totalExpenditure!,
                   textStyle: Theme.of(context).textTheme.caption!,
                 ),
                 fourPx,

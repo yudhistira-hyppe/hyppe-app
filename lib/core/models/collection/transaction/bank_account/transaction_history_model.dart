@@ -49,6 +49,8 @@ class TransactionHistoryModel {
   String? emailpembeli;
   String? namapenjual;
   String? emailpenjual;
+  String? penjual;
+  String? pembeli;
   String? time;
   String? namaBank;
   String? namaRek;
@@ -96,6 +98,8 @@ class TransactionHistoryModel {
     emailpembeli = json['emailpembeli'] ?? '';
     namapenjual = json['namapenjual'] ?? '';
     emailpenjual = json['emailpenjual'] ?? '';
+    penjual = json['penjual'] ?? '';
+    pembeli = json['pembeli'] ?? '';
     time = json['time'] ?? '';
     namaBank = json['namaBank'] ?? '';
     namaRek = json['namaRek'] ?? '';
