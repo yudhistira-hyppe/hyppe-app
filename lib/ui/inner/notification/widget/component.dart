@@ -55,10 +55,14 @@ class Component extends StatelessWidget {
                       ),
                       fourPx,
                       SizedBox(
-                        width: data!.body!.length < 30 ? null : SizeConfig.screenWidth! / 1.5,
+                        width: data!.body != null
+                            ? data!.body!.length < 30
+                                ? null
+                                : SizeConfig.screenWidth! / 1.5
+                            : null,
                         child: CustomTextWidget(
                           //textToDisplay: data?.body ?? '',
-                          textToDisplay: System().bodyMultiLang(bodyEn: data?.body, bodyId: data?.bodyId) ?? '',
+                          textToDisplay: System().bodyMultiLang(bodyEn: data?.body ?? data?.bodyId, bodyId: data?.bodyId) ?? '',
                           textStyle: Theme.of(context).textTheme.caption,
                           maxLines: 4,
                           textAlign: TextAlign.start,
