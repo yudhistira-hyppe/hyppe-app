@@ -162,7 +162,7 @@ class BuySellWidget extends StatelessWidget {
                 ),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: language!.totalIncome!,
+                  textToDisplay: data!.type!!= TransactionType.buy ? language!.totalIncome! : language!.totalExpenditure!,
                   textStyle: Theme.of(context).textTheme.caption!,
                 ),
                 fourPx,

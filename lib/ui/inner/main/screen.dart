@@ -19,7 +19,7 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayoutMixin {
+class _MainScreenState extends State<MainScreen> {
   late MainNotifier _mainNotifier;
 
   @override
@@ -29,52 +29,7 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    CustomRouteObserver.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute);
-    super.didChangeDependencies();
-  }
 
-  @override
-  void didPop() {
-    print('didPop isOnHomeScreen false');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
-    super.didPop();
-  }
-
-  @override
-  void didPush() {
-    Future.delayed(Duration(seconds: 1), (){
-      print('didPush isOnHomeScreen true');
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
-    });
-    super.didPush();
-  }
-
-  @override
-  void didPopNext() {
-    Future.delayed(Duration(seconds: 1), (){
-      print('didPopNext isOnHomeScreen true');
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
-    });
-    super.didPopNext();
-  }
-
-  @override
-  void didPushNext() {
-    print('didPushNext isOnHomeScreen false');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
-    super.didPushNext();
-  }
-
-  @override
-  void dispose() {
-    CustomRouteObserver.routeObserver.unsubscribe(this);
-    // print('isOnHomeScreen false');
-    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,8 +111,5 @@ class _MainScreenState extends State<MainScreen> with RouteAware, AfterFirstLayo
     );
   }
 
-  @override
-  void afterFirstLayout(BuildContext context) {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
-  }
+
 }
