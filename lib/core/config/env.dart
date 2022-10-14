@@ -77,6 +77,7 @@ class Env {
     UrlConstants.getInnteractives,
     UrlConstants.settingApps,
     UrlConstants.updatepost,
+    UrlConstants.postViewer,
   ];
 
   static final EnvData dev = EnvData(

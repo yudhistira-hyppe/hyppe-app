@@ -579,6 +579,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
             playTimer();
           }
           _removeNextHold();
+          _animationController?.forward();
 
           statusPlay = true;
           break;
