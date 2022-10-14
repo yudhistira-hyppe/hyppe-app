@@ -75,7 +75,7 @@ class _DiaryPageState extends State<DiaryPage> {
   @override
   void dispose() {
     print('_storyController dispose');
-    if(!_storyController.playbackNotifier.isClosed){
+    if (!_storyController.playbackNotifier.isClosed) {
       _storyController.dispose();
     }
 
@@ -142,10 +142,10 @@ class _DiaryPageState extends State<DiaryPage> {
                       }
                     });
                   },
-                  onInit: (){
+                  onInit: () {
                     context.incrementAdsCount();
                   },
-                  onRepeat: (){
+                  onRepeat: () {
                     context.incrementAdsCount();
                   },
                   nextDebouncer: false,
@@ -172,7 +172,7 @@ class _DiaryPageState extends State<DiaryPage> {
                       if (notifier.adsUrl.isNotEmpty) {
                         _storyController.pause();
                         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
-                        if(!isShowAds){
+                        if (!isShowAds) {
                           await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
                         }
                         _storyController.play();
@@ -203,46 +203,46 @@ class _DiaryPageState extends State<DiaryPage> {
                 ),
               ],
             );
-    }else{
-      Future.delayed(Duration(seconds: 2), (){
+    } else {
+      Future.delayed(Duration(seconds: 2), () {
         return isLoading
             ? Container(
-            color: Colors.black,
-            width: 100,
-            height: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                SizedBox(
-                  height: 60,
-                  child: SizedBox(
-                    height: 10,
-                    child: CustomLoading(),
+                color: Colors.black,
+                width: 100,
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 60,
+                      child: SizedBox(
+                        height: 10,
+                        child: CustomLoading(),
+                      ),
+                    ),
+                  ],
+                ))
+            : Center(
+                child: GestureDetector(
+                  // onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(context, widget.arguments),
+                  onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: CustomTextWidget(
+                      maxLines: 1,
+                      textToDisplay: Provider.of<TranslateNotifierV2>(context, listen: false).translate.noData!,
+                      textStyle: Theme.of(context).textTheme.button,
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
                   ),
                 ),
-              ],
-            ))
-            : Center(
-          child: GestureDetector(
-            // onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(context, widget.arguments),
-            onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
-            child: Container(
-              height: 50,
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: CustomTextWidget(
-                maxLines: 1,
-                textToDisplay: context.watch<TranslateNotifierV2>().translate.noData!,
-                textStyle: Theme.of(context).textTheme.button,
-              ),
-              margin: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Theme.of(context).colorScheme.surface,
-              ),
-            ),
-          ),
-        );
+              );
       });
 
       return Container(
@@ -261,10 +261,7 @@ class _DiaryPageState extends State<DiaryPage> {
               ),
             ],
           ));
-
     }
-
-
   }
 
   int secondOfAds(AdsData data) {

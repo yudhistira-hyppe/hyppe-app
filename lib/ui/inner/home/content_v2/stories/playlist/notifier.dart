@@ -207,6 +207,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           url: data.isApsara! ? data.mediaThumbUri! : data.fullThumbPath ?? '',
           controller: storyController,
           imageFit: BoxFit.contain,
+          isImages: true,
           requestHeaders: {
             'post-id': data.postID ?? '',
             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),

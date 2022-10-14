@@ -41,12 +41,15 @@ class StoryItem {
 
   String? source;
 
+  bool? isImages;
+
   /// The page content
   final Widget view;
   StoryItem(
     this.view, {
     this.source,
     this.shown = false,
+    this.isImages = false,
     required this.duration,
   });
 
@@ -122,6 +125,7 @@ class StoryItem {
     BoxFit imageFit = BoxFit.fitWidth,
     String? caption,
     bool shown = false,
+    bool isImages = true,
     Map<String, String>? requestHeaders,
     Duration? duration,
   }) {
@@ -168,6 +172,7 @@ class StoryItem {
         ),
       ),
       shown: shown,
+      isImages: true,
       duration: duration ?? const Duration(seconds: 3),
     );
   }
@@ -575,18 +580,23 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     _playbackSubscription = widget.controller.playbackNotifier.listen((playbackStatus) {
       print('playbackStatus : ${playbackStatus}');
-
       switch (playbackStatus) {
         case PlaybackState.play:
           final isRunning = timerAds == null ? false : timerAds!.isActive;
           if (isRunning) {
             pauseTimer();
+            _animationController?.forward();
           } else {
             playTimer();
+            _animationController?.stop();
           }
           _removeNextHold();
-          _animationController?.forward();
+          print('curent story hahahahahah');
+          print(_currentStory?.isImages);
+          if (_currentStory!.isImages!) _animationController?.forward();
 
+          // print(_currentStory?.shown);
+          // print(_currentStory?.view);
           statusPlay = true;
           break;
 
@@ -600,11 +610,13 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
         case PlaybackState.next:
           _removeNextHold();
+
           _goForward();
           break;
 
         case PlaybackState.previous:
           _removeNextHold();
+
           _goBack();
           break;
       }
@@ -652,8 +664,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       _animationController?.stop(canceled: false);
       setState(() {});
     } else if (event.betterPlayerEventType == BetterPlayerEventType.bufferingEnd) {
-    } else if (event.betterPlayerEventType == BetterPlayerEventType.initialized){
-      if(widget.onInit != null){
+      _animationController?.forward();
+      setState(() {});
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
+      if (widget.onInit != null) {
         widget.onInit!();
       }
     } else if (event.betterPlayerEventType == BetterPlayerEventType.play) {
@@ -739,7 +753,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       for (var it in widget.storyItems) {
         it!.shown = false;
       }
-      if(widget.onRepeat != null){
+      if (widget.onRepeat != null) {
         widget.onRepeat!();
       }
       _beginPlay();
@@ -875,6 +889,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 },
                 onLongPressEnd: (de) {
                   print('play1');
+
                   widget.controller.play();
                 },
                 // onTapDown: (details) {
