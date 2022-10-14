@@ -400,6 +400,8 @@ class StoryView extends StatefulWidget {
 
   final VoidCallback? onRepeat;
 
+  final VoidCallback? onInit;
+
   final Function(int)? onEverySecond;
 
   /// Callback for when a vertical swipe gesture is detected. If you do not
@@ -443,6 +445,7 @@ class StoryView extends StatefulWidget {
     this.onDouble,
     this.onComplete,
     this.onRepeat,
+    this.onInit,
     this.onStoryShow,
     this.onEverySecond,
     this.progressPosition = ProgressPosition.top,
@@ -648,6 +651,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       _animationController?.stop(canceled: false);
       setState(() {});
     } else if (event.betterPlayerEventType == BetterPlayerEventType.bufferingEnd) {
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.initialized){
+      if(widget.onInit != null){
+        widget.onInit!();
+      }
     } else if (event.betterPlayerEventType == BetterPlayerEventType.play) {
       _animationController?.forward();
       setState(() {});

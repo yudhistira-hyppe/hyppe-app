@@ -312,6 +312,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         enableFullscreen: true,
         controlBarColor: Color.fromARGB(10, 0, 0, 1),
       ),
+      eventListener: (event){
+        print('ini event betterPlayerEventType : ${event.betterPlayerEventType}');
+        if(event.betterPlayerEventType == BetterPlayerEventType.initialized){
+          context.incrementAdsCount();
+        }else if(event.betterPlayerEventType == BetterPlayerEventType.seekTo){
+          context.incrementAdsCount();
+        }
+      }
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
@@ -351,8 +359,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     _betterPlayerController?.addEventsListener(
       (event) {
-        print('ini event');
-        print(event.betterPlayerEventType);
+
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           print('event ads : ${event.parameters}');
           _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
@@ -364,9 +371,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         if(event.betterPlayerEventType == BetterPlayerEventType.finished){
           widget.afterView!();
         }
-        if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
-          context.incrementAdsCount();
-        }
+
       },
     );
   }

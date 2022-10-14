@@ -60,7 +60,6 @@ class _DiaryPageState extends State<DiaryPage> {
       notifier.initializeData(context, _storyController, widget.data!);
       _storyItems = notifier.result;
       isLoading = false;
-      context.incrementAdsCount();
     });
 
     super.initState();
@@ -142,6 +141,9 @@ class _DiaryPageState extends State<DiaryPage> {
                         }
                       }
                     });
+                  },
+                  onInit: (){
+                    context.incrementAdsCount();
                   },
                   onRepeat: (){
                     context.incrementAdsCount();
