@@ -7,6 +7,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../app.dart';
+
 class Hyppe extends StatefulWidget {
   @override
   State<Hyppe> createState() => _HyppeState();
@@ -30,6 +32,7 @@ class _HyppeState extends State<Hyppe> {
           selector: (_, select) => select.themeData,
           builder: (_, theme, __) {
             return MaterialApp(
+              key: scaffoldKey,
               title: "Hyppe",
               theme: theme,
               navigatorObservers: [

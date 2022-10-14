@@ -45,6 +45,7 @@ import 'core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 // }
 
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
+final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 void mainApp(EnvType env) async {
   WidgetsFlutterBinding.ensureInitialized();

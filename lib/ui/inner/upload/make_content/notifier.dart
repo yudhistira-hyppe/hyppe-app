@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../app.dart';
+
 class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements CameraInterface {
   static final _routing = Routing();
 
@@ -155,7 +157,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     _timer = null;
   }
 
-  void _startTimer() {
+  void _startTimer(BuildContext context) {
     _validateTimerWithFeature();
     _timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -177,10 +179,19 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         }
 
         if (_progressHuman >= _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
+          // onPauseRecordedVideo(context);
           timerIn.cancel();
           cancelTimer();
+
         }
+        print('type : $featureType');
+        print('_progressHuman : $_progressHuman');
+        print('_selectedDuration : $_selectedDuration');
+
         notifyListeners();
+        if(_progressHuman == _selectedDuration){
+          onStopRecordedVideo(scaffoldKey.currentContext ?? context);
+        }
       },
     );
   }
@@ -313,7 +324,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onRecordedVideo(BuildContext context) {
-    _startTimer();
+    _startTimer(context);
     final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     cameraNotifier.startVideoRecording();
   }
@@ -321,6 +332,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onPauseRecordedVideo(BuildContext context) {
     final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
 
@@ -329,7 +341,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     cameraNotifier.resumeVideoRecording().then((_) {
       cancelTimer();
-      _startTimer();
+      _startTimer(context);
     });
   }
 
