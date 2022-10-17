@@ -585,10 +585,11 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
           final isRunning = timerAds == null ? false : timerAds!.isActive;
           if (isRunning) {
             pauseTimer();
-            _animationController?.forward();
+            // _animationController?.forward();
           } else {
             playTimer();
-            _animationController?.stop();
+            _animationController?.forward();
+            // _animationController?.stop(canceled: false);
           }
           _removeNextHold();
           print('curent story hahahahahah');
@@ -672,6 +673,9 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       }
     } else if (event.betterPlayerEventType == BetterPlayerEventType.play) {
       _animationController?.forward();
+      setState(() {});
+    } else if (event.betterPlayerEventType == BetterPlayerEventType.pause) {
+      _animationController?.stop(canceled: false);
       setState(() {});
     }
   }
