@@ -90,6 +90,7 @@ class Routes {
   static const String transactionInProgress = '/transaction-inprogress';
   static const String bankAccount = '/bank-account';
   static const String addBankAccount = '/add-bank-account';
+  static const String withdrawal = '/withdrawal';
 
   //create pin
   static const String pinScreen = '/pin-screen';

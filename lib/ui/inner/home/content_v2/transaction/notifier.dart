@@ -130,6 +130,7 @@ class TransactionNotifier extends ChangeNotifier {
   navigateToBankAccount() => Routing().move(Routes.bankAccount);
   navigateToAddBankAccount() => Routing().move(Routes.addBankAccount);
   navigateToDetailTransaction() => Routing().move(Routes.detailTransaction);
+  navigateToWithDrawal() => Routing().move(Routes.withdrawal);
 
   showDialogHelp(BuildContext context) {
     ShowBottomSheet().onShowHelpBankAccount(context);

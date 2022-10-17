@@ -32,7 +32,9 @@ class ButtonTransaction extends StatelessWidget {
           sixPx,
           Expanded(
             child: CustomTextButton(
-              onPressed: () {},
+              onPressed: () {
+                // notifier.navigateToWithDrawal();
+              },
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(
                 textToDisplay: notifier2.translate.withdrawal!,

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/buy/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/buy_request.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/constants/status_code.dart';
@@ -100,6 +102,10 @@ class BuyBloc {
       },
       (errorData) {
         setBuyFetch(BuyFetch(BuyState.postContentsError, data: errorData.error));
+      },
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
       data: params,
       withAlertMessage: false,
