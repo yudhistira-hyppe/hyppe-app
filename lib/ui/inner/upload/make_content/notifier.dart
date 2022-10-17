@@ -189,7 +189,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         print('_selectedDuration : $_selectedDuration');
 
         notifyListeners();
-        if(_progressHuman == _selectedDuration){
+        if(_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)){
           onStopRecordedVideo(scaffoldKey.currentContext ?? context);
         }
       },
