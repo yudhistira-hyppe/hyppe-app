@@ -170,12 +170,13 @@ class _DiaryPageState extends State<DiaryPage> {
 
                     if (duration == secondOfAds(notifier.adsData)) {
                       if (notifier.adsUrl.isNotEmpty) {
-                        _storyController.pause();
                         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+
                         if (!isShowAds) {
+                          _storyController.pause();
                           await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
+                          _storyController.play();
                         }
-                        _storyController.play();
                       }
                     }
                   },
