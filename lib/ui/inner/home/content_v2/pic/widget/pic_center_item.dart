@@ -44,20 +44,23 @@ class PicCenterItem extends StatelessWidget {
               ),
               child: _buildBody(),
             ),
-            errorWidget: (context, url, error) => Container(
-              margin: margin,
-              // const EdgeInsets.symmetric(horizontal: 4.5),
-              width: _scaling,
-              height: 186,
-              child: _buildBody(),
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                  fit: BoxFit.cover,
+            errorWidget: (context, url, error){
+              print('errorWidget :  $error');
+              return Container(
+                margin: margin,
+                // const EdgeInsets.symmetric(horizontal: 4.5),
+                width: _scaling,
+                height: 186,
+                child: _buildBody(),
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),

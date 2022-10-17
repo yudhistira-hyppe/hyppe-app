@@ -32,7 +32,7 @@ class _HyppeState extends State<Hyppe> {
           selector: (_, select) => select.themeData,
           builder: (_, theme, __) {
             return MaterialApp(
-              key: scaffoldKey,
+              key: materialAppKey,
               title: "Hyppe",
               theme: theme,
               navigatorObservers: [

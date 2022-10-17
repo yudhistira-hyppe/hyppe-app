@@ -620,6 +620,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
           _goBack();
           break;
+        case PlaybackState.replay:
+          break;
       }
     });
 
