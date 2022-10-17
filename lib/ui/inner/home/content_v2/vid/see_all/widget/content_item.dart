@@ -102,9 +102,9 @@ class ContentItem extends StatelessWidget {
                               children: [
                                 Container(
                                   color: Colors.black,
-                                  child: AspectRatio(
-                                    aspectRatio: 16 / 9,
-                                    child: Center(
+                                  child: Center(
+                                    child: AspectRatio(
+                                      aspectRatio: 16 / 9,
                                       child: ContentThumbnail(
                                         vidData: data,
                                         fn: () => notifier.navigateToHyppeVidDetail(context, data),

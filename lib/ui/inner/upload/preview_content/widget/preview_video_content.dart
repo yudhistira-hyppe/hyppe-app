@@ -60,7 +60,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
 
       _videoPlayerController?.addEventsListener(
         (_) {
-          notifier.totalDuration = _.parameters!['duration'];
+          notifier.totalDuration = _.parameters!['duration'] ?? 0;
 
           if (_videoPlayerController?.isVideoInitialized() ?? false) if (_videoPlayerController!.videoPlayerController!.value.position >=
               _videoPlayerController!.videoPlayerController!.value.duration!) {

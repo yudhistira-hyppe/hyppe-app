@@ -889,7 +889,6 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 },
                 onLongPressEnd: (de) {
                   print('play1');
-
                   widget.controller.play();
                 },
                 // onTapDown: (details) {
