@@ -458,6 +458,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                     final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
                                     final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
                                     if (await canLaunchUrl(uri)) {
+                                      print('adsView part 1');
                                       adsView(_newClipData?.data ?? AdsData(), second);
                                       await launchUrl(
                                         uri,
@@ -563,13 +564,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           'Show skip ads'.logger();
 
           'second end ads1 $second'.logger();
+
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.closingAds) {
           print('skips di click');
           'Closing ads'.logger();
-          _handleClosingAdsEvent(roll);
           'second end ads2 $second'.logger();
-          adsView(_newClipData?.data ?? AdsData(), second);
+          if((_newClipData?.data?.adsSkip ?? 2) <= second){
+            adsView(_newClipData?.data ?? AdsData(), second);
+            _handleClosingAdsEvent(roll);
+          }
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
           'Ads finished'.logger();

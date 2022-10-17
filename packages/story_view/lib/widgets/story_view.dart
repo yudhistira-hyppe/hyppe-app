@@ -728,10 +728,14 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     _animationController!.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         storyItem.shown = true;
+
         if (widget.storyItems.last != storyItem) {
           _beginPlay();
         } else {
           // done playing
+          if(widget.repeat){
+            widget.controller.replay();
+          }
           _onComplete();
         }
       }
