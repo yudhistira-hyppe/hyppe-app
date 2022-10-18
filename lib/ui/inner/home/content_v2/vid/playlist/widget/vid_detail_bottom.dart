@@ -164,13 +164,14 @@ class VidDetailBottom extends StatelessWidget {
               value2.translate.share!,
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
-            if (data!.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != data!.email)
-              _buildButton(
-                context,
-                '${AssetPath.vectorPath}cart.svg',
-                value2.translate.buy!,
-                () => ShowBottomSheet.onBuyContent(context, data: data),
-              ),
+            if (data != null)
+              if (data!.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != data!.email)
+                _buildButton(
+                  context,
+                  '${AssetPath.vectorPath}cart.svg',
+                  value2.translate.buy!,
+                  () => ShowBottomSheet.onBuyContent(context, data: data),
+                ),
             // _buildButton(
             //   context,
             //   '${AssetPath.vectorPath}bookmark.svg',
