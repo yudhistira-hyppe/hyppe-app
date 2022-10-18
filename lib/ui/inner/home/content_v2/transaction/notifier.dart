@@ -37,10 +37,18 @@ class TransactionNotifier extends ChangeNotifier {
   TextEditingController _nameAccount = TextEditingController();
   TextEditingController _noBankAccount = TextEditingController();
   TextEditingController _accountOwnerName = TextEditingController();
+  TextEditingController _amountWithdrawal = TextEditingController();
 
   TextEditingController get nameAccount => _nameAccount;
   TextEditingController get noBankAccount => _noBankAccount;
   TextEditingController get accountOwnerName => _accountOwnerName;
+  TextEditingController get amountWithdrawal => _amountWithdrawal;
+
+  bool _isChecking = false;
+  bool get isCheking => _isChecking;
+
+  String _bankSelected = '0';
+  String get bankSelected => _bankSelected;
 
   String _messageAddBankError = '';
   String get messageAddBankError => _messageAddBankError;
@@ -61,6 +69,12 @@ class TransactionNotifier extends ChangeNotifier {
   bool get isScrollLoading => _isScrollLoading;
   bool _isDetailLoading = false;
   bool get isDetailLoading => _isDetailLoading;
+
+  set bankSelected(String val) {
+    _bankSelected = val;
+
+    notifyListeners();
+  }
 
   set accountBalance(AccountBalanceModel? val) {
     _accountBalance = val;
@@ -130,6 +144,7 @@ class TransactionNotifier extends ChangeNotifier {
   navigateToBankAccount() => Routing().move(Routes.bankAccount);
   navigateToAddBankAccount() => Routing().move(Routes.addBankAccount);
   navigateToDetailTransaction() => Routing().move(Routes.detailTransaction);
+  navigateToWithDrawal() => Routing().move(Routes.withdrawal);
 
   showDialogHelp(BuildContext context) {
     ShowBottomSheet().onShowHelpBankAccount(context);
@@ -452,5 +467,42 @@ class TransactionNotifier extends ChangeNotifier {
       await initTransactionHistoryInProgress(context);
       isScrollLoading = false;
     }
+  }
+
+  Future bankChecked(String val) async {
+    _isChecking = true;
+    bankSelected = val;
+    notifyListeners();
+    _checkingAccount();
+  }
+
+  Future _checkingAccount() async {
+    // bool connect = await System().checkConnections();
+    // if (connect) {
+    //   final email = SharedPreference().readStorage(SpKeys.email);
+    //   final Map params = {
+    //     // "id": id,
+    //   };
+    //   final notifier = TransactionBloc();
+    //   await notifier.deleteBankAccount(context, params: params);
+    //   final fetch = notifier.transactionFetch;
+
+    //   if (fetch.postsState == TransactionState.deleteBankAccontSuccess) {
+    //     dataAcccount!.removeAt(index);
+    //     print('delete berhasil');
+    //     Routing().moveBack();
+    //   }
+    //   if (fetch.postsState == TransactionState.deleteBankAccontError) {
+    //     if (fetch.data != null) {
+    //       ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+    //     }
+    //   }
+    //   notifyListeners();
+    // } else {
+    //   ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+    //     Routing().moveBack();
+    //     createBankAccount(context);
+    //   });
+    // }
   }
 }

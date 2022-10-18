@@ -1040,7 +1040,11 @@ class System {
   }
 
   String currencyFormat({required int? amount}) {
-    return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ').format(amount);
+    return intl.NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0).format(amount);
+  }
+
+  String numberFormat({required int? amount}) {
+    return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
   Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
