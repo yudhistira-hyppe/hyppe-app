@@ -79,6 +79,7 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('pageRow', '$pageRows'));
+      print('ZT $pageRows, $pageNumber, $visibility, ${System().validatePostTypeV2(type)}');
       formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     }
@@ -133,14 +134,14 @@ class PostsBloc {
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
-    final currentDate = context.getCurrentDate();
+    // final currentDate = context.getCurrentDate();
 
     formData.fields.add(const MapEntry('withExp', 'true'));
     formData.fields.add(const MapEntry('withActive', 'true'));
     formData.fields.add(const MapEntry('withDetail', 'true'));
     formData.fields.add(const MapEntry('withInsight', 'true'));
     formData.fields.add(MapEntry('visibility', visibility));
-    formData.fields.add(MapEntry('endDate', currentDate));
+    // formData.fields.add(MapEntry('endDate', currentDate));
     formData.fields.add(MapEntry('pageRow', '$pageRows'));
     formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
 
