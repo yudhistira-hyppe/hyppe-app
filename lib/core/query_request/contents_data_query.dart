@@ -30,7 +30,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     if (!hasNext) return [];
-    final box = Boxes.boxDataContents;
+    // final box = Boxes.boxDataContents;
 
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
 
@@ -55,21 +55,21 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
       res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
 
-      if (featureType == FeatureType.story) {
-        box.get(notifierMain.visibilty)!.story!.addAll(res ?? []);
-      } else if (featureType == FeatureType.vid) {
-        box.get(notifierMain.visibilty)!.video!.addAll(res ?? []);
-      } else if (featureType == FeatureType.diary) {
-        box.get(notifierMain.visibilty)!.diary!.addAll(res ?? []);
-      } else if (featureType == FeatureType.pic) {
-        box.get(notifierMain.visibilty)!.pict!.addAll(res ?? []);
-      }
-      await box.get(notifierMain.visibilty)!.save();
+      // if (featureType == FeatureType.story) {
+      //   box.get(notifierMain.visibilty)!.story!.addAll(res ?? []);
+      // } else if (featureType == FeatureType.vid) {
+      //   box.get(notifierMain.visibilty)!.video!.addAll(res ?? []);
+      // } else if (featureType == FeatureType.diary) {
+      //   box.get(notifierMain.visibilty)!.diary!.addAll(res ?? []);
+      // } else if (featureType == FeatureType.pic) {
+      //   box.get(notifierMain.visibilty)!.pict!.addAll(res ?? []);
+      // }
+      // await box.get(notifierMain.visibilty)!.save();
 
       hasNext = res?.length == limit;
       if (res?.length != null) page++;
     } catch (e) {
-      '$e'.logger();
+      'error loadNext : $e'.logger();
       rethrow;
     } finally {
       loading = false;
