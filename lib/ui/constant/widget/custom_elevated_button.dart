@@ -7,13 +7,13 @@ class CustomElevatedButton extends StatelessWidget {
   final Function? function;
   final ButtonStyle? buttonStyle;
 
-  const CustomElevatedButton({
+  const CustomElevatedButton({Key? key,
     required this.child,
     required this.width,
     required this.height,
     required this.function,
     this.buttonStyle,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

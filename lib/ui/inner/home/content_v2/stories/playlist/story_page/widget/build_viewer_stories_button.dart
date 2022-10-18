@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 // import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -62,7 +63,7 @@ class ViewerStoriesButton extends StatelessWidget {
                 )
               ],
             ),
-            width: 150,
+            width: context.getWidth() / 2,
             height: 30,
             function: () {
               storyController.pause();
