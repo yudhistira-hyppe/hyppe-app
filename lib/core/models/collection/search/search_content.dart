@@ -9,7 +9,7 @@ String searchContentToJson(SearchContentModel data) => json.encode(data.toJson()
 class SearchContentModel {
   SearchContentModel({
     this.users,
-    this.tags,
+    // this.tags,
     this.vid,
     this.diary,
     this.pict,
@@ -23,7 +23,7 @@ class SearchContentModel {
 
   factory SearchContentModel.fromJson(Map<String, dynamic> json) => SearchContentModel(
         users: Users.fromJson(json["users"]),
-        tags: Tags.fromJson(json["tags"]),
+        // tags: Tags.fromJson(json["tags"]),
         vid: Diary.fromJson(json["vid"]),
         diary: Diary.fromJson(json["diary"]),
         pict: Diary.fromJson(json["pict"]),
@@ -31,7 +31,7 @@ class SearchContentModel {
 
   Map<String, dynamic> toJson() => {
         "users": users?.toJson(),
-        "tags": tags?.toJson(),
+        // "tags": tags?.toJson(),
         "vid": vid?.toJson(),
         "diary": diary?.toJson(),
         "pict": pict?.toJson(),
