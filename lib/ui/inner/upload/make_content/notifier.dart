@@ -190,7 +190,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
         notifyListeners();
         if(_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)){
-          onStopRecordedVideo(scaffoldKey.currentContext ?? context);
+          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), (){
+            onStopRecordedVideo(materialAppKey.currentContext ?? context);
+          });
         }
       },
     );

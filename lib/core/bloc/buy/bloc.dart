@@ -131,6 +131,10 @@ class BuyBloc {
       (errorData) {
         setBuyFetch(BuyFetch(BuyState.postContentsError, data: errorData.error));
       },
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
       data: params,
       withAlertMessage: true,
       withCheckConnection: true,

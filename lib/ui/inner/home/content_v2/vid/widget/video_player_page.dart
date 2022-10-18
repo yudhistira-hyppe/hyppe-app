@@ -316,8 +316,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         print('ini event betterPlayerEventType : ${event.betterPlayerEventType}');
         if(event.betterPlayerEventType == BetterPlayerEventType.initialized){
           context.incrementAdsCount();
-        }else if(event.betterPlayerEventType == BetterPlayerEventType.seekTo){
-          context.incrementAdsCount();
         }
       }
     );
@@ -697,7 +695,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                   builder: (context, value, child) {
                     if (!value) {
                       print('progressBarVideo false');
-                      return const CircularProgressIndicator();
+                      return Center(
+                          child: CircularProgressIndicator(
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                          )
+                      );
                     } else {
                       print('_eventType $_eventType');
                       if (_eventType == BetterPlayerEventType.showingAds) {
@@ -710,7 +712,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                           print('progressBarVideo true');
                           return Center(
                             child: CircularProgressIndicator(
-                              backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                             ),
                           );
                         }
