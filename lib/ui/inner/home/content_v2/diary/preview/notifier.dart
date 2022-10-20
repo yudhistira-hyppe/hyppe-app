@@ -21,6 +21,9 @@ import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart'
 
 import 'package:provider/provider.dart';
 
+import '../../../../../../app.dart';
+import '../../../notifier_v2.dart';
+
 class PreviewDiaryNotifier with ChangeNotifier {
   final _system = System();
   final _routing = Routing();

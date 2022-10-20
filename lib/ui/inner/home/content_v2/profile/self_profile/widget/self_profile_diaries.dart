@@ -12,13 +12,15 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_conte
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../../../../constant/widget/custom_loading.dart';
+
 class SelfProfileDiaries extends StatelessWidget {
   const SelfProfileDiaries({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Selector<SelfProfileNotifier, Tuple2<UserInfoModel?, int>>(
-      selector: (_, select) => Tuple2(select.user, select.diaryCount),
+    return Selector<SelfProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
+      selector: (_, select) => Tuple3(select.user, select.diaryCount, select.diaryHasNext),
       builder: (_, notifier, __) => notifier.item1 != null
           ? notifier.item2 == 0
               ? const EmptyWidget()
@@ -26,6 +28,14 @@ class SelfProfileDiaries extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
                       try {
+                        if (index == notifier.item1?.diaries?.length) {
+                          return Container();
+                        } else if (index == (notifier.item1?.diaries?.length ?? 0) + 1 && notifier.item3) {
+                          return const Padding(
+                            padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
+                            child: CustomLoading(size: 4),
+                          );
+                        }
                         return GestureDetector(
                           onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
                           child: Padding(

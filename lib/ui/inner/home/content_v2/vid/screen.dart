@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -48,8 +49,8 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
     final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
-    return Consumer2<PreviewVidNotifier, TranslateNotifierV2>(
-      builder: (_, vidNotifier, translateNotifier, __) => SizedBox(
+    return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
+      builder: (_, vidNotifier, translateNotifier, homeNotifier, __) => SizedBox(
         width: SizeConfig.screenWidth,
         child: Column(
           children: [
@@ -66,7 +67,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                       function: () => context.read<PreviewVidNotifier>().initialVid(context, reload: true),
                     ),
                   )
-                : vidNotifier.vidData != null
+                : (vidNotifier.vidData != null)
                     ? vidNotifier.vidData!.length == 0
                         ? const NoResultFound()
                         : SizedBox(
@@ -89,6 +90,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                 },
                                 itemCount: vidNotifier.itemCount,
                                 itemBuilder: (BuildContext context, int index) {
+                                  if(homeNotifier.isLoadingVid){
+                                    return CustomShimmer(
+                                      margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
+                                      height: context.getHeight() / 8,
+                                      width: double.infinity,
+                                    );
+                                  }
                                   if (index == vidNotifier.vidData?.length && vidNotifier.hasNext) {
                                     return const CustomLoading(size: 5);
                                   }

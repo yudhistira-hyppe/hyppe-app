@@ -55,7 +55,7 @@ class HomeNotifier with ChangeNotifier {
   // bool get isHaveSomethingNew => _isHaveSomethingNew;
   String? get sessionID => _sessionID;
 
-  final box = Boxes.boxDataContents;
+  // final box = Boxes.boxDataContents;
 
   // set isHaveSomethingNew(bool val) {
   //   _isHaveSomethingNew = val;
@@ -114,7 +114,9 @@ class HomeNotifier with ChangeNotifier {
   Future onRefresh(BuildContext context) async {
     bool isConnected = await System().checkConnections();
     if (isConnected) {
-      isLoadingVid = true;
+      _isLoadingVid = true;
+      _isLoadingDiary = true;
+      _isLoadingPict = true;
       int totLoading = 0;
 
       final profile = Provider.of<MainNotifier>(context, listen: false);
@@ -154,8 +156,12 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
+
       if (totLoading >= 3) {
-        isLoadingVid = false;
+        print("is finish shimmer");
+        _isLoadingVid = false;
+        _isLoadingDiary = false;
+        _isLoadingPict = false;
       }
 
       notifyListeners();
@@ -169,9 +175,9 @@ class HomeNotifier with ChangeNotifier {
   }
 
   Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
-    print('ambil semua data');
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
+    print('ambil semua data ${notifierMain.visibilty}');
     const page = 0;
     try {
       final notifier = PostsBloc();

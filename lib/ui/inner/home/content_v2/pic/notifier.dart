@@ -21,7 +21,9 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import 'package:provider/provider.dart';
+import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../notifier_v2.dart';
 
 class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();

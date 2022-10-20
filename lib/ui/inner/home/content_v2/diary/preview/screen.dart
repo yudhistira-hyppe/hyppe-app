@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -39,6 +40,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final notifier = context.watch<PreviewDiaryNotifier>();
+    final homeNot = context.watch<HomeNotifier>();
     final translateNotifier = context.watch<TranslateNotifierV2>();
     final error = context.select((ErrorService value) => value.getError(ErrorType.diary));
     // double _result = context.read<PreviewDiaryNotifier>().scaleDiary(context) - 16 - 8;
@@ -80,7 +82,8 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                           itemCount: notifier.itemCount,
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           itemBuilder: (context, index) {
-                            if (notifier.diaryData == null) {
+                            if (notifier.diaryData == null || (homeNot.isLoadingDiary)) {
+
                               return CustomShimmer(
                                 width: (MediaQuery.of(context).size.width - 16.0 - 16.0 - 8) / 3,
                                 height: 181,
