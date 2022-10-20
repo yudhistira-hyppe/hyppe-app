@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -36,8 +37,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.pic));
 
-    return Consumer<PreviewPicNotifier>(
-      builder: (_, notifier, __) => Container(
+    return Consumer2<PreviewPicNotifier, HomeNotifier>(
+      builder: (_, notifier, home, __) => Container(
         width: SizeConfig.screenWidth,
         height: SizeWidget.barHyppePic,
         margin: const EdgeInsets.only(top: 16.0, bottom: 12),
@@ -73,7 +74,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                             itemCount: notifier.itemCount,
                             padding: const EdgeInsets.symmetric(horizontal: 11.5),
                             itemBuilder: (context, index) {
-                              if (notifier.pic == null) {
+                              if (notifier.pic == null || home.isLoadingPict) {
                                 return CustomShimmer(
                                   width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
                                   height: 168,

@@ -32,7 +32,7 @@ class _FilterLandingState extends State<FilterLanding> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<LikeNotifier, TranslateNotifierV2>(builder: (context, notifier, transNotifier, child) {
+    return Consumer3<LikeNotifier, TranslateNotifierV2, HomeNotifier>(builder: (context, notifier, transNotifier, homeNotifier, child) {
       filterList = [
         {"id": '1', 'name': "${transNotifier.translate.all}", 'code': 'PUBLIC'},
         // {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
@@ -51,6 +51,9 @@ class _FilterLandingState extends State<FilterLanding> {
                 filterList.length,
                 (index) => GestureDetector(
                   onTap: () {
+                    homeNotifier.isLoadingVid = true;
+                    homeNotifier.isLoadingDiary = true;
+                    homeNotifier.isLoadingPict = true;
                     selected(filterList[index]['code']);
                     notifier.changeVisibility(context, filterList[index]['code']);
                   },
