@@ -1,13 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/account_balance.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/bank_account_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
+import 'package:hyppe/core/models/collection/transaction/withdrawal_summary_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -30,24 +31,33 @@ class TransactionNotifier extends ChangeNotifier {
   TransactionHistoryModel? dataTransactionDetail;
   int? countTransactionProgress = 0;
 
+  WithdrawalSummaryModel? withdarawalSummarymodel;
+
   AccountBalanceModel? _accountBalance;
   AccountBalanceModel? get accountBalance => _accountBalance;
 
   String? bankcode;
+  TextEditingController pinController = TextEditingController();
   TextEditingController _nameAccount = TextEditingController();
   TextEditingController _noBankAccount = TextEditingController();
   TextEditingController _accountOwnerName = TextEditingController();
-  TextEditingController _amountWithdrawal = TextEditingController();
+  TextEditingController _amountWithdrawalController = TextEditingController();
 
   TextEditingController get nameAccount => _nameAccount;
   TextEditingController get noBankAccount => _noBankAccount;
   TextEditingController get accountOwnerName => _accountOwnerName;
-  TextEditingController get amountWithdrawal => _amountWithdrawal;
+  TextEditingController get amountWithdrawalController => _amountWithdrawalController;
+
+  String? _amountWithDrawal = '';
+  String? get amountWithDrawal => _amountWithDrawal;
+
+  String _amount = '';
+  String get amount => _amount;
 
   bool _isChecking = false;
   bool get isCheking => _isChecking;
 
-  String _bankSelected = '0';
+  String _bankSelected = '';
   String get bankSelected => _bankSelected;
 
   String _messageAddBankError = '';
@@ -70,9 +80,23 @@ class TransactionNotifier extends ChangeNotifier {
   bool _isDetailLoading = false;
   bool get isDetailLoading => _isDetailLoading;
 
+  set amountWithDrawal(String? val) {
+    _amountWithDrawal = val;
+    notifyListeners();
+  }
+
+  set amount(String val) {
+    _amount = val;
+    notifyListeners();
+  }
+
+  set amountWithdrawalController(TextEditingController val) {
+    _amountWithdrawalController = val;
+    notifyListeners();
+  }
+
   set bankSelected(String val) {
     _bankSelected = val;
-
     notifyListeners();
   }
 
@@ -236,7 +260,7 @@ class TransactionNotifier extends ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
-        initBankAccount(context);
+        initTransactionHistoryInProgress(context);
       });
     }
   }
@@ -269,7 +293,7 @@ class TransactionNotifier extends ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
-        initBankAccount(context);
+        getAccountBalance(context);
       });
     }
   }
@@ -469,9 +493,11 @@ class TransactionNotifier extends ChangeNotifier {
     }
   }
 
-  Future bankChecked(String val) async {
+  Future bankChecked(int index) async {
     _isChecking = true;
-    bankSelected = val;
+    bankSelected = dataAcccount![index].noRek!;
+    _accountOwner = dataAcccount![index].nama!;
+    bankcode = dataAcccount![index].bankCode!;
     notifyListeners();
     _checkingAccount();
   }
@@ -504,5 +530,140 @@ class TransactionNotifier extends ChangeNotifier {
     //     createBankAccount(context);
     //   });
     // }
+  }
+
+  void showRemarkWithdraw(BuildContext context) {
+    ShowGeneralDialog.remarkWidthdrawal(context);
+  }
+
+  Future summaryWithdrawal(BuildContext context) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final Map params = {
+      "email": email,
+      "bankcode": bankcode,
+      "norek": bankSelected,
+      "amount": int.parse(amountWithDrawal!),
+    };
+
+    if (accountBalance!.totalsaldo! < 50000 || int.parse(amountWithDrawal!) < 50000) {
+      return ShowBottomSheet().onShowColouredSheet(
+        context,
+        'Minimum Withdrawal Rp. 50.000',
+        maxLines: 2,
+        color: Theme.of(context).colorScheme.error,
+        iconSvg: "${AssetPath.vectorPath}close.svg",
+      );
+    }
+
+    for (var e in dataAcccount!) {
+      if (e.noRek == params['norek']) {
+        if (!e.statusInquiry!) {
+          return ShowBottomSheet().onShowColouredSheet(
+            context,
+            'Bank account name and your ID did not matched. Click Here to visit our Help Center',
+            maxLines: 4,
+            color: Theme.of(context).colorScheme.error,
+            iconSvg: "${AssetPath.vectorPath}close.svg",
+            function: () {
+              print('asdasd');
+            },
+          );
+        }
+      }
+    }
+
+    _summaryWithdrawal(context, params);
+  }
+
+  Future _summaryWithdrawal(BuildContext context, params) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      final notifier = TransactionBloc();
+      await notifier.summaryWithdrawal(context, params: params);
+      final fetch = notifier.transactionFetch;
+
+      if (fetch.postsState == TransactionState.summaryWithdrawalSuccess) {
+        withdarawalSummarymodel = WithdrawalSummaryModel.fromJson(fetch.data);
+        for (var e in dataAcccount!) {
+          if (e.noRek == params['norek']) {
+            e.statusInquiry = withdarawalSummarymodel!.statusInquiry;
+          }
+        }
+        if (withdarawalSummarymodel!.statusInquiry!) {
+          Routing().move(Routes.withdrawalSummary);
+        } else {
+          ShowBottomSheet().onShowColouredSheet(
+            context,
+            'Bank account name and your ID did not matched. Click Here to visit our Help Center',
+            maxLines: 2,
+            color: Theme.of(context).colorScheme.error,
+            iconSvg: "${AssetPath.vectorPath}close.svg",
+            function: () {
+              print('asdasd');
+            },
+          );
+        }
+      }
+      if (fetch.postsState == TransactionState.summaryWithdrawalError) {
+        if (fetch.data != null) {
+          ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+        }
+      }
+      notifyListeners();
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        createBankAccount(context);
+      });
+    }
+  }
+
+  bool withdrawalButton() => amountWithDrawal != '' && bankSelected != '' ? true : false;
+
+  Future createWithdraw(BuildContext context) async {
+    Routing().move(Routes.pinWithdrawal);
+    // ShowGeneralDialog.loadingDialog(context);
+    // bool connect = await System().checkConnections();
+    // if (connect) {
+    //   final email = SharedPreference().readStorage(SpKeys.email);
+    //   Map params = {
+    //     "recipient_bank": bankcode,
+    //     "recipient_account": withdarawalSummarymodel!.bankAccount,
+    //     "amount": withdarawalSummarymodel!.amount,
+    //     "note": "Withdraw",
+    //     "email": email,
+    //   };
+
+    //   final notifier = TransactionBloc();
+    //   await notifier.createWithdraw(context, params: params);
+    //   final fetch = notifier.transactionFetch;
+
+    //   if (fetch.postsState == TransactionState.createWithdrawalSuccess) {
+    //     withdarawalSummarymodel = WithdrawalSummaryModel.fromJson(fetch.data);
+
+    //     if (withdarawalSummarymodel!.statusInquiry!) {
+    //       // Routing().move(Routes.withdrawalSummary);
+    //     } else {}
+    //   }
+    //   if (fetch.postsState == TransactionState.createWithdrawalError) {
+    //     if (fetch.data != null) {
+    //       ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+    //     }
+    //   }
+    //   notifyListeners();
+    // } else {
+    //   ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+    //     Routing().moveBack();
+    //     createWithdraw(context);
+    //   });
+    // }
+  }
+
+  void exitPageWithdrawal(BuildContext context) {
+    bankcode = '';
+    bankSelected = '';
+    amountWithdrawalController.clear();
+    amountWithDrawal = '';
+    Routing().moveBack();
   }
 }

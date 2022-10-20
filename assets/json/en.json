@@ -667,5 +667,11 @@
   "youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue" : "You need a certificate to market your content, you can register it later. Do you want to continue?",
   "yesPostAnyway" : "Yes, Post Anyway",
   "noIWantToRegister" : "No, I Want To Register",
-  "sellingPrice" : "Selling Price"
+  "sellingPrice" : "Selling Price",
+  "transferTo" : "Transfer to",
+  "theBalanceWillBeTransferredToTheDesignatedAccount" : "The balance will be transferred to the designated account, this will take a while. The process will be done in maximum of one hour. Please note that bank operating hours may vary and may experience delays.",
+  "byClickingWithdrawYouHereby" : "By clicking withdraw, you hereby agreed to send the balance to designated account. The amount of balance transferred cannot be cancelled or refunded.",
+  "aVerifiedBankDoesNotNeed" : "A verified bank does not need a process checking bank account again",
+  "yourTransactionisBeingProcessedNow" : "Your Transaction is Being Processed Now",
+  "backtoTransaction" : "Back to Transaction"
 }

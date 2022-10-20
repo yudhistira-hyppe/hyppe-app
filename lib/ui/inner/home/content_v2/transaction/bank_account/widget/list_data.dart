@@ -55,7 +55,7 @@ class ListDataBankAccount extends StatelessWidget {
                                   textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
                                 ),
                                 sixPx,
-                                dataAcccount![index].statusInquiry!
+                                dataAcccount![index].statusInquiry != null && dataAcccount![index].statusInquiry!
                                     ? Container(
                                         padding: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(

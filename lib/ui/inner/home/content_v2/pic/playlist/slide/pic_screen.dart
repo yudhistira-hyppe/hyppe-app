@@ -23,25 +23,24 @@ class PicPlaylishScreen extends StatefulWidget {
 }
 
 class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
-
   @override
   void initState() {
     context.incrementAdsCount();
 
-    Future.delayed(Duration.zero, () async{
+    Future.delayed(Duration.zero, () async {
       if (widget.url.isNotEmpty && widget.data.adsId != null) {
         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
-        if(!isShowAds){
+        if (!isShowAds) {
           await System().adsPopUp(context, widget.data, widget.url);
         }
-
       }
     });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {return InteractiveViewer(
+  Widget build(BuildContext context) {
+    return InteractiveViewer(
       transformationController: widget.transformationController,
       child: InkWell(
         onDoubleTap: () {
@@ -49,7 +48,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
         },
         child: CustomCacheImage(
           // imageUrl: picData.content[arguments].contentUrl,
-          imageUrl: widget.contentData.isApsara! ? widget.contentData.mediaThumbUri : widget.contentData.fullThumbPath,
+          imageUrl: widget.contentData.isApsara! ? widget.contentData.mediaEndpoint : widget.contentData.fullThumbPath,
           imageBuilder: (ctx, imageProvider) {
             return Container(
               decoration: BoxDecoration(

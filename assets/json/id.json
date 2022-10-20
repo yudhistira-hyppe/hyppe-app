@@ -667,5 +667,11 @@
   "youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue" : "Anda memerlukan sertifikat untuk memasarkan konten Anda, Anda dapat mendaftarkannya nanti. Apakah Anda ingin melanjutkan?",
   "yesPostAnyway" : "Ya, Tetap Posting",
   "noIWantToRegister" : "Tidak, Saya Ingin Mendaftar",
-  "sellingPrice" : "Harga penjualan"
+  "sellingPrice" : "Harga penjualan",
+  "transferTo" : "Transfer kepada",
+  "theBalanceWillBeTransferredToTheDesignatedAccount" : "Saldo akan ditransfer ke rekening yang ditunjuk, ini akan memakan waktu cukup lama. Proses akan dilakukan dalam waktu maksimal satu jam. Harap dicatat bahwa jam operasional bank dapat bervariasi dan mungkin mengalami penundaan.",
+  "byClickingWithdrawYouHereby" : "Dengan mengklik penarikan, Anda dengan ini setuju untuk mengirim saldo ke rekening yang ditunjuk. Jumlah saldo yang ditransfer tidak dapat dibatalkan atau dikembalikan.",
+  "aVerifiedBankDoesNotNeed" : "Bank yang sudah verified tidak perlu ada proses pengecekan akun bank lagi",
+  "yourTransactionisBeingProcessedNow" : "Transaksi Anda Sedang Diproses Sekarang",
+  "backtoTransaction" : "Kembali ke Transaksi"
 }

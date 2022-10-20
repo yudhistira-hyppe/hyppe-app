@@ -8,7 +8,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
+import 'package:intl/intl.dart';
 import 'package:pattern_formatter/numeric_formatter.dart';
 import 'package:provider/provider.dart';
 
@@ -42,9 +42,12 @@ class TopWithdrawalWodget extends StatelessWidget {
                   textStyle: Theme.of(context).textTheme.subtitle2,
                 ),
                 fivePx,
-                const CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}info-icon.svg",
-                  height: 14,
+                GestureDetector(
+                  onTap: () => notifier.showRemarkWithdraw(context),
+                  child: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}info-icon.svg",
+                    height: 14,
+                  ),
                 )
               ],
             ),
@@ -79,19 +82,20 @@ class TopWithdrawalWodget extends StatelessWidget {
                       // }
                     },
                     // enabled: notifier.isSavedPrice ? false : true,
-                    controller: notifier.amountWithdrawal,
-                    // onChanged: (val) {
-                    //   if (val.isNotEmpty) {
-                    //     notifier.priceIsFilled = true;
-                    //   } else {
-                    //     notifier.priceIsFilled = false;
-                    //   }
-                    // },
+                    controller: notifier.amountWithdrawalController,
+                    onChanged: (val) {
+                      notifier.amountWithDrawal = val.replaceAll('.', '');
+                    },
                     keyboardAppearance: Brightness.dark,
                     cursorColor: const Color(0xff8A3181),
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly, ThousandsFormatter()], // Only numbers can be entered
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                      ThousandsFormatter(
+                        formatter: NumberFormat.decimalPattern('id'),
+                      )
+                    ], // Only numbers can be entered
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       fillColor: kHyppePrimary,
@@ -131,16 +135,17 @@ class TopWithdrawalWodget extends StatelessWidget {
                 itemCount: 4,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: () => notifier.amountWithdrawal.text = System().numberFormat(amount: (index + 1) * 50000),
-
-                    // (System().numberFormat(((index + 1) * 50000))).toString(),
+                    onTap: () {
+                      notifier.amountWithdrawalController.text = System().numberFormat(amount: (index + 1) * 50000);
+                      notifier.amountWithDrawal = ((index + 1) * 50000).toString();
+                    },
                     child: Container(
                       margin: const EdgeInsets.only(right: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.background,
                         borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(color: kHyppeLightInactive1),
+                        border: Border.all(color: notifier.amountWithDrawal == ((index + 1) * 50000).toString() ? kHyppePrimary : kHyppeLightInactive1),
                       ),
                       child: Text('${System().currencyFormat(amount: (index + 1) * 50000)} '),
                     ),

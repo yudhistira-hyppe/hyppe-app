@@ -213,6 +213,14 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                   if (v == Direction.down) notifier.onCloseStory(mounted);
                 },
               ),
+              // Padding(
+              //   padding: const EdgeInsets.all(200.0),
+              //   child: Text("${widget.data!.isApsara}"),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(top: 200.0),
+              //   child: SelectableText("${widget.data!.fullThumbPath}"),
+              // ),
               BuildTopView(
                 when: _when,
                 data: widget.data,

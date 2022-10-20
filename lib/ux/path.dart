@@ -92,6 +92,7 @@ class Routes {
   static const String addBankAccount = '/add-bank-account';
   static const String withdrawal = '/withdrawal';
   static const String withdrawalSummary = '/withdrawal-summary';
+  static const String pinWithdrawal = '/pin-withdrawal';
 
   //create pin
   static const String pinScreen = '/pin-screen';

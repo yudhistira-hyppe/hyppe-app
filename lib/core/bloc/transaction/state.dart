@@ -15,6 +15,10 @@ enum TransactionState {
   getAccountBalanceError,
   sendVerificationError,
   sendVerificationSuccess,
+  summaryWithdrawalSuccess,
+  summaryWithdrawalError,
+  createWithdrawalSuccess,
+  createWithdrawalError,
 }
 
 class TransactionFetch {

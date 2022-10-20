@@ -41,6 +41,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.d
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/transaction_inprogress/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/summary_withdrawal/screen.dart';
 
@@ -274,6 +275,9 @@ class Generate {
 
       case Routes.withdrawalSummary:
         return MaterialPageRoute(builder: (_) => const SummaryWithdrawalScreen());
+
+      case Routes.pinWithdrawal:
+        return MaterialPageRoute(builder: (_) => const PinWithdrawalScreen());
 
       case Routes.pinScreen:
         return MaterialPageRoute(builder: (_) => const PinScreen());

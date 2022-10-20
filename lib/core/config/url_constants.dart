@@ -454,6 +454,12 @@ class UrlConstants {
   /// post => Get History Transaction
   static const String detailTransactionHistorys = "$transactionRoute/historys/details";
 
+  /// post => Get Withdraw Detail
+  static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail";
+
+  /// post => Get Withdraw Detail
+  static const String withdraw = "$transactionRoute/withdraw";
+
   /// get => Get All Bank
   static const String getAllBank = "$bankRoute/all";
 

@@ -205,4 +205,60 @@ class TransactionBloc {
       errorServiceType: System().getErrorTypeV2(type),
     );
   }
+
+  Future summaryWithdrawal(BuildContext context, {required Map? params}) async {
+    var type = FeatureType.other;
+    setTransactionFetch(TransactionFetch(TransactionState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, message: onResult.data['message'], data: onResult.data));
+        } else {
+          setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, data: errorData.error));
+      },
+      data: params,
+      headers: {
+        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      withAlertMessage: true,
+      withCheckConnection: false,
+      host: UrlConstants.detailWithdrawal,
+      methodType: MethodType.post,
+      errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
+
+  Future createWithdraw(BuildContext context, {required Map? params}) async {
+    var type = FeatureType.other;
+    setTransactionFetch(TransactionFetch(TransactionState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, message: onResult.data['message'], data: onResult.data));
+        } else {
+          setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, data: errorData.error));
+      },
+      data: params,
+      headers: {
+        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      withAlertMessage: false,
+      withCheckConnection: false,
+      host: UrlConstants.withdraw,
+      methodType: MethodType.post,
+      errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
 }

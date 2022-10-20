@@ -34,73 +34,87 @@ class BottomWithdrawalWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const CustomTextWidget(textToDisplay: 'Destination Bank Account'),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: notifier.dataAcccount!.length,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Container(
-                    decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: kHyppeLightInactive2, width: 0.5))),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () => notifier.bankChecked(notifier.dataAcccount![index].noRek!),
-                          contentPadding: EdgeInsets.zero,
-                          title: Row(
+              notifier.dataAcccount!.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Row(
+                        children: const [
+                          Text(
+                            'No Bank Account !',
+                            style: TextStyle(color: kHyppeRed),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: notifier.dataAcccount!.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: kHyppeLightInactive2, width: 0.5))),
+                          child: Column(
                             children: [
-                              CustomTextWidget(
-                                textToDisplay: notifier.dataAcccount![index].bankName!,
-                                textAlign: TextAlign.start,
-                              ),
-                              sixPx,
-                              Container(
-                                padding: EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Color(0xAAF8EDF9),
-                                ),
-                                child: const CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}user-verified.svg",
-                                  defaultColor: false,
-                                ),
-                              )
-                            ],
-                          ),
-                          subtitle: CustomTextWidget(
-                            textToDisplay: '${notifier.dataAcccount![index].noRek} - ${notifier.dataAcccount![index].nama}',
-                            textAlign: TextAlign.start,
-                          ),
-                          trailing: Radio<String>(
-                            value: notifier.dataAcccount![index].noRek!,
-                            groupValue: notifier.bankSelected,
-                            onChanged: (val) => notifier.bankSelected = val!,
-                            activeColor: kHyppePrimary,
-                          ),
-                        ),
-                        notifier.isCheking && notifier.bankSelected == notifier.dataAcccount![index].noRek!
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: const [
-                                    SizedBox(
-                                      width: 10,
-                                      height: 10,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 1,
-                                        color: kHyppePrimary,
-                                      ),
+                              ListTile(
+                                onTap: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? () => notifier.bankChecked(index) : null,
+                                contentPadding: EdgeInsets.zero,
+                                title: Row(
+                                  children: [
+                                    CustomTextWidget(
+                                      textToDisplay: notifier.dataAcccount![index].bankName!,
+                                      textAlign: TextAlign.start,
                                     ),
                                     sixPx,
-                                    CustomTextWidget(textToDisplay: 'Checking the account'),
+                                    notifier.dataAcccount![index].statusInquiry != null && notifier.dataAcccount![index].statusInquiry!
+                                        ? Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50),
+                                              color: const Color(0xAAF8EDF9),
+                                            ),
+                                            child: const CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}user-verified.svg",
+                                              defaultColor: false,
+                                            ),
+                                          )
+                                        : Container()
                                   ],
                                 ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  );
-                },
-              )
+                                subtitle: CustomTextWidget(
+                                  textToDisplay: '${notifier.dataAcccount![index].noRek} - ${(notifier.dataAcccount![index].nama)!.toUpperCase()}',
+                                  textAlign: TextAlign.start,
+                                ),
+                                trailing: Radio<String>(
+                                  value: notifier.dataAcccount![index].noRek!,
+                                  groupValue: notifier.bankSelected,
+                                  onChanged: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? (val) => notifier.bankChecked(index) : null,
+                                  activeColor: kHyppePrimary,
+                                ),
+                              ),
+                              // notifier.isCheking && notifier.bankSelected == notifier.dataAcccount![index].noRek!
+                              //     ? Padding(
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: Row(
+                              //           children: const [
+                              //             SizedBox(
+                              //               width: 10,
+                              //               height: 10,
+                              //               child: CircularProgressIndicator(
+                              //                 strokeWidth: 1,
+                              //                 color: kHyppePrimary,
+                              //               ),
+                              //             ),
+                              //             sixPx,
+                              //             CustomTextWidget(textToDisplay: 'Checking the account'),
+                              //           ],
+                              //         ),
+                              //       )
+                              //     : Container(),
+                            ],
+                          ),
+                        );
+                      },
+                    )
             ],
           )),
     );

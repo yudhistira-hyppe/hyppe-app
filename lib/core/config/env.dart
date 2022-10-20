@@ -78,6 +78,8 @@ class Env {
     UrlConstants.settingApps,
     UrlConstants.updatepost,
     UrlConstants.postViewer,
+    UrlConstants.detailWithdrawal,
+    UrlConstants.withdraw,
   ];
 
   static final EnvData dev = EnvData(

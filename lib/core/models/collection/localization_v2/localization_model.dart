@@ -667,6 +667,12 @@ class LocalizationModelV2 {
   String? yesPostAnyway;
   String? noIWantToRegister;
   String? sellingPrice;
+  String? transferTo;
+  String? theBalanceWillBeTransferredToTheDesignatedAccount;
+  String? byClickingWithdrawYouHereby;
+  String? aVerifiedBankDoesNotNeed;
+  String? yourTransactionisBeingProcessedNow;
+  String? backtoTransaction;
 
   LocalizationModelV2({
     this.login,
@@ -1337,6 +1343,12 @@ class LocalizationModelV2 {
     this.yesPostAnyway,
     this.noIWantToRegister,
     this.sellingPrice,
+    this.transferTo,
+    this.theBalanceWillBeTransferredToTheDesignatedAccount,
+    this.byClickingWithdrawYouHereby,
+    this.aVerifiedBankDoesNotNeed,
+    this.yourTransactionisBeingProcessedNow,
+    this.backtoTransaction,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2026,5 +2038,11 @@ class LocalizationModelV2 {
     yesPostAnyway = json["yesPostAnyway"];
     noIWantToRegister = json["noIWantToRegister"];
     sellingPrice = json["sellingPrice"];
+    transferTo = json["transferTo"];
+    theBalanceWillBeTransferredToTheDesignatedAccount = json["theBalanceWillBeTransferredToTheDesignatedAccount"];
+    byClickingWithdrawYouHereby = json["byClickingWithdrawYouHereby"];
+    aVerifiedBankDoesNotNeed = json["aVerifiedBankDoesNotNeed"];
+    yourTransactionisBeingProcessedNow = json["yourTransactionisBeingProcessedNow"];
+    backtoTransaction = json["backtoTransaction"];
   }
 }

@@ -19,6 +19,7 @@ class BankAccount {
   String? noRek;
   String? nama;
   String? bankName;
+  String? bankCode;
   bool? statusInquiry;
 
   BankAccount.fromJSON(dynamic json) {
@@ -28,6 +29,7 @@ class BankAccount {
     noRek = json['noRek'];
     nama = json['nama'];
     bankName = json['bankname'];
+    bankCode = json['bankcode'];
     statusInquiry = json['statusInquiry'];
   }
 }
