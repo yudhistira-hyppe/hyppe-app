@@ -13,13 +13,15 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../../../../constant/widget/custom_loading.dart';
+
 class SelfProfileVids extends StatelessWidget {
   const SelfProfileVids({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Selector<SelfProfileNotifier, Tuple2<UserInfoModel?, int>>(
-        selector: (_, select) => Tuple2(select.user, select.vidCount),
+    return Selector<SelfProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
+        selector: (_, select) => Tuple3(select.user, select.vidCount, select.vidHasNext),
         builder: (_, notifier, __) {
           return notifier.item1 != null
               ? notifier.item2 == 0
@@ -28,6 +30,15 @@ class SelfProfileVids extends StatelessWidget {
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
                           try {
+                            if (index == notifier.item1?.vids?.length) {
+                              return Container();
+                            } else if (index == (notifier.item1?.vids?.length ?? 0) + 1 && notifier.item3) {
+                              return const Padding(
+                                padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
+                                child: CustomLoading(size: 4),
+                              );
+                            }
+
                             return GestureDetector(
                               onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
                               child: Padding(

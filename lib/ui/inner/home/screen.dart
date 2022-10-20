@@ -96,7 +96,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void initState() {
-    print('allReload deui');
 
     context.read<HomeNotifier>().onRefresh(context);
 

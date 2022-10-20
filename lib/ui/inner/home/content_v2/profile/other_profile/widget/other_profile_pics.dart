@@ -10,18 +10,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../../../../constant/widget/custom_loading.dart';
+
 class OtherProfilePics extends StatelessWidget {
   const OtherProfilePics({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Selector<OtherProfileNotifier, Tuple2<UserInfoModel?, int>>(
-      selector: (_, select) => Tuple2(select.user, select.picCount),
+    return Selector<OtherProfileNotifier, Tuple3<UserInfoModel?, int, bool>>(
+      selector: (_, select) => Tuple3(select.user, select.picCount, select.picHasNext),
       builder: (_, notifier, __) => notifier.item1 != null
           ? SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
                   try {
+                    if (index == notifier.item1?.pics?.length) {
+                      return Container();
+                    } else if (index == (notifier.item1?.pics?.length ?? 0) + 1 && notifier.item3) {
+                      return const Padding(
+                        padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
+                        child: CustomLoading(size: 4),
+                      );
+                    }
                     return GestureDetector(
                       onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index),
                       child: Padding(

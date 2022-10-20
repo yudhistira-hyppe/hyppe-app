@@ -55,7 +55,7 @@ class HomeNotifier with ChangeNotifier {
   // bool get isHaveSomethingNew => _isHaveSomethingNew;
   String? get sessionID => _sessionID;
 
-  final box = Boxes.boxDataContents;
+  // final box = Boxes.boxDataContents;
 
   // set isHaveSomethingNew(bool val) {
   //   _isHaveSomethingNew = val;
