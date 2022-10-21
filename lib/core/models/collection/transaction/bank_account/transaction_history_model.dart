@@ -110,7 +110,11 @@ class TransactionHistoryModel {
     totallike = json['totallike'] ?? 0;
     totalview = json['totalview'] ?? 0;
     apsara = json['apsara'] != '' ? json['apsara'] : false;
-    media = json['media'] is List ? null : MediaModel.fromJSON(json['media']);
+    media = json['media'] == null
+        ? null
+        : json['media'] is List
+            ? null
+            : MediaModel.fromJSON(json['media']);
   }
 
   String? concatThumbUri() {

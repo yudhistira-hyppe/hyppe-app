@@ -337,7 +337,7 @@ class ShowGeneralDialog {
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => WillPopScope(
         onWillPop: () async => false,
-        child: AlertDialog(
+        child: const AlertDialog(
           content: LoadingDialog(),
           contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         ),

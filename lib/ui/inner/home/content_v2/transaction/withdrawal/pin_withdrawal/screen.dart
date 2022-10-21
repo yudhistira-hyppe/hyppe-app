@@ -54,9 +54,13 @@ class PinWithdrawalScreen extends StatelessWidget {
               sixPx,
               CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
               twelvePx,
-              CustomRectangleInput(notifier.pinController, onChanged: (value) {
-                print(value);
-              }),
+              CustomRectangleInput(
+                notifier.pinController,
+                onChanged: (value) {
+                  print(value);
+                  notifier.createWithdraw(context, value);
+                },
+              ),
             ],
           ),
         ),

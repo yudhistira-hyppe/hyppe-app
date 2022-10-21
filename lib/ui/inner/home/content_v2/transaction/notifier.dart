@@ -204,7 +204,7 @@ class TransactionNotifier extends ChangeNotifier {
         final fetch = notifier.transactionFetch;
 
         if (fetch.postsState == TransactionState.getHistorySuccess) {
-          if (_skip == 0) dataTransaction = [];
+          // if (_skip == 0) dataTransaction = [];
           // if (dataAllTransaction!.isEmpty) {
           //   fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
           //   context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
@@ -620,43 +620,51 @@ class TransactionNotifier extends ChangeNotifier {
 
   bool withdrawalButton() => amountWithDrawal != '' && bankSelected != '' ? true : false;
 
-  Future createWithdraw(BuildContext context) async {
-    Routing().move(Routes.pinWithdrawal);
-    // ShowGeneralDialog.loadingDialog(context);
-    // bool connect = await System().checkConnections();
-    // if (connect) {
-    //   final email = SharedPreference().readStorage(SpKeys.email);
-    //   Map params = {
-    //     "recipient_bank": bankcode,
-    //     "recipient_account": withdarawalSummarymodel!.bankAccount,
-    //     "amount": withdarawalSummarymodel!.amount,
-    //     "note": "Withdraw",
-    //     "email": email,
-    //   };
+  void navigateToPin() => Routing().move(Routes.pinWithdrawal);
 
-    //   final notifier = TransactionBloc();
-    //   await notifier.createWithdraw(context, params: params);
-    //   final fetch = notifier.transactionFetch;
+  Future createWithdraw(BuildContext context, String pin) async {
+    print(pin);
+    if (pin.length > 5) {
+      _createWithdraw(context);
+    }
+  }
 
-    //   if (fetch.postsState == TransactionState.createWithdrawalSuccess) {
-    //     withdarawalSummarymodel = WithdrawalSummaryModel.fromJson(fetch.data);
+  Future _createWithdraw(BuildContext context) async {
+    ShowGeneralDialog.loadingDialog(context).then((value) => null);
+    bool connect = await System().checkConnections();
+    if (connect) {
+      final email = SharedPreference().readStorage(SpKeys.email);
+      Map params = {
+        "recipient_bank": bankcode,
+        "recipient_account": withdarawalSummarymodel!.bankAccount,
+        "amount": withdarawalSummarymodel!.amount,
+        "note": "Withdraw",
+        "email": email,
+      };
 
-    //     if (withdarawalSummarymodel!.statusInquiry!) {
-    //       // Routing().move(Routes.withdrawalSummary);
-    //     } else {}
-    //   }
-    //   if (fetch.postsState == TransactionState.createWithdrawalError) {
-    //     if (fetch.data != null) {
-    //       ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
-    //     }
-    //   }
-    //   notifyListeners();
-    // } else {
-    //   ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-    //     Routing().moveBack();
-    //     createWithdraw(context);
-    //   });
-    // }
+      final notifier = TransactionBloc();
+      await notifier.createWithdraw(context, params: params);
+      final fetch = notifier.transactionFetch;
+
+      if (fetch.postsState == TransactionState.createWithdrawalSuccess) {
+        withdarawalSummarymodel = WithdrawalSummaryModel.fromJson(fetch.data);
+
+        if (withdarawalSummarymodel!.statusInquiry!) {
+          // Routing().move(Routes.withdrawalSummary);
+        } else {}
+      }
+      if (fetch.postsState == TransactionState.createWithdrawalError) {
+        if (fetch.data != null) {
+          ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+        }
+      }
+      notifyListeners();
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        createWithdraw(context, pinController.text);
+      });
+    }
   }
 
   void exitPageWithdrawal(BuildContext context) {
