@@ -196,11 +196,13 @@ class UserBloc {
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
     platForm = Platform.isAndroid ? "android" : "ios";
+    referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
     // print('ini plat $platForm');
     dynamic payload = {
       'email': email.toLowerCase(),
       "password": password,
       "deviceId": deviceID,
+      "referral": referralEmail,
       "imei": realDeviceId != "" ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {

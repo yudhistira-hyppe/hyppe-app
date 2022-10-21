@@ -40,7 +40,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('PicPlaylishScreen : ${widget.contentData.isApsara} = ${widget.contentData.mediaEndpoint}, ${widget.contentData.fullThumbPath}');
+    // print('PicPlaylishScreen : ${widget.contentData.isApsara} = ${widget.contentData.mediaEndpoint}, ${widget.contentData.fullThumbPath}');
     return InteractiveViewer(
       transformationController: widget.transformationController,
       child: InkWell(

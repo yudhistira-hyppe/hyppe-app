@@ -33,8 +33,8 @@ class ButtonTransaction extends StatelessWidget {
           Expanded(
             child: CustomTextButton(
               onPressed: () {
-                notifier.navigateToWithDrawal();
-                notifier.initBankAccount(context);
+                // notifier.navigateToWithDrawal();
+                // notifier.initBankAccount(context);
               },
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(

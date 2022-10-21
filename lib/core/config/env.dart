@@ -80,6 +80,7 @@ class Env {
     UrlConstants.postViewer,
     UrlConstants.detailWithdrawal,
     UrlConstants.withdraw,
+    UrlConstants.resendOTP,
   ];
 
   static final EnvData dev = EnvData(

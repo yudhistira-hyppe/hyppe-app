@@ -380,7 +380,6 @@ class SignUpPinNotifier with ChangeNotifier {
   Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
     if (_timer != "00:00") {
       // ignore: avoid_print
-      print('resendCode');
       return null;
     } else {
       return () async {
