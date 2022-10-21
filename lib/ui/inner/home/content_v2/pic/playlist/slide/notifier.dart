@@ -138,7 +138,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
-      print('test8');
+      print('reload contentsQuery : 8');
       _resFuture = contentsQuery.reload(context);
 
       final res = await _resFuture;
@@ -269,7 +269,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
       try {
         checkIsLoading = true;
         _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
-        print('test9');
+        print('reload contentsQuery : 9');
         final _resFuture = _usersFollowingQuery.reload(context);
         final _resRequest = await _resFuture;
         if (_resRequest.isNotEmpty) {

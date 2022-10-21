@@ -108,7 +108,7 @@ class SearchNotifier with ChangeNotifier {
       picContentsQuery.limit = 18;
 
       allContents = UserInfoModel();
-      print('test24');
+      print('reload contentsQuery : 23');
       allContents?.vids = await vidContentsQuery.reload(context);
       allContents?.diaries = await diaryContentsQuery.reload(context);
       allContents?.pics = await picContentsQuery.reload(context);

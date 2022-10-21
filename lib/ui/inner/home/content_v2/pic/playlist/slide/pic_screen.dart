@@ -40,6 +40,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('PicPlaylishScreen : ${widget.contentData.isApsara} = ${widget.contentData.mediaEndpoint}, ${widget.contentData.fullThumbPath}');
     return InteractiveViewer(
       transformationController: widget.transformationController,
       child: InkWell(
@@ -48,7 +49,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
         },
         child: CustomCacheImage(
           // imageUrl: picData.content[arguments].contentUrl,
-          imageUrl: widget.contentData.isApsara! ? widget.contentData.mediaEndpoint : widget.contentData.fullThumbPath,
+          imageUrl: (widget.contentData.isApsara ?? false) ? widget.contentData.mediaEndpoint : widget.contentData.fullThumbPath,
           imageBuilder: (ctx, imageProvider) {
             return Container(
               decoration: BoxDecoration(

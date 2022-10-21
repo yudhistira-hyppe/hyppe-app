@@ -17,8 +17,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
-import 'core/constants/utils.dart';
 import 'core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 
 // void mainApp(EnvType env) async {

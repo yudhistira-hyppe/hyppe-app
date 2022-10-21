@@ -124,7 +124,7 @@ class CommentNotifierV2 with ChangeNotifier {
 
     try {
       if (reload) {
-        print('test0');
+        print('reload contentsQuery : 2');
         _resFuture = commentQuery.reload(context);
       } else {
         _resFuture = commentQuery.loadNext(context);

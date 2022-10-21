@@ -151,6 +151,7 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
       try {
+        print('initialPic : 1');
         await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
         print(e);

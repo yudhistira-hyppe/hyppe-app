@@ -70,7 +70,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
     try {
 
-      print('test18');
+      print('reload contentsQuery : 16');
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
       _data = res.firstOrNull;
@@ -137,7 +137,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
     try {
       checkIsLoading = true;
-      print('test19');
+      print('reload contentsQuery : 17');
       _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;

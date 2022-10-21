@@ -383,7 +383,7 @@ class OtherProfileNotifier with ChangeNotifier {
     try {
       _usersFollowingQuery.senderOrReceiver = email;
       _usersFollowingQuery.limit = 200;
-      print('test11');
+      print('reload contentsQuery : 11');
       final _resFuture = _usersFollowingQuery.reload(context);
       final _resRequest = await _resFuture;
 

@@ -67,7 +67,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
 
     try {
       if (reload) {
-        print('test23');
+        print('reload contentsQuery : 22');
         _resFuture = notificationsQuery.reload(context);
       } else {
         _resFuture = notificationsQuery.loadNext(context);

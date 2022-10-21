@@ -104,7 +104,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       sigmaX: 30,
                                       sigmaY: 30,
                                       // thumbnail: picData!.content[arguments].contentUrl,
-                                      thumbnail: _notifier.listData![indexRoot].isApsara ?? false ? _notifier.listData![indexRoot].mediaThumbUri : _notifier.listData![indexRoot].fullThumbPath,
+                                      thumbnail: (_notifier.listData![indexRoot].isApsara ?? false) ? _notifier.listData![indexRoot].mediaThumbUri : _notifier.listData![indexRoot].fullThumbPath,
                                     ),
                                     // Content
                                     PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: _notifier.listData![indexRoot], transformationController: transformationController),

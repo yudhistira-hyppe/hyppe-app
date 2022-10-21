@@ -52,6 +52,7 @@ class VidSeeAllNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
+        print('reload contentsQuery : 18');
         _resFuture = contentsQuery.reload(context);
       } else {
         _resFuture = contentsQuery.loadNext(context);

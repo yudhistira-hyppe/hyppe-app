@@ -71,7 +71,7 @@ class MessageNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
-        print('test22');
+        print('reload contentsQuery : 21');
         _resFuture = discussQuery.reload(context);
       } else {
         _resFuture = discussQuery.loadNext(context);

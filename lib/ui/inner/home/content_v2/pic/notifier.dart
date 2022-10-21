@@ -63,6 +63,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
         res.addAll(list);
       }else{
         if (reload) {
+          print('reload contentsQuery : satu');
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);
@@ -99,6 +100,8 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
+
+      print('initialPic : 2');
       initialPic(context);
     }
   }
