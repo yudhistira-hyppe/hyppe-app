@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/bloc/ads_video/bloc.dart';
@@ -307,7 +307,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       showPlaceholderUntilPlay: true,
       deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
       autoDetectFullscreenAspectRatio: true,
-      autoDetectFullscreenDeviceOrientation: true,
+      autoDetectFullscreenDeviceOrientation: !Platform.isIOS,
       controlsConfiguration: const BetterPlayerControlsConfiguration(
         enableFullscreen: true,
         controlBarColor: Color.fromARGB(10, 0, 0, 1),

@@ -101,7 +101,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                     return const CustomLoading(size: 5);
                                   }
                                   final vidData = vidNotifier.vidData?[index];
-                                  final vidNot = Provider.of<PreviewVidNotifier>(context);
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
