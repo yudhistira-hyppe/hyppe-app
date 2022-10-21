@@ -52,12 +52,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   //   super.didPush();
   // }
 
-
-
   @override
   void didPopNext() {
-
-    Future.delayed(Duration(milliseconds: 500), (){
+    Future.delayed(Duration(milliseconds: 500), () {
       print('didPopNext isOnHomeScreen true');
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
     });
@@ -87,7 +84,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     super.deactivate();
   }
 
-
   @override
   void didPush() {
     print('didPush isOnHomeScreen true');
@@ -96,11 +92,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void initState() {
-
     context.read<HomeNotifier>().onRefresh(context);
 
     final _language = context.read<TranslateNotifierV2>().translate;
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       context.read<HomeNotifier>().setSessionID();
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       if (notifierFollow.listFollow.isEmpty) {
@@ -110,10 +105,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
     });
-
-
-
-
 
     context.read<PreUploadContentNotifier>().onGetInterest(context);
 

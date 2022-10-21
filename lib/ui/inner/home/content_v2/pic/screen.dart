@@ -27,9 +27,16 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    print('initstate pic');
     notifier.initialPic(context, reload: true);
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -62,6 +69,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                           onNotification: (ScrollNotification scrollInfo) {
                             if (scrollInfo is ScrollStartNotification) {
                               Future.delayed(const Duration(milliseconds: 100), () {
+                                print('pic screen');
                                 notifier.initialPic(context);
                               });
                             }

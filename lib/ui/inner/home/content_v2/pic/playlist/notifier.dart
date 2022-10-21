@@ -65,6 +65,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
     if (_routeArgument?.postID != null) {
+      print('pic playlist');
       await _initialPic(context);
     } else {
       _data = _routeArgument?.picData;

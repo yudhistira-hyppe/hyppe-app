@@ -36,7 +36,6 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   double? _currentPage = 0;
   bool _forcePause = false;
 
-
   AdsData _adsData = AdsData();
   AdsData get adsData => _adsData;
   String _adsUrl = '';
@@ -78,25 +77,25 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ////////////////////////////////////////////////////////
   void onUpdate() => notifyListeners();
 
-  Future initAdsData(BuildContext context) async{
+  Future initAdsData(BuildContext context) async {
     _adsUrl = '';
     final count = context.getAdsCount();
     String? urlAds;
 
-    if(count == null){
+    if (count == null) {
       context.setAdsCount(0);
-    }else{
-      if(count == 4){
+    } else {
+      if (count == 4) {
         'type ads : Content Ads'.logger();
         _isSponsored = false;
         urlAds = await getAdsVideo(context, true);
-      }else if(count == 2){
+      } else if (count == 2) {
         'type ads : Sponsored Ads'.logger();
         _isSponsored = true;
         urlAds = await getAdsVideo(context, false);
       }
     }
-    if(urlAds != null){
+    if (urlAds != null) {
       _adsUrl = urlAds;
     }
   }
@@ -145,25 +144,25 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<String?> getAdsVideo(BuildContext context, bool isContent) async{
-    try{
+  Future<String?> getAdsVideo(BuildContext context, bool isContent) async {
+    try {
       final notifier = AdsDataBloc();
       await notifier.adsVideoBloc(context, isContent);
       final fetch = notifier.adsDataFetch;
 
-      if(fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess){
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         final _newClipData = fetch.data;
         _adsData = _newClipData!.data;
         return await getAdsVideoApsara(context, _newClipData!.data!.videoId!);
       }
-    } catch (e){
+    } catch (e) {
       'Failed to fetch ads data $e'.logger();
     }
     return null;
   }
 
-  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async{
+  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async {
     try {
       final notifier = PostsBloc();
       await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);

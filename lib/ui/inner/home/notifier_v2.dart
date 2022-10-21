@@ -112,6 +112,7 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future onRefresh(BuildContext context) async {
+    print('home notifier');
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       _isLoadingVid = true;
@@ -151,11 +152,11 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
       try {
+        print('pic home');
         await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
-
 
       if (totLoading >= 3) {
         print("is finish shimmer");

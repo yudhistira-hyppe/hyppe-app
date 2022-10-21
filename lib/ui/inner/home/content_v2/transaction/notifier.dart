@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
@@ -8,6 +10,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/account_balance.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/bank_account_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
+import 'package:hyppe/core/models/collection/transaction/withdrawal_model.dart';
 import 'package:hyppe/core/models/collection/transaction/withdrawal_summary_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -32,6 +35,7 @@ class TransactionNotifier extends ChangeNotifier {
   int? countTransactionProgress = 0;
 
   WithdrawalSummaryModel? withdarawalSummarymodel;
+  WithdrawalModel? withdarawalmodel;
 
   AccountBalanceModel? _accountBalance;
   AccountBalanceModel? get accountBalance => _accountBalance;
@@ -47,6 +51,9 @@ class TransactionNotifier extends ChangeNotifier {
   TextEditingController get noBankAccount => _noBankAccount;
   TextEditingController get accountOwnerName => _accountOwnerName;
   TextEditingController get amountWithdrawalController => _amountWithdrawalController;
+
+  String _errorPinWithdrawMsg = '';
+  String get errorPinWithdrawMsg => _errorPinWithdrawMsg;
 
   String? _amountWithDrawal = '';
   String? get amountWithDrawal => _amountWithDrawal;
@@ -82,6 +89,11 @@ class TransactionNotifier extends ChangeNotifier {
 
   set amountWithDrawal(String? val) {
     _amountWithDrawal = val;
+    notifyListeners();
+  }
+
+  set errorPinWithdrawMsg(String val) {
+    _errorPinWithdrawMsg = val;
     notifyListeners();
   }
 
@@ -204,7 +216,7 @@ class TransactionNotifier extends ChangeNotifier {
         final fetch = notifier.transactionFetch;
 
         if (fetch.postsState == TransactionState.getHistorySuccess) {
-          // if (_skip == 0) dataTransaction = [];
+          if (_skip == 0) dataTransaction = [];
           // if (dataAllTransaction!.isEmpty) {
           //   fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
           //   context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
@@ -623,16 +635,13 @@ class TransactionNotifier extends ChangeNotifier {
   void navigateToPin() => Routing().move(Routes.pinWithdrawal);
 
   Future createWithdraw(BuildContext context, String pin) async {
-    print(pin);
-    if (pin.length > 5) {
-      _createWithdraw(context);
-    }
+    _createWithdraw(context);
   }
 
   Future _createWithdraw(BuildContext context) async {
-    ShowGeneralDialog.loadingDialog(context).then((value) => null);
     bool connect = await System().checkConnections();
     if (connect) {
+      ShowGeneralDialog.loadingDialog(context);
       final email = SharedPreference().readStorage(SpKeys.email);
       Map params = {
         "recipient_bank": bankcode,
@@ -640,6 +649,7 @@ class TransactionNotifier extends ChangeNotifier {
         "amount": withdarawalSummarymodel!.amount,
         "note": "Withdraw",
         "email": email,
+        "pin": pinController.text,
       };
 
       final notifier = TransactionBloc();
@@ -647,18 +657,19 @@ class TransactionNotifier extends ChangeNotifier {
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.createWithdrawalSuccess) {
-        withdarawalSummarymodel = WithdrawalSummaryModel.fromJson(fetch.data);
-
-        if (withdarawalSummarymodel!.statusInquiry!) {
-          // Routing().move(Routes.withdrawalSummary);
-        } else {}
+        Routing().moveBack();
+        withdarawalmodel = WithdrawalModel.fromJson(fetch.data);
+        Routing().moveReplacement(Routes.successWithdrawal);
+        pinController.clear();
       }
       if (fetch.postsState == TransactionState.createWithdrawalError) {
+        Routing().moveBack();
+        _errorPinWithdrawMsg = fetch.message['messages']['info'][0];
+        notifyListeners();
         if (fetch.data != null) {
-          ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+          ShowBottomSheet().onShowColouredSheet(context, fetch.message['info'][0], color: Theme.of(context).colorScheme.error);
         }
       }
-      notifyListeners();
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
@@ -667,7 +678,13 @@ class TransactionNotifier extends ChangeNotifier {
     }
   }
 
-  void exitPageWithdrawal(BuildContext context) {
+  void backtransaction() {
+    Routing().moveBack();
+    Routing().moveBack();
+    exitPageWithdrawal();
+  }
+
+  void exitPageWithdrawal() {
     bankcode = '';
     bankSelected = '';
     amountWithdrawalController.clear();

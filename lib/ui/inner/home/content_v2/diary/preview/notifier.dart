@@ -74,16 +74,13 @@ class PreviewDiaryNotifier with ChangeNotifier {
     return _result;
   }
 
-  Future<void> initialDiary(
-    BuildContext context, {
-    bool reload = false, List<ContentData>? list = null
-  }) async {
+  Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list = null}) async {
     List<ContentData> res = [];
 
     try {
-      if(list != null){
+      if (list != null) {
         res.addAll(list);
-      }else{
+      } else {
         if (reload) {
           res = await contentsQuery.reload(context);
         } else {

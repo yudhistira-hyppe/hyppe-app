@@ -51,24 +51,20 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   bool get hasNext => contentsQuery.hasNext;
 
-  Future<void> initialPic(
-    BuildContext context, {
-    bool reload = false, List<ContentData>? list = null
-  }) async {
+  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list = null}) async {
     List<ContentData> res = [];
 
     try {
-
-      if(list != null){
+      if (list != null) {
         res.addAll(list);
-      }else{
+      } else {
         if (reload) {
+          print('pic  notifier');
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);
         }
       }
-
 
       print('ini pict initial 3');
       if (reload) {
@@ -99,6 +95,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
+      print('pic scrollListener notifier');
       initialPic(context);
     }
   }

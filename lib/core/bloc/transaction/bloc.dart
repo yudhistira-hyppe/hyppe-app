@@ -241,13 +241,13 @@ class TransactionBloc {
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, message: onResult.data['message'], data: onResult.data));
+          setTransactionFetch(TransactionFetch(TransactionState.createWithdrawalError, message: onResult.data, data: onResult.data));
         } else {
-          setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setTransactionFetch(TransactionFetch(TransactionState.createWithdrawalSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
-        setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, data: errorData.error));
+        setTransactionFetch(TransactionFetch(TransactionState.createWithdrawalError, data: errorData.error));
       },
       data: params,
       headers: {

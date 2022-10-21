@@ -27,6 +27,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
   @override
   Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
+    print('loadnext');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     if (!hasNext) return [];
@@ -68,6 +69,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
   @override
   Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
+    print('reload');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);

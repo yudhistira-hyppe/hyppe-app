@@ -29,6 +29,7 @@ class BottomDetailWidget extends StatelessWidget {
       twelvePx,
       const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
       twelvePx,
+      TwoColumnWidget(language!.withdrawalAmount!, text2: System().currencyFormat(amount: data!.amount)),
       data!.bankverificationcharge! > 0
           ? TwoColumnWidget(
               language!.verificationBankAccount!,

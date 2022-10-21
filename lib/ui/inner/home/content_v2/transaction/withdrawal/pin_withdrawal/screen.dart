@@ -28,6 +28,8 @@ class PinWithdrawalScreen extends StatelessWidget {
             splashRadius: 1,
             onPressed: () {
               Routing().moveBack();
+              notifier.pinController.clear();
+              notifier.errorPinWithdrawMsg = '';
             },
           ),
           titleSpacing: 0,
@@ -61,6 +63,10 @@ class PinWithdrawalScreen extends StatelessWidget {
                   notifier.createWithdraw(context, value);
                 },
               ),
+              Text(
+                notifier.errorPinWithdrawMsg,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kHyppeRed),
+              )
             ],
           ),
         ),

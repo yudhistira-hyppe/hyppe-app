@@ -16,7 +16,7 @@ class WithdrawalScreen extends StatelessWidget {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier2, __) => WillPopScope(
         onWillPop: () async {
-          context.read<TransactionNotifier>().exitPageWithdrawal(context);
+          context.read<TransactionNotifier>().exitPageWithdrawal();
           return false;
         },
         child: Scaffold(

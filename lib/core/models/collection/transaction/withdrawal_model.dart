@@ -1,4 +1,4 @@
-class WithdrawalModal {
+class WithdrawalModel {
   String? idUser;
   int? amount;
   String? status;
@@ -11,7 +11,7 @@ class WithdrawalModal {
   int? totalamount;
   String? sId;
 
-  WithdrawalModal({
+  WithdrawalModel({
     this.idUser,
     this.amount,
     this.status,
@@ -25,7 +25,7 @@ class WithdrawalModal {
     this.sId,
   });
 
-  WithdrawalModal.fromJson(Map<String, dynamic> json) {
+  WithdrawalModel.fromJson(Map<String, dynamic> json) {
     idUser = json['idUser'];
     amount = json['amount'];
     status = json['status'];

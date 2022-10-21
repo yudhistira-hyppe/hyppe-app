@@ -20,7 +20,7 @@ class LoadingDialog extends StatelessWidget {
         children: [
           const CustomLoading(),
           GestureDetector(
-            onTap: () => Routing().moveBack(),
+            // onTap: () => Routing().moveBack(),
             child: CustomTextWidget(
               textToDisplay: 'Please Wait',
               textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),

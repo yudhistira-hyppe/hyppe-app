@@ -5,6 +5,14 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'dart:io';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 class ApiAction {
   late Dio _dio;
