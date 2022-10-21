@@ -200,6 +200,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
   Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
     // List<StoryItem> _result = [];
+    print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
     _result = [];
     if (data.mediaType?.translateType() == ContentType.image) {
       _result.add(
@@ -223,6 +224,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           urlApsara = value;
         });
       }
+      print('StoryItem.pageVideo ${data.postID} : ${data.fullContentPath}, ${data.metadata?.duration}');
       _result.add(
         StoryItem.pageVideo(
           urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
