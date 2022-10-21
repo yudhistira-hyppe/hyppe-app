@@ -27,8 +27,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-    print('initstate pic');
-    notifier.initialPic(context, reload: true);
+    // notifier.initialPic(context, reload: true);
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     super.initState();
   }
@@ -61,7 +60,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
               child: context.read<ErrorService>().isInitialError(error, notifier.pic)
                   ? CustomErrorWidget(
                       errorType: ErrorType.pic,
-                      function: () => notifier.initialPic(context, reload: true),
+                      function: (){
+                        print('initialPic : 4');
+                        notifier.initialPic(context, reload: true);
+                      },
                     )
                   : notifier.itemCount == 0
                       ? const NoResultFound()
@@ -69,7 +71,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                           onNotification: (ScrollNotification scrollInfo) {
                             if (scrollInfo is ScrollStartNotification) {
                               Future.delayed(const Duration(milliseconds: 100), () {
-                                print('pic screen');
+                                print('initialPic : 5');
                                 notifier.initialPic(context);
                               });
                             }

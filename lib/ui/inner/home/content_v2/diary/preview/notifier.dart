@@ -82,6 +82,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
         res.addAll(list);
       } else {
         if (reload) {
+          print('reload contentsQuery : 4');
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);

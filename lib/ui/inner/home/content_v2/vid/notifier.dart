@@ -96,7 +96,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         res.addAll(list);
       }else{
         if (reload) {
-          print('test17');
+          print('reload contentsQuery : 15');
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);

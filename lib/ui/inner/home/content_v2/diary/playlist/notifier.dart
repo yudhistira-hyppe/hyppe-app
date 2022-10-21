@@ -228,6 +228,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
+      print('reload contentsQuery : 3');
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
       _listData = res;

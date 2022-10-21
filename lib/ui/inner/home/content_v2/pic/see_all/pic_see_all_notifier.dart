@@ -53,7 +53,7 @@ class PicSeeAllNotifier extends ChangeNotifier {
     try {
       if (reload) {
 
-        print('test5');
+        print('reload contentsQuery : 10');
         _resFuture = contentsQuery.reload(context);
       } else {
         _resFuture = contentsQuery.loadNext(context);

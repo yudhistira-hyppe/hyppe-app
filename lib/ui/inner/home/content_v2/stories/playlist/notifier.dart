@@ -283,7 +283,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     myContentsQuery.onlyMyData = false;
 
     try {
-      print('test13');
+      print('reload contentsQuery : 12');
       _resFuture = myContentsQuery.reload(context);
 
       final res = await _resFuture;

@@ -79,7 +79,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     Future<List<ContentData>> _resFuture;
 
     try {
-      print('test14');
+      print('reload contentsQuery : 13');
       _resFuture = myContentsQuery.reload(context);
       final res = await _resFuture;
       myStoriesData = res;
@@ -203,7 +203,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
     try {
       if (list != null) {
-        print('test16');
         res.addAll(list);
       } else {
         if(reload){
