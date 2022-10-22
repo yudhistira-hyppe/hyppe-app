@@ -70,6 +70,8 @@ class UserBloc {
 
   Future recoverPasswordOTPBloc(BuildContext context, {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
     await Repos().reposPost(
       context,
       (onResult) {
@@ -211,6 +213,8 @@ class UserBloc {
       },
     };
     'Login payload => $payload'.logger();
+    print('payload');
+    print(payload);
 
     await Repos().reposPost(
       context,
@@ -541,6 +545,9 @@ class UserBloc {
   Future verifyAccountBlocV2(BuildContext context, {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
+    referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
 
     await Repos().reposPost(
       context,
@@ -564,6 +571,8 @@ class UserBloc {
         "status": "REPLY",
         "event": "VERIFY_OTP",
         "deviceId": "$deviceId",
+        "referral": referralEmail,
+        "imei": realDeviceId != "" ? realDeviceId : deviceID,
       },
       host: UrlConstants.verifyAccount,
       methodType: MethodType.post,
