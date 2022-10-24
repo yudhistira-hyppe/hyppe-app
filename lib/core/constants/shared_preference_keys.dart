@@ -35,4 +35,5 @@ class SpKeys {
   static const String statusVerificationId = 'statusVerificationId';
 
   static const String settingMarketPlace = 'settingMarketPlace';
+  static const String referralFrom = 'referralFrom';
 }

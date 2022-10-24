@@ -306,13 +306,15 @@ class SignUpPinNotifier with ChangeNotifier {
             final fetch = notifier.userFetch;
             if (fetch.userState == UserState.verifyAccountSuccess) {
               _accountResponse = SignIn.fromJson(fetch.data);
+
               SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
               SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
               SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
               SharedPreference().writeStorage(SpKeys.lastHitPost, '');
               SharedPreference().removeValue(SpKeys.isUserInOTP);
+              SharedPreference().removeValue(SpKeys.referralFrom);
 
-              DynamicLinkService.hitReferralBackend(context);
+              // DynamicLinkService.hitReferralBackend(context);
 
               _handleVerifyAction(
                 context: context,

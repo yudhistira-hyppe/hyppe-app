@@ -131,6 +131,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
       (errorData) {
@@ -176,6 +177,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
       (errorData) {
@@ -223,6 +225,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
       (errorData) {
@@ -547,7 +550,7 @@ class UserBloc {
     String? deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
-    referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
+    referralEmail = SharedPreference().readStorage(SpKeys.referralFrom) ?? '';
 
     await Repos().reposPost(
       context,

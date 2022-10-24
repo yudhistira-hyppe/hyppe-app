@@ -86,7 +86,7 @@ class ReferralBloc {
       context,
       (onResult) {
         if (onResult.statusCode! == 406 || onResult.statusCode! > HTTP_CODE) {
-          setReferralFetch(ReferralFetch(ReferralState.referralUserError));
+          setReferralFetch(ReferralFetch(ReferralState.referralUserError, message: onResult.data['messages']));
         } else if (onResult.statusCode! == 200) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError, data: (onResult.data)));
         } else {
@@ -95,7 +95,7 @@ class ReferralBloc {
       },
       (errorData) {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
-        setReferralFetch(ReferralFetch(ReferralState.referralUserError));
+        setReferralFetch(ReferralFetch(ReferralState.referralUserError, message: errorData));
       },
       headers: {
         "x-auth-user": SharedPreference().readStorage(SpKeys.email),

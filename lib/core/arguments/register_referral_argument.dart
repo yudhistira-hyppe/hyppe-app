@@ -1,17 +1,19 @@
 class RegisterReferralArgument {
-  String username; // user yang mau jadi referral
+  String? username; // user yang mau jadi referral
   String imei;
+  String? email;
 
   RegisterReferralArgument({
-    required this.username,
-    required this.imei
-
+    this.username,
+    required this.imei,
+    this.email,
   });
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['username'] = username;
+    username != null ? data['username'] = username : '';
     data['imei'] = imei;
+    email != null ? data['email'] = email : '';
     return data;
   }
 }

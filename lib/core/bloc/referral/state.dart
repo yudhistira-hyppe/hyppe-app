@@ -9,6 +9,7 @@ enum ReferralState {
 
 class ReferralFetch {
   final data;
+  final message;
   final ReferralState referralState;
-  ReferralFetch(this.referralState, {this.data});
+  ReferralFetch(this.referralState, {this.data, this.message});
 }
