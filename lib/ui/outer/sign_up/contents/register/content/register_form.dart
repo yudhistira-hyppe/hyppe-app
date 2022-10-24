@@ -60,12 +60,12 @@ class RegisterForm extends StatelessWidget {
                     textEditingController: notifier.passwordController,
                     prefixIcon: const CustomIconWidget(iconData: '${AssetPath.vectorPath}lock.svg'),
                   ),
-                  SharedPreference().readStorage(SpKeys.referralFrom) == null
-                      ? Container()
-                      : Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Text('Referral from ${SharedPreference().readStorage(SpKeys.referralFrom)}'),
-                        ),
+                  // SharedPreference().readStorage(SpKeys.referralFrom) == null
+                  //     ? Container()
+                  //     : Padding(
+                  //         padding: const EdgeInsets.all(16.0),
+                  //         child: Text('Referral from ${SharedPreference().readStorage(SpKeys.referralFrom)}'),
+                  //       ),
                   thirtySixPx,
                   Row(
                     mainAxisSize: MainAxisSize.min,

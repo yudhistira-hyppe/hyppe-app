@@ -121,6 +121,7 @@ class UserBloc {
         "longitude": latitude ?? "${double.parse("0.0")}",
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
+      "devicetype": platForm,
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -167,6 +168,7 @@ class UserBloc {
         "longitude": latitude ?? "${double.parse("0.0")}",
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
+      "devicetype": platForm,
     };
     'Payload in social login referralPayload $payload'.logger();
 
