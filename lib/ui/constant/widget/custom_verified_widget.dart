@@ -9,6 +9,6 @@ class CustomVerifiedWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return verified! ? const CustomIconWidget(iconData: '${AssetPath.vectorPath}user-verified.svg', defaultColor: false) : const SizedBox.shrink();
+    return (verified ?? false) ? const CustomIconWidget(iconData: '${AssetPath.vectorPath}user-verified.svg', defaultColor: false) : const SizedBox.shrink();
   }
 }

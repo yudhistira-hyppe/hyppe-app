@@ -257,17 +257,17 @@ class SearchNotifier with ChangeNotifier {
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-        if(_res.vid?.totalFilter != _res.vid?.skip){
+        if((_res.vid?.totalFilter ?? 0) <= (_res.vid?.skip ?? 0)){
           _vidHasNext = true;
         }else{
           _vidHasNext = false;
         }
-        if(_res.diary?.totalFilter != _res.diary?.skip){
+        if((_res.diary?.totalFilter ?? 0) <= (_res.diary?.skip ?? 0)){
           _diaryHasNext = true;
         }else{
           _diaryHasNext = false;
         }
-        if(_res.pict?.totalFilter != _res.pict?.skip){
+        if((_res.pict?.totalFilter ?? 0) <= (_res.pict?.skip ?? 0)){
           _picHasNext = true;
         }else{
           _picHasNext = false;
@@ -294,7 +294,23 @@ class SearchNotifier with ChangeNotifier {
     await notifier.getSearchContent(context, keys: search, skip: skip, limit: 18);
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
-      _searchContent = SearchContentModel.fromJson(fetch.data);
+      final _res = SearchContentModel.fromJson(fetch.data);
+      if((_res.vid?.totalFilter ?? 0) <= (_res.vid?.skip ?? 0)){
+        _vidHasNext = true;
+      }else{
+        _vidHasNext = false;
+      }
+      if((_res.diary?.totalFilter ?? 0) <= (_res.diary?.skip ?? 0)){
+        _diaryHasNext = true;
+      }else{
+        _diaryHasNext = false;
+      }
+      if((_res.pict?.totalFilter ?? 0) <= (_res.pict?.skip ?? 0)){
+        _picHasNext = true;
+      }else{
+        _picHasNext = false;
+      }
+      _searchContent = _res;
     }
     // else {
       // _searchContent = null;
