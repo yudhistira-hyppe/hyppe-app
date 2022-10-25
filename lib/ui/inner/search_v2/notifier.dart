@@ -140,7 +140,7 @@ class SearchNotifier with ChangeNotifier {
   onInitialSearch(BuildContext context) async {
     print('initial search');
     print(allContents?.diaries);
-    print(allContents?.diaries![0].isApsara);
+    print(allContents?.diaries?[0].isApsara);
     if (allContents?.vids == null && allContents?.diaries == null && allContents?.pics == null) {
       vidContentsQuery.featureType = FeatureType.vid;
       diaryContentsQuery.featureType = FeatureType.diary;
@@ -259,24 +259,23 @@ class SearchNotifier with ChangeNotifier {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
         if(_res.vid?.data?.isEmpty ?? true){
           _vidHasNext = false;
-        }else if((_res.vid?.skip ?? 0)%18 == 0 || _res.vid?.skip == 0){
+        }else if(_res.vid?.skip == 0){
+          _vidHasNext = false;
+        }else if((_res.vid?.data?.length ?? 0)%18 == 0 ){
           if((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)){
-            _vidHasNext = false;
-          }else if(_res.vid?.skip == 0){
             _vidHasNext = false;
           }else{
             _vidHasNext = true;
           }
-
         }else{
           _vidHasNext = false;
         }
         if(_res.diary?.data?.isEmpty ?? true){
           _diaryHasNext = false;
-        }else if((_res.diary?.skip ?? 0)%18 == 0 || _res.diary?.skip == 0){
+        }else if(_res.diary?.skip == 0){
+          _diaryHasNext = false;
+        }else if((_res.diary?.data?.length ?? 0)%18 == 0 ){
           if((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)){
-            _diaryHasNext = false;
-          }else if(_res.diary?.skip == 0){
             _diaryHasNext = false;
           }else{
             _diaryHasNext = true;
@@ -286,10 +285,10 @@ class SearchNotifier with ChangeNotifier {
         }
         if(_res.pict?.data?.isEmpty ?? true){
           _picHasNext = false;
-        }else if((_res.pict?.skip ?? 0)%18 == 0 || _res.pict?.skip == 0){
+        }else if(_res.pict?.skip == 0){
+          _picHasNext = false;
+        }else if((_res.pict?.data?.length ?? 0)%18 == 0 ){
           if((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)){
-            _picHasNext = false;
-          }else if(_res.pict?.skip == 0){
             _picHasNext = false;
           }else{
             _picHasNext = true;
@@ -325,10 +324,12 @@ class SearchNotifier with ChangeNotifier {
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       final _res = SearchContentModel.fromJson(fetch.data);
-      if((_res.vid?.skip ?? 0)%18 == 0 || _res.vid?.skip == 0){
+      if(_res.vid?.data?.isEmpty ?? true){
+        _vidHasNext = false;
+      }else if(_res.vid?.skip == 0){
+        _vidHasNext = false;
+      }else if((_res.vid?.data?.length ?? 0)%18 == 0 ){
         if((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)){
-          _vidHasNext = false;
-        }else if(_res.vid?.skip == 0){
           _vidHasNext = false;
         }else{
           _vidHasNext = true;
@@ -336,10 +337,12 @@ class SearchNotifier with ChangeNotifier {
       }else{
         _vidHasNext = false;
       }
-      if((_res.diary?.skip ?? 0)%18 == 0 || _res.diary?.skip == 0){
+      if(_res.diary?.data?.isEmpty ?? true){
+        _diaryHasNext = false;
+      }else if(_res.diary?.skip == 0){
+        _diaryHasNext = false;
+      }else if((_res.diary?.data?.length ?? 0)%18 == 0 ){
         if((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)){
-          _diaryHasNext = false;
-        }else if(_res.diary?.skip == 0){
           _diaryHasNext = false;
         }else{
           _diaryHasNext = true;
@@ -347,10 +350,12 @@ class SearchNotifier with ChangeNotifier {
       }else{
         _diaryHasNext = false;
       }
-      if((_res.pict?.skip ?? 0)%18 == 0 || _res.pict?.skip == 0){
+      if(_res.pict?.data?.isEmpty ?? true){
+        _picHasNext = false;
+      }else if(_res.pict?.skip == 0){
+        _picHasNext = false;
+      }else if((_res.pict?.data?.length ?? 0)%18 == 0 ){
         if((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)){
-          _picHasNext = false;
-        }else if(_res.pict?.skip == 0){
           _picHasNext = false;
         }else{
           _picHasNext = true;
