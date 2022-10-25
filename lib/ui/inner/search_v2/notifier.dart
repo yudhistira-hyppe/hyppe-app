@@ -246,7 +246,7 @@ class SearchNotifier with ChangeNotifier {
   onScrollListener(BuildContext context, ScrollController scrollController) async {
     print("scroll");
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-      _skip += 18;
+
 
       String search = searchController.text;
       focusNode.unfocus();
@@ -257,21 +257,51 @@ class SearchNotifier with ChangeNotifier {
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-        if((_res.vid?.totalFilter ?? 0) <= (_res.vid?.skip ?? 0)){
-          _vidHasNext = true;
+        if(_res.vid?.data?.isEmpty ?? true){
+          _vidHasNext = false;
+        }else if((_res.vid?.skip ?? 0)%18 == 0 || _res.vid?.skip == 0){
+          if((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)){
+            _vidHasNext = false;
+          }else if(_res.vid?.skip == 0){
+            _vidHasNext = false;
+          }else{
+            _vidHasNext = true;
+          }
+
         }else{
           _vidHasNext = false;
         }
-        if((_res.diary?.totalFilter ?? 0) <= (_res.diary?.skip ?? 0)){
-          _diaryHasNext = true;
+        if(_res.diary?.data?.isEmpty ?? true){
+          _diaryHasNext = false;
+        }else if((_res.diary?.skip ?? 0)%18 == 0 || _res.diary?.skip == 0){
+          if((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)){
+            _diaryHasNext = false;
+          }else if(_res.diary?.skip == 0){
+            _diaryHasNext = false;
+          }else{
+            _diaryHasNext = true;
+          }
         }else{
           _diaryHasNext = false;
         }
-        if((_res.pict?.totalFilter ?? 0) <= (_res.pict?.skip ?? 0)){
-          _picHasNext = true;
+        if(_res.pict?.data?.isEmpty ?? true){
+          _picHasNext = false;
+        }else if((_res.pict?.skip ?? 0)%18 == 0 || _res.pict?.skip == 0){
+          if((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)){
+            _picHasNext = false;
+          }else if(_res.pict?.skip == 0){
+            _picHasNext = false;
+          }else{
+            _picHasNext = true;
+          }
         }else{
           _picHasNext = false;
         }
+
+        if(_picHasNext || _diaryHasNext || _vidHasNext){
+          _skip += 18;
+        }
+
         _searchContent?.users?.data?.addAll(_res.users?.data ?? []);
         _searchContent?.diary?.data = [...(_searchContent?.diary?.data ?? []), ...(_res.diary?.data ?? [])];
         _searchContent?.pict?.data = [...(_searchContent?.pict?.data ?? []), ...(_res.pict?.data ?? [])];
@@ -295,18 +325,36 @@ class SearchNotifier with ChangeNotifier {
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       final _res = SearchContentModel.fromJson(fetch.data);
-      if((_res.vid?.totalFilter ?? 0) <= (_res.vid?.skip ?? 0)){
-        _vidHasNext = true;
+      if((_res.vid?.skip ?? 0)%18 == 0 || _res.vid?.skip == 0){
+        if((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)){
+          _vidHasNext = false;
+        }else if(_res.vid?.skip == 0){
+          _vidHasNext = false;
+        }else{
+          _vidHasNext = true;
+        }
       }else{
         _vidHasNext = false;
       }
-      if((_res.diary?.totalFilter ?? 0) <= (_res.diary?.skip ?? 0)){
-        _diaryHasNext = true;
+      if((_res.diary?.skip ?? 0)%18 == 0 || _res.diary?.skip == 0){
+        if((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)){
+          _diaryHasNext = false;
+        }else if(_res.diary?.skip == 0){
+          _diaryHasNext = false;
+        }else{
+          _diaryHasNext = true;
+        }
       }else{
         _diaryHasNext = false;
       }
-      if((_res.pict?.totalFilter ?? 0) <= (_res.pict?.skip ?? 0)){
-        _picHasNext = true;
+      if((_res.pict?.skip ?? 0)%18 == 0 || _res.pict?.skip == 0){
+        if((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)){
+          _picHasNext = false;
+        }else if(_res.pict?.skip == 0){
+          _picHasNext = false;
+        }else{
+          _picHasNext = true;
+        }
       }else{
         _picHasNext = false;
       }
