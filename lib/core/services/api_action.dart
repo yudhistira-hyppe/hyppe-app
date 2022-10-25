@@ -26,16 +26,16 @@ class ApiAction {
     );
 
     if (!kReleaseMode) {
-      _dio.interceptors.add(LogInterceptor(
-        error: true,
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: true,
-      ));
+      // _dio.interceptors.add(LogInterceptor(
+      //   error: true,
+      //   request: true,
+      //   requestBody: true,
+      //   responseBody: true,
+      //   requestHeader: true,
+      //   responseHeader: true,
+      // ));
       // _dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
-      // _dio.interceptors.add(HttpFormatter());
+      _dio.interceptors.add(HttpFormatter());
     }
   }
 
@@ -52,9 +52,12 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (Env.dataUrlv3.contains(url)) {
+    if (Env.dataUrlv4.contains(url)) {
+      print("hit v4");
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    }else if (Env.dataUrlv3.contains(url)){
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
-    } else {
+    }else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     }
     try {
@@ -88,7 +91,10 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (Env.dataUrlv3.contains(url)) {
+    if (Env.dataUrlv4.contains(url)) {
+      print("hit v4");
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    }else if (Env.dataUrlv3.contains(url)){
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
@@ -128,7 +134,10 @@ class ApiAction {
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
 
-    if (Env.dataUrlv3.contains(url)) {
+    if (Env.dataUrlv4.contains(url)) {
+      print("hit v4");
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    }else if (Env.dataUrlv3.contains(url)){
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
@@ -170,9 +179,13 @@ class ApiAction {
 
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (Env.dataUrlv3.contains(url)) {
+    if (Env.dataUrlv4.contains(url)) {
+      print("hit v4");
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    }else if (Env.dataUrlv3.contains(url)){
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
+      print("hit v4");
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     }
     try {
@@ -212,7 +225,10 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
-    if (Env.dataUrlv3.contains(url)) {
+    if (Env.dataUrlv4.contains(url)) {
+      print("hit v4");
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    }else if (Env.dataUrlv3.contains(url)){
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
@@ -253,7 +269,10 @@ class ApiAction {
 
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (Env.dataUrlv3.contains(url)) {
+    if (Env.dataUrlv4.contains(url)) {
+      print("hit v4");
+      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    }else if (Env.dataUrlv3.contains(url)){
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     } else {
       _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';

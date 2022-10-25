@@ -84,6 +84,17 @@ class Env {
     UrlConstants.loginGoogle,
   ];
 
+  static final List dataUrlv4 = [
+    // UrlConstants.login,
+    // UrlConstants.deviceactivity,
+    // UrlConstants.getuserposts,
+    // UrlConstants.getUserPostsLandingPage,
+    // UrlConstants.updateLanguage,
+    // UrlConstants.getInnteractives,
+    // UrlConstants.reaction,
+
+  ];
+
   static final EnvData dev = EnvData(
     debug: true,
     appID: appID,
