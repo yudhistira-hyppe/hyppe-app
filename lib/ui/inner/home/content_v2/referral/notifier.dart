@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/register_referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
@@ -114,10 +116,21 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
 
       await notifier.registerReferral(
         context,
-        data: RegisterReferralArgument(username: _nameReferral, imei: realDeviceID != "" ? realDeviceID : SharedPreference().readStorage(SpKeys.fcmToken)),
+        data: System().validateEmail(_nameReferral)
+            ? RegisterReferralArgument(
+                email: _nameReferral,
+                imei: realDeviceID != "" ? realDeviceID : SharedPreference().readStorage(SpKeys.fcmToken),
+              )
+            : RegisterReferralArgument(
+                username: _nameReferral,
+                imei: realDeviceID != "" ? realDeviceID : SharedPreference().readStorage(SpKeys.fcmToken),
+              ),
+        withAlertConnection: false,
         // function: () => onClickLogin(context),
       );
       setLoading(false);
+
+      print(RegisterReferralArgument);
 
       final fetch = notifier.referralFetch;
       if (fetch.referralState == ReferralState.referralUserSuccess) {
@@ -126,8 +139,7 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
         _showSnackBar(kHyppeTextSuccess, 'Success', 'username referal berhasil digunakan');
       }
       if (fetch.referralState == ReferralState.referralUserError) {
-        var errorData = ErrorModel.fromJson(fetch.data);
-        _showSnackBar(kHyppeDanger, 'Gagal', '${errorData.message}');
+        _showSnackBar(kHyppeDanger, 'Gagal', '${fetch.message['info'][0]}');
       }
     } else {
       setLoading(false);

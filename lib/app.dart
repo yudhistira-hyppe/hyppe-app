@@ -47,7 +47,7 @@ final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 
 void mainApp(EnvType env) async {
-  HttpOverrides.global = MyHttpOverrides();
+  // HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   Env.init(env);
   NotificationService().initializeLocalNotification();

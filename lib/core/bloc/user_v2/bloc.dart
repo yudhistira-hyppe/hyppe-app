@@ -70,6 +70,8 @@ class UserBloc {
 
   Future recoverPasswordOTPBloc(BuildContext context, {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
     await Repos().reposPost(
       context,
       (onResult) {
@@ -119,6 +121,7 @@ class UserBloc {
         "longitude": latitude ?? "${double.parse("0.0")}",
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
+      "devicetype": platForm,
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -129,6 +132,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
       (errorData) {
@@ -164,6 +168,7 @@ class UserBloc {
         "longitude": latitude ?? "${double.parse("0.0")}",
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
+      "devicetype": platForm,
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -174,6 +179,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
       (errorData) {
@@ -196,11 +202,13 @@ class UserBloc {
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
     platForm = Platform.isAndroid ? "android" : "ios";
+    referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
     // print('ini plat $platForm');
     dynamic payload = {
       'email': email.toLowerCase(),
       "password": password,
       "deviceId": deviceID,
+      "referral": referralEmail,
       "imei": realDeviceId != "" ? realDeviceId : deviceID,
       "regSrc": platForm,
       "location": {
@@ -209,6 +217,8 @@ class UserBloc {
       },
     };
     'Login payload => $payload'.logger();
+    print('payload');
+    print(payload);
 
     await Repos().reposPost(
       context,
@@ -217,6 +227,7 @@ class UserBloc {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          SharedPreference().removeValue(SpKeys.referralFrom);
         }
       },
       (errorData) {
@@ -539,6 +550,9 @@ class UserBloc {
   Future verifyAccountBlocV2(BuildContext context, {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
     String? deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
+    deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    realDeviceId = await System().getDeviceIdentifier();
+    referralEmail = SharedPreference().readStorage(SpKeys.referralFrom) ?? '';
 
     await Repos().reposPost(
       context,
@@ -562,6 +576,8 @@ class UserBloc {
         "status": "REPLY",
         "event": "VERIFY_OTP",
         "deviceId": "$deviceId",
+        "referral": referralEmail,
+        "imei": realDeviceId != "" ? realDeviceId : deviceID,
       },
       host: UrlConstants.verifyAccount,
       methodType: MethodType.post,

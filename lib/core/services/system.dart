@@ -133,8 +133,13 @@ class System {
     return _status;
   }
 
+  removeSpecialChar(String str) {
+    String result = str.replaceAll(RegExp('[^A-Za-z0-9]'), '');
+    return result;
+  }
+
   basenameFiles(String filePath) {
-    return path.basename(filePath);
+    return removeSpecialChar(path.basename(filePath));
   }
 
   String? extensionFiles(String filePath) {

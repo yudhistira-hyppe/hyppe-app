@@ -52,12 +52,14 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   Future onTapInterestButton(BuildContext context, bool fromSetting, List<String> userInterested) async {
     print('simpan kesuakan');
     if (_interestData.isNotEmpty) {
+      print('dari setting');
       if (fromSetting) {
         if (!listEquals(_interestData, userInterested)) {
           final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
           await notifier.onClickSaveInterests(context, _interestData);
         }
       } else {
+        print('bukan dari setting');
         final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
         await notifier.onClickSaveInterests(context, _interestData);
         _routing.move(Routes.signUpWelcome);

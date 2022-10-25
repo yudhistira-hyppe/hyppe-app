@@ -94,7 +94,12 @@ class UserProfileModel {
         : json['isComplete'] == "true"
             ? true
             : false;
-    isIdVerified = json['isIdVerified'] ?? false;
+    isIdVerified = json['isIdVerified'] is String
+        ? json['isIdVerified']
+        : json["isEmailVerified"] == true
+            ? 'true'
+            : 'false';
+
     status = json['status'];
     refreshToken = json['refreshToken'];
     idProofStatus = _serializeIdProofStatus(json['idProofStatus']);

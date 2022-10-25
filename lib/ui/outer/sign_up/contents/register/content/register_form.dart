@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/register/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_form_field.dart';
@@ -30,8 +32,7 @@ class RegisterForm extends StatelessWidget {
                     child: SignUpText(
                       title: notifier.language.register!,
                       paddingDescription: 24 * SizeConfig.scaleDiagonal,
-                      description: notifier
-                          .language.joinTheCommunityCreateOrWatchAndGetMoney!,
+                      description: notifier.language.joinTheCommunityCreateOrWatchAndGetMoney!,
                     ),
                   ),
                   sixtyFourPx,
@@ -40,15 +41,12 @@ class RegisterForm extends StatelessWidget {
                     focusNode: notifier.emailNode,
                     onChange: (v) => notifier.email = v,
                     labelText: notifier.language.email!,
-                    suffixIcon: notifier.checkBoxSuffix(
-                        System().validateEmail(notifier.email),
-                        isEmail: true),
+                    suffixIcon: notifier.checkBoxSuffix(System().validateEmail(notifier.email), isEmail: true),
                     suffixIconSize: 1,
                     onTap: () => notifier.passwordToEmail(),
                     textInputType: TextInputType.emailAddress,
                     textEditingController: notifier.emailController,
-                    prefixIcon: Icon(Icons.email_outlined,
-                        color: Theme.of(context).iconTheme.color),
+                    prefixIcon: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
                   ),
                   twentyFourPx,
                   SignUpForm(
@@ -60,17 +58,21 @@ class RegisterForm extends StatelessWidget {
                     onTap: () => notifier.emailToPassword(),
                     suffixIcon: notifier.passwordSuffixIcon(context),
                     textEditingController: notifier.passwordController,
-                    prefixIcon: const CustomIconWidget(
-                        iconData: '${AssetPath.vectorPath}lock.svg'),
+                    prefixIcon: const CustomIconWidget(iconData: '${AssetPath.vectorPath}lock.svg'),
                   ),
+                  // SharedPreference().readStorage(SpKeys.referralFrom) == null
+                  //     ? Container()
+                  //     : Padding(
+                  //         padding: const EdgeInsets.all(16.0),
+                  //         child: Text('Referral from ${SharedPreference().readStorage(SpKeys.referralFrom)}'),
+                  //       ),
                   thirtySixPx,
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       notifier.checkBoxSuffix(notifier.password.isNotEmpty),
                       CustomTextWidget(
-                        textToDisplay:
-                            notifier.language.mustNotContainYourNameOrEmail!,
+                        textToDisplay: notifier.language.mustNotContainYourNameOrEmail!,
                         textStyle: Theme.of(context).textTheme.caption,
                       ),
                     ],
@@ -78,8 +80,7 @@ class RegisterForm extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      notifier.checkBoxSuffix(System()
-                          .atLeastEightCharacter(text: notifier.password)),
+                      notifier.checkBoxSuffix(System().atLeastEightCharacter(text: notifier.password)),
                       CustomTextWidget(
                         textToDisplay: notifier.language.atLeast8Characters!,
                         textStyle: Theme.of(context).textTheme.caption,
@@ -89,12 +90,9 @@ class RegisterForm extends StatelessWidget {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      notifier.checkBoxSuffix(System()
-                          .atLeastContainOneCharacterAndOneNumber(
-                              text: notifier.password)),
+                      notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.password)),
                       CustomTextWidget(
-                        textToDisplay: notifier
-                            .language.atLeastContain1CharacterAnd1Number!,
+                        textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number!,
                         textStyle: Theme.of(context).textTheme.caption,
                       )
                     ],

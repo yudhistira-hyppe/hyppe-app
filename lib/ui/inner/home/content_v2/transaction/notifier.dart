@@ -611,7 +611,7 @@ class TransactionNotifier extends ChangeNotifier {
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
             function: () {
-              print('asdasd');
+              // print('asdasd');
             },
           );
         }
