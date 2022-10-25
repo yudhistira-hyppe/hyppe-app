@@ -7,6 +7,7 @@ import 'package:hyppe/core/bloc/search_content/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
@@ -23,6 +24,7 @@ import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../../core/bloc/posts_v2/bloc.dart';
 
 class SearchNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -60,14 +62,55 @@ class SearchNotifier with ChangeNotifier {
   FocusNode get focusNode => _focusNode;
   FocusNode get focusNode1 => _focusNode1;
 
-  int get vidCount => allContents?.vids?.length ?? 0;
-  bool get vidHasNext => vidContentsQuery.hasNext;
+  List<ContentData>? _initDataVid = null;
+  List<ContentData>? get initDataVid => _initDataVid;
+  set initDataVid(List<ContentData>? data){
+    _initDataVid = data;
+    notifyListeners();
+  }
 
-  int get diaryCount => allContents?.diaries?.length ?? 0;
-  bool get diaryHasNext => diaryContentsQuery.hasNext;
+  List<ContentData>? _initDataDiary = null;
+  List<ContentData>? get initDataDiary => _initDataDiary;
+  set initDataDiary(List<ContentData>? data){
+    _initDataDiary = data;
+    notifyListeners();
+  }
 
-  int get picCount => allContents?.pics?.length ?? 0;
-  bool get picHasNext => picContentsQuery.hasNext;
+  List<ContentData>? _initDataPic = null;
+  List<ContentData>? get initDataPic => _initDataPic;
+  set initDataPic(List<ContentData>? data){
+    _initDataPic = data;
+    notifyListeners();
+  }
+
+  int get vidCount => _searchContent?.vid?.data == null
+      ? 18
+      : _vidHasNext
+      ? (_searchContent?.vid?.data?.length ?? 0) + 2
+      : (_searchContent?.vid?.data?.length ?? 0);
+
+  bool _vidHasNext = false;
+  // bool get vidHasNext => vidContentsQuery.hasNext;
+  bool get vidHasNext => _vidHasNext;
+
+  int get diaryCount => _searchContent?.diary?.data == null
+      ? 18
+      : _diaryHasNext
+      ? (_searchContent?.diary?.data?.length ?? 0) + 2
+      : (_searchContent?.diary?.data?.length ?? 0);
+
+  bool _diaryHasNext = false;
+  bool get diaryHasNext => _diaryHasNext;
+
+  int get picCount => _searchContent?.pict?.data == null
+      ? 18
+      : _picHasNext
+      ? (_searchContent?.pict?.data?.length ?? 0) + 2
+      : (_searchContent?.pict?.data?.length ?? 0);
+
+  bool _picHasNext = false;
+  // bool get picHasNext => picContentsQuery.hasNext;
+  bool get picHasNext => _picHasNext;
 
   set searchPeolpleData(List<SearchPeolpleData>? val) {
     _searchPeolpleData = val;
@@ -116,24 +159,123 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
+  onInitialSearchNew(BuildContext context) async{
+    String search = searchController.text;
+    focusNode.unfocus();
+    isLoading = true;
+    _searchContent = SearchContentModel();
+    _searchContent?.diary = Diary();
+    _searchContent?.diary?.data = [];
+    _searchContent?.vid = Diary();
+    _searchContent?.vid?.data = [];
+    _searchContent?.pict = Diary();
+    _searchContent?.pict?.data = [];
+    if(_initDataVid == null || _initDataDiary == null || _initDataPic == null){
+      _vidHasNext = true;
+      _diaryHasNext = true;
+      _picHasNext = true;
+      _skip += 18;
+      _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
+      _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
+      _searchContent?.pict?.data = await getListPosts(context, FeatureType.pic);
+    }else{
+      _vidHasNext = true;
+      _diaryHasNext = true;
+      _picHasNext = true;
+      _skip += 18;
+      _searchContent?.vid?.data = _initDataVid;
+      _searchContent?.diary?.data = _initDataDiary;
+      _searchContent?.pict?.data = _initDataPic;
+    }
+    // final notifier = SearchContentBloc();
+    // await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 18);
+    // final fetch = notifier.searchContentFetch;
+    // if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+    //   SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
+    //   if(_res.vid?.totalFilter != _res.vid?.skip){
+    //     _vidHasNext = true;
+    //   }else{
+    //     _vidHasNext = false;
+    //   }
+    //   if(_res.diary?.totalFilter != _res.diary?.skip){
+    //     _diaryHasNext = true;
+    //   }else{
+    //     _diaryHasNext = false;
+    //   }
+    //   if(_res.pict?.totalFilter != _res.pict?.skip){
+    //     _picHasNext = true;
+    //   }else{
+    //     _picHasNext = false;
+    //   }
+    //   _searchContent = _res;
+    // }
+    isLoading = false;
+
+    notifyListeners();
+  }
+
+  Future<List<ContentData>> getListPosts(BuildContext context, FeatureType type, {bool myContent = false, bool otherContent = false}) async {
+    print('reload');
+
+    List<ContentData>? res;
+    try {
+      final notifier = PostsBloc();
+      await notifier.getContentsBlocV2(context,
+          postID: null,
+          pageRows: 18,
+          pageNumber: 0,
+          type: type,
+          searchText: "",
+          onlyMyData: false,
+          visibility: 'PUBLIC',
+          myContent: myContent,
+          otherContent: otherContent);
+      final fetch = notifier.postsFetch;
+
+      res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+
+    } catch (e) {
+      '$e'.logger();
+      rethrow;
+    } finally {
+    }
+
+    return res ?? [];
+  }
+
   onScrollListener(BuildContext context, ScrollController scrollController) async {
     print("scroll");
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-      _skip += 10;
+      _skip += 18;
 
       String search = searchController.text;
       focusNode.unfocus();
 
       final notifier = SearchContentBloc();
 
-      await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 10);
+      await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 18);
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-        _searchContent!.users!.data!.addAll(_res.users!.data!);
-        _searchContent!.diary!.data!.addAll(_res.diary!.data!);
-        _searchContent!.pict!.data!.addAll(_res.pict!.data!);
-        _searchContent!.vid!.data!.addAll(_res.vid!.data!);
+        if(_res.vid?.totalFilter != _res.vid?.skip){
+          _vidHasNext = true;
+        }else{
+          _vidHasNext = false;
+        }
+        if(_res.diary?.totalFilter != _res.diary?.skip){
+          _diaryHasNext = true;
+        }else{
+          _diaryHasNext = false;
+        }
+        if(_res.pict?.totalFilter != _res.pict?.skip){
+          _picHasNext = true;
+        }else{
+          _picHasNext = false;
+        }
+        _searchContent?.users?.data?.addAll(_res.users?.data ?? []);
+        _searchContent?.diary?.data = [...(_searchContent?.diary?.data ?? []), ...(_res.diary?.data ?? [])];
+        _searchContent?.pict?.data = [...(_searchContent?.pict?.data ?? []), ...(_res.pict?.data ?? [])];
+        _searchContent?.vid?.data = [...(_searchContent?.vid?.data ?? []), ...(_res.vid?.data ?? [])];
       }
 
       notifyListeners();
@@ -149,13 +291,14 @@ class SearchNotifier with ChangeNotifier {
 
     isLoading = true;
     _searchContent = null;
-    await notifier.getSearchContent(context, keys: search, skip: skip, limit: 10);
+    await notifier.getSearchContent(context, keys: search, skip: skip, limit: 18);
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       _searchContent = SearchContentModel.fromJson(fetch.data);
-    } else {
-      _searchContent = null;
     }
+    // else {
+      // _searchContent = null;
+    // }
     isLoading = false;
     notifyListeners();
   }

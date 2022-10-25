@@ -27,7 +27,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
+    Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context));
     super.initState();
   }
 
@@ -112,10 +112,10 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                             child: TabBarView(
                               physics: const NeverScrollableScrollPhysics(),
                               controller: _tabController,
-                              children: [
-                                SearchContent(content: notifier.allContents?.vids, featureType: notifier.vidContentsQuery.featureType),
-                                SearchContent(content: notifier.allContents?.diaries, featureType: notifier.diaryContentsQuery.featureType),
-                                SearchContent(content: notifier.allContents?.pics, featureType: notifier.picContentsQuery.featureType),
+                              children: const [
+                                SearchContent(featureType: FeatureType.vid),
+                                SearchContent(featureType: FeatureType.diary),
+                                SearchContent(featureType: FeatureType.pic),
                               ],
                             ),
                           ),

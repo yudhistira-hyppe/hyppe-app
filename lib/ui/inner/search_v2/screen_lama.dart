@@ -110,9 +110,9 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
                               physics: const NeverScrollableScrollPhysics(),
                               controller: _tabController,
                               children: [
-                                SearchContent(content: notifier.allContents?.vids, featureType: notifier.vidContentsQuery.featureType),
-                                SearchContent(content: notifier.allContents?.diaries, featureType: notifier.diaryContentsQuery.featureType),
-                                SearchContent(content: notifier.allContents?.pics, featureType: notifier.picContentsQuery.featureType),
+                                SearchContent(featureType: notifier.vidContentsQuery.featureType),
+                                SearchContent(featureType: notifier.diaryContentsQuery.featureType),
+                                SearchContent(featureType: notifier.picContentsQuery.featureType),
                               ],
                             ),
                           ),

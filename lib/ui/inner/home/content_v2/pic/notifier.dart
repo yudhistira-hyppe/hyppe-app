@@ -51,7 +51,8 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   bool get hasNext => contentsQuery.hasNext;
 
-  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list = null}) async {
+  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list = null,
+    String? visibility = null}) async {
     List<ContentData> res = [];
 
     try {
@@ -82,11 +83,20 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       }
       final _searchData = context.read<SearchNotifier>();
       print('ini pict initial');
-      if (_searchData.allContents!.pics == null) {
-        print('ini pict initial 2');
+      if (_searchData.initDataPic == null) {
+        print('initDataPic is null');
+        if(visibility == 'PUBLIC'){
+          try{
+            _searchData.initDataPic = pic?.sublist(0, 18);
+            print('initDataPic is ${_searchData.initDataPic?.length}');
+          }catch(e){
+            _searchData.initDataPic = pic;
+            print('initDataPic is ${_searchData.initDataPic?.length}');
+          }
 
-        _searchData.picContentsQuery.featureType = FeatureType.pic;
-        _searchData.allContents!.pics = pic;
+        }
+        // _searchData.picContentsQuery.featureType = FeatureType.pic;
+        // _searchData.allContents!.pics = pic;
       }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();

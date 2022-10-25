@@ -90,3 +90,13 @@ extension ContentTypeDefine on String{
     return null;
   }
 }
+
+// extension GetContentType on ContentType{
+//   String? getValue(){
+//     if(this == ContentType.video){
+//       return "video";
+//     }else if(this == ContentType.image){
+//       return ""
+//     }
+//   }
+// }

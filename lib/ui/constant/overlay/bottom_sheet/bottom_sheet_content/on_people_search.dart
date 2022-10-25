@@ -87,7 +87,12 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                     if (lastInputValue != val) {
                       lastInputValue = val;
                       notifier.startSearch = 0;
-                      notifier.searchPeople(context, input: _controller.text);
+                      Future.delayed(const Duration(milliseconds: 500), () async{
+                        if(val == _controller.text){
+                          notifier.searchPeople(context, input: _controller.text);
+                        }
+                      });
+
                     }
                   }),
               NotificationListener<ScrollUpdateNotification>(

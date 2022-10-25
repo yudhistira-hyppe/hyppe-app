@@ -87,7 +87,8 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> initialVid(
     BuildContext context, {
-    bool reload = false, List<ContentData>? list = null
+    bool reload = false, List<ContentData>? list = null,
+    String? visibility = null
   }) async {
     List<ContentData> res = [];
 
@@ -124,9 +125,18 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       print(_searchData);
       print(_searchData.allContents);
       // print(_searchData.allContents!.vids);
-      if (_searchData.allContents!.vids == null) {
-        _searchData.vidContentsQuery.featureType = FeatureType.vid;
-        _searchData.allContents?.vids = vidData;
+      if (_searchData.initDataVid == null) {
+        // _searchData.vidContentsQuery.featureType = FeatureType.vid;
+        print('initDataVid is null');
+        if(visibility == 'PUBLIC'){
+          try{
+            _searchData.initDataVid = vidData?.sublist(0, 18);
+            print('initDataVid is ${_searchData.initDataVid?.length}');
+          }catch(e){
+            _searchData.initDataVid = vidData;
+            print('initDataVid is ${_searchData.initDataVid?.length}');
+          }
+        }
       }
       print('ini video data22');
       print(_searchData.allContents?.vids);

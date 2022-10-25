@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -32,7 +33,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
   void initState() {
     final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     // notifier.initialDiary(context, reload: true);
-    notifier.scrollController.addListener(() => notifier.scrollListener(context));
+    notifier.scrollController.addListener(() => notifier.scrollListener(materialAppKey.currentContext ?? context));
     super.initState();
   }
 

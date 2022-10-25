@@ -126,7 +126,7 @@ class PostsBloc {
 
   Future getAllContentsBlocV2(
     BuildContext context, {
-    int pageRows = 12,
+    int pageRows = 18,
     bool myContent = false,
     bool otherContent = false,
     required String visibility,

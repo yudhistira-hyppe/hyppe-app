@@ -134,7 +134,7 @@ class HomeNotifier with ChangeNotifier {
       }
 
       final allContents = await allReload(context);
-
+      final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
       // Refresh content
       try {
         await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
@@ -142,18 +142,18 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
       try {
-        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
+        await vid.initialVid(context, reload: true, list: allContents.video, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
-        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
+        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }
       try {
         print('initialPic : 1');
-        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
+        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
       } catch (e) {
         print(e);
       }

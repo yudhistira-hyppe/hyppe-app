@@ -74,7 +74,8 @@ class PreviewDiaryNotifier with ChangeNotifier {
     return _result;
   }
 
-  Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list = null}) async {
+  Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list = null,
+    String? visibility = null}) async {
     List<ContentData> res = [];
 
     try {
@@ -103,9 +104,19 @@ class PreviewDiaryNotifier with ChangeNotifier {
         diaryData = [...(diaryData ?? [] as List<ContentData>)] + res;
       }
       final _searchData = context.read<SearchNotifier>();
-      if (_searchData.allContents!.diaries == null) {
-        _searchData.diaryContentsQuery.featureType = FeatureType.diary;
-        _searchData.allContents?.diaries = diaryData;
+      if (_searchData.initDataDiary == null) {
+        // _searchData.diaryContentsQuery.featureType = FeatureType.diary;
+        print('initDataDiary is null');
+        if(visibility == 'PUBLIC'){
+          try{
+            _searchData.initDataDiary = diaryData?.sublist(0, 18);
+            print('initDataDiary is ${_searchData.initDataDiary?.length}');
+          }catch(e){
+            _searchData.initDataDiary = diaryData;
+            print('initDataDiary is ${_searchData.initDataDiary?.length}');
+          }
+
+        }
       }
     } catch (e) {
       'load diary list: ERROR: $e'.logger();
