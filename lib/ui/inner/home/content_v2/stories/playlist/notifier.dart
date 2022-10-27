@@ -16,6 +16,7 @@ import 'package:hyppe/core/bloc/reaction/bloc.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -526,9 +527,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context, {StoryController? storyController}) {
+  void reportContent(BuildContext context, ContentData data, {StoryController? storyController}) {
     storyController?.pause();
-    ShowBottomSheet.onReportContent(context);
+    ShowBottomSheet.onReportContent(context, data, hyppeStory);
   }
 }
 

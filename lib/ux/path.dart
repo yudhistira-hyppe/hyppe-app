@@ -104,4 +104,6 @@ class Routes {
   static const String verificationIDStepSupportingDocs = '/verification-id-docs';
   static const String verificationIDStepSupportingDocsPreview = '/verification-id-docs-preview';
   static const String verificationIDStepSupportDocsEula = '/verification-id-docs-eula';
+
+  static const String reportContent = '/report-content';
 }

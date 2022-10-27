@@ -82,6 +82,7 @@ class Env {
     UrlConstants.withdraw,
     UrlConstants.resendOTP,
     UrlConstants.loginGoogle,
+    UrlConstants.interactive,
   ];
 
   static final EnvData dev = EnvData(

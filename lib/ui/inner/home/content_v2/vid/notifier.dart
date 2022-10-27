@@ -3,6 +3,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
@@ -10,6 +11,7 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
@@ -25,7 +27,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     language = translate;
     notifyListeners();
   }
-
 
   final _system = System();
   final _routing = Routing();
@@ -85,17 +86,13 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  Future<void> initialVid(
-    BuildContext context, {
-    bool reload = false, List<ContentData>? list = null,
-    String? visibility = null
-  }) async {
+  Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list = null, String? visibility = null}) async {
     List<ContentData> res = [];
 
     try {
-      if(list != null){
+      if (list != null) {
         res.addAll(list);
-      }else{
+      } else {
         if (reload) {
           print('reload contentsQuery : 15');
           res = await contentsQuery.reload(context);
@@ -103,7 +100,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
           res = await contentsQuery.loadNext(context);
         }
       }
-
 
       if (reload) {
         vidData = res;
@@ -128,11 +124,11 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       if (_searchData.initDataVid == null) {
         // _searchData.vidContentsQuery.featureType = FeatureType.vid;
         print('initDataVid is null');
-        if(visibility == 'PUBLIC'){
-          try{
+        if (visibility == 'PUBLIC') {
+          try {
             _searchData.initDataVid = vidData?.sublist(0, 18);
             print('initDataVid is ${_searchData.initDataVid?.length}');
-          }catch(e){
+          } catch (e) {
             _searchData.initDataVid = vidData;
             print('initDataVid is ${_searchData.initDataVid?.length}');
           }
@@ -163,8 +159,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void reportContent(BuildContext context) {
-    ShowBottomSheet.onReportContent(context);
+  void reportContent(BuildContext context, ContentData data) {
+    context.read<ReportNotifier>().contentData = data;
+    ShowBottomSheet.onReportContent(context, data, hyppeVid);
   }
 
   void showUserTag(BuildContext context, index, postId) {

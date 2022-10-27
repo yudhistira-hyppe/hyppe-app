@@ -61,7 +61,10 @@ class SuccessWithdrawScreen extends StatelessWidget {
                     sixPx,
                     TwoColumnWidget(notifier2.translate.bankName, text2: notifier.withdarawalSummarymodel!.bankName),
                     sixPx,
-                    TwoColumnWidget('Status', text2: notifier.withdarawalmodel!.status),
+                    TwoColumnWidget(
+                      'Status',
+                      text2: System().statusWithdrwal(context, notifier.withdarawalmodel!.status!),
+                    ),
                     sixPx,
                     TwoColumnWidget(notifier2.translate.bankAccount, text2: notifier.withdarawalSummarymodel!.bankAccount),
                     sixPx,

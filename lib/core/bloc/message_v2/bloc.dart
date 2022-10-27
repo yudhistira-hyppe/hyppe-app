@@ -98,6 +98,8 @@ class MessageBlocV2 {
     formData.fields.add(MapEntry('receiverParty', disqusArgument.receiverParty));
     formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(disqusArgument.postType)));
     formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(disqusArgument.discussEventType)));
+    print('create dm');
+    print(formData.fields);
 
     await Repos().reposPost(
       context,

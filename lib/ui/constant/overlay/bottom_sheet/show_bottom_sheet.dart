@@ -129,7 +129,6 @@ class ShowBottomSheet {
         );
       },
     );
-
   }
 
   static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
@@ -841,7 +840,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, {StoryController? storyController}) {
+  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController}) {
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -857,7 +856,10 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnReportContentBottomSheet(),
+            child: OnReportContentBottomSheet(
+              postData: postData,
+              type: type,
+            ),
           ),
         );
       },
@@ -896,7 +898,7 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, {StoryController? storyController}) {
+  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, String? type}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -904,7 +906,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            // height: SizeConfig.screenHeight! / 1.78,
+            height: SizeConfig.screenHeight! / 1.09,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -913,7 +915,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnReportSpamFormBottomSheet(),
+            child: OnReportSpamFormBottomSheet(postData: postData, type: type),
           ),
         );
       },
@@ -1340,8 +1342,8 @@ class ShowBottomSheet {
 
   static onShowStatementPin(
     BuildContext context, {
-    required Function() onSave,
-    required Function() onCancel,
+    Function()? onSave,
+    Function()? onCancel,
     title = '',
     bodyText = '',
   }) {

@@ -12,6 +12,8 @@ import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 
 import 'package:better_player/better_player.dart';
@@ -301,24 +303,23 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     // });
 
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
-      autoDispose: true,
-      autoPlay: autoPlay,
-      fit: BoxFit.contain,
-      showPlaceholderUntilPlay: true,
-      deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
-      autoDetectFullscreenAspectRatio: true,
-      autoDetectFullscreenDeviceOrientation: !Platform.isIOS,
-      controlsConfiguration: const BetterPlayerControlsConfiguration(
-        enableFullscreen: true,
-        controlBarColor: Color.fromARGB(10, 0, 0, 1),
-      ),
-      eventListener: (event){
-        print('ini event betterPlayerEventType : ${event.betterPlayerEventType}');
-        if(event.betterPlayerEventType == BetterPlayerEventType.initialized){
-          context.incrementAdsCount();
-        }
-      }
-    );
+        autoDispose: true,
+        autoPlay: autoPlay,
+        fit: BoxFit.contain,
+        showPlaceholderUntilPlay: true,
+        deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
+        autoDetectFullscreenAspectRatio: true,
+        autoDetectFullscreenDeviceOrientation: !Platform.isIOS,
+        controlsConfiguration: const BetterPlayerControlsConfiguration(
+          enableFullscreen: true,
+          controlBarColor: Color.fromARGB(10, 0, 0, 1),
+        ),
+        eventListener: (event) {
+          print('ini event betterPlayerEventType : ${event.betterPlayerEventType}');
+          if (event.betterPlayerEventType == BetterPlayerEventType.initialized) {
+            context.incrementAdsCount();
+          }
+        });
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       widget.videoData?.fullContentPath ??
@@ -357,7 +358,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     _betterPlayerController?.addEventsListener(
       (event) {
-
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           print('event ads : ${event.parameters}');
           _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
@@ -366,10 +366,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         } else if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
           _handleHideFullScreenEvent();
         }
-        if(event.betterPlayerEventType == BetterPlayerEventType.finished){
+        if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
           widget.afterView!();
         }
-
       },
     );
   }
@@ -520,7 +519,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       final ratio = _betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio;
       // final height = _betterPlayerControllerMap?.videoPlayerController?.value.size?.height;
       // final width = _betterPlayerControllerMap?.videoPlayerController?.value.size?.width;
-      if(ratio != null){
+      if (ratio != null) {
         _betterPlayerControllerMap?.setOverriddenAspectRatio(ratio);
       }
       setStateIfMounted(() {
@@ -562,13 +561,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           'Show skip ads'.logger();
 
           'second end ads1 $second'.logger();
-
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.closingAds) {
           print('skips di click');
           'Closing ads'.logger();
           'second end ads2 $second'.logger();
-          if((_newClipData?.data?.adsSkip ?? 2) <= second){
+          if ((_newClipData?.data?.adsSkip ?? 2) <= second) {
             adsView(_newClipData?.data ?? AdsData(), second);
             _handleClosingAdsEvent(roll);
           }
@@ -680,14 +678,18 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     return ValueListenableBuilder<bool>(
       valueListenable: _initializeVideo,
       builder: (_, value, __) => !value
-          ? VideoThumbnail(
-              videoData: widget.videoData,
-              onDetail: widget.onDetail,
-              fn: () {
-                _initializeVideo.value = true;
-                _initialize();
-              },
-            )
+          ? widget.videoData!.isReport!
+              ? VideoThumbnailReport(
+                  videoData: widget.videoData,
+                )
+              : VideoThumbnail(
+                  videoData: widget.videoData,
+                  onDetail: widget.onDetail,
+                  fn: () {
+                    _initializeVideo.value = true;
+                    _initialize();
+                  },
+                )
           : Stack(
               children: [
                 ValueListenableBuilder<bool>(
@@ -697,9 +699,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                       print('progressBarVideo false');
                       return Center(
                           child: CircularProgressIndicator(
-                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                          )
-                      );
+                        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                      ));
                     } else {
                       print('_eventType $_eventType');
                       if (_eventType == BetterPlayerEventType.showingAds) {

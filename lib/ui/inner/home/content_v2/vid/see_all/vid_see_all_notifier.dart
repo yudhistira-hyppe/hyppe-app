@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -62,7 +63,7 @@ class VidSeeAllNotifier extends ChangeNotifier {
       if (reload) {
         vidData = res;
       } else {
-        for(var data in res){
+        for (var data in res) {
           print('data vidData : ${data.toJson().toString()}');
         }
 
@@ -88,8 +89,8 @@ class VidSeeAllNotifier extends ChangeNotifier {
     }
   }
 
-  void reportContent(BuildContext context) {
-    ShowBottomSheet.onReportContent(context);
+  void reportContent(BuildContext context, ContentData data) {
+    ShowBottomSheet.onReportContent(context, data, hyppeVid);
   }
 
   void showUserTag(BuildContext context, index) {

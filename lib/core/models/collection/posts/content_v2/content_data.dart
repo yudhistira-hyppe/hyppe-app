@@ -168,6 +168,8 @@ class ContentData extends HiveObject {
   @HiveField(35)
   String? apsaraId;
 
+  bool? isReport;
+
   ContentData(
       {this.metadata,
       this.mediaBasePath,
@@ -204,7 +206,8 @@ class ContentData extends HiveObject {
       this.saleView,
       this.saleLike,
       this.isApsara,
-      this.apsaraId});
+      this.apsaraId,
+      this.isReport});
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -256,6 +259,7 @@ class ContentData extends HiveObject {
     saleLike = json['saleLike'] ?? false;
     isApsara = json['isApsara'] ?? false;
     apsaraId = json['apsaraId'] ?? '';
+    isReport = json['isReport'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

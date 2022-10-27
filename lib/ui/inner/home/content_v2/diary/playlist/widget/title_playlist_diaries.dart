@@ -121,7 +121,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                         child: GestureDetector(
                           onTap: () {
                             widget.storyController.pause();
-                            ShowBottomSheet.onReportContent(context);
+                            ShowBottomSheet.onReportContent(context, widget.data, hyppeDiary);
                           },
                           child: const CustomIconWidget(
                             defaultColor: false,

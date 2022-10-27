@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/widget/custom_rectangle_input.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdrawal/otp_field_widget.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -56,17 +57,16 @@ class PinWithdrawalScreen extends StatelessWidget {
               sixPx,
               CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
               twelvePx,
-              CustomRectangleInput(
-                notifier.pinController,
-                onChanged: (value) {
+              PinWithdrawal(
+                controller: notifier.pinController,
+                lengthPinCode: 6,
+                msgError: notifier.errorPinWithdrawMsg,
+                onChanged: (val) {},
+                onCompleted: (value) {
                   print(value);
                   notifier.createWithdraw(context, value);
                 },
               ),
-              Text(
-                notifier.errorPinWithdrawMsg,
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kHyppeRed),
-              )
             ],
           ),
         ),

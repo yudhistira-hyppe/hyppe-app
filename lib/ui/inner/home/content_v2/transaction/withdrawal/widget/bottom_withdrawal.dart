@@ -17,7 +17,7 @@ class BottomWithdrawalWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<TransactionNotifier>(
       builder: (_, notifier, __) => Container(
-          padding: const EdgeInsets.all(11.0),
+          // padding: const EdgeInsets.all(11.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
@@ -33,88 +33,108 @@ class BottomWithdrawalWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const CustomTextWidget(textToDisplay: 'Destination Bank Account'),
-              notifier.dataAcccount!.isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
+              const Padding(
+                padding: EdgeInsets.all(11.0),
+                child: CustomTextWidget(textToDisplay: 'Destination Bank Account'),
+              ),
+              notifier.isLoading
+                  ? SizedBox(
+                      height: 150,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: const [
-                          Text(
-                            'No Bank Account !',
-                            style: TextStyle(color: kHyppeRed),
-                          ),
+                          Center(child: CustomLoading()),
                         ],
                       ),
                     )
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: notifier.dataAcccount!.length,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Container(
-                          decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: kHyppeLightInactive2, width: 0.5))),
-                          child: Column(
-                            children: [
-                              ListTile(
-                                onTap: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? () => notifier.bankChecked(index) : null,
-                                contentPadding: EdgeInsets.zero,
-                                title: Row(
-                                  children: [
-                                    CustomTextWidget(
-                                      textToDisplay: notifier.dataAcccount![index].bankName!,
-                                      textAlign: TextAlign.start,
-                                    ),
-                                    sixPx,
-                                    notifier.dataAcccount![index].statusInquiry != null && notifier.dataAcccount![index].statusInquiry!
-                                        ? Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(50),
-                                              color: const Color(0xAAF8EDF9),
-                                            ),
-                                            child: const CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}user-verified.svg",
-                                              defaultColor: false,
-                                            ),
-                                          )
-                                        : Container()
-                                  ],
-                                ),
-                                subtitle: CustomTextWidget(
-                                  textToDisplay: '${notifier.dataAcccount![index].noRek} - ${(notifier.dataAcccount![index].nama)!.toUpperCase()}',
-                                  textAlign: TextAlign.start,
-                                ),
-                                trailing: Radio<String>(
-                                  value: notifier.dataAcccount![index].noRek!,
-                                  groupValue: notifier.bankSelected,
-                                  onChanged: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? (val) => notifier.bankChecked(index) : null,
-                                  activeColor: kHyppePrimary,
-                                ),
+                  : notifier.dataAcccount!.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 16.0),
+                          child: Row(
+                            children: const [
+                              Text(
+                                'No Bank Account !',
+                                style: TextStyle(color: kHyppeRed),
                               ),
-                              // notifier.isCheking && notifier.bankSelected == notifier.dataAcccount![index].noRek!
-                              //     ? Padding(
-                              //         padding: const EdgeInsets.all(8.0),
-                              //         child: Row(
-                              //           children: const [
-                              //             SizedBox(
-                              //               width: 10,
-                              //               height: 10,
-                              //               child: CircularProgressIndicator(
-                              //                 strokeWidth: 1,
-                              //                 color: kHyppePrimary,
-                              //               ),
-                              //             ),
-                              //             sixPx,
-                              //             CustomTextWidget(textToDisplay: 'Checking the account'),
-                              //           ],
-                              //         ),
-                              //       )
-                              //     : Container(),
                             ],
                           ),
-                        );
-                      },
-                    )
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: notifier.dataAcccount!.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: const EdgeInsets.only(right: 11.0, left: 11.0),
+                              decoration: BoxDecoration(
+                                  border: const Border(
+                                    bottom: BorderSide(color: kHyppeLightInactive2, width: 0.5),
+                                  ),
+                                  color: notifier.dataAcccount![index].statusInquiry != null && !notifier.dataAcccount![index].statusInquiry!
+                                      ? Colors.grey.withOpacity(0.08)
+                                      : Theme.of(context).colorScheme.background),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    onTap: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? () => notifier.bankChecked(index) : null,
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Row(
+                                      children: [
+                                        CustomTextWidget(
+                                          textToDisplay: notifier.dataAcccount![index].bankName!,
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        sixPx,
+                                        notifier.dataAcccount![index].statusInquiry != null && notifier.dataAcccount![index].statusInquiry!
+                                            ? Container(
+                                                padding: const EdgeInsets.all(4),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(50),
+                                                  color: const Color(0xAAF8EDF9),
+                                                ),
+                                                child: const CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}user-verified.svg",
+                                                  defaultColor: false,
+                                                ),
+                                              )
+                                            : Container()
+                                      ],
+                                    ),
+                                    subtitle: CustomTextWidget(
+                                      textToDisplay: '${notifier.dataAcccount![index].noRek} - ${(notifier.dataAcccount![index].nama)!.toUpperCase()}',
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    trailing: Radio<String>(
+                                      value: notifier.dataAcccount![index].noRek!,
+                                      groupValue: notifier.bankSelected,
+                                      onChanged: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? (val) => notifier.bankChecked(index) : null,
+                                      activeColor: kHyppePrimary,
+                                    ),
+                                  ),
+                                  // notifier.isCheking && notifier.bankSelected == notifier.dataAcccount![index].noRek!
+                                  //     ? Padding(
+                                  //         padding: const EdgeInsets.all(8.0),
+                                  //         child: Row(
+                                  //           children: const [
+                                  //             SizedBox(
+                                  //               width: 10,
+                                  //               height: 10,
+                                  //               child: CircularProgressIndicator(
+                                  //                 strokeWidth: 1,
+                                  //                 color: kHyppePrimary,
+                                  //               ),
+                                  //             ),
+                                  //             sixPx,
+                                  //             CustomTextWidget(textToDisplay: 'Checking the account'),
+                                  //           ],
+                                  //         ),
+                                  //       )
+                                  //     : Container(),
+                                ],
+                              ),
+                            );
+                          },
+                        )
             ],
           )),
     );

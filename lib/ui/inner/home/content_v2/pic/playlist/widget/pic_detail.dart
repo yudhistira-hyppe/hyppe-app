@@ -165,7 +165,7 @@ class _PicDetailState extends State<PicDetail> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet.onReportContent(context),
+                              function: () => ShowBottomSheet.onReportContent(context, widget.arguments!, hyppePic),
                             )
                           : SizedBox(),
                     ],

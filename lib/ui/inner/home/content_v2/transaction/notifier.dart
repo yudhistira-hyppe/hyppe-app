@@ -40,6 +40,9 @@ class TransactionNotifier extends ChangeNotifier {
   AccountBalanceModel? _accountBalance;
   AccountBalanceModel? get accountBalance => _accountBalance;
 
+  String _errorNoBalance = '';
+  String get errorNoBalance => _errorNoBalance;
+
   String? bankcode;
   TextEditingController pinController = TextEditingController();
   TextEditingController _nameAccount = TextEditingController();
@@ -86,6 +89,8 @@ class TransactionNotifier extends ChangeNotifier {
   bool get isScrollLoading => _isScrollLoading;
   bool _isDetailLoading = false;
   bool get isDetailLoading => _isDetailLoading;
+  bool _isLoadingSummaryWithdraw = false;
+  bool get isLoadingSummaryWithdraw => _isLoadingSummaryWithdraw;
 
   set amountWithDrawal(String? val) {
     _amountWithDrawal = val;
@@ -129,6 +134,11 @@ class TransactionNotifier extends ChangeNotifier {
 
   set isDetailLoading(bool val) {
     _isDetailLoading = val;
+    notifyListeners();
+  }
+
+  set isLoadingSummaryWithdraw(bool val) {
+    _isLoadingSummaryWithdraw = val;
     notifyListeners();
   }
 
@@ -395,11 +405,12 @@ class TransactionNotifier extends ChangeNotifier {
           dataAcccount!.last.bankName = _nameAccount.text;
           Routing().moveBack();
           Routing().moveBack();
-          ShowBottomSheet().onShowColouredSheet(context, language.successfully!, color: kHyppeLightSuccess);
+          ShowBottomSheet().onShowColouredSheet(context, language.successfullyAdded!, color: kHyppeLightSuccess);
           _nameAccount.clear();
           noBankAccount.clear();
           accountOwnerName.clear();
           bankcode = '';
+          messageAddBankError = '';
         }
       }
 
@@ -472,7 +483,7 @@ class TransactionNotifier extends ChangeNotifier {
     ShowGeneralDialog.generalDialog(
       context,
       titleText: language.deletedBankAccount,
-      bodyText: "${language.youWillDelete} $bankName ${language.accountWithAccountNumber} $accountNumber ${language.ownedBy} $ownerName",
+      bodyText: "${language.youWillDelete} $bankName ${language.accountWithAccountNumber} $accountNumber ${language.an} ${ownerName.toUpperCase()}",
       maxLineTitle: 1,
       maxLineBody: 10,
       functionPrimary: () async {
@@ -545,11 +556,23 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   void showRemarkWithdraw(BuildContext context) {
-    ShowGeneralDialog.remarkWidthdrawal(context);
+    // ShowGeneralDialog.remarkWidthdrawal(context);
+    ShowBottomSheet.onShowStatementPin(
+      context,
+      onCancel: () {},
+      onSave: null,
+      title: '',
+      bodyText: context.read<TranslateNotifierV2>().translate.inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave!,
+    );
   }
 
   Future summaryWithdrawal(BuildContext context) async {
     final email = SharedPreference().readStorage(SpKeys.email);
+    if (accountBalance!.totalsaldo! < int.parse(amountWithDrawal!)) {
+      _errorNoBalance = "Insufficient balance";
+      notifyListeners();
+      return false;
+    }
     final Map params = {
       "email": email,
       "bankcode": bankcode,
@@ -569,7 +592,7 @@ class TransactionNotifier extends ChangeNotifier {
 
     for (var e in dataAcccount!) {
       if (e.noRek == params['norek']) {
-        if (!e.statusInquiry!) {
+        if (e.statusInquiry != null && !e.statusInquiry!) {
           return ShowBottomSheet().onShowColouredSheet(
             context,
             'Bank account name and your ID did not matched. Click Here to visit our Help Center',
@@ -583,13 +606,14 @@ class TransactionNotifier extends ChangeNotifier {
         }
       }
     }
-
     _summaryWithdrawal(context, params);
   }
 
   Future _summaryWithdrawal(BuildContext context, params) async {
     bool connect = await System().checkConnections();
     if (connect) {
+      isLoadingSummaryWithdraw = true;
+      _errorNoBalance = '';
       final notifier = TransactionBloc();
       await notifier.summaryWithdrawal(context, params: params);
       final fetch = notifier.transactionFetch;
@@ -615,11 +639,14 @@ class TransactionNotifier extends ChangeNotifier {
             },
           );
         }
+        isLoadingSummaryWithdraw = false;
+        notifyListeners();
       }
       if (fetch.postsState == TransactionState.summaryWithdrawalError) {
         if (fetch.data != null) {
           ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
         }
+        isLoadingSummaryWithdraw = false;
       }
       notifyListeners();
     } else {
@@ -661,13 +688,21 @@ class TransactionNotifier extends ChangeNotifier {
         withdarawalmodel = WithdrawalModel.fromJson(fetch.data);
         Routing().moveReplacement(Routes.successWithdrawal);
         pinController.clear();
+        _errorPinWithdrawMsg = '';
       }
       if (fetch.postsState == TransactionState.createWithdrawalError) {
         Routing().moveBack();
-        _errorPinWithdrawMsg = fetch.message['messages']['info'][0];
         notifyListeners();
         if (fetch.data != null) {
-          ShowBottomSheet().onShowColouredSheet(context, fetch.message['info'][0], color: Theme.of(context).colorScheme.error);
+          if (fetch.message != null && fetch.message['messages'] != null && fetch.message['messages']['info'] != null && fetch.message['messages']['info'][0] != null) {
+            _errorPinWithdrawMsg = fetch.message['messages']['info'][0];
+          }
+          if (_errorPinWithdrawMsg == 'Unabled to proceed, Pin not Match') {
+            _errorPinWithdrawMsg = context.read<TranslateNotifierV2>().translate.incorrectPINPleasetryAgain!;
+            ShowBottomSheet().onShowColouredSheet(context, _errorPinWithdrawMsg, color: Theme.of(context).colorScheme.error);
+          } else {
+            ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);
+          }
         }
       }
     } else {
@@ -685,6 +720,7 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   void exitPageWithdrawal() {
+    _errorNoBalance = '';
     bankcode = '';
     bankSelected = '';
     amountWithdrawalController.clear();

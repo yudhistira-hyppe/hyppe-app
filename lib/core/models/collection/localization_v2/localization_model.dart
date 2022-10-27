@@ -558,6 +558,7 @@ class LocalizationModelV2 {
   String? aboutBankAccount;
   String? aboutBankAccountContent;
   String? ownedBy;
+  String? an;
   String? help;
   String? bankAccount;
   String? makeSureTheName;
@@ -673,6 +674,30 @@ class LocalizationModelV2 {
   String? aVerifiedBankDoesNotNeed;
   String? yourTransactionisBeingProcessedNow;
   String? backtoTransaction;
+  String? successfullyAdded;
+  String? spam;
+  String? nudityOrSexualActivity;
+  String? hateSpeechOrSymbols;
+  String? violanceOrDangerousOrganizations;
+  String? fakeOrMisleadingInformation;
+  String? selfHarmSuicideOrDangerousActs;
+  String? scamOrFraud;
+  String? illegalActivitiesAndRegulatedGoods;
+  String? intellectualProperty;
+  String? falseorMisleadingInformation;
+  String? extremeViolence;
+  String? other;
+  String? reportThisContent;
+  String? whyareyoureportingthiscontent;
+  String? bullyingOrHarassment;
+  String? reportReceived;
+  String? yourReportWillbeHandledImmediately;
+  String? incorrectPINPleasetryAgain;
+  String? inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave;
+  String? cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn;
+  String? transferredSuccessfully;
+  String? waitingtoTransfer;
+  String? report;
 
   LocalizationModelV2({
     this.login,
@@ -1234,6 +1259,7 @@ class LocalizationModelV2 {
     this.aboutBankAccount,
     this.aboutBankAccountContent,
     this.ownedBy,
+    this.an,
     this.help,
     this.bankAccount,
     this.makeSureTheName,
@@ -1349,6 +1375,30 @@ class LocalizationModelV2 {
     this.aVerifiedBankDoesNotNeed,
     this.yourTransactionisBeingProcessedNow,
     this.backtoTransaction,
+    this.successfullyAdded,
+    this.spam,
+    this.nudityOrSexualActivity,
+    this.hateSpeechOrSymbols,
+    this.violanceOrDangerousOrganizations,
+    this.fakeOrMisleadingInformation,
+    this.selfHarmSuicideOrDangerousActs,
+    this.scamOrFraud,
+    this.illegalActivitiesAndRegulatedGoods,
+    this.intellectualProperty,
+    this.falseorMisleadingInformation,
+    this.extremeViolence,
+    this.other,
+    this.reportThisContent,
+    this.whyareyoureportingthiscontent,
+    this.bullyingOrHarassment,
+    this.reportReceived,
+    this.yourReportWillbeHandledImmediately,
+    this.incorrectPINPleasetryAgain,
+    this.inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave,
+    this.cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn,
+    this.transferredSuccessfully,
+    this.waitingtoTransfer,
+    this.report,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1927,6 +1977,7 @@ class LocalizationModelV2 {
     accountWithAccountNumber = json['accountWithAccountNumber'];
     aboutBankAccount = json['aboutBankAccount'];
     ownedBy = json['ownedBy'];
+    an = json['an'];
     aboutBankAccountContent = json['aboutBankAccountContent'];
     help = json['help'];
     bankAccount = json['bankAccount'];
@@ -2044,5 +2095,29 @@ class LocalizationModelV2 {
     aVerifiedBankDoesNotNeed = json["aVerifiedBankDoesNotNeed"];
     yourTransactionisBeingProcessedNow = json["yourTransactionisBeingProcessedNow"];
     backtoTransaction = json["backtoTransaction"];
+    successfullyAdded = json["successfullyAdded"];
+    spam = json["spam"];
+    nudityOrSexualActivity = json["nudityOrSexualActivity"];
+    hateSpeechOrSymbols = json["hateSpeechOrSymbols"];
+    violanceOrDangerousOrganizations = json["violanceOrDangerousOrganizations"];
+    fakeOrMisleadingInformation = json["fakeOrMisleadingInformation"];
+    selfHarmSuicideOrDangerousActs = json["selfHarmSuicideOrDangerousActs"];
+    scamOrFraud = json["scamOrFraud"];
+    illegalActivitiesAndRegulatedGoods = json["illegalActivitiesAndRegulatedGoods"];
+    intellectualProperty = json["intellectualProperty"];
+    falseorMisleadingInformation = json["falseorMisleadingInformation"];
+    extremeViolence = json["extremeViolence"];
+    other = json["Other"];
+    reportThisContent = json["reportThisContent"];
+    whyareyoureportingthiscontent = json["whyareyoureportingthiscontent"];
+    bullyingOrHarassment = json["bullyingOrHarassment"];
+    reportReceived = json["reportReceived"];
+    yourReportWillbeHandledImmediately = json["yourReportWillbeHandledImmediately"];
+    incorrectPINPleasetryAgain = json["incorrectPINPleasetryAgain"];
+    inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave = json["inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave"];
+    cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn = json["cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn"];
+    transferredSuccessfully = json["transferredSuccessfully"];
+    waitingtoTransfer = json["waitingtoTransfer"];
+    report = json["report"];
   }
 }

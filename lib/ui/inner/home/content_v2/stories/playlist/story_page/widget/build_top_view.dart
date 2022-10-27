@@ -99,7 +99,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                     : SizedBox(),
                 widget.data?.email != SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
-                        onTap: () => notifier.reportContent(context, storyController: widget.storyController),
+                        onTap: () => notifier.reportContent(context, widget.data!, storyController: widget.storyController),
                         child: const CustomIconWidget(
                           defaultColor: false,
                           iconData: '${AssetPath.vectorPath}more.svg',

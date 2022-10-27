@@ -68,7 +68,7 @@ class _TransactionState extends State<Transaction> {
             child: notifier.isLoading
                 ? const SingleChildScrollView(child: const ShimmerTransactionHistory())
                 : SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(

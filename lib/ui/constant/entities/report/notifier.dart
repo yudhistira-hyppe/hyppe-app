@@ -1,11 +1,20 @@
+import 'dart:async';
+
 import 'package:hyppe/core/bloc/report/bloc.dart';
 import 'package:hyppe/core/bloc/report/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/core/models/collection/report/report_data.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 class ReportNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -28,6 +37,8 @@ class ReportNotifier with ChangeNotifier {
   bool get fromLandscapeMode => _fromLandscapeMode;
   Map<String, dynamic>? get data => _data;
   ReportAction? get reportAction => _reportAction;
+  ContentData? contentData;
+  String typeContent = '';
 
   set appBar(String? val) {
     _appBar = val;
@@ -104,6 +115,21 @@ class ReportNotifier with ChangeNotifier {
     if (fetch.reportState == ReportState.getReportOptionsSuccess) {
       initData = fetch.data;
     }
+  }
+
+  Future<void> reportPost(BuildContext context) async {
+    context.read<HomeNotifier>().onReport(
+          context,
+          postID: contentData!.postID!,
+          content: typeContent,
+          isReport: true,
+        );
+    notifyListeners();
+    Navigator.pop(context, true);
+
+    // _showMessage("Your feedback will help us to improve your experience.");
+    var _showMessage = 'Thanks for letting us know", "We will review your report. If we find this content is violating of our community guidelines we will take action on it.';
+    ShowBottomSheet().onShowColouredSheet(context, _showMessage, color: Theme.of(context).colorScheme.onError);
   }
 
   void onClickButton(context) async {

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:provider/provider.dart';
 
 class TotalBalance extends StatelessWidget {
   String? accountBalance;
@@ -28,9 +31,20 @@ class TotalBalance extends StatelessWidget {
                 textAlign: TextAlign.start,
               ),
               fivePx,
-              const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}info-icon.svg",
-                height: 14,
+              GestureDetector(
+                onTap: () {
+                  ShowBottomSheet.onShowStatementPin(
+                    context,
+                    onCancel: () {},
+                    onSave: null,
+                    title: 'Total Balance',
+                    bodyText: context.read<TranslateNotifierV2>().translate.cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn!,
+                  );
+                },
+                child: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}info-icon.svg",
+                  height: 14,
+                ),
               )
             ],
           ),
