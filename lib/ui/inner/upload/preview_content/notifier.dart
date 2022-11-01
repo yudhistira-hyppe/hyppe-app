@@ -53,7 +53,9 @@ class PreviewContentNotifier with ChangeNotifier {
   Color? _dragTargetColor;
   bool _addTextItemMode = false;
   Duration? _totalDuration;
-  Duration get totalDuration => _totalDuration!;
+  Duration? get totalDuration => _totalDuration;
+  bool _isLoadVideo = false;
+  bool get isLoadVideo => _isLoadVideo;
 
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
@@ -88,7 +90,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set totalDuration(Duration val) {
+  set totalDuration(Duration? val) {
     _totalDuration = val;
     notifyListeners();
   }
@@ -164,6 +166,61 @@ class PreviewContentNotifier with ChangeNotifier {
       _fileContent?.forEach((_) {
         _filterMatrix.add(NORMAL);
       });
+    }
+  }
+
+  void initVideoPlayer(BuildContext context) async {
+
+    BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
+      autoPlay: false,
+      fit: BoxFit.contain,
+      showPlaceholderUntilPlay: true,
+      controlsConfiguration: BetterPlayerControlsConfiguration(
+        showControls: false,
+        enableFullscreen: false,
+        controlBarColor: Colors.black26,
+      ),
+    );
+    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
+      BetterPlayerDataSourceType.file,
+      Platform.isIOS ? _url!.replaceAll(" ", "%20") : _url!,
+      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
+        minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
+        maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
+        bufferForPlaybackMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
+        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackAfterRebufferMs,
+      ),
+    );
+
+    _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
+    try {
+      _isLoadVideo = true;
+      await _betterPlayerController?.setupDataSource(dataSource).then((_) {
+        _betterPlayerController?.play();
+        _betterPlayerController?.setLooping(true);
+        _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController!.videoPlayerController!.value.aspectRatio);
+        notifyListeners();
+      });
+
+      _betterPlayerController?.addEventsListener(
+            (_) {
+          _totalDuration = _.parameters?['duration'];
+          if(_totalDuration != null){
+            if (_betterPlayerController?.isVideoInitialized() ?? false) if (_betterPlayerController!.videoPlayerController!.value.position >=
+                _betterPlayerController!.videoPlayerController!.value.duration!) {
+              _nextVideo = true;
+            }
+          }
+
+        },
+      );
+
+      // notifier.setVideoPlayerController(_betterPlayerController);
+    } catch (e) {
+      print('Setup data source error: $e');
+    }
+    finally{
+      _isLoadVideo = false;
     }
   }
 
@@ -263,15 +320,18 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void navigateToPreUploaded(BuildContext context, [GlobalKey? globalKey]) async {
     if (featureType == FeatureType.diary) {
-      final ms = totalDuration.inMilliseconds;
-      int seconds = ms ~/ 1000;
-      if (seconds <= 3) {
-        showSnackBar(
-          color: kHyppeDanger,
-          message: "${language.min4second}",
-        );
-        return;
+      final ms = totalDuration?.inMilliseconds;
+      if(ms != null){
+        int seconds = ms ~/ 1000;
+        if (seconds <= 3) {
+          showSnackBar(
+            color: kHyppeDanger,
+            message: "${language.min4second}",
+          );
+          return;
+        }
       }
+
     }
 
     if (_isSheetOpen) closeFilters();

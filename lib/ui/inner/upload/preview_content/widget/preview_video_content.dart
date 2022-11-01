@@ -24,67 +24,20 @@ class PreviewVideoContent extends StatefulWidget {
 class _PreviewVideoContentState extends State<PreviewVideoContent> {
   BetterPlayerController? _videoPlayerController;
 
-  void _initVideoPlayer() async {
-    final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-
-    BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
-      autoPlay: false,
-      fit: BoxFit.contain,
-      showPlaceholderUntilPlay: true,
-      controlsConfiguration: BetterPlayerControlsConfiguration(
-        showControls: false,
-        enableFullscreen: false,
-        controlBarColor: Colors.black26,
-      ),
-    );
-    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.file,
-      Platform.isIOS ? notifier.url!.replaceAll(" ", "%20") : notifier.url!,
-      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
-        minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
-        maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
-        bufferForPlaybackMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
-        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackAfterRebufferMs,
-      ),
-    );
-
-    _videoPlayerController = BetterPlayerController(betterPlayerConfiguration);
-    try {
-      await _videoPlayerController?.setupDataSource(dataSource).then((_) {
-        setState(() {
-          _videoPlayerController?.play();
-          _videoPlayerController?.setLooping(true);
-          _videoPlayerController?.setOverriddenAspectRatio(_videoPlayerController!.videoPlayerController!.value.aspectRatio);
-        });
-      });
-
-      _videoPlayerController?.addEventsListener(
-        (_) {
-          notifier.totalDuration = _.parameters!['duration'] ?? 0;
-
-          if (_videoPlayerController?.isVideoInitialized() ?? false) if (_videoPlayerController!.videoPlayerController!.value.position >=
-              _videoPlayerController!.videoPlayerController!.value.duration!) {
-            notifier.nextVideo = true;
-          }
-        },
-      );
-
-      notifier.setVideoPlayerController(_videoPlayerController);
-    } catch (e) {
-      print('Setup data source error: $e');
-    }
-  }
-
   @override
   void initState() {
-    _initVideoPlayer();
+    final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+    if(notifier.betterPlayerController == null){
+      notifier.initVideoPlayer(context);
+    }
+
     super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _videoPlayerController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,7 +50,12 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
         notifier.betterPlayerController?.pause();
       }
     });
-
+    if(notifier.betterPlayerController == null){
+      return const Center(
+        child: CustomLoading(),
+      );
+    }
+    print('isVideoInitialized ${notifier.betterPlayerController?.isVideoInitialized()}');
     return notifier.betterPlayerController?.isVideoInitialized() ?? false
         ? GestureDetector(
             onTap: () {

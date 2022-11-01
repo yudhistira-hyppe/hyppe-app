@@ -6,6 +6,8 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/preview_video_content.dart';
 
+import '../../../../constant/widget/custom_loading.dart';
+
 class BuildAnyContentPreviewer extends StatelessWidget {
   final GlobalKey? globalKey;
   final PageController pageController;
@@ -70,7 +72,13 @@ class BuildAnyContentPreviewer extends StatelessWidget {
                 );
               }
               notifier.toDiaryVideoPlayer(index, SourceFile.local);
-              return PreviewVideoContent();
+              if(notifier.isLoadVideo){
+                return const Center(
+                  child: CustomLoading(),
+                );
+              }else{
+                return PreviewVideoContent();
+              }
             },
           ),
           for (int index = 0; index < notifier.additionalItem.length; index++) ...[
