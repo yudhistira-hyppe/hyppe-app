@@ -52,6 +52,10 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       notifier.initializeData(context, _storyController, widget.data!);
       _storyItems = notifier.result;
+      print('_storyItems');
+      print(_storyItems[0].duration);
+      print(_storyItems[0].isImages);
+      print(_storyItems[0].view);
       isLoading = false;
     });
     if (widget.data != null) {
@@ -129,132 +133,132 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 child: const CustomDynamicLinkErrorWidget(),
               ),
             );
-    }else{
+    } else {
       Future.delayed(Duration(seconds: 2), () {
         return isLoading
             ? Container(
-            color: Colors.black,
-            width: 100,
-            height: 100,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                SizedBox(
-                  height: 90,
-                  child: SizedBox(
-                    height: 10,
-                    child: CustomLoading(),
-                  ),
-                ),
-              ],
-            ))
+                color: Colors.black,
+                width: 100,
+                height: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    SizedBox(
+                      height: 90,
+                      child: SizedBox(
+                        height: 10,
+                        child: CustomLoading(),
+                      ),
+                    ),
+                  ],
+                ))
             : Stack(
-          children: [
-            StoryView(
-              inline: false,
-              repeat: false,
-              progressColor: kHyppeLightButtonText,
-              durationColor: kHyppeLightButtonText,
-              onDouble: () {
-                print('testtttt');
-                context.read<LikeNotifier>().likePost(context, widget.data!);
-              },
-              controller: _storyController,
-              storyItems: _storyItems,
-              progressPosition: ProgressPosition.top,
-              onStoryShow: (storyItem) async {
-                int pos = _storyItems.indexOf(storyItem);
-                notifier.setCurrentStory(pos);
-                if (pos > 0) {
-                  // notifier.when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), fullCaption: true);
-                  // setState(() => _when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), context, fullCaption: true));
-                  setState(() {
-                    _when = '${System().readTimestamp(
-                      DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
-                      context,
-                      fullCaption: true,
-                    )}';
-                  });
-                }
+                children: [
+                  StoryView(
+                    inline: false,
+                    repeat: false,
+                    progressColor: kHyppeLightButtonText,
+                    durationColor: kHyppeLightButtonText,
+                    onDouble: () {
+                      print('testtttt');
+                      context.read<LikeNotifier>().likePost(context, widget.data!);
+                    },
+                    controller: _storyController,
+                    storyItems: _storyItems,
+                    progressPosition: ProgressPosition.top,
+                    onStoryShow: (storyItem) async {
+                      int pos = _storyItems.indexOf(storyItem);
+                      notifier.setCurrentStory(pos);
+                      if (pos > 0) {
+                        // notifier.when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), fullCaption: true);
+                        // setState(() => _when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), context, fullCaption: true));
+                        setState(() {
+                          _when = '${System().readTimestamp(
+                            DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
+                            context,
+                            fullCaption: true,
+                          )}';
+                        });
+                      }
 
-                _storyController.playbackNotifier.listen((value) {
-                  if (value == PlaybackState.previous) {
-                    if (widget.controller!.page == 0) {
-                      notifier.onCloseStory(mounted);
-                    } else {
-                      widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                    }
-                  }
-                });
+                      _storyController.playbackNotifier.listen((value) {
+                        if (value == PlaybackState.previous) {
+                          if (widget.controller!.page == 0) {
+                            notifier.onCloseStory(mounted);
+                          } else {
+                            widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          }
+                        }
+                      });
 
-                // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
-              },
-              onComplete: () {
-                widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                final currentIndex = notifier.dataUserStories.length - 1;
-                final isLastPage = currentIndex == widget.controller!.page;
-                // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                // notifier.pageController =
-                print('onComplete Diary');
-                System().increaseViewCount(context, widget.data!).whenComplete(() {});
-                Timer(const Duration(seconds: 1), () {
-                  // widget.onNextPage!();
-                  // notifier.onCloseStory(mounted);
-                  // notifier.nextPage();
-                  // _storyController.next();
-                });
-                if (isLastPage) {
-                  notifier.onCloseStory(mounted);
-                }
-              },
-              onEverySecond: (duration) {},
-              onVerticalSwipeComplete: (v) {
-                // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
-                if (v == Direction.down) notifier.onCloseStory(mounted);
-              },
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.all(200.0),
-            //   child: Text("${widget.data!.isApsara}"),
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 200.0),
-            //   child: SelectableText("${widget.data!.fullThumbPath}"),
-            // ),
-            BuildTopView(
-              when: _when,
-              data: widget.data,
-              storyController: _storyController,
-            ),
-            Form(
-              child: BuildBottomView(
-                data: widget.data,
-                storyController: _storyController,
-                currentStory: notifier.currentStory,
-                animationController: _animationController,
-              ),
-            ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 800),
-              transitionBuilder: (child, animation) {
-                animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
+                      // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
+                    },
+                    onComplete: () {
+                      widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                      final currentIndex = notifier.dataUserStories.length - 1;
+                      final isLastPage = currentIndex == widget.controller!.page;
+                      // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                      // notifier.pageController =
+                      print('onComplete Diary');
+                      System().increaseViewCount(context, widget.data!).whenComplete(() {});
+                      Timer(const Duration(seconds: 1), () {
+                        // widget.onNextPage!();
+                        // notifier.onCloseStory(mounted);
+                        // notifier.nextPage();
+                        // _storyController.next();
+                      });
+                      if (isLastPage) {
+                        notifier.onCloseStory(mounted);
+                      }
+                    },
+                    onEverySecond: (duration) {},
+                    onVerticalSwipeComplete: (v) {
+                      // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
+                      if (v == Direction.down) notifier.onCloseStory(mounted);
+                    },
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(200.0),
+                  //   child: Text("${widget.data!.isApsara}"),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 200.0),
+                  //   child: SelectableText("${widget.data!.fullThumbPath}"),
+                  // ),
+                  BuildTopView(
+                    when: _when,
+                    data: widget.data,
+                    storyController: _storyController,
+                  ),
+                  Form(
+                    child: BuildBottomView(
+                      data: widget.data,
+                      storyController: _storyController,
+                      currentStory: notifier.currentStory,
+                      animationController: _animationController,
+                    ),
+                  ),
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 800),
+                    transitionBuilder: (child, animation) {
+                      animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
 
-                return ScaleTransition(
-                  scale: animation,
-                  alignment: Alignment.center,
-                  child: child,
-                );
-              },
-              child: notifier.linkCopied
-                  ? const Center(
-                child: LinkCopied(),
-              )
-                  : const SizedBox.shrink(),
-            ),
-            BuildReplayCaption(data: widget.data),
-            ...notifier.buildItems(_animationController)
-          ],
-        );
+                      return ScaleTransition(
+                        scale: animation,
+                        alignment: Alignment.center,
+                        child: child,
+                      );
+                    },
+                    child: notifier.linkCopied
+                        ? const Center(
+                            child: LinkCopied(),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                  BuildReplayCaption(data: widget.data),
+                  ...notifier.buildItems(_animationController)
+                ],
+              );
       });
 
       return Container(
@@ -274,7 +278,5 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
             ],
           ));
     }
-
-
   }
 }

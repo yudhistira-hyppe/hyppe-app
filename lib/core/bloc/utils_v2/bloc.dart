@@ -38,7 +38,7 @@ class UtilsBlocV2 {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
       },
-      host: UrlConstants.welcomeNotes + "?langIso=$_langIso",
+      host: UrlConstants.welcomeNotes + "?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
       methodType: MethodType.get,
       withAlertMessage: true,
       withCheckConnection: false,
@@ -84,7 +84,7 @@ class UtilsBlocV2 {
         setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
       },
       errorServiceType: ErrorType.getGender,
-      host: UrlConstants.interest + "?langIso=$_langIso",
+      host: UrlConstants.interest + "?langIso=$_langIso&pageNumber=0&pageRow=100",
       withAlertMessage: false,
       methodType: MethodType.get,
       withCheckConnection: false,

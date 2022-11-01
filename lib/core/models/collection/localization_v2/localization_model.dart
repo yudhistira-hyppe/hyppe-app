@@ -697,6 +697,17 @@ class LocalizationModelV2 {
   String? cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn;
   String? transferredSuccessfully;
   String? waitingtoTransfer;
+  String? helloCanIhelpyou;
+  String? frequentlyAskedQuestions;
+  String? yourTicketIssue;
+  String? searchtopic;
+  String? stillNeedsHelp;
+  String? submitTicketIssue;
+  String? doesThisHelpsyou;
+  String? newTicketIssue;
+  String? insertAnyAdditionalInfo;
+  String? chooseCategoryIssue;
+  String? description;
   String? report;
 
   LocalizationModelV2({
@@ -1398,6 +1409,17 @@ class LocalizationModelV2 {
     this.cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn,
     this.transferredSuccessfully,
     this.waitingtoTransfer,
+    this.helloCanIhelpyou,
+    this.frequentlyAskedQuestions,
+    this.yourTicketIssue,
+    this.searchtopic,
+    this.stillNeedsHelp,
+    this.submitTicketIssue,
+    this.doesThisHelpsyou,
+    this.newTicketIssue,
+    this.insertAnyAdditionalInfo,
+    this.chooseCategoryIssue,
+    this.description,
     this.report,
   });
 
@@ -2118,6 +2140,17 @@ class LocalizationModelV2 {
     cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn = json["cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn"];
     transferredSuccessfully = json["transferredSuccessfully"];
     waitingtoTransfer = json["waitingtoTransfer"];
+    helloCanIhelpyou = json["helloCanIhelpyou"];
+    frequentlyAskedQuestions = json["frequentlyAskedQuestions"];
+    yourTicketIssue = json["yourTicketIssue"];
+    searchtopic = json["searchtopic"];
+    stillNeedsHelp = json["stillNeedsHelp"];
+    submitTicketIssue = json["submitTicketIssue"];
+    doesThisHelpsyou = json["doesThisHelpsyou"];
+    newTicketIssue = json["newTicketIssue"];
+    insertAnyAdditionalInfo = json["insertAnyAdditionalInfo"];
+    chooseCategoryIssue = json["chooseCategoryIssue"];
+    description = json["description"];
     report = json["report"];
   }
 }

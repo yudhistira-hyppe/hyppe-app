@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
-
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-
 import 'package:hyppe/core/query_request/contents_data_query.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-
 import 'package:hyppe/core/services/system.dart';
-
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
-
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
-
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
-
 import 'package:provider/provider.dart';
 import '../../../../../app.dart';
 import '../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
@@ -51,8 +42,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   bool get hasNext => contentsQuery.hasNext;
 
-  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list = null,
-    String? visibility = null}) async {
+  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list = null, String? visibility = null}) async {
     List<ContentData> res = [];
 
     try {
@@ -85,15 +75,14 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       print('ini pict initial');
       if (_searchData.initDataPic == null) {
         print('initDataPic is null');
-        if(visibility == 'PUBLIC'){
-          try{
+        if (visibility == 'PUBLIC') {
+          try {
             _searchData.initDataPic = pic?.sublist(0, 18);
             print('initDataPic is ${_searchData.initDataPic?.length}');
-          }catch(e){
+          } catch (e) {
             _searchData.initDataPic = pic;
             print('initDataPic is ${_searchData.initDataPic?.length}');
           }
-
         }
         // _searchData.picContentsQuery.featureType = FeatureType.pic;
         // _searchData.allContents!.pics = pic;
@@ -105,7 +94,6 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
-
       print('initialPic : 2');
       initialPic(context);
     }

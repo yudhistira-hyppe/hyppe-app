@@ -42,15 +42,17 @@ class ButtonTransaction extends StatelessWidget {
                       notifier.navigateToWithDrawal();
                       notifier.initBankAccount(context);
                     }
-                  : ShowBottomSheet.onShowStatementPin(
-                      context,
-                      onCancel: () {},
-                      onSave: () {
-                        Routing().moveAndPop(Routes.homePageSignInSecurity);
-                      },
-                      title: notifier2.translate.addYourHyppePinFirst!,
-                      bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin!,
-                    ),
+                  : () {
+                      ShowBottomSheet.onShowStatementPin(
+                        context,
+                        onCancel: () {},
+                        onSave: () {
+                          Routing().moveAndPop(Routes.homePageSignInSecurity);
+                        },
+                        title: notifier2.translate.addYourHyppePinFirst!,
+                        bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin!,
+                      );
+                    },
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(
                 textToDisplay: notifier2.translate.withdrawal!,

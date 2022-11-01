@@ -58,19 +58,13 @@ class SelfProfileNotifier with ChangeNotifier {
   String? get username => _username;
   bool get descTextShowFlag => _descTextShowFlag;
 
-  int get vidCount => vidContentsQuery.hasNext
-      ? (user.vids?.length ?? 0) + 2
-      : (user.vids?.length ?? 0);
+  int get vidCount => vidContentsQuery.hasNext ? (user.vids?.length ?? 0) + 2 : (user.vids?.length ?? 0);
   bool get vidHasNext => vidContentsQuery.hasNext;
 
-  int get diaryCount => diaryContentsQuery.hasNext
-      ? (user.diaries?.length ?? 0) + 2
-      : (user.diaries?.length ?? 0);
+  int get diaryCount => diaryContentsQuery.hasNext ? (user.diaries?.length ?? 0) + 2 : (user.diaries?.length ?? 0);
   bool get diaryHasNext => diaryContentsQuery.hasNext;
 
-  int get picCount => picContentsQuery.hasNext
-      ? (user.pics?.length ?? 0) + 2
-      : (user.pics?.length ?? 0);
+  int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
 
   set user(UserInfoModel val) {
@@ -198,10 +192,10 @@ class SelfProfileNotifier with ChangeNotifier {
     final usersFetch = usersNotifier.userFetch;
 
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+      user.profile = null;
       user.profile = usersFetch.data;
       notifyListeners();
     }
-    print('test12');
     user.vids = await vidContentsQuery.reload(context, myContent: true);
     user.diaries = await diaryContentsQuery.reload(context, myContent: true);
     user.pics = await picContentsQuery.reload(context, myContent: true);

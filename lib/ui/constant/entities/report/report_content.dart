@@ -131,11 +131,10 @@ class _ReportContentScreenState extends State<ReportContentScreen> {
                                 foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
                                 shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
                             function: () {
-                              context.read<ReportNotifier>().reportPost(context);
-                              Navigator.pop(context, true);
+                              context.read<ReportNotifier>().reportPost(context).whenComplete(() => Navigator.pop(context, true));
 
                               // _showMessage("Your feedback will help us to improve your experience.");
-                              _showMessage("Thanks for letting us know", "We will review your report. If we find this content is violating of our community guidelines we will take action on it.");
+                              // _showMessage("Thanks for letting us know", "We will review your report. If we find this content is violating of our community guidelines we will take action on it.");
                             },
                             child: Selector<UserInterestNotifier, bool>(
                               selector: (context, notifier) => notifier.isLoading,

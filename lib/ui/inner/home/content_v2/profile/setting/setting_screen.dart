@@ -100,11 +100,11 @@ class SettingScreen extends StatelessWidget {
               SettingComponent(
                 headerCaption: '${notifier.translate.support}',
                 tiles: [
-                  // SettingTile(
-                  //   onTap: () {},
-                  //   caption: 'Help',
-                  //   icon: 'help-icon.svg',
-                  // ),
+                  SettingTile(
+                    caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
+                    icon: 'help-icon.svg',
+                    onTap: () => Routing().move(Routes.help),
+                  ),
                   SettingTile(
                     caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
                     icon: 'privacy-police-icon.svg',

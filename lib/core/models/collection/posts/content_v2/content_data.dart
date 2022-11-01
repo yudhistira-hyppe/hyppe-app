@@ -231,7 +231,7 @@ class ContentData extends HiveObject {
             : json['certified'] ?? false
         : false;
     createdAt = json['createdAt'];
-    insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight']) : null;
+    insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight'], isLike: isLiked!) : null;
     mediaThumbUri = json['mediaThumbUri'];
     mediaEndpoint = json['mediaEndpoint'];
     email = json['email'];

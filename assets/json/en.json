@@ -698,5 +698,16 @@
   "inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave" : "In the withdrawal process you cannot take all the balance you have. You must at least leave a balance of Rp 0 in Hyppe Ballance",
   "cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn" : "Cannot be used as a currency for transaction, this balance can only be withdrawn.",
   "transferredSuccessfully" : "Transferred Successfully",
-  "waitingtoTransfer" : "Waiting to Transfer"
+  "waitingtoTransfer" : "Waiting to Transfer",
+  "helloCanIhelpyou" : "Hello, Can I help you?",
+  "frequentlyAskedQuestions" : "Frequently Asked Questions",
+  "yourTicketIssue" : "Your Ticket Issue",
+  "searchtopic" : "Search topic...",
+  "stillNeedsHelp" : "Still Needs Help?",
+  "submitTicketIssue" : "Submit Ticket Issue",
+  "doesThisHelpsyou" : "Does this helps you?",
+  "newTicketIssue" : "New Ticket Issue",
+  "insertAnyAdditionalInfo" : "Insert any additional info",
+  "chooseCategoryIssue" : "Choose Category Issue",
+  "description" : "Description"
 }

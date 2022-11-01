@@ -22,6 +22,9 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delet
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
@@ -305,6 +308,13 @@ class Generate {
 
       case Routes.reportContent:
         return MaterialPageRoute(builder: (_) => const ReportContentScreen());
+
+      case Routes.help:
+        return MaterialPageRoute(builder: (_) => const HelpScreen());
+      case Routes.faqDetail:
+        return MaterialPageRoute(builder: (_) => const FAQdetailScreen());
+      case Routes.supportTicket:
+        return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

@@ -58,7 +58,7 @@ class MainNotifier with ChangeNotifier {
     bool onUpdateProfile = false,
   }) async {
     // Connect to socket
-    _connectAndListenToSocket();
+    // _connectAndListenToSocket();
 
     // Auto follow user if app is install from a dynamic link
     DynamicLinkService.followSender(context);
@@ -78,8 +78,11 @@ class MainNotifier with ChangeNotifier {
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-      Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
-      final _profile = Provider.of<SelfProfileNotifier>(context, listen: false).user.profile;
+      print('ambil profile');
+      print(usersFetch.data);
+      context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
+      // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
+      final _profile = context.read<SelfProfileNotifier>().user.profile;
       System().userVerified(_profile!.statusKyc);
       SharedPreference().writeStorage(SpKeys.setPin, _profile.pinCreate!.toString());
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
@@ -92,8 +95,6 @@ class MainNotifier with ChangeNotifier {
       }
     });
   }
-
-
 
   Future getReaction(BuildContext context) async {
     final utilsNotifier = UtilsBlocV2();
@@ -136,7 +137,7 @@ class MainNotifier with ChangeNotifier {
 
   void setNotification() => FcmService().setHaveNotification(false);
 
-  Future onShowPostContent(BuildContext context) async{
+  Future onShowPostContent(BuildContext context) async {
     // System().actionReqiredIdCard(context,
     //    action: () => ShowBottomSheet.onUploadContent(context));
     await ShowBottomSheet.onUploadContent(context);

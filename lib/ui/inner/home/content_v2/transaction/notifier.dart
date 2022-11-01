@@ -227,11 +227,13 @@ class TransactionNotifier extends ChangeNotifier {
 
         if (fetch.postsState == TransactionState.getHistorySuccess) {
           if (_skip == 0) dataTransaction = [];
-          // if (dataAllTransaction!.isEmpty) {
-          //   fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
-          //   context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
-          // }
           fetch.data['data'].forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+
+          if (dataAllTransaction!.isEmpty) {
+            fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+            context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
+          }
+
           countTransactionProgress = fetch.data['datacount'];
         }
         if (fetch.postsState == TransactionState.getHistoryError) {

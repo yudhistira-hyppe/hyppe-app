@@ -131,7 +131,6 @@ class _TransactionState extends State<Transaction> {
                               CustomTextButton(
                                 onPressed: () {
                                   context.read<FilterTransactionNotifier>().getTypeFilter(context);
-
                                   Routing().move(Routes.allTransaction);
                                 },
                                 child: CustomTextWidget(

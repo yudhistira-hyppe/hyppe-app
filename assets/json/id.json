@@ -698,5 +698,16 @@
   "inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave" : "Dalam proses penarikan Anda tidak dapat mengambil semua saldo yang Anda miliki. Anda setidaknya harus meninggalkan saldo Rp 0 di Hyppe Ballance",
   "cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn" : "Tidak dapat digunakan sebagai mata uang untuk transaksi, saldo ini hanya dapat ditarik.",
   "transferredSuccessfully" : "Berhasil Ditransfer",
-  "waitingtoTransfer" : "Menunggu Ditransfer"
+  "waitingtoTransfer" : "Menunggu Ditransfer",
+  "helloCanIhelpyou" : "Hallo, Ada yang bisa kami bantu?",
+  "frequentlyAskedQuestions" : "Pertanyaan yang sering Diajukan",
+  "yourTicketIssue" : "Tiket Pertanyaan Masalah Anda",
+  "searchtopic" : "Cari topik...",
+  "stillNeedsHelp" : "Masih Membutuhkan Bantuan?",
+  "submitTicketIssue" : "Kirim Masalah Tiket",
+  "doesThisHelpsyou" : "Apakah ini membantu Anda?",
+  "newTicketIssue" : "Edisi Tiket Baru",
+  "insertAnyAdditionalInfo" : "Masukkan info tambahan apa pun",
+  "chooseCategoryIssue" : "Pilih Kategori Masalah",
+  "description" : "Deskripsi"
 }

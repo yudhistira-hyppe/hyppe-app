@@ -28,6 +28,7 @@ class SocketService {
 
   /// connect to socket
   void connectToSocket(VoidCallback onEvent, {required String host, required Map<String, dynamic> options}) {
+    print(host);
     _socket = io(host, options);
 
     _socket?.connect();
@@ -38,6 +39,7 @@ class SocketService {
     });
 
     _socket?.onDisconnect((message) {
+      print(host);
       'Your disconnected from socket'.logger();
       _eventService.notifyRootSocketDisconnected(message);
     });
