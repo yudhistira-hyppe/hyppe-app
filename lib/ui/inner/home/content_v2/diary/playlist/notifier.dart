@@ -106,7 +106,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
     initAdsData(context);
 
-    if (data.isApsara!) {
+    if (data.isApsara ?? false) {
       await getVideoApsara(context, data.apsaraId!).then((value) {
         urlApsara = value;
       });

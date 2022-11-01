@@ -56,8 +56,8 @@ class _DiaryPageState extends State<DiaryPage> {
       isLoading = true;
     });
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      notifier.initializeData(context, _storyController, widget.data!);
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       _storyItems = notifier.result;
       isLoading = false;
     });
@@ -88,7 +88,7 @@ class _DiaryPageState extends State<DiaryPage> {
     final _forcePause = context.select((DiariesPlaylistNotifier value) => value.forcePause);
     final notifier = Provider.of<DiariesPlaylistNotifier>(context);
     // logic when list isScrolled, pause the story
-    if (widget.isScrolling!) {
+    if (widget.isScrolling ?? false) {
       _storyController.pause();
     } else if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause) {
       _storyController.play();
@@ -123,7 +123,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   durationColor: kHyppeLightButtonText,
                   storyItems: _storyItems,
                   onDouble: () {
-                    context.read<LikeNotifier>().likePost(context, widget.data!);
+                    context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
                   },
                   controller: _storyController,
                   progressPosition: ProgressPosition.top,
@@ -134,10 +134,10 @@ class _DiaryPageState extends State<DiaryPage> {
                     // _addPostView();
                     _storyController.playbackNotifier.listen((value) {
                       if (value == PlaybackState.previous) {
-                        if (widget.controller!.page == 0) {
+                        if (widget.controller?.page == 0) {
                           // context.read<DiariesPlaylistNotifier>().onWillPop(true);
                         } else {
-                          widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                         }
                       }
                     });
@@ -189,7 +189,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   storyController: _storyController,
                 ),
                 RightItems(
-                  data: widget.data!,
+                  data: widget.data ?? ContentData(),
                 ),
                 LeftItems(
                   description: widget.data?.description,
@@ -200,7 +200,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   location: widget.data?.location,
                   postID: widget.data?.postID,
                   storyController: _storyController,
-                  tagPeople: widget.data!.tagPeople,
+                  tagPeople: widget.data?.tagPeople,
                 ),
               ],
             );
@@ -233,7 +233,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     alignment: Alignment.center,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: Provider.of<TranslateNotifierV2>(context, listen: false).translate.noData!,
+                      textToDisplay: Provider.of<TranslateNotifierV2>(context, listen: false).translate.noData ?? '',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                     margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -274,14 +274,14 @@ class _DiaryPageState extends State<DiaryPage> {
         result = ((widget.data?.metadata?.preRoll ?? 0) == 0)
             ? 2
             : (widget.data?.metadata?.preRoll ?? 1) == 1
-                ? widget.data!.metadata!.preRoll! + 1
-                : widget.data!.metadata!.preRoll!;
+                ? (widget.data?.metadata?.preRoll ?? 1) + 1
+                : (widget.data?.metadata?.preRoll ?? 1);
         break;
       case 'Mid':
         result = mid != 0 ? mid : (duration / 2).toInt();
         break;
       case 'End':
-        result = (widget.data?.metadata?.postRoll ?? 2) != 0 ? widget.data!.metadata!.postRoll! : duration - 1;
+        result = (widget.data?.metadata?.postRoll ?? 2) != 0 ? widget.data?.metadata?.postRoll ?? 1 : duration - 1;
         break;
       default:
         result = 2;

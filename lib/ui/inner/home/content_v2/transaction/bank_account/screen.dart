@@ -79,7 +79,7 @@ class _BankAccountState extends State<BankAccount> {
                           textToDisplay: notifier2.translate.noSavedAccountYet!, textStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.onBackground)),
                       eightPx,
                       CustomTextWidget(
-                        textToDisplay: notifier2.translate.addYourBankAccountForAnEasierWithdraw!,
+                        textToDisplay: notifier2.translate.addYourBankAccountForAnEasierWithdraw ?? '',
                         maxLines: 4,
                       ),
                     ],

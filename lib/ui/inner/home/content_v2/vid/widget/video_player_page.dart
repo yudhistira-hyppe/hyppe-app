@@ -228,9 +228,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
     'Hyppe Vid Email ${SharedPreference().readStorage(SpKeys.email)}'.logger();
     'Hyppe Vid Token ${SharedPreference().readStorage(SpKeys.userToken)}'.logger();
-    'Hyppe Vid isApsara ${widget.videoData!.isApsara!}'.logger();
-    if (widget.videoData!.isApsara!) {
-      await getVideoApsara(widget.videoData!.apsaraId!);
+    'Hyppe Vid isApsara ${widget.videoData?.isApsara}'.logger();
+    if (widget.videoData?.isApsara ?? false) {
+      await getVideoApsara(widget.videoData?.apsaraId ?? '');
     }
     'Hyppe Vid Url ${widget.videoData?.fullContentPath}'.logger();
 
@@ -367,7 +367,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           _handleHideFullScreenEvent();
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
-          widget.afterView!();
+          if(widget.afterView != null){
+            widget.afterView!();
+          }
         }
       },
     );

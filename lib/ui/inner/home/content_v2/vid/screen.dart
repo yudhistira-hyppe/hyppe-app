@@ -183,12 +183,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                           ],
                                         ),
                                       ),
-                                      vidData?.tagPeople!.length != 0 || vidData?.location != ''
+                                      vidData?.tagPeople?.isNotEmpty ?? false || vidData?.location != ''
                                           ? Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
                                               child: Row(
                                                 children: [
-                                                  vidData?.tagPeople!.length != 0
+                                                  vidData?.tagPeople?.isNotEmpty ?? false
                                                       ? TagLabel(
                                                           icon: 'user',
                                                           label: '${vidData?.tagPeople!.length} people',

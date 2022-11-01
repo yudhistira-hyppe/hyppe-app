@@ -75,7 +75,7 @@ class _ListMyPlaylistState extends State<ListMyPlaylist> {
                             // ),
                             SizedBox(width: 12 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.createNew!,
+                              textToDisplay: notifier.language.createNew ?? '',
                               textStyle: Theme.of(context).textTheme.button,
                             ),
                           ],

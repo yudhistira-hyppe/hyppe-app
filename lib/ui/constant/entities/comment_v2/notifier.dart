@@ -317,11 +317,14 @@ class CommentNotifierV2 with ChangeNotifier {
     _isShowAutoComplete = false;
 
     final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
-    int length = _searchPeolpleData[index].username!.length;
-    _commentController.value = TextEditingValue(
-      text: "${newText}",
-      selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
-    );
+    final length = _searchPeolpleData[index].username?.length;
+    if(length != null){
+      _commentController.value = TextEditingValue(
+        text: "${newText}",
+        selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
+      );
+    }
+
     notifyListeners();
   }
 

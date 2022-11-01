@@ -54,7 +54,7 @@ class CommentBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setCommentFetch(CommentFetch(CommentState.commentsBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;

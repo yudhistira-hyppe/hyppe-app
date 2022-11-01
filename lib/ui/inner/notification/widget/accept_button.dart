@@ -85,7 +85,7 @@ class AcceptButton extends StatelessWidget {
     } else if (System().convertEventType(data?.eventType) == InteractiveEventType.following && System().convertEvent(data?.event) == InteractiveEvent.initial) {
       return 'Requested';
     } else {
-      return _language.translate.follow!;
+      return _language.translate.follow;
     }
   }
 }

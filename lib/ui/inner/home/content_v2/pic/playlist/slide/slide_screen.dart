@@ -92,206 +92,223 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                       await _notifier.initAdsVideo(context);
                     },
                     itemBuilder: (context, indexRoot) {
+                      final data = _notifier.listData;
+                      if(data != null){
+
+                      }
                       return PageView.builder(
                           controller: _mainPageController,
                           itemCount: 2,
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, indexPage) => indexPage == 0
-                              ? Stack(
-                                  children: [
-                                    // Background
-                                    CustomBackgroundLayer(
-                                      sigmaX: 30,
-                                      sigmaY: 30,
-                                      // thumbnail: picData!.content[arguments].contentUrl,
-                                      thumbnail: (_notifier.listData![indexRoot].isApsara ?? false) ? _notifier.listData![indexRoot].mediaThumbUri : _notifier.listData![indexRoot].fullThumbPath,
-                                    ),
-                                    // Content
-                                    PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: _notifier.listData![indexRoot], transformationController: transformationController),
-                                    // Top action
-                                    SafeArea(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 8.0),
-                                        child: Row(
-                                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  CustomTextButton(
-                                                    onPressed: () {
-                                                      resetZooming();
-                                                      Routing().moveBack();
-                                                    },
-                                                    style: ButtonStyle(
-                                                      alignment: Alignment.topCenter,
-                                                      padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                                    ),
-                                                    child: const DecoratedIconWidget(
-                                                      Icons.arrow_back_ios,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  ProfileComponent(
-                                                    isDetail: true,
-                                                    show: true,
-                                                    following: true,
-                                                    onFollow: () {},
-                                                    haveStory: false,
-                                                    onTapOnProfileImage: () => System().navigateToProfile(context, _notifier.listData![indexRoot].email!),
-                                                    spaceProfileAndId: eightPx,
-                                                    featureType: FeatureType.pic,
-                                                    username: _notifier.listData![indexRoot].username,
-                                                    isCelebrity: _notifier.listData![indexRoot].privacy?.isCelebrity,
-                                                    imageUrl: '${System().showUserPicture(_notifier.listData![indexRoot].avatar?.mediaEndpoint)}',
-                                                    createdAt: '${System().readTimestamp(
-                                                      DateTime.parse(_notifier.listData![indexRoot].createdAt!).millisecondsSinceEpoch,
-                                                      context,
-                                                      fullCaption: true,
-                                                    )}',
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            _notifier.listData![indexRoot].saleAmount! > 0
-                                                ? const Padding(
-                                                    padding: EdgeInsets.only(top: 10.0),
-                                                    child: CustomIconWidget(
-                                                      iconData: "${AssetPath.vectorPath}sale.svg",
-                                                      defaultColor: false,
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
-                                            _notifier.listData![indexRoot].email == SharedPreference().readStorage(SpKeys.email)
-                                                ? _buildButtonV2(
-                                                    context: context,
-                                                    iconData: '${AssetPath.vectorPath}more.svg',
-                                                    function: () => ShowBottomSheet.onShowOptionContent(
-                                                      context,
-                                                      contentData: _notifier.listData![indexRoot],
-                                                      captionTitle: hyppePic,
-                                                      // storyController: widget.storyController,
-                                                      onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                                                    ),
-                                                  )
-                                                : const SizedBox(),
-                                            _notifier.listData![indexRoot].email != SharedPreference().readStorage(SpKeys.email)
-                                                ? _buildButtonV2(
-                                                    context: context,
-                                                    iconData: '${AssetPath.vectorPath}more.svg',
-                                                    function: () => ShowBottomSheet.onReportContent(context, _notifier.listData![indexRoot], hyppePic),
-                                                  )
-                                                : const SizedBox(),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-
-                                    // Bottom action
-                                    Align(
-                                      alignment: const Alignment(-1.0, 0.9),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
+                          itemBuilder: (context, indexPage){
+                            final data = _notifier.listData?[indexRoot];
+                            if(data != null){
+                              return indexPage == 0
+                                  ? Stack(
+                                children: [
+                                  // Background
+                                  CustomBackgroundLayer(
+                                    sigmaX: 30,
+                                    sigmaY: 30,
+                                    // thumbnail: picData!.content[arguments].contentUrl,
+                                    thumbnail: (data.isApsara ?? false) ? data.mediaThumbUri : data.fullThumbPath,
+                                  ),
+                                  // Content
+                                  PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: data, transformationController: transformationController),
+                                  // Top action
+                                  SafeArea(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Row(
+                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Consumer<LikeNotifier>(
-                                                builder: (context, notifier, child) => _buildButtonV2(
-                                                  context: context,
-                                                  colorIcon: (_notifier.listData![indexRoot].insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                                                  iconData: '${AssetPath.vectorPath}${(_notifier.listData![indexRoot].insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                  function: () => notifier.likePost(context, _notifier.listData![indexRoot]),
-                                                ),
-                                              ),
-                                              _buildButtonV2(
-                                                context: context,
-                                                iconData: '${AssetPath.vectorPath}comment.svg',
-                                                function: _notifier.listData?[indexRoot] != null
-                                                    ? () {
-                                                        ShowBottomSheet.onShowCommentV2(context, postID: _notifier.listData![indexRoot].postID);
-                                                      }
-                                                    : () {},
-                                              ),
-                                              _buildButtonV2(
-                                                context: context,
-                                                iconData: '${AssetPath.vectorPath}share.svg',
-                                                function: _notifier.listData?[indexRoot] != null
-                                                    ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: _notifier.listData![indexRoot])
-                                                    : () {},
-                                              ),
-                                              if (_notifier.listData![indexRoot].saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != _notifier.listData![indexRoot].email)
-                                                _buildButtonV2(
-                                                  context: context,
-                                                  iconData: '${AssetPath.vectorPath}cart.svg',
-                                                  function: () => ShowBottomSheet.onBuyContent(context, data: _notifier.listData![indexRoot]),
-                                                ),
-                                            ],
-                                          ),
-                                          _notifier.listData![indexRoot].tagPeople!.isNotEmpty || _notifier.listData![indexRoot].location != ''
-                                              ? Padding(
-                                                  padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
-                                                  child: Row(
-                                                    children: [
-                                                      _notifier.listData![indexRoot].tagPeople!.isNotEmpty
-                                                          ? PicTagLabel(
-                                                              icon: 'user',
-                                                              label: '${_notifier.listData![indexRoot].tagPeople!.length} people',
-                                                              function: () {
-                                                                context.read<PicDetailNotifier>().showUserTag(context, _notifier.listData![indexRoot].tagPeople, _notifier.listData![indexRoot].postID);
-                                                              },
-                                                              width: 18,
-                                                            )
-                                                          : const SizedBox(),
-                                                      _notifier.listData![indexRoot].location == '' || _notifier.listData![indexRoot].location == null
-                                                          ? const SizedBox()
-                                                          : PicTagLabel(
-                                                              icon: 'maptag-white',
-                                                              label: "${_notifier.listData![indexRoot].location}",
-                                                              function: () {},
-                                                              width: 13,
-                                                            ),
-                                                    ],
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                CustomTextButton(
+                                                  onPressed: () {
+                                                    resetZooming();
+                                                    Routing().moveBack();
+                                                  },
+                                                  style: ButtonStyle(
+                                                    alignment: Alignment.topCenter,
+                                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
                                                   ),
-                                                )
-                                              : const SizedBox(),
-                                          Padding(
-                                            child: Container(
-                                              padding: const EdgeInsets.all(2),
-                                              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
-                                              // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-
-                                              child: SingleChildScrollView(
-                                                  child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  ReadMoreText(
-                                                    "${_notifier.listData![indexRoot].description}",
-                                                    // "${_notifier.listData![indexRoot]?.description} ${_notifier.listData![indexRoot]?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                                    trimLines: 5,
-                                                    trimMode: TrimMode.Line,
-                                                    textAlign: TextAlign.left,
-                                                    trimExpandedText: 'Show less',
-                                                    trimCollapsedText: 'Show more',
-                                                    colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                                                    style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                                                    moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
-                                                    lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                  child: const DecoratedIconWidget(
+                                                    Icons.arrow_back_ios,
+                                                    color: Colors.white,
                                                   ),
-                                                ],
-                                              )),
+                                                ),
+                                                ProfileComponent(
+                                                  isDetail: true,
+                                                  show: true,
+                                                  following: true,
+                                                  onFollow: () {},
+                                                  haveStory: false,
+                                                  onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
+                                                  spaceProfileAndId: eightPx,
+                                                  featureType: FeatureType.pic,
+                                                  username: data.username,
+                                                  isCelebrity: data.privacy?.isCelebrity,
+                                                  imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
+                                                  createdAt: '${System().readTimestamp(
+                                                    DateTime.parse(data.createdAt ?? '').millisecondsSinceEpoch,
+                                                    context,
+                                                    fullCaption: true,
+                                                  )}',
+                                                ),
+                                              ],
                                             ),
-                                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                          ),
+                                          data.saleAmount! > 0
+                                              ? const Padding(
+                                            padding: EdgeInsets.only(top: 10.0),
+                                            child: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}sale.svg",
+                                              defaultColor: false,
+                                            ),
                                           )
+                                              : const SizedBox(),
+                                          data.email == SharedPreference().readStorage(SpKeys.email)
+                                              ? _buildButtonV2(
+                                            context: context,
+                                            iconData: '${AssetPath.vectorPath}more.svg',
+                                            function: () => ShowBottomSheet.onShowOptionContent(
+                                              context,
+                                              contentData: data,
+                                              captionTitle: hyppePic,
+                                              // storyController: widget.storyController,
+                                              onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                                            ),
+                                          )
+                                              : const SizedBox(),
+                                          data.email != SharedPreference().readStorage(SpKeys.email)
+                                              ? _buildButtonV2(
+                                            context: context,
+                                            iconData: '${AssetPath.vectorPath}more.svg',
+                                            function: () => ShowBottomSheet.onReportContent(context, data, hyppePic),
+                                          )
+                                              : const SizedBox(),
                                         ],
                                       ),
                                     ),
-                                  ],
-                                )
-                              : PicDetailScreen(arguments: PicDetailScreenArgument(picData: _notifier.listData![indexRoot])));
+                                  ),
+
+                                  // Bottom action
+                                  Align(
+                                    alignment: const Alignment(-1.0, 0.9),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Consumer<LikeNotifier>(
+                                              builder: (context, notifier, child) => _buildButtonV2(
+                                                context: context,
+                                                colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                                iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                function: () => notifier.likePost(context, data),
+                                              ),
+                                            ),
+                                            _buildButtonV2(
+                                              context: context,
+                                              iconData: '${AssetPath.vectorPath}comment.svg',
+                                              function: _notifier.listData?[indexRoot] != null
+                                                  ? () {
+                                                ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                                              }
+                                                  : () {},
+                                            ),
+                                            _buildButtonV2(
+                                              context: context,
+                                              iconData: '${AssetPath.vectorPath}share.svg',
+                                              function: _notifier.listData?[indexRoot] != null
+                                                  ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data)
+                                                  : () {},
+                                            ),
+                                            if (data.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
+                                              _buildButtonV2(
+                                                context: context,
+                                                iconData: '${AssetPath.vectorPath}cart.svg',
+                                                function: () => ShowBottomSheet.onBuyContent(context, data: data),
+                                              ),
+                                          ],
+                                        ),
+                                        data.tagPeople!.isNotEmpty || data.location != ''
+                                            ? Padding(
+                                          padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                                          child: Row(
+                                            children: [
+                                              data.tagPeople!.isNotEmpty
+                                                  ? PicTagLabel(
+                                                icon: 'user',
+                                                label: '${data.tagPeople!.length} people',
+                                                function: () {
+                                                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                                                },
+                                                width: 18,
+                                              )
+                                                  : const SizedBox(),
+                                              data.location == '' || data.location == null
+                                                  ? const SizedBox()
+                                                  : PicTagLabel(
+                                                icon: 'maptag-white',
+                                                label: "${data.location}",
+                                                function: () {},
+                                                width: 13,
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                            : const SizedBox(),
+                                        Padding(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(2),
+                                            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                                            // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+
+                                            child: SingleChildScrollView(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    ReadMoreText(
+                                                      "${data.description}",
+                                                      // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                                      trimLines: 5,
+                                                      trimMode: TrimMode.Line,
+                                                      textAlign: TextAlign.left,
+                                                      trimExpandedText: 'Show less',
+                                                      trimCollapsedText: 'Show more',
+                                                      colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                                                      moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                      lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                    ),
+                                                  ],
+                                                )),
+                                          ),
+                                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                                  : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data));
+                            }else{
+                              return Stack(
+                                children: [
+                                  const CustomShimmer(),
+                                  RightItemsShimmer(),
+                                ],
+                              );
+                            }
+
+                          } );
                     })
                 : Stack(
                     children: [

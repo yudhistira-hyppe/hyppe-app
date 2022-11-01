@@ -45,9 +45,9 @@ class OtherProfileDiaries extends StatelessWidget {
                                 height: double.infinity,
                                 featureType: FeatureType.diary,
                                 isSafe: true, //notifier.postData!.data.listDiary[index].isSafe!,
-                                thumbnail: notifier.item1!.diaries![index].isApsara!
-                                    ? notifier.item1!.diaries![index].mediaThumbEndPoint!
-                                    : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint)!,
+                                thumbnail: (notifier.item1?.diaries?[index].isApsara ?? false)
+                                    ? (notifier.item1?.diaries?[index].mediaThumbEndPoint ?? '')
+                                    : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint) ?? '',
                               ),
                             ),
                             notifier.item1!.diaries![index].saleAmount! > 0

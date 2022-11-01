@@ -220,7 +220,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
     if (data.mediaType?.translateType() == ContentType.video) {
       String urlApsara = '';
-      if (data.isApsara!) {
+      if (data.isApsara ?? false) {
         await getVideoApsara(context, data.apsaraId!).then((value) {
           urlApsara = value;
         });

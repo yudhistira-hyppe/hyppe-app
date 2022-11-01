@@ -34,7 +34,7 @@ class SuccessWithdrawScreen extends StatelessWidget {
                 notifier2.translate.congrats!,
                 style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
               ),
-              Text(notifier2.translate.yourTransactionisBeingProcessedNow!),
+              Text(notifier2.translate.yourTransactionisBeingProcessedNow ?? ''),
               twentyPx,
               Container(
                 padding: const EdgeInsets.all(11.0),

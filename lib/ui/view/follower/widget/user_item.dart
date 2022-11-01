@@ -55,7 +55,7 @@ class _UserItemState extends State<UserItem> {
                     children: [
                       CustomTextWidget(
                         textToDisplay: widget.data?.senderOrReceiverInfo?.username ?? '',
-                        textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
                       CustomTextWidget(

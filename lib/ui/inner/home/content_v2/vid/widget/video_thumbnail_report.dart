@@ -24,7 +24,7 @@ class VideoThumbnailReport extends StatelessWidget {
               sigmaX: 30,
               sigmaY: 30,
               // thumbnail: picData!.content[arguments].contentUrl,
-              thumbnail: videoData!.isApsara! ? videoData!.mediaThumbEndPoint : '${videoData?.fullThumbPath}',
+              thumbnail: videoData?.isApsara ?? false ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
             ),
           ),
         ),

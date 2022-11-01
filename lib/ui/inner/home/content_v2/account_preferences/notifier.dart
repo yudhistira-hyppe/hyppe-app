@@ -104,9 +104,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6!.copyWith(color: kHyppePrimary);
-  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1!;
-  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor);
+  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6?.copyWith(color: kHyppePrimary) ?? const TextStyle();
+  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle() ;
+  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor) ?? const TextStyle();
 
   void onInitial(BuildContext context, AccountPreferenceScreenArgument argument) {
     _argument = argument;
@@ -207,7 +207,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       _eventService.notifyUploadCancel(
         DioError(
           error: reason,
-          requestOptions: _dioCancelToken!.requestOptions!,
+          requestOptions: _dioCancelToken?.requestOptions ?? RequestOptions(path: ''),
         ),
       );
     } catch (e) {
@@ -240,7 +240,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (_file.values.single != null) {
             progress = "0%";
 
-            Overlay.of(context)?.insert(uploadProgress!);
+            Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
             final notifier = UserBloc();
 
@@ -248,7 +248,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               context,
               verifyID: false,
               cancelToken: _dioCancelToken,
-              file: _file.values.single!.single.path,
+              file: _file.values.single?.single.path ?? '',
               email: SharedPreference().readStorage(SpKeys.email),
               onSendProgress: (received, total) {
                 _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
@@ -299,7 +299,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           }
         }
       } else {
-        ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage!);
+        ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage ?? '');
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -330,7 +330,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
           uploadProgress = System().createPopupDialog(ShowOverlayLoading());
 
-          Overlay.of(context)?.insert(uploadProgress!);
+          Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
@@ -373,14 +373,14 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
             if (_argument.fromSignUpFlow) {
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
               notifyListeners();
               Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
             } else {
               final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
               await _mainNotifier.initMain(context, onUpdateProfile: true);
               hold = false;
-              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+              ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
               notifyListeners();
             }
           }
@@ -410,7 +410,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
           uploadProgress = System().createPopupDialog(ShowOverlayLoading());
 
-          Overlay.of(context)?.insert(uploadProgress!);
+          Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
@@ -442,7 +442,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             final _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
             await _mainNotifier.initMain(context, onUpdateProfile: true);
             hold = false;
-            ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!);
+            ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
             notifyListeners();
 
             Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
@@ -470,7 +470,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         progress = "0%";
         FocusScopeNode currentFocus = FocusScope.of(context);
         uploadProgress = System().createPopupDialog(ShowOverlayLoading());
-        Overlay.of(context)?.insert(uploadProgress!);
+        Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
@@ -488,7 +488,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           progress = "${language.finishingUp}...";
           await Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true);
           hold = false;
-          ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation!).whenComplete(() => Routing().moveBack());
+          ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '').whenComplete(() => Routing().moveBack());
           notifyListeners();
         }
       } catch (e) {
@@ -591,7 +591,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           _assignDioCancelToken();
 
           progress = "0%";
-          Overlay.of(context)?.insert(uploadProgress!);
+          Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
           final notifier = UserBloc();
           await notifier.uploadProfilePictureBlocV2(
@@ -611,7 +611,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             progress = "${language.finishingUp}...";
             Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true).then((value) async {
               hold = false;
-              await ShowBottomSheet().onShowColouredSheet(context, language.successUploadId!);
+              await ShowBottomSheet().onShowColouredSheet(context, language.successUploadId ?? '');
               _determineIdProofStatusUser(context);
 
               final userNotifier = Provider.of<SelfProfileNotifier>(context, listen: false);
@@ -619,9 +619,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               // force complete id proof status (KTP terverifikasi)
               userNotifier.setIdProofStatusUser(IdProofStatus.complete);
 
-              debugPrint("PROFILE STATE => ${userNotifier.user.profile!.isComplete!}");
+              debugPrint("PROFILE STATE => ${userNotifier.user.profile?.isComplete}");
               if (userNotifier.user.profile != null) {
-                if (!userNotifier.user.profile!.isComplete!) {
+                if (!(userNotifier.user.profile?.isComplete ?? true)) {
                   Routing().moveAndPop(Routes.completeProfile);
                 } else {
                   Routing().moveAndPop(Routes.lobby);
@@ -637,7 +637,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (fetch.userState == UserState.uploadProfilePictureError) {
             ShowBottomSheet().onShowColouredSheet(
               context,
-              language.failedUploadId!,
+              language.failedUploadId ?? '',
               color: Theme.of(context).colorScheme.error,
               iconSvg: "${AssetPath.vectorPath}remove.svg",
             );
@@ -672,7 +672,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         }
       }
     } catch (e) {
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 

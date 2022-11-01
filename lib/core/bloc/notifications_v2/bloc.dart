@@ -46,7 +46,7 @@ class NotificationBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setNotificationsFetch(NotificationFetch(NotificationState.getUsersNotificationBlocError));
         } else {
           setNotificationsFetch(NotificationFetch(

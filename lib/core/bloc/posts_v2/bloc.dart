@@ -103,7 +103,7 @@ class PostsBloc {
       context,
       (onResult) {
         print(onResult);
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -151,7 +151,7 @@ class PostsBloc {
       context,
       (onResult) {
         print("test $onResult");
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -194,24 +194,24 @@ class PostsBloc {
 
     formData.files.add(MapEntry(
         "postContent",
-        await MultipartFile.fromFile(File(fileContents[0]!).path,
-            filename: "${System().basenameFiles(File(fileContents[0]!).path)}.${System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", "")}",
+        await MultipartFile.fromFile(File(fileContents[0] ?? '').path,
+            filename: "${System().basenameFiles(File(fileContents[0] ?? '').path)}.${System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "")}",
             contentType: MediaType(
-              System().lookupContentMimeType(File(fileContents[0]!).path)?.split('/')[0] ?? '',
-              System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", "") ?? "",
+              System().lookupContentMimeType(File(fileContents[0] ?? '').path)?.split('/')[0] ?? '',
+              System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "") ?? "",
             ))));
     formData.fields.add(MapEntry('email', email));
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('description', description));
-    formData.fields.add(MapEntry('tags', tags!.join(',')));
+    formData.fields.add(MapEntry('tags', tags?.join(',') ?? ''));
     formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
 
-    formData.fields.add(MapEntry('location', location!));
-    formData.fields.add(MapEntry('tagDescription', tagDescription!.join(',')));
+    formData.fields.add(MapEntry('location', location ?? ''));
+    formData.fields.add(MapEntry('tagDescription', tagDescription?.join(',') ?? ''));
     // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
 
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
@@ -221,14 +221,14 @@ class PostsBloc {
 
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
-    print(System().basenameFiles(File(fileContents[0]!).path));
-    print(System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", ""));
+    print(System().basenameFiles(File(fileContents[0] ?? '').path));
+    print(System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", ""));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
@@ -264,7 +264,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.deleteContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
@@ -312,7 +312,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
-    formData.fields.add(MapEntry('location', location!));
+    formData.fields.add(MapEntry('location', location ?? ''));
     formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
@@ -325,7 +325,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.updateContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.updateContentsSuccess, data: onResult));
@@ -357,7 +357,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.videoApsaraError));
         } else {
           print('onResult');

@@ -136,7 +136,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   //     return "Resend New Code";
   //   }
   // }
-  String resendString() => language.resendNewCode!;
+  String resendString() => language.resendNewCode ?? '';
 
   TextStyle? resendStyle(BuildContext context) {
     return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primaryVariant);
@@ -159,7 +159,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
           if (fetch.userState == UserState.RecoverSuccess) {
             _handleVerifyAction(
               context: context,
-              message: language.yourResetCodeHasBeenVerified!,
+              message: language.yourResetCodeHasBeenVerified ?? '',
             );
           } else {
             _inCorrectCode = true;
@@ -232,8 +232,8 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
         _sharedPrefs.removeValue(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.checkYourEmail!,
-          subCaption: language.weHaveSentAVerificationCodeToYourEmail!,
+          language.checkYourEmail ?? '',
+          subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
         );
       }
     } finally {
@@ -275,7 +275,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
           } catch (e) {
             print(e);
           }
-          ShowBottomSheet().onShowColouredSheet(context, language.verified!, subCaption: message);
+          ShowBottomSheet().onShowColouredSheet(context, language.verified ?? '', subCaption: message);
           Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
         }
       }

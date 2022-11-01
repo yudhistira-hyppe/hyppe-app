@@ -165,17 +165,18 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void showUserTag(BuildContext context, index, postId) {
-    ShowBottomSheet.onShowUserTag(context, value: _vidData![index].tagPeople!, function: () {}, postId: postId);
+    ShowBottomSheet.onShowUserTag(context, value: _vidData?[index].tagPeople ?? [], function: () {}, postId: postId);
   }
 
   void onDeleteSelfTagUserContent(BuildContext context, {required String postID, required String content, required String email}) {
     ContentData? _updatedData;
 
-    final index = vidData!.indexWhere((element) => element.postID == postID);
-    print(vidData![index].tagPeople!.length);
-    vidData![index].tagPeople?.removeWhere((element) => element.email == email);
+    final index = vidData?.indexWhere((element) => element.postID == postID);
+    if(index != null){
+      vidData?[index].tagPeople?.removeWhere((element) => element.email == email);
+    }
 
-    print(vidData![index].tagPeople!.length);
+
     // _updatedData!.tagPeople!.removeWhere((element) => element.email == email);
     // _updatedData.description = 'hflkjsdhkfjhskdjfhk';
 

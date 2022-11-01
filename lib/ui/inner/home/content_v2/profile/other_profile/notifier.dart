@@ -139,9 +139,9 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   String displayUserName() => user.profile != null
-      ? "@" + user.profile!.username!
+      ? "@" + (user.profile?.username ?? '')
       : username != null
-          ? "@" + username!
+          ? "@" + (username ?? '')
           : "";
 
   String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
@@ -152,11 +152,11 @@ class OtherProfileNotifier with ChangeNotifier {
 
   String displayFollowing() => user.profile?.insight != null ? _system.formatterNumber((user.profile?.insight?.followings ?? 0).toInt()) : "0";
 
-  String? displayFullName() => user.profile != null ? user.profile!.fullName ?? "" : "";
+  String? displayFullName() => user.profile != null ? (user.profile?.fullName ?? "") : "";
 
   String displayBio() => user.profile != null
       ? user.profile?.bio != null
-          ? '"${user.profile!.bio!}"'
+          ? '"${user.profile?.bio}"'
           : ""
       : "";
 
@@ -178,7 +178,7 @@ class OtherProfileNotifier with ChangeNotifier {
             if (!vidContentsQuery.loading && vidHasNext) {
               List<ContentData> _res = await vidContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
-                user.vids = [...user.vids!, ..._res];
+                user.vids = [...(user.vids ?? []), ..._res];
               } else {
                 print("Post Vid Dah Mentok");
               }
@@ -191,7 +191,7 @@ class OtherProfileNotifier with ChangeNotifier {
             if (!diaryContentsQuery.loading && diaryHasNext) {
               List<ContentData> _res = await diaryContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
-                user.diaries = [...user.diaries!, ..._res];
+                user.diaries = [...(user.diaries ?? []), ..._res];
               } else {
                 print("Post Diary Dah Mentok");
               }
@@ -204,7 +204,7 @@ class OtherProfileNotifier with ChangeNotifier {
             if (!picContentsQuery.loading && picHasNext) {
               List<ContentData> _res = await picContentsQuery.loadNext(context, otherContent: true);
               if (_res.isNotEmpty) {
-                user.pics = [...user.pics!, ..._res];
+                user.pics = [...(user.pics ?? []), ..._res];
               } else {
                 print("Post Pic Dah Mentok");
               }
@@ -235,9 +235,9 @@ class OtherProfileNotifier with ChangeNotifier {
     diaryContentsQuery.limit = 12;
     picContentsQuery.limit = 12;
 
-    vidContentsQuery.searchText = userEmail!;
-    diaryContentsQuery.searchText = userEmail!;
-    picContentsQuery.searchText = userEmail!;
+    vidContentsQuery.searchText = userEmail ?? '';
+    diaryContentsQuery.searchText = userEmail ?? '';
+    picContentsQuery.searchText = userEmail ?? '';
 
     final usersNotifier = UserBloc();
     await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
@@ -249,7 +249,7 @@ class OtherProfileNotifier with ChangeNotifier {
     }
 
     if (refresh) {
-      checkFollowingToUser(context, userEmail!);
+      checkFollowingToUser(context, userEmail ?? '');
     }
 
     print('test10');

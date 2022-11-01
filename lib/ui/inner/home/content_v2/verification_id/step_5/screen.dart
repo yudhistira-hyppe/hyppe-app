@@ -330,7 +330,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       const SizedBox(height: 20),
                       Center(
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.dataDidntShow!,
+                          textToDisplay: notifier.language.dataDidntShow ?? '',
                         ),
                       ),
                       Center(

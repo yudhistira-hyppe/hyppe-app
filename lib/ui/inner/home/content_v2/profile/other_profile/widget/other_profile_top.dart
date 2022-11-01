@@ -137,11 +137,11 @@ class OtherProfileTop extends StatelessWidget {
                         ? const CustomLoading()
                         : CustomTextWidget(
                             textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                                ? notifier.language.following!
+                                ? notifier.language.following ?? 'following'
                                 : notifier.statusFollowing == StatusFollowing.requested
-                                    ? notifier.language.requested!
-                                    : notifier.language.follow!,
-                            textStyle: Theme.of(context).textTheme.button!.copyWith(
+                                    ? notifier.language.requested ?? 'requested'
+                                    : notifier.language.follow ?? 'follow',
+                            textStyle: Theme.of(context).textTheme.button?.copyWith(
                                   color: notifier.statusFollowing == StatusFollowing.requested ? null : kHyppeLightButtonText,
                                 ),
                           ),
@@ -160,7 +160,7 @@ class OtherProfileTop extends StatelessWidget {
                   ),
                   CustomElevatedButton(
                     child: CustomTextWidget(
-                      textToDisplay: notifier.language.message!,
+                      textToDisplay: notifier.language.message ?? 'message',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                     width: 167 * SizeConfig.scaleDiagonal,

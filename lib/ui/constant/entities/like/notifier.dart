@@ -228,7 +228,7 @@ class LikeNotifier with ChangeNotifier {
     if (fetch.postViewerState == PostViewerState.likeViewSuccess) {
       _listLikeView = [];
       fetch.data.forEach((v) {
-        _listLikeView!.add(ViewContent.fromJson(v));
+        _listLikeView?.add(ViewContent.fromJson(v));
       });
       isLoading = false;
     }

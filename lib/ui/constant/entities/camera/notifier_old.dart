@@ -26,7 +26,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   bool get isRecordingPaused => cameraController?.value.isRecordingPaused ?? false;
   bool get isTakingPicture => cameraController?.value.isTakingPicture ?? false;
   bool get hasError => cameraController?.value.hasError ?? false;
-  double get cameraAspectRatio => cameraController!.value.previewSize!.height / cameraController!.value.previewSize!.width;
+  double get cameraAspectRatio => (cameraController?.value.previewSize?.height ?? 0) / (cameraController?.value.previewSize?.width ?? 0);
   double get yScale => 1;
 
   // Object Key

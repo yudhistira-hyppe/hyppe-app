@@ -104,15 +104,15 @@ class PaymentMethodNotifier extends ChangeNotifier {
   }
 
   void submitPay(BuildContext context) {
-    var cek = data!.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
+    final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
 
-    if (cek) _postSubmitBuy(context);
+    if (cek ?? false) _postSubmitBuy(context);
   }
 
   Color colorButton(context) {
     Color _color = Theme.of(context).colorScheme.primaryVariant;
-    var cek = data!.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
-    if (cek) {
+    final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
+    if (cek ?? false) {
       _color = Theme.of(context).colorScheme.primaryVariant;
     } else {
       _color = Theme.of(context).colorScheme.surface;
@@ -124,19 +124,19 @@ class PaymentMethodNotifier extends ChangeNotifier {
     isLoading = true;
     List<PostId> postId = [
       PostId(
-        id: reviewBuyNotifier.data!.postId,
+        id: reviewBuyNotifier.data?.postId,
         qty: 1,
-        totalAmount: reviewBuyNotifier.data!.price!.toInt(),
+        totalAmount: reviewBuyNotifier.data?.price?.toInt(),
       ),
     ];
     var params = BuyRequest(
         postid: postId,
-        amount: reviewBuyNotifier.data!.totalAmount!.toInt(),
+        amount: reviewBuyNotifier.data?.totalAmount?.toInt(),
         bankcode: _bankSelected,
         paymentmethod: 'VA', //TO DO : Other payment method
         type: 'CONTENT',
-        salelike: reviewBuyNotifier.data!.saleLike,
-        saleview: reviewBuyNotifier.data!.saleView);
+        salelike: reviewBuyNotifier.data?.saleLike,
+        saleview: reviewBuyNotifier.data?.saleView);
 
     print('data: ${params.toJson()}.');
 

@@ -122,7 +122,7 @@ class _AddPlaylistState extends State<AddPlaylist> {
                               child: notifier.loading
                                   ? const CustomLoading()
                                   : CustomTextWidget(
-                                      textToDisplay: notifier.language.createNew!,
+                                      textToDisplay: notifier.language.createNew ?? '',
                                       textStyle: Theme.of(context).textTheme.button,
                                     ),
                               buttonStyle: ButtonStyle(
@@ -138,7 +138,7 @@ class _AddPlaylistState extends State<AddPlaylist> {
                               child: notifier.loading
                                   ? const SizedBox.shrink()
                                   : CustomTextWidget(
-                                      textToDisplay: notifier.language.cancel!,
+                                      textToDisplay: notifier.language.cancel ?? '',
                                       textStyle: Theme.of(context).textTheme.button,
                                     ),
                               buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)),

@@ -26,13 +26,13 @@ class SignUpOrGoogle extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomTextWidget(
-                  textToDisplay: "${notifier.language.dontHaveAnAccount!}?   ",
+                  textToDisplay: "${notifier.language.dontHaveAnAccount}?   ",
                   textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                 ),
                 GestureDetector(
                   onTap: () => notifier.onClickSignUpHere(),
                   child: CustomTextWidget(
-                    textToDisplay: notifier.language.registerHere!,
+                    textToDisplay: notifier.language.registerHere ?? '',
                     textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primaryVariant,
@@ -49,7 +49,7 @@ class SignUpOrGoogle extends StatelessWidget {
                 children: [
                   TextSpan(
                     text: "${notifier.language.privacyPolicy} ",
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
                     recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
                   ),
                   TextSpan(
@@ -58,7 +58,7 @@ class SignUpOrGoogle extends StatelessWidget {
                   ),
                   TextSpan(
                     text: notifier.language.termsOfService,
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
                     recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
                   ),
                 ],

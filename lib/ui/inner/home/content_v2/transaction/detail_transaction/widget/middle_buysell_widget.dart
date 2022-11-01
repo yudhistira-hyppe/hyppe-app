@@ -23,7 +23,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
-            textToDisplay: language!.contentDetail!,
+            textToDisplay: language?.contentDetail ?? '',
             textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
@@ -36,10 +36,10 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
             Expanded(
               flex: 4,
               child: CustomCacheImage(
-                imageUrl: data!.apsara!
-                    ? data!.media!.imageInfo!.isEmpty
-                        ? data!.media!.videoList![0].coverURL
-                        : data!.media!.imageInfo![0].url
+                imageUrl: data?.apsara ?? false
+                    ? data?.media?.imageInfo?.isEmpty ?? false
+                        ? (data?.media?.videoList?[0].coverURL ?? '')
+                        : (data?.media?.imageInfo?[0].url ?? '')
                     : data?.fullThumbPath,
                 imageBuilder: (_, imageProvider) {
                   return Container(
@@ -79,7 +79,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                   sixPx,
                   CustomTextWidget(
                     textToDisplay:
-                        '${data!.like! ? data!.totallike! : ''}${data!.like! ? ' ${language!.like}' : ''} ${data!.like! && data!.view! ? ' | ' : ''}${data!.view! ? data!.totalview! : ''}${data!.view! ? ' ${language!.views}' : ''}',
+                        '${data?.like ?? false ? data?.totallike ?? '' : ''}${data?.like ?? false ? ' ${language?.like}' : ''} ${(data?.like ?? false) && (data?.view ?? false) ? ' | ' : ''}${data?.view ?? false ? data?.totalview : ''}${data?.view ?? false ? ' ${language?.views}' : ''}',
                     textStyle: Theme.of(context).textTheme.caption!,
                   ),
                   twelvePx,
@@ -100,8 +100,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                               ),
                             )
                           : Container(),
-                      data!.like! ? twelvePx : Container(),
-                      data!.view!
+                      data?.like ?? false ? twelvePx : Container(),
+                      data?.view ?? false
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(
@@ -110,8 +110,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                                 boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                               ),
                               child: CustomTextWidget(
-                                textToDisplay: '${language!.views}',
-                                textStyle: Theme.of(context).textTheme.caption!,
+                                textToDisplay: '${language?.views}',
+                                textStyle: Theme.of(context).textTheme.caption,
                                 textAlign: TextAlign.start,
                               ),
                             )

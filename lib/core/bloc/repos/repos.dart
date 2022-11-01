@@ -175,7 +175,7 @@ class Repos {
       logic(_response);
 
       /// show message if any error
-      if (_response.statusCode! > HTTP_CODE && !postLogsError!) {
+      if ((_response.statusCode ?? 0) > HTTP_CODE && !postLogsError!) {
         'Error communicate with host $host'.logger();
 
         /// serialize error data from backend

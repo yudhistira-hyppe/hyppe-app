@@ -95,7 +95,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                             /// End TODO
                           },
                           child: CustomTextWidget(
-                            textToDisplay: notifier.language.completeNow!,
+                            textToDisplay: notifier.language.completeNow ?? '',
                             textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
                           ),
                         ),

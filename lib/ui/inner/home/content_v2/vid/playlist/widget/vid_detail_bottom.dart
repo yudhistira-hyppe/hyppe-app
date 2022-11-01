@@ -72,15 +72,15 @@ class VidDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            data?.tagPeople!.length != 0 || data?.location != ''
+            data?.tagPeople?.isNotEmpty ?? false || data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
                       children: [
-                        data?.tagPeople!.length != 0
+                        data?.tagPeople?.isNotEmpty ?? false
                             ? TagLabel(
                                 icon: 'user',
-                                label: '${data?.tagPeople!.length} people',
+                                label: '${data?.tagPeople?.length} people',
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
                                   // vidNotifier.showUserTag(context, index, data!.postID);
@@ -161,15 +161,15 @@ class VidDetailBottom extends StatelessWidget {
             _buildButton(
               context,
               '${AssetPath.vectorPath}share.svg',
-              value2.translate.share!,
+              value2.translate.share ?? '',
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
             if (data != null)
-              if (data!.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != data!.email)
+              if ((data!.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data!.email)
                 _buildButton(
                   context,
                   '${AssetPath.vectorPath}cart.svg',
-                  value2.translate.buy!,
+                  value2.translate.buy ?? '',
                   () => ShowBottomSheet.onBuyContent(context, data: data),
                 ),
             // _buildButton(
@@ -199,7 +199,7 @@ class VidDetailBottom extends StatelessWidget {
           CustomIconWidget(
             iconData: icon,
             defaultColor: false,
-            color: colorIcon ?? Theme.of(context).appBarTheme.iconTheme!.color,
+            color: colorIcon ?? Theme.of(context).appBarTheme.iconTheme?.color,
           ),
           eightPx,
           CustomTextWidget(
@@ -227,7 +227,7 @@ class VidDetailBottom extends StatelessWidget {
                     return value.checkIsLoading
                         ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                         : CustomFollowButton(
-                            caption: value3.translate.follow!,
+                            caption: value3.translate.follow ?? 'follow',
                             onPressed: () async {
                               try {
                                 await value.followUser(context);
@@ -256,12 +256,12 @@ class VidDetailBottom extends StatelessWidget {
           haveStory: false,
 
           isCelebrity: false,
-          onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email!),
+          onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email ?? ''),
 
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(
-            DateTime.parse(data!.createdAt!).millisecondsSinceEpoch,
+            DateTime.parse(data!.createdAt ?? '').millisecondsSinceEpoch,
             context,
             fullCaption: true,
           )}',

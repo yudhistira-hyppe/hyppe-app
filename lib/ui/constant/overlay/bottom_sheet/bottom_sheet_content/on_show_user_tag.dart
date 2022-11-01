@@ -104,7 +104,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                     width: 100,
                                     child: CustomTextButton(
                                       child: Text(
-                                        notifier.statusFollow!,
+                                        notifier.statusFollow ?? '',
                                         style: TextStyle(color: widget.value[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
                                       ),
                                       onPressed: widget.value[index].status != 'TOFOLLOW'

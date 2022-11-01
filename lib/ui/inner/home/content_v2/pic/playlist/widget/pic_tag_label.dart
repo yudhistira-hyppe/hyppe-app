@@ -33,7 +33,7 @@ class PicTagLabel extends StatelessWidget {
               sixPx,
               Text(
                 label.length < 20 ? label : "${label.substring(0, 20)}...",
-                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kHyppeLightBackground),
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppeLightBackground),
               ),
             ],
           ),

@@ -28,33 +28,35 @@ class ButtonWidget extends StatelessWidget {
         ? CustomTextButton(
             onPressed: () {
               late FollowUserArgument argument;
+              if(data != null){
+                if (data?.eventType == InteractiveEventType.follower && data?.event == InteractiveEvent.request) {
+                  argument = FollowUserArgument(
+                    eventType: data?.eventType ?? InteractiveEventType.view,
+                    receiverParty: data?.senderOrReceiver ?? '',
+                    replyEvent: InteractiveEvent.accept,
+                  );
 
-              if (data?.eventType == InteractiveEventType.follower && data?.event == InteractiveEvent.request) {
-                argument = FollowUserArgument(
-                  eventType: data!.eventType!,
-                  receiverParty: data?.senderOrReceiver ?? '',
-                  replyEvent: InteractiveEvent.accept,
-                );
+                  context.read<FollowerNotifier>().followUser(context, data: data, argument: argument);
+                } else if (data?.eventType == InteractiveEventType.following && data?.event == InteractiveEvent.initial) {
+                  argument = FollowUserArgument(
+                    receiverParty: data?.senderOrReceiver ?? '',
+                    eventType: InteractiveEventType.unfollow,
+                  );
+                } else if (data?.event == InteractiveEvent.accept || data?.event == InteractiveEvent.done) {
+                  argument = FollowUserArgument(
+                    receiverParty: data?.senderOrReceiver ?? '',
+                    eventType: InteractiveEventType.unfollow,
+                  );
+                } else {
+                  argument = FollowUserArgument(
+                    receiverParty: data?.senderOrReceiver ?? '',
+                    eventType: InteractiveEventType.following,
+                  );
 
-                context.read<FollowerNotifier>().followUser(context, data: data, argument: argument);
-              } else if (data?.eventType == InteractiveEventType.following && data?.event == InteractiveEvent.initial) {
-                argument = FollowUserArgument(
-                  receiverParty: data?.senderOrReceiver ?? '',
-                  eventType: InteractiveEventType.unfollow,
-                );
-              } else if (data?.event == InteractiveEvent.accept || data?.event == InteractiveEvent.done) {
-                argument = FollowUserArgument(
-                  receiverParty: data?.senderOrReceiver ?? '',
-                  eventType: InteractiveEventType.unfollow,
-                );
-              } else {
-                argument = FollowUserArgument(
-                  receiverParty: data?.senderOrReceiver ?? '',
-                  eventType: InteractiveEventType.following,
-                );
-
-                context.read<FollowerNotifier>().followUser(context, data: data, argument: argument);
+                  context.read<FollowerNotifier>().followUser(context, data: data, argument: argument);
+                }
               }
+
             },
             style: theme.textButtonTheme.style?.copyWith(
               backgroundColor: MaterialStateProperty.all(buttonColor(theme)),
@@ -80,13 +82,13 @@ class ButtonWidget extends StatelessWidget {
   String? buttonText(BuildContext context) {
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false);
     if (data?.event == InteractiveEvent.accept || data?.event == InteractiveEvent.done) {
-      return _language.translate.following!;
+      return _language.translate.following ?? 'following';
     } else if (data?.eventType == InteractiveEventType.follower && data?.event == InteractiveEvent.request) {
-      return _language.translate.accept!;
+      return _language.translate.accept ?? 'accept';
     } else if (data?.eventType == InteractiveEventType.following && data?.event == InteractiveEvent.initial) {
-      return _language.translate.requested!;
+      return _language.translate.requested ?? 'requested';
     } else {
-      return _language.translate.follow!;
+      return _language.translate.follow ?? 'follow';
     }
   }
 }
