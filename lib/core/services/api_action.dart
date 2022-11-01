@@ -26,16 +26,16 @@ class ApiAction {
     );
 
     if (!kReleaseMode) {
-      _dio.interceptors.add(LogInterceptor(
-        error: true,
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: true,
-      ));
+      // _dio.interceptors.add(LogInterceptor(
+      //   error: true,
+      //   request: true,
+      //   requestBody: true,
+      //   responseBody: true,
+      //   requestHeader: true,
+      //   responseHeader: true,
+      // ));
       // _dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
-      // _dio.interceptors.add(HttpFormatter());
+      _dio.interceptors.add(HttpFormatter());
     }
   }
 
@@ -52,11 +52,12 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
-    if (Env.dataUrlv4.contains(url)) {
-      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
-    } else {
-      _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
-    }
+
+    // if (Env.dataUrlv4.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
     try {
       final _response = await _dio.post(
         url,
@@ -88,6 +89,7 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+
     // if (Env.dataUrlv4.contains(url)) {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
     // } else {
@@ -133,6 +135,7 @@ class ApiAction {
     // } else {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     // }
+
     try {
       final _response = await _dio
           .post(
@@ -170,12 +173,13 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
 
-    var newurl = url.split('?');
+    // var newurl = url.split('?');
     // if (Env.dataUrlv4.contains(newurl[0])) {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
     // } else {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
     // }
+
     try {
       final _response = await _dio
           .get(
@@ -213,6 +217,7 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
+
     // if (Env.dataUrlv4.contains(url)) {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
     // } else {
@@ -254,6 +259,7 @@ class ApiAction {
 
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+
     // if (Env.dataUrlv4.contains(url)) {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV4}';
     // } else {
