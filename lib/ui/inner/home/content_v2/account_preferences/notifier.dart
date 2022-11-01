@@ -265,6 +265,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
                 ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
                 notifyListeners();
               }).whenComplete(() {
+                print('data gambar');
+
                 _eventService.notifyUploadSuccess(fetch.data);
               });
             } else {

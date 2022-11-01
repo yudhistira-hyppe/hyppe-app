@@ -68,7 +68,7 @@ class _TransactionState extends State<Transaction> {
             child: notifier.isLoading
                 ? const SingleChildScrollView(child: const ShimmerTransactionHistory())
                 : SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -131,7 +131,6 @@ class _TransactionState extends State<Transaction> {
                               CustomTextButton(
                                 onPressed: () {
                                   context.read<FilterTransactionNotifier>().getTypeFilter(context);
-
                                   Routing().move(Routes.allTransaction);
                                 },
                                 child: CustomTextWidget(

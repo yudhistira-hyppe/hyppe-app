@@ -2,15 +2,12 @@ import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/my_balance.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -46,8 +43,8 @@ class SettingScreen extends StatelessWidget {
                 onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
                 caption: '${notifier.translate.transaction}',
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
                 child: MyBalance(),
               ),
               Divider(
@@ -103,11 +100,11 @@ class SettingScreen extends StatelessWidget {
               SettingComponent(
                 headerCaption: '${notifier.translate.support}',
                 tiles: [
-                  // SettingTile(
-                  //   onTap: () {},
-                  //   caption: 'Help',
-                  //   icon: 'help-icon.svg',
-                  // ),
+                  SettingTile(
+                    caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
+                    icon: 'help-icon.svg',
+                    onTap: () => Routing().move(Routes.help),
+                  ),
                   SettingTile(
                     caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
                     icon: 'privacy-police-icon.svg',

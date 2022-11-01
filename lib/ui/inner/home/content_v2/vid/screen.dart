@@ -50,7 +50,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     final likeNotifier = Provider.of<LikeNotifier>(context, listen: false);
 
     return Consumer3<PreviewVidNotifier, TranslateNotifierV2, HomeNotifier>(
-      builder: (_, vidNotifier, translateNotifier, homeNotifier, __) => SizedBox(
+      builder: (context, vidNotifier, translateNotifier, homeNotifier, widget) => SizedBox(
         width: SizeConfig.screenWidth,
         child: Column(
           children: [
@@ -90,7 +90,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                 },
                                 itemCount: vidNotifier.itemCount,
                                 itemBuilder: (BuildContext context, int index) {
-                                  if(homeNotifier.isLoadingVid){
+                                  if (homeNotifier.isLoadingVid) {
                                     return CustomShimmer(
                                       margin: const EdgeInsets.only(bottom: 100, right: 16, left: 16),
                                       height: context.getHeight() / 8,
@@ -137,7 +137,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               },
                                             ),
                                             GestureDetector(
-                                                onTap: () => vidNotifier.reportContent(context),
+                                                onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData![index]),
                                                 child: Visibility(
                                                   visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
                                                   child: const Icon(Icons.more_vert),
@@ -168,7 +168,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                             AspectRatio(
                                               aspectRatio: 16 / 9,
                                               child: Container(
-                                                color: Colors.black,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(8),
+                                                  color: Colors.black,
+                                                ),
                                                 child: VideoPlayerPage(
                                                   onDetail: false,
                                                   videoData: vidNotifier.vidData?[index],

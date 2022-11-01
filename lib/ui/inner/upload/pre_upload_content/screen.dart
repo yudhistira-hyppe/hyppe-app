@@ -140,7 +140,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   //   content: widget.arguments.content,
                   // ),
                   function: () {
-                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story) {
+                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
                       notifier.onClickPost(
                         context,
                         onEdit: widget.arguments.onEdit,

@@ -1,4 +1,3 @@
-
 import 'package:hive/hive.dart';
 
 part 'content_data_insight.g.dart';
@@ -46,7 +45,7 @@ class ContentDataInsight extends HiveObject {
     this.likes,
   });
 
-  ContentDataInsight.fromJson(Map<String, dynamic> json) {
+  ContentDataInsight.fromJson(Map<String, dynamic> json, {bool isLike = false}) {
     shares = json['shares'];
     if (json['insightLogs'] != null) {
       insightLogs = [];
@@ -58,7 +57,8 @@ class ContentDataInsight extends HiveObject {
     reactions = json['reactions'];
     views = json['views'];
     likes = json['likes'];
-    isPostLiked = insightLogs != null && insightLogs!.where((element) => element.eventInsight?.toLowerCase() == 'like').isNotEmpty;
+    // isPostLiked = insightLogs != null && insightLogs!.where((element) => element.eventInsight?.toLowerCase() == 'like').isNotEmpty;
+    isPostLiked = isLike;
     isView = (json['isView'] != null) ? json['isView'] : false;
   }
 

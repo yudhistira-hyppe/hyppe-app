@@ -520,6 +520,14 @@ class PreUploadContentNotifier with ChangeNotifier {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
+    context.read<HomeNotifier>().onReport(
+          context,
+          postID: postID,
+          content: content,
+          isReport: true,
+        );
+    notifyListeners();
+
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
       context,

@@ -109,7 +109,11 @@ class TransactionHistoryModel {
     serviceFee = json['serviceFee'] ?? 0;
     totallike = json['totallike'] ?? 0;
     totalview = json['totalview'] ?? 0;
-    apsara = json['apsara'] != '' ? json['apsara'] : false;
+    apsara = json['apsara'] == null
+        ? false
+        : json['apsara'] != ''
+            ? json['apsara']
+            : false;
     media = json['media'] == null
         ? null
         : json['media'] is List

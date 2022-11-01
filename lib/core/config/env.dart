@@ -19,7 +19,7 @@ class Env {
     }
   }
 
-  static final List dataUrlv3 = [
+  static final List dataUrlv4 = [
     UrlConstants.signUp,
     UrlConstants.verifyAccount,
     UrlConstants.getSearchPeople,
@@ -82,6 +82,15 @@ class Env {
     UrlConstants.withdraw,
     UrlConstants.resendOTP,
     UrlConstants.loginGoogle,
+    UrlConstants.interactive,
+    UrlConstants.interest,
+    UrlConstants.updateInterest,
+    UrlConstants.reaction,
+    UrlConstants.discuss,
+    UrlConstants.getNotification,
+    UrlConstants.welcomeNotes,
+    UrlConstants.categoryTickets,
+    UrlConstants.levelTickets,
   ];
 
   static final List dataUrlv4 = [

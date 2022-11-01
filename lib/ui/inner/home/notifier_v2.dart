@@ -236,20 +236,22 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onUpdateSelfPostContent(BuildContext context,
-      {required String postID,
-      required String content,
-      String? description,
-      String? visibility,
-      bool? allowComment,
-      bool? certified,
-      List<String>? tags,
-      List<String>? cats,
-      List<TagPeople>? tagPeople,
-      String? location,
-      String? saleAmount,
-      bool? saleLike,
-      bool? saleView}) {
+  void onUpdateSelfPostContent(
+    BuildContext context, {
+    required String postID,
+    required String content,
+    String? description,
+    String? visibility,
+    bool? allowComment,
+    bool? certified,
+    List<String>? tags,
+    List<String>? cats,
+    List<TagPeople>? tagPeople,
+    String? location,
+    String? saleAmount,
+    bool? saleLike,
+    bool? saleView,
+  }) {
     ContentData? _updatedData;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
@@ -280,7 +282,7 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.allowComments = allowComment;
       _updatedData.visibility = visibility;
       _updatedData.location = location;
-      _updatedData.saleAmount = num.parse(saleAmount!);
+      _updatedData.saleAmount = num.parse(saleAmount! != '' ? saleAmount : '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleView = saleView;
       _updatedData.cats = [];
@@ -297,6 +299,39 @@ class HomeNotifier with ChangeNotifier {
         }
       }
       print(_updatedData.cats!.length);
+    }
+
+    notifyListeners();
+  }
+
+  void onReport(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    ContentData? _updatedData;
+    final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+    final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+
+    switch (content) {
+      case hyppeVid:
+        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppeStory:
+        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    if (_updatedData != null) {
+      _updatedData.isReport = isReport;
+      // _updatedData.tagPeople = tagPeople;
     }
 
     notifyListeners();

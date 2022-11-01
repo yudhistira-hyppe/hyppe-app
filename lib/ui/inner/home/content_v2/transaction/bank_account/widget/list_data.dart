@@ -72,7 +72,7 @@ class ListDataBankAccount extends StatelessWidget {
                             ),
                             sixPx,
                             CustomTextWidget(
-                              textToDisplay: '${dataAcccount![index].noRek} - ${dataAcccount![index].nama}',
+                              textToDisplay: '${dataAcccount![index].noRek} - ${(dataAcccount![index].nama)!.toUpperCase()}',
                               textStyle: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],

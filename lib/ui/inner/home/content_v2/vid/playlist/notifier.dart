@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/query_request/users_data_query.dart';
@@ -69,7 +70,6 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
-
       print('reload contentsQuery : 16');
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
@@ -187,8 +187,8 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     return true;
   }
 
-  void reportContent(BuildContext context) {
-    ShowBottomSheet.onReportContent(context);
+  void reportContent(BuildContext context, ContentData data) {
+    ShowBottomSheet.onReportContent(context, data, hyppeVid);
   }
 
   void showUserTag(BuildContext context, data, postId) {

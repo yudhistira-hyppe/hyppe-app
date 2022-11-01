@@ -92,7 +92,7 @@ class PicDetailSlider extends StatelessWidget {
                             ? SizedBox(
                                 width: 50,
                                 child: CustomTextButton(
-                                  onPressed: () => ShowBottomSheet.onReportContent(context),
+                                  onPressed: () => ShowBottomSheet.onReportContent(context, picData, hyppePic),
                                   child: const CustomIconWidget(
                                     defaultColor: false,
                                     iconData: '${AssetPath.vectorPath}more.svg',

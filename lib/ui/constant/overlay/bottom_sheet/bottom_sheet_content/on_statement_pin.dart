@@ -12,11 +12,11 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class OnStatementPinBottomSheet extends StatelessWidget {
-  Function() onSave;
-  Function() onCancel;
+  Function()? onSave;
+  Function()? onCancel;
   String? title;
   String? bodyText;
-  OnStatementPinBottomSheet({Key? key, required this.onSave, required this.onCancel, this.title, this.bodyText}) : super(key: key);
+  OnStatementPinBottomSheet({Key? key, this.onSave, this.onCancel, this.title, this.bodyText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +32,18 @@ class OnStatementPinBottomSheet extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: CustomTextWidget(
-                    textToDisplay: title!,
-                    textStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.onBackground),
-                    maxLines: 2,
-                  ),
-                ),
-                const SizedBox(height: 20),
+                title == ''
+                    ? Container()
+                    : Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Center(
+                          child: CustomTextWidget(
+                            textToDisplay: title!,
+                            textStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                            maxLines: 2,
+                          ),
+                        ),
+                      ),
                 CustomTextWidget(
                   textToDisplay: bodyText!,
                   textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
@@ -49,22 +53,24 @@ class OnStatementPinBottomSheet extends StatelessWidget {
               ],
             ),
             twentyFourPx,
-            CustomElevatedButton(
-                height: 40,
-                width: MediaQuery.of(context).size.width,
-                function: onSave,
-                child: CustomTextWidget(
-                  textToDisplay: notifier.translate.goToSecurityPrivacy!,
-                ),
-                buttonStyle: ButtonStyle(
-                  // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                  backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                  shadowColor: MaterialStateProperty.all(Colors.white),
-                  elevation: MaterialStateProperty.all(0),
-                  side: MaterialStateProperty.all(
-                    BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
-                  ),
-                )),
+            onSave == null
+                ? Container()
+                : CustomElevatedButton(
+                    height: 40,
+                    width: MediaQuery.of(context).size.width,
+                    function: onSave,
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.translate.goToSecurityPrivacy!,
+                    ),
+                    buttonStyle: ButtonStyle(
+                      // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                      shadowColor: MaterialStateProperty.all(Colors.white),
+                      elevation: MaterialStateProperty.all(0),
+                      side: MaterialStateProperty.all(
+                        BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
+                      ),
+                    )),
           ],
         ),
       ),

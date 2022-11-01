@@ -115,6 +115,7 @@ class BuySellWidget extends StatelessWidget {
                 ),
                 const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
                 twelvePx,
+                // SelectableText("${data!.apsara! ? data!.media!.imageInfo!.isEmpty ? data!.media!.videoList![0].coverURL : data!.media!.imageInfo![0].url : data?.fullThumbPath}"),
                 Row(
                   children: [
                     Expanded(

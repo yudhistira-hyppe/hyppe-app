@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -94,7 +95,7 @@ class ContentItem extends StatelessWidget {
                                   //       statusFollowing: StatusFollowing.rejected,
                                   //     ),
                                 ),
-                                GestureDetector(onTap: () => ShowBottomSheet.onReportContent(context), child: const Icon(Icons.more_vert)),
+                                GestureDetector(onTap: () => ShowBottomSheet.onReportContent(context, data, hyppeVid), child: const Icon(Icons.more_vert)),
                               ],
                             ),
                             twelvePx,

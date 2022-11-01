@@ -1079,4 +1079,14 @@ class System {
         SharedPreference().writeStorage(SpKeys.statusVerificationId, UNVERIFIED);
     }
   }
+
+  String statusWithdrwal(context, String status) {
+    final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    switch (status) {
+      case 'Success':
+        return notifier.transferredSuccessfully!;
+      default:
+        return notifier.waitingtoTransfer!;
+    }
+  }
 }

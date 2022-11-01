@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
@@ -212,5 +213,7 @@ class AppDependencies {
         ChangeNotifierProvider<FilterTransactionNotifier>(create: (context) => FilterTransactionNotifier()),
 
         ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
+
+        ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
       ];
 }

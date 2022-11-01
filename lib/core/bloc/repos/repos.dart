@@ -166,8 +166,8 @@ class Repos {
 
       /// check if token is valid or not, if not, force logOut
       if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
-        await SharedPreference().logOutStorage();
-        _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+        // await SharedPreference().logOutStorage();
+        // _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
         return;
       }
 
@@ -203,7 +203,8 @@ class Repos {
             // _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_errorData.message}");
             _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
-          dataError['log'] = _errorData.message;
+
+          dataError['log'] = 'Error detail with no alertMessage ${_errorData.message.toString()} and host $host and paramdata $data';
           'Error data ddddd' + dataError.logger();
 
           final responError = await postLogError(context, dataError, headers, onReceiveProgress);
@@ -239,10 +240,9 @@ class Repos {
       if (withAlertMessage) {
         _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
-      'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'.logger();
-      dataError['log'] = 'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host';
-      // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
-      // 'Actual response error data ${responError.data}'.logger();
+      dataError['log'] = 'Error detail in DioError catch ${e.message.toString()} with status code ${e.response?.statusCode}, and host $host and paramdata $data';
+      final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+      'Actual response error data ${responError.data}'.logger();
       onDioError(e);
     } catch (e) {
       e.toString().logger();
@@ -259,9 +259,8 @@ class Repos {
       } else {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
-      dataError['log'] = 'Error detail with no alertMessage ${e.toString()} and host $host';
-      // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
-      // 'Actual response error data ${responError.data}'.logger();
+      dataError['log'] = 'Error detail in catch ${e.toString()}, and host $host and paramdata $data';
+      await postLogError(context, dataError, headers, onReceiveProgress);
     }
   }
 

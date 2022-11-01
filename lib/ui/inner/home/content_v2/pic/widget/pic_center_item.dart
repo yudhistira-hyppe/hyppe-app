@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
@@ -44,7 +45,7 @@ class PicCenterItem extends StatelessWidget {
               ),
               child: _buildBody(),
             ),
-            errorWidget: (context, url, error){
+            errorWidget: (context, url, error) {
               print('errorWidget :  $error');
               return Container(
                 margin: margin,

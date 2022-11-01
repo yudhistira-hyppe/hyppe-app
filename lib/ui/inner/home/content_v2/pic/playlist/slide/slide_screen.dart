@@ -182,7 +182,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                 ? _buildButtonV2(
                                                     context: context,
                                                     iconData: '${AssetPath.vectorPath}more.svg',
-                                                    function: () => ShowBottomSheet.onReportContent(context),
+                                                    function: () => ShowBottomSheet.onReportContent(context, _notifier.listData![indexRoot], hyppePic),
                                                   )
                                                 : const SizedBox(),
                                           ],

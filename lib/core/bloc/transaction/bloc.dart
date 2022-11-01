@@ -111,7 +111,7 @@ class TransactionBloc {
       },
       (errorData) {
         if (errorData.type == DioErrorType.cancel) {
-          setTransactionFetch(TransactionFetch(TransactionState.getHistorySuccess));
+          setTransactionFetch(TransactionFetch(TransactionState.getHistoryError));
         } else {
           ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
           setTransactionFetch(TransactionFetch(TransactionState.getHistoryError, data: errorData.error));

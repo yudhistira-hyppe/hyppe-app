@@ -12,6 +12,7 @@ import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_category_support_ticket.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_interest_list.dart';
@@ -129,7 +130,6 @@ class ShowBottomSheet {
         );
       },
     );
-
   }
 
   static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
@@ -841,7 +841,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, {StoryController? storyController}) {
+  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController}) {
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -857,7 +857,10 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnReportContentBottomSheet(),
+            child: OnReportContentBottomSheet(
+              postData: postData,
+              type: type,
+            ),
           ),
         );
       },
@@ -896,7 +899,7 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, {StoryController? storyController}) {
+  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, String? type}) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -904,7 +907,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            // height: SizeConfig.screenHeight! / 1.78,
+            height: SizeConfig.screenHeight! / 1.09,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -913,7 +916,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnReportSpamFormBottomSheet(),
+            child: OnReportSpamFormBottomSheet(postData: postData, type: type),
           ),
         );
       },
@@ -1340,8 +1343,8 @@ class ShowBottomSheet {
 
   static onShowStatementPin(
     BuildContext context, {
-    required Function() onSave,
-    required Function() onCancel,
+    Function()? onSave,
+    Function()? onCancel,
     title = '',
     bodyText = '',
   }) {
@@ -1366,6 +1369,31 @@ class ShowBottomSheet {
             title: title,
             bodyText: bodyText,
           ),
+        );
+      },
+    );
+  }
+
+  static onShowCategorySupportTicket(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    bodyText = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: const OnCategorySupportTicket(),
         );
       },
     );
