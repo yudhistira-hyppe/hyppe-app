@@ -47,7 +47,7 @@ class AutoCompleteUserTag extends StatelessWidget {
                                 },
 
                                 title: CustomTextWidget(
-                                  textToDisplay: '@' + notifier.searchPeolpleData[index].username,
+                                  textToDisplay: '@ ${notifier.searchPeolpleData[index].username}',
                                   textStyle: Theme.of(context).textTheme.bodyMedium,
                                   textAlign: TextAlign.start,
                                 ),

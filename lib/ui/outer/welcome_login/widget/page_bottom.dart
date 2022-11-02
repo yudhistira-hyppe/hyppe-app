@@ -35,14 +35,14 @@ class _PageBottomState extends State<PageBottom> {
               Column(
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.welcomeToHyppe,
-                    textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                    textToDisplay: notifier.language.welcomeToHyppe ?? '',
+                    textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   eightPx,
                   CustomTextWidget(
-                    textToDisplay: notifier.language.signInToFindSomethingInterestingInTheHyppeApp!,
+                    textToDisplay: notifier.language.signInToFindSomethingInterestingInTheHyppeApp ?? '',
                     maxLines: 2,
-                    textStyle: Theme.of(context).primaryTextTheme.subtitle2!,
+                    textStyle: Theme.of(context).primaryTextTheme.subtitle2 ?? const TextStyle(),
                   ),
                   fortyTwoPx,
                   ButtomSosmed(
@@ -69,8 +69,8 @@ class _PageBottomState extends State<PageBottom> {
                               ),
                               const Spacer(),
                               CustomTextWidget(
-                                textToDisplay: notifier.language.signInWithGoogleAccount!,
-                                textStyle: Theme.of(context).textTheme.subtitle2!,
+                                textToDisplay: notifier.language.signInWithGoogleAccount ?? '',
+                                textStyle: Theme.of(context).textTheme.subtitle2 ?? const TextStyle(),
                               ),
                               const Spacer(),
                             ],
@@ -103,7 +103,7 @@ class _PageBottomState extends State<PageBottom> {
                                     ),
                                     const Spacer(),
                                     CustomTextWidget(
-                                      textToDisplay: notifier.language.signInWithApple,
+                                      textToDisplay: notifier.language.signInWithApple ?? '',
                                       textStyle: Theme.of(context).textTheme.subtitle2,
                                     ),
                                     const Spacer(),
@@ -124,7 +124,7 @@ class _PageBottomState extends State<PageBottom> {
                         ),
                       ),
                       twelvePx,
-                      CustomTextWidget(textToDisplay: notifier.language.or!, textStyle: Theme.of(context).textTheme.bodyText2),
+                      CustomTextWidget(textToDisplay: notifier.language.or ?? 'or', textStyle: Theme.of(context).textTheme.bodyText2),
                       twelvePx,
                       Expanded(
                         child: Container(
@@ -161,8 +161,8 @@ class _PageBottomState extends State<PageBottom> {
                         ),
                         const Spacer(),
                         CustomTextWidget(
-                          textToDisplay: notifier.language.useAnotherEmailAddress!,
-                          textStyle: Theme.of(context).textTheme.subtitle2!,
+                          textToDisplay: notifier.language.useAnotherEmailAddress ?? '',
+                          textStyle: Theme.of(context).textTheme.subtitle2 ?? const TextStyle(),
                         ),
                         const Spacer(),
                       ],

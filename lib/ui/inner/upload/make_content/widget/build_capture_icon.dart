@@ -28,7 +28,7 @@ class BuildCaptureIcon extends StatelessWidget {
                   //   notifier.onResumeRecordedVideo(context);
                   // }
                 } else {
-                  ShowBottomSheet().onShowColouredSheet(context, notifier.language.isThisOkayClickOkToContinue).then((value) {
+                  ShowBottomSheet().onShowColouredSheet(context, notifier.language.isThisOkayClickOkToContinue ?? '').then((value) {
                     if (value) notifier.onStopRecordedVideo(context);
                   });
                 }

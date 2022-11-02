@@ -30,8 +30,8 @@ class BuildTopWidget extends StatelessWidget {
                   child: notifier.showNext
                       ? CustomTextButton(
                           child: CustomTextWidget(
-                            textToDisplay: notifier.addTextItemMode ? notifier.language.save : notifier.language.next!,
-                            textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                            textToDisplay: notifier.addTextItemMode ? notifier.language.save ?? 'save' : notifier.language.next ?? 'next',
+                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                           ),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),

@@ -38,7 +38,7 @@ class OwnershipSellingScreen extends StatelessWidget {
             color: Theme.of(context).colorScheme.onSurface,
           ),
           title: CustomTextWidget(
-            textToDisplay: notifier.language.ownershipSelling!,
+            textToDisplay: notifier.language.ownershipSelling ?? '',
             textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
@@ -54,7 +54,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: notifier.language.registerContentOwnership!,
+                          textToDisplay: notifier.language.registerContentOwnership ?? '',
                           textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                         ),
                         CustomCheckButton(
@@ -74,7 +74,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CustomTextWidget(
-                                textToDisplay: notifier.language.sellContent!,
+                                textToDisplay: notifier.language.sellContent ?? '',
                                 textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                               ),
                               CustomSwitchButton(
@@ -100,8 +100,8 @@ class OwnershipSellingScreen extends StatelessWidget {
                         fivePx,
                         Expanded(
                           child: CustomTextWidget(
-                            textToDisplay: notifier.language.marketContent1!,
-                            textStyle: Theme.of(context).textTheme.caption!,
+                            textToDisplay: notifier.language.marketContent1 ?? '',
+                            textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
                             maxLines: 3,
                             textAlign: TextAlign.start,
                           ),
@@ -127,12 +127,12 @@ class OwnershipSellingScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        notifier.language.includeTotalViews!,
+                                        notifier.language.includeTotalViews ?? '',
                                         style: Theme.of(context).textTheme.bodyText2,
                                       ),
                                       CustomCheckButton(
                                         value: notifier.includeTotalViews,
-                                        onChanged: (value) => notifier.includeTotalViews = value,
+                                        onChanged: (value) => notifier.includeTotalViews = value ?? false,
                                       ),
                                     ],
                                   ),
@@ -142,14 +142,14 @@ class OwnershipSellingScreen extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      notifier.language.includeTotalLikes!,
+                                      notifier.language.includeTotalLikes ?? '',
                                       style: Theme.of(context).textTheme.bodyText2,
                                     ),
                                     CustomCheckButton(
                                         value: notifier.includeTotalLikes,
                                         onChanged: (value) {
                                           //print("Like" + value.toString());
-                                          notifier.includeTotalLikes = value;
+                                          notifier.includeTotalLikes = value ?? false;
                                         }),
                                   ],
                                 ),
@@ -210,8 +210,8 @@ class OwnershipSellingScreen extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 18, left: 10),
                                   child: Text(
-                                    notifier.language.rp!,
-                                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold),
+                                    notifier.language.rp ?? 'Rp',
+                                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                                 Positioned(
@@ -221,8 +221,8 @@ class OwnershipSellingScreen extends StatelessWidget {
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
                                     padding: const EdgeInsets.all(8),
                                     child: Text(
-                                      notifier.language.setPrice,
-                                      style: Theme.of(context).textTheme.caption!.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
+                                      notifier.language.setPrice ?? '',
+                                      style: Theme.of(context).textTheme.caption?.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
                                     ),
                                   ),
                                 ),
@@ -232,7 +232,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                       notifier.toSell && notifier.priceController.text == ''
                           ? CustomTextWidget(
                               textAlign: TextAlign.start,
-                              textToDisplay: notifier.language.mustFilledFirst!,
+                              textToDisplay: notifier.language.mustFilledFirst ?? '',
                               textStyle: const TextStyle(color: kHyppeDanger),
                             )
                           : Container()
@@ -261,8 +261,8 @@ class OwnershipSellingScreen extends StatelessWidget {
                 : null,
             style: ButtonStyle(backgroundColor: notifier.certified ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
             child: CustomTextWidget(
-              textToDisplay: notifier.language.confirm!,
-              textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+              textToDisplay: notifier.language.confirm ?? 'confirm',
+              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),

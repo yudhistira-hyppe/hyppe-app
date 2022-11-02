@@ -41,11 +41,11 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     }
   }
 
-  TextStyle interestNextTextColor(BuildContext context, List<String> userInterested) {
+  TextStyle? interestNextTextColor(BuildContext context, List<String> userInterested) {
     if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText);
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button;
     }
   }
 
@@ -81,7 +81,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     print(index);
     print(interest.isNotEmpty);
     if (interest.isNotEmpty) {
-      String tile = interest[index].interestName;
+      String tile = interest[index].interestName ?? '';
       print(tile);
       return () {
         if (_interestData.contains(tile)) {

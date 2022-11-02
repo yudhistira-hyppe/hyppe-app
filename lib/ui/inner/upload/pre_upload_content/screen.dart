@@ -33,7 +33,7 @@ class PreUploadContentScreen extends StatefulWidget {
 }
 
 class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
   bool autoComplete = false;
   String search = '';
 
@@ -77,7 +77,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 color: Theme.of(context).colorScheme.onSurface,
               ),
               title: CustomTextWidget(
-                textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost!,
+                textToDisplay: widget.arguments.onEdit ? "${notifier.language.edit} ${notifier.language.post}" : notifier.language.newPost ?? '',
                 textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
               ),
               backgroundColor: Colors.transparent,
@@ -168,7 +168,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   child: widget.arguments.onEdit && notifier.updateContent
                       ? const CustomLoading()
                       : CustomTextWidget(
-                          textToDisplay: widget.arguments.onEdit ? notifier.language.save : notifier.language.confirm!,
+                          textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                   buttonStyle: ButtonStyle(
@@ -195,7 +195,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         Row(
           children: [
             CustomTextWidget(
-              textToDisplay: notifier.language.caption!,
+              textToDisplay: notifier.language.caption ?? '',
               textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
             ),
             Container(
@@ -312,7 +312,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         Row(
           children: [
             CustomTextWidget(
-              textToDisplay: notifier.language.categories!,
+              textToDisplay: notifier.language.categories ?? '',
               textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
             ),
             Container(
@@ -338,7 +338,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     splashFactory: NoSplash.splashFactory,
                   ),
                   child: PickitemTitle(
-                    title: notifier.interest[index].interestName,
+                    title: notifier.interest[index].interestName ?? '',
                     select: notifier.pickedInterest(notifier.interest[index].interestName) ? true : false,
                     button: false,
                     textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -362,7 +362,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             },
             contentPadding: EdgeInsets.zero,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.tagPeople,
+              textToDisplay: notifier.language.tagPeople ?? '',
               textAlign: TextAlign.start,
               textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
             ),
@@ -423,11 +423,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         textAlign: TextAlign.start,
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
       ),
-      trailing: notifier.locationName == notifier.language.addLocation!
+      trailing: notifier.locationName == notifier.language.addLocation
           ? const Icon(Icons.arrow_forward_ios_rounded)
           : GestureDetector(
               onTap: () {
-                notifier.locationName = notifier.language.addLocation!;
+                notifier.locationName = notifier.language.addLocation ?? '';
               },
               child: const Icon(Icons.close)),
       minLeadingWidth: 0,
@@ -438,7 +438,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     return ListTile(
       onTap: () => notifier.onClickPrivacyPost(context),
       title: CustomTextWidget(
-        textToDisplay: notifier.language.privacy!,
+        textToDisplay: notifier.language.privacy ?? 'privacy',
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
         textAlign: TextAlign.start,
       ),
@@ -465,7 +465,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             })
           : notifier.navigateToOwnership(context),
       title: CustomTextWidget(
-        textToDisplay: notifier.language.ownershipSelling!,
+        textToDisplay: notifier.language.ownershipSelling ?? '',
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
         textAlign: TextAlign.start,
       ),
@@ -474,7 +474,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextWidget(
-            textToDisplay: notifier.certified ? notifier.language.yes! : notifier.language.no!,
+            textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
             textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
           ),
           twentyPx,
@@ -540,7 +540,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 child: LinearProgressIndicator(
                   value: progressCompress / 100,
                   minHeight: 5,
-                  backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
+                  backgroundColor: Theme.of(context).textTheme.button?.color?.withOpacity(0.4),
                   valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
                 ),
               ),

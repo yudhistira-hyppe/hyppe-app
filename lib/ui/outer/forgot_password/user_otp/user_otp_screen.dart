@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/widget/sign_up_pin_top.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
@@ -54,7 +55,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                 automaticallyImplyLeading: false,
                 title: CustomTextWidget(
                   textStyle: Theme.of(context).textTheme.headline6,
-                  textToDisplay: notifier.language.verificationCode,
+                  textToDisplay: notifier.language.verificationCode ?? '',
                 ),
               ),
               body: SingleChildScrollView(
@@ -63,7 +64,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                     Container(
                       child: const SignUpPinTop(),
                       width: SizeConfig.screenWidth,
-                      height: (SizeConfig.screenHeight! * 0.7),
+                      height: (SizeConfig.screenHeight ?? context.getHeight() * 0.7),
                       alignment: const Alignment(0.0, -0.4),
                       padding: const EdgeInsets.only(left: 16, right: 16),
                     ),
@@ -73,7 +74,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                         withSkipButton: false,
                         loading: notifier.isLoading,
                         onTap: notifier.onVerifyButton(context),
-                        caption: notifier.language.verify!,
+                        caption: notifier.language.verify ?? '',
                         textStyle: notifier.verifyTextColor(context),
                         buttonColor: notifier.verifyButtonColor(context),
                       ),

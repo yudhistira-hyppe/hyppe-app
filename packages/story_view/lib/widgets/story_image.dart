@@ -47,7 +47,7 @@ class ImageLoader {
 
         state = LoadState.success;
 
-        PaintingBinding.instance.instantiateImageCodec(imageBytes).then((codec) {
+        PaintingBinding.instance?.instantiateImageCodec(imageBytes).then((codec) {
           frames = codec;
           onComplete();
         }, onError: (error) {
@@ -116,7 +116,7 @@ class StoryImageState extends State<StoryImage> {
     super.initState();
 
     if (widget.controller != null) {
-      _streamSubscription = widget.controller!.playbackNotifier.listen((playbackState) {
+      _streamSubscription = widget.controller?.playbackNotifier.listen((playbackState) {
         // for the case of gifs we need to pause/play
         if (widget.imageLoader.frames == null) {
           return;
@@ -163,17 +163,20 @@ class StoryImageState extends State<StoryImage> {
   void forward() async {
     _timer?.cancel();
 
-    if (widget.controller != null && widget.controller!.playbackNotifier.valueOrNull == PlaybackState.pause) {
+    if (widget.controller != null && widget.controller?.playbackNotifier.valueOrNull == PlaybackState.pause) {
       return;
     }
 
-    final nextFrame = await widget.imageLoader.frames!.getNextFrame();
+    final nextFrame = await widget.imageLoader.frames?.getNextFrame();
 
-    currentFrame = nextFrame.image;
+    if(nextFrame!= null){
+      currentFrame = nextFrame.image;
 
-    if (nextFrame.duration > const Duration(milliseconds: 0)) {
-      _timer = Timer(nextFrame.duration, forward);
+      if (nextFrame.duration > const Duration(milliseconds: 0)) {
+        _timer = Timer(nextFrame.duration, forward);
+      }
     }
+
 
     setState(() {});
   }

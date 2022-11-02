@@ -17,8 +17,8 @@ class CustomRectangleInput extends StatelessWidget {
           children: [
             notifier.inCorrectCode
                 ? CustomTextWidget(
-                    textToDisplay: notifier.language.incorrectCode,
-                    textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    textToDisplay: notifier.language.incorrectCode ?? '',
+                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                           color: Theme.of(context).colorScheme.error,
                         ),
                   )

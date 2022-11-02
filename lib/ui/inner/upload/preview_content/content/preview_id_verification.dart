@@ -66,7 +66,7 @@ class PreviewIDVerification extends StatelessWidget {
                       children: [
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}camera.svg", defaultColor: false),
                         const SizedBox(width: 8),
-                        CustomTextWidget(textToDisplay: notifier.language.retake, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(textToDisplay: notifier.language.retake ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                       ],
                     ),
                   ),

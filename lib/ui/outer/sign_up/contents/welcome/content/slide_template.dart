@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -34,10 +35,10 @@ class SlideTemplate extends StatelessWidget {
     if (notifier.result != null) {
       return Scaffold(
         body: Container(
-          height: SizeConfig.screenHeight - (SizeConfig.screenHeight! * 0.25),
+          height: SizeConfig.screenHeight ?? context.getHeight() - (SizeConfig.screenHeight! * 0.25),
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(top: SizeConfig.paddingTop),
-          child: DynamicWidgetBuilder.build(notifier.result.notesData[notesData].note, context, DefaultClickListener())!,
+          child: DynamicWidgetBuilder.build(notifier.result?.notesData[notesData].note ?? '', context, DefaultClickListener())!,
         ),
       );
     }
