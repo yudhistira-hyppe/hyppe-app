@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 // import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -34,7 +35,7 @@ class PreviewIDVerification extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Container(
             width: double.infinity,
-            height: SizeConfig.screenHeight! * 0.07,
+            height: SizeConfig.screenHeight ?? context.getHeight() * 0.07,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryVariant,
               borderRadius: const BorderRadius.only(
@@ -47,7 +48,7 @@ class PreviewIDVerification extends StatelessWidget {
         Align(
           alignment: const Alignment(-0.7, 0.97),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth! * 0.05),
+            padding: EdgeInsets.symmetric(horizontal: SizeConfig.screenWidth ?? context.getWidth() * 0.05),
             child: Consumer<AccountPreferencesNotifier>(
               builder: (_, notifier, __) => Row(
                 // TODO: Need to be refactored, waiting for the new design
@@ -96,7 +97,7 @@ class PreviewIDVerification extends StatelessWidget {
                     onPressed: () async => await notifier.onUploadProofPicture(context, picture),
                     child: Row(
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.upload!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(textToDisplay: notifier.language.upload ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                         const SizedBox(width: 8),
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}arrow.svg", defaultColor: false),
                       ],

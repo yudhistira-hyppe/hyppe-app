@@ -539,7 +539,7 @@ class TransactionNotifier extends ChangeNotifier {
     //   final fetch = notifier.transactionFetch;
 
     //   if (fetch.postsState == TransactionState.deleteBankAccontSuccess) {
-    //     dataAcccount!.removeAt(index);
+    //     dataAcccount.removeAt(index);
     //     print('delete berhasil');
     //     Routing().moveBack();
     //   }

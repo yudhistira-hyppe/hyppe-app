@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/comment/comments.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
+import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/show_reactions_icon.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -18,20 +19,20 @@ class ReactionCommentContent extends StatelessWidget {
     return Consumer<LikeNotifier>(
       builder: (_, notifier, __) => ShowReactionsIcon(
         onTap: () => Routing().moveBack(),
-        data: reaction!.data,
+        data: reaction?.data,
         crossAxisCount: 3,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               comment.isReacted = true;
-              comment.count = comment.count! + 1;
-              notifier.onLikeComment(context, comment: comment, rData: reaction.data[index]);
+              comment.count = comment.count ?? 0 + 1;
+              notifier.onLikeComment(context, comment: comment, rData: reaction?.data[index] ?? ReactionInteractive());
               Routing().moveBack();
             },
             child: Material(
               color: Colors.transparent,
               child: Text(
-                reaction.data[index].icon!,
+                reaction?.data[index].icon ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 35 * SizeConfig.scaleDiagonal),
               ),

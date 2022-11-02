@@ -29,8 +29,8 @@ class ButtonTransaction extends StatelessWidget {
                 side: const BorderSide(width: 1.0, color: kHyppePrimary),
               ),
               child: CustomTextWidget(
-                textToDisplay: notifier2.translate.addBankAccount!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary),
+                textToDisplay: notifier2.translate.addBankAccount ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
               ),
             ),
           ),
@@ -49,14 +49,14 @@ class ButtonTransaction extends StatelessWidget {
                         onSave: () {
                           Routing().moveAndPop(Routes.homePageSignInSecurity);
                         },
-                        title: notifier2.translate.addYourHyppePinFirst!,
-                        bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin!,
+                        title: notifier2.translate.addYourHyppePinFirst,
+                        bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin ?? '',
                       );
                     },
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(
-                textToDisplay: notifier2.translate.withdrawal!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textToDisplay: notifier2.translate.withdrawal ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
             ),
           ),

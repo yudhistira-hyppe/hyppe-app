@@ -20,7 +20,7 @@ class EmptyBankAccount extends StatelessWidget {
               iconData: '${AssetPath.vectorPath}no-Result-Found.svg',
             ),
           ),
-          textWidget!,
+          textWidget ?? Container(),
         ],
       ),
     );

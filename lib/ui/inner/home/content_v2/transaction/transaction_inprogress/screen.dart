@@ -48,12 +48,12 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        notifier.dataTransactionInProgress!.isEmpty
+                        notifier.dataTransactionInProgress?.isEmpty ?? false
                             ? EmptyBankAccount(
                                 textWidget: Column(
                                 children: [
                                   CustomTextWidget(
-                                    textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
+                                    textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
                                     maxLines: 4,
                                   ),
                                 ],
@@ -61,20 +61,20 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
                             : ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: notifier.dataTransactionInProgress!.length,
+                                itemCount: notifier.dataTransactionInProgress?.length,
                                 itemBuilder: (context, index) {
                                   String title = '';
-                                  switch (notifier.dataTransactionInProgress![index].type) {
+                                  switch (notifier.dataTransactionInProgress?[index].type) {
                                     case TransactionType.withdrawal:
-                                      title = notifier2.translate.withdrawal!;
+                                      title = notifier2.translate.withdrawal ?? '';
                                       return WithdrawalWidget(
                                         title: title,
                                         language: notifier2.translate,
-                                        data: notifier.dataTransactionInProgress![index],
+                                        data: notifier.dataTransactionInProgress?[index],
                                       );
                                     default:
                                       return BuySellWidget(
-                                        data: notifier.dataTransactionInProgress![index],
+                                        data: notifier.dataTransactionInProgress?[index],
                                         language: notifier2.translate,
                                       );
                                   }

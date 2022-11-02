@@ -211,11 +211,11 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.userTagDataReal = [];
                     notifier.userTagDataReal.addAll(widget.contentData.tagPeople ?? []);
 
-                    notifier.toSell = widget.contentData.saleAmount != null && widget.contentData.saleAmount! > 0 ? true : false;
+                    notifier.toSell = widget.contentData.saleAmount != null && (widget.contentData.saleAmount ?? 0) > 0 ? true : false;
                     notifier.includeTotalViews = widget.contentData.saleView ?? false;
                     notifier.includeTotalLikes = widget.contentData.saleLike ?? false;
                     notifier.certified = widget.contentData.certified ?? false;
-                    notifier.priceController.text = widget.contentData.saleAmount!.toInt().toString();
+                    notifier.priceController.text = widget.contentData.saleAmount?.toInt().toString() ?? '';
 
                     _routing
                         .move(Routes.preUploadContent,

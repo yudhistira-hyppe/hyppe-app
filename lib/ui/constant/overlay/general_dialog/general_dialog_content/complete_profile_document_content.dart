@@ -20,7 +20,7 @@
 //         error, notifier.listDocument.isEmpty ? null : notifier.listDocument.isEmpty)) {
 //       return Center(
 //         child: Container(
-//           height: SizeConfig.screenHeight! * 0.8,
+//           height: SizeConfig.screenHeight * 0.8,
 //           child: CustomErrorWidget(
 //             function: () => notifier.onDocTypeShowDropDown(context),
 //             errorType: ErrorType.getDocuments,
@@ -30,7 +30,7 @@
 //     }
 //
 //     return Container(
-//       height: SizeConfig.screenHeight! * 0.8,
+//       height: SizeConfig.screenHeight * 0.8,
 //       width: SizeConfig.screenWidth,
 //       child: Center(
 //           child: notifier.listDocument.isNotEmpty

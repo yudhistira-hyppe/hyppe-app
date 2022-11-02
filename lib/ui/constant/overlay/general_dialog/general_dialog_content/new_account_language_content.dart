@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -41,7 +42,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
     if (context.read<ErrorService>().isInitialError(error, notifier.listLanguage.isEmpty ? null : notifier.listLanguage)) {
       return Center(
         child: SizedBox(
-          height: SizeConfig.screenHeight! * 0.8,
+          height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
           child: CustomErrorWidget(
             function: () => notifier.getListOfLanguage(context),
             errorType: ErrorType.getStates,
@@ -51,7 +52,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
     }
 
     return SizedBox(
-      height: SizeConfig.screenHeight! * 0.8,
+      height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
       width: SizeConfig.screenWidth,
       child: Center(
         child: notifier.listLanguage.isNotEmpty
@@ -75,7 +76,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                           function: () => notifier.initTranslate(context, index: index),
                           buttonStyle: const ButtonStyle(),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.listLanguage[index].lang!,
+                            textToDisplay: notifier.listLanguage[index].lang ?? '',
                             textStyle: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),

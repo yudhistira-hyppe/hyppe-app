@@ -32,7 +32,7 @@ class VerificationPinBottom extends StatelessWidget {
           child: notifier.loading
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: notifier2.translate.verify!,
+                  textToDisplay: notifier2.translate.verify ?? '',
                   textStyle: notifier.verifyTextColor(context),
                 ),
         ),

@@ -45,7 +45,7 @@ class TextInputAccountPreferences extends StatelessWidget {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
               inputAreaWidth: SizeConfig.screenWidth!,
-              inputAreaHeight: inputAreaHeight == null ? 50 * SizeConfig.scaleDiagonal : inputAreaHeight!,
+              inputAreaHeight: inputAreaHeight == null ? 50 * SizeConfig.scaleDiagonal : inputAreaHeight ?? 0,
               maxLength: maxLength,
               maxLines: 20,
               minLines: 1,

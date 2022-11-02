@@ -38,7 +38,7 @@ class VideoThumbnailReport extends StatelessWidget {
                 height: 30,
               ),
               Text(translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text(translate.yourReportWillbeHandledImmediately!,
+              Text(translate.yourReportWillbeHandledImmediately ?? '',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,

@@ -14,7 +14,7 @@ class SignUp {
     result["password"] = password;
     result["deviceId"] = deviceId;
     result["langIso"] = langIso;
-    if (listOfInterest!.isNotEmpty) {
+    if (listOfInterest?.isNotEmpty ?? false) {
       result["interest"] = listOfInterest;
     }
     result["gender"] = gender;

@@ -70,7 +70,7 @@
 //               style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //               children: [
 //                 TextSpan(
-//                   text: notifier.isEmail ? "\n" : notifier.language.privacyPolicy! + "\n",
+//                   text: notifier.isEmail ? "\n" : notifier.language.privacyPolicy + "\n",
 //                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
 //                     color: Theme.of(context).colorScheme.primaryVariant,
 //                     fontWeight: FontWeight.bold,

@@ -150,7 +150,7 @@ class _CameraViewState extends State<CameraView> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     // final notifier = context.watch<CameraNotifier>();
-    final deviceRatio = SizeConfig.screenWidth ?? context.getWidth() / SizeConfig.screenHeight!;
+    final deviceRatio = SizeConfig.screenWidth ?? context.getWidth() / (SizeConfig.screenHeight ?? context.getHeight());
 
     return Consumer<CameraNotifier>(
       builder: (_, notifier, __) => Scaffold(

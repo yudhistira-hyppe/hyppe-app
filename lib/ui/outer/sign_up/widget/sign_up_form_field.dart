@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -82,14 +83,14 @@ class SignUpForm extends StatelessWidget {
                 ? Transform.translate(
                     offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0),
                     child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
                       child: prefixIcon,
                     ),
                   )
                 : const SizedBox.shrink(),
             suffixIcon: suffixIcon != null
                 ? Transform.scale(
-                    scale: SizeWidget().calculateSize(suffixIconSize ?? 1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                    scale: SizeWidget().calculateSize(suffixIconSize ?? 1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
                     child: suffixIcon,
                   )
                 : const SizedBox.shrink(),

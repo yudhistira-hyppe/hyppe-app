@@ -51,7 +51,7 @@ class SelfProfilePics extends StatelessWidget {
                                         : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? '',
                                   ),
                                 ),
-                                notifier.item1!.pics![index].saleAmount! > 0
+                                (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
                                     ? const Align(
                                         alignment: Alignment.topRight,
                                         child: Padding(

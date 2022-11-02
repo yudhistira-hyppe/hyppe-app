@@ -25,17 +25,17 @@ class BuildAnyContentPreviewer extends StatelessWidget {
             onPageChanged: (v) => notifier.indexView = v,
             controller: pageController,
             physics: notifier.addTextItemMode ? const NeverScrollableScrollPhysics() : null,
-            itemCount: notifier.fileContent!.length,
+            itemCount: notifier.fileContent?.length,
             itemBuilder: (context, index) {
-              final _isImage = System().lookupContentMimeType(notifier.fileContent![index]!)?.contains('image');
+              final _isImage = System().lookupContentMimeType(notifier.fileContent?[index] ?? '')?.contains('image');
 
               if ((_isImage ?? false) || _isImage == null) {
                 return InteractiveViewer(
                   child: ColorFiltered(
                     colorFilter: ColorFilter.matrix(notifier.filterMatrix(index)),
-                    child: !System().validateUrl(notifier.fileContent![index]!)
+                    child: !System().validateUrl(notifier.fileContent?[index] ?? '')
                         ? Image.file(
-                            File(notifier.fileContent![index]!),
+                            File(notifier.fileContent?[index] ?? ''),
                             filterQuality: FilterQuality.high,
                             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                               if (wasSynchronouslyLoaded) {
@@ -50,7 +50,7 @@ class BuildAnyContentPreviewer extends StatelessWidget {
                             },
                           )
                         : Image.network(
-                            notifier.fileContent![index]!,
+                            notifier.fileContent?[index] ?? '',
                             filterQuality: FilterQuality.high,
                             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                               if (wasSynchronouslyLoaded) {

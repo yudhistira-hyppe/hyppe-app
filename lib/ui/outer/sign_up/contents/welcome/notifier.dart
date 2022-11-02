@@ -47,6 +47,6 @@ class SignUpWelcomeNotifier with ChangeNotifier {
 class DefaultClickListener implements ClickListener {
   @override
   void onClicked(String? event) {
-    print("Receive click event: " + event!);
+    print("Receive click event: $event");
   }
 }

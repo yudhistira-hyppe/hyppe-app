@@ -25,23 +25,23 @@ class DetailTransaction extends StatelessWidget {
         Color? blockColor;
         Widget? bodyWidget = Container();
         if (notifier.dataTransactionDetail != null) {
-          switch (notifier.dataTransactionDetail!.type) {
+          switch (notifier.dataTransactionDetail?.type) {
             case TransactionType.buy:
               titleColor = kHyppeRed;
               blockColor = kHyppeRedLight;
-              title = notifier2.translate.buy!;
+              title = notifier2.translate.buy ?? '';
               bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
               break;
             case TransactionType.withdrawal:
               titleColor = kHyppeCyan;
               blockColor = kHyppeCyanLight;
-              title = notifier2.translate.withdrawal!;
+              title = notifier2.translate.withdrawal ?? '';
               bodyWidget = MiddleWithdrawalDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
               break;
             default:
               titleColor = kHyppeGreen;
               blockColor = kHyppeGreenLight;
-              title = notifier2.translate.sell!;
+              title = notifier2.translate.sell ?? 'sell';
               bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
           }
         }
@@ -80,7 +80,7 @@ class DetailTransaction extends StatelessWidget {
                               ),
                               child: CustomTextWidget(
                                 textToDisplay: title,
-                                textStyle: Theme.of(context).textTheme.button!.copyWith(color: titleColor),
+                                textStyle: Theme.of(context).textTheme.button?.copyWith(color: titleColor),
                               ),
                             ),
                             TopDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate),

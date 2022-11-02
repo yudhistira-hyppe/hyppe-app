@@ -1,5 +1,6 @@
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -29,11 +30,11 @@ class SignUpPinBottom extends StatelessWidget {
           child: notifier.loading
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: notifier.language.verify!,
+                  textToDisplay: notifier.language.verify ?? '',
                   textStyle: notifier.verifyTextColor(context),
                 ),
         ),
-        minimum: EdgeInsets.only(bottom: SizeConfig.screenHeight! * 0.075),
+        minimum: EdgeInsets.only(bottom: SizeConfig.screenHeight ?? context.getHeight() * 0.075),
       ),
     );
   }

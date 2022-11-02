@@ -47,7 +47,7 @@ class OtherProfilePics extends StatelessWidget {
                                     notifier.item1?.pics?[index].isApsara ?? false ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '') : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? '',
                               ),
                             ),
-                            notifier.item1!.pics![index].saleAmount! > 0
+                            (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
                                 ? const Align(
                                     alignment: Alignment.topRight,
                                     child: Padding(

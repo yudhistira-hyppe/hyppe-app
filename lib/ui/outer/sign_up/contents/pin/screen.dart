@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/widget/sign_up_pin_top.dart';
@@ -69,7 +70,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
             child: Stack(
               children: [
                 Container(
-                  height: (SizeConfig.screenHeight! + kToolbarHeight),
+                  height: (SizeConfig.screenHeight ?? context.getHeight() + kToolbarHeight),
                   width: SizeConfig.screenWidth,
                   alignment: const Alignment(0.0, -0.3),
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -82,7 +83,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
                   child: SignUpButton(
                     withSkipButton: true,
                     loading: notifier.loading,
-                    caption: notifier.language.verify!,
+                    caption: notifier.language.verify,
                     buttonColor: notifier.verifyButtonColor(context),
                     textStyle: notifier.verifyTextColor(context),
                     onTap: notifier.onVerifyButton(context, argument: widget.arguments),

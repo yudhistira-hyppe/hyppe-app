@@ -761,7 +761,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     if (widget.repeat) {
       for (var it in widget.storyItems) {
-        it!.shown = false;
+        it?.shown = false;
       }
       if (widget.onRepeat != null) {
         widget.onRepeat!();
@@ -774,7 +774,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     _animationController?.stop();
 
     if (_currentStory == null) {
-      widget.storyItems.last!.shown = false;
+      widget.storyItems.last?.shown = false;
     }
 
     if (_currentStory == widget.storyItems.first) {

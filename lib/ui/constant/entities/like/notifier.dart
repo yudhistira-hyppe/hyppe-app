@@ -109,11 +109,11 @@ class LikeNotifier with ChangeNotifier {
         //unlike
         postData.isLiked = false;
         postData.insight?.isPostLiked = false;
-        postData.insight?.likes = postData.insight!.likes! - 1;
+        postData.insight?.likes = postData.insight?.likes ?? 1 - 1;
 
         notifyListeners();
 
-        await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
+        await notifier.likePostUserBloc(context, postId: postData.postID ?? '', emailOwner: postData.email ?? '', isLike: postData.isLiked ?? false);
         // final fetch = notifier.likeFetch;
         // notifyListeners();
 
@@ -129,12 +129,12 @@ class LikeNotifier with ChangeNotifier {
         //like
         postData.isLiked = true;
         postData.insight?.isPostLiked = true;
-        postData.insight?.likes = postData.insight!.likes! + 1;
+        postData.insight?.likes = postData.insight?.likes ?? 0 + 1;
 
         notifyListeners();
 
         // print('ini false ${postData.isLiked}');
-        await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
+        await notifier.likePostUserBloc(context, postId: postData.postID ?? '', emailOwner: postData.email ?? '', isLike: postData.isLiked ?? false);
         // print('ini false');
         // final fetch = notifier.likeFetch;
 

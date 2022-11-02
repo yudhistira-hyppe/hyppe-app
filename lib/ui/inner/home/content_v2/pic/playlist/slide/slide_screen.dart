@@ -230,7 +230,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                   ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data)
                                                   : () {},
                                             ),
-                                            if (data.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
+                                            if ((data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
                                               _buildButtonV2(
                                                 context: context,
                                                 iconData: '${AssetPath.vectorPath}cart.svg',

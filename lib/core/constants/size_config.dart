@@ -16,7 +16,7 @@ class SizeConfig {
     screenHeight = _mediaQueryData.size.height;
     paddingBottom = _mediaQueryData.padding.bottom;
     paddingTop = _mediaQueryData.padding.top;
-    screenDiagonal = sqrt((screenHeight! * screenHeight!) + (screenWidth! * screenHeight!));
+    screenDiagonal = sqrt((screenHeight ?? 0 * (screenHeight ?? 0)) + (screenWidth ?? 0 * (screenHeight ?? 0)));
     scaleDiagonal = screenDiagonal / (sqrt((414 * 414) + (895 * 895)));
   }
 }

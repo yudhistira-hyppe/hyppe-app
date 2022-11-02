@@ -135,7 +135,7 @@ class CommentNotifierV2 with ChangeNotifier {
       if (reload) {
         commentData = res.firstOrNull()?.disqusLogs ?? [];
       } else {
-        commentData = [...(commentData ?? [] as List<CommentsLogs>)] + res.firstOrNull()!.disqusLogs!;
+        commentData = [...(commentData ?? [] as List<CommentsLogs>)] + (res.firstOrNull()?.disqusLogs ?? []);
       }
     } catch (e) {
       'load comments list: ERROR: $e'.logger();
@@ -173,7 +173,7 @@ class CommentNotifierV2 with ChangeNotifier {
           _commentData?.insert(0, res);
         } else {
           final _parentIndex = _commentData?.indexWhere((element) => element.comment?.lineID == parentID);
-          _commentData?[_parentIndex!].replies.insert(0, res.comment!);
+          _commentData?[_parentIndex ?? 0].replies.insert(0, res.comment ?? DisqusLogs());
           repliesComments[parentID]?.insertAll(0, [
             const SizedBox(height: 16),
             SubCommentListTile(data: res.comment, parentID: parentID, fromFront: fromFront),

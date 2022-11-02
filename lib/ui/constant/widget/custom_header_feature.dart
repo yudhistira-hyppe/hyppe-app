@@ -23,7 +23,7 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
     super.initState();
     // final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   // final _box = _key.currentContext!.findRenderObject() as RenderBox;
+    //   // final _box = _key.currentContext.findRenderObject() as RenderBox;
     //   // notifier.heightTitleFeature = _box.size.height;
     // });
   }
