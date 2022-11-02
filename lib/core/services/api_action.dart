@@ -26,15 +26,15 @@ class ApiAction {
     );
 
     if (!kReleaseMode) {
-      // _dio.interceptors.add(LogInterceptor(
-      //   error: true,
-      //   request: true,
-      //   requestBody: true,
-      //   responseBody: true,
-      //   requestHeader: true,
-      //   responseHeader: true,
-      // ));
-      // _dio.interceptors.add(CurlLoggerDioInterceptor(printOnSuccess: true));
+      _dio.interceptors.add(LogInterceptor(
+        error: true,
+        request: true,
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        responseHeader: true,
+      ));
+      // _dio.interceptors.add(CurlLoggerDioInte?rceptor(printOnSuccess: true));
       _dio.interceptors.add(HttpFormatter());
     }
   }

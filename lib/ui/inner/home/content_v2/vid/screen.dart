@@ -224,7 +224,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   maxLines: 2,
                                                   textAlign: TextAlign.left,
                                                   // textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                                  textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => e == '' ? '' : (e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                                  textToDisplay: "${vidData?.description}",
                                                   textStyle: Theme.of(context).textTheme.caption,
                                                 ),
                                               ),

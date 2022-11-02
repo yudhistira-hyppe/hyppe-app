@@ -47,9 +47,9 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
                 height: 50,
                 function: () => Routing().moveBack(),
                 buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
               ),
+              // Text("${isLoading}"),
               CustomElevatedButton(
                 child: !isLoading
                     ? CustomTextWidget(
@@ -62,14 +62,15 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
                 function: () async {
                   if (isLoading) return;
                   try {
-                    setState(() => setLoading(true));
+                    print('asdasd');
                     await widget.onSignOut();
+                    setState(() => setLoading(true));
                   } finally {
+                    print('asdasd2');
                     setState(() => setLoading(false));
                   }
                 },
-                buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
               )
             ],
           ),

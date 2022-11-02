@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:path/path.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -9,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:provider/provider.dart';
+import 'package:path/path.dart' as path;
 
 class SupportTicketScreen extends StatefulWidget {
   const SupportTicketScreen({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class SupportTicketScreen extends StatefulWidget {
 class _SupportTicketScreenState extends State<SupportTicketScreen> {
   @override
   void initState() {
-    context.read<SupportTicketNotifier>().getInitSupportTicket(context);
+    Provider.of<SupportTicketNotifier>(context, listen: false).getInitSupportTicket(context);
     super.initState();
   }
 
@@ -143,11 +145,39 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   },
                 ),
                 Row(
-                  children: const [
-                    CustomIconWidget(iconData: "${AssetPath.vectorPath}storage.svg"),
+                  children: [
+                    GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted), child: CustomIconWidget(iconData: "${AssetPath.vectorPath}storage.svg")),
                     twentyFourPx,
                     CustomIconWidget(iconData: "${AssetPath.vectorPath}sisipkan.svg"),
                   ],
+                ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  itemCount: supportNotifier.pickedSupportingDocs!.length,
+                  itemBuilder: (context, index) => ListTile(
+                    title: Text(path.basename(supportNotifier.pickedSupportingDocs![index].path)),
+                    // subtitle: Text(supportNotifier.pickedSupportingDocs![index].lengthSync().toString()),
+                    // leading: Image.file(supportNotifier.pickedSupportingDocs![index]),
+                    trailing: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          supportNotifier.pickedSupportingDocs!.removeAt(index);
+                        });
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
+                          child: Text(
+                            notifier.translate.delete!,
+                            style: const TextStyle(color: kHyppePrimary),
+                          )),
+                    ),
+                  ),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const Divider(
+                      color: Colors.black12,
+                    );
+                  },
                 ),
                 twentyPx,
                 SizedBox(

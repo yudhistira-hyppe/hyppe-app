@@ -40,6 +40,8 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   String? appPackage = "";
 
   Future logOut(BuildContext context) async {
+    print('asdasdasdasd');
+    print('${isLoading}');
     if (!isLoading) {
       setLoading(true);
       final notifier = UserBloc();

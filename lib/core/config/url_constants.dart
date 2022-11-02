@@ -167,8 +167,8 @@ class UrlConstants {
   static const String registerInterest = "$userRoute/userInterest";
 
   /// post register interest => To register interests of user.
-  // static const String updateInterest = "$userRoute/profileinterest";
-  static const String updateInterest = "/api/profileinterest";
+  static const String updateInterest = "$userRoute/profileinterest";
+  // static const String updateInterest = "/api/profileinterest";
 
   /// post and get => Id proof.
   static const String idProof = "$userRoute/idProof";
