@@ -10,6 +10,7 @@ import 'package:hyppe/core/constants/themes/hyppe_theme.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -40,7 +41,7 @@ class HyppeNotifier with ChangeNotifier {
 
   Future handleStartUp(BuildContext context) async {
     _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-    await context.read<CameraNotifier>().prepareCameraPage();
+    await context.read<CameraDevicesNotifier>().prepareCameraPage();
     await context.read<TranslateNotifierV2>().initTranslate(context);
 
     String? token = SharedPreference().readStorage(SpKeys.userToken);

@@ -6,9 +6,9 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
-import 'package:hyppe/ui/constant/entities/camera/screen.dart';
-import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
-import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_flash_button.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -23,8 +23,7 @@ class VerificationIDStep6 extends StatefulWidget {
   State<VerificationIDStep6> createState() => _VerificationIDStep6State();
 }
 
-class _VerificationIDStep6State extends State<VerificationIDStep6>
-    with RouteAware {
+class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAware {
   @override
   void initState() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -34,15 +33,13 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver
-        .subscribe(this, ModalRoute.of(context) as PageRoute);
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
     super.didChangeDependencies();
   }
 
@@ -57,9 +54,8 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
           return true;
         },
         child: Scaffold(
-          body: CameraPage(
-            onCameraNotifierUpdate: (cameraNotifier) =>
-                notifier.cameraNotifier = cameraNotifier,
+          body: CameraDevicesPage(
+            onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraNotifier = cameraNotifier,
             additionalViews: <Widget>[
               SafeArea(
                 top: Platform.isIOS,
@@ -68,11 +64,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      CustomTextButton(
-                          onPressed: () => notifier.backFromSelfie(context),
-                          child: const CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}close.svg",
-                              defaultColor: false)),
+                      CustomTextButton(onPressed: () => notifier.backFromSelfie(context), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
                     ],
                   ),
                 ),
@@ -85,9 +77,7 @@ class _VerificationIDStep6State extends State<VerificationIDStep6>
                     const Expanded(flex: 4, child: CameraFlashButton()),
                     Expanded(
                       flex: 4,
-                      child: CustomIconButtonWidget(
-                          iconData: "${AssetPath.vectorPath}shutter.svg",
-                          onPressed: () => notifier.onTakeSelfie(context)),
+                      child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}shutter.svg", onPressed: () => notifier.onTakeSelfie(context)),
                     ),
                     const Expanded(flex: 4, child: CameraSwitchButton())
                   ],

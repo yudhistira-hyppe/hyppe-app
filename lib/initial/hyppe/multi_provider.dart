@@ -1,6 +1,7 @@
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -72,6 +73,7 @@ class AppDependencies {
         // Camera
         // ChangeNotifierProvider(create: (context) => CameraNotifier()),
         ChangeNotifierProvider.value(value: CameraNotifier()),
+        ChangeNotifierProvider.value(value: CameraDevicesNotifier()),
 
         // UI && OUTER
         ChangeNotifierProvider(create: (context) => LoginNotifier()),
