@@ -42,18 +42,18 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   Future logOut(BuildContext context) async {
     print('asdasdasdasd');
     print('${isLoading}');
-    if (!isLoading) {
-      setLoading(true);
-      final notifier = UserBloc();
-      _resetData(context);
-      await notifier.logOut(context, withAlertMessage: false);
-      setLoading(false);
+    // if (!isLoading) {
+    setLoading(true);
+    final notifier = UserBloc();
+    _resetData(context);
+    await notifier.logOut(context, withAlertMessage: false);
+    setLoading(false);
 
-      // final fetch = notifier.userFetch;
-      // if (fetch.userState == UserState.logoutSuccess) {
-      //   _resetData(context);
-      // }
-    }
+    // final fetch = notifier.userFetch;
+    // if (fetch.userState == UserState.logoutSuccess) {
+    //   _resetData(context);
+    // }
+    // }
   }
 
   void _resetData(BuildContext context) async {

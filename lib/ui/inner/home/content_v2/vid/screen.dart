@@ -104,6 +104,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      // SelectableText("${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}"),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 16),
                                         child: Row(
