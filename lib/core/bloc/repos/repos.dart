@@ -273,6 +273,7 @@ class Repos {
       (onResult) {},
       (errorData) {},
       data: data,
+      headers: {"x-auth-user": SharedPreference().readStorage(SpKeys.email)},
       withAlertMessage: false,
       withCheckConnection: false,
       host: UrlConstants.postLogDevice,

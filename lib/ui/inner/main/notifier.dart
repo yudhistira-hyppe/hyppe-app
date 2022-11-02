@@ -58,7 +58,7 @@ class MainNotifier with ChangeNotifier {
     bool onUpdateProfile = false,
   }) async {
     // Connect to socket
-    // _connectAndListenToSocket();
+    _connectAndListenToSocket();
 
     // Auto follow user if app is install from a dynamic link
     DynamicLinkService.followSender(context);

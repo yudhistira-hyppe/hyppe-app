@@ -10,7 +10,7 @@ class UrlConstants {
   /// Versioning
   static const String apiV1 = 'v1';
 
-  static const String apiV2 = 'v2hilang';
+  static const String apiV2 = 'v2';
 
   static const String apiV3 = 'v3';
 
