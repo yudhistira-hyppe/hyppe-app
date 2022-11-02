@@ -19,7 +19,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data!.saleAmount!);
+    print(data?.saleAmount);
     var f = NumberFormat.decimalPattern('id');
 
     return Consumer<TranslateNotifierV2>(
@@ -34,7 +34,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.purchaseTerms!,
+                  textToDisplay: notifier.translate.purchaseTerms ?? '',
                   textStyle: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 20),
@@ -46,7 +46,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
-                      textToDisplay: System().currencyFormat(amount: data!.saleAmount!.toInt()),
+                      textToDisplay: System().currencyFormat(amount: data?.saleAmount?.toInt()),
                       textStyle: Theme.of(context).textTheme.subtitle1,
                     ),
                   ],
@@ -75,7 +75,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                     ),
                     CustomTextWidget(
                       // textToDisplay: f.format(data?.saleLike),
-                      textToDisplay: data!.saleLike! ? notifier.translate.yes! : notifier.translate.no!,
+                      textToDisplay: (data?.saleLike ?? false) ? notifier.translate.yes ?? 'yes' : notifier.translate.no ?? 'no',
                       textStyle: Theme.of(context).textTheme.subtitle1,
                     ),
                   ],
@@ -84,8 +84,8 @@ class OnBuyContentBottomSheet extends StatelessWidget {
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.buy!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textToDisplay: notifier.translate.buy ?? 'buy',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,

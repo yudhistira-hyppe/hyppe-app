@@ -694,7 +694,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     }
 
     // init duration when file is video
-    // if (storyItem.isVideoFile != null) await _loadVideoFileDuration(storyItem.source!);
+    // if (storyItem.isVideoFile != null) await _loadVideoFileDuration(storyItem.source);
 
     //   if (_isInit != null) {
     //     _animationController = AnimationController(
@@ -754,7 +754,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   void _onComplete() {
     if (widget.onComplete != null) {
       widget.controller.pause();
-      widget.onComplete!();
+      widget.onComplete();
       print('pause_1');
       pauseTimer(isReset: true);
     }
@@ -878,7 +878,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                 },
                 onDoubleTap: () {
                   if (widget.onDouble != null) {
-                    widget.onDouble!();
+                    widget.onDouble();
                   }
                 },
                 onTap: () {
@@ -972,8 +972,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                         print('play3');
                         widget.controller.play();
                         // finish up drag cycle
-                        if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {
-                          widget.onVerticalSwipeComplete!(verticalDragInfo!.direction);
+                        if (!verticalDragInfo.cancel && widget.onVerticalSwipeComplete != null) {
+                          widget.onVerticalSwipeComplete(verticalDragInfo.direction);
                         }
 
                         verticalDragInfo = null;

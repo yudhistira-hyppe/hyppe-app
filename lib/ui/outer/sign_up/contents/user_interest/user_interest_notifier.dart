@@ -81,7 +81,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     print(index);
     print(interest.isNotEmpty);
     if (interest.isNotEmpty) {
-      String tile = interest[index].interestName!;
+      String tile = interest[index].interestName;
       print(tile);
       return () {
         if (_interestData.contains(tile)) {

@@ -22,8 +22,8 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
           title: CustomTextWidget(
-            textToDisplay: notifier.language.deleteAccount!,
-            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            textToDisplay: notifier.language.deleteAccount ?? '',
+            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: false,
           titleSpacing: 0,
@@ -44,14 +44,14 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.deleteAccount!,
-                    textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+                    textToDisplay: notifier.language.deleteAccount ?? '',
+                    textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   eightPx,
                   CustomTextWidget(
                     textToDisplay:
-                        "${notifier.language.tappingDeleteAccountWillDelete!} ${SharedPreference().readStorage(SpKeys.email)} ${notifier.language.accountWillBeDeletedProccessAfter24Hours!}",
-                    textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(),
+                        "${notifier.language.tappingDeleteAccountWillDelete} ${SharedPreference().readStorage(SpKeys.email)} ${notifier.language.accountWillBeDeletedProccessAfter24Hours}",
+                    textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
                     maxLines: 100,
                     textAlign: TextAlign.start,
                   ),
@@ -65,15 +65,15 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                     Checkbox(
                       value: notifier.confirmDeleteAccount,
                       onChanged: (val) {
-                        notifier.confirmDeleteAccount = val!;
+                        notifier.confirmDeleteAccount = val ?? false;
                       },
                       activeColor: kHyppePrimary,
                       checkColor: kHyppeLightButtonText,
                     ),
                     Expanded(
                       child: CustomTextWidget(
-                        textToDisplay: notifier.language.deletingYourAccountIsPermanent!,
-                        textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(),
+                        textToDisplay: notifier.language.deletingYourAccountIsPermanent ?? '',
+                        textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
                         maxLines: 100,
                         textAlign: TextAlign.start,
                       ),
@@ -88,8 +88,8 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                     child: notifier.isLoading
                         ? const CustomLoading()
                         : CustomTextWidget(
-                            textToDisplay: notifier.language.deleteAccount!,
-                            textStyle: notifier.confirmDeleteAccount ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                            textToDisplay: notifier.language.deleteAccount ?? '',
+                            textStyle: notifier.confirmDeleteAccount ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                           ),
                     function: notifier.confirmDeleteAccount ? () => notifier.onClickDeleteAccount(context) : null,
                     buttonStyle: ButtonStyle(

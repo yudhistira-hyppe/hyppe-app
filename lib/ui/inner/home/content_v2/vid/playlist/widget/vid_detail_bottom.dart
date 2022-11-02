@@ -144,7 +144,7 @@ class VidDetailBottom extends StatelessWidget {
                         value2.translate.comment!,
                         () {
                           // if (context.read<ProfileNotifier>().myProfile != null) {
-                          //   if (context.read<ProfileNotifier>().myProfile!.profileOverviewData!.userOverviewData.isComplete!) {
+                          //   if (context.read<ProfileNotifier>().myProfile.profileOverviewData!.userOverviewData.isComplete) {
                           //     ShowBottomSheet.onShowComment(context, comment: data);
                           //   } else {
                           //     ShowBottomSheet().onShowColouredSheet(context, 'Please complete your profile to comment another hyppers',
@@ -175,7 +175,7 @@ class VidDetailBottom extends StatelessWidget {
             // _buildButton(
             //   context,
             //   '${AssetPath.vectorPath}bookmark.svg',
-            //   value2.translate.save!,
+            //   value2.translate.save,
             //   data != null
             //       ? () => context.read<PlaylistNotifier>().showMyPlaylistBottomSheet(
             //             context,
@@ -268,7 +268,7 @@ class VidDetailBottom extends StatelessWidget {
           // isCelebrity: data!.isCelebrity,
           // haveStory: data!.isHaveStory ?? false,
           // imageUrl: '${data!.profilePic}$VERYBIG',
-          // featureType: context.read<SeeAllNotifier>().featureType!,
+          // featureType: context.read<SeeAllNotifier>().featureType,
         )
       : Row(
           crossAxisAlignment: CrossAxisAlignment.center,

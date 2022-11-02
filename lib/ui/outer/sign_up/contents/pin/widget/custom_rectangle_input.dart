@@ -14,7 +14,7 @@ class CustomRectangleInput extends StatelessWidget {
         child: Column(
           children: [
             notifier.inCorrectCode ? CustomTextWidget(
-              textToDisplay: notifier.language.incorrectCode!,
+              textToDisplay: notifier.language.incorrectCode,
               textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.error),
             ) : const SizedBox.shrink(),
             sixPx,

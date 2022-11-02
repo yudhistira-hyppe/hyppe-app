@@ -61,7 +61,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
             ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.verificationCode!,
+              textToDisplay: notifier.language.verificationCode,
               textStyle: Theme.of(context).textTheme.headline6,
             ),
           ),

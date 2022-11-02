@@ -24,7 +24,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
             textToDisplay: language?.contentDetail ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
@@ -71,8 +71,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: data!.descriptionContent!,
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay: data?.descriptionContent ?? '',
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                     maxLines: 3,
                     textAlign: TextAlign.start,
                   ),
@@ -80,12 +80,12 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                   CustomTextWidget(
                     textToDisplay:
                         '${data?.like ?? false ? data?.totallike ?? '' : ''}${data?.like ?? false ? ' ${language?.like}' : ''} ${(data?.like ?? false) && (data?.view ?? false) ? ' | ' : ''}${data?.view ?? false ? data?.totalview : ''}${data?.view ?? false ? ' ${language?.views}' : ''}',
-                    textStyle: Theme.of(context).textTheme.caption!,
+                    textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
                   ),
                   twelvePx,
                   Row(
                     children: [
-                      data!.like!
+                      data?.like ?? false
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(
@@ -94,8 +94,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                                 boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                               ),
                               child: CustomTextWidget(
-                                textToDisplay: '${language!.like}',
-                                textStyle: Theme.of(context).textTheme.caption!,
+                                textToDisplay: '${language?.like}',
+                                textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
                                 textAlign: TextAlign.start,
                               ),
                             )

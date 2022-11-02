@@ -66,7 +66,7 @@
 //           ),
 //           CustomRichTextWidget(
 //             textSpan: TextSpan(
-//               text: notifier.isEmail ? "" : notifier.language.bySigningUpYouAgreeToHyppe! + " ",
+//               text: notifier.isEmail ? "" : notifier.language.bySigningUpYouAgreeToHyppe + " ",
 //               style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //               children: [
 //                 TextSpan(
@@ -81,7 +81,7 @@
 //                   style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                 ),
 //                 TextSpan(
-//                   text: notifier.isEmail ? "" : notifier.language.termsOfService!,
+//                   text: notifier.isEmail ? "" : notifier.language.termsOfService,
 //                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
 //                     color: Theme.of(context).colorScheme.primaryVariant,
 //                     fontWeight: FontWeight.bold,

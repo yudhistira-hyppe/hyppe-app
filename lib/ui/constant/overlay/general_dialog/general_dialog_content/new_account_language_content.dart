@@ -83,7 +83,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                     ),
                   ),
                   notifier.loadMore
-                      ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language!}")
+                      ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language}")
                       : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,

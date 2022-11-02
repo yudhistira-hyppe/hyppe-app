@@ -44,7 +44,7 @@ class InterestContent extends StatelessWidget {
             children: [
               SignUpText(
                 title: "${notifier.language.whatIsYourInterest!}?",
-                description: notifier.language.andWeKnowWhatToGive!,
+                description: notifier.language.andWeKnowWhatToGive,
               ),
               sixtyFourPx,
               InterestUserOverviewTile(),

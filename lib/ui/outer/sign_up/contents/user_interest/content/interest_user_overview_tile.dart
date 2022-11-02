@@ -80,7 +80,7 @@ class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
                               CustomTextWidget(
                                 textAlign: TextAlign.left,
                                 textOverflow: TextOverflow.clip,
-                                textToDisplay: notifier.interest[index].interestName!,
+                                textToDisplay: notifier.interest[index].interestName,
                                 textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                                       fontWeight: FontWeight.w700,
                                       color: notifier.pickedInterest(notifier.interest[index].interestName) ? Theme.of(context).colorScheme.primaryVariant : null,

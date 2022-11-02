@@ -458,8 +458,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         debugPrint('Pick => ' + value.toString());
         if (value.values.single != null) {
           // pickedSupportingDocs = value.values.single;
-          for (var element in value.values.single!) {
-            pickedSupportingDocs!.add(element);
+          for (var element in value.values.single ?? []) {
+            pickedSupportingDocs?.add(element);
           }
 
           // fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
@@ -475,7 +475,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       });
     } catch (e) {
       isLoading = false;
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 

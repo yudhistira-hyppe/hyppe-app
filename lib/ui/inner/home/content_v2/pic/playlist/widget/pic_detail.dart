@@ -142,7 +142,7 @@ class _PicDetailState extends State<PicDetail> {
                             // isCelebrity: picData.isCelebrity,
                             // haveStory: picData.isHaveStory ?? false,
                             // imageUrl: '${picData.profilePic}$VERYBIG',
-                            // featureType: context.read<SeeAllNotifier>().featureType!,
+                            // featureType: context.read<SeeAllNotifier>().featureType,
                             // onTapOnProfileImage: () => System().navigateToProfileScreen(context, picData),
                             // createdAt: '${System().readTimestamp(int.parse(picData.createdAt!), context, fullCaption: true)}',
                           ),
@@ -228,7 +228,7 @@ class _PicDetailState extends State<PicDetail> {
                             padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                             child: Row(
                               children: [
-                                (widget.arguments?.tagPeople?.length ?? 0) != 0
+                                widget.arguments?.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
                                         icon: 'user',
                                         label: '${widget.arguments?.tagPeople?.length} people',

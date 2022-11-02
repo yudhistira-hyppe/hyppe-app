@@ -55,7 +55,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
             CustomTextWidget(
               maxLines: 1,
               textAlign: TextAlign.left,
-              textToDisplay: widget.title!,
+              textToDisplay: widget.title,
               textStyle: _themes.textTheme.button!.apply(
                 color: _themes.bottomNavigationBarTheme.unselectedItemColor,
               ),

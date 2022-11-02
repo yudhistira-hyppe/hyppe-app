@@ -202,7 +202,7 @@ class PicDetailBottom extends StatelessWidget {
             // _buildButton(
             //   context,
             //   '${AssetPath.vectorPath}bookmark.svg',
-            //   value2.translate.save!,
+            //   value2.translate.save,
             //   data != null
             //       ? () => context.read<PlaylistNotifier>().showMyPlaylistBottomSheet(
             //             context,
@@ -299,7 +299,7 @@ class PicDetailBottom extends StatelessWidget {
           // isCelebrity: data!.isCelebrity,
           // haveStory: data!.isHaveStory ?? false,
           // imageUrl: '${data!.profilePic}$VERYBIG',
-          // featureType: context.read<SeeAllNotifier>().featureType!,
+          // featureType: context.read<SeeAllNotifier>().featureType,
         )
       : Row(
           crossAxisAlignment: CrossAxisAlignment.center,

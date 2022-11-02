@@ -460,10 +460,10 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           //   path: '/__/auth/handler',
           //   queryParameters: <String, String>{
           //     'code': credentialApple.authorizationCode,
-          //     if (credentialApple.givenName != null) 'firstName': credentialApple.givenName!,
-          //     if (credentialApple.familyName != null) 'lastName': credentialApple.familyName!,
+          //     if (credentialApple.givenName != null) 'firstName': credentialApple.givenName,
+          //     if (credentialApple.familyName != null) 'lastName': credentialApple.familyName,
           //     'useBundleId': !kIsWeb && (Platform.isIOS || Platform.isMacOS) ? 'true' : 'false',
-          //     if (credentialApple.state != null) 'state': credentialApple.state!,
+          //     if (credentialApple.state != null) 'state': credentialApple.state,
           //   },
           // );
 

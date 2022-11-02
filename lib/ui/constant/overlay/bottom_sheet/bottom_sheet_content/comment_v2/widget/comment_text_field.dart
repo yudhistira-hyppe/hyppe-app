@@ -86,7 +86,7 @@ class CommentTextField extends StatelessWidget {
                       ? const CustomLoading(size: 4)
                       : CustomTextButton(
                           child: CustomTextWidget(
-                            textToDisplay: language.translate.send!,
+                            textToDisplay: language.translate.send ?? '',
                             textStyle: TextStyle(
                               color: Theme.of(context).colorScheme.primaryVariant,
                               fontSize: 16,
@@ -138,12 +138,12 @@ class CommentTextField extends StatelessWidget {
                               notifier.insertAutoComplete(index);
                             },
                             title: CustomTextWidget(
-                              textToDisplay: notifier.searchPeolpleData[index].fullName!,
+                              textToDisplay: notifier.searchPeolpleData[index].fullName ?? '',
                               textStyle: Theme.of(context).textTheme.bodyMedium,
                               textAlign: TextAlign.start,
                             ),
                             subtitle: CustomTextWidget(
-                              textToDisplay: notifier.searchPeolpleData[index].fullName!,
+                              textToDisplay: notifier.searchPeolpleData[index].fullName ?? '',
                               textStyle: Theme.of(context).textTheme.bodySmall,
                               textAlign: TextAlign.start,
                             ),

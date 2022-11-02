@@ -42,14 +42,14 @@ class OnOwnershipEULABottomSheet extends StatelessWidget {
               children: [
                 Center(
                   child: CustomTextWidget(
-                    textToDisplay: notifier.translate.contentOwnershipRegistration!,
-                    textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay: notifier.translate.contentOwnershipRegistration ?? '',
+                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.byRegisteringYourContent!,
-                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay: notifier.translate.byRegisteringYourContent ?? '',
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.center,
                 ),
@@ -61,7 +61,7 @@ class OnOwnershipEULABottomSheet extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 function: onSave,
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.yesSure!,
+                  textToDisplay: notifier.translate.yesSure ?? '',
                 ),
                 buttonStyle: ButtonStyle(
                   // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -78,8 +78,8 @@ class OnOwnershipEULABottomSheet extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               function: onCancel,
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.cancel!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                textToDisplay: notifier.translate.cancel ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
               ),
             ),
           ],

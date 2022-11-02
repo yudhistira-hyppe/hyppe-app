@@ -38,7 +38,7 @@ class ShowGeneralDialog {
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 500),
       context: _,
-      pageBuilder: (context, animation, secondaryAnimation) => ReactionCommentContent(comment: comment!),
+      pageBuilder: (context, animation, secondaryAnimation) => ReactionCommentContent(comment: comment ?? Comments()),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
@@ -61,10 +61,10 @@ class ShowGeneralDialog {
       String? titleButtonSecondary,
       bool? barrierDismissible = false}) {
     showGeneralDialog(
-      //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
-      barrierDismissible: barrierDismissible!,
+      barrierDismissible: barrierDismissible ?? false,
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => AlertDialog(
         // insetPadding: EdgeInsets.only(top: 30),
@@ -273,7 +273,7 @@ class ShowGeneralDialog {
 
   static Future oldVersion(BuildContext context) async {
     await showGeneralDialog(
-      //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
       barrierDismissible: false,
@@ -294,7 +294,7 @@ class ShowGeneralDialog {
 
   static Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
     await showGeneralDialog(
-      //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
       barrierDismissible: false,
@@ -313,7 +313,7 @@ class ShowGeneralDialog {
 
   static Future remarkWidthdrawal(BuildContext context) async {
     await showGeneralDialog(
-      //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: context,
       barrierLabel: 'Barrier',
       barrierDismissible: true,
@@ -330,7 +330,7 @@ class ShowGeneralDialog {
 
   static Future loadingDialog(BuildContext context) async {
     await showGeneralDialog(
-      //Routing.navigatorKey.currentState!.overlay!.context    ini untuk bisa menjalankan diluar MaterialApp
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
       barrierLabel: 'Barrier',
       barrierDismissible: false,

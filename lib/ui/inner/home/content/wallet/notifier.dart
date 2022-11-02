@@ -150,7 +150,7 @@
 //   }
 
 //   void initial() {
-//     phoneNumberController.text = user!.profile!.mobileNumber!;
+//     phoneNumberController.text = user.profile.mobileNumber;
 //     phoneNumber = phoneNumberController.text;
 //     isEditPhoneNumber = false;
 //   }
@@ -161,17 +161,17 @@
 //       SignUpCompleteProfiles _data = SignUpCompleteProfiles(
 //         fullName: user!.profile?.fullName,
 //         dateOfBirth: user!.profile?.dob,
-//         // idProofNumber: myProfile!.userProfile?.userDetail?.data?.idProofNumber,
-//         // idProofName: myProfile!.userProfile?.userDetail?.data?.idProofName,
-//         gender: user!.profile?.gender,
+//         // idProofNumber: myProfile.userProfile?.userDetail?.data?.idProofNumber,
+//         // idProofName: myProfile.userProfile?.userDetail?.data?.idProofName,
+//         gender: user.profile?.gender,
 //         phoneNumber: phoneNumberController.text,
-//         email: user!.profile?.email,
-//         // eulaID: myProfile!.userProfile?.userDetail?.data?.eulaID,
-//         country: user!.profile?.country,
-//         // province: myProfile!.userProfile?.userDetail?.data?.stateName,
-//         // city: myProfile!.userProfile?.profileOverviewData?.userOverviewData.city,
-//         language: user!.profile?.langIso,
-//         // userID: myProfile!.userProfile?.userDetail?.data?.userID,
+//         email: user.profile?.email,
+//         // eulaID: myProfile.userProfile?.userDetail?.data?.eulaID,
+//         country: user.profile?.country,
+//         // province: myProfile.userProfile?.userDetail?.data?.stateName,
+//         // city: myProfile.userProfile?.profileOverviewData?.userOverviewData.city,
+//         language: user.profile?.langIso,
+//         // userID: myProfile.userProfile?.userDetail?.data?.userID,
 //       );
 
 //       final notifier = Provider.of<UserBloc>(context, listen: false);

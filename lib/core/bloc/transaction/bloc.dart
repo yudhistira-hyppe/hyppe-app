@@ -27,7 +27,7 @@ class TransactionBloc {
       context,
       (onResult) {
         print(onResult.statusCode);
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.addBankAccontError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.addBankAccontSuccess, message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -51,7 +51,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.deleteBankAccontError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.deleteBankAccontSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -77,7 +77,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.getBankAccontError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.getBankAccontSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -102,7 +102,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.getHistoryError, message: onResult.data['message'], data: onResult.data));
         } else {
           // setTransactionFetch(TransactionFetch(TransactionState.getHistorySuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -133,7 +133,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.getDetailHistoryError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.getDetailHistorySuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -158,7 +158,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.getAccountBalanceSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -184,7 +184,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.sendVerificationError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.sendVerificationSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -212,7 +212,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalError, message: onResult.data['message'], data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.summaryWithdrawalSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -240,7 +240,7 @@ class TransactionBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.createWithdrawalError, message: onResult.data, data: onResult.data));
         } else {
           setTransactionFetch(TransactionFetch(TransactionState.createWithdrawalSuccess, data: GenericResponse.fromJson(onResult.data).responseData));

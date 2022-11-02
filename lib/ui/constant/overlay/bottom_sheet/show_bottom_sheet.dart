@@ -1,12 +1,9 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/view_content.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
@@ -54,20 +51,11 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
-import '../../../../core/constants/shared_preference_keys.dart';
-import '../../../../core/services/shared_preference.dart';
-import '../../../inner/main/notifier.dart';
 import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
 import 'bottom_sheet_content/on_coloured_sheet.dart';
 
-// import 'package:hyppe/ui/inner/home/content/vid/notifier.dart';
-// import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-// import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
-// import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_user_first_layer.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_user_second_layer.dart';
 
 class ShowBottomSheet {
   ShowBottomSheet._private();
@@ -650,8 +638,8 @@ class ShowBottomSheet {
     );
   }
 
-  PersistentBottomSheetController<T> onShowFilters<T>(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, String file, GlobalKey? globalKey) {
-    return scaffoldState.currentState!.showBottomSheet<T>(
+  PersistentBottomSheetController<T>? onShowFilters<T>(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, String file, GlobalKey? globalKey) {
+    return scaffoldState.currentState?.showBottomSheet<T>(
       (context) => GestureDetector(
         onVerticalDragStart: (_) {},
         child: OnShowFilters(
@@ -680,7 +668,7 @@ class ShowBottomSheet {
               topRight: Radius.circular(8),
             ),
           ),
-          child: ViewedStoriesScreen(storyID: storyID!),
+          child: ViewedStoriesScreen(storyID: storyID ?? ''),
         );
       },
     );
@@ -825,7 +813,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            height: SizeConfig.screenHeight! / 1.78,
+            height: SizeConfig.screenHeight ?? 0 / 1.78,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -848,7 +836,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            // height: SizeConfig.screenHeight! / 1.78,
+            // height: SizeConfig.screenHeight / 1.78,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -879,7 +867,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            // height: SizeConfig.screenHeight! / 1.78,
+            // height: SizeConfig.screenHeight / 1.78,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -907,7 +895,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            height: SizeConfig.screenHeight! / 1.09,
+            height: SizeConfig.screenHeight ?? 0 / 1.09,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -1180,7 +1168,7 @@ class ShowBottomSheet {
         backgroundColor: Colors.transparent,
         builder: (builder) {
           return Container(
-            // height: height ?? SizeConfig.screenHeight! / 4,
+            // height: height ?? SizeConfig.screenHeight / 4,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -1247,7 +1235,7 @@ class ShowBottomSheet {
         backgroundColor: Colors.transparent,
         builder: (builder) {
           return Container(
-            // height: height ?? SizeConfig.screenHeight! / 4,
+            // height: height ?? SizeConfig.screenHeight / 4,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -1269,7 +1257,7 @@ class ShowBottomSheet {
         builder: (builder) {
           return Container(
             margin: EdgeInsets.only(top: 30),
-            // height: height ?? SizeConfig.screenHeight! / 4,
+            // height: height ?? SizeConfig.screenHeight / 4,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(

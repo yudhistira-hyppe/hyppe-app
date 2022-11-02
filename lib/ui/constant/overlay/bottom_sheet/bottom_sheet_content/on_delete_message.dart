@@ -50,17 +50,17 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
                           width: 48,
                           height: 48,
                           following: true,
-                          imageUrl: System().showUserPicture(data!.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+                          imageUrl: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
                         ),
                       ),
                       sixteenPx,
                       CustomRichTextWidget(
                         textSpan: TextSpan(
                           style: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
-                          text: "${data!.senderOrReceiverInfo?.username}\n",
+                          text: "${data?.senderOrReceiverInfo?.username}\n",
                           children: <TextSpan>[
                             TextSpan(
-                              text: data!.senderOrReceiverInfo?.fullName,
+                              text: data?.senderOrReceiverInfo?.fullName,
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Theme.of(context).colorScheme.secondaryVariant,
@@ -75,7 +75,7 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
                   ),
 
                   // CustomTextWidget(
-                  //   textToDisplay: notifier2.translate.about!,
+                  //   textToDisplay: notifier2.translate.about,
                   //   textStyle: Theme.of(context).textTheme.headline6,
                   // ),
                 ],
@@ -92,7 +92,7 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
                 //     crossAxisAlignment: CrossAxisAlignment.center,
                 //     children: [
                 //       CustomTextWidget(
-                //         textToDisplay: notifier2.translate.muteMessage!,
+                //         textToDisplay: notifier2.translate.muteMessage,
                 //         textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                 //       ),
                 //       SizedBox(
@@ -110,7 +110,7 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
                   child: ListTile(
                     onTap: function,
                     title: CustomTextWidget(
-                      textToDisplay: notifier2.translate.deleteMessage!,
+                      textToDisplay: notifier2.translate.deleteMessage ?? '',
                       textAlign: TextAlign.start,
                       textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                     ),
@@ -124,5 +124,5 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 }

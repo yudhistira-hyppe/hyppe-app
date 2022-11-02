@@ -523,7 +523,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       //           context,
       //           verifyID: true,
       //           cancelToken: _dioCancelToken,
-      //           file: value.values.single!.files.single.path!,
+      //           file: value.values.single.files.single.path!,
       //           email: SharedPreference().readStorage(SpKeys.email),
       //           onSendProgress: (received, total) {
       //             _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));

@@ -27,7 +27,7 @@ class TotalBalance extends StatelessWidget {
             children: [
               CustomTextWidget(
                 textToDisplay: 'Total Balance',
-                textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(),
+                textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(),
                 textAlign: TextAlign.start,
               ),
               fivePx,
@@ -38,7 +38,7 @@ class TotalBalance extends StatelessWidget {
                     onCancel: () {},
                     onSave: null,
                     title: 'Total Balance',
-                    bodyText: context.read<TranslateNotifierV2>().translate.cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn!,
+                    bodyText: context.read<TranslateNotifierV2>().translate.cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn ?? '',
                   );
                 },
                 child: const CustomIconWidget(
@@ -49,8 +49,8 @@ class TotalBalance extends StatelessWidget {
             ],
           ),
           CustomTextWidget(
-            textToDisplay: accountBalance!,
-            textStyle: Theme.of(context).textTheme.headlineMedium!.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onBackground),
+            textToDisplay: accountBalance ?? '',
+            textStyle: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onBackground),
             textAlign: TextAlign.start,
           ),
         ],

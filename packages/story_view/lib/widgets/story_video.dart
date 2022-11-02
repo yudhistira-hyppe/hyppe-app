@@ -114,7 +114,7 @@ class StoryVideoState extends State<StoryVideo> {
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       isHlsVideo ? BetterPlayerDataSourceType.network : BetterPlayerDataSourceType.file,
-      isHlsVideo ? widget.videoLoader.url : widget.videoLoader.videoFile!.path,
+      isHlsVideo ? widget.videoLoader.url : widget.videoLoader.videoFile.path,
       headers: widget.videoLoader.requestHeaders ?? {},
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
@@ -139,7 +139,7 @@ class StoryVideoState extends State<StoryVideo> {
         _setupPlayerController(
           callback: (dataSource) {
             playerController?.setupDataSource(dataSource).then((_) {
-              overridenAspectRatio = playerController!.videoPlayerController!.value.size!.height / playerController!.videoPlayerController!.value.size!.width;
+              overridenAspectRatio = playerController!.videoPlayerController.value.size.height / playerController!.videoPlayerController.value.size.width;
 
               _width = playerController?.videoPlayerController?.value.size?.width ?? 0;
               _height = playerController?.videoPlayerController?.value.size?.height ?? 0;

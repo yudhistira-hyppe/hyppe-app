@@ -38,12 +38,12 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
         children: [
           CustomTextWidget(
             textToDisplay: '${_language.removeMeFromPost} ${widget.contentTitle}',
-            textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
             maxLines: 3,
             textOverflow: TextOverflow.visible,
-            textToDisplay: _language.afterthatThisTagWillBePermanentlyRemoved!,
+            textToDisplay: _language.afterthatThisTagWillBePermanentlyRemoved ?? '',
             textStyle: theme.textTheme.bodyText1,
           ),
           Row(
@@ -59,12 +59,12 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
                 //       width: 120,
                 //       height: 42,
                 //       color: Colors.red,
-                //       child: Text(_language.delete!),
+                //       child: Text(_language.delete),
                 //     ),
                 //   ),
                 // )
                 _buildButton(
-                  caption: _language.delete!,
+                  caption: _language.delete ?? 'delete',
                   color: Colors.transparent,
                   function: () {
                     deleteMyTag(context, widget.postId, 'hyppeVid');
@@ -75,7 +75,7 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
               else
                 const CustomLoading(),
               _buildButton(
-                caption: _language.cancel!,
+                caption: _language.cancel ?? 'cancel',
                 color: theme.colorScheme.primaryVariant,
                 textColor: kHyppeLightButtonText,
                 function: () => _routing.moveBack(),
@@ -90,7 +90,7 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
 
   Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
     return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button!.copyWith(color: textColor)),
+      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor)),
       width: 120,
       height: 42,
       function: () {
@@ -102,7 +102,7 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
           setState(() => _isLoading = false);
         }
       },
-      buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
+      buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),
     );

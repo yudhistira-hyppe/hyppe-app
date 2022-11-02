@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -34,7 +35,7 @@ class _VerificationIDStepSupportDocsEulaState
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -42,9 +43,9 @@ class _VerificationIDStepSupportDocsEulaState
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.idVerification!,
+              textToDisplay: notifier.language.idVerification ?? '',
               textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -72,8 +73,8 @@ class _VerificationIDStepSupportDocsEulaState
                 GestureDetector(
                   onTap: () => notifier.backToVerificationID(),
                   child: Text(
-                    notifier.language.cancel!,
-                    style: textTheme.titleMedium!.copyWith(
+                    notifier.language.cancel ?? '',
+                    style: textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.primaryVariant),
                   ),
                 ),
@@ -84,7 +85,7 @@ class _VerificationIDStepSupportDocsEulaState
                   function: () => Routing()
                       .moveAndPop(Routes.verificationIDStepSupportingDocs),
                   child: CustomTextWidget(
-                    textToDisplay: notifier.language.agreeAndContinue!,
+                    textToDisplay: notifier.language.agreeAndContinue ?? '',
                     textStyle: textTheme.button
                         ?.copyWith(color: kHyppeLightButtonText),
                   ),

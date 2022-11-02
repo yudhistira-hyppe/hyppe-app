@@ -296,7 +296,7 @@ class SelfProfileNotifier with ChangeNotifier {
 
       // if (tagPeople != null) {
       //   for (var v in tagPeople) {
-      //     _updatedData.tagPeople!.add(TagPeople(username: v));
+      //     _updatedData.tagPeople.add(TagPeople(username: v));
       //   }
       // }
       if (cats != null) {

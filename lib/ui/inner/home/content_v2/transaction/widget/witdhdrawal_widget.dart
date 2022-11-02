@@ -27,7 +27,7 @@ class WithdrawalWidget extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data!.id!, type: System().convertTransactionTypeToString(data!.type), jenis: data!.jenis);
+            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
             context.read<TransactionNotifier>().navigateToDetailTransaction();
           },
           child: Container(
@@ -44,37 +44,37 @@ class WithdrawalWidget extends StatelessWidget {
                     boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                   ),
                   child: CustomTextWidget(
-                    textToDisplay: title!,
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeCyan),
+                    textToDisplay: title ?? '',
+                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeCyan),
                   ),
                 ),
                 const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: language!.withdrawalMoney!,
-                  textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay: language?.withdrawalMoney ?? '',
+                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                 ),
                 fourPx,
                 CustomTextWidget(
-                  textToDisplay: language!.fromBalance!,
-                  textStyle: Theme.of(context).textTheme.caption!,
+                  textToDisplay: language?.fromBalance ?? '',
+                  textStyle: Theme.of(context).textTheme.caption,
                 ),
                 tenPx,
                 CustomTextWidget(
-                  textToDisplay: language!.withdrawalAmount!,
-                  textStyle: Theme.of(context).textTheme.caption!,
+                  textToDisplay: language?.withdrawalAmount ?? '',
+                  textStyle: Theme.of(context).textTheme.caption,
                 ),
                 fourPx,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: '- ${System().currencyFormat(amount: data!.totalamount)}',
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+                      textToDisplay: '- ${System().currencyFormat(amount: data?.totalamount)}',
+                      textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(
-                      textToDisplay: System().dateFormatter(data!.timestamp!.substring(0, 10), 3),
-                      textStyle: Theme.of(context).textTheme.caption!,
+                      textToDisplay: System().dateFormatter(data?.timestamp?.substring(0, 10) ?? '', 3),
+                      textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
                     ),
                   ],
                 ),

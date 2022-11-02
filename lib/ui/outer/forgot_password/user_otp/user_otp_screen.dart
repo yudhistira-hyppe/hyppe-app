@@ -54,7 +54,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                 automaticallyImplyLeading: false,
                 title: CustomTextWidget(
                   textStyle: Theme.of(context).textTheme.headline6,
-                  textToDisplay: notifier.language.verificationCode!,
+                  textToDisplay: notifier.language.verificationCode,
                 ),
               ),
               body: SingleChildScrollView(

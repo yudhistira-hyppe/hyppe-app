@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -56,7 +57,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
           children: [
             CustomHeaderFeature(
               onPressed: () => vidNotifier.navigateToSeeAll(context),
-              title: context.read<TranslateNotifierV2>().translate.latestVidsForYou!,
+              title: context.read<TranslateNotifierV2>().translate.latestVidsForYou ?? '',
             ),
             twelvePx,
             context.read<ErrorService>().isInitialError(error, vidNotifier.vidData)
@@ -68,7 +69,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                     ),
                   )
                 : (vidNotifier.vidData != null)
-                    ? vidNotifier.vidData!.length == 0
+                    ? vidNotifier.vidData?.isEmpty ?? false
                         ? const NoResultFound()
                         : SizedBox(
                             height: 350,
@@ -191,9 +192,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   vidData?.tagPeople?.isNotEmpty ?? false
                                                       ? TagLabel(
                                                           icon: 'user',
-                                                          label: '${vidData?.tagPeople!.length} people',
+                                                          label: '${vidData?.tagPeople?.length} people',
                                                           function: () {
-                                                            vidNotifier.showUserTag(context, index, vidData!.postID);
+                                                            vidNotifier.showUserTag(context, index, vidData?.postID);
                                                           },
                                                         )
                                                       : const SizedBox(),
@@ -238,7 +239,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                     color: (vidData?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
                                                     iconData: '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                                   ),
-                                                  onTap: () => notifier.likePost(context, vidData!),
+                                                  onTap: (){
+                                                    if(vidData != null){
+                                                      notifier.likePost(context, vidData);
+                                                    }
+
+                                                  } ,
                                                 ),
                                               ),
                                             ),

@@ -119,14 +119,14 @@ class _BankAccountState extends State<BankAccount> {
         //                       Column(
         //                         crossAxisAlignment: CrossAxisAlignment.start,
         //                         children: [
-        //                           // CustomTextWidget(textToDisplay: notifier.dataAcccount![index].idBank! )
+        //                           // CustomTextWidget(textToDisplay: notifier.dataAcccount[index].idBank! )
         //                           CustomTextWidget(
-        //                             textToDisplay: notifier.dataAcccount![index].bankName!,
+        //                             textToDisplay: notifier.dataAcccount[index].bankName,
         //                             textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
         //                           ),
         //                           sixPx,
         //                           CustomTextWidget(
-        //                             textToDisplay: '${notifier.dataAcccount![index].noRek} - ${notifier.dataAcccount![index].nama}',
+        //                             textToDisplay: '${notifier.dataAcccount[index].noRek} - ${notifier.dataAcccount![index].nama}',
         //                             textStyle: Theme.of(context).textTheme.bodySmall,
         //                           ),
         //                         ],
@@ -139,7 +139,7 @@ class _BankAccountState extends State<BankAccount> {
         //                               side: BorderSide(width: 1.0, color: kHyppePrimary),
         //                             ),
         //                             child: CustomTextWidget(
-        //                               textToDisplay: notifier2.translate.remove!,
+        //                               textToDisplay: notifier2.translate.remove,
         //                               textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
         //                                     color: kHyppePrimary,
         //                                     fontWeight: FontWeight.bold,

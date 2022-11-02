@@ -51,7 +51,7 @@ class MessageBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setMessageFetch(MessageFetch(MessageState.getDiscussionBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -104,7 +104,7 @@ class MessageBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setMessageFetch(MessageFetch(MessageState.createDiscussionBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -141,7 +141,7 @@ class MessageBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setMessageFetch(MessageFetch(MessageState.deleteDiscussionBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;

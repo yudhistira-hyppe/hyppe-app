@@ -35,7 +35,7 @@ class ListDataBankAccount extends StatelessWidget {
             },
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: dataAcccount!.length,
+                itemCount: dataAcccount?.length,
                 itemBuilder: (context, index) {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20),
@@ -47,15 +47,15 @@ class ListDataBankAccount extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // CustomTextWidget(textToDisplay: dataAcccount![index].idBank! )
+                            // CustomTextWidget(textToDisplay: dataAcccount[index].idBank )
                             Row(
                               children: [
                                 CustomTextWidget(
-                                  textToDisplay: dataAcccount![index].bankName!,
-                                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                                  textToDisplay: dataAcccount?[index].bankName ?? '',
+                                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                                 ),
                                 sixPx,
-                                dataAcccount![index].statusInquiry != null && dataAcccount![index].statusInquiry!
+                                dataAcccount?[index].statusInquiry != null && (dataAcccount?[index].statusInquiry ?? false)
                                     ? Container(
                                         padding: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
@@ -72,7 +72,7 @@ class ListDataBankAccount extends StatelessWidget {
                             ),
                             sixPx,
                             CustomTextWidget(
-                              textToDisplay: '${dataAcccount![index].noRek} - ${(dataAcccount![index].nama)!.toUpperCase()}',
+                              textToDisplay: '${dataAcccount?[index].noRek} - ${(dataAcccount?[index].nama)?.toUpperCase()}',
                               textStyle: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -83,10 +83,10 @@ class ListDataBankAccount extends StatelessWidget {
                               onPressed: () {
                                 context.read<TransactionNotifier>().confirmDeleteBankAccount(
                                       context,
-                                      dataAcccount![index].bankName,
-                                      dataAcccount![index].noRek,
-                                      dataAcccount![index].nama,
-                                      dataAcccount![index].id,
+                                      dataAcccount?[index].bankName,
+                                      dataAcccount?[index].noRek,
+                                      dataAcccount?[index].nama,
+                                      dataAcccount?[index].id,
                                       index,
                                     );
                               },
@@ -94,8 +94,8 @@ class ListDataBankAccount extends StatelessWidget {
                                 side: BorderSide(width: 1.0, color: kHyppePrimary),
                               ),
                               child: CustomTextWidget(
-                                textToDisplay: textRemove!,
-                                textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                textToDisplay: textRemove ?? '',
+                                textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: kHyppePrimary,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -106,7 +106,7 @@ class ListDataBankAccount extends StatelessWidget {
                   );
                 }),
           ),
-          infoMaxAccount(title: textUpTo!)
+          infoMaxAccount(title: textUpTo ?? '')
         ],
       ),
     );

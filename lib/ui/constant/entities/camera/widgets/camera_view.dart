@@ -50,12 +50,12 @@
 
 /**
  * // return Transform.scale(
-    //   scale: (notifier.cameraController!.value.previewSize!.height / notifier.cameraController!.value.previewSize!.width) /
+    //   scale: (notifier.cameraController!.value.previewSize.height / notifier.cameraController.value.previewSize.width) /
     //       (SizeConfig.screenWidth! / SizeConfig.screenHeight!),
     //   child: Center(
     //     child: AspectRatio(
-    //       aspectRatio: (notifier.cameraController!.value.previewSize!.height / notifier.cameraController!.value.previewSize!.width),
-    //       child: CameraPreview(notifier.cameraController!),
+    //       aspectRatio: (notifier.cameraController.value.previewSize.height / notifier.cameraController.value.previewSize.width),
+    //       child: CameraPreview(notifier.cameraController),
     //     ),
     //   ),
     // );

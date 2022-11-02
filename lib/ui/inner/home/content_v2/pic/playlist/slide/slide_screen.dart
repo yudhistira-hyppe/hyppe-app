@@ -110,7 +110,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                   CustomBackgroundLayer(
                                     sigmaX: 30,
                                     sigmaY: 30,
-                                    // thumbnail: picData!.content[arguments].contentUrl,
+                                    // thumbnail: picData.content[arguments].contentUrl,
                                     thumbnail: (data.isApsara ?? false) ? data.mediaThumbUri : data.fullThumbPath,
                                   ),
                                   // Content
@@ -163,7 +163,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                               ],
                                             ),
                                           ),
-                                          data.saleAmount! > 0
+                                          (data.saleAmount ?? 0) > 0
                                               ? const Padding(
                                             padding: EdgeInsets.only(top: 10.0),
                                             child: CustomIconWidget(
@@ -238,15 +238,15 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                               ),
                                           ],
                                         ),
-                                        data.tagPeople!.isNotEmpty || data.location != ''
+                                        data.tagPeople?.isNotEmpty ?? false || data.location != ''
                                             ? Padding(
                                           padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                                           child: Row(
                                             children: [
-                                              data.tagPeople!.isNotEmpty
+                                              data.tagPeople?.isNotEmpty ?? false
                                                   ? PicTagLabel(
                                                 icon: 'user',
-                                                label: '${data.tagPeople!.length} people',
+                                                label: '${data.tagPeople?.length} people',
                                                 function: () {
                                                   context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
                                                 },
@@ -284,9 +284,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                       trimExpandedText: 'Show less',
                                                       trimCollapsedText: 'Show more',
                                                       colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                                                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                                                      moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
-                                                      lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                      style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                                                      moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                      lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                     ),
                                                   ],
                                                 )),

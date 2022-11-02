@@ -56,7 +56,7 @@ class ViewerStoriesButton extends StatelessWidget {
                 eightPx,
                 CustomTextWidget(
                   textToDisplay: '${_language.seenBy} ${_system.formatterNumber(data?.insight?.views ?? 0)}',
-                  textStyle: theme.textTheme.bodyText1!.copyWith(
+                  textStyle: theme.textTheme.bodyText1?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: kHyppeLightButtonText,
                   ),
@@ -67,11 +67,11 @@ class ViewerStoriesButton extends StatelessWidget {
             height: 30,
             function: () {
               storyController.pause();
-              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data?.email, storyController: storyController);
+              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email, storyController: storyController);
               // context.read<StoriesPlaylistNotifier>().forceStop = true;
-              // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory!].storyID);
+              // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory].storyID);
             },
-            buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
+            buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
               backgroundColor: MaterialStateProperty.all(
                 Colors.transparent,
               ),

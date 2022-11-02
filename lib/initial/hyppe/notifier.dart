@@ -71,7 +71,7 @@ class HyppeNotifier with ChangeNotifier {
       await _repos.reposPost(
         context,
         (onResult) async {
-          if (onResult.statusCode == HTTP_UNAUTHORIZED) {
+          if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
             await SharedPreference().logOutStorage();
             _routing.moveReplacement(Routes.welcomeLogin);
           } else {

@@ -33,7 +33,7 @@ class ReportUserFirstLayer extends StatelessWidget {
             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
           ),
           CustomTextWidget(
-            // textToDisplay: notifier.peopleProfile != null ? notifier.peopleProfile!.profileOverviewData!.userOverviewData.username! : "",
+            // textToDisplay: notifier.peopleProfile != null ? notifier.peopleProfile.profileOverviewData!.userOverviewData.username : "",
             textToDisplay: "dummy_user",
             textStyle: Theme.of(context).textTheme.subtitle1!.apply(color: const Color(0xffEEEEEE)),
           ),

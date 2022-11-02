@@ -17,9 +17,9 @@ class TopDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data!.type == TransactionType.withdrawal) {
+    if (data?.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
-    } else if (data!.type == TransactionType.buy) {
+    } else if (data?.type == TransactionType.buy) {
       return buyWidget(context);
     } else {
       return sellWidget(context);
@@ -29,9 +29,9 @@ class TopDetailWidget extends StatelessWidget {
   Widget withdrawWidget(context) {
     return Column(
       children: [
-        TwoColumnWidget('Status', text2: data!.status),
-        TwoColumnWidget(language!.time, text2: System().dateFormatter(data!.timestamp!, 4)),
-        TwoColumnWidget('Order ID', text2: data!.id),
+        TwoColumnWidget('Status', text2: data?.status),
+        TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.timestamp ?? '', 4)),
+        TwoColumnWidget('Order ID', text2: data?.id),
       ],
     );
   }
@@ -40,31 +40,31 @@ class TopDetailWidget extends StatelessWidget {
     return Column(
       children: [
         TwoColumnWidget(
-          data!.noinvoice,
+          data?.noinvoice ?? '',
           text2: 'See Invoice',
-          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget(
-          language!.from,
-          text2: data!.namapenjual,
-          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          language?.from ?? 'from',
+          text2: data?.namapenjual,
+          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
-        TwoColumnWidget('Status', text2: data!.status),
-        TwoColumnWidget(language!.time, text2: System().dateFormatter(data!.time!, 4)),
+        TwoColumnWidget('Status', text2: data?.status),
+        TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
         TwoColumnWidget(
           'No Virtual Account',
-          text2: data!.nova,
+          text2: data?.nova,
           widget: const CustomIconWidget(
             iconData: "${AssetPath.vectorPath}copy-link.svg",
             defaultColor: false,
             height: 15,
           ),
           function: () {
-            System().copyToClipboard(data!.nova!);
+            System().copyToClipboard(data?.nova ?? '');
             ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
           },
         ),
-        TwoColumnWidget('Order ID', text2: data!.id),
+        TwoColumnWidget('Order ID', text2: data?.id),
       ],
     );
   }
@@ -73,18 +73,18 @@ class TopDetailWidget extends StatelessWidget {
     return Column(
       children: [
         TwoColumnWidget(
-          data!.noinvoice,
+          data?.noinvoice,
           text2: 'See Invoice',
-          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget(
-          language!.forr,
-          text2: data!.namapembeli,
-          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+          language?.forr ?? 'for',
+          text2: data?.namapembeli,
+          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
-        TwoColumnWidget('Status', text2: data!.status),
-        TwoColumnWidget(language!.time, text2: System().dateFormatter(data!.time!, 4)),
-        TwoColumnWidget('Order ID', text2: data!.id),
+        TwoColumnWidget('Status', text2: data?.status),
+        TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
+        TwoColumnWidget('Order ID', text2: data?.id),
       ],
     );
   }

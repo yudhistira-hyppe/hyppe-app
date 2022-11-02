@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_stroke_text_widget.dart';
 
 import 'custom_profile_image.dart';
@@ -80,21 +81,21 @@ class ProfileComponent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                       child: Row(
                         children: [
                           Flexible(
                             child: isDetail
                                 ? CustomStrokeTextWidget(
-                                    textToDisplay: username!,
+                                    textToDisplay: username ?? '',
                                     maxLines: 1,
                                     textStyle: Theme.of(context).textTheme.button,
                                     textAlign: TextAlign.left,
                                   )
                                 : CustomTextWidget(
-                                    textToDisplay: username!,
+                                    textToDisplay: username ?? '',
                                     maxLines: 1,
-                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: textColor),
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: textColor),
                                     textAlign: TextAlign.left,
                                   ),
                           ),
@@ -104,19 +105,19 @@ class ProfileComponent extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                       child: isDetail
                           ? CustomStrokeTextWidget(
                               maxLines: 1,
                               textToDisplay: createdAt,
                               textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption!,
+                              textStyle: Theme.of(context).textTheme.caption,
                             )
                           : CustomTextWidget(
                               maxLines: 1,
                               textToDisplay: createdAt,
                               textAlign: TextAlign.left,
-                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
+                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: textColor),
                             ),
                     ),
                   ],

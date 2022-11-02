@@ -132,7 +132,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                                       ),
                                       CustomCheckButton(
                                         value: notifier.includeTotalViews,
-                                        onChanged: (value) => notifier.includeTotalViews = value!,
+                                        onChanged: (value) => notifier.includeTotalViews = value,
                                       ),
                                     ],
                                   ),
@@ -149,7 +149,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                                         value: notifier.includeTotalLikes,
                                         onChanged: (value) {
                                           //print("Like" + value.toString());
-                                          notifier.includeTotalLikes = value!;
+                                          notifier.includeTotalLikes = value;
                                         }),
                                   ],
                                 ),
@@ -221,7 +221,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
                                     padding: const EdgeInsets.all(8),
                                     child: Text(
-                                      notifier.language.setPrice!,
+                                      notifier.language.setPrice,
                                       style: Theme.of(context).textTheme.caption!.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
                                     ),
                                   ),

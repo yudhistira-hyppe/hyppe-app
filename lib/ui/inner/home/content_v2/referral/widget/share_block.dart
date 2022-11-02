@@ -25,7 +25,7 @@ class _ShareBlockState extends State<ShareBlock> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: notifier.language.shareStatus!,
+                  textToDisplay: notifier.language.shareStatus ?? '',
                   textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: kHyppeTextLightPrimary,
                       ),
@@ -46,7 +46,7 @@ class _ShareBlockState extends State<ShareBlock> {
                           Routing().move(Routes.listReferral, argument: ReferralListUserArgument(modelReferral: notifier.modelReferral));
                         },
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.hasUsed!,
+                          textToDisplay: notifier.language.hasUsed ?? '',
                           textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: kHyppeLightSecondary,
                               ),
@@ -67,7 +67,7 @@ class _ShareBlockState extends State<ShareBlock> {
                   ),
                 ),
                 CustomTextWidget(
-                  textToDisplay: notifier.language.linkYourReferral!,
+                  textToDisplay: notifier.language.linkYourReferral ?? '',
                   textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                         color: kHyppeTextLightPrimary,
                       ),
@@ -103,7 +103,7 @@ class _ShareBlockState extends State<ShareBlock> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 CustomTextWidget(
-                                  textToDisplay: notifier.language.share!,
+                                  textToDisplay: notifier.language.share ?? '',
                                   textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                 ),
                               ],

@@ -83,7 +83,7 @@ class PlaylistNotifier with ChangeNotifier {
 
   initialMyPlaylistData(BuildContext context) async {
     final translate = context.read<TranslateNotifierV2>().translate;
-    _listPrivacy = [translate.public!, translate.friends!, translate.onlyMe!];
+    _listPrivacy = [translate.public ?? 'public', translate.friends ?? 'friends', translate.onlyMe ?? 'only me'];
     _pagePlaylist = 0;
     _pageBookmark = 0;
     _playlistData.clear();
@@ -93,28 +93,31 @@ class PlaylistNotifier with ChangeNotifier {
   initialFetch(BuildContext context) async {
     final notifier = PlaylistBloc();
     await notifier.getAllPlaylistBloc(context, page: _pagePlaylist);
-    final fetch = notifier.playlistFetch!;
-    if (fetch.playlistState == PlaylistState.getAllPlaylistBlocSuccess) {
-      _result = fetch.data;
-      if (_result!.listPlaylistData.isNotEmpty) {
-        final notifier2 = BookmarkBloc();
-        for (int i = 0; i < _result!.listPlaylistData.length; i++) {
-          await notifier2.getBookmarkBloc(context, playlistID: _result!.listPlaylistData[i].playlistID!);
-          final fetch2 = notifier2.bookmarkFetch;
-          if (fetch2.bookmarkState == BookmarkState.getBookmarkBlocSuccess) {
-            Bookmark result = fetch2.data;
-            for (int v = 0; v < result.data.length; v++) {
-              if (result.data[v].contentID == _data!.postID) _indexList = i;
+    final fetch = notifier.playlistFetch;
+    if(fetch != null){
+      if (fetch.playlistState == PlaylistState.getAllPlaylistBlocSuccess) {
+        _result = fetch.data;
+        if (_result?.listPlaylistData.isNotEmpty ?? false) {
+          final notifier2 = BookmarkBloc();
+          for (int i = 0; i < (_result?.listPlaylistData.length ?? 0); i++) {
+            await notifier2.getBookmarkBloc(context, playlistID: _result?.listPlaylistData[i].playlistID ?? '');
+            final fetch2 = notifier2.bookmarkFetch;
+            if (fetch2.bookmarkState == BookmarkState.getBookmarkBlocSuccess) {
+              Bookmark result = fetch2.data;
+              for (int v = 0; v < result.data.length; v++) {
+                if (result.data[v].contentID == _data?.postID) _indexList = i;
+              }
             }
           }
+          _pagePlaylist = (_pagePlaylist ?? 0) + 1;
+          _playlistData.addAll(_result?.listPlaylistData ?? []);
+          notifyListeners();
+        } else {
+          print("BookMark Dah Mentok");
         }
-        _pagePlaylist = _pagePlaylist! + 1;
-        _playlistData.addAll(_result!.listPlaylistData);
-        notifyListeners();
-      } else {
-        print("BookMark Dah Mentok");
       }
     }
+
   }
 
   addScrollListenerPlaylist(BuildContext context, ScrollController scrollController) async {
@@ -127,7 +130,7 @@ class PlaylistNotifier with ChangeNotifier {
     final notifier = BookmarkBloc();
     print(playlistID);
     await notifier.addBookmarkBloc(context,
-        data: Bookmark(featureType: _featureType, contentID: _data!.postID, playlistID: playlistID));
+        data: Bookmark(featureType: _featureType, contentID: _data?.postID, playlistID: playlistID));
     final fetch = notifier.bookmarkFetch;
     if (fetch.bookmarkState == BookmarkState.addBookmarkBlocSuccess) {
       Future.delayed(const Duration(milliseconds: 300), () {
@@ -181,14 +184,17 @@ class PlaylistNotifier with ChangeNotifier {
     if (textEditing.isNotEmpty) {
       final notifier = PlaylistBloc();
       await notifier.createNewPlaylistBloc(context, data: Playlist(visibility: dropDownValue, playlistName: textEditing));
-      final fetch = notifier.playlistFetch!;
-      if (fetch.playlistState == PlaylistState.createNewPlaylistBlocSuccess) {
-        loading = false;
-        onExit();
+      final fetch = notifier.playlistFetch;
+      if(fetch != null){
+        if (fetch.playlistState == PlaylistState.createNewPlaylistBlocSuccess) {
+          loading = false;
+          onExit();
+        }
+        if (fetch.playlistState == PlaylistState.createNewPlaylistBlocError) {
+          color = true;
+        }
       }
-      if (fetch.playlistState == PlaylistState.createNewPlaylistBlocError) {
-        color = true;
-      }
+
     }
   }
 }

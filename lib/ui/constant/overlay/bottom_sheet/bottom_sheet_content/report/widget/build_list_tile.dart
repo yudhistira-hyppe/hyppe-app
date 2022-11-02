@@ -22,8 +22,8 @@ class BuildListTile extends StatelessWidget {
       ),
       subtitle: subtitle != null
           ? CustomTextWidget(
-              textToDisplay: subtitle!,
-              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeSecondary),
+              textToDisplay: subtitle ?? '',
+              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeSecondary),
               textAlign: TextAlign.start,
               textOverflow: TextOverflow.clip,
             )

@@ -78,7 +78,7 @@ class CenterItemView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               BottomItemView(data: data),
-              data!.tagPeople!.isNotEmpty
+              data?.tagPeople?.isNotEmpty ?? false
                   ? BottomUserView(data: data)
                   : const SizedBox(),
             ],

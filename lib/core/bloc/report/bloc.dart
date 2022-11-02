@@ -66,7 +66,7 @@ class ReportBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setReportFetch(ReportFetch(ReportState.getReportOptionsError));
         } else {
           Report _result = Report.fromJson(onResult.data);
@@ -89,7 +89,7 @@ class ReportBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setReportFetch(ReportFetch(ReportState.reportsError));
         } else {
           setReportFetch(ReportFetch(ReportState.reportsSuccess));

@@ -301,7 +301,7 @@ class ContentData extends HiveObject {
     }
     data['location'] = location;
     data['visibility'] = visibility;
-    data['tagPeople'] = List<dynamic>.from(tagPeople!.map((x) => x.toJson()));
+    data['tagPeople'] = List<dynamic>.from((tagPeople ?? []).map((x) => x.toJson()));
     data['likes'] = likes;
     data['isApsara'] = isApsara;
     data['apsaraId'] = apsaraId;

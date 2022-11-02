@@ -50,12 +50,12 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
     if (widget.onDetail) _routing.moveBack();
     context.read<SelfProfileNotifier>().onDeleteSelfPostContent(
           context,
-          postID: widget.contentData.postID!,
+          postID: widget.contentData.postID ?? '',
           content: widget.captionTitle,
         );
     context.read<HomeNotifier>().onDeleteSelfPostContent(
           context,
-          postID: widget.contentData.postID!,
+          postID: widget.contentData.postID ?? '',
           content: widget.captionTitle,
         );
     _showMessage('${_language.translate.yourContentHadSuccessfullyDeleted}');
@@ -130,7 +130,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
               CustomTextWidget(
                 textToDisplay: widget.captionTitle,
                 // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -150,7 +150,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 icon: 'share.svg',
                 onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
               ),
-              if (_system.getFeatureTypeV2(widget.contentData.postType!) != FeatureType.story) ...[
+              if (_system.getFeatureTypeV2(widget.contentData.postType ?? '') != FeatureType.story) ...[
                 _tileComponent(
                   moveBack: false,
                   caption: '${TranslateNotifierV2().translate.edit}',
@@ -160,8 +160,8 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.isEdit = true;
                     notifier.isUpdate = true;
                     notifier.captionController.text = widget.contentData.description ?? "";
-                    notifier.tagsController.text = widget.contentData.tags!.join(",");
-                    notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType!);
+                    notifier.tagsController.text = widget.contentData.tags?.join(",") ?? '';
+                    notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType ?? '');
 
                     notifier.thumbNail = widget.contentData.fullThumbPath;
                     notifier.allowComment = widget.contentData.allowComments ?? false;
@@ -171,16 +171,16 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     if (widget.contentData.location != null) {
                       notifier.locationName = widget.contentData.location!;
                     } else {
-                      notifier.locationName = notifier.language.addLocation!;
+                      notifier.locationName = notifier.language.addLocation ?? '';
                     }
 
-                    notifier.privacyTitle = widget.contentData.visibility!;
+                    notifier.privacyTitle = widget.contentData.visibility ?? '';
 
-                    notifier.privacyValue = widget.contentData.visibility!;
+                    notifier.privacyValue = widget.contentData.visibility ?? '';
                     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
 
                     if (_isoCodeCache == 'id') {
-                      switch (widget.contentData.visibility!) {
+                      switch (widget.contentData.visibility ?? '') {
                         case 'PUBLIC':
                           notifier.privacyTitle = 'Umum';
                           break;
@@ -193,23 +193,23 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                         default:
                       }
                     } else {
-                      notifier.privacyValue = widget.contentData.visibility!;
+                      notifier.privacyValue = widget.contentData.visibility ?? '';
                     }
 
                     notifier.interestData = [];
                     if (widget.contentData.cats != null) {
                       widget.contentData.cats!.map((val) {
-                        notifier.interestData.add(val.interestName!);
+                        notifier.interestData.add(val.interestName ?? '');
                       }).toList();
                     }
                     notifier.userTagData = [];
                     if (widget.contentData.tagPeople != null) {
                       widget.contentData.tagPeople!.map((val) {
-                        notifier.userTagData.add(val.username!);
+                        notifier.userTagData.add(val.username ?? '');
                       }).toList();
                     }
                     notifier.userTagDataReal = [];
-                    notifier.userTagDataReal.addAll(widget.contentData.tagPeople!);
+                    notifier.userTagDataReal.addAll(widget.contentData.tagPeople ?? []);
 
                     notifier.toSell = widget.contentData.saleAmount != null && widget.contentData.saleAmount! > 0 ? true : false;
                     notifier.includeTotalViews = widget.contentData.saleView ?? false;
@@ -234,7 +234,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 icon: 'delete.svg',
                 onTap: () async {
                   ShowGeneralDialog.deleteContentDialog(context, widget.captionTitle.replaceAll('Hyppe', ''), () async {
-                    await deletePostByID(context, postID: widget.contentData.postID!, postType: widget.contentData.postType!).then((value) {
+                    await deletePostByID(context, postID: widget.contentData.postID ?? '', postType: widget.contentData.postType ?? '').then((value) {
                       if (value) _handleDelete(context);
                     });
                   });
@@ -278,5 +278,3 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
     );
   }
 }
-
-class _interestData {}

@@ -405,7 +405,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //   try {
   //     await System().getLocalMedia(context: context).then((value) async {
   //       if (value.values.single != null) {
-  //         print(value.values.single!.paths);
+  //         print(value.values.single.paths);
   //       } else {
   //         print("Canceled pick data");
   //       }

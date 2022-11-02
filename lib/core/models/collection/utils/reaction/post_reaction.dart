@@ -28,7 +28,7 @@ class PostReaction {
     result["postID"] = postID;
     result["userID"] = userID;
     result["rUserID"] = rUserID;
-    if (isLike!) result["reactionID"] = reactionID;
+    if (isLike ?? false) result["reactionID"] = reactionID;
     result["isLike"] = isLike;
 
     return result;

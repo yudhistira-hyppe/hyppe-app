@@ -92,9 +92,9 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     SizeConfig().init(context);
-//     if (_latestValue!.hasError && !controller.value.isInitialized) {
-//       return chewieController!.errorBuilder != null
-//           ? chewieController!.errorBuilder!(context, chewieController!.videoPlayerController.value.errorDescription!)
+//     if (_latestValue.hasError && !controller.value.isInitialized) {
+//       return chewieController.errorBuilder != null
+//           ? chewieController.errorBuilder!(context, chewieController.videoPlayerController.value.errorDescription!)
 //           : Container(
 //               width: SizeConfig.screenWidth,
 //               height: SizeWidget().calculateSize(SizeWidget.centerLongVideoFrame, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
@@ -119,17 +119,17 @@
 //               AnimatedOpacity(
 //                   child: Container(color: Colors.black.withOpacity(0.5)),
 //                   duration: const Duration(milliseconds: 300),
-//                   opacity: _latestValue != null && !_dragging && !_latestValue!.isBuffering && !_latestValue!.isPlaying || !_hideStuff ? 1.0 : 0.0),
+//                   opacity: _latestValue != null && !_dragging && !_latestValue.isBuffering && !_latestValue.isPlaying || !_hideStuff ? 1.0 : 0.0),
 //               Column(
 //                 children: <Widget>[
 //                   // GestureDetector(
 //                   //   onTap: () {
-//                   //     if (!chewieController!.isFullScreen) {
+//                   //     if (!chewieController.isFullScreen) {
 //                   //       if (!widget.isSeeAll) {
-//                   //         if (!_latestValue!.isPlaying) {
+//                   //         if (!_latestValue.isPlaying) {
 //                   //           if (!_hideStuff) {
 //                   //             if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-//                   //             context.read<PreviewVidNotifier>().navigateToSeeAllScreen(context, widget.data, _latestValue!.position);
+//                   //             context.read<PreviewVidNotifier>().navigateToSeeAllScreen(context, widget.data, _latestValue.position);
 //                   //           }
 //                   //         }
 //                   //       }
@@ -146,20 +146,20 @@
 //                                 onTap: () {
 //                                   if (!chewieController!.isFullScreen) {
 //                                     if (!widget.isSeeAll) {
-//                                       if (!_latestValue!.isPlaying) {
+//                                       if (!_latestValue.isPlaying) {
 //                                         if (!_hideStuff) {
 //                                           if (context.read<OverlayHandlerProvider>().overlayActive)
 //                                             context.read<OverlayHandlerProvider>().removeOverlay(context);
-//                                           // context.read<PreviewVidNotifier>().navigateToSeeAllScreen(context, widget.data, _latestValue!.position);
+//                                           // context.read<PreviewVidNotifier>().navigateToSeeAllScreen(context, widget.data, _latestValue.position);
 //                                         }
 //                                       }
 //                                     }
 //                                   }
 //                                 },
 //                                 onDoubleTap: () {
-//                                   if (chewieController!.isFullScreen && (_latestValue!.position.inSeconds - 10) >= Duration.zero.inSeconds) {
+//                                   if (chewieController!.isFullScreen && (_latestValue.position.inSeconds - 10) >= Duration.zero.inSeconds) {
 //                                     _replayAction.value = true;
-//                                     controller.seekTo(Duration(seconds: _latestValue!.position.inSeconds - 10));
+//                                     controller.seekTo(Duration(seconds: _latestValue.position.inSeconds - 10));
 //                                   } else {
 //                                     print('do nothing');
 //                                   }
@@ -168,22 +168,22 @@
 //                         Expanded(
 //                             child: GestureDetector(
 //                                 onTap: () {
-//                                   if (!chewieController!.isFullScreen) {
+//                                   if (!chewieController.isFullScreen) {
 //                                     if (!widget.isSeeAll) {
-//                                       if (!_latestValue!.isPlaying) {
+//                                       if (!_latestValue.isPlaying) {
 //                                         if (!_hideStuff) {
 //                                           if (context.read<OverlayHandlerProvider>().overlayActive)
 //                                             context.read<OverlayHandlerProvider>().removeOverlay(context);
-//                                           // context.read<PreviewVidNotifier>().navigateToSeeAllScreen(context, widget.data, _latestValue!.position);
+//                                           // context.read<PreviewVidNotifier>().navigateToSeeAllScreen(context, widget.data, _latestValue.position);
 //                                         }
 //                                       }
 //                                     }
 //                                   }
 //                                 },
 //                                 onDoubleTap: () {
-//                                   if (chewieController!.isFullScreen && (_latestValue!.position.inSeconds + 10) <= _latestValue!.duration.inSeconds) {
+//                                   if (chewieController!.isFullScreen && (_latestValue.position.inSeconds + 10) <= _latestValue.duration.inSeconds) {
 //                                     _forwardAction.value = true;
-//                                     controller.seekTo(Duration(seconds: _latestValue!.position.inSeconds + 10));
+//                                     controller.seekTo(Duration(seconds: _latestValue.position.inSeconds + 10));
 //                                   } else {
 //                                     print('do nothing');
 //                                   }
@@ -192,7 +192,7 @@
 //                       ],
 //                     ),
 //                   ),
-//                   if (_latestValue!.isPlaying && _hideStuff)
+//                   if (_latestValue.isPlaying && _hideStuff)
 //                     VideoProgressIndicator(chewieController!.videoPlayerController,
 //                         allowScrubbing: false,
 //                         colors: VideoProgressColors(
@@ -202,13 +202,13 @@
 //                   else
 //                     AnimatedSwitcher(
 //                         duration: const Duration(milliseconds: 250),
-//                         child: !chewieController!.isPlaying && _latestValue!.position.inSeconds < 1
+//                         child: !chewieController!.isPlaying && _latestValue.position.inSeconds < 1
 //                             ? _buildVideoDescription()
 //                             : _buildBottomControl(context),
 //                         transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child, alignment: Alignment.bottomCenter))
 //                 ],
 //               ),
-//               Center(child: _latestValue!.isBuffering ? CustomLoading() : _buildHitArea()),
+//               Center(child: _latestValue.isBuffering ? CustomLoading() : _buildHitArea()),
 //               ValueListenableBuilder<bool>(
 //                 valueListenable: _forwardAction,
 //                 builder: (_, value, __) {
@@ -301,7 +301,7 @@
 //   }
 
 //   void _playPause() async {
-//     final isFinished = _latestValue!.position >= _latestValue!.duration;
+//     final isFinished = _latestValue.position >= _latestValue.duration;
 
 //     if (!controller.value.isInitialized) await Future.delayed(const Duration(milliseconds: 500));
 
@@ -342,7 +342,7 @@
 //   Widget _buildHitArea() {
 //     return GestureDetector(
 //         onTap: () {
-//           if (_latestValue != null && _latestValue!.isPlaying) {
+//           if (_latestValue != null && _latestValue.isPlaying) {
 //             if (_displayTapped) {
 //               setState(() => _hideStuff = true);
 //             } else {
@@ -357,7 +357,7 @@
 //         child: UnconstrainedBox(
 //           child: Container(
 //               child: AnimatedOpacity(
-//                   opacity: _latestValue != null && !_dragging && !_latestValue!.isBuffering && !_latestValue!.isPlaying || !_hideStuff ? 1.0 : 0.0,
+//                   opacity: _latestValue != null && !_dragging && !_latestValue.isBuffering && !_latestValue.isPlaying || !_hideStuff ? 1.0 : 0.0,
 //                   duration: const Duration(milliseconds: 300),
 //                   child: GestureDetector(
 //                       onTap: () => _playPause(),
@@ -370,7 +370,7 @@
 
 //   Widget _buildTopControl() {
 //     return AnimatedOpacity(
-//         opacity: _latestValue != null && !_dragging && !_hideStuff || !_latestValue!.isPlaying ? 1.0 : 0.0,
+//         opacity: _latestValue != null && !_dragging && !_hideStuff || !_latestValue.isPlaying ? 1.0 : 0.0,
 //         duration: const Duration(milliseconds: 300),
 //         child: Container(
 //             width: SizeConfig.screenWidth,
@@ -434,7 +434,7 @@
 //   }
 
 //   Widget _buildTotalVideoDuration() {
-//     final position = _latestValue != null ? _latestValue!.duration : Duration.zero;
+//     final position = _latestValue != null ? _latestValue.duration : Duration.zero;
 
 //     return CustomBalloonWidget(
 //         child: CustomTextWidget(textToDisplay: '${System().formatDuration(position.inSeconds)}', textStyle: Theme.of(context).textTheme.caption));
@@ -444,7 +444,7 @@
 //     return Consumer<LikeNotifier>(builder: (context, value, child) {
 //       return CustomBalloonWidget(
 //           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-//         CustomIconWidget(iconData: '${AssetPath.vectorPath}like.svg', defaultColor: false, color: Theme.of(context).appBarTheme.iconTheme!.color),
+//         CustomIconWidget(iconData: '${AssetPath.vectorPath}like.svg', defaultColor: false, color: Theme.of(context).appBarTheme.iconTheme.color),
 //         fourPx,
 //         CustomTextWidget(textToDisplay: '${widget.data!.lCount}', textStyle: Theme.of(context).textTheme.caption)
 //       ]));
@@ -463,7 +463,7 @@
 //             }
 //           },
 //           child: CustomIconWidget(
-//               defaultColor: false, iconData: '${AssetPath.vectorPath}back-arrow.svg', color: Theme.of(context).appBarTheme.iconTheme!.color));
+//               defaultColor: false, iconData: '${AssetPath.vectorPath}back-arrow.svg', color: Theme.of(context).appBarTheme.iconTheme.color));
 //     }
 
 //     return Consumer<FollowRequestUnfollowNotifier>(
@@ -502,7 +502,7 @@
 //                     child: CustomIconWidget(
 //                         iconData: '${AssetPath.vectorPath}bookmark.svg',
 //                         defaultColor: false,
-//                         color: Theme.of(context).appBarTheme.iconTheme!.color))),
+//                         color: Theme.of(context).appBarTheme.iconTheme.color))),
 //           Container(
 //               height: 40,
 //               width: 40,
@@ -527,7 +527,7 @@
 //                   },
 //                   style: ButtonStyle(padding: MaterialStateProperty.all(EdgeInsets.only(left: 0.0))),
 //                   child: CustomIconWidget(
-//                       iconData: '${AssetPath.vectorPath}more.svg', defaultColor: false, color: Theme.of(context).appBarTheme.iconTheme!.color)))
+//                       iconData: '${AssetPath.vectorPath}more.svg', defaultColor: false, color: Theme.of(context).appBarTheme.iconTheme.color)))
 //         ]));
 //   }
 
@@ -545,11 +545,11 @@
 //                         // height: chewieController!.isFullScreen ? 18 : null,
 //                         // width: chewieController!.isFullScreen ? 18 : null,
 //                         defaultColor: false,
-//                         color: Theme.of(context).appBarTheme.iconTheme!.color)))));
+//                         color: Theme.of(context).appBarTheme.iconTheme.color)))));
 //   }
 
 //   Widget _buildPosition(Color? iconColor) {
-//     final position = _latestValue != null ? _latestValue!.position : Duration.zero;
+//     final position = _latestValue != null ? _latestValue.position : Duration.zero;
 
 //     return CustomTextWidget(textToDisplay: '${System().formatDuration(position.inSeconds)}', textStyle: Theme.of(context).textTheme.caption);
 //   }
@@ -586,8 +586,8 @@
 //   //         isScrollControlled: true,
 //   //         useRootNavigator: true,
 //   //         builder: (context) => PlaybackSpeedDialog(
-//   //           speeds: chewieController!.playbackSpeeds,
-//   //           selected: _latestValue!.playbackSpeed,
+//   //           speeds: chewieController.playbackSpeeds,
+//   //           selected: _latestValue.playbackSpeed,
 //   //         ),
 //   //       );
 //   //
@@ -595,7 +595,7 @@
 //   //         controller.setPlaybackSpeed(chosenSpeed);
 //   //       }
 //   //
-//   //       if (_latestValue!.isPlaying) {
+//   //       if (_latestValue.isPlaying) {
 //   //         _startHideTimer();
 //   //       }
 //   //     },

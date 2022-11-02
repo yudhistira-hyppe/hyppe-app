@@ -72,8 +72,8 @@ class OnShowLicenseAgreement extends StatelessWidget {
                   selector: (context, notifier) => notifier.isLoading,
                   builder: (_, value, __) {
                     return CustomTextWidget(
-                      textToDisplay: notifier.language.agreeAndContinue!,
-                      textStyle: _textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                      textToDisplay: notifier.language.agreeAndContinue ?? '',
+                      textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
                     );
                   },
                 ),

@@ -168,7 +168,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   child: widget.arguments.onEdit && notifier.updateContent
                       ? const CustomLoading()
                       : CustomTextWidget(
-                          textToDisplay: widget.arguments.onEdit ? notifier.language.save! : notifier.language.confirm!,
+                          textToDisplay: widget.arguments.onEdit ? notifier.language.save : notifier.language.confirm!,
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                   buttonStyle: ButtonStyle(
@@ -338,7 +338,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     splashFactory: NoSplash.splashFactory,
                   ),
                   child: PickitemTitle(
-                    title: notifier.interest[index].interestName!,
+                    title: notifier.interest[index].interestName,
                     select: notifier.pickedInterest(notifier.interest[index].interestName) ? true : false,
                     button: false,
                     textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -362,7 +362,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             },
             contentPadding: EdgeInsets.zero,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.tagPeople!,
+              textToDisplay: notifier.language.tagPeople,
               textAlign: TextAlign.start,
               textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
             ),

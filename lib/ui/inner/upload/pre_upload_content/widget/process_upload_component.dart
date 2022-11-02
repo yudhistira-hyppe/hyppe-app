@@ -183,10 +183,10 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
                 //             }
                 //           }
                 //         },
-                //         style: Theme.of(context).textButtonTheme.style!.copyWith(padding: MaterialStateProperty.all(EdgeInsets.zero)),
+                //         style: Theme.of(context).textButtonTheme.style.copyWith(padding: MaterialStateProperty.all(EdgeInsets.zero)),
                 //         child: CustomTextWidget(
-                //           textToDisplay: value.isLoading ? value.language.cancelPost! : 'Ok',
-                //           textStyle: Theme.of(context).textTheme.button!.apply(
+                //           textToDisplay: value.isLoading ? value.language.cancelPost : 'Ok',
+                //           textStyle: Theme.of(context).textTheme.button.apply(
                 //                 color: value.progressDev == 1.0
                 //                     ? Theme.of(context).colorScheme.secondaryVariant
                 //                     : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,

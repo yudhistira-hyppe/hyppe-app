@@ -63,7 +63,7 @@ class VerificationIDBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setVerificationIDFetch(VerificationIDFetch(
               VerificationIDState.postVerificationIDError,
               data: GenericResponse.fromJson(onResult.data).responseData));
@@ -121,7 +121,7 @@ class VerificationIDBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setVerificationIDFetch(
               VerificationIDFetch(VerificationIDState.postVerificationIDError));
         } else {
@@ -208,7 +208,7 @@ class VerificationIDBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setVerificationIDFetch(VerificationIDFetch(
               VerificationIDState.postVerificationIDError,
               data: GenericResponse.fromJson(onResult.data).responseData));

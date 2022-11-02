@@ -35,7 +35,7 @@ class _PageBottomState extends State<PageBottom> {
               Column(
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.welcomeToHyppe!,
+                    textToDisplay: notifier.language.welcomeToHyppe,
                     textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
                   ),
                   eightPx,
@@ -103,8 +103,8 @@ class _PageBottomState extends State<PageBottom> {
                                     ),
                                     const Spacer(),
                                     CustomTextWidget(
-                                      textToDisplay: notifier.language.signInWithApple!,
-                                      textStyle: Theme.of(context).textTheme.subtitle2!,
+                                      textToDisplay: notifier.language.signInWithApple,
+                                      textStyle: Theme.of(context).textTheme.subtitle2,
                                     ),
                                     const Spacer(),
                                   ],

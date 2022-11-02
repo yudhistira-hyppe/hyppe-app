@@ -67,7 +67,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
     _getBankDetail(context);
 
     DateTime dt1 = DateTime.now();
-    DateTime dt2 = DateTime.parse(paymentMethodNotifier.postResponse!.expiredtimeva!);
+    DateTime dt2 = DateTime.parse(paymentMethodNotifier.postResponse?.expiredtimeva ?? '');
     DateTime dt3 = dt2.subtract(const Duration(hours: 7)); //convert to utc+7
     payDuration = dt3.difference(dt1);
     durationString = '($hours:$minutes:$seconds)';
@@ -86,7 +86,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
       Future.delayed(const Duration(seconds: 2), () {});
     } else if (fetch.postsState == BuyState.getContentsSuccess) {
       BankData? res = BankData.fromJson(fetch.data);
-      print("Bank response " + res.bankname!);
+      print("Bank response ${res.bankname}");
       bankData = res;
       notifyListeners();
     }
@@ -129,7 +129,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
 
   // Step 4
   void stopTimer() {
-    countdownTimer!.cancel();
+    countdownTimer?.cancel();
   }
 
   // Step 5
@@ -137,7 +137,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
     stopTimer();
 
     DateTime dt1 = DateTime.now();
-    DateTime dt2 = DateTime.parse(paymentMethodNotifier.postResponse!.expiredtimeva!);
+    DateTime dt2 = DateTime.parse(paymentMethodNotifier.postResponse?.expiredtimeva ?? '');
     DateTime dt3 = dt2.subtract(const Duration(hours: 7));
     payDuration = dt3.difference(dt1);
     durationString = '($hours:$minutes:$seconds)';
@@ -151,7 +151,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
     const reduceSecondsBy = 1;
     final seconds = payDuration.inSeconds - reduceSecondsBy;
     if (seconds < 0) {
-      countdownTimer!.cancel();
+      countdownTimer?.cancel();
     } else {
       payDuration = Duration(seconds: seconds);
     }

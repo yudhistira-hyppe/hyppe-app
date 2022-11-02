@@ -66,7 +66,7 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
                         controller: notifier.searchController,
                         onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                         onPressedIcon: () => notifier.onSearchPost(context),
-                        // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
+                        // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
                       ),
                     ),
                     TabBar(

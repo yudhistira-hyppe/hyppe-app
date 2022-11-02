@@ -44,7 +44,7 @@ class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomShee
                 color: Theme.of(context).colorScheme.onSurface,
               )),
           title: CustomTextWidget(
-            textToDisplay: notifier.language.selectLocation!,
+            textToDisplay: notifier.language.selectLocation ?? '',
             textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
@@ -66,22 +66,22 @@ class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomShee
                 child: notifier.modelGoogleMapPlace != null
                     ? ListView.builder(
                         shrinkWrap: true,
-                        itemCount: notifier.modelGoogleMapPlace?.predictions!.length,
+                        itemCount: notifier.modelGoogleMapPlace?.predictions?.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             onTap: () {
                               // widget.onSave;
                               Routing().moveBack();
-                              notifier.locationName = notifier.modelGoogleMapPlace!.predictions![index].description!;
+                              notifier.locationName = notifier.modelGoogleMapPlace?.predictions?[index].description ?? '';
                             },
                             title: CustomTextWidget(
                               textAlign: TextAlign.start,
-                              textToDisplay: notifier.modelGoogleMapPlace!.predictions![index].structuredFormatting!.mainText!,
+                              textToDisplay: notifier.modelGoogleMapPlace?.predictions?[index].structuredFormatting?.mainText ?? '',
                             ),
                             subtitle: CustomTextWidget(
                               textAlign: TextAlign.start,
                               maxLines: 2,
-                              textToDisplay: notifier.modelGoogleMapPlace!.predictions![index].structuredFormatting!.secondaryText!,
+                              textToDisplay: notifier.modelGoogleMapPlace?.predictions?[index].structuredFormatting?.secondaryText ?? '',
                             ),
                           );
                         },

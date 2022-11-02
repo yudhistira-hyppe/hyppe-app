@@ -62,7 +62,7 @@ class PeopleFrameStory extends StatelessWidget {
           child: CustomTextWidget(
             maxLines: 1,
             textAlign: TextAlign.center,
-            // textToDisplay: data[index].username!,
+            // textToDisplay: data[index].username,
             textToDisplay: '${data?.username}',
             textStyle: _themes.textTheme.overline,
           ),

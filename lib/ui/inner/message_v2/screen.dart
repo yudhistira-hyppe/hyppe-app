@@ -81,7 +81,7 @@ class _MessageScreenState extends State<MessageScreen> {
                       //   padding: EdgeInsets.symmetric(horizontal: 15 * SizeConfig.scaleDiagonal),
                       //   child: CustomSearchBar(
                       //     onSubmitted: (v) => print(v),
-                      //     hintText: notifier2.translate.searchName!,
+                      //     hintText: notifier2.translate.searchName,
                       //     contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                       //   ),
                       // ),
@@ -145,8 +145,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                           title: CustomTextWidget(
                                             // "Demo user",
                                             // textToDisplay: notifier.userID == notifier.chatData![index].senderID
-                                            //     ? notifier.chatData![index].receiverUserName!
-                                            //     : notifier.chatData![index].senderName!,
+                                            //     ? notifier.chatData![index].receiverUserName
+                                            //     : notifier.chatData![index].senderName,
                                             textToDisplay: discussData?.senderOrReceiverInfo?.fullName ?? '',
                                             textAlign: TextAlign.start,
                                             textStyle: const TextStyle(

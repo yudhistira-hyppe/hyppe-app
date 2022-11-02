@@ -69,7 +69,7 @@ class HyppeChangePassword extends StatelessWidget {
                   duration: const Duration(milliseconds: 800),
                   child: ButtonChangePassword(
                     loading: notifier.onSave,
-                    caption: notifier.language.save!,
+                    caption: notifier.language.save,
                     buttonColor: notifier.saveButtonColor(context),
                     textStyle: notifier.saveTextColor(context),
                     onTap: () => notifier.onClickSave(context),

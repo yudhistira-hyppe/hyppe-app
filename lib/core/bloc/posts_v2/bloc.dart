@@ -103,7 +103,7 @@ class PostsBloc {
       context,
       (onResult) {
         print(onResult);
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -151,7 +151,7 @@ class PostsBloc {
       context,
       (onResult) {
         print("test $onResult");
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -228,7 +228,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
@@ -264,7 +264,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.deleteContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
@@ -325,7 +325,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.updateContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.updateContentsSuccess, data: onResult));
@@ -357,7 +357,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if ((onResult.statusCode ?? 0) > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.videoApsaraError));
         } else {
           print('onResult');

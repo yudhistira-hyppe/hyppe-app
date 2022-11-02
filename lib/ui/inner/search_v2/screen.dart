@@ -68,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                         // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                         // onPressedIcon: () => notifier.onSearchPost(context),
                         onTap: () => notifier.moveSearchMore(),
-                        // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
+                        // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
                       ),
                     ),
                     // const HashtagScreen(),

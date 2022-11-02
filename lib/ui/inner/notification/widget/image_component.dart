@@ -27,7 +27,7 @@ class ImageComponent extends StatelessWidget {
     print('ini imagecomponen');
     final getStory = PostsBloc();
     final List<ContentData> _listContentData = [];
-    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: data!.postID!);
+    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: data?.postID ?? '');
     final fetch = getStory.postsFetch;
     if (fetch.postsState == PostsState.getContentsSuccess) {
       if (fetch.data.isNotEmpty) {
@@ -46,7 +46,7 @@ class ImageComponent extends StatelessWidget {
     if (data != null) {
       return InkWell(
         onTap: () async {
-          final featureType = System().getFeatureTypeV2(data!.postType!);
+          final featureType = System().getFeatureTypeV2(data?.postType ?? '');
           switch (featureType) {
             case FeatureType.vid:
               onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
@@ -67,7 +67,7 @@ class ImageComponent extends StatelessWidget {
           }
         },
         child: CustomBaseCacheImage(
-          imageUrl: '${data!.fullThumbPath}',
+          imageUrl: '${data?.fullThumbPath}',
           errorWidget: (_, __, ___) {
             return Container(
                 width: width * SizeConfig.scaleDiagonal,

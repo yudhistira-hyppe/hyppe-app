@@ -66,17 +66,17 @@ class PreviewIDVerification extends StatelessWidget {
                       children: [
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}camera.svg", defaultColor: false),
                         const SizedBox(width: 8),
-                        CustomTextWidget(textToDisplay: notifier.language.retake!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(textToDisplay: notifier.language.retake, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                       ],
                     ),
                   ),
                   // TODO: Need to be refactored, waiting for the new design
-                  // notifier.picIDVerification != null && notifier.picIDVerification!.isNotEmpty
+                  // notifier.picIDVerification != null && notifier.picIDVerification.isNotEmpty
                   //     ? CustomTextButton(
                   //         onPressed: () => Routing().moveBack(),
                   //         child: Row(
                   //           children: [
-                  //             CustomTextWidget(textToDisplay: notifier.language.close!, textStyle: Theme.of(context).textTheme.subtitle1),
+                  //             CustomTextWidget(textToDisplay: notifier.language.close, textStyle: Theme.of(context).textTheme.subtitle1),
                   //             SizedBox(width: 8),
                   //             CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                   //           ],

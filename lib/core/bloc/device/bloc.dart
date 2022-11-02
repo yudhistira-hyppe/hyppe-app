@@ -23,7 +23,7 @@ class DeviceBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -58,7 +58,7 @@ class DeviceBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setDeviceFetch(DeviceFetch(DeviceState.activityAwakeError, data: GenericResponse.fromJson(onResult.data).responseData));

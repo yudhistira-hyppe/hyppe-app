@@ -31,8 +31,8 @@ class SuccessWithdrawScreen extends StatelessWidget {
               ),
               twentyPx,
               Text(
-                notifier2.translate.congrats!,
-                style: Theme.of(context).primaryTextTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                notifier2.translate.congrats ?? '',
+                style: Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               Text(notifier2.translate.yourTransactionisBeingProcessedNow ?? ''),
               twentyPx,
@@ -53,39 +53,39 @@ class SuccessWithdrawScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier2.translate.detailTransaction!,
-                      textStyle: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                      textToDisplay: notifier2.translate.detailTransaction ?? '',
+                      textStyle: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     twentyPx,
-                    TwoColumnWidget(notifier2.translate.transferTo, text2: notifier.withdarawalSummarymodel!.name),
+                    TwoColumnWidget(notifier2.translate.transferTo, text2: notifier.withdarawalSummarymodel?.name),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.bankName, text2: notifier.withdarawalSummarymodel!.bankName),
+                    TwoColumnWidget(notifier2.translate.bankName, text2: notifier.withdarawalSummarymodel?.bankName),
                     sixPx,
                     TwoColumnWidget(
                       'Status',
-                      text2: System().statusWithdrwal(context, notifier.withdarawalmodel!.status!),
+                      text2: System().statusWithdrwal(context, notifier.withdarawalmodel?.status ?? ''),
                     ),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.bankAccount, text2: notifier.withdarawalSummarymodel!.bankAccount),
+                    TwoColumnWidget(notifier2.translate.bankAccount, text2: notifier.withdarawalSummarymodel?.bankAccount),
                     sixPx,
                     const Divider(
                       color: kHyppeLightSurface,
                     ),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.withdrawalAmount, text2: System().currencyFormat(amount: notifier.withdarawalmodel!.amount)),
-                    notifier.withdarawalmodel!.bankVerificationCharge != null && notifier.withdarawalmodel!.bankVerificationCharge! > 0
+                    TwoColumnWidget(notifier2.translate.withdrawalAmount, text2: System().currencyFormat(amount: notifier.withdarawalmodel?.amount)),
+                    notifier.withdarawalmodel?.bankVerificationCharge != null && (notifier.withdarawalmodel?.bankVerificationCharge ?? 0) > 0
                         ? Padding(
                             padding: const EdgeInsets.only(top: 6.0),
                             child: TwoColumnWidget(
                               notifier2.translate.verificationBankAccount,
-                              text2: System().currencyFormat(amount: notifier.withdarawalmodel!.bankVerificationCharge),
+                              text2: System().currencyFormat(amount: notifier.withdarawalmodel?.bankVerificationCharge),
                             ),
                           )
                         : Container(),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.adminFee, text2: System().currencyFormat(amount: notifier.withdarawalmodel!.bankDisbursmentCharge)),
+                    TwoColumnWidget(notifier2.translate.adminFee, text2: System().currencyFormat(amount: notifier.withdarawalmodel?.bankDisbursmentCharge)),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.withdrawal, text2: System().currencyFormat(amount: notifier.withdarawalmodel!.totalamount)),
+                    TwoColumnWidget(notifier2.translate.withdrawal, text2: System().currencyFormat(amount: notifier.withdarawalmodel?.totalamount)),
                   ],
                 ),
               ),
@@ -97,7 +97,7 @@ class SuccessWithdrawScreen extends StatelessWidget {
                   width: SizeConfig.screenWidth,
                   child: CustomTextButton(
                     onPressed: () => notifier.backtransaction(),
-                    child: Text(notifier2.translate.backtoTransaction!),
+                    child: Text(notifier2.translate.backtoTransaction ?? ''),
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                   ),
                 ),

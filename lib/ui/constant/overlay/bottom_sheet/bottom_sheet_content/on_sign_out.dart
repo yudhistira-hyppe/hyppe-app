@@ -40,7 +40,7 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
               ),
               CustomElevatedButton(
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.yesSure!,
+                  textToDisplay: notifier.translate.yesSure ?? '',
                   textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
                 ),
                 width: double.infinity,

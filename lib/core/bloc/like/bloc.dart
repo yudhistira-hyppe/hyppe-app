@@ -23,7 +23,7 @@ class LikeBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setLikeFetch(LikeFetch(LikeState.likeUserPostFailed));
         } else {
           setLikeFetch(LikeFetch(LikeState.likeUserPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));

@@ -11,14 +11,10 @@ import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -72,18 +68,18 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                 itemCount: widget.value.length,
                 itemBuilder: (context, index) {
                   // print(System().showUserPicture(value[index].avatar));
-                  widget.value[index].status == 'UNLINK' ? '' : notifier.statusFollow = notifier.label(widget.value[index].status!);
+                  widget.value[index].status == 'UNLINK' ? '' : notifier.statusFollow = notifier.label(widget.value[index].status);
                   return Column(
                     children: [
                       ListTile(
-                        onTap: () => System().navigateToProfile(context, widget.value[index].email!),
+                        onTap: () => System().navigateToProfile(context, widget.value[index].email ?? ''),
                         contentPadding: EdgeInsets.zero,
                         title: CustomTextWidget(
-                          textToDisplay: widget.value[index].username!,
+                          textToDisplay: widget.value[index].username ?? '',
                           textStyle: Theme.of(context).textTheme.titleSmall,
                           textAlign: TextAlign.start,
                         ),
-                        // subtitle: Text("${notifier.searchPeolpleData[index].fullName!}"),
+                        // subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
                         trailing: widget.value[index].status == 'UNLINK'
                             ? const SizedBox()
                             : notifier.emailcheck(widget.value[index].email)
@@ -95,7 +91,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                         ShowGeneralDialog.deleteTagUserContentDialog(context, '', () {}, widget.postId);
                                       },
                                       child: Text(
-                                        notifierTranslate.translate.delete!,
+                                        notifierTranslate.translate.delete ?? 'delete',
                                         style: const TextStyle(color: kHyppePrimary),
                                       ),
                                     ),
@@ -130,7 +126,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                             width: 40,
                             height: 40,
                             onTap: () {},
-                            imageUrl: System().showUserPicture(widget.value[index].avatar == null ? '' : widget.value[index].avatar!.mediaEndpoint),
+                            imageUrl: System().showUserPicture(widget.value[index].avatar == null ? '' : widget.value[index].avatar?.mediaEndpoint),
                             following: true,
                             onFollow: () {},
                           ),

@@ -5,7 +5,6 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,15 +37,15 @@ class OnStatementPinBottomSheet extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: Center(
                           child: CustomTextWidget(
-                            textToDisplay: title!,
-                            textStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                            textToDisplay: title ?? '',
+                            textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                             maxLines: 2,
                           ),
                         ),
                       ),
                 CustomTextWidget(
-                  textToDisplay: bodyText!,
-                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay: bodyText ?? '',
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.center,
                 ),
@@ -60,7 +59,7 @@ class OnStatementPinBottomSheet extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     function: onSave,
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.goToSecurityPrivacy!,
+                      textToDisplay: notifier.translate.goToSecurityPrivacy ?? '',
                     ),
                     buttonStyle: ButtonStyle(
                       // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),

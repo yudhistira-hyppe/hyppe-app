@@ -94,7 +94,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                                   textStyle: Theme.of(context).textTheme.titleSmall,
                                   textAlign: TextAlign.start,
                                 ),
-                                // subtitle: Text("${notifier.searchPeolpleData[index].fullName!}"),
+                                // subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
                                 // trailing: Consumer<PreUploadContentNotifier>(
                                 //   builder: (_, notifier, __) {
                                 //     notifier.statusFollow = notifier.label(widget.value[index].status!);

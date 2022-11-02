@@ -37,8 +37,8 @@ class _HelpScreenState extends State<HelpScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextWidget(
-                textToDisplay: notifier.translate.helloCanIhelpyou!,
-                textStyle: Theme.of(context).primaryTextTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+                textToDisplay: notifier.translate.helloCanIhelpyou ?? '',
+                textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
               ),
               CustomSearchBar(
                 hintText: notifier.translate.searchtopic,
@@ -47,7 +47,7 @@ class _HelpScreenState extends State<HelpScreen> {
                 // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                 // onPressedIcon: () => notifier.onSearchPost(context),
                 // onTap: () => notifier.moveSearchMore(),
-                // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
+                // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
               ),
               Container(
                 padding: const EdgeInsets.all(11),
@@ -65,7 +65,7 @@ class _HelpScreenState extends State<HelpScreen> {
                     ),
                     tenPx,
                     CustomTextWidget(
-                      textToDisplay: notifier.translate.yourTicketIssue!,
+                      textToDisplay: notifier.translate.yourTicketIssue ?? '',
                       textStyle: Theme.of(context).primaryTextTheme.caption,
                       textAlign: TextAlign.start,
                     ),
@@ -78,8 +78,8 @@ class _HelpScreenState extends State<HelpScreen> {
               ),
               twentyFourPx,
               CustomTextWidget(
-                textToDisplay: notifier.translate.frequentlyAskedQuestions!,
-                textStyle: Theme.of(context).primaryTextTheme.bodyText1!.copyWith(),
+                textToDisplay: notifier.translate.frequentlyAskedQuestions ?? '',
+                textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(),
               ),
               GestureDetector(onTap: () => Routing().move(Routes.faqDetail), child: Text('List FAQ')),
               const Spacer(),
@@ -105,7 +105,7 @@ class _HelpScreenState extends State<HelpScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: notifier.translate.stillNeedsHelp!,
+                            textToDisplay: notifier.translate.stillNeedsHelp ?? '',
                             maxLines: 2,
                             textAlign: TextAlign.start,
                           ),
@@ -115,8 +115,8 @@ class _HelpScreenState extends State<HelpScreen> {
                             },
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                             child: CustomTextWidget(
-                              textToDisplay: notifier.translate.submitTicketIssue!,
-                              textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
+                              textToDisplay: notifier.translate.submitTicketIssue ?? '',
+                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
                             ),
                           ),
                         ],

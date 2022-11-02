@@ -53,8 +53,8 @@ class TopWithdrawalWodget extends StatelessWidget {
             ),
             twelvePx,
             CustomTextWidget(
-              textToDisplay: System().currencyFormat(amount: notifier.accountBalance!.totalsaldo ?? 0),
-              textStyle: Theme.of(context).primaryTextTheme.headline5!.copyWith(fontWeight: FontWeight.w700),
+              textToDisplay: System().currencyFormat(amount: notifier.accountBalance?.totalsaldo ?? 0),
+              textStyle: Theme.of(context).primaryTextTheme.headline5?.copyWith(fontWeight: FontWeight.w700),
             ),
             thirtyTwoPx,
             CustomTextWidget(
@@ -96,7 +96,7 @@ class TopWithdrawalWodget extends StatelessWidget {
                         formatter: NumberFormat.decimalPattern('id'),
                       )
                     ], // Only numbers can be entered
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       fillColor: kHyppePrimary,
                       errorBorder: InputBorder.none,
@@ -117,8 +117,8 @@ class TopWithdrawalWodget extends StatelessWidget {
                     color: kHyppeLightSurface,
                   ),
                   child: Text(
-                    translate.rp!,
-                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold),
+                    translate.rp ?? 'Rp',
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
                 ),

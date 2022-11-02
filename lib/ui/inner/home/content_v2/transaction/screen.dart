@@ -73,7 +73,7 @@ class _TransactionState extends State<Transaction> {
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
-                          TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance!.totalsaldo ?? 0)),
+                          TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
                           const ButtonTransaction(),
                           sixPx,
                           Container(
@@ -99,7 +99,7 @@ class _TransactionState extends State<Transaction> {
                                       ),
                                       sixPx,
                                       CustomTextWidget(
-                                        textToDisplay: notifier2.translate.transactionInProgress!,
+                                        textToDisplay: notifier2.translate.transactionInProgress ?? '',
                                         textStyle: Theme.of(context).textTheme.caption,
                                       ),
                                       Expanded(
@@ -109,11 +109,11 @@ class _TransactionState extends State<Transaction> {
                                             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(8),
-                                              color: notifier.countTransactionProgress! > 0 ? kHyppeDanger : kHyppeLightSecondary,
+                                              color: (notifier.countTransactionProgress ?? 0) > 0 ? kHyppeDanger : kHyppeLightSecondary,
                                             ),
                                             child: CustomTextWidget(
                                               textToDisplay: "${notifier.countTransactionProgress}",
-                                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightBackground),
+                                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightBackground),
                                             ),
                                           ),
                                         ),
@@ -134,20 +134,20 @@ class _TransactionState extends State<Transaction> {
                                   Routing().move(Routes.allTransaction);
                                 },
                                 child: CustomTextWidget(
-                                    textToDisplay: notifier2.translate.seeMore!,
-                                    textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                    textToDisplay: notifier2.translate.seeMore ?? '',
+                                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                                           color: kHyppePrimary,
                                           fontWeight: FontWeight.bold,
                                         )),
                               )
                             ],
                           ),
-                          notifier.dataTransaction!.isEmpty
+                          notifier.dataTransaction?.isEmpty ?? true
                               ? EmptyBankAccount(
                                   textWidget: Column(
                                   children: [
                                     CustomTextWidget(
-                                      textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
+                                      textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
                                       maxLines: 4,
                                     ),
                                   ],
@@ -155,20 +155,20 @@ class _TransactionState extends State<Transaction> {
                               : ListView.builder(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: notifier.dataTransaction!.length,
+                                  itemCount: notifier.dataTransaction?.length,
                                   itemBuilder: (context, index) {
                                     String title = '';
-                                    switch (notifier.dataTransaction![index].type) {
+                                    switch (notifier.dataTransaction?[index].type) {
                                       case TransactionType.withdrawal:
-                                        title = notifier2.translate.withdrawal!;
+                                        title = notifier2.translate.withdrawal ?? '';
                                         return WithdrawalWidget(
                                           title: title,
                                           language: notifier2.translate,
-                                          data: notifier.dataTransaction![index],
+                                          data: notifier.dataTransaction?[index],
                                         );
                                       default:
                                         return BuySellWidget(
-                                          data: notifier.dataTransaction![index],
+                                          data: notifier.dataTransaction?[index],
                                           language: notifier2.translate,
                                         );
                                     }
