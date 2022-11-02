@@ -6,8 +6,8 @@ class WebViewNotifier {
 
   Future<bool> onWillPop() async {
     try {
-      final canGoBack = await webViewController!.canGoBack();
-      if (canGoBack) {
+      final canGoBack = await webViewController?.canGoBack();
+      if (canGoBack ?? false) {
         webViewController?.goBack();
         return Future.value(false);
       } else {

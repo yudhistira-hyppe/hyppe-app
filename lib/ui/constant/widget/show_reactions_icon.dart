@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class ShowReactionsIcon extends StatelessWidget {
     SizeConfig().init(context);
     return UnconstrainedBox(
       child: Container(
-        width: SizeConfig.screenWidth! * widthP,
+        width: SizeConfig.screenWidth ?? context.getWidth() * widthP,
         height: 550 * SizeConfig.scaleDiagonal,
         margin: const EdgeInsets.symmetric(horizontal: 15),
         alignment: Alignment.bottomCenter,
@@ -56,7 +57,7 @@ class ShowReactionsIcon extends StatelessWidget {
             SizedBox(height: 10 * SizeConfig.scaleDiagonal),
             Expanded(
               child: GridView.builder(
-                itemCount: data!.length,
+                itemCount: data?.length,
                 itemBuilder: itemBuilder,
                 scrollDirection: Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),

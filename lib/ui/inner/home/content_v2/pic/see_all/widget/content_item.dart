@@ -85,12 +85,6 @@ class ContentItem extends StatelessWidget {
                               onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
                               createdAt: '${System().readTimestamp(DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)}',
 
-                              // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
-                              //       context,
-                              //       currentValue: vidData,
-                              //       fUserId: vidData.userID!,
-                              //       statusFollowing: StatusFollowing.rejected,
-                              //     ),
                             ),
                             twelvePx,
                             Stack(
@@ -127,9 +121,10 @@ class ContentItem extends StatelessWidget {
                                                 label: '${data?.tagPeople?.length} people',
                                                 function: () {
                                                   context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
-                                                  // vidNotifier.showUserTag(context, index, data!.postID);
+                                                  // vidNotifier.showUserTag(context, index, data.postID);
                                                 },
                                               )
+
                                             : const SizedBox(),
                                         data?.location == '' || data?.location == null
                                             ? const SizedBox()

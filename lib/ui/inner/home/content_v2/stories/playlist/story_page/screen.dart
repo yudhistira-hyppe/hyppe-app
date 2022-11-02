@@ -271,7 +271,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                       : const SizedBox.shrink(),
                 ),
                 BuildReplayCaption(data: widget.data),
-                ...notifier.buildItems(_animationController)
+                ...notifier.buildItems(_animationController!)
               ],
             );
     }

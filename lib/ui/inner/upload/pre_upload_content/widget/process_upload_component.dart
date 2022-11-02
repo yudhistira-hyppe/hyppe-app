@@ -107,60 +107,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               children: [
                 Row(
                   children: [
-                    // System().extensionFiles(context.read<PreUploadContentNotifier>().fileContent![0]!) != '.$MP4' &&
-                    //         System().extensionFiles(context.read<PreUploadContentNotifier>().fileContent![0]!) != '.$MOV'
-                    //     ? Container(
-                    //         width: 27,
-                    //         height: 27,
-                    //         alignment: Alignment.center,
-                    //         child: CustomIconWidget(
-                    //           width: 10.8,
-                    //           height: 10.8,
-                    //           defaultColor: false,
-                    //           color: Colors.white.withOpacity(0.4),
-                    //           iconData: iconData(context.read<PreUploadContentNotifier>().featureType),
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //           image: DecorationImage(
-                    //             fit: BoxFit.cover,
-                    //             image: FileImage(
-                    //               File(context.read<PreUploadContentNotifier>().fileContent![0]!),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       )
-                    //     : FutureBuilder<Uint8List?>(
-                    //         future: context.read<PreUploadContentNotifier>().makeThumbnail(),
-                    //         builder: (context, snapshot) {
-                    //           if (snapshot.data != null) {
-                    //             return Image.memory(
-                    //               snapshot.data!,
-                    //               width: 27,
-                    //               height: 27,
-                    //               fit: BoxFit.cover,
-                    //               frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                    //                 if (wasSynchronouslyLoaded) {
-                    //                   return child;
-                    //                 }
-                    //                 return AnimatedOpacity(
-                    //                   child: child,
-                    //                   curve: Curves.easeOut,
-                    //                   opacity: frame == null ? 0 : 1,
-                    //                   duration: const Duration(seconds: 1),
-                    //                 );
-                    //               },
-                    //               filterQuality: FilterQuality.high,
-                    //             );
-                    //           } else {
-                    //             return Container(
-                    //               width: 27,
-                    //               height: 27,
-                    //               child: CustomLoading(),
-                    //             );
-                    //           }
-                    //         },
-                    //       ),
-                    // eightPx,
+
                     CustomTextWidget(
                       textToDisplay: notifier.message,
                       textStyle: Theme.of(context).textTheme.caption,
@@ -203,7 +150,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               borderRadius: BorderRadius.circular(40.0),
               child: LinearProgressIndicator(
                 value: notifier.progress,
-                backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
+                backgroundColor: Theme.of(context).textTheme.button?.color?.withOpacity(0.4),
                 valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
               ),
             )

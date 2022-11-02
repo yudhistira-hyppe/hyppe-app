@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
@@ -60,7 +61,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                 alignment: Alignment.topCenter,
                 child: Container(
                   width: double.infinity,
-                  height: SizeConfig.screenHeight! * 0.07,
+                  height: SizeConfig.screenHeight ?? context.getHeight() * 0.07,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -86,7 +87,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                     children: [
                       CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
                       CustomTextWidget(
-                        textToDisplay: notifier.language.idVerification!,
+                        textToDisplay: notifier.language.idVerification ?? '',
                         textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
                       ),
                     ],
@@ -116,7 +117,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
               ),
               Align(
                 alignment: const Alignment(0.0, 0.6),
-                child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo!, textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
+                child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
               )
             ],
           ),

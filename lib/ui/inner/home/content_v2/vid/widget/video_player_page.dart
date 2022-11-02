@@ -166,7 +166,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         // print('data : ${fetch.data.toString()}');
         _newClipData = fetch.data;
         print('videoId : ${_newClipData?.data?.videoId}');
-        await getAdsVideoApsara(_newClipData!.data!.videoId!);
+        await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
@@ -273,7 +273,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         result = mid != 0 ? 0 : (duration / 2).toInt();
         break;
       case 'End':
-        result = (widget.videoData?.metadata?.postRoll ?? 0) != 0 ? widget.videoData!.metadata!.postRoll! : duration - 1;
+        result = (widget.videoData?.metadata?.postRoll ?? 0) != 0 ? widget.videoData?.metadata?.postRoll ?? 0 : duration - 1;
         break;
       default:
         result = 0;
@@ -285,15 +285,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void _userVideo(bool autoPlay) async {
     print('test iklan data');
     print(widget.videoData?.postID);
-    // print(_clipsData!.ads[0].rollDuration);
-    // print(_clipsData!.ads[1].rollUri);
-    // print(_clipsData!.ads[1].playingAt);
-    // print(_clipsData!.ads[1].playingAt);
-    // print(_clipsData!.ads[1].rollDuration);
-    // print(_clipsData!.ads[1].rollUri);
-    // print(_clipsData!.ads[2].playingAt);
-    // print(_clipsData!.ads[2].rollDuration);
-    // print(_clipsData!.ads[2].rollUri);
+    // print(_clipsData.ads[0].rollDuration);
+    // print(_clipsData.ads[1].rollUri);
+    // print(_clipsData.ads[1].playingAt);
+    // print(_clipsData.ads[1].playingAt);
+    // print(_clipsData.ads[1].rollDuration);
+    // print(_clipsData.ads[1].rollUri);
+    // print(_clipsData.ads[2].playingAt);
+    // print(_clipsData.ads[2].rollDuration);
+    // print(_clipsData.ads[2].rollUri);
     // setStateIfMounted(() {
     //   countAds += 1;
     //   if (countAds > 4) {
@@ -351,7 +351,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     try {
       await _betterPlayerController?.setupDataSource(dataSource);
-      _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController!.videoPlayerController!.value.aspectRatio);
+      _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
     } catch (e) {
       'Setup user data source error: $e'.logger();
     }
@@ -510,7 +510,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         BetterPlayerDataSourceType.network,
         roll.rollUri ?? _betterPlayerRollUri ?? '',
         headers: {
-          'post-id': widget.videoData!.postID!, //. widget.videoData?.postID ?? '',
+          'post-id': widget.videoData?.postID ?? '', //. widget.videoData?.postID ?? '',
           'x-auth-user': SharedPreference().readStorage(SpKeys.email),
           'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
         },
@@ -548,7 +548,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
             });
           } else {
             print('play iklan');
-            _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap!.videoPlayerController!.value.aspectRatio);
+            _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio ?? 0);
             _betterPlayerControllerMap?.play();
           }
         });
@@ -680,7 +680,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     return ValueListenableBuilder<bool>(
       valueListenable: _initializeVideo,
       builder: (_, value, __) => !value
-          ? widget.videoData!.isReport!
+          ? widget.videoData?.isReport ?? false
               ? VideoThumbnailReport(
                   videoData: widget.videoData,
                 )

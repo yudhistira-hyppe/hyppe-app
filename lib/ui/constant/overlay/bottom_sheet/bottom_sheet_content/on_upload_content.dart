@@ -28,7 +28,7 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                       iconData: "${AssetPath.vectorPath}handler.svg"),
                   SizedBox(height: 16 * SizeConfig.scaleDiagonal),
                   CustomTextWidget(
-                    textToDisplay: notifier.language.postTo!,
+                    textToDisplay: notifier.language.postTo ?? '',
                     textStyle: Theme.of(context).textTheme.headline6,
                   ),
                 ],
@@ -53,11 +53,10 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.start,
                     textStyle: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppeStoryCaption!,
+                    textToDisplay: notifier.language.hyppeStoryCaption ?? '',
                     textAlign: TextAlign.start,
                     textStyle:
                         const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
@@ -86,11 +85,10 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.start,
                     textStyle: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppeVidCaption!,
+                    textToDisplay: notifier.language.hyppeVidCaption ?? '',
                     textAlign: TextAlign.start,
                     textStyle:
                         const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
@@ -119,11 +117,10 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.start,
                     textStyle: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppeDiaryCaption!,
+                    textToDisplay: notifier.language.hyppeDiaryCaption ?? '',
                     textAlign: TextAlign.start,
                     textStyle:
                         const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
@@ -153,11 +150,10 @@ class OnUploadContentBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.start,
                     textStyle: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                        .bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   subtitle: CustomTextWidget(
-                    textToDisplay: notifier.language.hyppePicCaption!,
+                    textToDisplay: notifier.language.hyppePicCaption ?? '',
                     textAlign: TextAlign.start,
                     textStyle:
                         const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),

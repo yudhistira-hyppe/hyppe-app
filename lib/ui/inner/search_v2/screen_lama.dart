@@ -85,7 +85,7 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
                         OptionBar(title: "Pic", icon: "pic", pageIndex: 2),
                         // CustomElevatedButton(
                         //     child: CustomTextWidget(
-                        //       textToDisplay: context.select((SearchNotifier value) => value.language.filter!),
+                        //       textToDisplay: context.select((SearchNotifier value) => value.language.filter),
                         //       textStyle: Theme.of(context).textTheme.button,
                         //     ),
                         //     width: 50,

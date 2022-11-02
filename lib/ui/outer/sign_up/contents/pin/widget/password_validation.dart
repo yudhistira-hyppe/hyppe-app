@@ -51,7 +51,7 @@
 //                 RadioListTile(
 //                   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
 //                   title: CustomTextWidget(
-//                     textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number!,
+//                     textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number,
 //                     textAlign: TextAlign.start,
 //                     textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                   ),

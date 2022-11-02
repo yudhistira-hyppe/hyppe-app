@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -18,7 +19,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
   Widget build(BuildContext context) {
     return Consumer<ChangePasswordNotifier>(
       builder: (_, notifier, __) => Container(
-        height: SizeConfig.screenHeight! * 0.35,
+        height: SizeConfig.screenHeight ?? context.getHeight() * 0.35,
         margin: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -46,12 +47,12 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 ),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: notifier.currentPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color! : kHyppePrimary, width: 1)),
+                        color: notifier.currentPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              inputAreaWidth: SizeConfig.screenWidth!,
+              inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
               obscureText: notifier.obscureCurrentPassword,
               inputAreaHeight: 75.0 * SizeConfig.scaleDiagonal,
             ),
@@ -78,12 +79,12 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 ),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: notifier.newPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color! : kHyppePrimary, width: 1)),
+                        color: notifier.newPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              inputAreaWidth: SizeConfig.screenWidth!,
+              inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
               obscureText: notifier.obscureNewPassword,
               inputAreaHeight: 75.0 * SizeConfig.scaleDiagonal,
             ),
@@ -110,12 +111,12 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 ),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: notifier.reTypePasswordController.text.isEmpty ? Theme.of(context).iconTheme.color! : kHyppePrimary, width: 1)),
+                        color: notifier.reTypePasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              inputAreaWidth: SizeConfig.screenWidth!,
+              inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
               obscureText: notifier.obscureReTypePassword,
               inputAreaHeight: 75.0 * SizeConfig.scaleDiagonal,
             )

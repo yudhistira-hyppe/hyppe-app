@@ -83,7 +83,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
               CustomBackgroundLayer(
                 sigmaX: 30,
                 sigmaY: 30,
-                // thumbnail: picData!.content[arguments].contentUrl,
                 thumbnail: widget.urlAds,
               ),
               // Content

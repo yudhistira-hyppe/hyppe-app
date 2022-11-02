@@ -177,9 +177,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     }
 
 
-    // _updatedData!.tagPeople.removeWhere((element) => element.email == email);
-    // _updatedData.description = 'hflkjsdhkfjhskdjfhk';
-
     notifyListeners();
   }
 

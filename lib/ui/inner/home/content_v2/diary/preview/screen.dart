@@ -60,7 +60,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
         children: [
           CustomHeaderFeature(
             onPressed: () => notifier.navigateToSeeAll(context),
-            title: translateNotifier.translate.latestDiariesForYou!,
+            title: translateNotifier.translate.latestDiariesForYou ?? '',
           ),
           eightPx,
           Expanded(
@@ -112,7 +112,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                                     context.read<PreviewDiaryNotifier>().navigateToShortVideoPlayer(context, index);
                                   },
                                 ),
-                                notifier.diaryData![index].saleAmount! > 0
+                                (notifier.diaryData?[index].saleAmount ?? 0) > 0
                                     ? const Positioned(
                                         top: 3,
                                         right: 8,

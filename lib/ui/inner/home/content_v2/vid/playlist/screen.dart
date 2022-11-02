@@ -51,7 +51,6 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Text("${notifier.data!.isReport}"),
                       _notifier.data != null
                           ? Stack(
                               children: [

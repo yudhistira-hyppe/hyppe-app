@@ -61,7 +61,7 @@ class _PicDetailState extends State<PicDetail> {
               CustomBackgroundLayer(
                 sigmaX: 30,
                 sigmaY: 30,
-                // thumbnail: picData!.content[arguments].contentUrl,
+                // thumbnail: picData.content[arguments].contentUrl,
                 thumbnail: widget.arguments?.isApsara ?? false ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
               ),
               // Content

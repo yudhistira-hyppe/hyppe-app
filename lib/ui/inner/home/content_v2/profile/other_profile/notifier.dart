@@ -318,7 +318,7 @@ class OtherProfileNotifier with ChangeNotifier {
     return false;
     // if (itsMe) {
     //   final storyNotifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    //   return storyNotifier.myStoriesData != null && storyNotifier.myStoriesData!.story.isNotEmpty;
+    //   return storyNotifier.myStoriesData != null && storyNotifier.myStoriesData.story.isNotEmpty;
     // } else {
     //   return false;
     // }
@@ -327,7 +327,7 @@ class OtherProfileNotifier with ChangeNotifier {
   Future viewStory(BuildContext context) async {
     // if (itsMe) {
     // final storyNotifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    // if (storyNotifier.myStoriesData != null && storyNotifier.myStoriesData!.story.isNotEmpty) {
+    // if (storyNotifier.myStoriesData != null && storyNotifier.myStoriesData.story.isNotEmpty) {
     //   storyNotifier.tapHandler(context, storyNotifier.myStoriesData);
     // }
     // }

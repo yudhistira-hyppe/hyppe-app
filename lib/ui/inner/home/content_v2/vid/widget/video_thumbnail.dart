@@ -69,7 +69,7 @@ class VideoThumbnail extends StatelessWidget {
                 //   ),
                 // ),
                 Visibility(
-                  visible: videoData!.saleAmount! > 0,
+                  visible: (videoData?.saleAmount ?? 0) > 0,
                   child: Padding(
                     padding: EdgeInsets.all(videoData?.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13),
                     child: CustomIconWidget(
@@ -88,7 +88,7 @@ class VideoThumbnail extends StatelessWidget {
                       ),
                       onPressed: () => ShowBottomSheet.onShowOptionContent(
                         context,
-                        contentData: videoData!,
+                        contentData: videoData ?? ContentData(),
                         captionTitle: hyppeVid,
                         onDetail: onDetail,
                         onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
@@ -104,7 +104,7 @@ class VideoThumbnail extends StatelessWidget {
                 Visibility(
                   visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
                   child: CustomTextButton(
-                    onPressed: () => context.read<VidDetailNotifier>().reportContent(context, videoData!),
+                    onPressed: () => context.read<VidDetailNotifier>().reportContent(context, videoData ?? ContentData()),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       iconData: '${AssetPath.vectorPath}more.svg',
@@ -141,7 +141,7 @@ class VideoThumbnail extends StatelessWidget {
                   builder: (context, value, child) {
                     return GestureDetector(
                       onTap: () {
-                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData!.postID, 'LIKE', 'Like', videoData?.email);
+                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData?.postID ?? '', 'LIKE', 'Like', videoData?.email);
                       },
                       child: CustomBalloonWidget(
                         child: Row(
@@ -156,7 +156,7 @@ class VideoThumbnail extends StatelessWidget {
                             ),
                             fourPx,
                             CustomTextWidget(
-                              textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                               textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
                             )
                           ],
@@ -167,7 +167,7 @@ class VideoThumbnail extends StatelessWidget {
                 ),
                 CustomBalloonWidget(
                   child: CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                     textToDisplay: System().formatDuration(Duration(seconds: videoData?.metadata?.duration ?? 0).inMilliseconds),
                   ),
                 ),

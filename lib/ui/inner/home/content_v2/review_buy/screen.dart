@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -39,7 +40,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
     return Consumer<ReviewBuyNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -47,8 +48,8 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.orderSummary!,
-            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+            textToDisplay: notifier.language.orderSummary ?? '',
+            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -62,7 +63,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Row(
                         children: [
-                          Expanded(child: Text(notifier.data!.description!)),
+                          Expanded(child: Text(notifier.data?.description ?? '')),
                           const SizedBox(width: 10),
                           Container(
                             alignment: Alignment.topRight,
@@ -70,14 +71,14 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                               borderRadius: BorderRadius.circular(2),
                               image: DecorationImage(
                                 scale: 1,
-                                // image: NetworkImage(System().showUserPicture('/pict/' + notifier.data!.postId!)!),
+                                // image: NetworkImage(System().showUserPicture('/pict/' + notifier.data.postId)),
                                 image: NetworkImage(widget.arguments?.isApsara ?? false ? (widget.arguments?.mediaThumbEndPoint ?? '') : (widget.arguments?.fullThumbPath ?? '')),
                                 fit: BoxFit.cover,
                               ),
                             ),
                             width: 48 * SizeConfig.scaleDiagonal,
                             height: 48 * SizeConfig.scaleDiagonal,
-                            child: notifier.data!.postType == 'vid'
+                            child: notifier.data?.postType == 'vid'
                                 ? Center(
                                     child: CustomIconWidget(
                                       defaultColor: false,
@@ -95,7 +96,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
                       child: Column(
                         children: [
-                          contentInfo(textTheme, title: notifier.language.certificateNumber!, value: notifier.data!.postId!),
+                          contentInfo(textTheme, title: notifier.language.certificateNumber ?? '', value: notifier.data?.postId ?? ''),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: SizedBox(
@@ -130,12 +131,12 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: notifier.language.total!,
+                            textToDisplay: notifier.language.total ?? 'total',
                             textStyle: textTheme.titleSmall,
                           ),
                           CustomTextWidget(
-                            textToDisplay: System().currencyFormat(amount: notifier.data!.totalAmount!.toInt()),
-                            textStyle: Theme.of(context).primaryTextTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                            textToDisplay: System().currencyFormat(amount: notifier.data?.totalAmount?.toInt()),
+                            textStyle: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -145,7 +146,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                         height: 44.0 * SizeConfig.scaleDiagonal,
                         function: () => Routing().move(Routes.paymentMethodScreen),
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.choosePaymentMethods!,
+                          textToDisplay: notifier.language.choosePaymentMethods ?? '',
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                         buttonStyle: ButtonStyle(

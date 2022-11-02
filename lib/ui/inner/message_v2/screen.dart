@@ -57,8 +57,8 @@ class _MessageScreenState extends State<MessageScreen> {
         builder: (_, notifier, notifier2, __) => Scaffold(
           appBar: AppBar(
             title: CustomTextWidget(
-              textToDisplay: notifier2.translate.messages!,
-              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+              textToDisplay: notifier2.translate.messages ?? '',
+              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
             ),
             automaticallyImplyLeading: false,
           ),
@@ -121,22 +121,22 @@ class _MessageScreenState extends State<MessageScreen> {
                                           // ShowBottomSheet.onLongPressTileUserMessage(context);
                                           ShowBottomSheet.onLongPressDeleteMessage(context, data: discussData, function: () {
                                             // print('masuk mas eko');
-                                            // print(discussData!.senderOrReceiverInfo!.email!);
+                                            // print(discussData.senderOrReceiverInfo.email);
                                             // print(discussData.disqusID);
-                                            notifier.deletetConversation(context, discussData!.senderOrReceiverInfo!.email!, discussData.disqusID!);
+                                            notifier.deletetConversation(context, discussData?.senderOrReceiverInfo?.email ?? '', discussData?.disqusID ?? '');
                                           });
                                         },
                                         child: ListTile(
                                           leading: StoryColorValidator(
                                             featureType: FeatureType.other,
-                                            // haveStory: notifier.chatData![index].isHaveStory ?? false,
+                                            // haveStory: notifier.chatData[index].isHaveStory ?? false,
                                             haveStory: false,
                                             child: CustomProfileImage(
                                               following: true,
                                               onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
-                                              // imageUrl: notifier.userID == notifier.chatData![index].senderID
-                                              //     ? '${notifier.chatData![index].picReceiverUrl! + SMALL}'
-                                              //     : '${notifier.chatData![index].picSenderUrl! + SMALL}',
+                                              // imageUrl: notifier.userID == notifier.chatData[index].senderID
+                                              //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
+                                              //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
                                               imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
                                               height: 60 * SizeConfig.scaleDiagonal,
                                               width: 60 * SizeConfig.scaleDiagonal,
@@ -144,9 +144,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                           ),
                                           title: CustomTextWidget(
                                             // "Demo user",
-                                            // textToDisplay: notifier.userID == notifier.chatData![index].senderID
-                                            //     ? notifier.chatData![index].receiverUserName
-                                            //     : notifier.chatData![index].senderName,
+                                            // textToDisplay: notifier.userID == notifier.chatData[index].senderID
+                                            //     ? notifier.chatData[index].receiverUserName
+                                            //     : notifier.chatData[index].senderName,
                                             textToDisplay: discussData?.senderOrReceiverInfo?.fullName ?? '',
                                             textAlign: TextAlign.start,
                                             textStyle: const TextStyle(
@@ -164,7 +164,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                             children: [
                                               CustomTextWidget(
                                                 textToDisplay: System().readTimestamp(
-                                                  DateTime.parse(discussData!.updatedAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                                                  DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
                                                   context,
                                                   fullCaption: true,
                                                 ),
@@ -175,16 +175,16 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 iconData: "${AssetPath.vectorPath}unread.svg",
                                                 defaultColor: false,
                                                 color: DateTime.now().millisecondsSinceEpoch >
-                                                        DateTime.parse(discussData.updatedAt ?? DateTime.now().toString()).add(const Duration(minutes: 10)).millisecondsSinceEpoch
+                                                        DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).add(const Duration(minutes: 10)).millisecondsSinceEpoch
                                                     ? kHyppeLightIcon
                                                     : null,
                                               ),
                                             ],
                                           ),
-                                          // trailing: notifier.chatData![index].isRead == true
+                                          // trailing: notifier.chatData[index].isRead == true
                                           //     ? CustomTextWidget(
                                           //         textToDisplay: System().readTimestamp(
-                                          //           int.parse(notifier.chatData![index].timestamp!),
+                                          //           int.parse(notifier.chatData[index].timestamp),
                                           //           context,
                                           //           fullCaption: false,
                                           //         ),
@@ -195,7 +195,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                           //         children: [
                                           //           CustomTextWidget(
                                           //             textToDisplay: System().readTimestamp(
-                                          //               int.parse(notifier.chatData![index].timestamp!),
+                                          //               int.parse(notifier.chatData[index].timestamp),
                                           //               context,
                                           //               fullCaption: false,
                                           //             ),

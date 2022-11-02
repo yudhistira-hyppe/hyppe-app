@@ -96,103 +96,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async {}
 
-  // Future allReload(BuildContext context, {bool isStartAgain = false, bool myContent = false, bool otherContent = false}) async {
-  //   AllContents? res;
-  //   const page = 0;
-  //   final box = Boxes.boxDataContents;
-  //   try {
-  //     final visi = 'PUBLIC';
-  //     final allContent = box.get(visi);
-  //     if(allContent != null){
-  //       'allContent is not null'.logger();
-  //       if(!isStartAgain){
-  //         final isHit =_availableToHitAgain(allContent, 12);
-  //         if(isHit){
-  //           final notifier = PostsBloc();
-  //           await notifier.getAllContentsBlocV2(
-  //               context,
-  //               pageNumber: page,
-  //               visibility: visi,
-  //               isStartAgain: isStartAgain,
-  //               myContent: myContent,
-  //               otherContent: otherContent);
-  //           final fetch = notifier.postsFetch;
-  //
-  //           res = AllContents.fromJson(fetch.data);
-  //           if((res.story ?? []).isNotEmpty){
-  //             allContent.story!.addAll(res.story!);
-  //           }
-  //           if((res.video ?? []).isNotEmpty){
-  //             allContent.video!.addAll(res.video!);
-  //           }
-  //           if((res.diary ?? []).isNotEmpty){
-  //             allContent.diary!.addAll(res.diary!);
-  //           }
-  //           if((res.pict ?? []).isNotEmpty){
-  //             allContent.pict!.addAll(res.pict!);
-  //           }
-  //           await allContent.save();
-  //         }
-  //       }else{
-  //         final notifier = PostsBloc();
-  //         await notifier.getAllContentsBlocV2(
-  //             context,
-  //             pageNumber: page,
-  //             visibility: visi,
-  //             isStartAgain: isStartAgain,
-  //             myContent: myContent,
-  //             otherContent: otherContent);
-  //         final fetch = notifier.postsFetch;
-  //
-  //         res = AllContents.fromJson(fetch.data);
-  //
-  //         await box.put(visi, res);
-  //       }
-  //
-  //     }else{
-  //       'allContent is null'.logger();
-  //       final notifier = PostsBloc();
-  //       await notifier.getAllContentsBlocV2(
-  //           context,
-  //           pageNumber: page,
-  //           visibility: visi,
-  //           isStartAgain: isStartAgain,
-  //           myContent: myContent,
-  //           otherContent: otherContent);
-  //       final fetch = notifier.postsFetch;
-  //       if(fetch.postsState == PostsState.getAllContentsError){
-  //
-  //       }else{
-  //
-  //       }
-  //       '${AllContents.fromJson(fetch.data).toJson()}'.logger();
-  //       res = AllContents.fromJson(fetch.data);
-  //       await box.put(visi, res);
-  //     }
-  //
-  //
-  //   } catch (e) {
-  //     '$e'.logger();
-  //     rethrow;
-  //   }
-  // }
-  //
-  // bool _availableToHitAgain(AllContents all, int limit){
-  //   if((all.story?.length ?? 0) < limit){
-  //     return true;
-  //   }
-  //   if((all.diary?.length ?? 0) < limit){
-  //     return true;
-  //   }
-  //   if((all.video?.length ?? 0) < limit){
-  //     return true;
-  //   }
-  //   if((all.pict?.length ?? 0) < limit){
-  //     return true;
-  //   }
-  //
-  //   return false;
-  // }
 
   Future<void> initialPeopleStories(
     BuildContext context, {
@@ -225,7 +128,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
       }
 
       if (peopleStoriesData != null) {
-        peopleStoriesData!.removeDuplicates(by: (item) => item.email);
+        peopleStoriesData?.removeDuplicates(by: (item) => item.email);
       }
     } catch (e) {
       'load people story list: ERROR: $e'.logger();

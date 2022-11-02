@@ -52,7 +52,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           ),
           centerTitle: false,
         ),
-        body: notifier.data != null ? notifier.data!.isNotEmpty
+        body: notifier.data != null ? notifier.data?.isNotEmpty ?? false
             ? SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 child: Column(
@@ -61,7 +61,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? '', textStyle: textTheme.titleMedium),
                     const SizedBox(height: 5),
                     CustomTextWidget(
-                      textToDisplay: notifier.reviewBuyNotifier.data != null ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount!.toInt()) : '',
+                      textToDisplay: notifier.reviewBuyNotifier.data != null ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount?.toInt()) : '',
                       textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                     ),
                     const SizedBox(height: 24),

@@ -58,7 +58,7 @@ class ContentSearchState extends State<ContentSearch> {
                       width: double.infinity,
                       height: double.infinity,
                       featureType: widget.featureType ?? FeatureType.other,
-                      isSafe: true, //notifier.postData!.data.listVid[index].isSafe,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
                       thumbnail: System().showUserPicture(widget.featureType != FeatureType.pic ? (widget.content?[index].mediaThumbEndPoint ?? '') : widget.content?[index].mediaEndpoint) ?? '',
                     ),
                   ),

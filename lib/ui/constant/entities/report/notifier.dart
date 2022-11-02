@@ -120,7 +120,7 @@ class ReportNotifier with ChangeNotifier {
   Future<void> reportPost(BuildContext context) async {
     context.read<HomeNotifier>().onReport(
           context,
-          postID: contentData!.postID!,
+          postID: contentData?.postID ?? '',
           content: typeContent,
           isReport: true,
         );
@@ -143,7 +143,7 @@ class ReportNotifier with ChangeNotifier {
           {
             await notifier.reports(
               context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID']),
+              data: ReportData(langID: 'en', remarkID: remarkID, userID: data?['userID'], postID: data?['postID']),
               reportType: ReportType.post,
             );
             print("REPORT POST");
@@ -153,7 +153,7 @@ class ReportNotifier with ChangeNotifier {
           {
             await notifier.reports(
               context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID'], commentID: data!['commentID']),
+              data: ReportData(langID: 'en', remarkID: remarkID, userID: data?['userID'], postID: data?['postID'], commentID: data?['commentID']),
               reportType: ReportType.comment,
             );
             print("REPORT COMMENT");
@@ -163,7 +163,7 @@ class ReportNotifier with ChangeNotifier {
           {
             await notifier.reports(
               context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], ruserID: data!['ruserID'], reportType: data!['reportType']),
+              data: ReportData(langID: 'en', remarkID: remarkID, userID: data?['userID'], ruserID: data?['ruserID'], reportType: data?['reportType']),
               reportType: ReportType.profile,
             );
             print("REPORT PROFILE");
@@ -173,7 +173,7 @@ class ReportNotifier with ChangeNotifier {
           {
             await notifier.reports(
               context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], storyID: data!['storyID']),
+              data: ReportData(langID: 'en', remarkID: remarkID, userID: data?['userID'], storyID: data?['storyID']),
               reportType: ReportType.story,
             );
             print("REPORT STORY");

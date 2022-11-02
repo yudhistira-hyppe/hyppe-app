@@ -43,9 +43,9 @@ class _DiaryPageState extends State<DiaryPage> {
   bool isLoading = false;
 
   // void _addPostView() {
-  //   if (widget.data!.postView == PostView.notViewed) {
+  //   if (widget.data.postView == PostView.notViewed) {
   //     if (!_postViewAdded) {
-  //       context.read<DiariesPlaylistNotifier>().addPostViewMixin(context, widget.data!).then((value) => _postViewAdded = value);
+  //       context.read<DiariesPlaylistNotifier>().addPostViewMixin(context, widget.data).then((value) => _postViewAdded = value);
   //     }
   //   }
   // }
@@ -151,12 +151,12 @@ class _DiaryPageState extends State<DiaryPage> {
                   nextDebouncer: false,
                   onComplete: () async {
                     await notifier.initAdsData(context);
-                    // widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                    // widget.controller.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
                     // _storyController.next();
-                    // widget.controller!.
+                    // widget.controller.
 
-                    // final isLastPage = widget.total! - 1 == widget.controller!.page;
+                    // final isLastPage = widget.total! - 1 == widget.controller.page;
                     // widget.function();
                     // if (isLastPage) {
                     //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);

@@ -47,7 +47,7 @@ class BuildReplayCaption extends StatelessWidget {
               width: 10 * SizeConfig.scaleDiagonal,
             ),
             CustomTextWidget(
-              textToDisplay: "Hanya Balas ke ${data!.username}",
+              textToDisplay: "Hanya Balas ke ${data?.username}",
               textStyle: Theme.of(context).textTheme.bodyText1!.apply(
                     color: Theme.of(context).colorScheme.secondaryVariant,
                   ),

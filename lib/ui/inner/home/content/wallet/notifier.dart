@@ -159,8 +159,8 @@
 //     bool connect = await System().checkConnections();
 //     if (connect && isValidPhoneNumber) {
 //       SignUpCompleteProfiles _data = SignUpCompleteProfiles(
-//         fullName: user!.profile?.fullName,
-//         dateOfBirth: user!.profile?.dob,
+//         fullName: user.profile?.fullName,
+//         dateOfBirth: user.profile?.dob,
 //         // idProofNumber: myProfile.userProfile?.userDetail?.data?.idProofNumber,
 //         // idProofName: myProfile.userProfile?.userDetail?.data?.idProofName,
 //         gender: user.profile?.gender,

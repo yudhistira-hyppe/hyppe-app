@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -26,7 +27,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -34,9 +35,9 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.idVerification!,
+            textToDisplay: notifier.language.idVerification ?? '',
             textStyle:
-                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -55,14 +56,14 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
                 const SizedBox(
                   height: 16,
                 ),
-                unorderedList(notifier.language.uploadIdCardNotice1!),
-                unorderedList(notifier.language.uploadIdCardNotice2!),
-                unorderedList(notifier.language.uploadIdCardNotice3!),
-                unorderedList(notifier.language.uploadIdCardNotice4!),
-                unorderedList(notifier.language.uploadIdCardNotice5!),
-                unorderedList(notifier.language.uploadIdCardNotice6!),
-                unorderedList(notifier.language.uploadIdCardNotice7!),
-                unorderedList(notifier.language.uploadIdCardNotice8!),
+                unorderedList(notifier.language.uploadIdCardNotice1 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice2 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice3 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice4 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice5 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice6 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice7 ?? ''),
+                unorderedList(notifier.language.uploadIdCardNotice8 ?? ''),
                 const SizedBox(
                   height: 50,
                 ),
@@ -78,7 +79,7 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
             height: 44.0 * SizeConfig.scaleDiagonal,
             function: () => Routing().moveAndPop(Routes.verificationIDStep4),
             child: CustomTextWidget(
-              textToDisplay: notifier.language.continueStep!,
+              textToDisplay: notifier.language.continueStep ?? '',
               textStyle:
                   textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),

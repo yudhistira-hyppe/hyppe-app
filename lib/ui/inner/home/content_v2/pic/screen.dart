@@ -52,7 +52,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomHeaderFeature(
-              title: notifier.language.latestPicsForYou!,
+              title: notifier.language.latestPicsForYou ?? '',
               onPressed: () => notifier.navigateToSeeAll(context),
             ),
             eightPx,

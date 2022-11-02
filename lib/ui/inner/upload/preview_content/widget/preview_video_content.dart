@@ -74,13 +74,13 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                   child: Center(
                     child: Platform.isAndroid
                         ? AspectRatio(
-                            child: BetterPlayer(controller: notifier.betterPlayerController!),
-                            aspectRatio: notifier.betterPlayerController!.videoPlayerController!.value.aspectRatio,
+                            child: BetterPlayer(controller: notifier.betterPlayerController! ),
+                            aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0,
                           )
                         : BetterPlayer(controller: notifier.betterPlayerController!),
                   ),
                 ),
-                if (!notifier.betterPlayerController!.isPlaying()!)
+                if (!(notifier.betterPlayerController?.isPlaying() ?? false))
                   const CustomIconWidget(
                     defaultColor: false,
                     iconData: "${AssetPath.vectorPath}pause.svg",

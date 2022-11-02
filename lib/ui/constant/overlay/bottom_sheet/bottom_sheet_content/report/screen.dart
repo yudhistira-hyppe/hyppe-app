@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/widget/conditional_bottom.dart';
@@ -44,7 +45,7 @@ class _HyppeReportState extends State<HyppeReport> {
                 automaticallyImplyLeading: false,
                 elevation: 0.0,
                 title: CustomTextWidget(
-                    textAlign: TextAlign.left, textToDisplay: notifier.appBar!, textStyle: _themes.textTheme.button!.apply(fontWeightDelta: 1)),
+                    textAlign: TextAlign.left, textToDisplay: notifier.appBar ?? '', textStyle: _themes.textTheme.button?.apply(fontWeightDelta: 1)),
                 actions: [
                   GestureDetector(
                     child: Container(
@@ -73,13 +74,13 @@ class _HyppeReportState extends State<HyppeReport> {
                 child: Column(children: [
                   conditionalHeader(context),
                   SizedBox(
-                      height: SizeConfig.screenHeight! * 0.5,
+                      height: SizeConfig.screenHeight ?? context.getHeight() * 0.5,
                       child: notifier.initData == null
                           ? const Center(child: CustomLoading())
                           : ListView.builder(
                               scrollDirection: Axis.vertical,
                               physics: const BouncingScrollPhysics(),
-                              itemCount: notifier.initData!.data.length,
+                              itemCount: notifier.initData?.data.length,
                               itemBuilder: (context, index) {
                                 return RadioListTile(
                                     value: index,
@@ -88,14 +89,14 @@ class _HyppeReportState extends State<HyppeReport> {
                                         maxLines: 2,
                                         textAlign: TextAlign.left,
                                         textStyle: _themes.textTheme.bodyText2,
-                                        textToDisplay: notifier.initData!.data[index].remark!),
+                                        textToDisplay: notifier.initData?.data[index].remark ?? ''),
                                     groupValue: notifier.selectedIndex,
                                     activeColor: const Color(0xff7F2D6C),
                                     controlAffinity: ListTileControlAffinity.trailing,
                                     onChanged: (int? v) {
                                       notifier.selectedIndex = v;
                                       if (v != null) {
-                                        notifier.remarkID = notifier.initData!.data[v].remarkID!;
+                                        notifier.remarkID = notifier.initData?.data[v].remarkID ?? '';
                                       } else {
                                         notifier.remarkID = '';
                                       }

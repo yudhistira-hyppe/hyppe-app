@@ -47,7 +47,7 @@ class _DiarySeeAllScreenState extends State<DiarySeeAllScreen> with SingleTicker
               children: [
                 CustomTextWidget(
                   textAlign: TextAlign.left,
-                  textToDisplay: _language.diariesForYou!,
+                  textToDisplay: _language.diariesForYou ?? '',
                   textStyle: theme.textTheme.bodyText1,
                 ),
                 eightPx,

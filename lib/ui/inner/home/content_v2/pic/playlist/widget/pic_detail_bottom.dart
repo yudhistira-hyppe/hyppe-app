@@ -92,7 +92,7 @@ class PicDetailBottom extends StatelessWidget {
                                 label: '${data?.tagPeople?.length ?? 0} people',
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
-                                  // vidNotifier.showUserTag(context, index, data!.postID);
+                                  // vidNotifier.showUserTag(context, index, data.postID);
                                 },
                               )
                             : const SizedBox(),
@@ -130,7 +130,7 @@ class PicDetailBottom extends StatelessWidget {
                       maxLines: 2,
                       textAlign: TextAlign.left,
                       textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondaryVariant),
-                      // textToDisplay: '${_system.formatterNumber(data!.totalViews)}x ${notifier.language.views!}',
+                      // textToDisplay: '${_system.formatterNumber(data.totalViews)}x ${notifier.language.views!}',
                       textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
                     ),
                   )
@@ -165,7 +165,7 @@ class PicDetailBottom extends StatelessWidget {
             //           // } else {
             //           //   value.data?.isLiked = true;
             //           // }
-            //           notifier.likePost(context, data!);
+            //           notifier.likePost(context, data);
             //         },
             //           colorIcon: (value.data?.isLiked ?? false)
             //               ? kHyppePrimary
@@ -296,10 +296,6 @@ class PicDetailBottom extends StatelessWidget {
             context,
             fullCaption: true,
           )}',
-          // isCelebrity: data!.isCelebrity,
-          // haveStory: data!.isHaveStory ?? false,
-          // imageUrl: '${data!.profilePic}$VERYBIG',
-          // featureType: context.read<SeeAllNotifier>().featureType,
         )
       : Row(
           crossAxisAlignment: CrossAxisAlignment.center,

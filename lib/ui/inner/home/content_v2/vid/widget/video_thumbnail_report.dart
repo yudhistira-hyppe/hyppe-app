@@ -23,7 +23,6 @@ class VideoThumbnailReport extends StatelessWidget {
             child: CustomBackgroundLayer(
               sigmaX: 30,
               sigmaY: 30,
-              // thumbnail: picData!.content[arguments].contentUrl,
               thumbnail: videoData?.isApsara ?? false ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
             ),
           ),

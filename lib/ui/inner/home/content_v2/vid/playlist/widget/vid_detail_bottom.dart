@@ -63,7 +63,7 @@ class VidDetailBottom extends StatelessWidget {
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _buildDescription(context) {
     return Consumer2<VidDetailNotifier, TranslateNotifierV2>(
@@ -83,7 +83,7 @@ class VidDetailBottom extends StatelessWidget {
                                 label: '${data?.tagPeople?.length} people',
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
-                                  // vidNotifier.showUserTag(context, index, data!.postID);
+                                  // vidNotifier.showUserTag(context, index, data.postID);
                                 },
                               )
                             : const SizedBox(),
@@ -107,12 +107,12 @@ class VidDetailBottom extends StatelessWidget {
             eightPx,
             data != null
                 ? GestureDetector(
-                    onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data!.email),
+                    onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID ?? '', 'VIEW', 'Viewer', data?.email),
                     child: CustomTextWidget(
                       maxLines: 2,
                       textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
-                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                      textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
                     ),
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
@@ -132,7 +132,7 @@ class VidDetailBottom extends StatelessWidget {
             Consumer<LikeNotifier>(
               builder: (context, notifier, child) => data != null
                   ? _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
-                      () => notifier.likePost(context, data!),
+                      () => notifier.likePost(context, data ?? ContentData()),
                       colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
                   : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
@@ -141,18 +141,9 @@ class VidDetailBottom extends StatelessWidget {
                     ? _buildButton(
                         context,
                         '${AssetPath.vectorPath}comment.svg',
-                        value2.translate.comment!,
+                        value2.translate.comment ?? '',
                         () {
-                          // if (context.read<ProfileNotifier>().myProfile != null) {
-                          //   if (context.read<ProfileNotifier>().myProfile.profileOverviewData!.userOverviewData.isComplete) {
-                          //     ShowBottomSheet.onShowComment(context, comment: data);
-                          //   } else {
-                          //     ShowBottomSheet().onShowColouredSheet(context, 'Please complete your profile to comment another hyppers',
-                          //         maxLines: 2, color: Theme.of(context).colorScheme.error);
-                          //   }
-                          // } else {
-                          //   ShowBottomSheet.onShowSomethingWhenWrong(context);
-                          // }
+
                           ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
                         },
                       )
@@ -165,26 +156,14 @@ class VidDetailBottom extends StatelessWidget {
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
             if (data != null)
-              if ((data!.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data!.email)
+              if ((data?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data?.email)
                 _buildButton(
                   context,
                   '${AssetPath.vectorPath}cart.svg',
                   value2.translate.buy ?? '',
                   () => ShowBottomSheet.onBuyContent(context, data: data),
                 ),
-            // _buildButton(
-            //   context,
-            //   '${AssetPath.vectorPath}bookmark.svg',
-            //   value2.translate.save,
-            //   data != null
-            //       ? () => context.read<PlaylistNotifier>().showMyPlaylistBottomSheet(
-            //             context,
-            //             data: data,
-            //             featureType: FeatureType.pic,
-            //             index: context.read<SeeAllNotifier>().contentIndex,
-            //           )
-            //       : () {},
-            // )
+
           ],
         ),
       ),
@@ -251,23 +230,23 @@ class VidDetailBottom extends StatelessWidget {
           show: true,
           following: true,
           onFollow: () {},
-          username: data!.username,
+          username: data?.username,
           spaceProfileAndId: eightPx,
           haveStory: false,
 
           isCelebrity: false,
-          onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email ?? ''),
+          onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
 
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(
-            DateTime.parse(data!.createdAt ?? '').millisecondsSinceEpoch,
+            DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch,
             context,
             fullCaption: true,
           )}',
-          // isCelebrity: data!.isCelebrity,
-          // haveStory: data!.isHaveStory ?? false,
-          // imageUrl: '${data!.profilePic}$VERYBIG',
+          // isCelebrity: data.isCelebrity,
+          // haveStory: data.isHaveStory ?? false,
+          // imageUrl: '${data.profilePic}$VERYBIG',
           // featureType: context.read<SeeAllNotifier>().featureType,
         )
       : Row(

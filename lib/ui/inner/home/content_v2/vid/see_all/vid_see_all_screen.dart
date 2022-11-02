@@ -47,7 +47,7 @@ class _VidSeeAllScreenState extends State<VidSeeAllScreen> with SingleTickerProv
               children: [
                 CustomTextWidget(
                   textAlign: TextAlign.left,
-                  textToDisplay: _language.vidsForYou!,
+                  textToDisplay: _language.vidsForYou ?? '',
                   textStyle: theme.textTheme.bodyText1,
                 ),
                 eightPx,

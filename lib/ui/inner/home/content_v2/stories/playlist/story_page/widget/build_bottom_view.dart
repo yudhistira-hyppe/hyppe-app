@@ -64,7 +64,7 @@ class BuildBottomView extends StatelessWidget {
                       keyboardAppearance: Brightness.dark,
                       decoration: InputDecoration(
                         filled: true,
-                        hintText: "Balas ke ${data!.username}...",
+                        hintText: "Balas ke ${data?.username}...",
                         fillColor: Theme.of(context).colorScheme.background,
                         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         border: OutlineInputBorder(

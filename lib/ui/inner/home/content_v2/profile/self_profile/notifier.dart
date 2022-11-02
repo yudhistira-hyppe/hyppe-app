@@ -315,18 +315,12 @@ class SelfProfileNotifier with ChangeNotifier {
   // create generic function that can be detect profile is have story or not
   bool checkHaveStory(BuildContext context) {
     return false;
-    // if (itsMe) {
-    //   final storyNotifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    //   return storyNotifier.myStoriesData != null && storyNotifier.myStoriesData!.story.isNotEmpty;
-    // } else {
-    //   return false;
-    // }
   }
 
   Future viewStory(BuildContext context) async {
     // if (itsMe) {
     // final storyNotifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    // if (storyNotifier.myStoriesData != null && storyNotifier.myStoriesData!.story.isNotEmpty) {
+    // if (storyNotifier.myStoriesData != null && storyNotifier.myStoriesData.story.isNotEmpty) {
     //   storyNotifier.tapHandler(context, storyNotifier.myStoriesData);
     // }
     // }

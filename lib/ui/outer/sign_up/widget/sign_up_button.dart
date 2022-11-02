@@ -61,7 +61,7 @@ class SignUpButton extends StatelessWidget {
               CustomTextButton(
                 onPressed: onSkipTap,
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.skip!,
+                  textToDisplay: notifier.translate.skip ?? 'skip',
                   textStyle: Theme.of(context).textTheme.button!.copyWith(
                         color: onSkipTap != null ? Theme.of(context).textTheme.button!.color : Colors.transparent,
                       ),

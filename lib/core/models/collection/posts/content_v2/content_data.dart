@@ -27,32 +27,32 @@ class AllContents extends HiveObject {
   AllContents.fromJson(Map<String, dynamic> json) {
     if (json['story'] != null) {
       story = [];
-      json['story'].forEach((v) => story!.add(ContentData.fromJson(v)));
+      json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
     }
 
     if (json['diary'] != null) {
       diary = [];
-      json['diary'].forEach((v) => diary!.add(ContentData.fromJson(v)));
+      json['diary'].forEach((v) => diary?.add(ContentData.fromJson(v)));
     }
 
     if (json['video'] != null) {
       video = [];
-      json['video'].forEach((v) => video!.add(ContentData.fromJson(v)));
+      json['video'].forEach((v) => video?.add(ContentData.fromJson(v)));
     }
 
     if (json['pict'] != null) {
       pict = [];
-      json['pict'].forEach((v) => pict!.add(ContentData.fromJson(v)));
+      json['pict'].forEach((v) => pict?.add(ContentData.fromJson(v)));
     }
   }
 
   Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
 
-    result['story'] = List<dynamic>.from(story!.map((x) => x.toJson()));
-    result['diary'] = List<dynamic>.from(diary!.map((x) => x.toJson()));
-    result['video'] = List<dynamic>.from(video!.map((x) => x.toJson()));
-    result['pict'] = List<dynamic>.from(pict!.map((x) => x.toJson()));
+    result['story'] = List<dynamic>.from(story??[].map((x) => x.toJson()));
+    result['diary'] = List<dynamic>.from(diary??[].map((x) => x.toJson()));
+    result['video'] = List<dynamic>.from(video??[].map((x) => x.toJson()));
+    result['pict'] = List<dynamic>.from(pict??[].map((x) => x.toJson()));
 
     return result;
   }
@@ -231,7 +231,7 @@ class ContentData extends HiveObject {
             : json['certified'] ?? false
         : false;
     createdAt = json['createdAt'];
-    insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight'], isLike: isLiked!) : null;
+    insight = json['insight'] != null ? ContentDataInsight.fromJson(json['insight'], isLike: isLiked ?? false) : null;
     mediaThumbUri = json['mediaThumbUri'];
     mediaEndpoint = json['mediaEndpoint'];
     email = json['email'];
@@ -245,7 +245,7 @@ class ContentData extends HiveObject {
     visibility = json['visibility'];
     if (json['cats'] != null) {
       cats = [];
-      json['cats'].forEach((v) => cats!.add(Cats.fromJson(v)));
+      json['cats'].forEach((v) => cats?.add(Cats.fromJson(v)));
     }
     tagPeople = json['tagPeople'] != null ? List<TagPeople>.from(json["tagPeople"].map((x) => TagPeople.fromJson(x))) : [];
     if (json['likes'] != null) {

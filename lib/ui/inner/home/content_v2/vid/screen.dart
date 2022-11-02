@@ -122,23 +122,17 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   featureType: FeatureType.vid,
                                                   isCelebrity: vidData?.privacy?.isCelebrity,
                                                   imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData!.email!),
+                                                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
                                                   createdAt: '${System().readTimestamp(
                                                     DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
                                                     context,
                                                     fullCaption: true,
                                                   )}',
-                                                  // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
-                                                  //       context,
-                                                  //       currentValue: vidData,
-                                                  //       fUserId: vidData.userID!,
-                                                  //       statusFollowing: StatusFollowing.rejected,
-                                                  //     ),
                                                 );
                                               },
                                             ),
                                             GestureDetector(
-                                                onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData![index]),
+                                                onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData()),
                                                 child: Visibility(
                                                   visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
                                                   child: const Icon(Icons.more_vert),
@@ -177,7 +171,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   onDetail: false,
                                                   videoData: vidNotifier.vidData?[index],
                                                   key: ValueKey(vidNotifier.vidPostState),
-                                                  afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
+                                                  afterView: () => System().increaseViewCount(context, vidNotifier.vidData?[index] ?? ContentData()),
                                                 ),
                                               ),
                                             ),

@@ -75,7 +75,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //       ),
             //     ),
             //     twelvePx,
-            //     CustomTextWidget(textToDisplay: notifier.language.or!, textStyle: Theme.of(context).textTheme.bodyText2),
+            //     CustomTextWidget(textToDisplay: notifier.language.or, textStyle: Theme.of(context).textTheme.bodyText2),
             //     twelvePx,
             //     Container(
             //       width: 50,
