@@ -245,7 +245,7 @@ class OwnershipSellingScreen extends StatelessWidget {
           child: CustomTextButton(
             onPressed: notifier.certified
                 ? () {
-                    if (!notifier.toSell && notifier.priceController.text == '') {
+                    if (!notifier.toSell && (notifier.priceController.text == '' || notifier.priceController.text == '0')) {
                       Routing().moveBack();
                     } else {
                       final harga = num.parse(notifier.priceController.text.replaceAll(',', '').replaceAll('.', ''));
