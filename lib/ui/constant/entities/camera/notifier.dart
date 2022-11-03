@@ -88,13 +88,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onStoryPhotoVideo(bool isPhoto) async {
-    if (deepArController!.isRecording) {
-      // File? file = await _controller.stopVideoRecording();
-      // OpenFile.open(file.path);
-    } else {
-      await deepArController!.startVideoRecording();
-    }
-
     // final _currentLensDirection = cameraController?.description.lensDirection;
 
     // if (cameraController != null) {
@@ -118,17 +111,17 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     //   }
     // });
 
-    // try {
-    //   await cameraController?.initialize();
+    try {
+      await cameraController?.initialize();
 
-    //   /// TODO: Resolved by backend
-    //   if (Platform.isIOS) {
-    //     await cameraController?.lockCaptureOrientation();
-    //   }
-    //   flashMode = cameraController!.value.flashMode;
-    // } on CameraException catch (e) {
-    //   e.description.logger();
-    // }
+      /// TODO: Resolved by backend
+      // if (Platform.isIOS) {
+      //   await cameraController?.lockCaptureOrientation();
+      // }
+      // flashMode = cameraController!.value.flashMode;
+    } on CameraException catch (e) {
+      e.description.logger();
+    }
 
     if (loadingForObject(loadingForSwitching)) {
       setLoading(false, loadingObject: loadingForSwitching);

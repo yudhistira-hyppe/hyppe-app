@@ -182,15 +182,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
           // onPauseRecordedVideo(context);
           timerIn.cancel();
           cancelTimer();
-
         }
         print('type : $featureType');
         print('_progressHuman : $_progressHuman');
         print('_selectedDuration : $_selectedDuration');
 
         notifyListeners();
-        if(_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)){
-          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), (){
+        if (_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
+          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), () {
             onStopRecordedVideo(materialAppKey.currentContext ?? context);
           });
         }

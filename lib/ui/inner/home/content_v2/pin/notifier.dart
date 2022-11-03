@@ -53,6 +53,14 @@ class PinAccountNotifier extends ChangeNotifier {
   bool get isForgotPin => _isForgotPin;
   bool get isSetPinInForgot => _isSetPinInForgot;
 
+  String _otpVerified = '';
+  String get otpVerified => _otpVerified;
+
+  set otpVerified(String val) {
+    _otpVerified = val;
+    notifyListeners();
+  }
+
   set confirm(bool val) {
     _confirm = val;
     notifyListeners();
@@ -234,7 +242,7 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   bool checkSubmitButtonOTP() {
-    if (otpController.text.length >= 4) {
+    if (otpVerified.length >= 4) {
       return true;
     } else {
       return false;
@@ -401,6 +409,7 @@ class PinAccountNotifier extends ChangeNotifier {
     confirm = false;
     checkPin = false;
     isForgotPin = false;
+    otpVerified = '';
     resetTimer();
     Routing().moveBack();
     Routing().moveBack();

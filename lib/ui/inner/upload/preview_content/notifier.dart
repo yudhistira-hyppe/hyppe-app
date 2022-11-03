@@ -170,7 +170,6 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void initVideoPlayer(BuildContext context) async {
-
     BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
       autoPlay: false,
       fit: BoxFit.contain,
@@ -203,23 +202,21 @@ class PreviewContentNotifier with ChangeNotifier {
       });
 
       _betterPlayerController?.addEventsListener(
-            (_) {
+        (_) {
           _totalDuration = _.parameters?['duration'];
-          if(_totalDuration != null){
+          if (_totalDuration != null) {
             if (_betterPlayerController?.isVideoInitialized() ?? false) if (_betterPlayerController!.videoPlayerController!.value.position >=
                 _betterPlayerController!.videoPlayerController!.value.duration!) {
               _nextVideo = true;
             }
           }
-
         },
       );
 
       // notifier.setVideoPlayerController(_betterPlayerController);
     } catch (e) {
       print('Setup data source error: $e');
-    }
-    finally{
+    } finally {
       _isLoadVideo = false;
     }
   }
@@ -321,7 +318,7 @@ class PreviewContentNotifier with ChangeNotifier {
   void navigateToPreUploaded(BuildContext context, [GlobalKey? globalKey]) async {
     if (featureType == FeatureType.diary) {
       final ms = totalDuration?.inMilliseconds;
-      if(ms != null){
+      if (ms != null) {
         int seconds = ms ~/ 1000;
         if (seconds <= 3) {
           showSnackBar(
@@ -331,7 +328,6 @@ class PreviewContentNotifier with ChangeNotifier {
           return;
         }
       }
-
     }
 
     if (_isSheetOpen) closeFilters();
@@ -355,6 +351,8 @@ class PreviewContentNotifier with ChangeNotifier {
     } else {
       _thumbNails = [];
       for (int i = 0; i <= index; i++) {
+        print('adsasdasd asdads');
+        print(fileContent![index]!);
         Uint8List? _thumbnail = await VideoThumbnail.thumbnailData(
           video: fileContent![index]!,
           imageFormat: ImageFormat.JPEG,

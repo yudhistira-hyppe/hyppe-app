@@ -27,16 +27,17 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    if(notifier.betterPlayerController == null){
-      notifier.initVideoPlayer(context);
-    }
+    // if (notifier.betterPlayerController == null) {
+    notifier.initVideoPlayer(context);
+    // }
 
     super.initState();
   }
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
+    final notifier = context.read<PreviewContentNotifier>();
+    notifier.betterPlayerController!.dispose();
     super.dispose();
   }
 
@@ -50,7 +51,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
         notifier.betterPlayerController?.pause();
       }
     });
-    if(notifier.betterPlayerController == null){
+    if (notifier.betterPlayerController == null) {
       return const Center(
         child: CustomLoading(),
       );
