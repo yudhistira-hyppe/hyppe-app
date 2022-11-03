@@ -21,15 +21,25 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    final _notifier = context.read<TransactionNotifier>();
-    _notifier.skip = 0;
-    _notifier.initTransactionHistoryInProgress(context);
-    _scrollController.addListener(() => _notifier.scrollListInProgress(context, _scrollController));
+    Future.delayed(Duration(milliseconds: 100), (){
+      final _notifier = context.read<TransactionNotifier>();
+      _notifier.skip = 0;
+      _notifier.initTransactionHistoryInProgress(context);
+      _scrollController.addListener(() => _notifier.scrollListInProgress(context, _scrollController));
+    });
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     final theme = Theme.of(context);
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (context, notifier, notifier2, child) => Scaffold(

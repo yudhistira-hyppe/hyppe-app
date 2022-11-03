@@ -23,7 +23,7 @@ class Profile extends StatelessWidget {
           width: 26,
           height: 26,
           following: true,
-          imageUrl: System().showUserPicture(notifier.item2 ?? ''),
+          imageUrl: System().showUserPicture(notifier.item2 ?? '') ?? '',
         ),
       ),
     );

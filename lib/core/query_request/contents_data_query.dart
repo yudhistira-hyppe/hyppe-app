@@ -72,7 +72,8 @@ class ContentsDataQuery extends PaginationQueryInterface {
     print('reload');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
-    final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
+    // pending error 1
+
     hasNext = true;
 
     loading = true;
@@ -84,6 +85,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
     // page = 0;
     List<ContentData>? res;
     try {
+      final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context,
           postID: postID,

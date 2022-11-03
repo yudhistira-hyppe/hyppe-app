@@ -133,30 +133,20 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
-      final allContents = await allReload(context);
-      final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
       // Refresh content
-      try {
+      final allContents = await allReload(context);
+      try{
+        final notifierMain = Provider.of(context)<HomeNotifier>(context, listen: false);
         await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
-      } catch (e) {
-        print(e);
-      }
-      try {
         await vid.initialVid(context, reload: true, list: allContents.video, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      } catch (e) {
-        print(e);
-      }
-      try {
         await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      } catch (e) {
-        print(e);
-      }
-      try {
-        print('initialPic : 1');
         await pic.initialPic(context, reload: true, list: allContents.pict, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      } catch (e) {
+      }catch(e){
         print(e);
       }
+
+
+
 
       if (totLoading >= 3) {
         print("is finish shimmer");
@@ -166,6 +156,7 @@ class HomeNotifier with ChangeNotifier {
       }
 
       notifyListeners();
+
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
