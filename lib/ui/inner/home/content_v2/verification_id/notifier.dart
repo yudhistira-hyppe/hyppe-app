@@ -15,8 +15,8 @@ import 'package:hyppe/core/models/collection/localization_v2/localization_model.
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/entities/camera_devices/camera_interface.dart';
-import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 // import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -79,7 +79,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  CameraDevicesNotifier cameraNotifier = CameraDevicesNotifier();
+  CameraNotifier cameraNotifier = CameraNotifier();
   TextEditingController _realNameController = TextEditingController();
   TextEditingController _birtDateController = TextEditingController();
   TextEditingController _birtPlaceController = TextEditingController();
@@ -330,8 +330,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   @override
   Future<void> onTakePicture(BuildContext context) async {
-    final cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    XFile? filePath = await cameraNotifier.takePicture();
+    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    File? filePath = await cameraNotifier.takePicture();
     if (filePath != null) {
       imagePath = filePath.path;
       aspectRatio = cameraNotifier.cameraAspectRatio;
@@ -341,7 +341,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   void onTakeSelfie(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         selfiePath = filePath.path;

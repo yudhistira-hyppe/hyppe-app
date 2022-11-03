@@ -41,7 +41,7 @@ class HyppeNotifier with ChangeNotifier {
 
   Future handleStartUp(BuildContext context) async {
     _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-    await context.read<CameraDevicesNotifier>().prepareCameraPage();
+    // await context.read<CameraDevicesNotifier>().prepareCameraPage();
     await context.read<TranslateNotifierV2>().initTranslate(context);
 
     String? token = SharedPreference().readStorage(SpKeys.userToken);
