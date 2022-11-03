@@ -481,7 +481,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       });
     } catch (e) {
       isLoading = false;
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 

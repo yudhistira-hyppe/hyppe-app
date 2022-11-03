@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -34,7 +35,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -42,8 +43,8 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.supportDoc!,
-              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              textToDisplay: notifier.language.supportDoc ?? '',
+              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
             actions: [
@@ -60,22 +61,22 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
             children: [
               ListView.separated(
                 shrinkWrap: true,
-                itemCount: notifier.pickedSupportingDocs!.length,
+                itemCount: notifier.pickedSupportingDocs?.length ?? 0,
                 itemBuilder: (context, index) => ListTile(
-                  title: Text(basename(notifier.pickedSupportingDocs![index].path)),
-                  subtitle: Text(notifier.pickedSupportingDocs![index].lengthSync().toString()),
-                  leading: Image.file(notifier.pickedSupportingDocs![index]),
+                  title: Text(basename(notifier.pickedSupportingDocs?[index].path ?? '')),
+                  subtitle: Text(notifier.pickedSupportingDocs?[index].lengthSync().toString() ?? ''),
+                  leading: notifier.pickedSupportingDocs?[index] != null ? Image.file(notifier.pickedSupportingDocs![index]) : null,
                   trailing: GestureDetector(
                     onTap: () {
                       setState(() {
-                        notifier.pickedSupportingDocs!.removeAt(index);
+                        notifier.pickedSupportingDocs?.removeAt(index);
                       });
                     },
                     child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
                         child: Text(
-                          notifier.language.delete!,
+                          notifier.language.delete ?? '',
                           style: const TextStyle(color: kHyppePrimary),
                         )),
                   ),
@@ -97,7 +98,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                     children: [
                       Text(
                         'Add Document',
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
                       ),
                       const Icon(
                         Icons.add,
@@ -130,7 +131,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                     ),
                   const SizedBox(width: 10),
                   CustomTextWidget(
-                    textToDisplay: notifier.language.save!,
+                    textToDisplay: notifier.language.save ?? '',
                     textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],

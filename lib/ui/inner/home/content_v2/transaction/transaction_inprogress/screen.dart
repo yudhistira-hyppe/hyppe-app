@@ -21,15 +21,25 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
-    final _notifier = context.read<TransactionNotifier>();
-    _notifier.skip = 0;
-    _notifier.initTransactionHistoryInProgress(context);
-    _scrollController.addListener(() => _notifier.scrollListInProgress(context, _scrollController));
+    Future.delayed(Duration(milliseconds: 100), (){
+      final _notifier = context.read<TransactionNotifier>();
+      _notifier.skip = 0;
+      _notifier.initTransactionHistoryInProgress(context);
+      _scrollController.addListener(() => _notifier.scrollListInProgress(context, _scrollController));
+    });
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     final theme = Theme.of(context);
     return Consumer2<TransactionNotifier, TranslateNotifierV2>(
       builder: (context, notifier, notifier2, child) => Scaffold(
@@ -48,12 +58,12 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        notifier.dataTransactionInProgress!.isEmpty
+                        notifier.dataTransactionInProgress?.isEmpty ?? false
                             ? EmptyBankAccount(
                                 textWidget: Column(
                                 children: [
                                   CustomTextWidget(
-                                    textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet!,
+                                    textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
                                     maxLines: 4,
                                   ),
                                 ],
@@ -61,20 +71,20 @@ class _TransactionHistoryInProgressState extends State<TransactionHistoryInProgr
                             : ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: notifier.dataTransactionInProgress!.length,
+                                itemCount: notifier.dataTransactionInProgress?.length,
                                 itemBuilder: (context, index) {
                                   String title = '';
-                                  switch (notifier.dataTransactionInProgress![index].type) {
+                                  switch (notifier.dataTransactionInProgress?[index].type) {
                                     case TransactionType.withdrawal:
-                                      title = notifier2.translate.withdrawal!;
+                                      title = notifier2.translate.withdrawal ?? '';
                                       return WithdrawalWidget(
                                         title: title,
                                         language: notifier2.translate,
-                                        data: notifier.dataTransactionInProgress![index],
+                                        data: notifier.dataTransactionInProgress?[index],
                                       );
                                     default:
                                       return BuySellWidget(
-                                        data: notifier.dataTransactionInProgress![index],
+                                        data: notifier.dataTransactionInProgress?[index],
                                         language: notifier2.translate,
                                       );
                                   }

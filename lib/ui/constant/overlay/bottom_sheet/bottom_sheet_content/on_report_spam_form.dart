@@ -68,8 +68,8 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: notifier.translate.reportThisContent!,
-                        textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay: notifier.translate.reportThisContent ?? '',
+                        textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       InkWell(
                           onTap: () {
@@ -90,8 +90,8 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                         height: 20,
                       ),
                       CustomTextWidget(
-                        textToDisplay: notifier.translate.whyareyoureportingthiscontent!,
-                        textStyle: Theme.of(context).primaryTextTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay: notifier.translate.whyareyoureportingthiscontent ?? '',
+                        textStyle: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
@@ -139,8 +139,8 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                           selector: (context, notifier) => notifier.isLoading,
                           builder: (_, value, __) {
                             return CustomTextWidget(
-                              textToDisplay: notifier.translate.report!,
-                              textStyle: _textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                              textToDisplay: notifier.translate.report ?? '',
+                              textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
                             );
                           },
                         ),

@@ -261,7 +261,7 @@ class SelfProfileTop extends StatelessWidget {
                       // when button library is active, remove this expanded and set width value
                       child: CustomElevatedButton(
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.editProfile!,
+                          textToDisplay: notifier.language.editProfile ?? '',
                           textStyle: Theme.of(context).textTheme.button,
                         ),
                         width: null,

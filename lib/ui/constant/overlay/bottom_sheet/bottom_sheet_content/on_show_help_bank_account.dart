@@ -26,14 +26,14 @@ class OnHelpBankAccountBottomSheet extends StatelessWidget {
               children: [
                 Center(
                   child: CustomTextWidget(
-                    textToDisplay: notifier.translate.aboutBankAccount!,
-                    textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay: notifier.translate.aboutBankAccount ?? '',
+                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.aboutBankAccountContent!,
-                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay: notifier.translate.aboutBankAccountContent ?? '',
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.start,
                 ),

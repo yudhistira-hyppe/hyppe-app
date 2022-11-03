@@ -10,16 +10,16 @@ class FacebookSignIn {
     email = json['email'];
     id = json['id'];
     picture =
-        json['picture'] != null ? new Picture.fromJson(json['picture']) : null;
+        json['picture'] != null ? Picture.fromJson(json['picture']) : null;
     name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['email'] = this.email;
     data['id'] = this.id;
     if (this.picture != null) {
-      data['picture'] = this.picture!.toJson();
+      data['picture'] = this.picture?.toJson();
     }
     data['name'] = this.name;
     return data;
@@ -39,7 +39,7 @@ class Picture {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.picture != null) {
-      data['picture'] = this.picture!.toJson();
+      data['picture'] = this.picture?.toJson();
     }
     return data;
   }

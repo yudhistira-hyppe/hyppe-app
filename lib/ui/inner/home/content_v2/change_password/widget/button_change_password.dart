@@ -42,7 +42,7 @@ class ButtonChangePassword extends StatelessWidget {
                 child: loading
                     ? const CustomLoading()
                     : CustomTextWidget(
-                        textToDisplay: caption ?? notifier.translate.next!,
+                        textToDisplay: caption ?? notifier.translate.next ?? '',
                         textStyle: textStyle,
                       ),
               ),

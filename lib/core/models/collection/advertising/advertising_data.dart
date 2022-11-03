@@ -19,19 +19,19 @@ class AdvertisingData {
     if (json['preRoll'] != null) {
       preRoll = <PreRoll>[];
       json['preRoll'].forEach((v) {
-        preRoll!.add(PreRoll.fromJson(v));
+        preRoll?.add(PreRoll.fromJson(v));
       });
     }
     if (json['midRoll'] != null) {
       midRoll = <MidRoll>[];
       json['midRoll'].forEach((v) {
-        midRoll!.add(MidRoll.fromJson(v));
+        midRoll?.add(MidRoll.fromJson(v));
       });
     }
     if (json['postRoll'] != null) {
       postRoll = <PostRoll>[];
       json['postRoll'].forEach((v) {
-        postRoll!.add(PostRoll.fromJson(v));
+        postRoll?.add(PostRoll.fromJson(v));
       });
     }
 
@@ -42,13 +42,13 @@ class AdvertisingData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['postID'] = postID;
     if (preRoll != null) {
-      data['preRoll'] = preRoll!.map((v) => v.toJson()).toList();
+      data['preRoll'] = preRoll?.map((v) => v.toJson()).toList();
     }
     if (midRoll != null) {
-      data['midRoll'] = midRoll!.map((v) => v.toJson()).toList();
+      data['midRoll'] = midRoll?.map((v) => v.toJson()).toList();
     }
     if (postRoll != null) {
-      data['postRoll'] = postRoll!.map((v) => v.toJson()).toList();
+      data['postRoll'] = postRoll?.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -61,7 +61,7 @@ class AdvertisingData {
       for (var i = 0; i < (preRoll?.length ?? 0); i++) {
         ads.add(Roll(
           rollUri: preRoll?[i].preRollUri,
-          playingAt: metadata!.preRoll,
+          playingAt: metadata?.preRoll,
           rollDuration: preRoll?[i].preRollDuration,
         ));
       }
@@ -72,7 +72,7 @@ class AdvertisingData {
       for (var i = 0; i < (midRoll?.length ?? 0); i++) {
         ads.add(Roll(
           rollUri: midRoll?[i].midRollUri,
-          // playingAt: metadata!.midRoll,
+          // playingAt: metadata.midRoll,
           playingAt: 0,
           rollDuration: midRoll?[i].midRollDuration,
         ));
@@ -84,7 +84,7 @@ class AdvertisingData {
       for (var i = 0; i < (postRoll?.length ?? 0); i++) {
         ads.add(Roll(
           rollUri: postRoll?[i].postRollUri,
-          playingAt: metadata!.postRoll! - 2,
+          playingAt: metadata?.postRoll ?? 2 - 2,
           rollDuration: postRoll?[i].postRollDuration,
         ));
       }
@@ -92,7 +92,7 @@ class AdvertisingData {
 
     // Sort ads by playingAt
     if (ads.isNotEmpty) {
-      ads.sort((a, b) => a.playingAt!.compareTo(b.playingAt!));
+      ads.sort((a, b) => a.playingAt?.compareTo(b.playingAt ?? 0) ?? 0);
     }
   }
 }

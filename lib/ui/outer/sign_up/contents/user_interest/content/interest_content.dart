@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/content/interest_user_overview_tile.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
@@ -36,15 +37,15 @@ class InterestContent extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.only(top: SizeConfig.screenHeight! * 0.15),
+      padding: EdgeInsets.only(top: SizeConfig.screenHeight ?? context.getHeight() * 0.15),
       child: Column(
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SignUpText(
-                title: "${notifier.language.whatIsYourInterest!}?",
-                description: notifier.language.andWeKnowWhatToGive!,
+                title: "${notifier.language.whatIsYourInterest}?",
+                description: notifier.language.andWeKnowWhatToGive ?? '',
               ),
               sixtyFourPx,
               InterestUserOverviewTile(),
@@ -56,7 +57,7 @@ class InterestContent extends StatelessWidget {
             caption: fromSetting ? notifier.language.save : null,
             onTap: () => notifier.onTapInterestButton(context, fromSetting, userInterested),
             onSkipTap: fromSetting ? null : notifier.interestSkipButton(),
-            textStyle: notifier.interestNextTextColor(context, userInterested),
+            textStyle: notifier.interestNextTextColor(context, userInterested) ?? const TextStyle(),
             buttonColor: notifier.interestNextButtonColor(context, userInterested),
           ),
         ],

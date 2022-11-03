@@ -19,7 +19,7 @@ class GoogleMapPlaceBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setGoogleMapPlaceFetch(GoogleMapPlaceFetch(GoogleMapPlaceState.getGoogleMapPlaceBlocError));
         } else {
           final ModelGoogleMapPlace _result = ModelGoogleMapPlace.fromJson(onResult.data);

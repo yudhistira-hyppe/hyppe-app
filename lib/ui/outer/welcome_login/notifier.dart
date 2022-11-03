@@ -239,7 +239,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'true');
       DeviceBloc().activityAwake(context);
 
-      if (signData.interest!.isEmpty) {
+      if (signData.interest?.isEmpty ?? false) {
         Routing().moveAndRemoveUntil(Routes.userInterest, Routes.root, argument: UserInterestScreenArgument());
       } else {
         Routing().moveReplacement(Routes.lobby);
@@ -279,8 +279,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       signUpPinNotifier.resendPilih = true;
       // signUpPinNotifier.timer = '00:00';
 
-      signUpPinNotifier.userToken = signData.token!;
-      // signUpPinNotifier.userID = signData.profileID!;
+      signUpPinNotifier.userToken = signData.token ?? '';
+      // signUpPinNotifier.userID = signData.profileID;
       Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin)).whenComplete(() {
         clearTextController();
       });
@@ -330,7 +330,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           } else {
             await notifier.googleSignInBlocV2(
               context,
-              email: userCredential.user!.email!,
+              email: userCredential.user?.email ?? '',
               latitude: latitude,
               longtitude: longitude,
               function: () => loginGoogleSign(context),
@@ -434,7 +434,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           } else {
             await notifier.appleSignInBlocV2(
               context,
-              email: userCredential.user!.email!,
+              email: userCredential.user?.email ?? '',
               latitude: latitude,
               longtitude: longitude,
               function: () => loginAppleSign(context),
@@ -460,10 +460,10 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           //   path: '/__/auth/handler',
           //   queryParameters: <String, String>{
           //     'code': credentialApple.authorizationCode,
-          //     if (credentialApple.givenName != null) 'firstName': credentialApple.givenName!,
-          //     if (credentialApple.familyName != null) 'lastName': credentialApple.familyName!,
+          //     if (credentialApple.givenName != null) 'firstName': credentialApple.givenName,
+          //     if (credentialApple.familyName != null) 'lastName': credentialApple.familyName,
           //     'useBundleId': !kIsWeb && (Platform.isIOS || Platform.isMacOS) ? 'true' : 'false',
-          //     if (credentialApple.state != null) 'state': credentialApple.state!,
+          //     if (credentialApple.state != null) 'state': credentialApple.state,
           //   },
           // );
 
@@ -530,7 +530,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   //     print('halo ${value.errorMessage}');
   //     print('halo ${value.status}');
   //     final credential = TwitterAuthProvider.credential(
-  //         accessToken: value.authToken!, secret: value.authTokenSecret!);
+  //         accessToken: value.authToken, secret: value.authTokenSecret);
 
   //     userCredential =
   //         await FirebaseAuth.instance.signInWithCredential(credential);

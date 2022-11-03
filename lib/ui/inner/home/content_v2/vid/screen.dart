@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -37,9 +38,18 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
-    // notifier.initialVid(context, reload: true);
+    notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
+    // notifier.initialVid(context, reload: true);
+    notifier.pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -56,7 +66,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
           children: [
             CustomHeaderFeature(
               onPressed: () => vidNotifier.navigateToSeeAll(context),
-              title: context.read<TranslateNotifierV2>().translate.latestVidsForYou!,
+              title: context.read<TranslateNotifierV2>().translate.latestVidsForYou ?? '',
             ),
             twelvePx,
             context.read<ErrorService>().isInitialError(error, vidNotifier.vidData)
@@ -68,7 +78,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                     ),
                   )
                 : (vidNotifier.vidData != null)
-                    ? vidNotifier.vidData!.length == 0
+                    ? vidNotifier.vidData?.isEmpty ?? false
                         ? const NoResultFound()
                         : SizedBox(
                             height: 350,
@@ -122,23 +132,17 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   featureType: FeatureType.vid,
                                                   isCelebrity: vidData?.privacy?.isCelebrity,
                                                   imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData!.email!),
+                                                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
                                                   createdAt: '${System().readTimestamp(
                                                     DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
                                                     context,
                                                     fullCaption: true,
                                                   )}',
-                                                  // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
-                                                  //       context,
-                                                  //       currentValue: vidData,
-                                                  //       fUserId: vidData.userID!,
-                                                  //       statusFollowing: StatusFollowing.rejected,
-                                                  //     ),
                                                 );
                                               },
                                             ),
                                             GestureDetector(
-                                                onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData![index]),
+                                                onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData()),
                                                 child: Visibility(
                                                   visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
                                                   child: const Icon(Icons.more_vert),
@@ -177,24 +181,24 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   onDetail: false,
                                                   videoData: vidNotifier.vidData?[index],
                                                   key: ValueKey(vidNotifier.vidPostState),
-                                                  afterView: () => System().increaseViewCount(context, vidNotifier.vidData![index]),
+                                                  afterView: () => System().increaseViewCount(context, vidNotifier.vidData?[index] ?? ContentData()),
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      vidData?.tagPeople!.length != 0 || vidData?.location != ''
+                                      vidData?.tagPeople?.isNotEmpty ?? false || vidData?.location != ''
                                           ? Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
                                               child: Row(
                                                 children: [
-                                                  vidData?.tagPeople!.length != 0
+                                                  vidData?.tagPeople?.isNotEmpty ?? false
                                                       ? TagLabel(
                                                           icon: 'user',
-                                                          label: '${vidData?.tagPeople!.length} people',
+                                                          label: '${vidData?.tagPeople?.length} people',
                                                           function: () {
-                                                            vidNotifier.showUserTag(context, index, vidData!.postID);
+                                                            vidNotifier.showUserTag(context, index, vidData?.postID);
                                                           },
                                                         )
                                                       : const SizedBox(),
@@ -239,7 +243,12 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                     color: (vidData?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
                                                     iconData: '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                                   ),
-                                                  onTap: () => notifier.likePost(context, vidData!),
+                                                  onTap: (){
+                                                    if(vidData != null){
+                                                      notifier.likePost(context, vidData);
+                                                    }
+
+                                                  } ,
                                                 ),
                                               ),
                                             ),

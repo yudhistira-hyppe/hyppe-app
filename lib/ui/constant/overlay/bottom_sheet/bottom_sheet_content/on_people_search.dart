@@ -112,8 +112,8 @@ class _OnSearchPeopleBottomSheetState extends State<OnSearchPeopleBottomSheet> {
                                     ListTile(
                                       onTap: () => notifier.inserTagPeople(index),
                                       contentPadding: EdgeInsets.zero,
-                                      title: Text("@${notifier.searchPeolpleData[index].username!}"),
-                                      subtitle: Text("${notifier.searchPeolpleData[index].fullName!}"),
+                                      title: Text("@${notifier.searchPeolpleData[index].username}"),
+                                      subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
                                       leading: StoryColorValidator(
                                         haveStory: false,
                                         featureType: FeatureType.pic,

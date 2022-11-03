@@ -23,18 +23,18 @@ class OnShowCompleteProfileBottomSheet extends StatelessWidget {
           children: [
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             CustomTextWidget(
-              textToDisplay: notifier.translate.completeProfiles!,
+              textToDisplay: notifier.translate.completeProfiles ?? '',
               textStyle: Theme.of(context).textTheme.headline6,
             ),
             CustomTextWidget(
-              textToDisplay: notifier.translate.pleaseCompleteProfileToContinue!,
+              textToDisplay: notifier.translate.pleaseCompleteProfileToContinue ?? '',
               textStyle: Theme.of(context).textTheme.bodyText1,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.yesCompleteProfile!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textToDisplay: notifier.translate.yesCompleteProfile ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
@@ -48,7 +48,7 @@ class OnShowCompleteProfileBottomSheet extends StatelessWidget {
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.noLater!,
+                textToDisplay: notifier.translate.noLater ?? '',
                 textStyle: Theme.of(context).textTheme.button,
               ),
               width: double.infinity,

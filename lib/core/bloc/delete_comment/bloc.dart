@@ -25,7 +25,7 @@ class DeleteCommentBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setDeleteCommentFetch(
               DeleteCommentPost(DeleteCommentState.deleteCommentError));
         } else {

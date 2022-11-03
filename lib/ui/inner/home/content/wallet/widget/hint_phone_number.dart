@@ -8,7 +8,7 @@ class HintPhoneNumber extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomTextWidget(
       textToDisplay: 'Pastikan nomor anda sudah benar',
-      textStyle: Theme.of(context).textTheme.caption!.copyWith(
+      textStyle: Theme.of(context).textTheme.caption?.copyWith(
             color: Theme.of(context).colorScheme.secondaryVariant,
           ),
     );

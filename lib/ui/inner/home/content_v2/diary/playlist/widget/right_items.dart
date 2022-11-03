@@ -49,7 +49,7 @@ class RightItems extends StatelessWidget {
                   //   builder: (_, notifier, __) => _customIcon2(
                   //     context,
                   //     "${AssetPath.vectorPath}bookmark.svg",
-                  //     value2.translate.save!,
+                  //     value2.translate.save,
                   //     onTap: () {
                   //       context.read<DiariesPlaylistNotifier>().forcePause = true;
                   //       notifier.showMyPlaylistBottomSheet(context, index: value.currentDiary, data: data, featureType: FeatureType.diary);
@@ -61,7 +61,7 @@ class RightItems extends StatelessWidget {
                     builder: (context, notifier, child) => _customIcon2(
                       context,
                       '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
-                      (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like!,
+                      (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like ?? '',
                       colorIcon: data.isLiked == true ? kHyppePrimary : kHyppeLightButtonText,
                       onTap: () {
                         context.read<DiariesPlaylistNotifier>().forcePause = false;
@@ -73,10 +73,10 @@ class RightItems extends StatelessWidget {
                       ? _customIcon2(
                           context,
                           "${AssetPath.vectorPath}comment.svg",
-                          value2.translate.comment!,
+                          value2.translate.comment ?? 'comment',
                           onTap: () async {
                             // if (context.read<ProfileNotifier>().myProfile != null) {
-                            //   if (context.read<ProfileNotifier>().myProfile!.profileOverviewData!.userOverviewData.isComplete!) {
+                            //   if (context.read<ProfileNotifier>().myProfile.profileOverviewData.userOverviewData.isComplete) {
                             //     context.read<DiariesPlaylistNotifier>().forcePause = true;
                             //     await ShowBottomSheet.onShowComment(context, comment: data);
                             //   } else {
@@ -94,15 +94,15 @@ class RightItems extends StatelessWidget {
                   _customIcon2(
                     context,
                     "${AssetPath.vectorPath}share.svg",
-                    value2.translate.share!,
+                    value2.translate.share ?? 'share',
                     colorIcon: kHyppeLightButtonText,
                     onTap: () => value.createdDynamicLink(context, data: data),
                   ),
-                  if (data.saleAmount! > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
+                  if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
                     _customIcon2(
                       context,
                       "${AssetPath.vectorPath}cart.svg",
-                      value2.translate.buy!,
+                      value2.translate.buy ?? 'buy',
                       colorIcon: kHyppeLightButtonText,
                       onTap: () => ShowBottomSheet.onBuyContent(context, data: data),
                     ),
@@ -134,7 +134,7 @@ class RightItems extends StatelessWidget {
           fourPx,
           CustomTextWidget(
             textToDisplay: caption,
-            textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
           )
         ],
       ),

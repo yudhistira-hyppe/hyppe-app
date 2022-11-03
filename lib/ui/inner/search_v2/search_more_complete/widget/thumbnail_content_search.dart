@@ -31,10 +31,10 @@ class ThumbnailContentSearch extends StatelessWidget {
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
     String gambar;
-    if (data!.postType == 'pict') {
-      gambar = Env.data.baseUrl + "/pict/" + data!.postID! + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+    if (data?.postType == 'pict') {
+      gambar = Env.data.baseUrl + "/pict/" + (data?.postID ?? '') + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
     } else {
-      gambar = Env.data.baseUrl + "/thumb/" + data!.postID! + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      gambar = Env.data.baseUrl + "/thumb/" + (data?.postID ?? '')+ "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
     }
 
     return GestureDetector(
@@ -72,7 +72,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               ),
             ),
           ),
-          data!.postType != 'pict'
+          data?.postType != 'pict'
               ? Center(
                   child: CustomIconWidget(
                     width: 30,
@@ -105,8 +105,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               ),
               fourPx,
               CustomTextWidget(
-                // textToDisplay: '${data!.lCount}',
-                textToDisplay: System().formatterNumber(data!.likes ?? 0),
+                textToDisplay: System().formatterNumber(data?.likes ?? 0),
                 textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
               )
             ],
@@ -116,26 +115,3 @@ class ThumbnailContentSearch extends StatelessWidget {
     );
   }
 }
-
-// Widget _buildBody(context) {
-//   return Column(
-//     children: [
-//       Row(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           const CustomIconWidget(
-//             iconData: '${AssetPath.vectorPath}like.svg',
-//             defaultColor: false,
-//             color: kHyppeLightButtonText,
-//           ),
-//           fourPx,
-//           CustomTextWidget(
-//             // textToDisplay: '${data!.lCount}',
-//             textToDisplay: System().formatterNumber(data!.likes ?? 0),
-//             textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-//           )
-//         ],
-//       ),
-//     ],
-//   );
-// }

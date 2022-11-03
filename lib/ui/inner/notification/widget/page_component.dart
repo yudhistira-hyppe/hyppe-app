@@ -61,8 +61,7 @@ class _PageComponentState extends State<PageComponent> {
   Widget _buildWidget() {
     final mediaQuery = MediaQuery.of(context);
 
-    // if (context.read<NotificationNotifier>().data != null && widget.data!.falsy) {
-    if (context.read<NotificationNotifier>().data != null && widget.data!.isEmpty) {
+    if (context.read<NotificationNotifier>().data != null && (widget.data?.isEmpty ?? true)) {
       return SingleChildScrollView(
         child: Container(
           color: Colors.transparent,
@@ -84,7 +83,7 @@ class _PageComponentState extends State<PageComponent> {
               eightPx,
               CustomTextWidget(
                 textToDisplay: "${context.read<NotificationNotifier>().language.whenThereIsNewNotificationItWillGoesHere}",
-                textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
               )
             ],
           ),

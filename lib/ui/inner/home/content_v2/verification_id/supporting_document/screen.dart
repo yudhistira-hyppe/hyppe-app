@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -38,7 +39,7 @@ class _VerificationIDStepSupportingDocsState
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -46,9 +47,9 @@ class _VerificationIDStepSupportingDocsState
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.uploadSupportDoc!,
+              textToDisplay: notifier.language.uploadSupportDoc ?? '',
               textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -69,16 +70,16 @@ class _VerificationIDStepSupportingDocsState
                   const SizedBox(
                     height: 16,
                   ),
-                  unorderedList(notifier.language.supportDocNotice1!),
-                  unorderedList(notifier.language.supportDocNotice2!),
-                  unorderedList(notifier.language.supportDocNotice3!),
-                  unorderedList(notifier.language.supportDocNotice4!),
-                  unorderedList(notifier.language.supportDocNotice5!),
-                  unorderedList(notifier.language.supportDocNotice6!),
-                  unorderedList(notifier.language.supportDocNotice7!),
-                  unorderedList(notifier.language.supportDocNotice8!),
-                  unorderedList(notifier.language.supportDocNotice9!),
-                  unorderedList(notifier.language.supportDocNotice10!),
+                  unorderedList(notifier.language.supportDocNotice1 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice2 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice3 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice4 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice5 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice6 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice7 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice8 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice9 ?? ''),
+                  unorderedList(notifier.language.supportDocNotice10 ?? ''),
                   const SizedBox(
                     height: 50,
                   ),
@@ -97,8 +98,8 @@ class _VerificationIDStepSupportingDocsState
                   : notifier.onPickSupportedDocument(context, true),
               child: CustomTextWidget(
                 textToDisplay: notifier.selfiePath == ''
-                    ? notifier.language.continueSelfie!
-                    : notifier.language.continueStep!,
+                    ? (notifier.language.continueSelfie ?? '')
+                    : notifier.language.continueStep ?? '',
                 textStyle:
                     textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),

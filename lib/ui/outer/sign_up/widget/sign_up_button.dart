@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -52,18 +53,18 @@ class SignUpButton extends StatelessWidget {
               child: loading
                   ? const CustomLoading()
                   : CustomTextWidget(
-                      textToDisplay: caption ?? notifier.translate.next!,
+                      textToDisplay: caption ?? notifier.translate.next ?? '',
                       textStyle: textStyle,
                     ),
             ),
-            if (!withSkipButton) SizedBox(height: SizeConfig.screenHeight! * 0.0175),
+            if (!withSkipButton) SizedBox(height: SizeConfig.screenHeight ?? context.getHeight() * 0.0175),
             if (withSkipButton)
               CustomTextButton(
                 onPressed: onSkipTap,
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.skip!,
-                  textStyle: Theme.of(context).textTheme.button!.copyWith(
-                        color: onSkipTap != null ? Theme.of(context).textTheme.button!.color : Colors.transparent,
+                  textToDisplay: notifier.translate.skip ?? 'skip',
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(
+                        color: onSkipTap != null ? Theme.of(context).textTheme.button?.color : Colors.transparent,
                       ),
                 ),
               ),
@@ -76,7 +77,7 @@ class SignUpButton extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: "${notifier.translate.privacyPolicy} ",
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
                       recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
                     ),
                     TextSpan(
@@ -85,13 +86,13 @@ class SignUpButton extends StatelessWidget {
                     ),
                     TextSpan(
                       text: notifier.translate.termsOfService,
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
+                      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold, color: kHyppePrimary),
                       recognizer: TapGestureRecognizer()..onTap = () => context.read<UserInterestNotifier>().goToEula(),
                     ),
                   ],
                 ),
               ),
-            SizedBox(height: SizeConfig.screenHeight! * 0.0175),
+            SizedBox(height: SizeConfig.screenHeight ?? context.getHeight() * 0.0175),
           ],
         ),
       ),

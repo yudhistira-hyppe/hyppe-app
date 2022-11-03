@@ -55,7 +55,7 @@
 //                       notifier.isEditPhoneNumber = true;
 //                     }
 //                   },
-//                   buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
+//                   buttonStyle: theme.elevatedButtonTheme.style.copyWith(
 //                     alignment: Alignment.centerRight,
 //                     padding: MaterialStateProperty.all(const EdgeInsets.symmetric(vertical: 8.0)),
 //                     overlayColor: MaterialStateProperty.all(Colors.transparent),

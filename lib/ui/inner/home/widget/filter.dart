@@ -64,7 +64,7 @@ class _FilterLandingState extends State<FilterLanding> {
                           side: BorderSide(color: _select == filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.secondaryContainer)),
                       label: CustomTextWidget(
                         textToDisplay: filterList[index]['name'],
-                        textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: _select == filterList[index]['code'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: _select == filterList[index]['code'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
                       )),
                 ),
               ),

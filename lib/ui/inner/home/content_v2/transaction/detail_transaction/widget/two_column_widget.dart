@@ -17,18 +17,18 @@ class TwoColumnWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CustomTextWidget(
-            textToDisplay: text1!,
-            textStyle: Theme.of(context).textTheme.caption!,
+            textToDisplay: text1 ?? '',
+            textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
             textAlign: TextAlign.start,
           ),
           InkWell(
             onTap: function as void Function()?,
             child: Row(
               children: [
-                widget!,
+                widget ?? Container(),
                 CustomTextWidget(
                   textToDisplay: text2 ?? '',
-                  textStyle: textStyle ?? Theme.of(context).textTheme.caption!,
+                  textStyle: textStyle ?? Theme.of(context).textTheme.caption ?? const TextStyle(),
                 ),
               ],
             ),

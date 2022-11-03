@@ -38,7 +38,7 @@ class ContentThumbnail extends StatelessWidget {
             child: Center(
               child: CustomThumbImage(
                 boxFit: BoxFit.cover,
-                imageUrl: picData!.isApsara! ? picData?.mediaThumbEndPoint : '${picData?.fullThumbPath}',
+                imageUrl: picData?.isApsara ?? false ? picData?.mediaThumbEndPoint : '${picData?.fullThumbPath}',
               ),
             ),
           ),
@@ -64,7 +64,7 @@ class ContentThumbnail extends StatelessWidget {
                       fourPx,
                       CustomTextWidget(
                         textToDisplay: _system.formatterNumber(picData?.insight?.likes),
-                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                       )
                     ],
                   ),

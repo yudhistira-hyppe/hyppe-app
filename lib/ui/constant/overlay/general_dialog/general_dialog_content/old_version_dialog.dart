@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,7 @@ class OldVersionDialog extends StatelessWidget {
         children: [
           CustomTextWidget(
             textToDisplay: '${_language.newUpdate}',
-            textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
             // maxLines: 2,
@@ -53,7 +52,7 @@ class OldVersionDialog extends StatelessWidget {
 
   Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
     return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button!.copyWith(color: textColor)),
+      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor)),
       width: 220,
       height: 42,
       function: () async {
@@ -68,7 +67,7 @@ class OldVersionDialog extends StatelessWidget {
           );
         }
       },
-      buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
+      buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),
     );

@@ -25,7 +25,7 @@ class PicCenterItem extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
-    print('mediaThumbEndPoint : ${data!.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}');
+    print('mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}');
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Stack(
@@ -33,7 +33,7 @@ class PicCenterItem extends StatelessWidget {
           CustomBaseCacheImage(
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: data!.isApsara! ? data!.mediaThumbEndPoint : "${data?.fullThumbPath}",
+            imageUrl: data?.isApsara ?? false ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
             imageBuilder: (context, imageProvider) => Container(
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),

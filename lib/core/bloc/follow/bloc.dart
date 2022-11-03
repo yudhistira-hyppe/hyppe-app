@@ -27,7 +27,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setFollowFetch(FollowFetch(FollowState.checkFollowingToUserError));
         } else {
           IsFollowing _result = IsFollowing.fromJson(onResult.data);
@@ -50,7 +50,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setFollowFetch(FollowFetch(FollowState.followUserError));
         } else {
           setFollowFetch(FollowFetch(FollowState.followUserSuccess, data: onResult.data));
@@ -77,7 +77,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setFollowFetch(FollowFetch(FollowState.followUserError));
         } else {
           setFollowFetch(FollowFetch(FollowState.followUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -120,7 +120,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setFollowFetch(FollowFetch(FollowState.getFollowersUsersError));
         } else {
           setFollowFetch(FollowFetch(FollowState.getFollowersUsersSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -152,7 +152,7 @@ class FollowBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setFollowFetch(FollowFetch(FollowState.deleteUserTagError));
         } else {
           setFollowFetch(FollowFetch(FollowState.deleteUserTagSuccess));

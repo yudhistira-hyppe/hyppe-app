@@ -34,15 +34,15 @@ class _AddPlaylistState extends State<AddPlaylist> {
                 child: CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
               ),
               CustomTextWidget(
-                textToDisplay: notifier.language.newFavorite!,
-                textStyle: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.w500),
+                textToDisplay: notifier.language.newFavorite ?? '',
+                textStyle: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.w500),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.name!,
+                    textToDisplay: notifier.language.name ?? '',
                     textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 10 * SizeConfig.scaleDiagonal),
@@ -54,7 +54,7 @@ class _AddPlaylistState extends State<AddPlaylist> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: const Color(0xff1B1F23),
-                      hintText: notifier.language.name!,
+                      hintText: notifier.language.name,
                       hintStyle: TextStyle(
                           fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 18 * SizeConfig.scaleDiagonal, color: const Color(0xff505558)),
                       contentPadding: const EdgeInsets.only(left: 15, right: 15),
@@ -76,7 +76,7 @@ class _AddPlaylistState extends State<AddPlaylist> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.selectPrivacy!,
+                    textToDisplay: notifier.language.selectPrivacy ?? '',
                     textStyle: Theme.of(context).textTheme.bodyText1,
                   ),
                   SizedBox(height: 10 * SizeConfig.scaleDiagonal),
@@ -122,7 +122,7 @@ class _AddPlaylistState extends State<AddPlaylist> {
                               child: notifier.loading
                                   ? const CustomLoading()
                                   : CustomTextWidget(
-                                      textToDisplay: notifier.language.createNew!,
+                                      textToDisplay: notifier.language.createNew ?? '',
                                       textStyle: Theme.of(context).textTheme.button,
                                     ),
                               buttonStyle: ButtonStyle(
@@ -138,7 +138,7 @@ class _AddPlaylistState extends State<AddPlaylist> {
                               child: notifier.loading
                                   ? const SizedBox.shrink()
                                   : CustomTextWidget(
-                                      textToDisplay: notifier.language.cancel!,
+                                      textToDisplay: notifier.language.cancel ?? '',
                                       textStyle: Theme.of(context).textTheme.button,
                                     ),
                               buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)),

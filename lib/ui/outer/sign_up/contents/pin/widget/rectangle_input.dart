@@ -32,7 +32,7 @@ class RectangleInput extends StatelessWidget {
             focusNode: focusNode,
             onChanged: onChanged,
             maxLength: 1,
-            style: Theme.of(context).textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headline5?.copyWith(fontWeight: FontWeight.bold),
             inputDecoration: InputDecoration(
               contentPadding: const EdgeInsets.only(left: 12),
               focusedBorder: OutlineInputBorder(
@@ -49,7 +49,7 @@ class RectangleInput extends StatelessWidget {
                         ? Theme.of(context).colorScheme.error
                         : input.text.isNotEmpty
                             ? Theme.of(context).colorScheme.primaryVariant
-                            : Theme.of(context).primaryTextTheme.button!.color!,
+                            : Theme.of(context).primaryTextTheme.button?.color ?? Colors.white,
                     width: 1.0),
               ),
               counterText: "",

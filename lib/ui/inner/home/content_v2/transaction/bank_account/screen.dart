@@ -56,7 +56,7 @@ class _BankAccountState extends State<BankAccount> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier2.translate.help!,
+                    textToDisplay: notifier2.translate.help ?? 'help',
                     textStyle: theme.textTheme.caption,
                   ),
                   fourPx,
@@ -71,15 +71,15 @@ class _BankAccountState extends State<BankAccount> {
         ),
         body: notifier.isLoading
             ? Center(child: CustomLoading())
-            : notifier.dataAcccount!.isEmpty
+            : notifier.dataAcccount?.isEmpty ?? false
                 ? EmptyBankAccount(
                     textWidget: Column(
                     children: [
                       CustomTextWidget(
-                          textToDisplay: notifier2.translate.noSavedAccountYet!, textStyle: Theme.of(context).textTheme.subtitle1!.copyWith(color: Theme.of(context).colorScheme.onBackground)),
+                          textToDisplay: notifier2.translate.noSavedAccountYet ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Theme.of(context).colorScheme.onBackground)),
                       eightPx,
                       CustomTextWidget(
-                        textToDisplay: notifier2.translate.addYourBankAccountForAnEasierWithdraw!,
+                        textToDisplay: notifier2.translate.addYourBankAccountForAnEasierWithdraw ?? '',
                         maxLines: 4,
                       ),
                     ],
@@ -107,7 +107,7 @@ class _BankAccountState extends State<BankAccount> {
         //           },
         //           child: ListView.builder(
         //               shrinkWrap: true,
-        //               itemCount: notifier.dataAcccount!.length,
+        //               itemCount: notifier.dataAcccount.length,
         //               itemBuilder: (context, index) {
         //                 return Container(
         //                   margin: const EdgeInsets.only(bottom: 20),
@@ -119,14 +119,14 @@ class _BankAccountState extends State<BankAccount> {
         //                       Column(
         //                         crossAxisAlignment: CrossAxisAlignment.start,
         //                         children: [
-        //                           // CustomTextWidget(textToDisplay: notifier.dataAcccount![index].idBank! )
+        //                           // CustomTextWidget(textToDisplay: notifier.dataAcccount[index].idBank )
         //                           CustomTextWidget(
-        //                             textToDisplay: notifier.dataAcccount![index].bankName!,
-        //                             textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+        //                             textToDisplay: notifier.dataAcccount[index].bankName,
+        //                             textStyle: Theme.of(context).textTheme.bodyMedium.copyWith(color: Theme.of(context).colorScheme.onBackground),
         //                           ),
         //                           sixPx,
         //                           CustomTextWidget(
-        //                             textToDisplay: '${notifier.dataAcccount![index].noRek} - ${notifier.dataAcccount![index].nama}',
+        //                             textToDisplay: '${notifier.dataAcccount[index].noRek} - ${notifier.dataAcccount[index].nama}',
         //                             textStyle: Theme.of(context).textTheme.bodySmall,
         //                           ),
         //                         ],
@@ -139,8 +139,8 @@ class _BankAccountState extends State<BankAccount> {
         //                               side: BorderSide(width: 1.0, color: kHyppePrimary),
         //                             ),
         //                             child: CustomTextWidget(
-        //                               textToDisplay: notifier2.translate.remove!,
-        //                               textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+        //                               textToDisplay: notifier2.translate.remove,
+        //                               textStyle: Theme.of(context).textTheme.bodySmall.copyWith(
         //                                     color: kHyppePrimary,
         //                                     fontWeight: FontWeight.bold,
         //                                   ),
@@ -151,7 +151,7 @@ class _BankAccountState extends State<BankAccount> {
         //                 );
         //               }),
         //         ),
-        //         infoMaxAccount(title: notifier2.translate.youCanAddUpTo!)
+        //         infoMaxAccount(title: notifier2.translate.youCanAddUpTo)
         //       ],
         //     ),
         //   ),
@@ -159,15 +159,15 @@ class _BankAccountState extends State<BankAccount> {
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(8.0),
           child: CustomTextButton(
-            onPressed: notifier.dataAcccount!.length >= 5
+            onPressed: (notifier.dataAcccount?.length ?? 0) >= 5
                 ? null
                 : () {
                     notifier.showDialogAllBank(context);
                   },
-            style: ButtonStyle(backgroundColor: notifier.dataAcccount!.length >= 5 ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
+            style: ButtonStyle(backgroundColor: (notifier.dataAcccount?.length ?? 0) >= 5 ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
             child: CustomTextWidget(
-              textToDisplay: notifier2.translate.addBankAccount!,
-              textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+              textToDisplay: notifier2.translate.addBankAccount ?? '',
+              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
             ),
           ),
         ),

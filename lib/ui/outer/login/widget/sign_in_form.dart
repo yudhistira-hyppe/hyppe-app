@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -38,7 +39,7 @@ class _SignInFormState extends State<SignInForm> {
               CustomTextFormField(
                 focusNode: notifier.emailFocus,
                 inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
-                inputAreaWidth: SizeConfig.screenWidth!,
+                inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
                 textEditingController: notifier.emailController,
                 style: Theme.of(context).textTheme.bodyText1,
                 textInputType: TextInputType.emailAddress,
@@ -48,17 +49,17 @@ class _SignInFormState extends State<SignInForm> {
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
                   labelText: notifier.incorrect ? notifier.language.notAValidEmailAddress : notifier.language.email,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                       color: notifier.emailValidator(notifier.emailController.text) != ''
                           ? Theme.of(context).colorScheme.error
                           : notifier.emailFocus.hasFocus
                               ? Theme.of(context).colorScheme.primaryVariant
                               : null),
-                  prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
+                  prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                   prefixIcon: Transform.translate(
-                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                     child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
                       child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
                     ),
                   ),
@@ -92,7 +93,7 @@ class _SignInFormState extends State<SignInForm> {
                 focusNode: notifier.passwordFocus,
                 obscuringCharacter: '*',
                 inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
-                inputAreaWidth: SizeConfig.screenWidth!,
+                inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
                 textEditingController: notifier.passwordController,
                 style: Theme.of(context).textTheme.bodyText1,
                 obscureText: notifier.hide,
@@ -102,27 +103,27 @@ class _SignInFormState extends State<SignInForm> {
                   isDense: true,
                   contentPadding: const EdgeInsets.only(right: 16, bottom: 16),
                   labelText: notifier.incorrect ? notifier.language.incorrectPassword : notifier.language.password,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                       color: notifier.incorrect
                           ? Theme.of(context).colorScheme.error
                           : notifier.passwordFocus.hasFocus
                               ? Theme.of(context).colorScheme.primaryVariant
                               : null),
                   prefixIconConstraints: BoxConstraints(
-                    minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                    minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                   ),
                   suffixIconConstraints: BoxConstraints(
-                    minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                    minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                   ),
                   prefixIcon: Transform.translate(
-                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                    offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                     child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
                       child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}lock.svg"),
                     ),
                   ),
                   suffixIcon: Transform.scale(
-                    scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                    scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
                     child: CustomTextButton(
                       style: ButtonStyle(
                           alignment: const Alignment(0.75, 0.0),
@@ -172,8 +173,8 @@ class _SignInFormState extends State<SignInForm> {
               : CustomTextButton(
                   onPressed: () => notifier.onClickForgotPassword(context),
                   child: CustomTextWidget(
-                    textToDisplay: "${notifier.language.forgotPassword!}?",
-                    textStyle: Theme.of(context).primaryTextTheme.button!.copyWith(color: kHyppePrimary),
+                    textToDisplay: "${notifier.language.forgotPassword}?",
+                    textStyle: Theme.of(context).primaryTextTheme.button?.copyWith(color: kHyppePrimary),
                   ),
                 ),
           fourPx,
@@ -198,8 +199,8 @@ class _SignInFormState extends State<SignInForm> {
             child: notifier.isLoading
                 ? const CustomLoading()
                 : CustomTextWidget(
-                    textToDisplay: notifier.language.logIn!,
-                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                    textToDisplay: notifier.language.logIn ?? '',
+                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                   ),
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,

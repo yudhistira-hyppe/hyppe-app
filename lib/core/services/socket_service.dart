@@ -44,7 +44,7 @@ class SocketService {
       _eventService.notifyRootSocketDisconnected(message);
     });
 
-    _socket!.onConnectError((message) {
+    _socket?.onConnectError((message) {
       'Your connection error from socket'.logger();
       _eventService.notifyRootSocketError(message);
     });
@@ -55,7 +55,7 @@ class SocketService {
   /// emit something
   emit(String event, [dynamic data]) {
     'Emit data $data'.logger();
-    _socket!.emit(event, data);
+    _socket?.emit(event, data);
   }
 
   /// check socket is running or not

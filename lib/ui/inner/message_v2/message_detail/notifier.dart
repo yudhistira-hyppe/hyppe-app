@@ -81,7 +81,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   void onMessageReceived(MessageDataV2 message) {
     try {
       // addMessage(logs: message.disqusLogs.firstOrNull!, context: context);
-      addMessage(logs: message.disqusLogs.firstOrNull!);
+      addMessage(logs: message.disqusLogs.firstOrNull ?? DisqusLogs());
     } catch (e) {
       '$e'.logger();
     }
@@ -144,7 +144,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
       // sort descending
       try {
-        discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt!).compareTo(DateTime.parse(a.createdAt!)));
+        discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
       } catch (e) {
         '$e'.logger();
       }
@@ -348,7 +348,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   // }
 
   // Future syncDetailChatFromServer(context, {int? rows, String? lCts}) async {
-  //   if (_limitChat! > _listChatData.length || _listChatData.isEmpty) {
+  //   if (_limitChat > _listChatData.length || _listChatData.isEmpty) {
   //     final notifier = Provider.of<MessageBloc>(context, listen: false);
   //     await notifier.syncMessageDetailFromServerBloc(context,
   //         function: () => syncDetailChatFromServer(context, rows: rows, lCts: lCts), receiverId: receiverUid, rows: rows, lCts: lCts);
@@ -405,7 +405,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //   try {
   //     await System().getLocalMedia(context: context).then((value) async {
   //       if (value.values.single != null) {
-  //         print(value.values.single!.paths);
+  //         print(value.values.single.paths);
   //       } else {
   //         print("Canceled pick data");
   //       }
@@ -434,7 +434,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
     final notifier = MessageBlocV2();
     String? postId = _discussData?.first.disqusLogs[_selectData].lineID;
     try {
-      await notifier.deleteDiscussionBloc(context, postEmail: '', postId: postId!);
+      await notifier.deleteDiscussionBloc(context, postEmail: '', postId: postId ?? '');
       final fetch = notifier.messageFetch;
       if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
         _selectData = -1;

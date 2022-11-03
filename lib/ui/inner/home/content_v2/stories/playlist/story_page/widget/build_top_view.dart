@@ -64,11 +64,11 @@ class _BuildTopViewState extends State<BuildTopView> {
                       following: true,
                       createdAt: widget.when,
                       isCelebrity: false,
-                      onTapOnProfileImage: () => System().navigateToProfile(context, widget.data!.email!, storyController: widget.storyController),
+                      onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
                       featureType: FeatureType.pic,
                       username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
                       imageUrl: notifier.onProfilePicShow(
-                        "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data!.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
+                        "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
                       ),
                       // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
                     );
@@ -84,7 +84,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                           widget.storyController.pause();
                           ShowBottomSheet.onShowOptionContent(
                             context,
-                            contentData: widget.data!,
+                            contentData: widget.data ?? ContentData(),
                             captionTitle: hyppeStory,
                             onDetail: widget.onDetail,
                             storyController: widget.storyController,
@@ -99,7 +99,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                     : SizedBox(),
                 widget.data?.email != SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
-                        onTap: () => notifier.reportContent(context, widget.data!, storyController: widget.storyController),
+                        onTap: () => notifier.reportContent(context, widget.data ?? ContentData(), storyController: widget.storyController),
                         child: const CustomIconWidget(
                           defaultColor: false,
                           iconData: '${AssetPath.vectorPath}more.svg',

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -41,7 +41,7 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
     return Consumer<PaymentSummaryNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -49,8 +49,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.payment!,
-            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+            textToDisplay: notifier.language.payment ?? '',
+            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -65,14 +65,14 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextWidget(textToDisplay: notifier.language.paymentBefore!, textStyle: textTheme.bodyMedium),
+                      CustomTextWidget(textToDisplay: notifier.language.paymentBefore ?? '', textStyle: textTheme.bodyMedium),
                       const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomTextWidget(
                             // textToDisplay: "Saturday, 15 Jul 2022 01:50 WIB",
-                            textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', 'en_US').format(DateTime.parse(notifier.paymentMethodNotifier.postResponse!.expiredtimeva!)),
+                            textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', 'en_US').format(DateTime.parse(notifier.paymentMethodNotifier.postResponse?.expiredtimeva ?? '')),
                             textStyle: textTheme.bodyMedium,
                           ),
                           TweenAnimationBuilder<Duration>(
@@ -86,12 +86,12 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                                 final seconds = value.inSeconds % 60;
                                 return CustomTextWidget(
                                   textToDisplay: '( ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds )',
-                                  textStyle: textTheme.bodyLarge!.copyWith(color: const Color.fromRGBO(201, 29, 29, 1), fontWeight: FontWeight.bold),
+                                  textStyle: textTheme.bodyLarge?.copyWith(color: const Color.fromRGBO(201, 29, 29, 1), fontWeight: FontWeight.bold),
                                 );
                               }),
                           // CustomTextWidget(
                           //   textToDisplay: notifier.durationString,
-                          //   textStyle: textTheme.bodyLarge!.copyWith(color: const Color.fromRGBO(201, 29, 29, 1)),
+                          //   textStyle: textTheme.bodyLarge.copyWith(color: const Color.fromRGBO(201, 29, 29, 1)),
                           // ),
                         ],
                       ),
@@ -102,8 +102,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            CustomTextWidget(textToDisplay: notifier.paymentMethodNotifier.postResponse!.bank!, textStyle: textTheme.bodyMedium),
-                            Image(width: 77 * SizeConfig.scaleDiagonal, image: NetworkImage(notifier.bankData!.bankIcon!))
+                            CustomTextWidget(textToDisplay: notifier.paymentMethodNotifier.postResponse?.bank ?? '', textStyle: textTheme.bodyMedium),
+                            Image(width: 77 * SizeConfig.scaleDiagonal, image: NetworkImage(notifier.bankData?.bankIcon ?? ''))
                           ],
                         ),
                       ),
@@ -113,16 +113,16 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(notifier.paymentMethodNotifier.postResponse!.nova!),
+                              Text(notifier.paymentMethodNotifier.postResponse?.nova ?? ''),
                               GestureDetector(
                                 onTap: () {
-                                  Clipboard.setData(ClipboardData(text: notifier.paymentMethodNotifier.postResponse!.nova!));
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notifier.language.vaCopyToClipboard!)));
+                                  Clipboard.setData(ClipboardData(text: notifier.paymentMethodNotifier.postResponse?.nova ?? ''));
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notifier.language.vaCopyToClipboard ?? '')));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
                                   decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryVariant, borderRadius: const BorderRadius.all(Radius.circular(50))),
-                                  child: CustomTextWidget(textToDisplay: notifier.language.copy!, textStyle: textTheme.titleSmall!.copyWith(color: Colors.white)),
+                                  child: CustomTextWidget(textToDisplay: notifier.language.copy ?? 'copy', textStyle: textTheme.titleSmall?.copyWith(color: Colors.white)),
                                 ),
                               ),
                             ],
@@ -130,18 +130,18 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                       const SizedBox(
                         height: 16,
                       ),
-                      CustomTextWidget(textToDisplay: notifier.language.totalPayment!, textStyle: textTheme.bodyMedium!.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
+                      CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? 'total payment', textStyle: textTheme.bodyMedium?.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
                       const SizedBox(
                         height: 5,
                       ),
-                      CustomTextWidget(textToDisplay: System().currencyFormat(amount: notifier.paymentMethodNotifier.postResponse!.totalamount), textStyle: textTheme.titleMedium),
+                      CustomTextWidget(textToDisplay: System().currencyFormat(amount: notifier.paymentMethodNotifier.postResponse?.totalamount), textStyle: textTheme.titleMedium),
                       const SizedBox(
                         height: 32,
                       ),
-                      CustomTextWidget(textToDisplay: notifier.language.seePaymentInstruction!, textStyle: textTheme.bodyMedium!.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
-                      expansionLists(context, textTheme, 'Via ATM', notifier.bankData!.atm!),
-                      expansionLists(context, textTheme, 'Via m-Banking', notifier.bankData!.mobileBanking!),
-                      expansionLists(context, textTheme, 'Via Internet Banking', notifier.bankData!.internetBanking!),
+                      CustomTextWidget(textToDisplay: notifier.language.seePaymentInstruction ?? '', textStyle: textTheme.bodyMedium?.copyWith(color: const Color.fromRGBO(115, 115, 115, 1))),
+                      expansionLists(context, textTheme, 'Via ATM', notifier.bankData?.atm ?? ''),
+                      expansionLists(context, textTheme, 'Via m-Banking', notifier.bankData?.mobileBanking ?? ''),
+                      expansionLists(context, textTheme, 'Via Internet Banking', notifier.bankData?.internetBanking ?? ''),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         color: Theme.of(context).backgroundColor,
@@ -153,7 +153,7 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                               height: 44.0 * SizeConfig.scaleDiagonal,
                               function: () => Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby),
                               child: CustomTextWidget(
-                                textToDisplay: notifier.language.backToHome!,
+                                textToDisplay: notifier.language.backToHome ?? '',
                                 textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                               ),
                               buttonStyle: ButtonStyle(
@@ -169,8 +169,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                               child: GestureDetector(
                                 onTap: () => Routing().move(Routes.transaction),
                                 child: Text(
-                                  notifier.language.checkPaymentStatus!,
-                                  style: textTheme.titleMedium!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                                  notifier.language.checkPaymentStatus ?? '',
+                                  style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                                 ),
                               ),
                             )
@@ -207,9 +207,9 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                 style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
                 onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
                   print(url);
-                  if (await canLaunchUrl(Uri.parse(url!))) {
+                  if (await canLaunchUrl(Uri.parse(url ?? ''))) {
                     await launchUrl(
-                      Uri.parse(url),
+                      Uri.parse(url ?? ''),
                       mode: LaunchMode.externalApplication,
                     );
                   } else {

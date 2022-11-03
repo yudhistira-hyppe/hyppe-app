@@ -16,8 +16,8 @@ class UserAgreementScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: CustomTextWidget(
-          textToDisplay: context.watch<TranslateNotifierV2>().translate.endUserLicenseAgreement!,
-          textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+          textToDisplay: context.watch<TranslateNotifierV2>().translate.endUserLicenseAgreement ?? '',
+          textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: const UserAgreementDemoScreen(),

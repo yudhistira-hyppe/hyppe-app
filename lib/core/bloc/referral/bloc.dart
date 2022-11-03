@@ -24,7 +24,7 @@ class ReferralBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != 202) {
+        if ((onResult.statusCode ?? 300) != 202) {
           setReferralFetch(ReferralFetch(ReferralState.getReferralUserError));
         } else {
           setReferralFetch(ReferralFetch(ReferralState.getReferralUserSuccess, data: onResult.data));
@@ -55,7 +55,7 @@ class ReferralBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError));
         } else {
           setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -85,9 +85,9 @@ class ReferralBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! == 406 || onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) == 406 || (onResult.statusCode ?? 300) > HTTP_CODE) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError, message: onResult.data['messages']));
-        } else if (onResult.statusCode! == 200) {
+        } else if ((onResult.statusCode ?? 300) == 200) {
           setReferralFetch(ReferralFetch(ReferralState.referralUserError, data: (onResult.data)));
         } else {
           setReferralFetch(ReferralFetch(ReferralState.referralUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));

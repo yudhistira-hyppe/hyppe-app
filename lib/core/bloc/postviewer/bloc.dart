@@ -25,7 +25,7 @@ class PostViewerBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserError));
         } else {
           setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -61,7 +61,7 @@ class PostViewerBloc {
       (onResult) {
         print('hahaha status code');
         print(onResult.statusCode);
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
         } else {
           // print(onResult.data['data']);

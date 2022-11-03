@@ -71,7 +71,7 @@ class _CommentListTileState extends State<CommentListTile> {
                     textAlign: TextAlign.start,
                     textSpan: TextSpan(
                       style: Theme.of(context).textTheme.caption,
-                      text: commentor?.username != null ? "@" + commentor!.username! + "   " : '',
+                      text: commentor?.username != null ? "@" + (commentor?.username ?? '') + "   " : '',
                       children: [
                         TextSpan(
                           text: System().readTimestamp(
@@ -96,7 +96,7 @@ class _CommentListTileState extends State<CommentListTile> {
                   Row(
                     children: [
                       // TODO: show reactions count
-                      // widget.data!.count! > 0
+                      // widget.data.count > 0
                       //     ? Row(
                       //         children: [
                       //           CustomIconWidget(
@@ -105,13 +105,13 @@ class _CommentListTileState extends State<CommentListTile> {
                       //             width: 15 * SizeConfig.scaleDiagonal,
                       //           ),
                       //           CustomTextWidget(
-                      //             textToDisplay: " ${System().formatterNumber(widget.data!.count!)}",
+                      //             textToDisplay: " ${System().formatterNumber(widget.data.count)}",
                       //             textStyle: Theme.of(context).textTheme.button,
                       //           ),
                       //         ],
                       //       )
                       //     : SizedBox.shrink(),
-                      // widget.data!.count! > 0 ? SizedBox(width: 51.5 * SizeConfig.scaleDiagonal) : SizedBox.shrink(),
+                      // widget.data.count > 0 ? SizedBox(width: 51.5 * SizeConfig.scaleDiagonal) : SizedBox.shrink(),
                       InkWell(
                         onTap: () {
                           if (widget.fromFront) {
@@ -155,7 +155,7 @@ class _CommentListTileState extends State<CommentListTile> {
                             // TODO: show sub comments
                             // notifier.commentController.clear();
                             // notifier.forSubComment = widget.data;
-                            // notifier.subComments!.clear();
+                            // notifier.subComments.clear();
                             // notifier.subComment = true;
                             notifier.seeMoreReplies(widget.data);
                           },
@@ -173,7 +173,7 @@ class _CommentListTileState extends State<CommentListTile> {
                   notifier.repliesComments.containsKey(comment?.lineID)
                       ? Column(
                           mainAxisSize: MainAxisSize.min,
-                          children: notifier.repliesComments[comment?.lineID]!,
+                          children: notifier.repliesComments[comment?.lineID] ?? [],
                         )
                       : const SizedBox.shrink(),
                 ],
@@ -186,23 +186,23 @@ class _CommentListTileState extends State<CommentListTile> {
           //   child: CustomIconButtonWidget(
           //     padding: EdgeInsets.all(0),
           //     alignment: Alignment.topRight,
-          //     iconData: widget.data!.isReacted! ? "${AssetPath.vectorPath}liked.svg" : "${AssetPath.vectorPath}unlike.svg",
-          //     defaultColor: widget.data!.isReacted! ? false : true,
-          //     onPressed: widget.data!.isReacted!
+          //     iconData: widget.data.isReacted ? "${AssetPath.vectorPath}liked.svg" : "${AssetPath.vectorPath}unlike.svg",
+          //     defaultColor: widget.data.isReacted ? false : true,
+          //     onPressed: widget.data.isReacted
           //         ? () => print("Belom Bisa Unlike Comment") //=> notifier.onLikeComment(context, comment: widget.data)
           //         : () async => ShowGeneralDialog().reactionComment(context, widget.data).whenComplete(() => setState(() {
           //               context.read<CommentNotifierV2>().inputNode.unfocus();
           //             })),
           //   ),
           // ),
-          widget.data!.comment!.sender == email
+          widget.data?.comment?.sender == email
               ? Consumer<CommentNotifierV2>(
                   builder: (_, notifier, __) => Align(
                       alignment: const Alignment(1.0, 0.0),
                       child: InkWell(
                           onTap: () async {
                             ShowGeneralDialog.deleteContentDialog(context, '${_language.comment}', () async {
-                              notifier.deleteComment(context, comment!.lineID!);
+                              notifier.deleteComment(context, comment?.lineID ?? '');
                             });
                           },
                           child: const Icon(Icons.close))),

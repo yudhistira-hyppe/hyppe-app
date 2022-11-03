@@ -75,11 +75,11 @@ class _SearchContentState extends State<SearchContent> {
                   child: CustomContentModeratedWidget(
                     width: double.infinity,
                     height: double.infinity,
-                    featureType: widget.featureType!,
-                    isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
+                    featureType: widget.featureType ?? FeatureType.other,
+                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
                     thumbnail: contents[index].isApsara ?? false
                         ? contents[index].mediaThumbEndPoint ?? ""
-                        : System().showUserPicture(widget.featureType != FeatureType.pic ? contents[index].mediaThumbEndPoint : contents[index].mediaEndpoint)!,
+                        : System().showUserPicture(widget.featureType != FeatureType.pic ? contents[index].mediaThumbEndPoint : contents[index].mediaEndpoint) ?? '',
                   ),
                 ),
               ),

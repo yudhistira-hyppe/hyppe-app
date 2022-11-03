@@ -15,7 +15,7 @@ class TopItemView extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (data!.saleAmount! > 0)
+        if ((data?.saleAmount ?? 0) > 0)
           CustomIconWidget(
             iconData: '${AssetPath.vectorPath}sale.svg',
             defaultColor: false,

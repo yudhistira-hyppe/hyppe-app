@@ -29,7 +29,7 @@ class AutoCompleteSearch extends StatelessWidget {
                           Expanded(child: SizedBox(height: 50, child: CustomLoading())),
                         ],
                       )
-                    : notifier.searchPeolpleData!.length == 0
+                    : notifier.searchPeolpleData?.isNotEmpty ?? false
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -39,21 +39,21 @@ class AutoCompleteSearch extends StatelessWidget {
                           )
                         : ListView.builder(
                             shrinkWrap: true,
-                            itemCount: notifier.searchPeolpleData!.length >= 5 ? 5 : notifier.searchPeolpleData!.length,
+                            itemCount: (notifier.searchPeolpleData?.length ?? 0) >= 5 ? 5 : notifier.searchPeolpleData?.length,
                             itemBuilder: (context, index) {
                               return SizedBox(
                                 height: 60,
                                 child: ListTile(
                                   onTap: () {
-                                    _system.navigateToProfile(context, notifier.searchPeolpleData![index].email!);
+                                    _system.navigateToProfile(context, notifier.searchPeolpleData?[index].email ?? '');
                                   },
                                   title: CustomTextWidget(
-                                    textToDisplay: notifier.searchPeolpleData![index].fullName!,
+                                    textToDisplay: notifier.searchPeolpleData?[index].fullName ?? '',
                                     textStyle: Theme.of(context).textTheme.bodyMedium,
                                     textAlign: TextAlign.start,
                                   ),
                                   subtitle: Text(
-                                    notifier.searchPeolpleData![index].username!,
+                                    notifier.searchPeolpleData?[index].username ?? '',
                                     style: TextStyle(fontSize: 12),
                                   ),
                                   leading: StoryColorValidator(
@@ -63,7 +63,7 @@ class AutoCompleteSearch extends StatelessWidget {
                                       width: 40,
                                       height: 40,
                                       onTap: () {},
-                                      imageUrl: System().showUserPicture(notifier.searchPeolpleData![index].avatar?.mediaEndpoint),
+                                      imageUrl: System().showUserPicture(notifier.searchPeolpleData?[index].avatar?.mediaEndpoint ?? ''),
                                       following: true,
                                       onFollow: () {},
                                     ),
@@ -74,12 +74,12 @@ class AutoCompleteSearch extends StatelessWidget {
                           )
                 : Container(),
             notifier.searchPeolpleData != null
-                ? notifier.searchPeolpleData!.length != 0 || notifier.searchController.text != ''
+                ? notifier.searchPeolpleData?.isNotEmpty ?? false || notifier.searchController.text != ''
                     ? ListTile(
                         onTap: () => notifier.onSearchPost(context),
                         title: CustomTextWidget(
                           textToDisplay: 'See More',
-                          textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(color: kHyppePrimary),
+                          textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(color: kHyppePrimary),
                         ),
                       )
                     : const SizedBox()

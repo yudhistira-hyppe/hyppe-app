@@ -67,8 +67,8 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                       child: CustomTextButton(
                         onPressed: () => Routing().moveAndRemoveUntil(Routes.lobby, Routes.root),
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.completeLater!,
-                          textStyle: Theme.of(context).textTheme.button!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          textToDisplay: notifier.language.completeLater ?? '',
+                          textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                         ),
                       ),
                     )
@@ -95,8 +95,8 @@ class _SignUpWelcomeState extends State<SignUpWelcome> with SingleTickerProvider
                             /// End TODO
                           },
                           child: CustomTextWidget(
-                            textToDisplay: notifier.language.completeNow!,
-                            textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                            textToDisplay: notifier.language.completeNow ?? '',
+                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                           ),
                         ),
                       ),

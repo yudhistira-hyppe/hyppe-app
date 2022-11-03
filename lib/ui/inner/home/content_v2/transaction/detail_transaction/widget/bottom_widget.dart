@@ -15,9 +15,9 @@ class BottomDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (data!.type == TransactionType.withdrawal) {
+    if (data?.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
-    } else if (data!.type == TransactionType.buy) {
+    } else if (data?.type == TransactionType.buy) {
       return buyWidget(context);
     } else {
       return sellWidget(context);
@@ -29,23 +29,23 @@ class BottomDetailWidget extends StatelessWidget {
       twelvePx,
       const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
       twelvePx,
-      TwoColumnWidget(language!.withdrawalAmount!, text2: System().currencyFormat(amount: data!.amount)),
-      data!.bankverificationcharge! > 0
+      TwoColumnWidget(language?.withdrawalAmount ?? '', text2: System().currencyFormat(amount: data?.amount ?? 0)),
+      (data?.bankverificationcharge ?? 0) > 0
           ? TwoColumnWidget(
-              language!.verificationBankAccount!,
-              text2: System().currencyFormat(amount: data!.bankverificationcharge),
+              language?.verificationBankAccount ?? '',
+              text2: System().currencyFormat(amount: data?.bankverificationcharge),
             )
           : Container(),
-      TwoColumnWidget(language!.adminFee!, text2: System().currencyFormat(amount: data!.adminFee)),
+      TwoColumnWidget(language?.adminFee ?? '', text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
       CustomTextWidget(
-        textToDisplay: language!.ballanceAmount!,
-        textStyle: Theme.of(context).textTheme.caption!,
+        textToDisplay: language?.ballanceAmount ?? '',
+        textStyle: Theme.of(context).textTheme.caption,
         maxLines: 3,
       ),
       sixPx,
       CustomTextWidget(
-        textToDisplay: System().currencyFormat(amount: data!.totalamount),
-        textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+        textToDisplay: System().currencyFormat(amount: data?.totalamount ?? 0),
+        textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
       ),
     ]);
   }
@@ -60,15 +60,15 @@ class BottomDetailWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
-            textToDisplay: language!.paymentDetails!,
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+            textToDisplay: language?.paymentDetails ?? '',
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
           ),
         ),
-        TwoColumnWidget(language!.totalPrice!, text2: System().currencyFormat(amount: data!.totalamount)),
-        TwoColumnWidget(language!.totalIncome!, text2: System().currencyFormat(amount: data!.totalamount)),
+        TwoColumnWidget(language?.totalPrice ?? 'total price', text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
+        TwoColumnWidget(language?.totalIncome ?? 'total income', text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
       ],
     );
   }
@@ -83,18 +83,18 @@ class BottomDetailWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
-            textToDisplay: language!.paymentDetails!,
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+            textToDisplay: language?.paymentDetails ?? '',
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
           ),
         ),
-        TwoColumnWidget(language!.paymentMethods!, text2: data!.paymentmethode),
-        TwoColumnWidget(language!.contentPrice!, text2: System().currencyFormat(amount: data!.amount)),
-        TwoColumnWidget(language!.adminFee!, text2: System().currencyFormat(amount: data!.adminFee)),
-        TwoColumnWidget(language!.serviceFee!, text2: System().currencyFormat(amount: data!.serviceFee)),
-        TwoColumnWidget(language!.totalPrice!, text2: System().currencyFormat(amount: data!.totalamount)),
+        TwoColumnWidget(language?.paymentMethods, text2: data?.paymentmethode),
+        TwoColumnWidget(language?.contentPrice, text2: System().currencyFormat(amount: data?.amount ?? 0)),
+        TwoColumnWidget(language?.adminFee, text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
+        TwoColumnWidget(language?.serviceFee, text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
+        TwoColumnWidget(language?.totalPrice, text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
       ],
     );
   }

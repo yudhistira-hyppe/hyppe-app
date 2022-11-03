@@ -34,6 +34,8 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
 
   @override
   void dispose() {
+    final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
+    notifier.scrollController.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -52,7 +54,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomHeaderFeature(
-              title: notifier.language.latestPicsForYou!,
+              title: notifier.language.latestPicsForYou ?? '',
               onPressed: () => notifier.navigateToSeeAll(context),
             ),
             eightPx,

@@ -69,7 +69,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
             children: [
               CustomTextWidget(
                 textAlign: TextAlign.center,
-                textToDisplay: translateNotifier.translate.gender!,
+                textToDisplay: translateNotifier.translate.gender ?? 'gender',
                 textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
               ),
               Expanded(
@@ -114,8 +114,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                     widget.onSave();
                   },
                   child: CustomTextWidget(
-                    textToDisplay: translateNotifier.translate.save!,
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                    textToDisplay: translateNotifier.translate.save ?? 'save',
+                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ),
               ),
@@ -133,8 +133,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                     overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
                   ),
                   child: CustomTextWidget(
-                    textToDisplay: translateNotifier.translate.cancel!,
-                    textStyle: Theme.of(context).textTheme.button!,
+                    textToDisplay: translateNotifier.translate.cancel ?? '',
+                    textStyle: Theme.of(context).textTheme.button,
                   ),
                 ),
               ),
@@ -165,7 +165,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //   children: [
     //     CustomTextWidget(
     //       textAlign: TextAlign.center,
-    //       textToDisplay: translateNotifier.translate.gender!,
+    //       textToDisplay: translateNotifier.translate.gender,
     //       textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
     //     ),
     //     Expanded(
@@ -202,8 +202,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         ),
     //         function: () => Routing().moveBack(),
     //         child: CustomTextWidget(
-    //           textToDisplay: translateNotifier.translate.save!,
-    //           textStyle: Theme.of(context).textTheme.button!,
+    //           textToDisplay: translateNotifier.translate.save,
+    //           textStyle: Theme.of(context).textTheme.button,
     //         ),
     //       ),
     //     ),
@@ -218,8 +218,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         },
     //         buttonStyle: ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(Colors.transparent)),
     //         child: CustomTextWidget(
-    //           textToDisplay: translateNotifier.translate.cancel!,
-    //           textStyle: Theme.of(context).textTheme.button!,
+    //           textToDisplay: translateNotifier.translate.cancel,
+    //           textStyle: Theme.of(context).textTheme.button,
     //         ),
     //       ),
     //     ),

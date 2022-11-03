@@ -5,7 +5,6 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,14 +41,14 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
               children: [
                 Center(
                   child: CustomTextWidget(
-                    textToDisplay: notifier.translate.areYouSure!,
-                    textStyle: Theme.of(context).textTheme.titleLarge!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay: notifier.translate.areYouSure ?? '',
+                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   ),
                 ),
                 const SizedBox(height: 20),
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue!,
-                  textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                  textToDisplay: notifier.translate.youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue ?? '',
+                  textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   maxLines: 100,
                   textAlign: TextAlign.center,
                 ),
@@ -61,7 +60,7 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 function: onCancel,
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.yesPostAnyway!,
+                  textToDisplay: notifier.translate.yesPostAnyway ?? '',
                 ),
                 buttonStyle: ButtonStyle(
                   // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
@@ -78,8 +77,8 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               function: onSave,
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.noIWantToRegister!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                textToDisplay: notifier.translate.noIWantToRegister ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
               ),
             ),
           ],

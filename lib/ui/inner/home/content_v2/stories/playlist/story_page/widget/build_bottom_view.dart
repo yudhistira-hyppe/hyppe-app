@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
 
@@ -39,22 +40,22 @@ class BuildBottomView extends StatelessWidget {
         : AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             bottom: MediaQuery.of(context).viewInsets.bottom,
-            height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+            height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
             child: Container(
               alignment: Alignment.center,
               width: SizeConfig.screenWidth,
-              height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+              height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
+                    width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                     margin: const EdgeInsets.only(left: 10),
                     child: TextFormField(
                       maxLines: null,
                       validator: (String? input) {
-                        if (input!.isEmpty) {
+                        if (input?.isEmpty ?? true) {
                           return "Please enter message";
                         } else {
                           return null;
@@ -64,7 +65,7 @@ class BuildBottomView extends StatelessWidget {
                       keyboardAppearance: Brightness.dark,
                       decoration: InputDecoration(
                         filled: true,
-                        hintText: "Balas ke ${data!.username}...",
+                        hintText: "Balas ke ${data?.username}...",
                         fillColor: Theme.of(context).colorScheme.background,
                         contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         border: OutlineInputBorder(

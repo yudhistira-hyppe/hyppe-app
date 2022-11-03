@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -32,7 +33,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -40,9 +41,9 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.idVerification!,
+              textToDisplay: notifier.language.idVerification ?? '',
               textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -60,23 +61,23 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                   CustomTextWidget(
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
-                      textToDisplay: notifier.language.failedIdCardInfoTitle!),
+                      textToDisplay: notifier.language.failedIdCardInfoTitle ?? ''),
                   _buildDivider(context),
                   CustomTextWidget(
-                    textToDisplay: notifier.language.failedIdCardInfoSubTitle!,
+                    textToDisplay: notifier.language.failedIdCardInfoSubTitle ?? '',
                     textStyle: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  _unorderedList(notifier.language.failedIdCardInfo1!),
-                  _unorderedList(notifier.language.failedIdCardInfo2!),
-                  _unorderedList(notifier.language.failedIdCardInfo3!),
-                  _unorderedList(notifier.language.failedIdCardInfo4!),
-                  _unorderedList(notifier.language.failedIdCardInfo5!),
-                  _unorderedList(notifier.language.failedIdCardInfo6!),
+                  _unorderedList(notifier.language.failedIdCardInfo1 ?? ''),
+                  _unorderedList(notifier.language.failedIdCardInfo2 ?? ''),
+                  _unorderedList(notifier.language.failedIdCardInfo3 ?? ''),
+                  _unorderedList(notifier.language.failedIdCardInfo4 ?? ''),
+                  _unorderedList(notifier.language.failedIdCardInfo5 ?? ''),
+                  _unorderedList(notifier.language.failedIdCardInfo6 ?? ''),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      CustomTextWidget(textToDisplay: notifier.language.help!),
+                      CustomTextWidget(textToDisplay: notifier.language.help ?? ''),
                       const SizedBox(width: 10),
                       const CustomIconWidget(
                           iconData: "${AssetPath.vectorPath}help.svg"),
@@ -99,8 +100,8 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                 GestureDetector(
                   onTap: () => notifier.retrySelfie(context),
                   child: Text(
-                    notifier.language.retakeSelfie!,
-                    style: textTheme.titleMedium!.copyWith(
+                    notifier.language.retakeSelfie ?? '',
+                    style: textTheme.titleMedium?.copyWith(
                         color: Theme.of(context).colorScheme.primaryVariant),
                   ),
                 ),
@@ -111,7 +112,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                   function: () => Routing()
                       .moveAndPop(Routes.verificationIDStepSupportDocsEula),
                   child: CustomTextWidget(
-                    textToDisplay: notifier.language.uploadSupportDoc!,
+                    textToDisplay: notifier.language.uploadSupportDoc ?? '',
                     textStyle: textTheme.button
                         ?.copyWith(color: kHyppeLightButtonText),
                   ),
@@ -137,7 +138,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
 
   Widget _buildDivider(context) => Divider(
       thickness: 1.0,
-      color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _unorderedList(String text) {
     return Padding(

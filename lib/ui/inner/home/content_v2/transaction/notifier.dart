@@ -203,14 +203,14 @@ class TransactionNotifier extends ChangeNotifier {
 
   void bankInsert(BankData data) {
     bankDataSelected = data;
-    nameAccount.text = data.bankname!;
+    nameAccount.text = data.bankname ?? '';
     bankcode = data.bankcode;
     Routing().moveBack();
     navigateToAddBankAccount();
   }
 
   Future initTransactionHistory(BuildContext context) async {
-    if (dataTransaction!.isEmpty) isLoading = true;
+    if (dataTransaction?.isEmpty ?? false) isLoading = true;
 
     bool connect = await System().checkConnections();
     if (connect) {
@@ -229,7 +229,7 @@ class TransactionNotifier extends ChangeNotifier {
           if (_skip == 0) dataTransaction = [];
           fetch.data['data'].forEach((v) => dataTransaction?.add(TransactionHistoryModel.fromJSON(v)));
 
-          if (dataAllTransaction!.isEmpty) {
+          if (dataAllTransaction?.isEmpty ?? false) {
             fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
             context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
           }
@@ -256,7 +256,7 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   Future initTransactionHistoryInProgress(BuildContext context) async {
-    if (dataTransactionInProgress!.isEmpty) isLoadingInProgress = true;
+    if (dataTransactionInProgress?.isEmpty ?? false) isLoadingInProgress = true;
 
     bool connect = await System().checkConnections();
     if (connect) {
@@ -290,7 +290,7 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   Future getAccountBalance(BuildContext context) async {
-    if (dataTransaction!.isEmpty) isLoading = true;
+    if (dataTransaction?.isEmpty ?? false) isLoading = true;
 
     bool connect = await System().checkConnections();
     if (connect) {
@@ -325,7 +325,7 @@ class TransactionNotifier extends ChangeNotifier {
   Future initBankAccount(BuildContext context) async {
     bool connect = await System().checkConnections();
     if (connect) {
-      if (dataAcccount!.isEmpty) isLoading = true;
+      if (dataAcccount?.isEmpty ?? false) isLoading = true;
       dataAcccount = [];
       final notifier = TransactionBloc();
       await notifier.getMyBankAccount(context);
@@ -404,10 +404,10 @@ class TransactionNotifier extends ChangeNotifier {
           Routing().moveBack();
         } else {
           dataAcccount?.add(BankAccount.fromJSON(fetch.data));
-          dataAcccount!.last.bankName = _nameAccount.text;
+          dataAcccount?.last.bankName = _nameAccount.text;
           Routing().moveBack();
           Routing().moveBack();
-          ShowBottomSheet().onShowColouredSheet(context, language.successfullyAdded!, color: kHyppeLightSuccess);
+          ShowBottomSheet().onShowColouredSheet(context, language.successfullyAdded ?? '', color: kHyppeLightSuccess);
           _nameAccount.clear();
           noBankAccount.clear();
           accountOwnerName.clear();
@@ -442,7 +442,7 @@ class TransactionNotifier extends ChangeNotifier {
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.deleteBankAccontSuccess) {
-        dataAcccount!.removeAt(index);
+        dataAcccount?.removeAt(index);
         print('delete berhasil');
         Routing().moveBack();
       }
@@ -520,9 +520,9 @@ class TransactionNotifier extends ChangeNotifier {
 
   Future bankChecked(int index) async {
     _isChecking = true;
-    bankSelected = dataAcccount![index].noRek!;
-    _accountOwner = dataAcccount![index].nama!;
-    bankcode = dataAcccount![index].bankCode!;
+    bankSelected = dataAcccount?[index].noRek ?? '';
+    _accountOwner = dataAcccount?[index].nama ?? '';
+    bankcode = dataAcccount?[index].bankCode ?? '';
     notifyListeners();
     _checkingAccount();
   }
@@ -539,7 +539,7 @@ class TransactionNotifier extends ChangeNotifier {
     //   final fetch = notifier.transactionFetch;
 
     //   if (fetch.postsState == TransactionState.deleteBankAccontSuccess) {
-    //     dataAcccount!.removeAt(index);
+    //     dataAcccount.removeAt(index);
     //     print('delete berhasil');
     //     Routing().moveBack();
     //   }
@@ -564,13 +564,13 @@ class TransactionNotifier extends ChangeNotifier {
       onCancel: () {},
       onSave: null,
       title: '',
-      bodyText: context.read<TranslateNotifierV2>().translate.inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave!,
+      bodyText: context.read<TranslateNotifierV2>().translate.inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave ?? '',
     );
   }
 
   Future summaryWithdrawal(BuildContext context) async {
     final email = SharedPreference().readStorage(SpKeys.email);
-    if (accountBalance!.totalsaldo! < int.parse(amountWithDrawal!)) {
+    if ((accountBalance?.totalsaldo ?? 0) < int.parse(amountWithDrawal ?? '0')) {
       _errorNoBalance = "Insufficient balance";
       notifyListeners();
       return false;
@@ -579,10 +579,10 @@ class TransactionNotifier extends ChangeNotifier {
       "email": email,
       "bankcode": bankcode,
       "norek": bankSelected,
-      "amount": int.parse(amountWithDrawal!),
+      "amount": int.parse(amountWithDrawal ?? '0'),
     };
 
-    if (accountBalance!.totalsaldo! < 50000 || int.parse(amountWithDrawal!) < 50000) {
+    if ((accountBalance?.totalsaldo ?? 0) < 50000 || int.parse(amountWithDrawal ?? '0') < 50000) {
       return ShowBottomSheet().onShowColouredSheet(
         context,
         'Minimum Withdrawal Rp. 50.000',
@@ -592,9 +592,9 @@ class TransactionNotifier extends ChangeNotifier {
       );
     }
 
-    for (var e in dataAcccount!) {
+    for (var e in dataAcccount ?? []) {
       if (e.noRek == params['norek']) {
-        if (e.statusInquiry != null && !e.statusInquiry!) {
+        if (e.statusInquiry != null && !e.statusInquiry) {
           return ShowBottomSheet().onShowColouredSheet(
             context,
             'Bank account name and your ID did not matched. Click Here to visit our Help Center',
@@ -622,12 +622,12 @@ class TransactionNotifier extends ChangeNotifier {
 
       if (fetch.postsState == TransactionState.summaryWithdrawalSuccess) {
         withdarawalSummarymodel = WithdrawalSummaryModel.fromJson(fetch.data);
-        for (var e in dataAcccount!) {
+        for (var e in dataAcccount ?? []) {
           if (e.noRek == params['norek']) {
-            e.statusInquiry = withdarawalSummarymodel!.statusInquiry;
+            e.statusInquiry = withdarawalSummarymodel?.statusInquiry;
           }
         }
-        if (withdarawalSummarymodel!.statusInquiry!) {
+        if (withdarawalSummarymodel?.statusInquiry ?? false) {
           Routing().move(Routes.withdrawalSummary);
         } else {
           ShowBottomSheet().onShowColouredSheet(
@@ -674,8 +674,8 @@ class TransactionNotifier extends ChangeNotifier {
       final email = SharedPreference().readStorage(SpKeys.email);
       Map params = {
         "recipient_bank": bankcode,
-        "recipient_account": withdarawalSummarymodel!.bankAccount,
-        "amount": withdarawalSummarymodel!.amount,
+        "recipient_account": withdarawalSummarymodel?.bankAccount,
+        "amount": withdarawalSummarymodel?.amount,
         "note": "Withdraw",
         "email": email,
         "pin": pinController.text,
@@ -700,7 +700,7 @@ class TransactionNotifier extends ChangeNotifier {
             _errorPinWithdrawMsg = fetch.message['messages']['info'][0];
           }
           if (_errorPinWithdrawMsg == 'Unabled to proceed, Pin not Match') {
-            _errorPinWithdrawMsg = context.read<TranslateNotifierV2>().translate.incorrectPINPleasetryAgain!;
+            _errorPinWithdrawMsg = context.read<TranslateNotifierV2>().translate.incorrectPINPleasetryAgain ?? '';
             ShowBottomSheet().onShowColouredSheet(context, _errorPinWithdrawMsg, color: Theme.of(context).colorScheme.error);
           } else {
             ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Theme.of(context).colorScheme.error);

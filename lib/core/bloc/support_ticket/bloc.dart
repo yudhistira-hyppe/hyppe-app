@@ -21,7 +21,7 @@ class SupportTicketBloc {
       context,
       (onResult) {
         print(onResult.statusCode);
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getCategoryIssueError, message: onResult.data['message'], data: onResult.data));
         } else {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getCategoryIssueSuccess, message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -45,7 +45,7 @@ class SupportTicketBloc {
       context,
       (onResult) {
         print(onResult.statusCode);
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getLevelError, message: onResult.data['message'], data: onResult.data));
         } else {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getLevelSuccess, message: onResult.data['message'], data: GenericResponse.fromJson(onResult.data).responseData));

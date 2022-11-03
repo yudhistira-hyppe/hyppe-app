@@ -49,8 +49,8 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     isLoading = true;
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      notifier.initializeData(context, _storyController, widget.data!);
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       setState(() {
         _storyItems = notifier.result;
         isLoading = false;
@@ -58,7 +58,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     });
     if (widget.data != null) {
       _when = '${System().readTimestamp(
-        DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
+        DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
         context,
         fullCaption: true,
       )}';
@@ -86,7 +86,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
       setState(() => notifier.setIsKeyboardActive(false));
     }
     // logic when list isScrolled, pause the story
-    if (widget.isScrolling!) {
+    if (widget.isScrolling ?? false) {
       _storyController.pause();
     } else {
       if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction && !notifier.isReactAction) {
@@ -103,7 +103,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
 
     // if (widget.userID != null) {
     //   if (_storyItems.isEmpty) {
-    //     _storyItems = notifier.initializeData(context, _storyController, widget.data!);
+    //     _storyItems = notifier.initializeData(context, _storyController, widget.data);
     //   }
     // }
     print('_storyItems : ${_storyItems.length}, $isLoading');
@@ -176,7 +176,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                   durationColor: kHyppeLightButtonText,
                   onDouble: () {
                     print('testtttt');
-                    context.read<LikeNotifier>().likePost(context, widget.data!);
+                    context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
                   },
                   controller: _storyController,
                   storyItems: _storyItems,
@@ -185,11 +185,11 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                     int pos = _storyItems.indexOf(storyItem);
                     notifier.setCurrentStory(pos);
                     if (pos > 0) {
-                      // notifier.when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), fullCaption: true);
-                      // setState(() => _when = System().readTimestamp(int.parse(widget.data!.story[pos].timestamp!), context, fullCaption: true));
+                      // notifier.when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), fullCaption: true);
+                      // setState(() => _when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), context, fullCaption: true));
                       setState(() {
                         _when = '${System().readTimestamp(
-                          DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
+                          DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
                           context,
                           fullCaption: true,
                         )}';
@@ -198,26 +198,26 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
 
                     _storyController.playbackNotifier.listen((value) {
                       if (value == PlaybackState.previous) {
-                        if (widget.controller!.page == 0) {
+                        if (widget.controller?.page == 0) {
                           notifier.onCloseStory(mounted);
                         } else {
-                          widget.controller!.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                         }
                       }
                     });
 
-                    // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data!, widget.storyParentIndex!, widget.userID);
+                    // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
                   },
                   onComplete: () {
-                    widget.controller!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                    widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                     final currentIndex = notifier.dataUserStories.length - 1;
-                    final isLastPage = currentIndex == widget.controller!.page;
+                    final isLastPage = currentIndex == widget.controller?.page;
                     // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                     // notifier.pageController =
                     print('onComplete Diary');
-                    System().increaseViewCount(context, widget.data!).whenComplete(() {});
+                    System().increaseViewCount(context, widget.data ?? ContentData()).whenComplete(() {});
                     Timer(const Duration(seconds: 1), () {
-                      // widget.onNextPage!();
+                      // widget.onNextPage();
                       // notifier.onCloseStory(mounted);
                       // notifier.nextPage();
                       // _storyController.next();
@@ -234,11 +234,11 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 ),
                 // Padding(
                 //   padding: const EdgeInsets.all(200.0),
-                //   child: Text("${widget.data!.isApsara}"),
+                //   child: Text("${widget.data.isApsara}"),
                 // ),
                 // Padding(
                 //   padding: const EdgeInsets.only(top: 200.0),
-                //   child: SelectableText("${widget.data!.fullThumbPath}"),
+                //   child: SelectableText("${widget.data.fullThumbPath}"),
                 // ),
                 BuildTopView(
                   when: _when,
@@ -271,7 +271,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                       : const SizedBox.shrink(),
                 ),
                 BuildReplayCaption(data: widget.data),
-                ...notifier.buildItems(_animationController)
+                ...notifier.buildItems(_animationController!)
               ],
             );
     }

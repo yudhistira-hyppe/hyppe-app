@@ -23,26 +23,26 @@ class MiddleWithdrawalDetailWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
-            textToDisplay: language!.paymentDetails!,
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+            textToDisplay: language?.paymentDetails ?? '',
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                 ),
           ),
         ),
         CustomTextWidget(
-          textToDisplay: language!.wtihdrawalTo!,
-          textStyle: Theme.of(context).textTheme.caption!,
+          textToDisplay: language?.wtihdrawalTo ?? '',
+          textStyle: Theme.of(context).textTheme.caption,
         ),
         fivePx,
         fivePx,
         CustomTextWidget(
-          textToDisplay: data!.namaBank!,
-          textStyle: Theme.of(context).textTheme.bodyText1!,
+          textToDisplay: data?.namaBank ?? '',
+          textStyle: Theme.of(context).textTheme.bodyText1,
         ),
         CustomTextWidget(
-          textToDisplay: "${data!.noRek} - ${data!.namaRek}",
-          textStyle: Theme.of(context).textTheme.caption!,
+          textToDisplay: "${data?.noRek} - ${data?.namaRek}",
+          textStyle: Theme.of(context).textTheme.caption,
         ),
       ],
     );

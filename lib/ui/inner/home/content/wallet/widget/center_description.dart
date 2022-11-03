@@ -23,7 +23,7 @@
 //         twentyPx,
 //         CustomTextWidget(
 //           textAlign: TextAlign.left,
-//           textToDisplay: language!.createAccountAndConnect!,
+//           textToDisplay: language.createAccountAndConnect,
 //           textStyle: Theme.of(context).textTheme.bodyText1,
 //           maxLines: null,
 //           textOverflow: TextOverflow.visible,

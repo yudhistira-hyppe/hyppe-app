@@ -66,7 +66,7 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
                         controller: notifier.searchController,
                         onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                         onPressedIcon: () => notifier.onSearchPost(context),
-                        // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
+                        // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
                       ),
                     ),
                     TabBar(
@@ -85,7 +85,7 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
                         OptionBar(title: "Pic", icon: "pic", pageIndex: 2),
                         // CustomElevatedButton(
                         //     child: CustomTextWidget(
-                        //       textToDisplay: context.select((SearchNotifier value) => value.language.filter!),
+                        //       textToDisplay: context.select((SearchNotifier value) => value.language.filter),
                         //       textStyle: Theme.of(context).textTheme.button,
                         //     ),
                         //     width: 50,

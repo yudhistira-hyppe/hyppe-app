@@ -48,9 +48,9 @@ class MyFrameStory extends StatelessWidget {
                     child: CustomTextWidget(
                       maxLines: 1,
                       textToDisplay: myStoriesData.item1?.isEmpty ?? [].isEmpty
-                          ? context.read<TranslateNotifierV2>().translate.yourStory!
+                          ? context.read<TranslateNotifierV2>().translate.yourStory ?? ''
                           : "${_system.formatterNumber(myStoriesData.item2)} / ${_system.formatterNumber(myStoriesData.item1?.length)}",
-                      textStyle: Theme.of(context).textTheme.overline!.copyWith(letterSpacing: myStoriesData.item1?.isEmpty ?? [].isEmpty ? null : 1.0),
+                      textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: myStoriesData.item1?.isEmpty ?? [].isEmpty ? null : 1.0),
                     ),
                   )
                 : const CustomShimmer(

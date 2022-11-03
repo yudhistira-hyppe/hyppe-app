@@ -30,7 +30,7 @@
 //                         decoration: BoxDecoration(
 //                           image: DecorationImage(
 //                             fit: BoxFit.cover,
-//                             image: NetworkImage(notifier.overview!.profilePicture!),
+//                             image: NetworkImage(notifier.overview.profilePicture),
 //                           ),
 //                           shape: BoxShape.circle,
 //                         ),
@@ -39,14 +39,14 @@
 //                       ),
 //                       title: CustomTextWidget(
 //                         // "Demo user",
-//                         textToDisplay: notifier.overview!.username!,
+//                         textToDisplay: notifier.overview!.username,
 //                         textAlign: TextAlign.start,
 //                         textStyle: TextStyle(
 //                           fontWeight: FontWeight.bold,
 //                           fontSize: 14,
 //                         ),
 //                       ),
-//                       subtitle: CustomTextWidget(textToDisplay: notifier.overview!.fullName!, textAlign: TextAlign.start, textStyle: Theme.of(context).textTheme.caption),
+//                       subtitle: CustomTextWidget(textToDisplay: notifier.overview!.fullName, textAlign: TextAlign.start, textStyle: Theme.of(context).textTheme.caption),
 //                     ),
 //                   ),
 //                   SizedBox(
@@ -68,7 +68,7 @@
 //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //                           children: [
 //                             CustomTextWidget(
-//                               textToDisplay: notifier.language.muteMessage!,
+//                               textToDisplay: notifier.language.muteMessage,
 //                               textStyle: Theme.of(context).textTheme.subtitle1,
 //                             ),
 //                             CustomSwitchButton(
@@ -82,7 +82,7 @@
 //                             GestureDetector(
 //                               onTap: () => print("Chat Deleted"),
 //                               child: CustomTextWidget(
-//                                 textToDisplay: notifier.language.deleteMessage!,
+//                                 textToDisplay: notifier.language.deleteMessage,
 //                                 textStyle: Theme.of(context).textTheme.subtitle1,
 //                               ),
 //                             ),

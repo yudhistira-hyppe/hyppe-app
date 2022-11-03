@@ -31,7 +31,7 @@ class _ListBookmarkState extends State<ListBookmark> {
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.center,
-                    child: CustomTextWidget(maxLines: 1, textToDisplay: notifier.language.noData!, textStyle: Theme.of(context).textTheme.subtitle1),
+                    child: CustomTextWidget(maxLines: 1, textToDisplay: notifier.language.noData ?? '', textStyle: Theme.of(context).textTheme.subtitle1),
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(5.0), color: Theme.of(context).colorScheme.surface)))
             : Column(
@@ -54,7 +54,7 @@ class _ListBookmarkState extends State<ListBookmark> {
                                 title: Padding(
                                   padding: const EdgeInsets.only(bottom: 6),
                                   child: CustomTextWidget(
-                                    textToDisplay: notifier.playlistData[index].playlistName!,
+                                    textToDisplay: notifier.playlistData[index].playlistName ?? '',
                                     textStyle: Theme.of(context).textTheme.headline6,
                                     textAlign: TextAlign.start,
                                   ),
@@ -89,7 +89,7 @@ class _ListBookmarkState extends State<ListBookmark> {
                             children: [
                               CustomElevatedButton(
                                 child: CustomTextWidget(
-                                  textToDisplay: notifier.language.save!,
+                                  textToDisplay: notifier.language.save ?? '',
                                   textStyle: Theme.of(context).textTheme.button,
                                 ),
                                 buttonStyle: ButtonStyle(
@@ -97,12 +97,12 @@ class _ListBookmarkState extends State<ListBookmark> {
                                         notifier.indexList != null ? const Color(0xff822E6E) : const Color(0xff373A3C))),
                                 width: 375.0 * SizeConfig.scaleDiagonal,
                                 height: 56.0 * SizeConfig.scaleDiagonal,
-                                function: () => notifier.addToBookmark(context, playlistID: notifier.playlistData[notifier.indexList!].playlistID),
+                                function: () => notifier.addToBookmark(context, playlistID: notifier.playlistData[notifier.indexList ?? 0].playlistID),
                               ),
                               SizedBox(height: 5 * SizeConfig.scaleDiagonal),
                               CustomElevatedButton(
                                 child: CustomTextWidget(
-                                  textToDisplay: notifier.language.cancel!,
+                                  textToDisplay: notifier.language.cancel ?? '',
                                   textStyle: Theme.of(context).textTheme.button,
                                 ),
                                 buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent)),

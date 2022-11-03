@@ -140,7 +140,7 @@ class BuildPersonalInformationBody extends StatelessWidget {
             ListTile(
               contentPadding: EdgeInsets.zero,
               minLeadingWidth: 10,
-              shape: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).iconTheme.color!, width: 0.2)),
+              shape: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).iconTheme.color ?? Colors.white, width: 0.2)),
               onTap: () {
                 notifier.getListDeleteOption();
                 notifier.navigateToDeleteProfile();
@@ -150,7 +150,7 @@ class BuildPersonalInformationBody extends StatelessWidget {
               ),
               title: CustomTextWidget(
                 textToDisplay: 'Delete Account',
-                textStyle: Theme.of(context).textTheme.bodyText1!,
+                textStyle: Theme.of(context).textTheme.bodyText1,
                 textAlign: TextAlign.start,
               ),
             )

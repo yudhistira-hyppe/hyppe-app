@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -46,7 +47,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -54,8 +55,8 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.idVerification!,
-              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              textToDisplay: notifier.language.idVerification ?? '',
+              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -70,29 +71,29 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _disabledInputText(title: notifier.language.realName!, value: notifier.idCardName.toUpperCase()),
+                      _disabledInputText(title: notifier.language.realName ?? '', value: notifier.idCardName.toUpperCase()),
                       if (notifier.errorName != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorName,
-                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
-                      _disabledInputText(title: notifier.language.eKtpNumber!, value: notifier.idCardNumber, infoIcon: true),
+                      _disabledInputText(title: notifier.language.eKtpNumber ?? '', value: notifier.idCardNumber, infoIcon: true),
                       if (notifier.errorKtp != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorKtp,
-                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       CustomTextWidget(
-                        textToDisplay: notifier.language.gender!,
-                        textStyle: textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                        textToDisplay: notifier.language.gender ?? 'gender',
+                        textStyle: textTheme.bodySmall?.copyWith(color: kHyppePrimary),
                       ),
                       // TextFormField(
                       //   maxLines: 1,
                       //   validator: (String? input) {
                       //     if (input?.isEmpty ?? true) {
-                      //       return notifier.language.selectGenderInfo!;
+                      //       return notifier.language.selectGenderInfo;
                       //     } else {
                       //       return null;
                       //     }
@@ -135,7 +136,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                               maxLines: 1,
                               validator: (String? input) {
                                 if (input?.isEmpty ?? true) {
-                                  return notifier.language.selectGenderInfo!;
+                                  return notifier.language.selectGenderInfo ?? '';
                                 } else {
                                   return null;
                                 }
@@ -166,18 +167,18 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       if (notifier.errorGender != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorGender,
-                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       CustomTextWidget(
-                        textToDisplay: notifier.language.placeBirth!,
-                        textStyle: textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                        textToDisplay: notifier.language.placeBirth ?? '',
+                        textStyle: textTheme.bodySmall?.copyWith(color: kHyppePrimary),
                       ),
                       TextFormField(
                         maxLines: 1,
                         validator: (String? input) {
                           if (input?.isEmpty ?? true) {
-                            return notifier.language.placeBirthNote!;
+                            return notifier.language.placeBirthNote;
                           } else {
                             return null;
                           }
@@ -202,18 +203,18 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       ),
                       _buildDivider(context),
                       CustomTextWidget(
-                        textToDisplay: notifier.language.placeBirthNote!,
+                        textToDisplay: notifier.language.placeBirthNote ?? '',
                         textStyle: textTheme.bodySmall,
                       ),
                       if (notifier.errorPlaceBirth != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorPlaceBirth,
-                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       CustomTextWidget(
-                        textToDisplay: notifier.language.dateOfBirth!,
-                        textStyle: textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                        textToDisplay: notifier.language.dateOfBirth ?? '',
+                        textStyle: textTheme.bodySmall?.copyWith(color: kHyppePrimary),
                       ),
                       TextFormField(
                         onTap: () async {
@@ -236,7 +237,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                                       ),
                                     ),
                                   ),
-                                  child: child!,
+                                  child: child ?? Container(),
                                 );
                               });
 
@@ -266,13 +267,13 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       ),
                       _buildDivider(context),
                       CustomTextWidget(
-                        textToDisplay: notifier.language.selectDateBirthInfo!,
+                        textToDisplay: notifier.language.selectDateBirthInfo ?? '',
                         textStyle: textTheme.bodySmall,
                       ),
                       if (notifier.errorDateBirth != '')
                         CustomTextWidget(
                           textToDisplay: notifier.errorDateBirth,
-                          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.red),
+                          textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red),
                         ),
                       const SizedBox(height: 24),
                       Row(
@@ -281,7 +282,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                             child: CustomRichTextWidget(
                               maxLines: 3,
                               textAlign: TextAlign.left,
-                              textSpan: TextSpan(style: textTheme.bodyText2!.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdGenuine!),
+                              textSpan: TextSpan(style: textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdGenuine),
                             ),
                           ),
                           Checkbox(checkColor: Colors.white, value: notifier.acceptTos, onChanged: (e) => notifier.checked())
@@ -291,13 +292,13 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       CustomRichTextWidget(
                         maxLines: 3,
                         textAlign: TextAlign.left,
-                        textSpan: TextSpan(style: textTheme.bodyText2!.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdNotice!),
+                        textSpan: TextSpan(style: textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdNotice),
                       ),
                       const SizedBox(height: 20),
                       CustomElevatedButton(
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.retakeIdPicture!,
-                          textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary),
+                          textToDisplay: notifier.language.retakeIdPicture ?? '',
+                          textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
                         ),
                         width: double.infinity,
                         height: 50 * SizeConfig.scaleDiagonal,
@@ -310,7 +311,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         height: 44.0 * SizeConfig.scaleDiagonal,
                         function: () => notifier.continueSelfie(context),
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.continueSelfie!,
+                          textToDisplay: notifier.language.continueSelfie ?? '',
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                         buttonStyle: notifier.step5CanNext
@@ -330,7 +331,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       const SizedBox(height: 20),
                       Center(
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.dataDidntShow!,
+                          textToDisplay: notifier.language.dataDidntShow ?? '',
                         ),
                       ),
                       Center(
@@ -338,11 +339,11 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                           onTap: () => Routing().moveAndRemoveUntil(Routes.verificationIDStepSupportDocsEula, Routes.verificationIDStepSupportDocsEula),
                           child: RichText(
                             text: TextSpan(
-                              text: notifier.language.tapHere!,
-                              style: Theme.of(context).textTheme.bodySmall!.copyWith(color: kHyppePrimary),
+                              text: notifier.language.tapHere,
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppePrimary),
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: notifier.language.toAppeal!,
+                                  text: notifier.language.toAppeal ?? '',
                                   style: const TextStyle(color: kHyppeTextLightPrimary),
                                 ),
                               ],
@@ -388,5 +389,5 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
     );
   }
 
-  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 }

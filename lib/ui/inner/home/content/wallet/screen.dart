@@ -49,7 +49,7 @@
 //                   child: CustomIconWidget(
 //                     defaultColor: false,
 //                     iconData: '${AssetPath.vectorPath}back-arrow.svg',
-//                     color: Theme.of(context).appBarTheme.iconTheme!.color,
+//                     color: Theme.of(context).appBarTheme.iconTheme.color,
 //                   ),
 //                 ),
 //                 Padding(

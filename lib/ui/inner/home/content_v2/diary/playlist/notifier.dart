@@ -106,7 +106,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
     initAdsData(context);
 
-    if (data.isApsara!) {
+    if (data.isApsara ?? false) {
       await getVideoApsara(context, data.apsaraId!).then((value) {
         urlApsara = value;
       });
@@ -153,8 +153,8 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         final _newClipData = fetch.data;
-        _adsData = _newClipData!.data;
-        return await getAdsVideoApsara(context, _newClipData!.data!.videoId!);
+        _adsData = _newClipData.data;
+        return await getAdsVideoApsara(context, _newClipData.data.videoId!);
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();

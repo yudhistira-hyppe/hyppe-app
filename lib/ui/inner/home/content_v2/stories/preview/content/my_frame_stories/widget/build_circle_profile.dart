@@ -32,7 +32,7 @@ class BuildCircleProfile extends StatelessWidget {
           children: [
             StoryColorValidator(
               featureType: FeatureType.other,
-              haveStory: listStory!.isNotEmpty,
+              haveStory: listStory?.isNotEmpty ?? false,
               child: CustomProfileImage(
                 following: true,
                 imageUrl: imageUrl,
@@ -42,7 +42,7 @@ class BuildCircleProfile extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: (listStory != null && listStory!.isNotEmpty) ? false : true,
+              visible: (listStory != null && (listStory?.isNotEmpty ?? false)) ? false : true,
               child: const CustomIconWidget(
                 defaultColor: false,
                 iconData: '${AssetPath.vectorPath}add-story.svg',

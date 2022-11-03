@@ -23,8 +23,7 @@ class VideoThumbnailReport extends StatelessWidget {
             child: CustomBackgroundLayer(
               sigmaX: 30,
               sigmaY: 30,
-              // thumbnail: picData!.content[arguments].contentUrl,
-              thumbnail: videoData!.isApsara! ? videoData!.mediaThumbEndPoint : '${videoData?.fullThumbPath}',
+              thumbnail: videoData?.isApsara ?? false ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
             ),
           ),
         ),
@@ -39,7 +38,7 @@ class VideoThumbnailReport extends StatelessWidget {
                 height: 30,
               ),
               Text(translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text(translate.yourReportWillbeHandledImmediately!,
+              Text(translate.yourReportWillbeHandledImmediately ?? '',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,

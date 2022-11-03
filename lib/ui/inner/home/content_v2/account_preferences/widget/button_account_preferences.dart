@@ -13,9 +13,9 @@ class ButtonAccountPreferences extends StatelessWidget {
           width: SizeConfig.screenWidth,
           height: 49 * SizeConfig.scaleDiagonal,
           child: CustomTextWidget(
-            textToDisplay: notifier.language.save!,
+            textToDisplay: notifier.language.save ?? '',
             textStyle: notifier.somethingChanged(context)
-                ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText)
+                ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText)
                 : Theme.of(context).primaryTextTheme.button,
           ),
           function: () => notifier.onClickSaveProfile(context),

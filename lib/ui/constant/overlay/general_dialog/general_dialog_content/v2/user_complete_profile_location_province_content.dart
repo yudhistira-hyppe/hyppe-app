@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_complete_profile/user_complete_profile_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_load_more_list.dart';
@@ -48,7 +49,7 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
     if (context.read<ErrorService>().isInitialError(error, notifier.provinceData.isEmpty ? null : notifier.provinceData.isEmpty)) {
       return Center(
         child: SizedBox(
-          height: SizeConfig.screenHeight! * 0.8,
+          height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
           child: CustomErrorWidget(
             function: () => notifier.initProvince(context, country: widget.country, reload: true),
             errorType: ErrorType.getStates,
@@ -58,7 +59,7 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
     }
 
     return SizedBox(
-      height: SizeConfig.screenHeight! * 0.8,
+      height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
       width: SizeConfig.screenWidth,
       child: Center(
         child: notifier.provinceData.isNotEmpty
@@ -79,9 +80,9 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
                         child: CustomElevatedButton(
                           height: 42,
                           width: SizeConfig.screenWidth,
-                          function: () => widget.onSelected(notifier.provinceData[index].stateName!),
+                          function: () => widget.onSelected(notifier.provinceData[index].stateName ?? ''),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.provinceData[index].stateName!,
+                            textToDisplay: notifier.provinceData[index].stateName ?? '',
                             textStyle: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),

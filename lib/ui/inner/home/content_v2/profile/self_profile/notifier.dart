@@ -97,7 +97,7 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  String displayUserName() => user.profile != null ? "@" + user.profile!.username! : "";
+  String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
 
   String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
 
@@ -107,11 +107,11 @@ class SelfProfileNotifier with ChangeNotifier {
 
   String displayFollowing() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.followings?.toInt()) : "0";
 
-  String? displayFullName() => user.profile != null ? user.profile!.fullName ?? "" : "";
+  String? displayFullName() => user.profile != null ? (user.profile?.fullName ?? '') : "";
 
   String displayBio() => user.profile != null
       ? user.profile?.bio != null
-          ? '"${user.profile!.bio!}"'
+          ? '"${user.profile?.bio}"'
           : ""
       : "";
 
@@ -135,7 +135,7 @@ class SelfProfileNotifier with ChangeNotifier {
             if (!vidContentsQuery.loading && vidHasNext) {
               List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
-                user.vids = [...user.vids!, ..._res];
+                user.vids = [...(user.vids ?? []), ..._res];
               } else {
                 print("Post Vid Dah Mentok");
               }
@@ -148,7 +148,7 @@ class SelfProfileNotifier with ChangeNotifier {
             if (!diaryContentsQuery.loading && diaryHasNext) {
               List<ContentData> _res = await diaryContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
-                user.diaries = [...user.diaries!, ..._res];
+                user.diaries = [...(user.diaries ?? []), ..._res];
               } else {
                 print("Post Diary Dah Mentok");
               }
@@ -161,7 +161,7 @@ class SelfProfileNotifier with ChangeNotifier {
             if (!picContentsQuery.loading && picHasNext) {
               List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
-                user.pics = [...user.pics!, ..._res];
+                user.pics = [...(user.pics ?? []), ..._res];
               } else {
                 print("Post Pic Dah Mentok");
               }
@@ -226,19 +226,19 @@ class SelfProfileNotifier with ChangeNotifier {
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     switch (content) {
       case hyppeVid:
-        if (user.vids != null) user.vids!.removeWhere((element) => element.postID == postID);
+        if (user.vids != null) user.vids?.removeWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        if (user.diaries != null) user.diaries!.removeWhere((element) => element.postID == postID);
+        if (user.diaries != null) user.diaries?.removeWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        if (user.pics != null) user.pics!.removeWhere((element) => element.postID == postID);
+        if (user.pics != null) user.pics?.removeWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
-    user.profile!.insight!.posts = (user.profile!.insight!.posts ?? 1) - 1;
+    user.profile?.insight?.posts = (user.profile?.insight?.posts ?? 1) - 1;
     notifyListeners();
   }
 
@@ -261,17 +261,17 @@ class SelfProfileNotifier with ChangeNotifier {
     switch (content) {
       case hyppeVid:
         if (user.vids != null) {
-          _updatedData = user.vids!.firstWhereOrNull((element) => element.postID == postID);
+          _updatedData = user.vids?.firstWhereOrNull((element) => element.postID == postID);
         }
         break;
       case hyppeDiary:
         if (user.diaries != null) {
-          _updatedData = user.diaries!.firstWhereOrNull((element) => element.postID == postID);
+          _updatedData = user.diaries?.firstWhereOrNull((element) => element.postID == postID);
         }
         break;
       case hyppePic:
         if (user.pics != null) {
-          _updatedData = user.pics!.firstWhereOrNull((element) => element.postID == postID);
+          _updatedData = user.pics?.firstWhereOrNull((element) => element.postID == postID);
         }
         break;
       default:
@@ -286,22 +286,22 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.certified = certified;
       _updatedData.visibility = visibility;
       _updatedData.location = location;
-      _updatedData.saleAmount = num.parse(saleAmount!);
+      _updatedData.saleAmount = num.parse(saleAmount ?? '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleLike = saleView;
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
       // _updatedData.tagPeople = tagPeople;
-      _updatedData.tagPeople!.addAll(tagPeople!);
+      _updatedData.tagPeople?.addAll(tagPeople ?? []);
 
       // if (tagPeople != null) {
       //   for (var v in tagPeople) {
-      //     _updatedData.tagPeople!.add(TagPeople(username: v));
+      //     _updatedData.tagPeople.add(TagPeople(username: v));
       //   }
       // }
       if (cats != null) {
         for (var v in cats) {
-          _updatedData.cats!.add(
+          _updatedData.cats?.add(
             Cats(
               interestName: v,
             ),
@@ -315,18 +315,12 @@ class SelfProfileNotifier with ChangeNotifier {
   // create generic function that can be detect profile is have story or not
   bool checkHaveStory(BuildContext context) {
     return false;
-    // if (itsMe) {
-    //   final storyNotifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    //   return storyNotifier.myStoriesData != null && storyNotifier.myStoriesData!.story.isNotEmpty;
-    // } else {
-    //   return false;
-    // }
   }
 
   Future viewStory(BuildContext context) async {
     // if (itsMe) {
     // final storyNotifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    // if (storyNotifier.myStoriesData != null && storyNotifier.myStoriesData!.story.isNotEmpty) {
+    // if (storyNotifier.myStoriesData != null && storyNotifier.myStoriesData.story.isNotEmpty) {
     //   storyNotifier.tapHandler(context, storyNotifier.myStoriesData);
     // }
     // }

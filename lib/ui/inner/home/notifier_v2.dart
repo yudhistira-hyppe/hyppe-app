@@ -133,30 +133,20 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
-      final allContents = await allReload(context);
-      final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
       // Refresh content
-      try {
+      final allContents = await allReload(context);
+      try{
+        final notifierMain = Provider.of(context)<HomeNotifier>(context, listen: false);
         await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
-      } catch (e) {
-        print(e);
-      }
-      try {
         await vid.initialVid(context, reload: true, list: allContents.video, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      } catch (e) {
-        print(e);
-      }
-      try {
         await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      } catch (e) {
-        print(e);
-      }
-      try {
-        print('initialPic : 1');
         await pic.initialPic(context, reload: true, list: allContents.pict, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      } catch (e) {
+      }catch(e){
         print(e);
       }
+
+
+
 
       if (totLoading >= 3) {
         print("is finish shimmer");
@@ -166,6 +156,7 @@ class HomeNotifier with ChangeNotifier {
       }
 
       notifyListeners();
+
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
@@ -218,16 +209,16 @@ class HomeNotifier with ChangeNotifier {
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     switch (content) {
       case hyppeVid:
-        vid.vidData!.removeWhere((element) => element.postID == postID);
+        vid.vidData?.removeWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        diary.diaryData!.removeWhere((element) => element.postID == postID);
+        diary.diaryData?.removeWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        pic.pic!.removeWhere((element) => element.postID == postID);
+        pic.pic?.removeWhere((element) => element.postID == postID);
         break;
       case hyppeStory:
-        stories.myStoriesData!.removeWhere((element) => element.postID == postID);
+        stories.myStoriesData?.removeWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -260,16 +251,16 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -282,23 +273,22 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.allowComments = allowComment;
       _updatedData.visibility = visibility;
       _updatedData.location = location;
-      _updatedData.saleAmount = num.parse(saleAmount! != '' ? saleAmount : '0');
+      _updatedData.saleAmount = num.parse(saleAmount != null ? saleAmount != '' ? saleAmount : '0' : '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleView = saleView;
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
       // _updatedData.tagPeople = tagPeople;
-      _updatedData.tagPeople!.addAll(tagPeople!);
+      _updatedData.tagPeople?.addAll(tagPeople ?? []);
       if (cats != null) {
         for (var v in cats) {
-          _updatedData.cats!.add(
+          _updatedData.cats?.add(
             Cats(
               interestName: v,
             ),
           );
         }
       }
-      print(_updatedData.cats!.length);
     }
 
     notifyListeners();
@@ -313,16 +303,16 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
@@ -344,7 +334,7 @@ class HomeNotifier with ChangeNotifier {
 
   Future navigateToWallet(BuildContext context) async {
     if (context.read<SelfProfileNotifier>().user.profile != null) {
-      if (context.read<SelfProfileNotifier>().user.profile!.isComplete!) {
+      if (context.read<SelfProfileNotifier>().user.profile?.isComplete ?? false) {
         // context.read<WalletNotifier>().syncToDana(fromHome: true);
         ShowBottomSheet.onComingSoonDoku(context);
       } else {
@@ -363,7 +353,7 @@ class HomeNotifier with ChangeNotifier {
 
   bool pickedVisibility(String? tile) {
     notifyListeners();
-    if (_visibilty.contains(tile!)) {
+    if (_visibilty.contains(tile ?? '')) {
       return true;
     } else {
       return false;
@@ -386,29 +376,31 @@ class HomeNotifier with ChangeNotifier {
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
 
-    final index = vid.vidData!.indexWhere((element) => element.postID == postID);
-    print(vid.vidData![index].tagPeople!.length);
-    vid.vidData![index].tagPeople?.removeWhere((element) => element.email == email);
-    vid.vidData![index].description = 'asdaksdjha jsd';
+    final index = vid.vidData?.indexWhere((element) => element.postID == postID);
+    if(index != null){
+      vid.vidData?[index].tagPeople?.removeWhere((element) => element.email == email);
+      vid.vidData?[index].description = 'asdaksdjha jsd';
 
-    print(vid.vidData![index].tagPeople!.length);
-    _updatedData!.tagPeople!.removeWhere((element) => element.email == email);
+      print(vid.vidData?[index].tagPeople?.length);
+      _updatedData?.tagPeople?.removeWhere((element) => element.email == email);
+    }
+
 
     notifyListeners();
   }

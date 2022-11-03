@@ -26,7 +26,7 @@ class ViewBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setViewFetch(ViewFetch(ViewState.viewUserPostFailed));
         } else {
           setViewFetch(ViewFetch(ViewState.viewUserPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));

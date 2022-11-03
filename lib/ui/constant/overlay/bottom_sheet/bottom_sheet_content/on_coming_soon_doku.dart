@@ -40,12 +40,12 @@ class OnComingSoonDoku extends StatelessWidget {
                 ),
                 thirtyTwoPx,
                 CustomTextWidget(
-                  textToDisplay: _language.comingSoon!,
-                  textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                  textToDisplay: _language.comingSoon ?? '',
+                  textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 eightPx,
                 CustomTextWidget(
-                  textToDisplay: _language.weWillNotifyYouOnceThisFeaturedIsReady!,
+                  textToDisplay: _language.weWillNotifyYouOnceThisFeaturedIsReady ?? '',
                   textStyle: Theme.of(context).textTheme.bodyText2,
                 ),
               ],

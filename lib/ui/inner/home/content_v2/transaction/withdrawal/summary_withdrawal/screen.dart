@@ -45,34 +45,34 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier2.translate.detailTransaction!,
-                      textStyle: Theme.of(context).primaryTextTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                      textToDisplay: notifier2.translate.detailTransaction ?? '',
+                      textStyle: Theme.of(context).primaryTextTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     twentyPx,
-                    TwoColumnWidget(notifier2.translate.transferTo, text2: notifier.withdarawalSummarymodel!.name),
+                    TwoColumnWidget(notifier2.translate.transferTo, text2: notifier.withdarawalSummarymodel?.name),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.bankName, text2: notifier.withdarawalSummarymodel!.bankName),
+                    TwoColumnWidget(notifier2.translate.bankName, text2: notifier.withdarawalSummarymodel?.bankName),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.bankAccount, text2: notifier.withdarawalSummarymodel!.bankAccount),
+                    TwoColumnWidget(notifier2.translate.bankAccount, text2: notifier.withdarawalSummarymodel?.bankAccount),
                     sixPx,
                     const Divider(
                       color: kHyppeLightSurface,
                     ),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.withdrawalAmount, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel!.amount)),
-                    notifier.withdarawalSummarymodel!.chargeInquiry != null && notifier.withdarawalSummarymodel!.chargeInquiry! > 0
+                    TwoColumnWidget(notifier2.translate.withdrawalAmount, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.amount)),
+                    notifier.withdarawalSummarymodel?.chargeInquiry != null && (notifier.withdarawalSummarymodel?.chargeInquiry ?? 0) > 0
                         ? Padding(
                             padding: const EdgeInsets.only(top: 6.0),
                             child: TwoColumnWidget(
                               notifier2.translate.verificationBankAccount,
-                              text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel!.chargeInquiry),
+                              text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.chargeInquiry),
                             ),
                           )
                         : Container(),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.adminFee, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel!.adminFee)),
+                    TwoColumnWidget(notifier2.translate.adminFee, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.adminFee)),
                     sixPx,
-                    TwoColumnWidget(notifier2.translate.withdrawal, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel!.totalAmount)),
+                    TwoColumnWidget(notifier2.translate.withdrawal, text2: System().currencyFormat(amount: notifier.withdarawalSummarymodel?.totalAmount)),
                   ],
                 ),
               ),
@@ -92,7 +92,7 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                   color: kHyppeLightSurface,
                 ),
                 child: Text(
-                  notifier2.translate.theBalanceWillBeTransferredToTheDesignatedAccount!,
+                  notifier2.translate.theBalanceWillBeTransferredToTheDesignatedAccount ?? '',
                   style: Theme.of(context).textTheme.bodySmall,
                   maxLines: 5,
                 ),
@@ -107,7 +107,7 @@ class SummaryWithdrawalScreen extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                notifier2.translate.byClickingWithdrawYouHereby!,
+                notifier2.translate.byClickingWithdrawYouHereby ?? '',
                 maxLines: 5,
                 style: Theme.of(context).textTheme.bodySmall,
                 textAlign: TextAlign.center,
@@ -117,7 +117,7 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                 width: SizeConfig.screenWidth,
                 child: CustomTextButton(
                   onPressed: () => notifier.navigateToPin(),
-                  child: Text(notifier2.translate.withdrawal!),
+                  child: Text(notifier2.translate.withdrawal ?? ''),
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                 ),
               )

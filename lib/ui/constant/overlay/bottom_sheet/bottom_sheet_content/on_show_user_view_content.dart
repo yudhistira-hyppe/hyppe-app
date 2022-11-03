@@ -79,63 +79,69 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                       controller: _scrollController,
                       scrollDirection: Axis.vertical,
                       physics: const BouncingScrollPhysics(),
-                      itemCount: notifier.listLikeView!.length,
+                      itemCount: notifier.listLikeView?.length,
                       itemBuilder: (context, index) {
+                        final data = notifier.listLikeView?[index];
                         // print(System().showUserPicture(value[index].avatar));
-                        return Column(
-                          children: [
-                            ListTile(
-                              onTap: () => System().navigateToProfile(context, notifier.listLikeView![index].email!),
-                              contentPadding: EdgeInsets.zero,
-                              title: CustomTextWidget(
-                                textToDisplay: notifier.listLikeView![index].username!,
-                                textStyle: Theme.of(context).textTheme.titleSmall,
-                                textAlign: TextAlign.start,
-                              ),
-                              // subtitle: Text("${notifier.searchPeolpleData[index].fullName!}"),
-                              // trailing: Consumer<PreUploadContentNotifier>(
-                              //   builder: (_, notifier, __) {
-                              //     notifier.statusFollow = notifier.label(widget.value[index].status!);
-                              //     return SizedBox(
-                              //       width: 100,
-                              //       child: CustomTextButton(
-                              //         child: Text(
-                              //           notifier.statusFollow!,
-                              //           style: TextStyle(color: widget.value[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
-                              //         ),
-                              //         onPressed: widget.value[index].status != 'TOFOLLOW'
-                              //             ? null
-                              //             : () {
-                              //                 notifier.followUser(context, email: widget.value[index].email, index: index).then((value) {
-                              //                   if (value) {
-                              //                     widget.value[index].status = 'requested';
-                              //                     setState(() {});
-                              //                   }
-                              //                 });
-                              //               },
-                              //         style: widget.value[index].status == 'TOFOLLOW'
-                              //             ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
-                              //             : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
-                              //       ),
-                              //     );
-                              //   },
-                              // ),
+                        if(data != null){
+                          return Column(
+                            children: [
+                              ListTile(
+                                onTap: () => System().navigateToProfile(context, data.email ?? ''),
+                                contentPadding: EdgeInsets.zero,
+                                title: CustomTextWidget(
+                                  textToDisplay: data.username ?? '',
+                                  textStyle: Theme.of(context).textTheme.titleSmall,
+                                  textAlign: TextAlign.start,
+                                ),
+                                // subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
+                                // trailing: Consumer<PreUploadContentNotifier>(
+                                //   builder: (_, notifier, __) {
+                                //     notifier.statusFollow = notifier.label(widget.value[index].status!);
+                                //     return SizedBox(
+                                //       width: 100,
+                                //       child: CustomTextButton(
+                                //         child: Text(
+                                //           notifier.statusFollow!,
+                                //           style: TextStyle(color: widget.value[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
+                                //         ),
+                                //         onPressed: widget.value[index].status != 'TOFOLLOW'
+                                //             ? null
+                                //             : () {
+                                //                 notifier.followUser(context, email: widget.value[index].email, index: index).then((value) {
+                                //                   if (value) {
+                                //                     widget.value[index].status = 'requested';
+                                //                     setState(() {});
+                                //                   }
+                                //                 });
+                                //               },
+                                //         style: widget.value[index].status == 'TOFOLLOW'
+                                //             ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
+                                //             : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
+                                //       ),
+                                //     );
+                                //   },
+                                // ),
 
-                              leading: StoryColorValidator(
-                                haveStory: false,
-                                featureType: FeatureType.pic,
-                                child: CustomProfileImage(
-                                  width: 40,
-                                  height: 40,
-                                  onTap: () => System().navigateToProfile(context, notifier.listLikeView![index].email!),
-                                  imageUrl: System().showUserPicture(notifier.listLikeView![index].avatar == null ? '' : notifier.listLikeView![index].avatar!.mediaEndpoint),
-                                  following: true,
-                                  onFollow: () {},
+                                leading: StoryColorValidator(
+                                  haveStory: false,
+                                  featureType: FeatureType.pic,
+                                  child: CustomProfileImage(
+                                    width: 40,
+                                    height: 40,
+                                    onTap: () => System().navigateToProfile(context, data.email ?? ''),
+                                    imageUrl: System().showUserPicture(data.avatar == null ? '' : data.avatar?.mediaEndpoint),
+                                    following: true,
+                                    onFollow: () {},
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        );
+                            ],
+                          );
+                        }else{
+                          return Container();
+                        }
+
                       },
                     )
             ],

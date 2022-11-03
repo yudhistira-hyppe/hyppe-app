@@ -47,7 +47,7 @@ class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProv
               children: [
                 CustomTextWidget(
                   textAlign: TextAlign.left,
-                  textToDisplay: _language.picsForYou!,
+                  textToDisplay: _language.picsForYou ?? "",
                   textStyle: theme.textTheme.bodyText1,
                 ),
                 eightPx,

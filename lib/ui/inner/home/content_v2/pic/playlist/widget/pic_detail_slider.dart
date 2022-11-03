@@ -51,7 +51,7 @@ class PicDetailSlider extends StatelessWidget {
                 child: Center(
                   child: CustomThumbImage(
                     boxFit: BoxFit.cover,
-                    imageUrl: picData!.isApsara! ? picData?.mediaThumbUri : picData?.fullThumbPath,
+                    imageUrl: picData?.isApsara ?? false ? picData?.mediaThumbUri : picData?.fullThumbPath,
                   ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
@@ -79,7 +79,7 @@ class PicDetailSlider extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        picData!.saleAmount! > 0
+                        (picData?.saleAmount ?? 0) > 0
                             ? const Padding(
                                 padding: EdgeInsets.all(2.0),
                                 child: CustomIconWidget(
@@ -108,7 +108,7 @@ class PicDetailSlider extends StatelessWidget {
                                   onPressed: () => ShowBottomSheet.onShowOptionContent(
                                     context,
                                     onDetail: onDetail,
-                                    contentData: picData!,
+                                    contentData: picData ?? ContentData(),
                                     captionTitle: hyppePic,
                                     onUpdate: () => notifier.onUpdate(),
                                   ),
@@ -135,7 +135,7 @@ class PicDetailSlider extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
+                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData?.postID, 'LIKE', 'Like', picData?.email);
                       },
                       child: CustomBalloonWidget(
                         child: Row(
@@ -150,7 +150,7 @@ class PicDetailSlider extends StatelessWidget {
                             ),
                             fourPx,
                             CustomTextWidget(
-                              textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                               // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
                               textToDisplay: "${notifier.data?.insight?.likes}",
                             ),

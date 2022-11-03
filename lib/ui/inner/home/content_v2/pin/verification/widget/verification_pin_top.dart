@@ -35,7 +35,7 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
           twentyPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: notifier2.translate.pinTopText! + " $email",
+            textToDisplay: "${notifier2.translate.pinTopText} $email",
           ),
           fortyTwoPx,
           CustomRectangleVInput(),
@@ -80,7 +80,7 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
                           final seconds = value.inSeconds % 60;
                           return CustomTextWidget(
                             textToDisplay: ' ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds',
-                            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+                            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
                           );
                         }),
                   ),

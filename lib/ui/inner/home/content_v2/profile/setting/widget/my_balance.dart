@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -28,7 +26,7 @@ class MyBalance extends StatelessWidget {
               children: [
                 CustomTextWidget(
                   textToDisplay: 'My Balance',
-                  textStyle: Theme.of(context).textTheme.caption!.copyWith(),
+                  textStyle: Theme.of(context).textTheme.caption?.copyWith(),
                   textAlign: TextAlign.start,
                 ),
                 fivePx,
@@ -42,8 +40,8 @@ class MyBalance extends StatelessWidget {
             value.isLoading
                 ? const CustomLoading()
                 : CustomTextWidget(
-                    textToDisplay: System().currencyFormat(amount: value.accountBalance!.totalsaldo ?? 0),
-                    textStyle: Theme.of(context).textTheme.subtitle1!.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onBackground),
+                    textToDisplay: System().currencyFormat(amount: value.accountBalance?.totalsaldo ?? 0),
+                    textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onBackground),
                     textAlign: TextAlign.start,
                   ),
           ],

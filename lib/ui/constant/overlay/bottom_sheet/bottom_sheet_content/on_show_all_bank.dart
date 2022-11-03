@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -27,22 +28,22 @@ class onShowAllBankBottomSheet extends StatelessWidget {
               ? const CustomLoading()
               : ListView.builder(
                   shrinkWrap: true,
-                  itemCount: notifier.data!.length,
+                  itemCount: notifier.data?.length,
                   itemBuilder: (context, index) {
                     return Container(
                       decoration: const BoxDecoration(border: Border(bottom: BorderSide(width: 0.3, color: kHyppeLightInactive2)), color: Colors.transparent),
                       child: ListTile(
                         onTap: () {
-                          context.read<TransactionNotifier>().bankInsert(notifier.data![index]);
+                          context.read<TransactionNotifier>().bankInsert(notifier.data?[index] ?? BankData());
                         },
                         title: CustomTextWidget(
-                          textToDisplay: notifier.data![index].bankname!,
+                          textToDisplay: notifier.data?[index].bankname ?? '',
                           textAlign: TextAlign.start,
-                          textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                          textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                         ),
                         leading: CustomCacheImage(
                           // imageUrl: picData.content[arguments].contentUrl,
-                          imageUrl: notifier.data![index].bankIcon,
+                          imageUrl: notifier.data?[index].bankIcon,
                           imageBuilder: (_, imageProvider) {
                             return Container(
                               width: 35,

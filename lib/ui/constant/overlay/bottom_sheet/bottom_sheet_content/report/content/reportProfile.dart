@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/widget/build_list_tile.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -26,13 +27,12 @@ class ReportProfile extends StatelessWidget {
           ),
           Container(
               alignment: Alignment.center,
-              height: 84.5 * SizeConfig.screenHeight! / SizeWidget.baseHeightXD,
+              height: 84.5 * (SizeConfig.screenHeight ?? context.getHeight()) / SizeWidget.baseHeightXD,
               child: BuildListTile(
                 onTap: () => ShowBottomSheet.onReportSpamContent(context),
                 icon: "${AssetPath.vectorPath}report.svg",
-                title: notifier.translate.reportThisAccount!,
-              )
-              // subtitle: notifier.translate.thisPostIsOffensiveOrTheAccountIsHacked!),
+                title: notifier.translate.reportThisAccount ?? '',
+              ),
               )
         ],
       ),

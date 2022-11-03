@@ -85,16 +85,16 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   onInitialUploadContent() {
     _selectedDuration = 15;
     if (_featureType == FeatureType.vid) {
-      _durationOptions = {15: "15${language.timerSecond!}", 30: "30${language.timerSecond!}", 60: "60${language.timerSecond!}", 0: "1m>"}; // ignore this
+      _durationOptions = {15: "15${language.timerSecond}", 30: "30${language.timerSecond}", 60: "60${language.timerSecond}", 0: "1m>"}; // ignore this
     } else if (_featureType == FeatureType.diary) {
       _durationOptions = {
-        15: "15${language.timerSecond!}",
-        30: "30${language.timerSecond!}",
-        60: "60${language.timerSecond!}",
+        15: "15${language.timerSecond}",
+        30: "30${language.timerSecond}",
+        60: "60${language.timerSecond}",
       };
     } else {
       _durationOptions = {
-        15: "15${language.timerSecond!}",
+        15: "15${language.timerSecond}",
       };
     }
     notifyListeners();
@@ -168,7 +168,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         //   cancelTimer();
         // }
 
-        if (_timer != null && _timer!.isActive && timerIn.isActive) {
+        if (_timer != null && (_timer?.isActive ?? false) && timerIn.isActive) {
           _elapsedProgress++;
           if (featureType != FeatureType.pic && selectedDuration != 0) {
             _progressDev = _elapsedProgress / _selectedDuration;
@@ -211,7 +211,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     if (isRecordingVideo) {
       _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
         context,
-        language.cancelRecording!,
+        language.cancelRecording ?? '',
         color: kHyppeTextWarning,
       );
     }
@@ -254,7 +254,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
       // loop for move back to root
       for (int count = 0; count < 4; count++) {
-        _dir = Directory(_dir ?? _directory!.absolute.path).parent.absolute.path;
+        _dir = Directory(_dir ?? (_directory?.absolute.path ?? '')).parent.absolute.path;
       }
 
       // loop for get first file picture
@@ -275,7 +275,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
             final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-            notifier.fileContent = value.values.single!.map((e) => e.path).toList();
+            notifier.fileContent = value.values.single?.map((e) => e.path).toList();
             notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
             notifier.featureType = featureType;
             notifier.showNext = false;
@@ -288,7 +288,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       });
     } catch (e) {
       setLoading(false);
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 
@@ -317,7 +317,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
     cameraNotifier.stopVideoRecording().then((file) async {
       final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-      notifier.fileContent = [file!.path];
+      notifier.fileContent = [file?.path ?? ''];
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
       await _routing.move(Routes.previewContent);

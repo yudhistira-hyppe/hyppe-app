@@ -46,9 +46,9 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 Row(
                   children: [
                     CustomTextWidget(
-                      textToDisplay: notifier.translate.categories!,
+                      textToDisplay: notifier.translate.categories ?? 'category',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                     ),
                     sixPx,
                     Container(
@@ -64,21 +64,21 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   },
                   contentPadding: EdgeInsets.zero,
                   title: CustomTextWidget(
-                    textToDisplay: supportNotifier.nameCategory != '' ? supportNotifier.nameCategory : notifier.translate.chooseCategoryIssue!,
+                    textToDisplay: supportNotifier.nameCategory != '' ? supportNotifier.nameCategory : notifier.translate.chooseCategoryIssue ?? '',
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
                   minLeadingWidth: 0,
                 ),
-                Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color!.withOpacity(0.1)),
+                Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1)),
                 tenPx,
                 Row(
                   children: [
                     CustomTextWidget(
                       textToDisplay: 'Level',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                     ),
                     sixPx,
                     Container(
@@ -95,14 +95,14 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                       child: RadioListTile<String>(
                         contentPadding: EdgeInsets.zero,
                         groupValue: supportNotifier.nameLevel,
-                        value: supportNotifier.levelData[index].descLevel!,
+                        value: supportNotifier.levelData[index].descLevel ?? '',
                         onChanged: (val) {
-                          supportNotifier.nameLevel = val!;
+                          supportNotifier.nameLevel = val ?? '';
                         },
                         toggleable: true,
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
-                          textToDisplay: supportNotifier.levelData[index].descLevel!,
+                          textToDisplay: supportNotifier.levelData[index].descLevel ?? '',
                           textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                         ),
                         subtitle: Text('The condition will appear if the users problem need technical   that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
@@ -113,9 +113,9 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 ),
                 fortyTwoPx,
                 CustomTextWidget(
-                  textToDisplay: notifier.translate.description!,
+                  textToDisplay: notifier.translate.description ?? '',
                   textAlign: TextAlign.start,
-                  textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                 ),
                 TextFormField(
                   minLines: 1,
@@ -189,8 +189,8 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                     },
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.submit!,
-                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                      textToDisplay: notifier.translate.submit ?? 'submit',
+                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
                 ),

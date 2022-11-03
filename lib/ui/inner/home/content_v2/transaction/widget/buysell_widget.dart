@@ -25,7 +25,7 @@ class BuySellWidget extends StatelessWidget {
     String keterangan = '';
     String fullname = '';
     String email = '';
-    switch (data!.postType) {
+    switch (data?.postType) {
       case FeatureType.pic:
         titleContent = 'HyppePict';
         break;
@@ -44,22 +44,22 @@ class BuySellWidget extends StatelessWidget {
     Color? titleColor;
     Color? blockColor;
 
-    switch (data!.type) {
+    switch (data?.type) {
       case TransactionType.buy:
-        keterangan = language!.from!;
+        keterangan = language?.from ?? 'from';
         titleColor = kHyppeRed;
         blockColor = kHyppeRedLight;
-        title = language!.buy!;
-        fullname = data!.penjual!;
-        email = data!.emailpenjual!;
+        title = language?.buy ?? 'buy';
+        fullname = data?.penjual ?? '';
+        email = data?.emailpenjual ?? '';
         break;
       default:
-        keterangan = language!.forr!;
+        keterangan = language?.forr ?? '';
         titleColor = kHyppeGreen;
         blockColor = kHyppeGreenLight;
-        title = language!.sell!;
-        fullname = data!.pembeli!;
-        email = data!.emailpembeli!;
+        title = language?.sell ?? '';
+        fullname = data?.pembeli ?? '';
+        email = data?.emailpembeli ?? '';
     }
     final desc = '$titleContent $keterangan $fullname ( $email )';
     return Container(
@@ -73,7 +73,7 @@ class BuySellWidget extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () {
-            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data!.id!, type: System().convertTransactionTypeToString(data!.type), jenis: data!.jenis);
+            context.read<TransactionNotifier>().getDetailTransactionHistory(context, id: data?.id ?? '', type: System().convertTransactionTypeToString(data?.type), jenis: data?.jenis);
             context.read<TransactionNotifier>().navigateToDetailTransaction();
           },
           child: Container(
@@ -94,14 +94,14 @@ class BuySellWidget extends StatelessWidget {
                       ),
                       child: CustomTextWidget(
                         textToDisplay: title,
-                        textStyle: Theme.of(context).textTheme.button!.copyWith(color: titleColor),
+                        textStyle: Theme.of(context).textTheme.button?.copyWith(color: titleColor),
                       ),
                     ),
                     Row(
                       children: [
                         CustomTextWidget(
-                          textToDisplay: data!.status!,
-                          textStyle: Theme.of(context).textTheme.caption!,
+                          textToDisplay: data?.status ?? '',
+                          textStyle: Theme.of(context).textTheme.caption,
                         ),
                         sixPx,
                         const CustomIconWidget(
@@ -115,17 +115,17 @@ class BuySellWidget extends StatelessWidget {
                 ),
                 const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
                 twelvePx,
-                // SelectableText("${data!.apsara! ? data!.media!.imageInfo!.isEmpty ? data!.media!.videoList![0].coverURL : data!.media!.imageInfo![0].url : data?.fullThumbPath}"),
+                // SelectableText("${data.apsara ? data.media.imageInfo.isEmpty ? data.media.videoList[0].coverURL : data.media.imageInfo[0].url : data?.fullThumbPath}"),
                 Row(
                   children: [
                     Expanded(
                       flex: 2,
                       child: CustomCacheImage(
-                        imageUrl: data!.apsara!
-                            ? data!.media!.imageInfo!.isEmpty
-                                ? data!.media!.videoList![0].coverURL
-                                : data!.media!.imageInfo![0].url
-                            : data?.fullThumbPath,
+                        imageUrl: data?.apsara ?? false
+                            ? data?.media?.imageInfo?.isEmpty ?? false
+                                ? (data?.media?.videoList?[0].coverURL ?? '')
+                                : (data?.media?.imageInfo?[0].url ?? '')
+                            : data?.fullThumbPath ?? '',
                         imageBuilder: (_, imageProvider) {
                           return Container(
                             height: 50,
@@ -154,12 +154,12 @@ class BuySellWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: data!.title!,
-                            textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+                            textToDisplay: data?.title ?? '',
+                            textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                           ),
                           CustomTextWidget(
                             textToDisplay: desc,
-                            textStyle: Theme.of(context).textTheme.caption!,
+                            textStyle: Theme.of(context).textTheme.caption,
                             textAlign: TextAlign.start,
                           ),
                         ],
@@ -169,20 +169,20 @@ class BuySellWidget extends StatelessWidget {
                 ),
                 twelvePx,
                 CustomTextWidget(
-                  textToDisplay: data!.type! != TransactionType.buy ? language!.totalIncome! : language!.totalExpenditure!,
-                  textStyle: Theme.of(context).textTheme.caption!,
+                  textToDisplay: data?.type != TransactionType.buy ? language?.totalIncome ?? '' : language?.totalExpenditure ?? '',
+                  textStyle: Theme.of(context).textTheme.caption,
                 ),
                 fourPx,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: System().currencyFormat(amount: data!.totalamount),
-                      textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
+                      textToDisplay: System().currencyFormat(amount: data?.totalamount),
+                      textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(
-                      textToDisplay: System().dateFormatter(data!.timestamp!, 3),
-                      textStyle: Theme.of(context).textTheme.caption!,
+                      textToDisplay: System().dateFormatter(data?.timestamp ?? '', 3),
+                      textStyle: Theme.of(context).textTheme.caption,
                     ),
                   ],
                 ),

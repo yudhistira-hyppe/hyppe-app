@@ -1,3 +1,4 @@
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,7 +11,7 @@ class AccountPreferencesBirthContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => SizedBox(
-        height: SizeConfig.screenHeight! * 0.6,
+        height: SizeConfig.screenHeight ?? context.getHeight() * 0.6,
         width: SizeConfig.screenWidth,
         child: Center(
           child: CupertinoTheme(

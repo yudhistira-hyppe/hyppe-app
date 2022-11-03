@@ -183,7 +183,7 @@ class PreviewContentNotifier with ChangeNotifier {
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.file,
-      Platform.isIOS ? _url!.replaceAll(" ", "%20") : _url!,
+      _url != null ? Platform.isIOS ? _url!.replaceAll(" ", "%20") : _url! : '',
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
         maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
@@ -198,7 +198,7 @@ class PreviewContentNotifier with ChangeNotifier {
       await _betterPlayerController?.setupDataSource(dataSource).then((_) {
         _betterPlayerController?.play();
         _betterPlayerController?.setLooping(true);
-        _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController!.videoPlayerController!.value.aspectRatio);
+        _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0.0);
         notifyListeners();
       });
 
@@ -206,8 +206,8 @@ class PreviewContentNotifier with ChangeNotifier {
             (_) {
           _totalDuration = _.parameters?['duration'];
           if(_totalDuration != null){
-            if (_betterPlayerController?.isVideoInitialized() ?? false) if (_betterPlayerController!.videoPlayerController!.value.position >=
-                _betterPlayerController!.videoPlayerController!.value.duration!) {
+            if (_betterPlayerController?.isVideoInitialized() ?? false) if ((_betterPlayerController?.videoPlayerController?.value.position ?? Duration.zero) >=
+                (_betterPlayerController?.videoPlayerController?.value.duration ?? Duration.zero)) {
               _nextVideo = true;
             }
           }
@@ -341,8 +341,8 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
     notifier.thumbNail = _thumbNails != null ? _thumbNails![0] : null;
-    notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public! : notifier.privacyTitle = notifier.privacyTitle;
-    notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation! : notifier.locationName = notifier.locationName;
+    notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
+    notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
 
     // notifier.compressVideo();
 
@@ -350,20 +350,20 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   Future makeThumbnail(BuildContext context, int index) async {
-    if (System().lookupContentMimeType(fileContent![index]!)?.startsWith('image') ?? false) {
+    if (System().lookupContentMimeType(fileContent?[index] ?? '')?.startsWith('image') ?? false) {
       showNext = true;
     } else {
       _thumbNails = [];
       for (int i = 0; i <= index; i++) {
         Uint8List? _thumbnail = await VideoThumbnail.thumbnailData(
-          video: fileContent![index]!,
+          video: fileContent?[index] ?? '',
           imageFormat: ImageFormat.JPEG,
           maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
           quality: 25,
         );
-        _thumbNails!.add(_thumbnail);
+        _thumbNails?.add(_thumbnail);
       }
-      if (_thumbNails!.isNotEmpty) {
+      if (_thumbNails?.isNotEmpty ?? false) {
         showNext = true;
       } else {
         if (betterPlayerController != null) isForcePaused = true;
@@ -373,21 +373,21 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void toDiaryVideoPlayer(int index, SourceFile sourceFile) {
-    _url = fileContent![index];
+    _url = fileContent?[index];
     _sourceFile = sourceFile;
   }
 
   void showFilters(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, GlobalKey? globalKey) {
-    if (System().extensionFiles(_fileContent![indexView]!) == '.$PNG' ||
-        System().extensionFiles(_fileContent![indexView]!) == '.$JPG' ||
-        System().extensionFiles(_fileContent![indexView]!) == '.$JPEG') {
+    if (System().extensionFiles(_fileContent?[indexView] ?? '') == '.$PNG' ||
+        System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPG' ||
+        System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPEG') {
       isSheetOpen = true;
-      persistentBottomSheetController = ShowBottomSheet().onShowFilters(context, scaffoldState, fileContent![indexView]!, globalKey);
+      persistentBottomSheetController = ShowBottomSheet().onShowFilters(context, scaffoldState, fileContent?[indexView] ?? '', globalKey);
 
       // listen to Scaffold status
       persistentBottomSheetController?.closed.whenComplete(() => isSheetOpen = false);
     } else {
-      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage!, color: kHyppeTextWarning, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
     }
   }
 
@@ -400,7 +400,7 @@ class PreviewContentNotifier with ChangeNotifier {
         // generated widget to image
         _file = await System().convertWidgetToImage(globalKey);
 
-        _fileContent![indexView] = _file;
+        _fileContent?[indexView] = _file;
       } catch (e) {
         e.toString().logger();
       }
@@ -416,12 +416,12 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void addTextItem(BuildContext context) {
-    if (System().extensionFiles(_fileContent![indexView]!) == '.$PNG' ||
-        System().extensionFiles(_fileContent![indexView]!) == '.$JPG' ||
-        System().extensionFiles(_fileContent![indexView]!) == '.$JPEG') {
+    if (System().extensionFiles(_fileContent?[indexView] ?? '') == '.$PNG' ||
+        System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPG' ||
+        System().extensionFiles(_fileContent?[indexView] ?? '') == '.$JPEG') {
       OverlayService().addOverlayElement(context, const CustomTextFieldForOverlay());
     } else {
-      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage!, color: kHyppeTextWarning, maxLines: 2);
+      ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
     }
   }
 
@@ -433,7 +433,7 @@ class PreviewContentNotifier with ChangeNotifier {
       // check if filter changing or not
       _file = await System().convertWidgetToImage(globalKey);
 
-      _fileContent![indexView] = _file;
+      _fileContent?[indexView] = _file;
       clearAdditionalItem();
       notifyListeners();
     }

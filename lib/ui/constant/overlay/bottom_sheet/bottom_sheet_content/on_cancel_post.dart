@@ -23,18 +23,18 @@ class OnCancelPostBottomSheet extends StatelessWidget {
           children: [
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             CustomTextWidget(
-              textToDisplay: notifier.language.cancelPost!,
+              textToDisplay: notifier.language.cancelPost ?? '',
               textStyle: Theme.of(context).textTheme.headline6,
             ),
             CustomTextWidget(
-              textToDisplay: notifier.language.areYouSure!,
+              textToDisplay: notifier.language.areYouSure ?? 'Are you sure?',
               textStyle: Theme.of(context).textTheme.bodyText2,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.language.yesCancelPost!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textToDisplay: notifier.language.yesCancelPost ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50,
@@ -49,7 +49,7 @@ class OnCancelPostBottomSheet extends StatelessWidget {
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.language.keepEditing!,
+                textToDisplay: notifier.language.keepEditing ?? '',
                 textStyle: Theme.of(context).textTheme.button,
               ),
               width: double.infinity,

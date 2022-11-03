@@ -50,7 +50,7 @@ class FAQdetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: notifier.translate.doesThisHelpsyou!,
+                            textToDisplay: notifier.translate.doesThisHelpsyou ?? '',
                             maxLines: 2,
                             textAlign: TextAlign.start,
                           ),
@@ -63,7 +63,7 @@ class FAQdetailScreen extends StatelessWidget {
                                 },
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSurface)),
                                 child: CustomTextWidget(
-                                  textToDisplay: notifier.translate.no!,
+                                  textToDisplay: notifier.translate.no ?? '',
                                   textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary),
                                 ),
                               ),

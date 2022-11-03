@@ -83,7 +83,7 @@ class NotificationService {
             // final Map<String, dynamic> mapData = jsonDecode(payload);
             // final msgData = MessageDataV2.fromJson(mapData);
             // Routing().move(messageDetail, argument: MessageDetailArgument(
-            //   mate: msgData.mate!,
+            //   mate: msgData.mate,
             //   emailReceiver: msgData.email ?? '',
             //   usernameReceiver: msgData.username ?? '',
             //   fullnameReceiver: msgData.fullName ?? '',
