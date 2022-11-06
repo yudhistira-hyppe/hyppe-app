@@ -42,7 +42,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
     if (context.read<ErrorService>().isInitialError(error, notifier.listLanguage.isEmpty ? null : notifier.listLanguage)) {
       return Center(
         child: SizedBox(
-          height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
+          height: SizeConfig.screenHeight! * 0.8,
           child: CustomErrorWidget(
             function: () => notifier.getListOfLanguage(context),
             errorType: ErrorType.getStates,
@@ -52,7 +52,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
     }
 
     return SizedBox(
-      height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
+      height: SizeConfig.screenHeight! * 0.8,
       width: SizeConfig.screenWidth,
       child: Center(
         child: notifier.listLanguage.isNotEmpty

@@ -30,7 +30,7 @@ class ShowReactionsIcon extends StatelessWidget {
     SizeConfig().init(context);
     return UnconstrainedBox(
       child: Container(
-        width: SizeConfig.screenWidth ?? context.getWidth() * widthP,
+        width: SizeConfig.screenWidth! * widthP,
         height: 550 * SizeConfig.scaleDiagonal,
         margin: const EdgeInsets.symmetric(horizontal: 15),
         alignment: Alignment.bottomCenter,

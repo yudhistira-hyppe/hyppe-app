@@ -65,7 +65,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      width: SizeConfig.screenWidth ?? context.getWidth() / 1.3,
+      width: SizeConfig.screenWidth! / 1.3,
       alignment: const Alignment(-1.0, 0.75),
       padding: const EdgeInsets.only(left: 15.0),
       child: Column(

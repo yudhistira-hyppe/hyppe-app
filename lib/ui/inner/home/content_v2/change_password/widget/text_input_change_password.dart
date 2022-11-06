@@ -19,7 +19,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
   Widget build(BuildContext context) {
     return Consumer<ChangePasswordNotifier>(
       builder: (_, notifier, __) => Container(
-        height: SizeConfig.screenHeight ?? context.getHeight() * 0.35,
+        height: SizeConfig.screenHeight! * 0.35,
         margin: const EdgeInsets.symmetric(vertical: 15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -52,7 +52,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+              inputAreaWidth: SizeConfig.screenWidth!,
               obscureText: notifier.obscureCurrentPassword,
               inputAreaHeight: 75.0 * SizeConfig.scaleDiagonal,
             ),
@@ -84,7 +84,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+              inputAreaWidth: SizeConfig.screenWidth!,
               obscureText: notifier.obscureNewPassword,
               inputAreaHeight: 75.0 * SizeConfig.scaleDiagonal,
             ),
@@ -116,7 +116,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
-              inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+              inputAreaWidth: SizeConfig.screenWidth!,
               obscureText: notifier.obscureReTypePassword,
               inputAreaHeight: 75.0 * SizeConfig.scaleDiagonal,
             )

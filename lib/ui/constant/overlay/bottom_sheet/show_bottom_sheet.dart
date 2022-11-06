@@ -80,7 +80,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            height: SizeConfig.screenHeight ?? context.getHeight() / 1.78,
+            height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -186,7 +186,7 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-          height: height ?? SizeConfig.screenHeight ?? context.getHeight() / 4,
+          height: height ?? SizeConfig.screenHeight! / 4,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(
@@ -215,7 +215,7 @@ class ShowBottomSheet {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            height: SizeConfig.screenHeight ?? context.getHeight() / 4,
+            height: SizeConfig.screenHeight! / 4,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -261,7 +261,7 @@ class ShowBottomSheet {
               },
               child: SafeArea(
                 child: Container(
-                  height: !notifier.isLoading ? SizeConfig.screenHeight ?? context.getHeight() : SizeConfig.screenHeight ?? context.getHeight() - (28 + (SizeConfig.screenWidth ?? context.getHeight() / 1.78)),
+                  height: !notifier.isLoading ? SizeConfig.screenHeight! : SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
                   decoration: BoxDecoration(
                     color: Theme.of(_).colorScheme.background,
                     borderRadius: const BorderRadius.only(

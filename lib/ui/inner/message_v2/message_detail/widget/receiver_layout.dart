@@ -30,7 +30,7 @@ class ReceiverLayout extends StatelessWidget {
         ),
       ),
       constraints: BoxConstraints(
-        maxWidth: SizeConfig.screenWidth ?? context.getWidth() * 0.7,
+        maxWidth: SizeConfig.screenWidth! * 0.7,
       ),
       child: Padding(
         padding: EdgeInsets.all(10 * SizeConfig.scaleDiagonal),

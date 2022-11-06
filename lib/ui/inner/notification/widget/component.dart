@@ -60,7 +60,7 @@ class Component extends StatelessWidget {
                         width: data?.body != null
                             ? data!.body!.length < 30
                                 ? null
-                                : SizeConfig.screenWidth ?? context.getWidth() / 1.5
+                                : SizeConfig.screenWidth! / 1.5
                             : null,
                         child: CustomTextWidget(
                           //textToDisplay: data?.body ?? '',

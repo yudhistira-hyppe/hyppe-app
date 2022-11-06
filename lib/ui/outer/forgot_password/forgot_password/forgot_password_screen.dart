@@ -68,7 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     child: CustomTextFormField(
                       focusNode: notifier.focusNode,
                       inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
-                      inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+                      inputAreaWidth: SizeConfig.screenWidth!,
                       textEditingController: notifier.emailController,
                       style: Theme.of(context).textTheme.bodyText1,
                       textInputType: TextInputType.emailAddress,

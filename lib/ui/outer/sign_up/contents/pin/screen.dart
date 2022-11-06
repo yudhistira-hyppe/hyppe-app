@@ -70,7 +70,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
             child: Stack(
               children: [
                 Container(
-                  height: (SizeConfig.screenHeight ?? context.getHeight() + kToolbarHeight),
+                  height: (SizeConfig.screenHeight! + kToolbarHeight),
                   width: SizeConfig.screenWidth,
                   alignment: const Alignment(0.0, -0.3),
                   padding: const EdgeInsets.only(left: 16, right: 16),

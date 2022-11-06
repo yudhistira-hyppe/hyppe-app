@@ -37,7 +37,7 @@ class InterestContent extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.only(top: SizeConfig.screenHeight ?? context.getHeight() * 0.15),
+      padding: EdgeInsets.only(top: SizeConfig.screenHeight! * 0.15),
       child: Column(
         children: [
           Column(

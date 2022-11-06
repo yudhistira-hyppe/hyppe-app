@@ -34,7 +34,7 @@ class SignUpPinBottom extends StatelessWidget {
                   textStyle: notifier.verifyTextColor(context),
                 ),
         ),
-        minimum: EdgeInsets.only(bottom: SizeConfig.screenHeight ?? context.getHeight() * 0.075),
+        minimum: EdgeInsets.only(bottom: SizeConfig.screenHeight! * 0.075),
       ),
     );
   }

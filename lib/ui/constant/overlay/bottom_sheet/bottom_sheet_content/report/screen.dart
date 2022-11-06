@@ -74,7 +74,7 @@ class _HyppeReportState extends State<HyppeReport> {
                 child: Column(children: [
                   conditionalHeader(context),
                   SizedBox(
-                      height: SizeConfig.screenHeight ?? context.getHeight() * 0.5,
+                      height: SizeConfig.screenHeight! * 0.5,
                       child: notifier.initData == null
                           ? const Center(child: CustomLoading())
                           : ListView.builder(

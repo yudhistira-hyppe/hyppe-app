@@ -57,7 +57,7 @@ class SignUpButton extends StatelessWidget {
                       textStyle: textStyle,
                     ),
             ),
-            if (!withSkipButton) SizedBox(height: SizeConfig.screenHeight ?? context.getHeight() * 0.0175),
+            if (!withSkipButton) SizedBox(height: SizeConfig.screenHeight! * 0.0175),
             if (withSkipButton)
               CustomTextButton(
                 onPressed: onSkipTap,
@@ -92,7 +92,7 @@ class SignUpButton extends StatelessWidget {
                   ],
                 ),
               ),
-            SizedBox(height: SizeConfig.screenHeight ?? context.getHeight() * 0.0175),
+            SizedBox(height: SizeConfig.screenHeight! * 0.0175),
           ],
         ),
       ),

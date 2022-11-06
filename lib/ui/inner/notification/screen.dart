@@ -35,7 +35,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               padding: EdgeInsets.only(left: 15 * SizeConfig.scaleDiagonal),
               width: SizeConfig.screenWidth,
               child: CustomTextWidget(
-                textToDisplay: notifier.language.notification!,
+                textToDisplay: notifier.language.notification ?? 'notification',
                 textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
               ),
               alignment: Alignment.centerLeft,
@@ -55,7 +55,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 itemBuilder: (context, index) => GestureDetector(
                   onTap: () {
                     notifier.screen = notifier.listScreen.keys.elementAt(index);
-                    notifier.pageIndex = notifier.listScreen.keys.toList().indexOf(notifier.screen!);
+                    notifier.pageIndex = notifier.listScreen.keys.toList().indexOf(notifier.screen ?? Container());
                     notifier.getNotifications(context, reload: true, eventType: notifier.eventType(index));
                   },
                   child: Container(
@@ -103,7 +103,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         return SlideTransition(
                             position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation), child: child);
                       },
-                      child: notifier.screen!,
+                      child: notifier.screen ?? Container(),
                     ),
                   )
           ],

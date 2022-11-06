@@ -64,7 +64,7 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                     Container(
                       child: const SignUpPinTop(),
                       width: SizeConfig.screenWidth,
-                      height: (SizeConfig.screenHeight ?? context.getHeight() * 0.7),
+                      height: (SizeConfig.screenHeight! * 0.7),
                       alignment: const Alignment(0.0, -0.4),
                       padding: const EdgeInsets.only(left: 16, right: 16),
                     ),

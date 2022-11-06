@@ -35,7 +35,7 @@ class SlideTemplate extends StatelessWidget {
     if (notifier.result != null) {
       return Scaffold(
         body: Container(
-          height: SizeConfig.screenHeight ?? context.getHeight() - ((SizeConfig.screenHeight ?? context.getHeight()) * 0.25),
+          height: SizeConfig.screenHeight! - ((SizeConfig.screenHeight ?? context.getHeight()) * 0.25),
           width: SizeConfig.screenWidth,
           padding: EdgeInsets.only(top: SizeConfig.paddingTop),
           child: DynamicWidgetBuilder.build(notifier.result?.notesData[notesData].note ?? '', context, DefaultClickListener())!,

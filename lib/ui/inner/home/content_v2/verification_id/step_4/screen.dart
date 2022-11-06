@@ -61,7 +61,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                 alignment: Alignment.topCenter,
                 child: Container(
                   width: double.infinity,
-                  height: SizeConfig.screenHeight ?? context.getHeight() * 0.07,
+                  height: SizeConfig.screenHeight! * 0.07,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,

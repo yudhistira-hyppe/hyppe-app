@@ -33,7 +33,7 @@ class UploadIDVerification extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Container(
             width: double.infinity,
-            height: SizeConfig.screenHeight ?? context.getHeight() * 0.07,
+            height: SizeConfig.screenHeight! * 0.07,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
@@ -83,7 +83,7 @@ class UploadIDVerification extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           child: Container(
             width: double.infinity,
-            height: SizeConfig.screenHeight ?? context.getHeight() / 5,
+            height: SizeConfig.screenHeight! / 5,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
               borderRadius: const BorderRadius.only(

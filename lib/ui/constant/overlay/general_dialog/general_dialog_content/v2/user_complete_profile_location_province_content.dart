@@ -49,7 +49,7 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
     if (context.read<ErrorService>().isInitialError(error, notifier.provinceData.isEmpty ? null : notifier.provinceData.isEmpty)) {
       return Center(
         child: SizedBox(
-          height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
+          height: SizeConfig.screenHeight! * 0.8,
           child: CustomErrorWidget(
             function: () => notifier.initProvince(context, country: widget.country, reload: true),
             errorType: ErrorType.getStates,
@@ -59,7 +59,7 @@ class _UserCompleteProfileLocationProvinceContentState extends State<UserComplet
     }
 
     return SizedBox(
-      height: SizeConfig.screenHeight ?? context.getHeight() * 0.8,
+      height: SizeConfig.screenHeight! * 0.8,
       width: SizeConfig.screenWidth,
       child: Center(
         child: notifier.provinceData.isNotEmpty

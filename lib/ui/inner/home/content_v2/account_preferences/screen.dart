@@ -116,7 +116,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
               body: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: SizedBox(
-                  height: SizeConfig.screenHeight ?? context.getHeight() -
+                  height: SizeConfig.screenHeight! -
                       ((kToolbarHeight +
                               ((kToolbarHeight - 10) *
                                   SizeConfig.scaleDiagonal)) *

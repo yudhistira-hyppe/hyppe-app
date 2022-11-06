@@ -42,7 +42,7 @@ class AddBankAccount extends StatelessWidget {
                 CustomTextFormField(
                   // focusNode: notifier.emailFocus,
                   inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
-                  inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+                  inputAreaWidth: SizeConfig.screenWidth!,
                   textEditingController: notifier.nameAccount,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   textInputType: TextInputType.text,
@@ -65,7 +65,7 @@ class AddBankAccount extends StatelessWidget {
                 CustomTextFormField(
                   // focusNode: notifier.emailFocus,
                   inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
-                  inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+                  inputAreaWidth: SizeConfig.screenWidth!,
                   textEditingController: notifier.noBankAccount,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   textInputType: TextInputType.number,
@@ -88,7 +88,7 @@ class AddBankAccount extends StatelessWidget {
                 sixteenPx,
                 CustomTextFormField(
                   inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
-                  inputAreaWidth: SizeConfig.screenWidth ?? context.getWidth(),
+                  inputAreaWidth: SizeConfig.screenWidth!,
                   textEditingController: notifier.accountOwnerName,
                   style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                   textInputType: TextInputType.text,

@@ -22,7 +22,7 @@ class RegisterForm extends StatelessWidget {
     return Consumer<RegisterNotifier>(
       builder: (_, notifier, __) => SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(top: SizeConfig.screenHeight ?? context.getHeight() * 0.15),
+          padding: EdgeInsets.only(top: SizeConfig.screenHeight! * 0.15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

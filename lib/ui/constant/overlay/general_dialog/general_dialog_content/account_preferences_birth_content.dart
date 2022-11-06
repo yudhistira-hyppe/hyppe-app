@@ -11,7 +11,7 @@ class AccountPreferencesBirthContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<AccountPreferencesNotifier>(
       builder: (_, notifier, __) => SizedBox(
-        height: SizeConfig.screenHeight ?? context.getHeight() * 0.6,
+        height: SizeConfig.screenHeight! * 0.6,
         width: SizeConfig.screenWidth,
         child: Center(
           child: CupertinoTheme(

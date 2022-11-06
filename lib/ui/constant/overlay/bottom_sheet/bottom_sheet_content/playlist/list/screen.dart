@@ -43,7 +43,7 @@ class _ListMyPlaylistState extends State<ListMyPlaylist> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
-                    width: SizeConfig.screenWidth ?? context.getWidth() / 9,
+                    width: SizeConfig.screenWidth! / 9,
                     height: 3.5,
                     child: Container(
                       decoration: const BoxDecoration(
