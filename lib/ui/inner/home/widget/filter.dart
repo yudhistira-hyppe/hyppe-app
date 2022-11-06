@@ -20,7 +20,7 @@ class _FilterLandingState extends State<FilterLanding> {
   @override
   void initState() {
     super.initState();
-    final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
+    // final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
   }
 
   void selected(val) {

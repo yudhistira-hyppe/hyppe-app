@@ -207,8 +207,8 @@ class Repos {
           dataError['log'] = 'Error detail with no alertMessage ${_errorData.message.toString()} and host $host and paramdata $data';
           'Error data ddddd' + dataError.logger();
 
-          final responError = await postLogError(context, dataError, headers, onReceiveProgress);
-          'Actual response error data ${responError.data}'.logger();
+          // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+          // 'Actual response error data ${responError.data}'.logger();
         }
       } else {
         final _statusCodeFromBackend = methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty ? _response.data['statusCode'] ?? _response.data['status'] : null;
@@ -241,8 +241,8 @@ class Repos {
         _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
       dataError['log'] = 'Error detail in DioError catch ${e.message.toString()} with status code ${e.response?.statusCode}, and host $host and paramdata $data';
-      final responError = await postLogError(context, dataError, headers, onReceiveProgress);
-      'Actual response error data ${responError.data}'.logger();
+      // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+      // 'Actual response error data ${responError.data}'.logger();
       onDioError(e);
     } catch (e) {
       e.toString().logger();
@@ -260,7 +260,7 @@ class Repos {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
       dataError['log'] = 'Error detail in catch ${e.toString()}, and host $host and paramdata $data';
-      await postLogError(context, dataError, headers, onReceiveProgress);
+      // await postLogError(context, dataError, headers, onReceiveProgress);
     }
   }
 

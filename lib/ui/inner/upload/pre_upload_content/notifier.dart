@@ -380,7 +380,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       () {
         _socketService.events(SocketService.eventNotif, (result) {
           '$result'.logger();
-          homeNotifier.onRefresh(context);
+          homeNotifier.onRefresh(context, _visibility);
           // homeNotifier.isHaveSomethingNew = true;
           _socketService.closeSocket();
         });

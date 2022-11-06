@@ -111,7 +111,7 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future onRefresh(BuildContext context) async {
+  Future onRefresh(BuildContext context, String visibility) async {
     print('home notifier');
     bool isConnected = await System().checkConnections();
     if (isConnected) {
@@ -133,21 +133,33 @@ class HomeNotifier with ChangeNotifier {
         print(e);
       }
 
-      // Refresh content
       final allContents = await allReload(context);
-      try{
-        final notifierMain = Provider.of(context)<HomeNotifier>(context, listen: false);
+      // Refresh content
+      try {
         await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
-        await vid.initialVid(context, reload: true, list: allContents.video, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: notifierMain.visibilty).then((value) => totLoading += 1);
-      }catch(e){
-        print(e);
+      } catch (e) {
+        print("Error Load Story : $e");
+      }
+      try {
+        await vid.initialVid(context, reload: true, list: allContents.video, visibility: visibilty).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Video : $e");
+      }
+      try {
+        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: visibilty).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Diary : $e");
+      }
+      try {
+        print('initialPic : 1');
+        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: visibilty).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Pic : $e");
       }
 
 
 
-
+      print('totLoading $totLoading');
       if (totLoading >= 3) {
         print("is finish shimmer");
         _isLoadingVid = false;
@@ -160,7 +172,7 @@ class HomeNotifier with ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
-        onRefresh(context);
+        onRefresh(context, visibility);
       });
     }
     // isHaveSomethingNew = false;
@@ -363,7 +375,7 @@ class HomeNotifier with ChangeNotifier {
   void changeVisibility(BuildContext context, index) {
     _visibilty = _visibiltyList[index]['code'];
     _visibilitySelect = _visibiltyList[index]['code'];
-    onRefresh(context);
+    onRefresh(context, _visibilitySelect);
 
     notifyListeners();
   }

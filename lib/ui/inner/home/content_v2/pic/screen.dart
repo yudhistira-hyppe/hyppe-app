@@ -27,7 +27,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewPicNotifier>(context, listen: false);
-    // notifier.initialPic(context, reload: true);
+    notifier.initialPic(context, reload: true);
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     super.initState();
   }

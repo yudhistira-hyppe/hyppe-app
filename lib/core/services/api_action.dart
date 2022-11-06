@@ -20,20 +20,20 @@ class ApiAction {
   ApiAction() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV4}',
+        baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV3}',
         validateStatus: (status) => status! < 500,
       ),
     );
 
     if (!kReleaseMode) {
-      _dio.interceptors.add(LogInterceptor(
-        error: true,
-        request: true,
-        requestBody: true,
-        responseBody: true,
-        requestHeader: true,
-        responseHeader: true,
-      ));
+      // _dio.interceptors.add(LogInterceptor(
+      //   error: true,
+      //   request: true,
+      //   requestBody: true,
+      //   responseBody: true,
+      //   requestHeader: true,
+      //   responseHeader: true,
+      // ));
       // _dio.interceptors.add(CurlLoggerDioInte?rceptor(printOnSuccess: true));
       _dio.interceptors.add(HttpFormatter());
     }

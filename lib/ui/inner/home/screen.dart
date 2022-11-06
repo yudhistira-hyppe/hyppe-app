@@ -92,11 +92,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void initState() {
-    context.read<HomeNotifier>().onRefresh(context);
 
-    final _language = context.read<TranslateNotifierV2>().translate;
+
     Future.delayed(Duration.zero, () {
       context.read<HomeNotifier>().setSessionID();
+      final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           key: _globalKey,
           strokeWidth: 2.0,
           color: Colors.purple,
-          onRefresh: () => notifier.onRefresh(context),
+          onRefresh: () => notifier.onRefresh(context, notifier.visibilty),
           child: Stack(
             children: [
               // notifier.isLoadingVid
