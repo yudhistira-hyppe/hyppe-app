@@ -12,6 +12,7 @@ import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
@@ -217,5 +218,6 @@ class AppDependencies {
         ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
 
         ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
+        ChangeNotifierProvider<SlidedPicDetailNotifier>(create: (context) => SlidedPicDetailNotifier()),
       ];
 }

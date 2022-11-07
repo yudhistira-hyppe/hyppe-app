@@ -30,6 +30,11 @@ class PicCenterItem extends StatelessWidget {
       onTap: onTap as void Function()?,
       child: Stack(
         children: [
+          CustomBackgroundLayer(
+              sigmaX: 30,
+              sigmaY: 30,
+              // thumbnail: picData!.content[arguments].contentUrl,
+              thumbnail: data!.isApsara! ? data!.mediaThumbEndPoint : "${data?.fullThumbPath}"),
           CustomBaseCacheImage(
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,

@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:hyppe/core/bloc/report/bloc.dart';
 import 'package:hyppe/core/bloc/report/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/core/models/collection/report/report_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +21,15 @@ class ReportNotifier with ChangeNotifier {
     language = translate;
     notifyListeners();
   }
+
+  bool _loadingOption = false;
+  bool get loadingOption => _loadingOption;
+
+  String _currentReport = '';
+  String get currentReport => _currentReport;
+
+  String _currentReportDesc = '';
+  String get currentReportDesc => _currentReportDesc;
 
   String? _appBar;
   String _fABCaption = "Submit";
@@ -39,6 +48,16 @@ class ReportNotifier with ChangeNotifier {
   ReportAction? get reportAction => _reportAction;
   ContentData? contentData;
   String typeContent = '';
+
+  set currentReport(String val) {
+    _currentReport = val;
+    notifyListeners();
+  }
+
+  set currentReportDesc(String val) {
+    _currentReportDesc = val;
+    notifyListeners();
+  }
 
   set appBar(String? val) {
     _appBar = val;
@@ -109,87 +128,116 @@ class ReportNotifier with ChangeNotifier {
   }
 
   Future initializeData(BuildContext context) async {
+    _loadingOption = true;
     final notifier = ReportBloc();
-    await notifier.getReportOptionsBloc(context, langID: 'en', reportType: reportType, action: reportAction);
+    await notifier.getReportOptionsBloc(context);
     final fetch = notifier.reportFetch;
+
     if (fetch.reportState == ReportState.getReportOptionsSuccess) {
       initData = fetch.data;
     }
-  }
-
-  Future<void> reportPost(BuildContext context) async {
-    context.read<HomeNotifier>().onReport(
-          context,
-          postID: contentData!.postID!,
-          content: typeContent,
-          isReport: true,
-        );
+    _loadingOption = false;
     notifyListeners();
-    Navigator.pop(context, true);
-
-    // _showMessage("Your feedback will help us to improve your experience.");
-    var _showMessage = 'Thanks for letting us know", "We will review your report. If we find this content is violating of our community guidelines we will take action on it.';
-    ShowBottomSheet().onShowColouredSheet(context, _showMessage, color: Theme.of(context).colorScheme.onError);
   }
 
-  void onClickButton(context) async {
-    if (remarkID.isNotEmpty) {
-      isLoading = true;
-      final notifier = ReportBloc();
-      // final notifier2 = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-      // ignore: missing_enum_constant_in_switch
-      switch (reportType) {
-        case ReportType.post:
-          {
-            await notifier.reports(
-              context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID']),
-              reportType: ReportType.post,
-            );
-            print("REPORT POST");
-          }
-          break;
-        case ReportType.comment:
-          {
-            await notifier.reports(
-              context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID'], commentID: data!['commentID']),
-              reportType: ReportType.comment,
-            );
-            print("REPORT COMMENT");
-          }
-          break;
-        case ReportType.profile:
-          {
-            await notifier.reports(
-              context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], ruserID: data!['ruserID'], reportType: data!['reportType']),
-              reportType: ReportType.profile,
-            );
-            print("REPORT PROFILE");
-          }
-          break;
-        case ReportType.story:
-          {
-            await notifier.reports(
-              context,
-              data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], storyID: data!['storyID']),
-              reportType: ReportType.story,
-            );
-            print("REPORT STORY");
-          }
-          break;
-      }
-      final fetch = notifier.reportFetch;
-      isLoading = false;
-      if (fetch.reportState == ReportState.reportsSuccess) {
-        print('Success Reporting');
-        // notifier2.forceStop = false;
-        Routing().moveBack();
-        Routing().moveBack();
-      }
+  Future reportPost(BuildContext context) async {
+    _isLoading = true;
+    final data = {
+      "postID": contentData!.postID,
+      "type": "content",
+      "reportedStatus": "ALL",
+      "contentModeration": false,
+      "contentModerationResponse": "",
+      "reportedUser": [
+        {
+          "userID": SharedPreference().readStorage(SpKeys.userID),
+          "email": SharedPreference().readStorage(SpKeys.email),
+          "reportReasonId": _currentReport,
+          "description": _currentReportDesc,
+        }
+      ]
+    };
+    final notifier = ReportBloc();
+    await notifier.reports(context, data: data);
+    final fetch = notifier.reportFetch;
+    if (fetch.reportState == ReportState.reportsSuccess) {
+      context.read<HomeNotifier>().onReport(
+            context,
+            postID: contentData!.postID!,
+            content: typeContent,
+            isReport: true,
+          );
+      _isLoading = false;
+      Routing().moveBack();
+      // _showMessage("Your feedback will help us to improve your experience.");
+
     } else {
-      print('No remark selected');
+      _isLoading = false;
+      var _showMessage = 'Error';
+      ShowBottomSheet().onShowColouredSheet(context, _showMessage, color: Theme.of(context).colorScheme.onError);
     }
+
+    notifyListeners();
   }
+
+  // void onClickButton(context) async {
+  //   if (remarkID.isNotEmpty) {
+  //     isLoading = true;
+  //     final notifier = ReportBloc();
+  //     // final notifier2 = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
+  //     // ignore: missing_enum_constant_in_switch
+  //     switch (reportType) {
+  //       case ReportType.post:
+  //         {
+  //           await notifier.reports(
+  //             context,
+  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID']),
+  //             reportType: ReportType.post,
+  //           );
+  //           print("REPORT POST");
+  //         }
+  //         break;
+  //       case ReportType.comment:
+  //         {
+  //           await notifier.reports(
+  //             context,
+  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID'], commentID: data!['commentID']),
+  //             reportType: ReportType.comment,
+  //           );
+  //           print("REPORT COMMENT");
+  //         }
+  //         break;
+  //       case ReportType.profile:
+  //         {
+  //           await notifier.reports(
+  //             context,
+  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], ruserID: data!['ruserID'], reportType: data!['reportType']),
+  //             reportType: ReportType.profile,
+  //           );
+  //           print("REPORT PROFILE");
+  //         }
+  //         break;
+  //       case ReportType.story:
+  //         {
+  //           await notifier.reports(
+  //             context,
+  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], storyID: data!['storyID']),
+  //             reportType: ReportType.story,
+  //           );
+  //           print("REPORT STORY");
+  //         }
+  //         break;
+  //     }
+  //     final fetch = notifier.reportFetch;
+  //     isLoading = false;
+  //     if (fetch.reportState == ReportState.reportsSuccess) {
+  //       print('Success Reporting');
+  //       // notifier2.forceStop = false;
+  //       Routing().moveBack();
+  //       Routing().moveBack();
+  //     }
+  //   } else {
+  //     print('No remark selected');
+  //   }
+  // }
 }

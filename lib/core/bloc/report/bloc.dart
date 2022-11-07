@@ -2,9 +2,11 @@ import 'package:hyppe/core/bloc/report/state.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/core/models/collection/report/report_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
@@ -60,13 +62,37 @@ class ReportBloc {
         return UrlConstants.reportOnPost;
     }
   }
+  //====option report OLD
+  // Future getReportOptionsBloc(BuildContext context, {required String langID, required ReportType? reportType, required ReportAction? action}) async {
+  //   setReportFetch(ReportFetch(ReportState.loading));
+  //   await Repos().reposPost(
+  //     context,
+  //     (onResult) {
+  //       if (onResult.statusCode != HTTP_OK) {
+  //         setReportFetch(ReportFetch(ReportState.getReportOptionsError));
+  //       } else {
+  //         Report _result = Report.fromJson(onResult.data);
+  //         setReportFetch(ReportFetch(ReportState.getReportOptionsSuccess, data: _result));
+  //       }
+  //     },
+  //     (errorData) {
+  //       ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+  //       setReportFetch(ReportFetch(ReportState.getReportOptionsError));
+  //     },
+  //     host: UrlConstants.getReportOptions + "?langID=$langID&reportType=${_translateReportType(reportType)}&action=${_translateReportAction(action)}",
+  //     withAlertMessage: false,
+  //     methodType: MethodType.get,
+  //     withCheckConnection: false,
+  //   );
+  // }
 
-  Future getReportOptionsBloc(BuildContext context, {required String langID, required ReportType? reportType, required ReportAction? action}) async {
+  Future getReportOptionsBloc(BuildContext context) async {
     setReportFetch(ReportFetch(ReportState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          print('error1');
           setReportFetch(ReportFetch(ReportState.getReportOptionsError));
         } else {
           Report _result = Report.fromJson(onResult.data);
@@ -74,22 +100,24 @@ class ReportBloc {
         }
       },
       (errorData) {
+        print('error2');
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setReportFetch(ReportFetch(ReportState.getReportOptionsError));
       },
-      host: UrlConstants.getReportOptions + "?langID=$langID&reportType=${_translateReportType(reportType)}&action=${_translateReportAction(action)}",
+      data: {"lang": SharedPreference().readStorage(SpKeys.isoCode)},
+      host: UrlConstants.getOptionReport,
       withAlertMessage: false,
-      methodType: MethodType.get,
+      methodType: MethodType.post,
       withCheckConnection: false,
     );
   }
 
-  Future reports(BuildContext context, {required ReportData data, required ReportType reportType}) async {
+  Future reports(BuildContext context, {required Map data}) async {
     setReportFetch(ReportFetch(ReportState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if (onResult.statusCode! > HTTP_CODE) {
           setReportFetch(ReportFetch(ReportState.reportsError));
         } else {
           setReportFetch(ReportFetch(ReportState.reportsSuccess));
@@ -99,9 +127,9 @@ class ReportBloc {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setReportFetch(ReportFetch(ReportState.reportsError));
       },
-      host: _translateReportApi(reportType),
-      data: data.toMap(),
-      withAlertMessage: true,
+      host: UrlConstants.insertReport,
+      data: data,
+      withAlertMessage: false,
       methodType: MethodType.post,
       withCheckConnection: false,
     );

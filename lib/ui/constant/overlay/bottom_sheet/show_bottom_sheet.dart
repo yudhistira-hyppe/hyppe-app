@@ -841,7 +841,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController}) {
+  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController, Function? onUpdate}) {
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -860,15 +860,12 @@ class ShowBottomSheet {
             child: OnReportContentBottomSheet(
               postData: postData,
               type: type,
+              onUpdate: onUpdate,
             ),
           ),
         );
       },
-    ).whenComplete(() {
-      if (storyController != null) storyController.play();
-      // if (onUpdate != null) onUpdate();
-    });
-    ;
+    );
   }
 
   static onReportFormContent(_, {StoryController? storyController}) {
@@ -899,7 +896,13 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, String? type}) {
+  static onReportSpamContent(
+    _, {
+    StoryController? storyController,
+    ContentData? postData,
+    String? type,
+    Function? onUpdate,
+  }) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -923,7 +926,7 @@ class ShowBottomSheet {
     ).whenComplete(() {
       if (storyController != null) storyController.play();
       Routing().moveBack();
-      // if (onUpdate != null) onUpdate();
+      if (onUpdate != null) onUpdate();
     });
   }
 

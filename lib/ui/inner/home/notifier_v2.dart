@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -253,9 +254,11 @@ class HomeNotifier with ChangeNotifier {
     bool? saleView,
   }) {
     ContentData? _updatedData;
+    ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     switch (content) {
@@ -267,6 +270,7 @@ class HomeNotifier with ChangeNotifier {
         break;
       case hyppePic:
         _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData2 = pic2.data;
         break;
       case hyppeStory:
         _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
@@ -298,6 +302,30 @@ class HomeNotifier with ChangeNotifier {
           );
         }
       }
+      if (_updatedData2 != null) {
+        _updatedData2.tags = tags;
+        _updatedData2.description = description;
+        _updatedData2.allowComments = allowComment;
+        _updatedData2.visibility = visibility;
+        _updatedData2.location = location;
+        _updatedData2.saleAmount = num.parse(saleAmount != '' ? saleAmount : '0');
+        _updatedData2.saleLike = saleLike;
+        _updatedData2.saleView = saleView;
+        _updatedData2.cats = [];
+        _updatedData2.tagPeople = [];
+        // _updatedData2.tagPeople = tagPeople;
+        _updatedData2.tagPeople!.addAll(tagPeople);
+        if (cats != null) {
+          for (var v in cats) {
+            _updatedData2.cats!.add(
+              Cats(
+                interestName: v,
+              ),
+            );
+          }
+        }
+      }
+
       print(_updatedData.cats!.length);
     }
 
@@ -306,9 +334,11 @@ class HomeNotifier with ChangeNotifier {
 
   void onReport(BuildContext context, {required String postID, required String content, bool? isReport}) {
     ContentData? _updatedData;
+    ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     switch (content) {
@@ -320,6 +350,7 @@ class HomeNotifier with ChangeNotifier {
         break;
       case hyppePic:
         _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData2 = pic2.data;
         break;
       case hyppeStory:
         _updatedData = stories.myStoriesData!.firstWhereOrNull((element) => element.postID == postID);
@@ -331,7 +362,10 @@ class HomeNotifier with ChangeNotifier {
 
     if (_updatedData != null) {
       _updatedData.isReport = isReport;
-      // _updatedData.tagPeople = tagPeople;
+
+      if (_updatedData2 != null) {
+        _updatedData2.isReport = isReport;
+      }
     }
 
     notifyListeners();

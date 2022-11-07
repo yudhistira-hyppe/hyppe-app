@@ -12,16 +12,12 @@ import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
-import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
-import 'package:hyppe/core/bloc/utils_v2/state.dart';
-
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/hyppe_version.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
-import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
@@ -37,9 +33,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:http/http.dart' as http;
 
 class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -237,6 +231,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'true');
+      // SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       DeviceBloc().activityAwake(context);
 
       if (signData.interest!.isEmpty) {
@@ -254,6 +249,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'false');
+      SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       DeviceBloc().activityAwake(context);
       Routing().moveReplacement(Routes.lobby);

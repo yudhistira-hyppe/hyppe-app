@@ -7,15 +7,14 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnReportContentBottomSheet extends StatelessWidget {
-  String? type;
-  ContentData? postData;
+  final String? type;
+  final ContentData? postData;
+  final Function? onUpdate;
 
-  OnReportContentBottomSheet({Key? key, this.postData, this.type}) : super(key: key);
+  const OnReportContentBottomSheet({Key? key, this.postData, this.type, this.onUpdate}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -48,8 +47,7 @@ class OnReportContentBottomSheet extends StatelessWidget {
             ListTile(
               visualDensity: VisualDensity.adaptivePlatformDensity,
               onTap: () {
-                // ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type);
-                Routing().move(Routes.reportContent);
+                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate);
                 context.read<ReportNotifier>().contentData = postData;
                 context.read<ReportNotifier>().typeContent = type!;
               },
