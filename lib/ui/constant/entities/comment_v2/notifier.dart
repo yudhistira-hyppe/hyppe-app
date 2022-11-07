@@ -295,6 +295,7 @@ class CommentNotifierV2 with ChangeNotifier {
       if (_startSearch == 0) {
         _isLoading = true;
       }
+      print('getSearchPeopleBloc 1');
       await notifier.getSearchPeopleBloc(context, input, _startSearch * 20, 20);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {

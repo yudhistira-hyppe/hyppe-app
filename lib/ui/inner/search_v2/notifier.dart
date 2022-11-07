@@ -33,7 +33,7 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  List<SearchPeolpleData>? _searchPeolpleData;
+  List<SearchPeolpleData>? _searchPeolpleData = [];
   List<SearchPeolpleData>? get searchPeolpleData => _searchPeolpleData;
 
   SearchContentModel? _searchContent;
@@ -419,6 +419,7 @@ class SearchNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       isLoading = true;
+      print('getSearchPeopleBloc 2');
       await notifier.getSearchPeopleBloc(context, input, 0, 20);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
@@ -427,6 +428,7 @@ class SearchNotifier with ChangeNotifier {
         fetch.data.forEach((v) {
           _searchPeolpleData?.add(SearchPeolpleData.fromJson(v));
         });
+        print('length _searchPeolpleData ${_searchPeolpleData?.length}');
         isLoading = false;
         notifyListeners();
       }

@@ -20,7 +20,7 @@ class ApiAction {
   ApiAction() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV3}',
+        baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV4}',
         validateStatus: (status) => status! < 500,
       ),
     );

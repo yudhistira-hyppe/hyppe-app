@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
+import 'content_v2/profile/self_profile/notifier.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

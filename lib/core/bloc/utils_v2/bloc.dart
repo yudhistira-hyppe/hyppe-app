@@ -260,6 +260,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
+        print('status getSearchPeopleBloc ${onResult.statusCode}');
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.searchPeopleError));
         } else {

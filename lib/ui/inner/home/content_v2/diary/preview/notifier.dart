@@ -116,6 +116,18 @@ class PreviewDiaryNotifier with ChangeNotifier {
             print('initDataDiary is ${_searchData.initDataDiary?.length}');
           }
 
+        }else{
+          if(_searchData.initDataDiary!.isEmpty){
+            if (visibility == 'PUBLIC') {
+              try {
+                _searchData.initDataDiary = diaryData?.sublist(0, 18);
+                print('initDataVid is ${_searchData.initDataDiary?.length}');
+              } catch (e) {
+                _searchData.initDataDiary = diaryData;
+                print('initDataVid is ${_searchData.initDataDiary?.length}');
+              }
+            }
+          }
         }
       }
     } catch (e) {

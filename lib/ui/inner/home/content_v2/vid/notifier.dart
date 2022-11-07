@@ -96,6 +96,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         if (reload) {
           print('reload contentsQuery : 15');
           res = await contentsQuery.reload(context);
+
         } else {
           res = await contentsQuery.loadNext(context);
         }
@@ -111,6 +112,32 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
             curve: Curves.easeIn,
           );
         }
+        final _searchData = context.read<SearchNotifier>();
+        if(_searchData.initDataVid == null){
+          _searchData.initDataVid = [];
+          if (visibility == 'PUBLIC') {
+            try {
+              _searchData.initDataVid = vidData?.sublist(0, 18);
+              print('initDataVid is ${_searchData.initDataVid?.length}');
+            } catch (e) {
+              _searchData.initDataVid = vidData;
+              print('initDataVid is ${_searchData.initDataVid?.length}');
+            }
+          }
+        }else{
+          if(_searchData.initDataVid!.isEmpty){
+            if (visibility == 'PUBLIC') {
+              try {
+                _searchData.initDataVid = vidData?.sublist(0, 18);
+                print('initDataVid is ${_searchData.initDataVid?.length}');
+              } catch (e) {
+                _searchData.initDataVid = vidData;
+                print('initDataVid is ${_searchData.initDataVid?.length}');
+              }
+            }
+          }
+        }
+
       } else {
         print('initial video');
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;

@@ -55,6 +55,14 @@ class HomeNotifier with ChangeNotifier {
   // bool get isHaveSomethingNew => _isHaveSomethingNew;
   String? get sessionID => _sessionID;
 
+  String _profileImage = '';
+  String get profileImage => _profileImage;
+
+  set profileImage(String url){
+    _profileImage = url;
+    notifyListeners();
+  }
+
   // final box = Boxes.boxDataContents;
 
   // set isHaveSomethingNew(bool val) {
