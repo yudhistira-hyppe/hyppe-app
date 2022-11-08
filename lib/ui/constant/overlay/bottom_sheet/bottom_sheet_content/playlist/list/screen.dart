@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +57,8 @@ class _ListMyPlaylistState extends State<ListMyPlaylist> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: notifier.language.saveTo!,
-                        textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.normal),
+                        textToDisplay: notifier.language.saveTo ?? '',
+                        textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.normal),
                       ),
                       GestureDetector(
                         onTap: () {
@@ -75,7 +76,7 @@ class _ListMyPlaylistState extends State<ListMyPlaylist> {
                             // ),
                             SizedBox(width: 12 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.createNew!,
+                              textToDisplay: notifier.language.createNew ?? '',
                               textStyle: Theme.of(context).textTheme.button,
                             ),
                           ],

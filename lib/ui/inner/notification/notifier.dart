@@ -130,12 +130,12 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  List<NotificationModel>? likeData() => data!.filterNotification([NotificationCategory.like]);
-  List<NotificationModel>? commentData() => data!.filterNotification([NotificationCategory.comment]);
-  List<NotificationModel>? followData() => data!.filterNotification([NotificationCategory.follower]);
-  List<NotificationModel>? followingData() => data!.filterNotification([NotificationCategory.following]);
-  List<NotificationModel>? mentionData() => data!.filterNotification([NotificationCategory.mention]);
-  List<NotificationModel>? generalData() => data!.filterNotification([NotificationCategory.general]);
+  List<NotificationModel>? likeData() => data?.filterNotification([NotificationCategory.like]);
+  List<NotificationModel>? commentData() => data?.filterNotification([NotificationCategory.comment]);
+  List<NotificationModel>? followData() => data?.filterNotification([NotificationCategory.follower]);
+  List<NotificationModel>? followingData() => data?.filterNotification([NotificationCategory.following]);
+  List<NotificationModel>? mentionData() => data?.filterNotification([NotificationCategory.mention]);
+  List<NotificationModel>? generalData() => data?.filterNotification([NotificationCategory.general]);
 
   void resetNotificationData() {
     _data = null;
@@ -143,13 +143,13 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
 
   void onInitial() {
     _listScreen = {
-      AllNotification(): language.all!,
-      LikeNotification(): language.like!,
-      CommentNotification(): language.comment!,
-      const FollowNotification(category: NotificationCategory.follower): language.follow!,
-      const FollowNotification(category: NotificationCategory.following): language.following!,
-      MentionNotification(): language.mention!,
-      GeneralNotification(): language.general!
+      AllNotification(): language.all ?? '',
+      LikeNotification(): language.like ?? '',
+      CommentNotification(): language.comment ?? '',
+      const FollowNotification(category: NotificationCategory.follower): language.follow ?? 'follow',
+      const FollowNotification(category: NotificationCategory.following): language.following ?? 'following',
+      MentionNotification(): language.mention ?? '',
+      GeneralNotification(): language.general ?? ''
     };
     _screen = _listScreen.keys.elementAt(0);
   }
@@ -178,12 +178,15 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future markAsRead(BuildContext context, NotificationModel? data) async {
-    int indexP = _data!.indexOf(data!);
-    if (!_data![indexP].isRead!) {
-      _data![indexP].isRead = true;
-      notifyListeners();
+  Future markAsRead(BuildContext context, NotificationModel data) async {
+    final indexP = _data?.indexOf(data);
+    if(indexP != null){
+      if (!(_data?[indexP].isRead ?? false)) {
+        _data?[indexP].isRead = true;
+        notifyListeners();
+      }
     }
+
     if (data.eventType == 'TRANSACTION') {
       Routing().move(Routes.transaction);
     }

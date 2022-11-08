@@ -35,7 +35,7 @@ class OnShowOptionStory extends StatelessWidget {
           title: CustomTextWidget(
             textAlign: TextAlign.start,
             textToDisplay: caption,
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
           ),
           leading: CustomIconWidget(
             defaultColor: false,
@@ -63,7 +63,7 @@ class OnShowOptionStory extends StatelessWidget {
               // CustomTextWidget(
               //   textToDisplay:
               //       '$HYPPESTORY ${context.read<StoriesPlaylistNotifier>().currentStory + 1} of ${context.read<PreviewStoriesNotifier>().myStoriesData?.totalStories}',
-              //   textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+              //   textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
               // ),
             ],
           ),
@@ -79,7 +79,7 @@ class OnShowOptionStory extends StatelessWidget {
                   // value2.linkCopied = true;
                   // try {
                   //   value2
-                  //       .createdDynamicLink(context, value2.dataUserStories[value2.currentPage!.toInt()]!, null, true)
+                  //       .createdDynamicLink(context, value2.dataUserStories[value2.currentPage.toInt()], null, true)
                   //       .whenComplete(() => Future.delayed(Duration(seconds: 2), () => value2.linkCopied = false));
                   // } catch (_) {
                   //   value2.linkCopied = false;
@@ -90,7 +90,7 @@ class OnShowOptionStory extends StatelessWidget {
                 moveBack: false,
                 caption: 'Share to...',
                 icon: 'share.svg',
-                onTap: (_, value2) => value2.createdDynamicLink(context, value2.dataUserStories[value2.currentPage!.toInt()]),
+                onTap: (_, value2) => value2.createdDynamicLink(context, value2.dataUserStories[value2.currentPage?.toInt() ?? 0]),
               ),
               // _tileComponent(
               //   moveBack: true,
@@ -107,7 +107,7 @@ class OnShowOptionStory extends StatelessWidget {
               //       await value2.deleteStory(
               //         context,
               //         arguments: arguments,
-              //         data: value2.dataUserStories[value2.currentPage!.toInt()]!,
+              //         data: value2.dataUserStories[value2.currentPage.toInt()],
               //       );
               //     });
               //   },

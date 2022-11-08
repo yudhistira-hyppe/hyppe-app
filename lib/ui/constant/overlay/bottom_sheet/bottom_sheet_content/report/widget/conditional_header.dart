@@ -20,14 +20,14 @@ Widget conditionalHeader(context) {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => ListTile(
         title: CustomTextWidget(
-          textToDisplay: notifier.translate.tellUsWhyYouDontWantToSeeThis!,
+          textToDisplay: notifier.translate.tellUsWhyYouDontWantToSeeThis ?? '',
           textStyle: Theme.of(context).textTheme.bodyText2,
           textAlign: TextAlign.start,
           textOverflow: TextOverflow.clip,
         ),
         subtitle: CustomTextWidget(
-          textToDisplay: notifier.translate.yourFeedbackWillHelpUsToImproveYourExperience!,
-          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeSecondary),
+          textToDisplay: notifier.translate.yourFeedbackWillHelpUsToImproveYourExperience ?? '',
+          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeSecondary),
           textAlign: TextAlign.start,
           textOverflow: TextOverflow.clip,
         ),
@@ -42,17 +42,17 @@ Widget conditionalHeader(context) {
     //     crossAxisAlignment: CrossAxisAlignment.start,
     //     children: [
     //       CustomTextWidget(
-    //         textToDisplay: "${notifier.language.blockSubject} ${notifier.peopleProfile!.profileOverviewData!.userOverviewData.username!}?",
+    //         textToDisplay: "${notifier.language.blockSubject} ${notifier.peopleProfile.profileOverviewData.userOverviewData.username}?",
     //         textStyle: Theme.of(context).textTheme.subtitle1,
     //       ),
     //       twentyPx,
     //       SizedBox(
-    //         width: SizeConfig.screenWidth! * 0.9,
+    //         width: SizeConfig.screenWidth * 0.9,
     //         child: CustomTextWidget(
     //             textAlign: TextAlign.left,
     //             textOverflow: TextOverflow.visible,
-    //             textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: kHyppeSecondary),
-    //             textToDisplay: notifier.language.blockBody!),
+    //             textStyle: Theme.of(context).textTheme.bodyText2.apply(color: kHyppeSecondary),
+    //             textToDisplay: notifier.language.blockBody),
     //       ),
     //     ],
     //   ),
@@ -83,23 +83,23 @@ Widget conditionalHeader(context) {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SizedBox(
-          width: SizeConfig.screenWidth! * 0.9,
+          width: (SizeConfig.screenWidth ?? context.getWidth()) * 0.9,
           child: CustomTextWidget(
               textAlign: TextAlign.left,
               textOverflow: TextOverflow.clip,
-              textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: kHyppeSecondary),
-              textToDisplay: notifier.translate.reportToContentOnThisProfileOrThatThisAccount!),
+              textStyle: Theme.of(context).textTheme.bodyText2?.apply(color: kHyppeSecondary),
+              textToDisplay: notifier.translate.reportToContentOnThisProfileOrThatThisAccount ?? ''),
         ),
         twentyPx,
         SizedBox(
-            width: SizeConfig.screenWidth! * 0.9,
+            width: (SizeConfig.screenWidth ?? context.getWidth()) * 0.9,
             child: CustomTextWidget(
                 textAlign: TextAlign.left,
                 textOverflow: TextOverflow.clip,
-                textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: kHyppeSecondary),
-                textToDisplay: notifier.translate.noteToReportActivityByThisMemberGoToTheSpecific!)),
+                textStyle: Theme.of(context).textTheme.bodyText2?.apply(color: kHyppeSecondary),
+                textToDisplay: notifier.translate.noteToReportActivityByThisMemberGoToTheSpecific ?? '')),
         twentyPx,
-        CustomTextWidget(textToDisplay: notifier.translate.tellUsALittleMore!, textStyle: Theme.of(context).textTheme.subtitle1)
+        CustomTextWidget(textToDisplay: notifier.translate.tellUsALittleMore ?? '', textStyle: Theme.of(context).textTheme.subtitle1)
       ]),
     );
   }

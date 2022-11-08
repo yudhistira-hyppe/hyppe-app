@@ -46,8 +46,8 @@ class PeopleFrameStory extends StatelessWidget {
               width: SizeWidget.circleDiameterOutside,
               height: SizeWidget.circleDiameterOutside,
               onTap: () {
-                context.read<PreviewStoriesNotifier>().changeBorderColor(data!);
-                context.read<ViewerStoriesNotifier>().postViewer(context, data!.postID!);
+                context.read<PreviewStoriesNotifier>().changeBorderColor(data ?? ContentData());
+                context.read<ViewerStoriesNotifier>().postViewer(context, data?.postID ?? '');
                 // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
                 context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
               },
@@ -62,7 +62,7 @@ class PeopleFrameStory extends StatelessWidget {
           child: CustomTextWidget(
             maxLines: 1,
             textAlign: TextAlign.center,
-            // textToDisplay: data[index].username!,
+            // textToDisplay: data[index].username,
             textToDisplay: '${data?.username}',
             textStyle: _themes.textTheme.overline,
           ),

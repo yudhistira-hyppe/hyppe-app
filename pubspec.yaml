@@ -94,7 +94,8 @@ dependencies:
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
 
  
-# dependency_overrides:
+#dependency_overrides:
+#  firebase_core_platform_interface: 4.5.1
 #   camera: <=0.10.0
 
 dev_dependencies:

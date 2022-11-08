@@ -18,7 +18,7 @@ class PlaylistBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setPlaylistFetch(PlaylistFetch(PlaylistState.createNewPlaylistBlocError));
         } else {
           final Playlist _result = Playlist.fromJsonResponsePost(onResult.data);
@@ -42,7 +42,7 @@ class PlaylistBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setPlaylistFetch(PlaylistFetch(PlaylistState.getAllPlaylistBlocBlocError));
         } else {
           Playlist _result = Playlist.fromJsonResponseGet(onResult.data);

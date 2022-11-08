@@ -41,7 +41,7 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
           CustomTextWidget(
             // textToDisplay: '${_language.deletePost} ${widget.contentTitle}',
             textToDisplay: widget.contentTitle == 'Comment' || widget.contentTitle == 'Komentar' ? '${_language.deleteComment}' : '${_language.deletePost}',
-            textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
           ),
           CustomTextWidget(
             maxLines: 3,
@@ -54,7 +54,7 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
             children: [
               if (!_isLoading)
                 _buildButton(
-                  caption: _language.delete!,
+                  caption: _language.delete ?? 'delete',
                   color: Colors.transparent,
                   function: () => widget.function(),
                   theme: theme,
@@ -62,7 +62,7 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
               else
                 const CustomLoading(),
               _buildButton(
-                caption: _language.cancel!,
+                caption: _language.cancel ?? 'cancel',
                 color: theme.colorScheme.primaryVariant,
                 textColor: kHyppeLightButtonText,
                 function: () => _routing.moveBack(),
@@ -77,7 +77,7 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
 
   Widget _buildButton({required ThemeData theme, required String caption, required Function function, required Color color, Color? textColor}) {
     return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button!.copyWith(color: textColor)),
+      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor)),
       width: 120,
       height: 42,
       function: () async {
@@ -89,7 +89,7 @@ class _DeleteContentDialogState extends State<DeleteContentDialog> {
           setState(() => _isLoading = false);
         }
       },
-      buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
+      buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),
     );

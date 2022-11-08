@@ -50,13 +50,13 @@ class SelfProfileVids extends StatelessWidget {
                                         width: double.infinity,
                                         height: double.infinity,
                                         featureType: FeatureType.vid,
-                                        isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                                        thumbnail: notifier.item1!.vids![index].isApsara!
-                                            ? notifier.item1!.vids![index].mediaThumbEndPoint!
-                                            : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint)!,
+                                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                        thumbnail: notifier.item1?.vids?[index].isApsara ?? false
+                                            ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
+                                            : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? '',
                                       ),
                                     ),
-                                    notifier.item1!.vids![index].saleAmount! > 0
+                                    (notifier.item1?.vids?[index].saleAmount ?? 0)> 0
                                         ? const Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(

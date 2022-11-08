@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -31,7 +32,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
         },
         child: Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -39,9 +40,9 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
             ),
             titleSpacing: 0,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.idVerification!,
+              textToDisplay: notifier.language.idVerification ?? '',
               textStyle:
-                  Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -59,13 +60,13 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
                   CustomTextWidget(
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
-                      textToDisplay: notifier.language.successIdCardTitle!),
+                      textToDisplay: notifier.language.successIdCardTitle ?? ''),
                   _buildDivider(context),
                   const SizedBox(height: 10),
-                  _unorderedList(notifier.language.successIdCard1!),
-                  _unorderedList(notifier.language.successIdCard2!),
-                  _unorderedList(notifier.language.successIdCard3!),
-                  _unorderedList(notifier.language.successIdCard4!),
+                  _unorderedList(notifier.language.successIdCard1 ?? ''),
+                  _unorderedList(notifier.language.successIdCard2 ?? ''),
+                  _unorderedList(notifier.language.successIdCard3 ?? ''),
+                  _unorderedList(notifier.language.successIdCard4 ?? ''),
                   const SizedBox(height: 70)
                 ],
               ),
@@ -80,7 +81,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
               height: 44.0 * SizeConfig.scaleDiagonal,
               function: () => notifier.clearAndMoveToLobby(),
               child: CustomTextWidget(
-                textToDisplay: notifier.language.close!,
+                textToDisplay: notifier.language.close ?? 'close',
                 textStyle:
                     textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
@@ -103,7 +104,7 @@ class _VerificationIDSuccessState extends State<VerificationIDSuccess> {
 
   Widget _buildDivider(context) => Divider(
       thickness: 1.0,
-      color: Theme.of(context).dividerTheme.color!.withOpacity(0.1));
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _unorderedList(String text) {
     return Padding(

@@ -1,12 +1,9 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
-import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +51,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           CustomTextWidget(
             textToDisplay: '${widget.titleText}',
             maxLines: widget.maxLineTitle,
-            textStyle: theme.textTheme.subtitle1!.copyWith(fontWeight: FontWeight.w600),
+            textStyle: theme.textTheme.subtitle1?.copyWith(fontWeight: FontWeight.w600),
           ),
           twelvePx,
           CustomTextWidget(
@@ -76,7 +73,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                             child: _buildButton(
                               caption: '${widget.titleButtonSecondary}',
                               color: Colors.transparent,
-                              function: widget.functionSecondary!,
+                              function: widget.functionSecondary ?? (){},
                               // function: () => _routing.moveBack(),
                               theme: theme,
                             ),
@@ -114,24 +111,24 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
           setState(() => _isLoading = false);
         }
       },
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button!.copyWith(color: textColor, fontSize: 10)),
-      style: theme.elevatedButtonTheme.style!.copyWith(
+      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
+      style: theme.elevatedButtonTheme.style?.copyWith(
         backgroundColor: MaterialStateProperty.all(color),
       ),
     );
 
-    return CustomElevatedButton(
-      child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button!.copyWith(color: textColor, fontSize: 10)),
-      width: 120,
-      height: 42,
-      function: () {
-        try {
-          function();
-        } catch (_) {}
-      },
-      buttonStyle: theme.elevatedButtonTheme.style!.copyWith(
-        backgroundColor: MaterialStateProperty.all(color),
-      ),
-    );
+    // return CustomElevatedButton(
+    //   child: CustomTextWidget(textToDisplay: caption, textStyle: theme.textTheme.button?.copyWith(color: textColor, fontSize: 10)),
+    //   width: 120,
+    //   height: 42,
+    //   function: () {
+    //     try {
+    //       function();
+    //     } catch (_) {}
+    //   },
+    //   buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
+    //     backgroundColor: MaterialStateProperty.all(color),
+    //   ),
+    // );
   }
 }

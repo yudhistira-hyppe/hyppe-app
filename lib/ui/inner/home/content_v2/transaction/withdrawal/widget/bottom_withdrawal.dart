@@ -47,7 +47,7 @@ class BottomWithdrawalWidget extends StatelessWidget {
                         ],
                       ),
                     )
-                  : notifier.dataAcccount!.isEmpty
+                  : notifier.dataAcccount?.isEmpty ?? true
                       ? Padding(
                           padding: const EdgeInsets.only(top: 16.0),
                           child: Row(
@@ -61,7 +61,7 @@ class BottomWithdrawalWidget extends StatelessWidget {
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: notifier.dataAcccount!.length,
+                          itemCount: notifier.dataAcccount?.length,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return Container(
@@ -70,22 +70,22 @@ class BottomWithdrawalWidget extends StatelessWidget {
                                   border: const Border(
                                     bottom: BorderSide(color: kHyppeLightInactive2, width: 0.5),
                                   ),
-                                  color: notifier.dataAcccount![index].statusInquiry != null && !notifier.dataAcccount![index].statusInquiry!
+                                  color: notifier.dataAcccount?[index].statusInquiry != null && !(notifier.dataAcccount?[index].statusInquiry ?? false)
                                       ? Colors.grey.withOpacity(0.08)
                                       : Theme.of(context).colorScheme.background),
                               child: Column(
                                 children: [
                                   ListTile(
-                                    onTap: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? () => notifier.bankChecked(index) : null,
+                                    onTap: notifier.dataAcccount?[index].statusInquiry == null || (notifier.dataAcccount?[index].statusInquiry ?? false) ? () => notifier.bankChecked(index) : null,
                                     contentPadding: EdgeInsets.zero,
                                     title: Row(
                                       children: [
                                         CustomTextWidget(
-                                          textToDisplay: notifier.dataAcccount![index].bankName!,
+                                          textToDisplay: notifier.dataAcccount?[index].bankName ?? '',
                                           textAlign: TextAlign.start,
                                         ),
                                         sixPx,
-                                        notifier.dataAcccount![index].statusInquiry != null && notifier.dataAcccount![index].statusInquiry!
+                                        notifier.dataAcccount?[index].statusInquiry != null && (notifier.dataAcccount?[index].statusInquiry ?? false)
                                             ? Container(
                                                 padding: const EdgeInsets.all(4),
                                                 decoration: BoxDecoration(
@@ -101,17 +101,17 @@ class BottomWithdrawalWidget extends StatelessWidget {
                                       ],
                                     ),
                                     subtitle: CustomTextWidget(
-                                      textToDisplay: '${notifier.dataAcccount![index].noRek} - ${(notifier.dataAcccount![index].nama)!.toUpperCase()}',
+                                      textToDisplay: '${notifier.dataAcccount?[index].noRek} - ${(notifier.dataAcccount?[index].nama)?.toUpperCase()}',
                                       textAlign: TextAlign.start,
                                     ),
                                     trailing: Radio<String>(
-                                      value: notifier.dataAcccount![index].noRek!,
+                                      value: notifier.dataAcccount?[index].noRek ?? '',
                                       groupValue: notifier.bankSelected,
-                                      onChanged: notifier.dataAcccount![index].statusInquiry == null || notifier.dataAcccount![index].statusInquiry! ? (val) => notifier.bankChecked(index) : null,
+                                      onChanged: notifier.dataAcccount?[index].statusInquiry == null || (notifier.dataAcccount?[index].statusInquiry ?? false) ? (val) => notifier.bankChecked(index) : null,
                                       activeColor: kHyppePrimary,
                                     ),
                                   ),
-                                  // notifier.isCheking && notifier.bankSelected == notifier.dataAcccount![index].noRek!
+                                  // notifier.isCheking && notifier.bankSelected == notifier.dataAcccount[index].noRek
                                   //     ? Padding(
                                   //         padding: const EdgeInsets.all(8.0),
                                   //         child: Row(

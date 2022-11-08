@@ -104,7 +104,7 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                               },
                             )
                           : UnconstrainedBox(
-                              child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment!),
+                              child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
                               // child: CustomTextButton(
                               //   onPressed: () {
                               //     if (widget.fromFront) {
@@ -113,7 +113,7 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                               //       notifier.showTextInput = true;
                               //     }
                               //   },
-                              //   child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment!),
+                              //   child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment),
                               //   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
                               // ),
                             ),

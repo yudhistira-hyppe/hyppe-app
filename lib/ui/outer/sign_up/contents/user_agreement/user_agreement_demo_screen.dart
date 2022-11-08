@@ -27,7 +27,7 @@ class UserAgreementDemoScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Markdown(
-            data: snapshot.data!,
+            data: snapshot.data ?? '',
           );
         } else {
           return const Center(

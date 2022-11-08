@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
@@ -71,17 +72,17 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          widget.tagPeople!.length != 0 || widget.location != ''
+          widget.tagPeople?.isNotEmpty ?? false || widget.location != ''
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Row(
                     children: [
-                      widget.tagPeople!.length != 0
+                      widget.tagPeople?.isNotEmpty ?? false
                           ? PicTagLabel(
                               icon: 'user',
-                              label: '${widget.tagPeople!.length} people',
+                              label: '${widget.tagPeople?.length} people',
                               function: () {
-                                widget.storyController!.pause();
+                                widget.storyController?.pause();
                                 context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID, storyController: widget.storyController);
                               },
                             )
@@ -110,9 +111,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                 trimExpandedText: 'Show less',
                 trimCollapsedText: 'Show more',
                 colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
               ),
             ),
           ),

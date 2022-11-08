@@ -12,8 +12,10 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notifier = context.select((SelfProfileNotifier value) => Tuple2(value.user, value.user.profile?.avatar?.mediaEndpoint));
-
+    // var notifier = context.select((SelfProfileNotifier value) => Tuple2(value.user, value.user.profile?.avatar?.mediaEndpoint));
+    // final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
+    final notifier = Provider.of<HomeNotifier>(context);
+    print('showUserPicture 1 : ${notifier.profileImage}');
     return SizedBox(
       width: 50,
       child: CustomTextButton(
@@ -23,7 +25,7 @@ class Profile extends StatelessWidget {
           width: 26,
           height: 26,
           following: true,
-          imageUrl: System().showUserPicture(notifier.item2 ?? ''),
+          imageUrl: System().showUserPicture(notifier.profileImage) ?? '',
         ),
       ),
     );

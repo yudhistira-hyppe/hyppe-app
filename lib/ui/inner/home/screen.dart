@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
+import 'content_v2/profile/self_profile/notifier.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -92,11 +93,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void initState() {
-    context.read<HomeNotifier>().onRefresh(context);
 
-    final _language = context.read<TranslateNotifierV2>().translate;
+
     Future.delayed(Duration.zero, () {
       context.read<HomeNotifier>().setSessionID();
+      final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
@@ -134,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           key: _globalKey,
           strokeWidth: 2.0,
           color: Colors.purple,
-          onRefresh: () => notifier.onRefresh(context),
+          onRefresh: () => notifier.onRefresh(context, notifier.visibilty),
           child: Stack(
             children: [
               // notifier.isLoadingVid

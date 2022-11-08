@@ -21,7 +21,7 @@ class AllNotification extends StatelessWidget {
               return ComponentShimmer();
             }
             return Component(
-              data: notifier.data![index],
+              data: notifier.data?[index],
               rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
                       System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
                   ? Container()

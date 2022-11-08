@@ -23,7 +23,7 @@ class BuyBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.getContentsError, data: onResult.data));
         } else {
           setBuyFetch(BuyFetch(BuyState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -47,7 +47,7 @@ class BuyBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.getContentsError, data: onResult.data));
         } else {
           setBuyFetch(BuyFetch(BuyState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -70,7 +70,7 @@ class BuyBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.getContentsError, data: onResult.data));
         } else {
           setBuyFetch(BuyFetch(BuyState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -94,7 +94,7 @@ class BuyBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.postContentsError, data: onResult.data));
         } else {
           setBuyFetch(BuyFetch(BuyState.postContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -122,7 +122,7 @@ class BuyBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setBuyFetch(BuyFetch(BuyState.postContentsError, data: onResult.data));
         } else {
           setBuyFetch(BuyFetch(BuyState.postContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));

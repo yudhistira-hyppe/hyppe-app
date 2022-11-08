@@ -2,17 +2,14 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
-import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +23,7 @@ class _InsertReferralState extends State<InsertReferral> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+        leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
         leading: CustomIconButtonWidget(
           defaultColor: true,
           iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -35,7 +32,7 @@ class _InsertReferralState extends State<InsertReferral> {
         titleSpacing: 0,
         title: CustomTextWidget(
           textToDisplay: 'Masukkan Referal',
-          textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+          textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
         ),
         centerTitle: false,
       ),
@@ -81,8 +78,8 @@ class _InsertReferralState extends State<InsertReferral> {
                 child: notifier.isLoading
                     ? const CustomLoading()
                     : CustomTextWidget(
-                        textToDisplay: notifier.language.save!,
-                        textStyle: notifier.buttonReferralDisable() ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                        textToDisplay: notifier.language.save ?? 'save',
+                        textStyle: notifier.buttonReferralDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                       ),
                 width: SizeConfig.screenWidth,
                 height: 49 * SizeConfig.scaleDiagonal,

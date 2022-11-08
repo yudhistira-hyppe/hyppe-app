@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/widget/forgot_password_title.dart';
@@ -50,7 +51,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 iconData: '${AssetPath.vectorPath}back-arrow.svg',
               ),
               title: CustomTextWidget(
-                textToDisplay: notifier.language.reset!,
+                textToDisplay: notifier.language.reset ?? '',
                 textStyle: style.bodyText1?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
@@ -59,8 +60,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Stack(
                 children: [
                   ForgotPasswordTitle(
-                    title: notifier.language.forgotPassword!,
-                    subtitle: notifier.language.wellEmailYourCodeToResetYourPassword!,
+                    title: notifier.language.forgotPassword ?? '',
+                    subtitle: notifier.language.wellEmailYourCodeToResetYourPassword ?? '',
                   ),
                   Align(
                     alignment: const Alignment(0, -0.3),
@@ -74,15 +75,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onChanged: (v) => notifier.text = v,
                       inputDecoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-                        labelText: notifier.language.email!,
-                        labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        labelText: notifier.language.email ?? '',
+                        labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                             color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty
                                 ? Theme.of(context).colorScheme.primaryVariant
                                 : null),
                         prefixIconConstraints:
-                            BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
+                            BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                         prefixIcon: Transform.translate(
-                          offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                          offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                           child: Transform.scale(
                             scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                             child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
@@ -113,7 +114,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         child: notifier.isLoading
                             ? const CustomLoading()
                             : CustomTextWidget(
-                                textToDisplay: notifier.language.reset!,
+                                textToDisplay: notifier.language.reset ?? '',
                                 textStyle: notifier.emailNextTextColor(context),
                               ),
                       ),

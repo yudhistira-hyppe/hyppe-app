@@ -51,7 +51,7 @@
 //                 RadioListTile(
 //                   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
 //                   title: CustomTextWidget(
-//                     textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number!,
+//                     textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number,
 //                     textAlign: TextAlign.start,
 //                     textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                   ),
@@ -66,11 +66,11 @@
 //           ),
 //           CustomRichTextWidget(
 //             textSpan: TextSpan(
-//               text: notifier.isEmail ? "" : notifier.language.bySigningUpYouAgreeToHyppe! + " ",
+//               text: notifier.isEmail ? "" : notifier.language.bySigningUpYouAgreeToHyppe + " ",
 //               style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //               children: [
 //                 TextSpan(
-//                   text: notifier.isEmail ? "\n" : notifier.language.privacyPolicy! + "\n",
+//                   text: notifier.isEmail ? "\n" : notifier.language.privacyPolicy + "\n",
 //                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
 //                     color: Theme.of(context).colorScheme.primaryVariant,
 //                     fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@
 //                   style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                 ),
 //                 TextSpan(
-//                   text: notifier.isEmail ? "" : notifier.language.termsOfService!,
+//                   text: notifier.isEmail ? "" : notifier.language.termsOfService,
 //                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
 //                     color: Theme.of(context).colorScheme.primaryVariant,
 //                     fontWeight: FontWeight.bold,

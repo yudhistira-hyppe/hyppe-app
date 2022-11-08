@@ -22,7 +22,7 @@ class BuildFiltersWidget extends StatelessWidget {
             IgnorePointer(
               ignoring: notifier.addTextItemMode,
               child: _buildButton(context,
-                  caption: notifier.language.filter!,
+                  caption: notifier.language.filter ?? '',
                   iconData: "${AssetPath.vectorPath}filters.svg",
                   onPressed: () => context.read<PreviewContentNotifier>().isSheetOpen
                       ? context.read<PreviewContentNotifier>().closeFilters()
@@ -32,7 +32,7 @@ class BuildFiltersWidget extends StatelessWidget {
             IgnorePointer(
               ignoring: notifier.isSheetOpen,
               child: _buildButton(context,
-                  caption: notifier.language.text!,
+                  caption: notifier.language.text ?? '',
                   iconData: "${AssetPath.vectorPath}texts.svg",
                   onPressed: () => context.read<PreviewContentNotifier>().addTextItem(context)),
             ),

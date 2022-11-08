@@ -18,13 +18,13 @@ class Register extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomTextWidget(
-                textToDisplay: "${notifier.language.dontHaveAnAccount!}?   ",
+                textToDisplay: "${notifier.language.dontHaveAnAccount}?   ",
                 textStyle: Theme.of(context).primaryTextTheme.bodyText2,
               ),
               GestureDetector(
                 onTap: () => notifier.onClickSignUpHere(),
                 child: CustomTextWidget(
-                  textToDisplay: notifier.language.registerHere!,
+                  textToDisplay: notifier.language.registerHere ?? '',
                   textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).colorScheme.primaryVariant,

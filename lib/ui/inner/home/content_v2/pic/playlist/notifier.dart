@@ -149,7 +149,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> _increaseViewCount(BuildContext context) async {
     try {
-      System().increaseViewCount(context, _data!).whenComplete(() => notifyListeners());
+      System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
     } catch (e) {
       'post view request: ERROR: $e'.logger();
     }

@@ -136,14 +136,14 @@ class ReportNotifier with ChangeNotifier {
     if (fetch.reportState == ReportState.getReportOptionsSuccess) {
       initData = fetch.data;
     }
+
     _loadingOption = false;
-    notifyListeners();
   }
 
   Future reportPost(BuildContext context) async {
     _isLoading = true;
     final data = {
-      "postID": contentData!.postID,
+      "postID": contentData?.postID ?? '',
       "type": "content",
       "reportedStatus": "ALL",
       "contentModeration": false,
@@ -163,7 +163,7 @@ class ReportNotifier with ChangeNotifier {
     if (fetch.reportState == ReportState.reportsSuccess) {
       context.read<HomeNotifier>().onReport(
             context,
-            postID: contentData!.postID!,
+            postID: contentData?.postID ?? '',
             content: typeContent,
             isReport: true,
           );

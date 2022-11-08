@@ -111,17 +111,17 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     //   }
     // });
 
-    try {
-      await cameraController?.initialize();
+    // try {
+    //   await cameraController?.initialize();
 
-      /// TODO: Resolved by backend
-      // if (Platform.isIOS) {
-      //   await cameraController?.lockCaptureOrientation();
-      // }
-      // flashMode = cameraController!.value.flashMode;
-    } on CameraException catch (e) {
-      e.description.logger();
-    }
+    //   /// TODO: Resolved by backend
+    //   // if (Platform.isIOS) {
+    //   //   await cameraController?.lockCaptureOrientation();
+    //   // }
+    //   // flashMode = cameraController!.value.flashMode;
+    // } on CameraException catch (e) {
+    //   e.description.logger();
+    // }
 
     if (loadingForObject(loadingForSwitching)) {
       setLoading(false, loadingObject: loadingForSwitching);
@@ -172,7 +172,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Resolution _configureResolutionDeepArPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion!.replaceAll('.', '')) <= minIphoneVersionForResolutionCamera) {
+    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
       return Resolution.high;
     } else {
       return onStoryIsPhoto != null && onStoryIsPhoto == true ? Resolution.veryHigh : Resolution.high;
@@ -180,7 +180,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion!.replaceAll('.', '')) <= minIphoneVersionForResolutionCamera) {
+    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
       return ResolutionPreset.high;
     } else {
       return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
@@ -283,7 +283,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await cameraController!.pauseVideoRecording();
+      await cameraController?.pauseVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();

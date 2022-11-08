@@ -70,7 +70,7 @@ class PicDetailBottom extends StatelessWidget {
   Widget _buildDivider(BuildContext context) {
     return Divider(
       thickness: 1.0,
-      color: Theme.of(context).dividerTheme.color!.withOpacity(0.1),
+      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1),
     );
   }
 
@@ -81,18 +81,18 @@ class PicDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            data?.tagPeople!.length != 0 || data?.location != ''
+            data?.tagPeople?.isNotEmpty ?? false || data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
                       children: [
-                        data?.tagPeople!.length != 0
+                        data?.tagPeople?.isNotEmpty ?? false
                             ? TagLabel(
                                 icon: 'user',
-                                label: '${data?.tagPeople!.length} people',
+                                label: '${data?.tagPeople?.length ?? 0} people',
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
-                                  // vidNotifier.showUserTag(context, index, data!.postID);
+                                  // vidNotifier.showUserTag(context, index, data.postID);
                                 },
                               )
                             : const SizedBox(),
@@ -124,14 +124,14 @@ class PicDetailBottom extends StatelessWidget {
             data != null
                 ? GestureDetector(
                     onTap: () {
-                      Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data!.postID, 'VIEW', 'Viewer', data?.email);
+                      Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
                     },
                     child: CustomTextWidget(
                       maxLines: 2,
                       textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.caption!.apply(color: Theme.of(context).colorScheme.secondaryVariant),
-                      // textToDisplay: '${_system.formatterNumber(data!.totalViews)}x ${notifier.language.views!}',
-                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views!}',
+                      textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondaryVariant),
+                      // textToDisplay: '${_system.formatterNumber(data.totalViews)}x ${notifier.language.views!}',
+                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
                     ),
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
@@ -152,7 +152,7 @@ class PicDetailBottom extends StatelessWidget {
                 builder: (context, notifier, child) =>
                     // data != null ?
                     _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
-                      notifier.likePost(context, data!);
+                      notifier.likePost(context, data ?? ContentData());
                     }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)),
 
             //   builder: (context, notifier, child) => data != null
@@ -165,7 +165,7 @@ class PicDetailBottom extends StatelessWidget {
             //           // } else {
             //           //   value.data?.isLiked = true;
             //           // }
-            //           notifier.likePost(context, data!);
+            //           notifier.likePost(context, data);
             //         },
             //           colorIcon: (value.data?.isLiked ?? false)
             //               ? kHyppePrimary
@@ -179,7 +179,7 @@ class PicDetailBottom extends StatelessWidget {
                 _buildButton(
                   context,
                   '${AssetPath.vectorPath}comment.svg',
-                  value2.translate.comment!,
+                  value2.translate.comment ?? 'comment',
                   () {
                     ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
                   },
@@ -188,21 +188,21 @@ class PicDetailBottom extends StatelessWidget {
             _buildButton(
               context,
               '${AssetPath.vectorPath}share.svg',
-              value2.translate.share!,
+              value2.translate.share ?? '',
               data != null ? () => value.createdDynamicLink(context, data: data) : () {},
             ),
-            if (data!.saleAmount! > 0 && email != data!.email)
+            if ((data?.saleAmount ?? 0) > 0 && email != data?.email)
               _buildButton(
                 context,
                 '${AssetPath.vectorPath}cart.svg',
-                value2.translate.buy!,
+                value2.translate.buy ?? 'buy',
                 () => ShowBottomSheet.onBuyContent(context, data: data),
               ),
 
             // _buildButton(
             //   context,
             //   '${AssetPath.vectorPath}bookmark.svg',
-            //   value2.translate.save!,
+            //   value2.translate.save,
             //   data != null
             //       ? () => context.read<PlaylistNotifier>().showMyPlaylistBottomSheet(
             //             context,
@@ -226,7 +226,7 @@ class PicDetailBottom extends StatelessWidget {
           CustomIconWidget(
             iconData: icon,
             defaultColor: false,
-            color: colorIcon ?? Theme.of(context).appBarTheme.iconTheme!.color,
+            color: colorIcon ?? Theme.of(context).appBarTheme.iconTheme?.color,
           ),
           fourPx,
           CustomTextWidget(
@@ -258,7 +258,7 @@ class PicDetailBottom extends StatelessWidget {
                         value.checkIsLoading
                             ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                             : CustomFollowButton(
-                                caption: value3.translate.follow!,
+                                caption: value3.translate.follow ?? '',
                                 checkIsLoading: value.checkIsLoading,
                                 onPressed: () async {
                                   try {
@@ -288,18 +288,14 @@ class PicDetailBottom extends StatelessWidget {
           spaceProfileAndId: eightPx,
           haveStory: false,
           isCelebrity: false,
-          onTapOnProfileImage: () => _system.navigateToProfile(context, data!.email!),
+          onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
           featureType: FeatureType.pic,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(
-            DateTime.parse(data!.createdAt!).millisecondsSinceEpoch,
+            DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch,
             context,
             fullCaption: true,
           )}',
-          // isCelebrity: data!.isCelebrity,
-          // haveStory: data!.isHaveStory ?? false,
-          // imageUrl: '${data!.profilePic}$VERYBIG',
-          // featureType: context.read<SeeAllNotifier>().featureType!,
         )
       : Row(
           crossAxisAlignment: CrossAxisAlignment.center,

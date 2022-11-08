@@ -29,8 +29,8 @@ class ConfirmPin extends StatelessWidget {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier2.translate.confirmPin!,
-            textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
+            textToDisplay: notifier2.translate.confirmPin ?? '',
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
           ),
           centerTitle: false,
         ),
@@ -47,13 +47,13 @@ class ConfirmPin extends StatelessWidget {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: notifier2.translate.confirmNewPin!,
-                textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                textToDisplay: notifier2.translate.confirmNewPin ?? '',
+                textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
+              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
               twelvePx,
               CustomRectangleInput(
                 notifier.pin2Controller,
@@ -61,9 +61,9 @@ class ConfirmPin extends StatelessWidget {
               ),
               !notifier.matchingPin
                   ? CustomTextWidget(
-                      textToDisplay: notifier2.translate.enterThePinThatMatchesThePinYouFilledInEarlier!,
+                      textToDisplay: notifier2.translate.enterThePinThatMatchesThePinYouFilledInEarlier ?? '',
                       maxLines: 3,
-                      textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeRed),
+                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeRed),
                     )
                   : Container(),
             ],

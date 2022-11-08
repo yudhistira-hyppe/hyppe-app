@@ -35,7 +35,7 @@ class CustomFollowButton extends StatelessWidget {
           title = value.translate.following!;
           break;
         default:
-          title = value.translate.follow!;
+          title = value.translate.follow ?? '';
       }
       isFollowing == StatusFollowing.requested;
       return InkWell(

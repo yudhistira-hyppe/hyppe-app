@@ -61,7 +61,7 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
             ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
-              textToDisplay: notifier2.translate.verificationCode!,
+              textToDisplay: notifier2.translate.verificationCode ?? '',
               textStyle: Theme.of(context).textTheme.headline6,
             ),
           ),

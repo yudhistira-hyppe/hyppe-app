@@ -58,8 +58,8 @@ class _FollowerScreenState extends State<FollowerScreen> with SingleTickerProvid
               bottom: TabBar(
                 controller: _tabController,
                 tabs: [
-                  Tab(text: _language.followers!),
-                  Tab(text: _language.following!),
+                  Tab(text: _language.followers ?? ''),
+                  Tab(text: _language.following ?? ''),
                 ],
                 onTap: (value) {
                   if (_tabController.index == 0) {

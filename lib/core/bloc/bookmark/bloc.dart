@@ -18,7 +18,7 @@ class BookmarkBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setBookmarkFetch(BookmarkFetch(BookmarkState.addBookmarkBlocError));
         } else {
           setBookmarkFetch(BookmarkFetch(BookmarkState.addBookmarkBlocSuccess, data: onResult.data));
@@ -42,7 +42,7 @@ class BookmarkBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setBookmarkFetch(BookmarkFetch(BookmarkState.getBookmarkBlocError));
         } else {
           final Bookmark _result = Bookmark.fromJson(onResult.data);

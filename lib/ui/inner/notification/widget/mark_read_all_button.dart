@@ -17,7 +17,7 @@
 
 //     return CustomTextButton(
 //         onPressed: () => context.read<NotificationNotifier>().markAllAsRead(context),
-//         style: Theme.of(context).textButtonTheme.style!.copyWith(
+//         style: Theme.of(context).textButtonTheme.style.copyWith(
 //             backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
 //             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)))),
 //         child: CustomTextWidget(

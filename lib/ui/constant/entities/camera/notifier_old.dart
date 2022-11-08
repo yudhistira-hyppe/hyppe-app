@@ -26,7 +26,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   bool get isRecordingPaused => cameraController?.value.isRecordingPaused ?? false;
   bool get isTakingPicture => cameraController?.value.isTakingPicture ?? false;
   bool get hasError => cameraController?.value.hasError ?? false;
-  double get cameraAspectRatio => cameraController!.value.previewSize!.height / cameraController!.value.previewSize!.width;
+  double get cameraAspectRatio => (cameraController?.value.previewSize?.height ?? 0) / (cameraController?.value.previewSize?.width ?? 0);
   double get yScale => 1;
 
   // Object Key
@@ -95,7 +95,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       if (Platform.isIOS) {
         await cameraController?.lockCaptureOrientation();
       }
-      flashMode = cameraController!.value.flashMode;
+      flashMode = cameraController?.value.flashMode ?? FlashMode.off;
     } on CameraException catch (e) {
       e.description.logger();
     }
@@ -136,7 +136,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
       /// TODO: Resolved by backend
       // await cameraController?.lockCaptureOrientation();
-      flashMode = cameraController!.value.flashMode;
+      flashMode = cameraController?.value.flashMode ?? FlashMode.off;
     } on CameraException catch (e) {
       e.description.logger();
     }
@@ -174,7 +174,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion!.replaceAll('.', '')) <= minIphoneVersionForResolutionCamera) {
+    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
       return ResolutionPreset.high;
     } else {
       return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
@@ -211,7 +211,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<XFile?> takePicture() async {
-    XFile _result;
+    XFile? _result;
     if (!isInitialized) {
       return null;
     }
@@ -221,7 +221,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      _result = await cameraController!.takePicture();
+      if(cameraController != null){
+        _result = await cameraController!.takePicture();
+      }else{
+        _result = null;
+      }
+
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();
@@ -240,7 +245,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await cameraController!.startVideoRecording();
+      await cameraController?.startVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();
@@ -254,7 +259,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      final _xFile = await cameraController!.stopVideoRecording();
+      final _xFile = await cameraController?.stopVideoRecording();
       notifyListeners();
       return _xFile;
     } on CameraException catch (e) {
@@ -269,7 +274,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await cameraController!.resumeVideoRecording();
+      await cameraController?.resumeVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();
@@ -283,7 +288,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await cameraController!.pauseVideoRecording();
+      await cameraController?.pauseVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();

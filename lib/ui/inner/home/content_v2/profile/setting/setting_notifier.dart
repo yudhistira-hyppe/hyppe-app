@@ -97,13 +97,13 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
     // if (userPin != 'true') {
     //   return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
     //     Routing().moveAndPop(Routes.homePageSignInSecurity);
-    //   }, title: language.translate.addYourHyppePinFirst!, bodyText: language.translate.toAccessTransactionPageYouNeedToSetYourPin!);
+    //   }, title: language.translate.addYourHyppePinFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToSetYourPin!);
     // }
 
     if (userKyc != VERIFIED) {
       return ShowBottomSheet.onShowStatementPin(context, onCancel: () {}, onSave: () {
         Routing().moveAndPop(Routes.homePageSignInSecurity);
-      }, title: language.translate.verificationYourIDFirst!, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID!);
+      }, title: language.translate.verificationYourIDFirst, bodyText: language.translate.toAccessTransactionPageYouNeedToVerificationYourID!);
     }
 
     Routing().move(Routes.transaction);

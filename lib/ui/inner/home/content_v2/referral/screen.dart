@@ -95,7 +95,7 @@ class _ReferralState extends State<Referral> {
                     //   height: 44.0 * SizeConfig.scaleDiagonal,
                     //   function: () => null,
                     //   child: CustomTextWidget(
-                    //     textToDisplay: notifier.language.downloadQRCode!,
+                    //     textToDisplay: notifier.language.downloadQRCode,
                     //     textStyle: Theme.of(context)
                     //         .textTheme
                     //         .button

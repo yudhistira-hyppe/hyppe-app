@@ -59,7 +59,7 @@ class Diary {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": List<dynamic>.from((data ?? []).map((x) => x.toJson())),
         "totalFilter": totalFilter,
         "skip": skip,
         "limit": limit,
@@ -87,7 +87,7 @@ class Tags {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": List<dynamic>.from((data ?? []).map((x) => x.toJson())),
         "totalFilter": totalFilter,
         "skip": skip,
         "limit": limit,
@@ -109,7 +109,7 @@ class DataTags {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": List<dynamic>.from(id!.map((x) => x)),
+        "_id": List<dynamic>.from(id??[].map((x) => x)),
         "total": total,
       };
 }
@@ -135,7 +135,7 @@ class Users {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data??[].map((x) => x.toJson())),
         "totalFilter": totalFilter,
         "skip": skip,
         "limit": limit,
@@ -170,7 +170,7 @@ class DataUser {
 
   Map<String, dynamic> toJson() => {
         "_id": id,
-        "avatar": avatar!.toJson(),
+        "avatar": avatar?.toJson(),
         "idUserAuth": idUserAuth,
         "username": username,
         "fullName": fullName,

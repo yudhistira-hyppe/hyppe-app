@@ -152,10 +152,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   setIsKeyboardActive(bool val) => _isKeyboardActive = val;
 
   nextPage() {
-    if (_pageController!.page == dataUserStories.length - 1) {
+    if (_pageController?.page == dataUserStories.length - 1) {
       return;
     }
-    _pageController!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _pageController?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   degreeToRadian(double deg) {
@@ -220,8 +220,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
     if (data.mediaType?.translateType() == ContentType.video) {
       String urlApsara = '';
-      if (data.isApsara!) {
-        await getVideoApsara(context, data.apsaraId!).then((value) {
+      if (data.isApsara ?? false) {
+        await getVideoApsara(context, data.apsaraId ?? '').then((value) {
           urlApsara = value;
         });
       }
@@ -260,7 +260,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
-    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email!;
+    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
     storyController.pause();
     _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
   }
@@ -320,7 +320,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           child: const UnconstrainedBox(child: CustomLoading()),
         ),
       );
-      Overlay.of(context)!.insert(_popupDialog);
+      Overlay.of(context)?.insert(_popupDialog);
       await context.read<MainNotifier>().getReaction(context).whenComplete(() {
         _data = context.read<MainNotifier>().reactionData;
         _popupDialog.remove();
@@ -339,37 +339,42 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         transitionDuration: const Duration(milliseconds: 500),
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) {
-          return ShowReactionsIcon(
-              onTap: () => _routing.moveBack(),
-              crossAxisCount: 3,
-              data: _data!.data,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () async {
-                    reaction = _data?.data[index].icon;
-                    _routing.moveBack();
-                    makeItems(animationController!);
-                    Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                    Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
-                    try {
-                      await sendMessageReaction(
-                        context,
-                        contentData: data,
-                        reaction: _data?.data[index],
-                      );
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                  child: Material(
-                    color: Colors.transparent,
-                    child: CustomTextWidget(
-                      textToDisplay: _data!.data[index].icon!,
-                      textStyle: Theme.of(context).textTheme.headline4!.apply(color: null),
+          if(animationController != null){
+            return ShowReactionsIcon(
+                onTap: () => _routing.moveBack(),
+                crossAxisCount: 3,
+                data: _data?.data ?? [],
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () async {
+                      reaction = _data?.data[index].icon;
+                      _routing.moveBack();
+                      makeItems(animationController);
+                      Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
+                      Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
+                      try {
+                        await sendMessageReaction(
+                          context,
+                          contentData: data,
+                          reaction: _data?.data[index],
+                        );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Material(
+                      color: Colors.transparent,
+                      child: CustomTextWidget(
+                        textToDisplay: _data?.data[index].icon ?? '',
+                        textStyle: Theme.of(context).textTheme.headline4?.apply(color: null),
+                      ),
                     ),
-                  ),
-                );
-              });
+                  );
+                });
+          }else{
+            return Container();
+          }
+
         },
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
@@ -439,14 +444,14 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
 
-  List<Widget> buildItems(AnimationController? animationController) {
+  List<Widget> buildItems(AnimationController animationController) {
     return items.map((item) {
       var tween = Tween<Offset>(
         begin: Offset(0, Random().nextDouble() * 1 + 1),
         end: Offset(Random().nextDouble() * 0.5, -2),
       ).chain(CurveTween(curve: Curves.linear));
       return SlideTransition(
-        position: animationController!.drive(tween),
+        position: animationController.drive(tween),
         child: AnimatedAlign(
           alignment: item.alignment,
           duration: const Duration(seconds: 10),
@@ -456,7 +461,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             child: Material(
               color: Colors.transparent,
               child: Text(
-                reaction!,
+                reaction ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: item.size),
               ),
@@ -533,45 +538,3 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 }
 
-
-// void onCloseStory(BuildContext context, Map? arguments) {
-  //   // final notifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-  //   // Story? _model;
-  //   // List<StoryData> viewedStories = [];
-
-  //   // validate story
-  //   if (userID == null) {
-  //     // get viewed stories data
-  //     // viewedStories = notifier.peopleStoriesData!.data.where((e1) => !e1.story.map((e2) => e2.isView).contains(0)).toList();
-
-  //     // delete viewed stories data
-  //     // notifier.peopleStoriesData!.data.removeWhere((e1) => !e1.story.map((e2) => e2.isView).contains(0));
-
-  //     // check if any viewed stories data, and then insert to peopleStoriesData object
-  //     // if (viewedStories.isNotEmpty) notifier.peopleStoriesData!.data.insertAll(notifier.peopleStoriesData!.data.length, viewedStories);
-
-  //     // _model = notifier.peopleStoriesData;
-  //     // notifier.peopleStoriesData = Story();
-  //     _textEditingController.clear();
-  //     // notifyListeners();
-  //   }
-  //   // if (arguments != null && !arguments.containsKey('isSearch')) {
-  //   //   Routing().moveAndPop(lobby);
-  //   // } else {
-  //   //   Routing().moveBack();
-  //   // }
-  //   _routing.moveBack();
-  //   // if (userID == null) _socketService.closeSocket();
-  //   // Timer(Duration(milliseconds: 50), () {
-  //   //   if (userID == null) {
-  //   //     notifier.peopleStoriesData = _model;
-  //   //     notifyListeners();
-  //   //   }
-  //   //   Timer(Duration(milliseconds: 50), () {
-  //   //     // _storyItems.clear();
-  //   //     _items.clear();
-  //   //   });
-  //   // });
-
-  //   // context.read<PreviewVidNotifier>().forcePause = false;
-  // }

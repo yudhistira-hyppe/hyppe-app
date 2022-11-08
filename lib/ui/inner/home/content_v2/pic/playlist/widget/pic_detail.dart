@@ -61,19 +61,19 @@ class _PicDetailState extends State<PicDetail> {
               CustomBackgroundLayer(
                 sigmaX: 30,
                 sigmaY: 30,
-                // thumbnail: picData!.content[arguments].contentUrl,
-                thumbnail: widget.arguments!.isApsara! ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                // thumbnail: picData.content[arguments].contentUrl,
+                thumbnail: widget.arguments?.isApsara ?? false ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
               ),
               // Content
               InteractiveViewer(
                 transformationController: transformationController,
                 child: InkWell(
                   onDoubleTap: () {
-                    context.read<LikeNotifier>().likePost(context, widget.arguments!);
+                    context.read<LikeNotifier>().likePost(context, widget.arguments ?? ContentData());
                   },
                   child: CustomCacheImage(
                     // imageUrl: picData.content[arguments].contentUrl,
-                    imageUrl: widget.arguments!.isApsara! ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                    imageUrl: widget.arguments?.isApsara ?? false ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
                     imageBuilder: (_, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(
@@ -126,35 +126,27 @@ class _PicDetailState extends State<PicDetail> {
                             following: true,
                             onFollow: () {},
                             haveStory: false,
-                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.arguments!.email!),
+                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.arguments?.email ?? ''),
                             spaceProfileAndId: eightPx,
                             featureType: FeatureType.pic,
                             username: widget.arguments?.username,
                             isCelebrity: widget.arguments?.privacy?.isCelebrity,
                             imageUrl: '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
                             createdAt: '${System().readTimestamp(
-                              DateTime.parse(widget.arguments!.createdAt!).millisecondsSinceEpoch,
+                              DateTime.parse(widget.arguments?.createdAt ?? '').millisecondsSinceEpoch,
                               context,
                               fullCaption: true,
                             )}',
-                            // username: picData.username,
-                            // spaceProfileAndId: eightPx,
-                            // isCelebrity: picData.isCelebrity,
-                            // haveStory: picData.isHaveStory ?? false,
-                            // imageUrl: '${picData.profilePic}$VERYBIG',
-                            // featureType: context.read<SeeAllNotifier>().featureType!,
-                            // onTapOnProfileImage: () => System().navigateToProfileScreen(context, picData),
-                            // createdAt: '${System().readTimestamp(int.parse(picData.createdAt!), context, fullCaption: true)}',
-                          ),
+                            ),
                         ],
                       ),
-                      widget.arguments!.email == SharedPreference().readStorage(SpKeys.email)
+                      widget.arguments?.email == SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () => ShowBottomSheet.onShowOptionContent(
                                 context,
-                                contentData: widget.arguments!,
+                                contentData: widget.arguments ?? ContentData(),
                                 captionTitle: hyppePic,
                                 // storyController: widget.storyController,
                                 onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
@@ -165,7 +157,7 @@ class _PicDetailState extends State<PicDetail> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet.onReportContent(context, widget.arguments!, hyppePic),
+                              function: () => ShowBottomSheet.onReportContent(context, widget.arguments ?? ContentData(), hyppePic),
                             )
                           : SizedBox(),
                     ],
@@ -196,7 +188,7 @@ class _PicDetailState extends State<PicDetail> {
                             context: context,
                             colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
                             iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            function: () => notifier.likePost(context, widget.arguments!),
+                            function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
                           ),
                         ),
                         _buildButtonV2(
@@ -204,7 +196,7 @@ class _PicDetailState extends State<PicDetail> {
                           iconData: '${AssetPath.vectorPath}share.svg',
                           function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
                         ),
-                        if (widget.arguments!.saleAmount! > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments!.email)
+                        if ((widget.arguments?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments!.email)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
@@ -223,15 +215,15 @@ class _PicDetailState extends State<PicDetail> {
                         // )
                       ],
                     ),
-                    widget.arguments?.tagPeople!.length != 0 || widget.arguments?.location != ''
+                    widget.arguments?.tagPeople?.isNotEmpty ?? false || widget.arguments?.location != ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                             child: Row(
                               children: [
-                                widget.arguments?.tagPeople!.length != 0
+                                widget.arguments?.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
                                         icon: 'user',
-                                        label: '${widget.arguments?.tagPeople!.length} people',
+                                        label: '${widget.arguments?.tagPeople?.length} people',
                                         function: () {
                                           context.read<PicDetailNotifier>().showUserTag(context, widget.arguments!.tagPeople, widget.arguments?.postID);
                                         },

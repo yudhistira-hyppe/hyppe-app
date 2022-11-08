@@ -380,7 +380,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       () {
         _socketService.events(SocketService.eventNotif, (result) {
           '$result'.logger();
-          homeNotifier.onRefresh(context);
+          homeNotifier.onRefresh(context, _visibility);
           // homeNotifier.isHaveSomethingNew = true;
           _socketService.closeSocket();
         });
@@ -439,11 +439,19 @@ class PreUploadContentNotifier with ChangeNotifier {
     List<String> userTagCaption = [];
     List<String> hastagCaption = [];
     _tagRegex.allMatches(captionController.text).map((z) {
-      userTagCaption.add(z.group(0)!.substring(1));
+      final val = z.group(0)?.substring(1);
+      if(val != null){
+        userTagCaption.add(val);
+      }
+
     }).toList();
 
     _tagHastagRegex.allMatches(captionController.text).map((z) {
-      hastagCaption.add(z.group(0)!.substring(1));
+      final val = z.group(0)?.substring(1);
+      if(val != null){
+        hastagCaption.add(val);
+      }
+
     }).toList();
 
     // if (featureType == FeatureType.vid && progressCompress != 100) {
@@ -460,13 +468,13 @@ class PreUploadContentNotifier with ChangeNotifier {
       final notifier = PostsBloc();
       notifier.postContentsBlocV2(
         context,
-        type: featureType!,
+        type: featureType ?? FeatureType.other,
         visibility: privacyValue,
         tags: hastagCaption,
         tagDescription: userTagCaption,
         allowComment: allowComment,
         certified: certified,
-        fileContents: fileContent!,
+        fileContents: fileContent ?? [],
         description: captionController.text,
         cats: _interestData,
         tagPeople: userTagData,
@@ -524,7 +532,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     await notifier.updateContentBlocV2(
       context,
       postId: postID,
-      type: featureType!,
+      type: featureType ?? FeatureType.other,
       visibility: privacyValue,
       tags: hastagCaption.join(','),
       allowComment: allowComment,
@@ -630,7 +638,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (!_validatePrice()) {
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.priceIsNotEmpty!,
+          language.priceIsNotEmpty ?? '',
           color: Theme.of(context).colorScheme.error,
           maxLines: 2,
         );
@@ -644,8 +652,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         if (onEdit) {
           await _updatePostContentV2(
             context,
-            postID: data!.postID!,
-            content: content!,
+            postID: data?.postID ?? '',
+            content: content ?? '',
           );
         } else {
           await _createPostContentV2();
@@ -659,7 +667,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     } else {
       ShowBottomSheet().onShowColouredSheet(
         context,
-        _validateDescription() ? language.categoryCanOnlyWithMin1Characters! : language.descriptionCanOnlyWithMin5Characters!,
+        _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
       );
@@ -668,7 +676,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future<Uint8List?> makeThumbnail() async {
     Uint8List? _thumbnails = await VideoThumbnail.thumbnailData(
-      video: fileContent![0]!,
+      video: fileContent?[0] ?? '',
       imageFormat: ImageFormat.JPEG,
       maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
       quality: 25,
@@ -802,7 +810,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future getVideoSize() async {
-    final size = await File(fileContent![0]!).length();
+    final size = await File(fileContent?[0] ?? '').length();
     _videoSize = size;
     notifyListeners();
   }
@@ -813,7 +821,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (Platform.isAndroid) {
       // Handle this part the way you want to save it in any directory you wish.
       final List<Directory>? dir = await path.getExternalStorageDirectories(type: path.StorageDirectory.downloads);
-      directory = dir!.first.path;
+      directory = dir?.first.path ?? '';
       return File('$directory/$videoName').path;
     } else {
       final Directory dir = await path.getLibraryDirectory();
@@ -834,8 +842,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         });
 
         final dynamic response = await _lightCompressor.compressVideo(
-          path: File(fileContent![0]!).path,
-          destinationPath: _desFile!,
+          path: File(fileContent?[0] ?? '').path,
+          destinationPath: _desFile ?? '',
           videoQuality: VideoQuality.medium,
           isMinBitrateCheckEnabled: false,
           // frameRate: 24, /* or ignore it */
@@ -879,7 +887,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           _interestList.add(InterestData.fromJson(v));
         });
         _interestList.sort((a, b) {
-          return a.interestName!.compareTo(b.interestName!);
+          return a.interestName?.compareTo(b.interestName ?? '') ?? 0;
         });
 
         notifyListeners();
@@ -896,7 +904,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool pickedInterest(String? tile) => _interestData.contains(tile) ? true : false;
   void insertInterest(BuildContext context, int index) {
     if (interest.isNotEmpty) {
-      String tile = interest[index].interestName!;
+      String tile = interest[index].interestName ?? '';
       if (tile == 'See More') {
         showInterest(context);
       } else {
@@ -913,7 +921,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   void insertInterestList(BuildContext context, int index) {
     if (interestList.isNotEmpty) {
-      String tile = interestList[index].interestName!;
+      String tile = interestList[index].interestName ?? '';
       if (tile == 'See More') {
         showLocation(context);
       } else {
@@ -931,7 +939,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   Future inserTagPeople(int index) async {
     if (_searchPeolpleData.isNotEmpty) {
-      String tile = searchPeolpleData[index].username!;
+      String tile = searchPeolpleData[index].username ?? '';
       if (_userTagData.contains(tile)) {
         showSnackBar(
           icon: "info-icon.svg",
@@ -986,6 +994,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (_startSearch == 0) {
         _isLoading = true;
       }
+      print('getSearchPeopleBloc 3');
       await notifier.getSearchPeopleBloc(context, input, _startSearch * 10, 10);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
@@ -1047,7 +1056,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _isShowAutoComplete = false;
 
     final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
-    int length = _searchPeolpleData[index].username!.length;
+    int length = _searchPeolpleData[index].username?.length ?? 0;
     _captionController.value = TextEditingValue(
       text: "${newText}",
       selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),
@@ -1108,7 +1117,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (fetch.utilsState == UtilsState.getSettingSuccess) {
       final SettingModel _result = SettingModel.fromJson(fetch.data);
       print(_result.settingMP);
-      _canSale = _result.settingMP!;
+      _canSale = _result.settingMP ?? false;
       _isLoading = false;
       notifyListeners();
     }

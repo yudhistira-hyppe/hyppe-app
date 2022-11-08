@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ux/routing.dart';
@@ -62,11 +63,10 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 title: CustomTextWidget(
-                  textToDisplay: notifier.language.accountPreferences!,
+                  textToDisplay: notifier.language.accountPreferences ?? '',
                   textStyle: Theme.of(context)
                       .textTheme
-                      .headline6!
-                      .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                      .headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 centerTitle: false,
                 bottom: PreferredSize(
@@ -80,7 +80,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
                       indicatorSize: TabBarIndicatorSize.tab,
                       indicator: UnderlineTabIndicator(
                           borderSide: BorderSide(
-                              color: Theme.of(context).tabBarTheme.labelColor!,
+                              color: Theme.of(context).tabBarTheme.labelColor ?? Colors.black,
                               width: 2.0)),
                       labelColor: Theme.of(context).tabBarTheme.labelColor,
                       labelPadding: const EdgeInsets.only(bottom: 10.0),
@@ -96,8 +96,8 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
                           fontWeight: FontWeight.w400,
                           fontSize: 16 * SizeConfig.scaleDiagonal),
                       tabs: [
-                        Text(notifier.language.profile!),
-                        Text(notifier.language.personalInformation!),
+                        Text(notifier.language.profile ?? ''),
+                        Text(notifier.language.personalInformation ?? ''),
                       ],
                     ),
                   ),

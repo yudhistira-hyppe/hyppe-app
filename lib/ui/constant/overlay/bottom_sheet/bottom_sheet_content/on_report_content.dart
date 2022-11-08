@@ -32,12 +32,12 @@ class OnReportContentBottomSheet extends StatelessWidget {
             //     ShowBottomSheet.onReportFormContent(context);
             //   },
             //   title: CustomTextWidget(
-            //     textToDisplay: notifier.language.iDontWantToSeeThis!,
+            //     textToDisplay: notifier.language.iDontWantToSeeThis,
             //     textAlign: TextAlign.start,
-            //     textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+            //     textStyle: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
             //   ),
             //   subtitle: CustomTextWidget(
-            //     textToDisplay: notifier.language.letUsKnowWhyYouDontWantToSeeThisPost!,
+            //     textToDisplay: notifier.language.letUsKnowWhyYouDontWantToSeeThisPost,
             //     textAlign: TextAlign.start,
             //     textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
             //   ),
@@ -49,16 +49,16 @@ class OnReportContentBottomSheet extends StatelessWidget {
               onTap: () {
                 ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate);
                 context.read<ReportNotifier>().contentData = postData;
-                context.read<ReportNotifier>().typeContent = type!;
+                context.read<ReportNotifier>().typeContent = type ?? '';
               },
               dense: true,
               title: CustomTextWidget(
-                textToDisplay: notifier.language.reportThisPost!,
+                textToDisplay: notifier.language.reportThisPost ?? '',
                 textAlign: TextAlign.start,
-                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+                textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
               ),
               subtitle: CustomTextWidget(
-                textToDisplay: notifier.language.thisPostIsOffensiveOrTheAccountIsHacked!,
+                textToDisplay: notifier.language.thisPostIsOffensiveOrTheAccountIsHacked ?? '',
                 textAlign: TextAlign.start,
                 textStyle: const TextStyle(fontSize: 12, color: Color(0xffaaaaaa)),
               ),

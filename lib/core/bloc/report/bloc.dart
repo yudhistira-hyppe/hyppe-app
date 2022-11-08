@@ -93,6 +93,7 @@ class ReportBloc {
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
           print('error1');
+
           setReportFetch(ReportFetch(ReportState.getReportOptionsError));
         } else {
           Report _result = Report.fromJson(onResult.data);

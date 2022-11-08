@@ -15,7 +15,7 @@
 //   Widget build(BuildContext context) {
 //     SizeConfig().init(context);
 //     final notifier = context.watch<CameraNotifier>();
-//     final deviceRatio = SizeConfig.screenWidth! / SizeConfig.screenHeight!;
+//     final deviceRatio = SizeConfig.screenWidth / SizeConfig.screenHeight;
 
 //     return NativeDeviceOrientationReader(
 //       useSensor: true,
@@ -37,7 +37,7 @@
 //             aspectRatio: deviceRatio,
 //             child: Transform(
 //               alignment: Alignment.center,
-//               child: CameraPreview(notifier.cameraController!), //for camera
+//               child: CameraPreview(notifier.cameraController), //for camera
 
 //               transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
 //             ),
@@ -50,12 +50,12 @@
 
 /**
  * // return Transform.scale(
-    //   scale: (notifier.cameraController!.value.previewSize!.height / notifier.cameraController!.value.previewSize!.width) /
-    //       (SizeConfig.screenWidth! / SizeConfig.screenHeight!),
+    //   scale: (notifier.cameraController.value.previewSize.height / notifier.cameraController.value.previewSize.width) /
+    //       (SizeConfig.screenWidth / SizeConfig.screenHeight),
     //   child: Center(
     //     child: AspectRatio(
-    //       aspectRatio: (notifier.cameraController!.value.previewSize!.height / notifier.cameraController!.value.previewSize!.width),
-    //       child: CameraPreview(notifier.cameraController!),
+    //       aspectRatio: (notifier.cameraController.value.previewSize.height / notifier.cameraController.value.previewSize.width),
+    //       child: CameraPreview(notifier.cameraController),
     //     ),
     //   ),
     // );
@@ -66,9 +66,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:deepar_flutter/deepar_flutter.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -139,8 +139,8 @@ class _CameraViewState extends State<CameraView> {
   @override
   void dispose() {
     // final _notifier = context.read<CameraNotifier>();
-    // if (_notifier.deepArController!.isInitialized) {
-    //   _notifier.deepArController!.destroy();
+    // if (_notifier.deepArController.isInitialized) {
+    //   _notifier.deepArController.destroy();
     // }
 
     super.dispose();
@@ -148,9 +148,9 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     // final notifier = context.watch<CameraNotifier>();
-    final deviceRatio = SizeConfig.screenWidth! / SizeConfig.screenHeight!;
+    final deviceRatio = context.getWidth() / context.getHeight();
 
     return Consumer<CameraNotifier>(
       builder: (_, notifier, __) => Scaffold(
@@ -173,8 +173,8 @@ class _CameraViewState extends State<CameraView> {
                       child: Text("Loading..."),
                     ),
           notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox(),
-          // _topMediaOptions(notifier.deepArController!),
-          // _bottomMediaOptions(notifier.deepArController!),
+          // _topMediaOptions(notifier.deepArController),
+          // _bottomMediaOptions(notifier.deepArController),
         ],
       )),
     );

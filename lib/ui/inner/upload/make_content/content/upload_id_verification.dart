@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
 // import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
@@ -57,10 +58,10 @@ class UploadIDVerification extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CustomTextButton(
-                    onPressed: !notifier!.isRecordingVideo
+                    onPressed: !(notifier?.isRecordingVideo ?? true)
                         ? () async {
                             debugPrint("DONE_BACK");
-                            notifier!.isVideo = false;
+                            notifier?.isVideo = false;
                             Routing().moveBack();
                           }
                         : null,

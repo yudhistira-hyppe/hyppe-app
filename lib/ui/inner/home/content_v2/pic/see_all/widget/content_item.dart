@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -81,15 +82,9 @@ class ContentItem extends StatelessWidget {
                               featureType: FeatureType.pic,
                               isCelebrity: data?.privacy?.isCelebrity,
                               imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                              onTapOnProfileImage: () => System().navigateToProfile(context, data!.email!),
-                              createdAt: '${System().readTimestamp(DateTime.parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true)}',
+                              onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
+                              createdAt: '${System().readTimestamp(DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)}',
 
-                              // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
-                              //       context,
-                              //       currentValue: vidData,
-                              //       fUserId: vidData.userID!,
-                              //       statusFollowing: StatusFollowing.rejected,
-                              //     ),
                             ),
                             twelvePx,
                             Stack(
@@ -101,7 +96,7 @@ class ContentItem extends StatelessWidget {
                                     fn: () => notifier.navigateToHyppePicDetail(context, data),
                                   ),
                                 ),
-                                data.saleAmount! > 0
+                                (data?.saleAmount ?? 0) > 0
                                     ? const Align(
                                         alignment: Alignment.topRight,
                                         child: Padding(
@@ -115,26 +110,27 @@ class ContentItem extends StatelessWidget {
                                     : Container()
                               ],
                             ),
-                            data.tagPeople!.length != 0 || data.location != ''
+                            (data?.tagPeople?.length ?? 0) != 0 || data?.location != ''
                                 ? Padding(
                                     padding: const EdgeInsets.only(bottom: 10, top: 16),
                                     child: Row(
                                       children: [
-                                        data.tagPeople!.length != 0
+                                        (data?.tagPeople?.length ?? 0) != 0
                                             ? TagLabel(
                                                 icon: 'user',
-                                                label: '${data.tagPeople!.length} people',
+                                                label: '${data?.tagPeople?.length} people',
                                                 function: () {
-                                                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
-                                                  // vidNotifier.showUserTag(context, index, data!.postID);
+                                                  context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
+                                                  // vidNotifier.showUserTag(context, index, data.postID);
                                                 },
                                               )
+
                                             : const SizedBox(),
-                                        data.location == '' || data.location == null
+                                        data?.location == '' || data?.location == null
                                             ? const SizedBox()
                                             : TagLabel(
                                                 icon: 'maptag',
-                                                label: "${data.location}",
+                                                label: "${data?.location}",
                                                 function: () {},
                                               ),
                                       ],
@@ -151,7 +147,7 @@ class ContentItem extends StatelessWidget {
                                     child: CustomTextWidget(
                                       maxLines: 2,
                                       textAlign: TextAlign.left,
-                                      textToDisplay: "${data.description} ${data.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                      textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
                                       textStyle: Theme.of(context).textTheme.caption,
                                     ),
                                   ),
@@ -161,10 +157,10 @@ class ContentItem extends StatelessWidget {
                                       builder: (context, notifier, child) => InkWell(
                                         child: CustomIconWidget(
                                           defaultColor: false,
-                                          color: data.isLiked == true ? kHyppePrimary : Theme.of(context).iconTheme.color,
-                                          iconData: '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
+                                          color: data?.isLiked == true ? kHyppePrimary : Theme.of(context).iconTheme.color,
+                                          iconData: '${AssetPath.vectorPath}${data?.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
                                         ),
-                                        onTap: () => notifier.likePost(context, data),
+                                        onTap: () => notifier.likePost(context, data ?? ContentData()),
                                       ),
                                     ),
                                   ),

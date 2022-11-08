@@ -39,6 +39,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
     SizeConfig().init(context);
     scaffoldContext = context;
     final _textTheme = Theme.of(context).textTheme;
+
     return Consumer2<ReportNotifier, TranslateNotifierV2>(
       builder: (context, notifier, translate, child) => SafeArea(
         child: Scaffold(
@@ -56,8 +57,8 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CustomTextWidget(
-                            textToDisplay: translate.translate.reportThisContent!,
-                            textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
+                            textToDisplay: translate.translate.reportThisContent ?? '',
+                            textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           InkWell(
                               onTap: () {
@@ -72,7 +73,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                     child: SingleChildScrollView(
                       child: notifier.loadingOption
                           ? SizedBox(
-                              height: SizeConfig.screenHeight! / 1.2,
+                              height: SizeConfig.screenHeight ?? 0 / 1.2,
                               child: const CustomLoading(),
                             )
                           : Column(
@@ -83,28 +84,28 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   height: 20,
                                 ),
                                 CustomTextWidget(
-                                  textToDisplay: translate.translate.whyareyoureportingthiscontent!,
-                                  textStyle: Theme.of(context).primaryTextTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                                  textToDisplay: translate.translate.whyareyoureportingthiscontent ?? '',
+                                  textStyle: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: notifier.initData!.data.length,
+                                  itemCount: notifier.initData?.data.length ?? 0,
                                   itemBuilder: (context, index) {
                                     return RadioListTile<String>(
                                       contentPadding: const EdgeInsets.all(0),
-                                      groupValue: notifier.initData!.data[index].sId!,
+                                      groupValue: notifier.initData?.data[index].sId ?? '',
                                       value: notifier.currentReport,
                                       onChanged: (_) {
                                         setState(() {
-                                          notifier.currentReport = notifier.initData!.data[index].sId!;
-                                          notifier.currentReportDesc = notifier.initData!.data[index].description!;
+                                          notifier.currentReport = notifier.initData?.data[index].sId ?? '';
+                                          notifier.currentReportDesc = notifier.initData?.data[index].description ?? '';
                                         });
                                       },
                                       toggleable: true,
                                       title: CustomTextWidget(
                                         textAlign: TextAlign.left,
-                                        textToDisplay: notifier.initData!.data[index].description!,
+                                        textToDisplay: notifier.initData?.data[index].description ?? '',
                                         textStyle: Theme.of(context).primaryTextTheme.titleSmall,
                                         maxLines: 2,
                                       ),
@@ -130,8 +131,8 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                     child: notifier.isLoading
                                         ? const CustomLoading()
                                         : CustomTextWidget(
-                                            textToDisplay: translate.translate.report!,
-                                            textStyle: _textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                            textToDisplay: translate.translate.report ?? '',
+                                            textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
                                           )),
                               ],
                             ),

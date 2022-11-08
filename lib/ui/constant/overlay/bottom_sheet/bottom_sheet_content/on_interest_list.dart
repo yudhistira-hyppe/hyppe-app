@@ -87,7 +87,7 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                             onTap: () => notifier.insertInterestList(context, index),
                             title: CustomTextWidget(
                               textAlign: TextAlign.left,
-                              textToDisplay: notifier.interestList[index].interestName!,
+                              textToDisplay: notifier.interestList[index].interestName ?? '',
                               // textStyle: Theme.of(context).primaryTextTheme.titleMedium,
                             ),
                             trailing: notifier.pickedInterest(notifier.interestList[index].interestName)
@@ -107,7 +107,7 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                         height: 44.0 * SizeConfig.scaleDiagonal,
                         function: widget.onSave,
                         child: CustomTextWidget(
-                          textToDisplay: notifier.language.save!,
+                          textToDisplay: notifier.language.save ?? 'save',
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                         buttonStyle: ButtonStyle(

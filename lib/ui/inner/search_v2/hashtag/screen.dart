@@ -73,18 +73,6 @@ class _HashtagScreenState extends State<HashtagScreen> {
                   (notifier.listHashtag?[index].count ?? 0) > 500 ? "500+ ${notifier.language.posts}" : "${notifier.listHashtag?[index].count} ${notifier.language.posts}",
                   style: const TextStyle(fontSize: 12, color: kHyppeGrey),
                 ),
-                // leading: StoryColorValidator(
-                //   haveStory: false,
-                //   featureType: FeatureType.pic,
-                //   child: CustomProfileImage(
-                //     width: 40,
-                //     height: 40,
-                //     onTap: () {},
-                //     imageUrl: System().showUserPicture(notifier.searchPeolpleData![index].avatar?.mediaEndpoint),
-                //     following: true,
-                //     onFollow: () {},
-                //   ),
-                // ),
               );
             }) : const SizedBox()
           ],

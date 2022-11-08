@@ -15,7 +15,7 @@ class ModelReferral {
     if (json['list'] != null) {
       list = <ListReferral>[];
       json['list'].forEach((v) {
-        list!.add(new ListReferral.fromJson(v));
+        list?.add(new ListReferral.fromJson(v));
       });
     }
   }
@@ -26,10 +26,10 @@ class ModelReferral {
     data['response_code'] = this.responseCode;
     data['data'] = this.data;
     if (this.messages != null) {
-      data['messages'] = this.messages!.toJson();
+      data['messages'] = this.messages?.toJson();
     }
     if (this.list != null) {
-      data['list'] = this.list!.map((v) => v.toJson()).toList();
+      data['list'] = this.list?.map((v) => v.toJson()).toList();
     }
     return data;
   }

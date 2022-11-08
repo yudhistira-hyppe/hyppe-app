@@ -44,13 +44,13 @@ class OtherProfileDiaries extends StatelessWidget {
                                 width: double.infinity,
                                 height: double.infinity,
                                 featureType: FeatureType.diary,
-                                isSafe: true, //notifier.postData!.data.listDiary[index].isSafe!,
-                                thumbnail: notifier.item1!.diaries![index].isApsara!
-                                    ? notifier.item1!.diaries![index].mediaThumbEndPoint!
-                                    : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint)!,
+                                isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
+                                thumbnail: (notifier.item1?.diaries?[index].isApsara ?? false)
+                                    ? (notifier.item1?.diaries?[index].mediaThumbEndPoint ?? '')
+                                    : System().showUserPicture(notifier.item1?.diaries?[index].mediaThumbEndPoint) ?? '',
                               ),
                             ),
-                            notifier.item1!.diaries![index].saleAmount! > 0
+                            (notifier.item1?.diaries?[index].saleAmount ?? 0) > 0
                                 ? const Align(
                                     alignment: Alignment.topRight,
                                     child: Padding(

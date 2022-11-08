@@ -33,7 +33,7 @@ class BottomItemView extends StatelessWidget {
                   ),
                   fourPx,
                   CustomTextWidget(
-                    // textToDisplay: '${data!.lCount}',
+                    // textToDisplay: '${data.lCount}',
                     textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
                     textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
                   )
@@ -50,10 +50,10 @@ class BottomItemView extends StatelessWidget {
         //       child: CustomTextButton(
         //         style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(EdgeInsets.only(left: 0.0))),
         //         onPressed: () {
-        //           data!.isReacted == 0 ? notifier.showReactionList(context, data) : notifier.onLikeContent(context, data: data!);
+        //           data.isReacted == 0 ? notifier.showReactionList(context, data) : notifier.onLikeContent(context, data: data);
         //         },
         //         child: CustomIconWidget(
-        //           iconData: '${AssetPath.vectorPath}${data!.isReacted == 0 ? 'none-like.svg' : 'liked.svg'}',
+        //           iconData: '${AssetPath.vectorPath}${data.isReacted == 0 ? 'none-like.svg' : 'liked.svg'}',
         //           defaultColor: false,
         //         ),
         //       ),

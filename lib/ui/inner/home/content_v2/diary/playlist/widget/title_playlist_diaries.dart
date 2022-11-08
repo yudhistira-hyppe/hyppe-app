@@ -53,7 +53,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget.data!.isReport!
+            widget.data?.isReport ?? false
                 ? Container()
                 : Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(
                     builder: (context, value, value2, child) {
@@ -63,30 +63,30 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                         onFollow: () {},
                         following: true,
                         haveStory: false,
-                        onTapOnProfileImage: () => System().navigateToProfile(context, widget.data!.email!, storyController: widget.storyController),
+                        onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
                         username: "${widget.data?.username}",
                         spaceProfileAndId: fourteenPx,
                         featureType: FeatureType.diary,
                         imageUrl: '${System().showUserPicture(widget.data?.avatar?.mediaEndpoint)}',
                         isCelebrity: widget.data?.privacy?.isCelebrity,
                         createdAt: '${System().readTimestamp(
-                          DateTime.parse(widget.data!.createdAt!).millisecondsSinceEpoch,
+                          DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
                           context,
                           fullCaption: true,
                         )}',
-                        // haveStory: data!.isHaveStory ?? false,
+                        // haveStory: data.isHaveStory ?? false,
                         // onFollow: () async => await context
                         //     .read<FollowRequestUnfollowNotifier>()
-                        //     .followRequestUnfollowUser(context, fUserId: data!.userID!, statusFollowing: StatusFollowing.rejected, currentValue: data!),
-                        // username: "${data!.fullName}",
-                        // isCelebrity: data!.isCelebrity,
-                        // imageUrl: "${data!.profilePic}$VERYBIG",
+                        //     .followRequestUnfollowUser(context, fUserId: data.userID, statusFollowing: StatusFollowing.rejected, currentValue: data),
+                        // username: "${data.fullName}",
+                        // isCelebrity: data.isCelebrity,
+                        // imageUrl: "${data.profilePic}$VERYBIG",
                         // following: value.statusFollowing == StatusFollowing.following || value.statusFollowing == StatusFollowing.requested ? true : false,
                         // onTapOnProfileImage: () => context.read<DiariesPlaylistNotifier>().followUser(context),
                       );
                     },
                   ),
-            widget.data!.isReport!
+            widget.data?.isReport ?? false
                 ? SizedBox(
                     width: 40,
                     height: 40,
@@ -105,7 +105,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                   )
                 : Row(
                     children: [
-                      widget.data!.saleAmount! > 0
+                      (widget.data?.saleAmount ?? 0) > 0
                           ? const Padding(
                               padding: EdgeInsets.all(2.0),
                               child: CustomIconWidget(

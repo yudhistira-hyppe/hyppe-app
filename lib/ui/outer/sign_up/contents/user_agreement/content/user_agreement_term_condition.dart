@@ -10,7 +10,7 @@ class UserAgreementTermCondition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UserAgreementNotifier>(context);
-    if (notifier.eula != null && notifier.eula!.data[0].eulaContent != null) {
+    if (notifier.eula != null && notifier.eula?.data[0].eulaContent != null) {
       return DynamicWidgetBuilder.build(notifier.eula!.data[0].eulaContent!, context, DefaultClickListener())!;
     } else if (notifier.isLoading) {
       return const CustomLoading();
@@ -23,8 +23,8 @@ class UserAgreementTermCondition extends StatelessWidget {
               onPressed: () => notifier.initEula(context),
             ),
             CustomTextWidget(
-              textToDisplay: notifier.language.refresh!,
-              textStyle: Theme.of(context).textTheme.bodyText1!.apply(color: Colors.grey),
+              textToDisplay: notifier.language.refresh ?? '',
+              textStyle: Theme.of(context).textTheme.bodyText1?.apply(color: Colors.grey),
             ),
           ],
         ),

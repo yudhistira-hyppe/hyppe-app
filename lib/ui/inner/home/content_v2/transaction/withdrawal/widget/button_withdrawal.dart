@@ -28,8 +28,8 @@ class ButtonWithdrawalWidget extends StatelessWidget {
           child: notifier.isLoadingSummaryWithdraw
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: translate!.next!,
-                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                  textToDisplay: translate?.next ?? '',
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
         ),
       ),

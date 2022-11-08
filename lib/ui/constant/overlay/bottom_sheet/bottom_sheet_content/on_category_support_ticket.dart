@@ -27,7 +27,7 @@ class OnCategorySupportTicket extends StatelessWidget {
               const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
               sixPx,
               CustomTextWidget(
-                textToDisplay: notifier2.translate.categories!,
+                textToDisplay: notifier2.translate.categories ?? '',
                 textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                 textAlign: TextAlign.start,
               ),
@@ -41,15 +41,15 @@ class OnCategorySupportTicket extends StatelessWidget {
                     return RadioListTile<String>(
                       contentPadding: EdgeInsets.zero,
                       groupValue: notifier.nameCategory,
-                      value: notifier.categoryData[index].nameCategory!,
+                      value: notifier.categoryData[index].nameCategory ?? '',
                       onChanged: (val) {
-                        notifier.nameCategory = val!;
+                        notifier.nameCategory = val ?? '';
                         Routing().moveBack();
                       },
                       toggleable: true,
                       title: CustomTextWidget(
                         textAlign: TextAlign.left,
-                        textToDisplay: notifier.categoryData[index].nameCategory!,
+                        textToDisplay: notifier.categoryData[index].nameCategory ?? '',
                         textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                       ),
                       controlAffinity: ListTileControlAffinity.trailing,

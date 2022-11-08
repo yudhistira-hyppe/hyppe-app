@@ -55,13 +55,6 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
           controller: notifier.scrollController,
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.only(left: 4.5, right: 16.0),
-          // itemCount: notifier.peopleStoriesData != null
-          //     ? notifier.peopleStoriesData!.data.length == 0
-          //         ? 1
-          //         : notifier.peopleStoriesData!.data.length + 1
-          //     : context.read<ErrorService>().isInitialError(error, notifier.peopleStoriesData)
-          //         ? 1
-          //         : 10,
           itemCount: notifier.peopleItemCount(error),
           itemBuilder: (context, index) {
             int itemIndex = index - 1;

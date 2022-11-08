@@ -28,7 +28,7 @@ class OnShowSuccessPostContentOwnershipBottomSheet extends StatelessWidget {
                 iconData: "${AssetPath.vectorPath}handler.svg"),
             Image.asset("${AssetPath.pngPath}user-verified.png"),
             CustomTextWidget(
-              textToDisplay: notifier.language.congrats!,
+              textToDisplay: notifier.language.congrats ?? '',
               textStyle: Theme.of(context).textTheme.subtitle1,
             ),
             CustomRichTextWidget(
@@ -36,18 +36,17 @@ class OnShowSuccessPostContentOwnershipBottomSheet extends StatelessWidget {
               textOverflow: TextOverflow.clip,
               textSpan: TextSpan(
                   text: notifier.language
-                      .contentOwnershipSuccessInfo!,
+                      .contentOwnershipSuccessInfo ?? '',
                   style: Theme.of(context)
                       .textTheme
-                      .caption!.copyWith(height: 1.6)),
+                      .caption?.copyWith(height: 1.6)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.language.close!,
+                textToDisplay: notifier.language.close ?? 'close',
                 textStyle: Theme.of(context)
                     .textTheme
-                    .button!
-                    .copyWith(color: kHyppeLightButtonText),
+                    .button?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,

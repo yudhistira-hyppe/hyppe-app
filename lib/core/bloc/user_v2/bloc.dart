@@ -41,7 +41,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.RecoverError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.RecoverSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -75,7 +75,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.RecoverError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.RecoverSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -128,7 +128,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -175,7 +175,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -223,7 +223,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -250,7 +250,7 @@ class UserBloc {
   Future signUpBlocV2(BuildContext context, {required SignUpDataArgument data}) async {
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(context, (onResult) {
-      if (onResult.statusCode! > HTTP_CODE) {
+      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
         setUserFetch(UserFetch(UserState.signUpError, data: GenericResponse.fromJson(onResult.data).responseData));
       } else {
         setUserFetch(UserFetch(UserState.signUpSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -267,7 +267,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.completeProfileError));
         } else {
           setUserFetch(UserFetch(UserState.completeProfileSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -294,7 +294,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.updateInterestError));
         } else {
           setUserFetch(UserFetch(UserState.updateInterestSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -388,7 +388,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.uploadProfilePictureError));
         } else {
           setUserFetch(UserFetch(UserState.uploadProfilePictureSuccess, data: onResult));
@@ -419,7 +419,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.changePasswordError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.changePasswordSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -458,7 +458,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != 202) {
+        if ((onResult.statusCode ?? 300) != 202) {
           setUserFetch(UserFetch(UserState.getUserProfilesError));
         } else {
           UserProfileModel _result = UserProfileModel.fromJson(onResult.data["data"][0]);
@@ -491,7 +491,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != 202) {
+        if ((onResult.statusCode ?? 300) != 202) {
           setUserFetch(UserFetch(UserState.getUserProfilesError));
         } else {
           UserProfileModel _result = UserProfileModel.fromJson(onResult.data["data"][0]);
@@ -524,7 +524,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.logoutError));
         } else {
           setUserFetch(UserFetch(UserState.logoutSuccess, data: onResult));
@@ -557,7 +557,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.verifyAccountError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.verifyAccountSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -600,7 +600,7 @@ class UserBloc {
             setUserFetch(UserFetch(UserState.resendOTPSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
           }
         } else {
-          if (onResult.statusCode! > HTTP_CODE) {
+          if ((onResult.statusCode ?? 300) > HTTP_CODE) {
             setUserFetch(UserFetch(UserState.resendOTPError, data: GenericResponse.fromJson(onResult.data).responseData));
           } else {
             setUserFetch(UserFetch(UserState.resendOTPSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -631,7 +631,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setUserFetch(UserFetch(UserState.LoginGoogleError, data: onResult.data));
         } else {
           setUserFetch(UserFetch(UserState.LoginGoogleSuccess, data: onResult));
@@ -669,7 +669,7 @@ class UserBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUserFetch(UserFetch(UserState.deleteAccountError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.deleteAccountSuccess, data: GenericResponse.fromJson(onResult.data).responseData));

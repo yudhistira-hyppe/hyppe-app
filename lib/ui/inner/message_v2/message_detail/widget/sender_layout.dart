@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 
 import 'package:hyppe/core/services/system.dart';
 
@@ -49,7 +50,7 @@ class SenderLayout extends StatelessWidget {
             ),
             CustomTextWidget(
               textAlign: TextAlign.end,
-              textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData!.createdAt!, 1),
+              textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
               textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
             ),
           ],

@@ -46,7 +46,7 @@ class _QRBlockState extends State<QRBlock> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: CustomTextWidget(
-                              textToDisplay: notifier.language.shareYourQR!,
+                              textToDisplay: notifier.language.shareYourQR ?? '',
                               textStyle: const TextStyle(
                                   fontSize: 12,
                                   color: kHyppeTextLightPrimary,

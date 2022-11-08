@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 // import 'package:hyppe/core/models/collection/notifications/notifications_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -22,7 +24,7 @@ class Component extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return InkWell(
-      onTap: () => context.read<NotificationNotifier>().markAsRead(context, data),
+      onTap: () => context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel()),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         child: Row(
@@ -51,11 +53,11 @@ class Component extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         textToDisplay: data?.senderOrReceiverInfo?.fullName ?? '',
-                        textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
                       SizedBox(
-                        width: data!.body != null
+                        width: data?.body != null
                             ? data!.body!.length < 30
                                 ? null
                                 : SizeConfig.screenWidth! / 1.5
@@ -71,8 +73,8 @@ class Component extends StatelessWidget {
                       sixPx,
                       CustomTextWidget(
                         textToDisplay:
-                            data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(data!.createdAt!).millisecondsSinceEpoch, context, fullCaption: true) : '',
-                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                            data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true) : '',
+                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
                       ),
                     ],
                   ),

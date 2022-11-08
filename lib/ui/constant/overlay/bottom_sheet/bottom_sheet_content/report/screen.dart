@@ -1,3 +1,4 @@
+ 
 // import 'package:hyppe/core/constants/asset_path.dart';
 // import 'package:hyppe/core/constants/size_config.dart';
 // import 'package:hyppe/core/models/collection/report/report.dart';
@@ -12,6 +13,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:provider/provider.dart';
+  
 
 // class HyppeReport extends StatefulWidget {
 //   @override
@@ -27,6 +29,7 @@
 //     if (notifier.fromLandscapeMode) SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 //   }
 
+ 
 //   @override
 //   Widget build(BuildContext context) {
 //     SizeConfig().init(context);
@@ -121,3 +124,4 @@
 //             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat));
 //   }
 // }
+ 

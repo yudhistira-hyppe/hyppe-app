@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -46,7 +47,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 ),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: notifier.currentPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color! : kHyppePrimary, width: 1)),
+                        color: notifier.currentPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -78,7 +79,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 ),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: notifier.newPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color! : kHyppePrimary, width: 1)),
+                        color: notifier.newPasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -110,7 +111,7 @@ class _TextInputChangePasswordState extends State<TextInputChangePassword> {
                 ),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
-                        color: notifier.reTypePasswordController.text.isEmpty ? Theme.of(context).iconTheme.color! : kHyppePrimary, width: 1)),
+                        color: notifier.reTypePasswordController.text.isEmpty ? Theme.of(context).iconTheme.color ?? Colors.white : kHyppePrimary, width: 1)),
                 focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: kHyppePrimary, width: 1)),
                 contentPadding: const EdgeInsets.only(bottom: 2),
                 floatingLabelBehavior: FloatingLabelBehavior.always,

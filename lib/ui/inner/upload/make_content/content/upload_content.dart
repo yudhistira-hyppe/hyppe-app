@@ -37,7 +37,7 @@ class UploadContent extends StatelessWidget {
         SafeArea(
           top: Platform.isIOS,
           child: Visibility(
-            visible: !notifier!.isRecordingVideo,
+            visible: !(notifier?.isRecordingVideo ?? true),
             child: Align(
               alignment: Alignment.topRight,
               child: Column(
@@ -45,7 +45,7 @@ class UploadContent extends StatelessWidget {
                   const CameraFlashButton(),
                   CustomTextWidget(
                     textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],
               ),
@@ -56,11 +56,11 @@ class UploadContent extends StatelessWidget {
         SafeArea(
           top: Platform.isIOS,
           child: Visibility(
-            visible: notifier!.conditionalOnClose(),
+            visible: notifier?.conditionalOnClose() ?? false,
             child: Align(
               alignment: Alignment.topLeft,
               child: CustomTextButton(
-                onPressed: notifier!.conditionalOnClose() ? () async => await notifier!.onClose(context) : null,
+                onPressed: notifier?.conditionalOnClose() ?? false ? () async => await notifier?.onClose(context) : null,
                 child: const UnconstrainedBox(
                   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                 ),
@@ -70,7 +70,7 @@ class UploadContent extends StatelessWidget {
         ),
         // Timer
         Visibility(
-          visible: !notifier!.isRecordingVideo,
+          visible: !(notifier?.isRecordingVideo ?? true),
           child: Align(
             alignment: const Alignment(0.0, 0.63),
             child: BuildTimer(),
@@ -82,23 +82,23 @@ class UploadContent extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (!notifier!.isRecordingVideo) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
+              if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
               BuildEffect(mounted: mounted),
               Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
-              if (!notifier!.isRecordingVideo) const Expanded(flex: 4, child: CameraSwitchButton())
+              if (!(notifier?.isRecordingVideo ?? true)) const Expanded(flex: 4, child: CameraSwitchButton())
             ],
           ),
         ),
         // Ok button
         Visibility(
-          visible: notifier!.conditionalShowingOkButton(),
+          visible: notifier?.conditionalShowingOkButton() ?? false,
           child: Align(
             alignment: const Alignment(0.77, 0.705),
             child: BuildOkButton(mounted: mounted!),
           ),
         ),
         // Widget modal, this is widget appear, if loading state is true
-        notifier!.isLoading
+        (notifier?.isLoading ?? false)
             ? Container(color: Colors.black54, width: SizeConfig.screenWidth, height: SizeConfig.screenHeight, child: const UnconstrainedBox(child: CustomLoading()))
             : const SizedBox.shrink()
       ],

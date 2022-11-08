@@ -19,8 +19,8 @@ class HyppeDeleteAccoount extends StatelessWidget {
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
           title: CustomTextWidget(
-            textToDisplay: notifier.language.deleteAccount!,
-            textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+            textToDisplay: notifier.language.deleteAccount ?? 'delete account',
+            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           centerTitle: false,
           titleSpacing: 0,
@@ -46,13 +46,13 @@ class HyppeDeleteAccoount extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomTextWidget(
-                          textToDisplay: notifier.language.whyAreYouLeavingHyppe!,
-                          textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
+                          textToDisplay: notifier.language.whyAreYouLeavingHyppe ?? '',
+                          textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         eightPx,
                         CustomTextWidget(
-                          textToDisplay: notifier.language.wereSorryToSeeYouGo!,
-                          textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(),
+                          textToDisplay: notifier.language.wereSorryToSeeYouGo ?? '',
+                          textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
                           maxLines: 100,
                           textAlign: TextAlign.start,
                         ),
@@ -62,19 +62,19 @@ class HyppeDeleteAccoount extends StatelessWidget {
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: notifier.optionDelete!.length,
+                    itemCount: notifier.optionDelete?.length ?? 0,
                     itemBuilder: (context, index) {
                       return RadioListTile(
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                        groupValue: notifier.optionDelete![index]['code'],
+                        groupValue: notifier.optionDelete?[index]['code'],
                         value: notifier.currentOptionDelete,
                         onChanged: (_) {
-                          notifier.currentOptionDelete = notifier.optionDelete![index]['code'];
+                          notifier.currentOptionDelete = notifier.optionDelete?[index]['code'];
                         },
                         toggleable: true,
                         title: CustomTextWidget(
                           textAlign: TextAlign.left,
-                          textToDisplay: notifier.optionDelete![index]['title'],
+                          textToDisplay: notifier.optionDelete?[index]['title'],
                           textStyle: Theme.of(context).primaryTextTheme.titleSmall,
                           maxLines: 3,
                         ),
@@ -93,8 +93,8 @@ class HyppeDeleteAccoount extends StatelessWidget {
                     width: SizeConfig.screenWidth,
                     height: 49 * SizeConfig.scaleDiagonal,
                     child: CustomTextWidget(
-                      textToDisplay: notifier.language.next!,
-                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                      textToDisplay: notifier.language.next ?? '',
+                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                     function: () => notifier.navigateToConfirmDeleteProfile(),
                     buttonStyle: ButtonStyle(

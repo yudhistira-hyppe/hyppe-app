@@ -121,8 +121,8 @@ final ChipThemeData _lightChipThemeData = ChipThemeData(
   selectedColor: const Color.fromRGBO(255, 255, 255, 0.12),
   secondarySelectedColor: const Color.fromRGBO(255, 255, 255, 0.12),
   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-  labelStyle: _lightTextTheme().bodyText2!,
-  secondaryLabelStyle: _lightTextTheme().bodyText2!,
+  labelStyle: _lightTextTheme().bodyText2,
+  secondaryLabelStyle: _lightTextTheme().bodyText2,
   brightness: Brightness.dark,
 );
 
@@ -134,8 +134,8 @@ final ChipThemeData _darkChipThemeData = ChipThemeData(
   selectedColor: _darkColorScheme.background,
   secondarySelectedColor: Color.fromARGB(30, 38, 46, 206),
   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-  labelStyle: _darkTextTheme().bodyText2!,
-  secondaryLabelStyle: _darkTextTheme().bodyText2!,
+  labelStyle: _darkTextTheme().bodyText2,
+  secondaryLabelStyle: _darkTextTheme().bodyText2,
   brightness: Brightness.dark,
 );
 
@@ -272,7 +272,7 @@ final ElevatedButtonThemeData _lightElevatedButtonThemeData = ElevatedButtonThem
         elevation: MaterialStateProperty.all<double>(0.0),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-        textStyle: MaterialStateProperty.all<TextStyle>(_lightTextTheme().button!.copyWith(color: kHyppePrimary)),
+        textStyle: MaterialStateProperty.all<TextStyle>(_lightTextTheme().button?.copyWith(color: kHyppePrimary) ?? const TextStyle()),
         backgroundColor: MaterialStateProperty.all<Color>(_lightColorScheme.surface),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))));
 
@@ -281,7 +281,7 @@ final ElevatedButtonThemeData _darkElevatedButtonThemeData = ElevatedButtonTheme
         elevation: MaterialStateProperty.all<double>(0.0),
         visualDensity: VisualDensity.adaptivePlatformDensity,
         overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-        textStyle: MaterialStateProperty.all<TextStyle>(_lightTextTheme().button!.copyWith(color: kHyppePrimary)),
+        textStyle: MaterialStateProperty.all<TextStyle>(_lightTextTheme().button?.copyWith(color: kHyppePrimary) ?? const TextStyle()),
         backgroundColor: MaterialStateProperty.all<Color>(_darkColorScheme.surface),
         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))));
 
@@ -315,19 +315,19 @@ TextTheme _lightTextTheme() {
   final base = ThemeData.light().textTheme;
   return base
       .copyWith(
-          headline1: base.headline1!.copyWith(fontSize: 96, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
-          headline2: base.headline2!.copyWith(fontSize: 60, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
-          headline3: base.headline3!.copyWith(fontSize: 48, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          headline4: base.headline4!.copyWith(fontSize: 34, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
-          headline5: base.headline5!.copyWith(fontSize: 24, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          headline6: base.headline6!.copyWith(fontSize: 20, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
-          subtitle1: base.subtitle1!.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
-          subtitle2: base.subtitle2!.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
-          bodyText1: base.bodyText1!.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          bodyText2: base.bodyText2!.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          button: base.button!.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
-          caption: base.caption!.copyWith(fontSize: 12, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          overline: base.overline!.copyWith(fontSize: 10, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400, letterSpacing: -0.3))
+          headline1: base.headline1?.copyWith(fontSize: 96, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
+          headline2: base.headline2?.copyWith(fontSize: 60, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
+          headline3: base.headline3?.copyWith(fontSize: 48, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          headline4: base.headline4?.copyWith(fontSize: 34, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
+          headline5: base.headline5?.copyWith(fontSize: 24, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          headline6: base.headline6?.copyWith(fontSize: 20, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
+          subtitle1: base.subtitle1?.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
+          subtitle2: base.subtitle2?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
+          bodyText1: base.bodyText1?.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          bodyText2: base.bodyText2?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          button: base.button?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
+          caption: base.caption?.copyWith(fontSize: 12, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          overline: base.overline?.copyWith(fontSize: 10, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400, letterSpacing: -0.3))
       .apply(fontFamily: 'Lato', displayColor: kHyppeLightSecondary, bodyColor: kHyppeLightSecondary);
 }
 
@@ -335,18 +335,18 @@ TextTheme _darkTextTheme() {
   final base = ThemeData.dark().textTheme;
   return base
       .copyWith(
-          headline1: base.headline1!.copyWith(fontSize: 96, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
-          headline2: base.headline2!.copyWith(fontSize: 60, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
-          headline3: base.headline3!.copyWith(fontSize: 48, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          headline4: base.headline4!.copyWith(fontSize: 34, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
-          headline5: base.headline5!.copyWith(fontSize: 24, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          headline6: base.headline6!.copyWith(fontSize: 20, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
-          subtitle1: base.subtitle1!.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
-          subtitle2: base.subtitle2!.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
-          bodyText1: base.bodyText1!.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          bodyText2: base.bodyText2!.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          button: base.button!.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
-          caption: base.caption!.copyWith(fontSize: 12, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
-          overline: base.overline!.copyWith(fontSize: 10, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400, letterSpacing: -0.3))
+          headline1: base.headline1?.copyWith(fontSize: 96, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
+          headline2: base.headline2?.copyWith(fontSize: 60, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
+          headline3: base.headline3?.copyWith(fontSize: 48, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          headline4: base.headline4?.copyWith(fontSize: 34, fontStyle: FontStyle.normal, fontWeight: FontWeight.w300),
+          headline5: base.headline5?.copyWith(fontSize: 24, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          headline6: base.headline6?.copyWith(fontSize: 20, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
+          subtitle1: base.subtitle1?.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
+          subtitle2: base.subtitle2?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w500),
+          bodyText1: base.bodyText1?.copyWith(fontSize: 16, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          bodyText2: base.bodyText2?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          button: base.button?.copyWith(fontSize: 14, fontStyle: FontStyle.normal, fontWeight: FontWeight.bold),
+          caption: base.caption?.copyWith(fontSize: 12, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400),
+          overline: base.overline?.copyWith(fontSize: 10, fontStyle: FontStyle.normal, fontWeight: FontWeight.w400, letterSpacing: -0.3))
       .apply(fontFamily: 'Lato', displayColor: kHyppeTextPrimary, bodyColor: kHyppeTextPrimary);
 }

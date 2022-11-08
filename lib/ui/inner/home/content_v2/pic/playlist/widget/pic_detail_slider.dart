@@ -50,11 +50,11 @@ class PicDetailSlider extends StatelessWidget {
               onPageChanged: print,
               itemBuilder: (context, index) => InkWell(
                 child: Center(
-                  child: picData!.isReport!
+                  child: picData?.isReport ?? false
                       ? PichTumbnailReport(pictData: picData)
                       : CustomThumbImage(
                           boxFit: BoxFit.cover,
-                          imageUrl: picData!.isApsara! ? picData?.mediaThumbUri : picData?.fullThumbPath,
+                          imageUrl: picData?.isApsara ?? false ? picData?.mediaThumbUri : picData?.fullThumbPath,
                         ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
@@ -80,56 +80,59 @@ class PicDetailSlider extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        picData!.saleAmount! > 0
-                            ? const Padding(
-                                padding: EdgeInsets.all(2.0),
-                                child: CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}sale.svg",
-                                  defaultColor: false,
-                                ),
-                              )
-                            : const SizedBox(),
-                        !picData!.isReport! && picData?.email != SharedPreference().readStorage(SpKeys.email)
-                            ? SizedBox(
-                                width: 50,
-                                child: CustomTextButton(
-                                  onPressed: () => ShowBottomSheet.onReportContent(context, picData, hyppePic),
-                                  child: const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: '${AssetPath.vectorPath}more.svg',
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                        !picData!.isReport! && picData?.email == SharedPreference().readStorage(SpKeys.email)
-                            ? SizedBox(
-                                width: 50,
-                                child: CustomTextButton(
-                                  onPressed: () => ShowBottomSheet.onShowOptionContent(
-                                    context,
-                                    onDetail: onDetail,
-                                    contentData: picData!,
-                                    captionTitle: hyppePic,
-                                    onUpdate: () => notifier.onUpdate(),
-                                  ),
-                                  child: const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: '${AssetPath.vectorPath}more.svg',
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
+                    picData?.isReport ?? false
+                        ? Container()
+                        : Row(
+                            children: [
+                              (picData?.saleAmount ?? 0) > 0
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(2.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        defaultColor: false,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              picData?.email != SharedPreference().readStorage(SpKeys.email)
+                                  ? SizedBox(
+                                      width: 50,
+                                      child: CustomTextButton(
+                                        onPressed: () => ShowBottomSheet.onReportContent(context, picData, hyppePic),
+                                        child: const CustomIconWidget(
+                                          defaultColor: false,
+                                          iconData: '${AssetPath.vectorPath}more.svg',
+                                          color: kHyppeLightButtonText,
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              picData?.email == SharedPreference().readStorage(SpKeys.email)
+                                  ? SizedBox(
+                                      width: 50,
+                                      child: CustomTextButton(
+                                        onPressed: () => ShowBottomSheet.onShowOptionContent(
+                                          context,
+                                          onDetail: onDetail,
+                                          contentData: picData ?? ContentData(),
+                                          captionTitle: hyppePic,
+                                          onUpdate: () => notifier.onUpdate(),
+                                        ),
+                                        child: const CustomIconWidget(
+                                          defaultColor: false,
+                                          iconData: '${AssetPath.vectorPath}more.svg',
+                                          color: kHyppeLightButtonText,
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
                   ],
                 ),
               ),
             ),
-            picData!.isReport!
+
+            picData?.isReport ?? false
                 ? Container()
                 : Align(
                     alignment: Alignment.bottomLeft,
@@ -155,7 +158,7 @@ class PicDetailSlider extends StatelessWidget {
                                   ),
                                   fourPx,
                                   CustomTextWidget(
-                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                     // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
                                     textToDisplay: "${notifier.data?.insight?.likes}",
                                   ),

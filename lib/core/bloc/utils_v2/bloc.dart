@@ -26,7 +26,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -51,7 +51,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getGenderError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.getGenderSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -74,7 +74,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getInterestsError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.getInterestsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -97,7 +97,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -121,7 +121,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.loadCountryError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.loadCountrySuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -143,7 +143,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.loadAreaError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.loadAreaSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -165,7 +165,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.loadCityError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.loadCitySuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -187,7 +187,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.languagesError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.languagesSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -209,7 +209,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.updateLanguagesError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.updateLanguagesSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -236,7 +236,7 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getReactionError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -260,7 +260,8 @@ class UtilsBlocV2 {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        print('status getSearchPeopleBloc ${onResult.statusCode}');
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.searchPeopleError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.searchPeopleSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -292,7 +293,7 @@ class UtilsBlocV2 {
       context,
       (onResult) {
         print(onResult);
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.deleteUserTagError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.deleteUserTagSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -322,7 +323,7 @@ class UtilsBlocV2 {
       context,
       (onResult) {
         print(onResult);
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setUtilsFetch(UtilsFetch(UtilsState.getSettingError));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.getSettingSuccess, data: GenericResponse.fromJson(onResult.data).responseData));

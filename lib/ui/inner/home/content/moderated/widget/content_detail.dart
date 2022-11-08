@@ -52,7 +52,7 @@ class ContentDetail extends StatelessWidget {
             child: CustomTextWidget(
                 maxLines: null,
                 textAlign: TextAlign.left,
-                textToDisplay: data.description!,
+                textToDisplay: data.description ?? '',
                 textOverflow: TextOverflow.visible,
                 textStyle: Theme.of(context).textTheme.bodyText2),
           )

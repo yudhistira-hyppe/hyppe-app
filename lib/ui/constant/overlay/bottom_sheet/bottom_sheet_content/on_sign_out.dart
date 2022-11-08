@@ -35,13 +35,13 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
             children: [
               const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
               CustomTextWidget(
-                textToDisplay: notifier.translate.keepSignIn!,
+                textToDisplay: notifier.translate.keepSignIn ?? '',
                 textStyle: Theme.of(context).textTheme.headline6,
               ),
               CustomElevatedButton(
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.yesSure!,
-                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                  textToDisplay: notifier.translate.yesSure ?? '',
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
                 width: double.infinity,
                 height: 50,
@@ -53,7 +53,7 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
               CustomElevatedButton(
                 child: !isLoading
                     ? CustomTextWidget(
-                        textToDisplay: notifier.translate.noLogout!,
+                        textToDisplay: notifier.translate.noLogout ?? '',
                         textStyle: Theme.of(context).textTheme.button,
                       )
                     : const CustomLoading(),

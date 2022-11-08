@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 // import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -66,17 +67,17 @@ class PreviewIDVerification extends StatelessWidget {
                       children: [
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}camera.svg", defaultColor: false),
                         const SizedBox(width: 8),
-                        CustomTextWidget(textToDisplay: notifier.language.retake!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(textToDisplay: notifier.language.retake ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                       ],
                     ),
                   ),
                   // TODO: Need to be refactored, waiting for the new design
-                  // notifier.picIDVerification != null && notifier.picIDVerification!.isNotEmpty
+                  // notifier.picIDVerification != null && notifier.picIDVerification.isNotEmpty
                   //     ? CustomTextButton(
                   //         onPressed: () => Routing().moveBack(),
                   //         child: Row(
                   //           children: [
-                  //             CustomTextWidget(textToDisplay: notifier.language.close!, textStyle: Theme.of(context).textTheme.subtitle1),
+                  //             CustomTextWidget(textToDisplay: notifier.language.close, textStyle: Theme.of(context).textTheme.subtitle1),
                   //             SizedBox(width: 8),
                   //             CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                   //           ],
@@ -96,7 +97,7 @@ class PreviewIDVerification extends StatelessWidget {
                     onPressed: () async => await notifier.onUploadProofPicture(context, picture),
                     child: Row(
                       children: [
-                        CustomTextWidget(textToDisplay: notifier.language.upload!, textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
+                        CustomTextWidget(textToDisplay: notifier.language.upload ?? '', textStyle: Theme.of(context).textTheme.subtitle1?.apply(color: Colors.white)),
                         const SizedBox(width: 8),
                         const CustomIconWidget(iconData: "${AssetPath.vectorPath}arrow.svg", defaultColor: false),
                       ],

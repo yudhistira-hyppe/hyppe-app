@@ -173,8 +173,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         print('getAdsVideo : ${fetch.data.toString()}');
         final _newClipData = fetch.data;
-        _adsData = _newClipData!.data;
-        return await getAdsVideoApsara(context, _newClipData!.data!.videoId!);
+        _adsData = _newClipData.data;
+        return await getAdsVideoApsara(context, _newClipData.data.videoId!);
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();
@@ -256,7 +256,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> _increaseViewCount(BuildContext context) async {
     try {
-      System().increaseViewCount(context, _data!).whenComplete(() => notifyListeners());
+      System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
     } catch (e) {
       'post view request: ERROR: $e'.logger();
     }

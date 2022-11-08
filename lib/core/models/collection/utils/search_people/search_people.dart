@@ -12,7 +12,7 @@ class ModelSearchPeople {
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data??[].map((x) => x.toJson())),
       };
 }
 
@@ -53,7 +53,7 @@ class SearchPeolpleData {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "avatar": avatar!.toJson(),
+        "avatar": avatar?.toJson(),
         "idUserAuth": idUserAuth,
         "username": username,
         "fullName": fullName,

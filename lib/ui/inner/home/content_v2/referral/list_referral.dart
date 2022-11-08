@@ -3,6 +3,7 @@ import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/referral/model_referral.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -19,7 +20,7 @@ class ListReferralUser extends StatelessWidget {
     return Consumer<ReferralNotifier>(
       builder: (_, notifier, __) => Scaffold(
           appBar: AppBar(
-            leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
             leading: CustomIconButtonWidget(
               defaultColor: true,
               iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -28,7 +29,7 @@ class ListReferralUser extends StatelessWidget {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: '${notifier.language.linkYourReferral}',
-              textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -50,7 +51,7 @@ class ListReferralUser extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: arguments.modelReferral!.list!.length,
+                    itemCount: arguments.modelReferral?.list?.length,
                     itemBuilder: (c, index) {
                       final listUser = arguments.modelReferral?.list?[index];
                       return Column(

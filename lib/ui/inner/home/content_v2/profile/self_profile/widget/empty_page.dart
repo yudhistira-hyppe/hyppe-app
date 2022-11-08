@@ -24,7 +24,7 @@ class EmptyWidget extends StatelessWidget {
               children: [
                 Consumer<TranslateNotifierV2>(
                   builder: (_, notifier, __) => CustomTextWidget(
-                    textToDisplay: notifier.translate.youDontHaveAnyPostsYetCreateOneNow!,
+                    textToDisplay: notifier.translate.youDontHaveAnyPostsYetCreateOneNow ?? '',
                     maxLines: 2,
                   ),
                 ),

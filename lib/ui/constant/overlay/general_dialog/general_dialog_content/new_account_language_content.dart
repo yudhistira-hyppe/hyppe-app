@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -75,7 +76,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                           function: () => notifier.initTranslate(context, index: index),
                           buttonStyle: const ButtonStyle(),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.listLanguage[index].lang!,
+                            textToDisplay: notifier.listLanguage[index].lang ?? '',
                             textStyle: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),
@@ -83,7 +84,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                     ),
                   ),
                   notifier.loadMore
-                      ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language!}")
+                      ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language}")
                       : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,

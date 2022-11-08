@@ -61,8 +61,8 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                       controller: _pageController,
                       itemCount: notifier.dataUserStories.length,
                       itemBuilder: (context, index) {
-                        if (notifier.currentPage!.floor() == index) {
-                          double value = notifier.currentPage! - index;
+                        if (notifier.currentPage?.floor() == index) {
+                          double value = (notifier.currentPage ?? 1) - index;
                           double degValue = notifier.degreeToRadian(value * 90);
                           return Transform(
                             transform: Matrix4.identity()
@@ -70,15 +70,15 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               ..rotateY(degValue),
                             alignment: Alignment.centerRight,
                             child: StoryPage(
-                              isScrolling: _pageController.position.activity!.isScrolling,
+                              isScrolling: _pageController.position.activity?.isScrolling,
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
                               controller: _pageController,
                             ),
                           );
-                        } else if (notifier.currentPage!.floor() + 1 == index) {
-                          double value = notifier.currentPage! - index;
+                        } else if ((notifier.currentPage?.floor() ?? 0) + 1 == index) {
+                          double value = (notifier.currentPage ?? 1) - index;
                           double degValue = notifier.degreeToRadian(value * 90);
                           return Transform(
                             transform: Matrix4.identity()
@@ -86,7 +86,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               ..rotateY(degValue),
                             alignment: Alignment.centerLeft,
                             child: StoryPage(
-                              isScrolling: _pageController.position.activity!.isScrolling,
+                              isScrolling: _pageController.position.activity?.isScrolling,
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
@@ -95,7 +95,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                           );
                         }
                         return StoryPage(
-                          isScrolling: _pageController.position.activity!.isScrolling,
+                          isScrolling: _pageController.position.activity?.isScrolling,
                           storyParentIndex: notifier.storyParentIndex,
                           data: notifier.dataUserStories[index],
                           onNextPage: () => notifier.nextPage(),

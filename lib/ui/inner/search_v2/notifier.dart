@@ -33,7 +33,7 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  List<SearchPeolpleData>? _searchPeolpleData;
+  List<SearchPeolpleData>? _searchPeolpleData = [];
   List<SearchPeolpleData>? get searchPeolpleData => _searchPeolpleData;
 
   SearchContentModel? _searchContent;
@@ -187,28 +187,7 @@ class SearchNotifier with ChangeNotifier {
       _searchContent?.diary?.data = _initDataDiary;
       _searchContent?.pict?.data = _initDataPic;
     }
-    // final notifier = SearchContentBloc();
-    // await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 18);
-    // final fetch = notifier.searchContentFetch;
-    // if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
-    //   SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-    //   if(_res.vid?.totalFilter != _res.vid?.skip){
-    //     _vidHasNext = true;
-    //   }else{
-    //     _vidHasNext = false;
-    //   }
-    //   if(_res.diary?.totalFilter != _res.diary?.skip){
-    //     _diaryHasNext = true;
-    //   }else{
-    //     _diaryHasNext = false;
-    //   }
-    //   if(_res.pict?.totalFilter != _res.pict?.skip){
-    //     _picHasNext = true;
-    //   }else{
-    //     _picHasNext = false;
-    //   }
-    //   _searchContent = _res;
-    // }
+
     isLoading = false;
 
     notifyListeners();
@@ -440,14 +419,16 @@ class SearchNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       isLoading = true;
+      print('getSearchPeopleBloc 2');
       await notifier.getSearchPeopleBloc(context, input, 0, 20);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
         _searchPeolpleData = [];
 
         fetch.data.forEach((v) {
-          _searchPeolpleData!.add(SearchPeolpleData.fromJson(v));
+          _searchPeolpleData?.add(SearchPeolpleData.fromJson(v));
         });
+        print('length _searchPeolpleData ${_searchPeolpleData?.length}');
         isLoading = false;
         notifyListeners();
       }
@@ -460,7 +441,7 @@ class SearchNotifier with ChangeNotifier {
   }
 
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
-    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email!;
+    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
     storyController.pause();
     _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
   }

@@ -23,7 +23,7 @@ class NotificationSenderOrReceiverInfoModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['fullName'] = fullName;
-    if (avatar != null) data['avatar'] = avatar!.toJson();
+    if (avatar != null) data['avatar'] = avatar?.toJson();
     data['email'] = email;
     data['username'] = username;
     return data;

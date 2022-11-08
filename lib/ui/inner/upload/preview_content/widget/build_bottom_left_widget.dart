@@ -18,7 +18,7 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
   void initState() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () {
-      for (var i = 0; i < notifier.fileContent!.length; i++) {
+      for (var i = 0; i < (notifier.fileContent?.length ?? 0); i++) {
         notifier.makeThumbnail(context, i);
       }
     });
@@ -41,9 +41,9 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
-                    itemCount: notifier.fileContent!.length,
+                    itemCount: notifier.fileContent?.length,
                     itemBuilder: (context, index) {
-                      final _isImage = System().lookupContentMimeType(notifier.fileContent![index]!)?.contains('image');
+                      final _isImage = System().lookupContentMimeType(notifier.fileContent?[index] ?? '')?.contains('image');
 
                       return GestureDetector(
                           child: Container(
@@ -61,7 +61,7 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                                   ? ColorFiltered(
                                       colorFilter: ColorFilter.matrix(notifier.filterMatrix(index)),
                                       child: Image.file(
-                                        File(notifier.fileContent![index]!),
+                                        File(notifier.fileContent?[index] ?? ''),
                                         fit: BoxFit.cover,
                                         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                                           if (wasSynchronouslyLoaded) {
@@ -77,7 +77,7 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                                         filterQuality: FilterQuality.high,
                                       ),
                                     )
-                                  : notifier.thumbNails != null && notifier.thumbNails!.isNotEmpty && notifier.thumbNails?[index] != null
+                                  : notifier.thumbNails != null && (notifier.thumbNails?.isNotEmpty ?? false) && notifier.thumbNails?[index] != null
                                       ? Image.memory(
                                           notifier.thumbNails![index]!,
                                           fit: BoxFit.cover, // '${AssetPath.pngPath}content-error.png'

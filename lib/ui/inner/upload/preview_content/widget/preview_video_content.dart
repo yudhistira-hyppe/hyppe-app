@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 
 import 'package:better_player/better_player.dart';
@@ -13,6 +16,8 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 
+import '../../../../constant/widget/custom_text_widget.dart';
+
 // import 'package:hyppe/core/constants/enum.dart';
 // import 'package:video_player/video_player.dart';
 
@@ -23,13 +28,11 @@ class PreviewVideoContent extends StatefulWidget {
 
 class _PreviewVideoContentState extends State<PreviewVideoContent> {
   BetterPlayerController? _videoPlayerController;
-
   @override
   void initState() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    // if (notifier.betterPlayerController == null) {
     notifier.initVideoPlayer(context);
-    // }
+    _videoPlayerController = notifier.betterPlayerController;
 
     super.initState();
   }
@@ -51,12 +54,13 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
         notifier.betterPlayerController?.pause();
       }
     });
+    print('isVideoInitialized ${notifier.betterPlayerController?.isVideoInitialized()}');
     if (notifier.betterPlayerController == null) {
       return const Center(
         child: CustomLoading(),
       );
     }
-    print('isVideoInitialized ${notifier.betterPlayerController?.isVideoInitialized()}');
+
     return notifier.betterPlayerController?.isVideoInitialized() ?? false
         ? GestureDetector(
             onTap: () {
@@ -72,16 +76,40 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
               alignment: Alignment.center,
               children: [
                 Material(
-                  child: Center(
-                    child: Platform.isAndroid
-                        ? AspectRatio(
-                            child: BetterPlayer(controller: notifier.betterPlayerController!),
-                            aspectRatio: notifier.betterPlayerController!.videoPlayerController!.value.aspectRatio,
-                          )
-                        : BetterPlayer(controller: notifier.betterPlayerController!),
-                  ),
+                  child: !notifier.isLoadVideo
+                      ? Center(
+                          child: Platform.isAndroid
+                              ? AspectRatio(
+                                  child: BetterPlayer(controller: notifier.betterPlayerController!),
+                                  aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0,
+                                )
+                              : BetterPlayer(controller: notifier.betterPlayerController!),
+                        )
+                      : const Center(
+                          child: CustomLoading(),
+                        ),
                 ),
-                if (!notifier.betterPlayerController!.isPlaying()!)
+                // Positioned(
+                //   right: 16,
+                //   bottom: context.getHeight() * 0.4,
+                //   child: InkWell(
+                //     onTap: (){
+                //
+                //     },
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: const [
+                //         CustomIconWidget(
+                //           defaultColor: false,
+                //           iconData: "${AssetPath.vectorPath}circle_music.svg",
+                //         ),
+                //         fourPx,
+                //         CustomTextWidget(maxLines: 1, textToDisplay: "Rp.0", textAlign: TextAlign.left, textStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                if (!(notifier.betterPlayerController?.isPlaying() ?? false))
                   const CustomIconWidget(
                     defaultColor: false,
                     iconData: "${AssetPath.vectorPath}pause.svg",
@@ -89,10 +117,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
               ],
             ),
           )
-        : Container(
-            child: const Center(
-              child: CustomLoading(),
-            ),
+        : const Center(
+            child: CustomLoading(),
           );
   }
 }

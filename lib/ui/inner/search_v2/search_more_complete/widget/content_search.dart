@@ -48,7 +48,7 @@ class ContentSearchState extends State<ContentSearch> {
               return GestureDetector(
                 onTap: () {
                   print('asdasd 33');
-                  context.read<SearchNotifier>().navigateToSeeAllScreen2(context, widget.content!, index, widget.selectIndex!);
+                  context.read<SearchNotifier>().navigateToSeeAllScreen2(context, widget.content ?? [], index, widget.selectIndex ?? 0);
                 },
                 child: Container(
                   padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
@@ -57,9 +57,9 @@ class ContentSearchState extends State<ContentSearch> {
                     child: CustomContentModeratedWidget(
                       width: double.infinity,
                       height: double.infinity,
-                      featureType: widget.featureType!,
-                      isSafe: true, //notifier.postData!.data.listVid[index].isSafe!,
-                      thumbnail: System().showUserPicture(widget.featureType != FeatureType.pic ? widget.content![index].mediaThumbEndPoint : widget.content![index].mediaEndpoint)!,
+                      featureType: widget.featureType ?? FeatureType.other,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: System().showUserPicture(widget.featureType != FeatureType.pic ? (widget.content?[index].mediaThumbEndPoint ?? '') : widget.content?[index].mediaEndpoint) ?? '',
                     ),
                   ),
                 ),

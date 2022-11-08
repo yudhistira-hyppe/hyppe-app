@@ -68,7 +68,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                         // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                         // onPressedIcon: () => notifier.onSearchPost(context),
                         onTap: () => notifier.moveSearchMore(),
-                        // onTap: () => _scaffoldKey.currentState!.openEndDrawer(),
+                        // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
                       ),
                     ),
                     // const HashtagScreen(),
@@ -88,7 +88,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                         OptionBar(title: "Pic", icon: "pic", pageIndex: 2),
                         // CustomElevatedButton(
                         //     child: CustomTextWidget(
-                        //       textToDisplay: context.select((SearchNotifier value) => value.language.filter!),
+                        //       textToDisplay: context.select((SearchNotifier value) => value.language.filter),
                         //       textStyle: Theme.of(context).textTheme.button,
                         //     ),
                         //     width: 50,

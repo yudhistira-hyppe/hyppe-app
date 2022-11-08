@@ -96,7 +96,7 @@ class System {
 
   bool validateUrl(String url) {
     try {
-      return Uri.tryParse(url)!.isAbsolute;
+      return Uri.tryParse(url)?.isAbsolute ?? false;
     } catch (e) {
       return false;
     }
@@ -447,7 +447,7 @@ class System {
 
     bool _validateCountPost(int count) {
       if (count > 10) {
-        _errorMsg = notifier.pleaseSelectMax10Items!;
+        _errorMsg = notifier.pleaseSelectMax10Items ?? '';
         return true;
       }
       return false;
@@ -466,8 +466,8 @@ class System {
         debugPrint("Masuk KYC");
         List<File>? imageFileList = [];
         final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
-        if (selectedImages!.isNotEmpty && selectedImages.length <= 3) {
-          for (XFile file in selectedImages) {
+        if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= 3) {
+          for (XFile file in selectedImages ?? []) {
             debugPrint(file.path);
             imageFileList.add(File(file.path));
           }
@@ -481,10 +481,10 @@ class System {
       if (featureType == FeatureType.vid) {
         await FilePicker.platform.pickFiles(type: FileType.video, allowCompression: false).then((result) {
           if (result != null) {
-            if (result.files.single.extension!.toLowerCase() == MP4 || result.files.single.extension!.toLowerCase() == MOV) {
-              _filePickerResult = [File(result.files.single.path!)];
+            if (result.files.single.extension?.toLowerCase() == MP4 || result.files.single.extension?.toLowerCase() == MOV) {
+              _filePickerResult = [File(result.files.single.path ?? '')];
             } else {
-              _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat!} ${result.names.single}';
+              _errorMsg = '${notifier.weCurrentlySupportOnlyMP4andMOVformat} ${result.names.single}';
             }
           }
         });
@@ -510,9 +510,9 @@ class System {
           // validasi count post
           if (_validateCountPost(_pickerResult.files.length) == false) {
             for (int element = 0; element < _pickerResult.files.length; element++) {
-              if (_pickerResult.files[element].extension!.toLowerCase() == MP4 || _pickerResult.files[element].extension!.toLowerCase() == MOV) {
-                await getVideoMetadata(_pickerResult.files[element].path!).then((value) {
-                  _duration = Duration(milliseconds: int.parse(value!.duration!.toInt().toString()));
+              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
+                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 60 detik
                   if (_duration.inSeconds > 60) {
@@ -525,11 +525,11 @@ class System {
 
             // show toast if there is fail file
             if (_failFile.isNotEmpty) {
-              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature!} :\n$_failFile';
+              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
             }
 
             if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path!)).toList();
+              _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
             }
           }
         }
@@ -547,9 +547,9 @@ class System {
           if (_validateCountPost(_pickerResult.files.length) == false) {
             for (int element = 0; element < _pickerResult.files.length; element++) {
               // validasi content type
-              if (_pickerResult.files[element].extension!.toLowerCase() == MP4 || _pickerResult.files[element].extension!.toLowerCase() == MOV) {
-                await getVideoMetadata(_pickerResult.files[element].path!).then((value) {
-                  _duration = Duration(milliseconds: int.parse(value!.duration!.toInt().toString()));
+              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+                await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
+                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
                   // hapus file yang durasinya lebih dari 15 detik
                   if (_duration.inSeconds > 15) {
@@ -562,11 +562,11 @@ class System {
 
             // show toast if there is fail file
             if (_failFile.isNotEmpty) {
-              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature!} :\n$_failFile';
+              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
             }
 
             if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path!)).toList();
+              _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
             }
           }
         }
@@ -616,12 +616,12 @@ class System {
     //   final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
 
     //   if (notifier.user.profile != null) {
-    //     // debugPrint(notifier.user.profile!.isComplete.toString());
-    //     // debugPrint(notifier.user.profile!.isIdVerified.toString());
-    //     // if (!notifier.user.profile!.isComplete!) {
+    //     // debugPrint(notifier.user.profile.isComplete.toString());
+    //     // debugPrint(notifier.user.profile.isIdVerified.toString());
+    //     // if (!notifier.user.profile.isComplete) {
     //     //   ShowBottomSheet.onShowCompleteProfile(context);
-    //     // } else if (!notifier.user.profile!.isIdVerified!) {
-    //     if (!notifier.user.profile!.isIdVerified!) {
+    //     // } else if (!notifier.user.profile.isIdVerified) {
+    //     if (!notifier.user.profile.isIdVerified) {
     //       ShowBottomSheet.onShowIDVerification(context);
     //     } else {
     //       action();
@@ -745,30 +745,30 @@ class System {
               ? weeks > 1
                   ? " ${translate.weeksAgo}"
                   : " ${translate.weekAgo}"
-              : translate.w!);
+              : translate.w ?? '');
     } else if (days > 0) {
       time = days.toString() +
           (fullCaption
               ? days > 1
                   ? " ${translate.daysAgo}"
                   : " ${translate.dayAgo}"
-              : translate.d!);
+              : translate.d ?? '');
     } else if (hours > 0) {
       time = hours.toString() +
           (fullCaption
               ? hours > 1
                   ? " ${translate.hoursAgo}"
                   : " ${translate.hourAgo}"
-              : translate.h!);
+              : translate.h ?? '');
     } else if (minutes > 0) {
       time = minutes.toString() +
           (fullCaption
               ? minutes > 1
                   ? " ${translate.minutesAgo}"
                   : " ${translate.minuteAgo}"
-              : translate.m!);
+              : translate.m ?? '');
     } else {
-      time = fullCaption ? translate.justNow! : translate.now!;
+      time = fullCaption ? translate.justNow ?? '' : translate.now ?? '';
     }
     return time;
   }
@@ -815,7 +815,7 @@ class System {
     final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
     final DynamicLinkParameters parameters = DynamicLinkParameters(
       uriPrefix: Env.data.deeplinkBaseUrl,
-      link: Uri.parse('${Env.data.deeplinkBaseUrl}${Routes.otherProfile}?referral=1&sender_email=${notifier.user.profile!.email}'),
+      link: Uri.parse('${Env.data.deeplinkBaseUrl}${Routes.otherProfile}?referral=1&sender_email=${notifier.user.profile?.email}'),
       androidParameters: AndroidParameters(
         minimumVersion: 0,
         packageName: Env.data.appID,
@@ -827,8 +827,8 @@ class System {
       ),
       socialMetaTagParameters: SocialMetaTagParameters(
         description: "Referral",
-        imageUrl: Uri.parse('${notifier.user.profile!.avatar}'),
-        title: 'Hyppe App | ${notifier.user.profile!.fullName}',
+        imageUrl: Uri.parse('${notifier.user.profile?.avatar}'),
+        title: 'Hyppe App | ${notifier.user.profile?.fullName}',
       ),
     );
 
@@ -870,13 +870,15 @@ class System {
   }
 
   Future<String> convertWidgetToImage(GlobalKey globalKey) async {
-    RenderRepaintBoundary repaintBoundary = globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    RenderRepaintBoundary repaintBoundary = globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary;
     ui.Image boxImage = await repaintBoundary.toImage(pixelRatio: 3);
     ByteData? byteData = await boxImage.toByteData(format: ui.ImageByteFormat.png);
-    Uint8List uint8list = byteData!.buffer.asUint8List();
+    var uint8list = byteData?.buffer.asUint8List();
     final String _pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
     File imgFile = File(_pathFile);
-    await imgFile.writeAsBytes(uint8list);
+    if (uint8list != null) {
+      await imgFile.writeAsBytes(uint8list);
+    }
     return imgFile.absolute.path;
   }
 
@@ -930,12 +932,12 @@ class System {
   Future<void> increaseViewCount(BuildContext context, v2.ContentData data) async {
     try {
       final notifier = ViewBloc();
-      await notifier.viewPostUserBloc(context, postId: data.postID!, emailOwner: data.email!);
+      await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
       final fetch = notifier.viewFetch;
-      if (!data.insight!.isView) {
+      if (!(data.insight?.isView ?? true)) {
         if (fetch.viewState == ViewState.viewUserPostSuccess) {
           data.insight?.views = (data.insight?.views ?? 0) + 1;
-          data.insight!.isView = true;
+          data.insight?.isView = true;
         }
       }
     } catch (e) {
@@ -1084,9 +1086,9 @@ class System {
     final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     switch (status) {
       case 'Success':
-        return notifier.transferredSuccessfully!;
+        return notifier.transferredSuccessfully ?? '';
       default:
-        return notifier.waitingtoTransfer!;
+        return notifier.waitingtoTransfer ?? '';
     }
   }
 }

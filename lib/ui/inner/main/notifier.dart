@@ -20,6 +20,7 @@ import 'package:hyppe/core/services/socket_service.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/home/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/screen.dart';
 import 'package:hyppe/ui/inner/notification/screen.dart';
@@ -81,10 +82,11 @@ class MainNotifier with ChangeNotifier {
       print('ambil profile');
       print(usersFetch.data);
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
+      context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
       final _profile = context.read<SelfProfileNotifier>().user.profile;
-      System().userVerified(_profile!.statusKyc);
-      SharedPreference().writeStorage(SpKeys.setPin, _profile.pinCreate!.toString());
+      System().userVerified(_profile?.statusKyc);
+      SharedPreference().writeStorage(SpKeys.setPin, _profile?.pinCreate.toString());
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
       notifyListeners();
     }

@@ -83,6 +83,18 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
             _searchData.initDataPic = pic;
             print('initDataPic is ${_searchData.initDataPic?.length}');
           }
+        }else{
+          if(_searchData.initDataPic!.isEmpty){
+            if (visibility == 'PUBLIC') {
+              try {
+                _searchData.initDataPic = pic?.sublist(0, 18);
+                print('initDataVid is ${_searchData.initDataPic?.length}');
+              } catch (e) {
+                _searchData.initDataPic = pic;
+                print('initDataVid is ${_searchData.initDataPic?.length}');
+              }
+            }
+          }
         }
         // _searchData.picContentsQuery.featureType = FeatureType.pic;
         // _searchData.allContents!.pics = pic;

@@ -487,16 +487,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   int durationAds = 0;
   Timer? timerAds;
 
-  // StoryItem? get _currentStory => widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => null);
-  StoryItem? get _currentStory => widget.storyItems.firstWhereOrNull((it) => !it!.shown);
+  // StoryItem? get _currentStory => widget.storyItems.firstWhere((it) => !it.shown, orElse: () => null);
+  StoryItem? get _currentStory => widget.storyItems.firstWhereOrNull((it) => !(it?.shown ?? false));
 
-  // Widget get _currentView => widget.storyItems.firstWhere((it) => !it!.shown, orElse: () => widget.storyItems.last)!.view;
-  // Widget? get _currentView => widget.storyItems.firstWhereOrNull((it) => !it!.shown)?.view;
+  // Widget get _currentView => widget.storyItems.firstWhere((it) => !it.shown, orElse: () => widget.storyItems.last).view;
+  // Widget? get _currentView => widget.storyItems.firstWhereOrNull((it) => !it.shown)?.view;
   Widget get _currentView {
     try {
-      return widget.storyItems.firstWhere((it) => !it!.shown)!.view;
+      return widget.storyItems.firstWhere((it) => !(it?.shown ?? false))?.view ?? Container();
     } catch (stateError) {
-      return widget.storyItems.last!.view;
+      return widget.storyItems.last?.view ?? Container();
     }
   }
 
@@ -546,10 +546,10 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     /// Original
     // final firstPage = widget.storyItems.firstWhere((it) {
-    //   return !it!.shown;
+    //   return !it.shown;
     // }, orElse: () {
     //   widget.storyItems.forEach((it2) {
-    //     it2!.shown = false;
+    //     it2.shown = false;
     //   });
     //
     //   return null;
@@ -557,16 +557,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     /// My
     // final firstPage = widget.storyItems.firstWhereOrNull((it) {
-    //   return !it!.shown;
+    //   return !it.shown;
     // });
 
     StoryItem? firstPage;
 
     try {
-      firstPage = widget.storyItems.firstWhere((it) => !it!.shown);
+      firstPage = widget.storyItems.firstWhere((it) => !(it?.shown ?? false));
     } catch (stateError) {
       for (var it2 in widget.storyItems) {
-        it2!.shown = false;
+        it2?.shown = false;
       }
       firstPage = null;
     }
@@ -574,7 +574,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     if (firstPage != null) {
       final lastShownPos = widget.storyItems.indexOf(firstPage);
       widget.storyItems.sublist(lastShownPos).forEach((it) {
-        it!.shown = false;
+        it?.shown = false;
       });
     }
 
@@ -582,7 +582,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       print('playbackStatus : ${playbackStatus}');
       switch (playbackStatus) {
         case PlaybackState.play:
-          final isRunning = timerAds == null ? false : timerAds!.isActive;
+          final isRunning = timerAds == null ? false : timerAds?.isActive ?? false;
           if (isRunning) {
             pauseTimer();
             // _animationController?.forward();
@@ -594,7 +594,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
           _removeNextHold();
           print('curent story hahahahahah');
           print(_currentStory?.isImages);
-          if (_currentStory!.isImages!) _animationController?.forward();
+          if (_currentStory?.isImages ?? false) _animationController?.forward();
 
           // print(_currentStory?.shown);
           // print(_currentStory?.view);
@@ -686,7 +686,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     _animationController?.dispose();
     // get the next playing page
     final storyItem = widget.storyItems.firstWhere((it) {
-      return !it!.shown;
+      return !(it?.shown ?? false);
     })!;
 
     if (widget.onStoryShow != null) {
@@ -694,16 +694,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     }
 
     // init duration when file is video
-    // if (storyItem.isVideoFile != null) await _loadVideoFileDuration(storyItem.source!);
+    // if (storyItem.isVideoFile != null) await _loadVideoFileDuration(storyItem.source);
 
     //   if (_isInit != null) {
     //     _animationController = AnimationController(
     //         duration: storyItem.isVideoFile != null && _fileVideoDuration != null
-    //             ? Duration(milliseconds: _fileVideoDuration!)
+    //             ? Duration(milliseconds: _fileVideoDuration)
     //             : storyItem.duration,
     //         vsync: this);
 
-    //     _animationController!.addStatusListener((status) {
+    //     _animationController.addStatusListener((status) {
     //       if (status == AnimationStatus.completed) {
     //         storyItem.shown = true;
     //         if (widget.storyItems.last != storyItem) {
@@ -715,7 +715,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     //       }
     //     });
 
-    //     _currentAnimation = Tween(begin: 0.0, end: 1.0).animate(_animationController!);
+    //     _currentAnimation = Tween(begin: 0.0, end: 1.0).animate(_animationController);
 
     //     widget.controller.play();
     //   }
@@ -727,7 +727,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       duration: storyItem.duration,
     );
 
-    _animationController!.addStatusListener((status) {
+    _animationController?.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         storyItem.shown = true;
 
@@ -761,7 +761,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     if (widget.repeat) {
       for (var it in widget.storyItems) {
-        it!.shown = false;
+        it?.shown = false;
       }
       if (widget.onRepeat != null) {
         widget.onRepeat!();
@@ -771,20 +771,20 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   }
 
   void _goBack() {
-    _animationController!.stop();
+    _animationController?.stop();
 
     if (_currentStory == null) {
-      widget.storyItems.last!.shown = false;
+      widget.storyItems.last?.shown = false;
     }
 
     if (_currentStory == widget.storyItems.first) {
       _beginPlay();
     } else {
-      _currentStory!.shown = false;
+      _currentStory?.shown = false;
       int lastPos = widget.storyItems.indexOf(_currentStory);
-      final previous = widget.storyItems[lastPos - 1]!;
+      final previous = widget.storyItems[lastPos - 1];
 
-      previous.shown = false;
+      previous?.shown = false;
 
       _beginPlay();
     }
@@ -792,7 +792,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
   void _goForward() {
     if (_currentStory != widget.storyItems.last) {
-      _animationController!.stop();
+      _animationController?.stop();
 
       // get last showing
       final _last = _currentStory;
@@ -805,7 +805,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
       }
     } else {
       // this is the last page, progress animation should skip to end
-      _animationController!.animateTo(1.0, duration: const Duration(milliseconds: 10));
+      _animationController?.animateTo(1.0, duration: const Duration(milliseconds: 10));
     }
   }
 
@@ -832,7 +832,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     //   );
     // }
 
-    // if (_isInit!) {
+    // if (_isInit) {
     //   return Center(
     //     child: StoryLoading(),
     //   );
@@ -854,7 +854,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                   vertical: 8,
                 ),
                 child: PageBar(
-                  widget.storyItems.map((it) => PageData(it!.duration, it.shown)).toList(),
+                  widget.storyItems.map((it) => PageData(it?.duration ?? Duration.zero, it?.shown ?? false)).toList(),
                   _currentAnimation,
                   key: UniqueKey(),
                   progressColor: widget.progressColor,
@@ -962,7 +962,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                     : (details) {
                         verticalDragInfo ??= VerticalDragInfo();
 
-                        verticalDragInfo!.update(details.primaryDelta!);
+                        verticalDragInfo?.update(details.primaryDelta ?? 0);
 
                         // TODO: provide callback interface for animation purposes
                       },
@@ -972,8 +972,8 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
                         print('play3');
                         widget.controller.play();
                         // finish up drag cycle
-                        if (!verticalDragInfo!.cancel && widget.onVerticalSwipeComplete != null) {
-                          widget.onVerticalSwipeComplete!(verticalDragInfo!.direction);
+                        if (!(verticalDragInfo?.cancel ?? true) && widget.onVerticalSwipeComplete != null) {
+                          widget.onVerticalSwipeComplete!(verticalDragInfo?.direction);
                         }
 
                         verticalDragInfo = null;
@@ -1038,7 +1038,7 @@ class PageBarState extends State<PageBar> {
     int count = widget.pages.length;
     spacing = (count > 15) ? 1 : ((count > 10) ? 2 : 4);
 
-    widget.animation!.addListener(() {
+    widget.animation?.addListener(() {
       if (mounted) {
         setState(() {});
       }
@@ -1064,7 +1064,7 @@ class PageBarState extends State<PageBar> {
           child: Container(
             padding: EdgeInsets.only(right: widget.pages.last == it ? 0 : spacing),
             child: StoryProgressIndicator(
-              isPlaying(it) ? widget.animation!.value : (it.shown ? 1 : 0),
+              isPlaying(it) ? widget.animation?.value ?? 0 : (it.shown ? 1 : 0),
               indicatorHeight: widget.indicatorHeight == IndicatorHeight.large ? 5 : 3,
               durationColor: widget.durationColor,
               progressColor: widget.progressColor,
@@ -1132,7 +1132,7 @@ class IndicatorOval extends CustomPainter {
 class ContrastHelper {
   static double luminance(int? r, int? g, int? b) {
     final a = [r, g, b].map((it) {
-      double value = it!.toDouble() / 255.0;
+      double value = (it?.toDouble() ?? 255.0) / 255.0;
       return value <= 0.03928 ? value / 12.92 : pow((value + 0.055) / 1.055, 2.4);
     }).toList();
 

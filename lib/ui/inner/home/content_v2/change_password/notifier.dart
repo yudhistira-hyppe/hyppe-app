@@ -78,15 +78,15 @@ class ChangePasswordNotifier with ChangeNotifier {
 
   TextStyle saveTextColor(BuildContext context) {
     if (_buttonValidation()) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
     }
   }
 
-  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6!.copyWith(color: kHyppePrimary);
-  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1!;
-  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor);
+  TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6?.copyWith(color: kHyppePrimary) ?? const TextStyle();
+  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle();
+  TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor) ?? const TextStyle();
 
   void onClickSave(BuildContext context) async {
     bool connect = await System().checkConnections();
@@ -97,7 +97,7 @@ class ChangePasswordNotifier with ChangeNotifier {
       if (!_system.passwordMatch(password: newPasswordController.text, confirmPassword: reTypePasswordController.text)) {
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.incorrectPassword!,
+          language.incorrectPassword ?? '',
           sizeIcon: 15,
           color: Theme.of(context).colorScheme.error,
           iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -107,7 +107,7 @@ class ChangePasswordNotifier with ChangeNotifier {
       } else if (!_system.atLeastEightCharacter(text: newPasswordController.text)) {
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.incorrectPassword!,
+          language.incorrectPassword ?? '',
           subCaption: language.atLeast8Characters,
           color: Theme.of(context).colorScheme.error,
           iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -117,7 +117,7 @@ class ChangePasswordNotifier with ChangeNotifier {
       } else if (!_system.atLeastContainOneCharacterAndOneNumber(text: newPasswordController.text)) {
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.incorrectPassword!,
+          language.incorrectPassword ?? '',
           sizeIcon: 15,
           color: Theme.of(context).colorScheme.error,
           iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -131,7 +131,7 @@ class ChangePasswordNotifier with ChangeNotifier {
       )) {
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.incorrectPassword!,
+          language.incorrectPassword ?? '',
           sizeIcon: 15,
           color: Theme.of(context).colorScheme.error,
           iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -149,13 +149,13 @@ class ChangePasswordNotifier with ChangeNotifier {
           obscureNewPassword = true;
           obscureReTypePassword = true;
           clearTxt();
-          ShowBottomSheet().onShowColouredSheet(context, language.passwordChangedSuccessfully!);
+          ShowBottomSheet().onShowColouredSheet(context, language.passwordChangedSuccessfully ?? '');
           await context.read<SettingNotifier>().logOut(context);
         }
         if (fetch.userState == UserState.changePasswordError) {
           onSave = false;
           if (fetch.data != null) {
-            ShowBottomSheet().onShowColouredSheet(context, language.incorrectPassword!, color: Theme.of(context).colorScheme.error);
+            ShowBottomSheet().onShowColouredSheet(context, language.incorrectPassword ?? '', color: Theme.of(context).colorScheme.error);
           }
         }
       }

@@ -48,7 +48,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void onUpdate() => notifyListeners();
 
-  void updateView(BuildContext context) => System().increaseViewCount(context, _data!).whenComplete(() => notifyListeners());
+  void updateView(BuildContext context) => System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
 
   void initState(BuildContext context, VidDetailScreenArgument routeArgument) {
     _routeArgument = routeArgument;

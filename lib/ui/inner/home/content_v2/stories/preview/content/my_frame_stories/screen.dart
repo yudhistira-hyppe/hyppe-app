@@ -14,6 +14,8 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../../../../notifier_v2.dart';
+
 class MyFrameStory extends StatelessWidget {
   static final _system = System();
 
@@ -23,7 +25,8 @@ class MyFrameStory extends StatelessWidget {
     final myStoriesData = context.select((PreviewStoriesNotifier value) => Tuple2(value.myStoriesData, value.totalViews));
     final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
     final error = context.select((ErrorService value) => value.getError(ErrorType.peopleStory));
-
+    final notifier = Provider.of<HomeNotifier>(context);
+    print('showUserPicture 2 : ${notifier.profileImage}');
     return Row(
       children: [
         sixteenPx,
@@ -34,7 +37,7 @@ class MyFrameStory extends StatelessWidget {
             context.read<ErrorService>().isInitialError(error, myStoriesData.item1) || myStoriesData.item1 != null
                 ? BuildCircleProfile(
                     listStory: myStoriesData.item1 ?? [],
-                    imageUrl: System().showUserPicture(myPicture),
+                    imageUrl: System().showUserPicture(notifier.profileImage),
                   )
                 : const CustomShimmer(
                     radius: 50,
@@ -48,9 +51,9 @@ class MyFrameStory extends StatelessWidget {
                     child: CustomTextWidget(
                       maxLines: 1,
                       textToDisplay: myStoriesData.item1?.isEmpty ?? [].isEmpty
-                          ? context.read<TranslateNotifierV2>().translate.yourStory!
+                          ? context.read<TranslateNotifierV2>().translate.yourStory ?? ''
                           : "${_system.formatterNumber(myStoriesData.item2)} / ${_system.formatterNumber(myStoriesData.item1?.length)}",
-                      textStyle: Theme.of(context).textTheme.overline!.copyWith(letterSpacing: myStoriesData.item1?.isEmpty ?? [].isEmpty ? null : 1.0),
+                      textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: myStoriesData.item1?.isEmpty ?? [].isEmpty ? null : 1.0),
                     ),
                   )
                 : const CustomShimmer(

@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -33,7 +34,7 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
     return Consumer<ReviewSellNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -41,9 +42,9 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.orderSummary!,
+            textToDisplay: notifier.language.orderSummary ?? '',
             textStyle:
-                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -285,8 +286,7 @@ class _ReviewSellContentScreenState extends State<ReviewSellContentScreen> {
                 textToDisplay: subtitle,
                 textStyle: Theme.of(context)
                     .textTheme
-                    .caption!
-                    .copyWith(color: kHyppeSecondary),
+                    .caption?.copyWith(color: kHyppeSecondary),
                 textAlign: TextAlign.start,
                 textOverflow: TextOverflow.clip,
               )

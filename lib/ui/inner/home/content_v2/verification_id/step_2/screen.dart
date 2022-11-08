@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -26,7 +27,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leadingWidth: 50 * SizeConfig.screenWidth! / SizeWidget.baseWidthXD,
+          leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
           leading: CustomIconButtonWidget(
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -34,9 +35,9 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.idVerification!,
+            textToDisplay: notifier.language.idVerification ?? '',
             textStyle:
-                Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
+                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -49,7 +50,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: notifier.language.realName!,
+                    textToDisplay: notifier.language.realName ?? '',
                     textStyle: textTheme.titleMedium,
                   ),
                   Container(
@@ -84,8 +85,8 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
                       textStyle:
-                          textTheme.caption!.copyWith(color: Colors.black26),
-                      textToDisplay: notifier.language.reaNameNotice!)
+                          textTheme.caption?.copyWith(color: Colors.black26),
+                      textToDisplay: notifier.language.reaNameNotice ?? '')
                 ],
               ),
               Visibility(
@@ -95,7 +96,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                   height: 44.0 * SizeConfig.scaleDiagonal,
                   function: () => notifier.submitStep2(context),
                   child: CustomTextWidget(
-                    textToDisplay: notifier.language.continueStep!,
+                    textToDisplay: notifier.language.continueStep ?? '',
                     textStyle: textTheme.button
                         ?.copyWith(color: kHyppeLightButtonText),
                   ),

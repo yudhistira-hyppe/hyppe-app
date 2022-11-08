@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/widget/build_list_tile.dart';
@@ -34,23 +35,23 @@ class ReportContent extends StatelessWidget {
             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
           ),
           Container(
-            height: 84.5 * SizeConfig.screenHeight! / SizeWidget.baseHeightXD,
+            height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
             alignment: Alignment.center,
             child: BuildListTile(
                 onTap: () => reportHide(context),
                 icon: "${AssetPath.vectorPath}eye-off.svg",
-                title: notifier.translate.iDontWantToSeeThis!,
-                subtitle: notifier.translate.letUsKnowWhyYouDontWantToSeeThisPost!),
+                title: notifier.translate.iDontWantToSeeThis ?? '',
+                subtitle: notifier.translate.letUsKnowWhyYouDontWantToSeeThisPost),
           ),
           if (fromLandscapeMode) sixteenPx,
           Container(
             alignment: Alignment.center,
-            height: 84.5 * SizeConfig.screenHeight! / SizeWidget.baseHeightXD,
+            height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
             child: BuildListTile(
                 onTap: () => reportReport(context),
                 icon: "${AssetPath.vectorPath}report.svg",
-                title: notifier.translate.reportThisPost!,
-                subtitle: notifier.translate.thisPostIsOffensiveOrTheAccountIsHacked!),
+                title: notifier.translate.reportThisPost ?? '',
+                subtitle: notifier.translate.thisPostIsOffensiveOrTheAccountIsHacked ?? ''),
           )
         ],
       ),
@@ -64,7 +65,7 @@ class ReportContent extends StatelessWidget {
       case ReportType.post:
         {
           notifier.data = {'userID': userID, 'postID': postID};
-          notifier.appBar = language.translate.dontWantToSeeThis!;
+          notifier.appBar = language.translate.dontWantToSeeThis ?? '';
           notifier.reportType = reportType;
           notifier.reportAction = ReportAction.hide;
           notifier.fromLandscapeMode = fromLandscapeMode;
@@ -74,7 +75,7 @@ class ReportContent extends StatelessWidget {
       case ReportType.story:
         {
           notifier.data = {'userID': userID, 'storyID': storyID};
-          notifier.appBar = language.translate.dontWantToSeeThis!;
+          notifier.appBar = language.translate.dontWantToSeeThis ?? '';
           notifier.reportType = reportType;
           notifier.reportAction = ReportAction.hide;
           notifier.fromLandscapeMode = fromLandscapeMode;
@@ -84,7 +85,7 @@ class ReportContent extends StatelessWidget {
       case ReportType.comment:
         {
           notifier.data = {'userID': userID, 'postID': postID, 'commentID': commentID};
-          notifier.appBar = language.translate.dontWantToSeeThis!;
+          notifier.appBar = language.translate.dontWantToSeeThis ?? '';
           notifier.reportType = reportType;
           notifier.reportAction = ReportAction.hide;
           notifier.fromLandscapeMode = fromLandscapeMode;
@@ -104,7 +105,7 @@ class ReportContent extends StatelessWidget {
       case ReportType.post:
         {
           notifier.data = {'userID': userID, 'postID': postID};
-          notifier.appBar = language.translate.whyAreYouReportingThis!;
+          notifier.appBar = language.translate.whyAreYouReportingThis ?? '';
           notifier.reportType = reportType;
           notifier.reportAction = ReportAction.report;
           notifier.fromLandscapeMode = fromLandscapeMode;
@@ -114,7 +115,7 @@ class ReportContent extends StatelessWidget {
       case ReportType.story:
         {
           notifier.data = {'userID': userID, 'storyID': storyID};
-          notifier.appBar = language.translate.whyAreYouReportingThis!;
+          notifier.appBar = language.translate.whyAreYouReportingThis ?? '';
           notifier.reportType = reportType;
           notifier.reportAction = ReportAction.report;
           notifier.fromLandscapeMode = fromLandscapeMode;
@@ -124,7 +125,7 @@ class ReportContent extends StatelessWidget {
       case ReportType.comment:
         {
           notifier.data = {'userID': userID, 'postID': postID, 'commentID': commentID};
-          notifier.appBar = language.translate.whyAreYouReportingThis!;
+          notifier.appBar = language.translate.whyAreYouReportingThis ?? '';
           notifier.reportType = reportType;
           notifier.reportAction = ReportAction.report;
           notifier.fromLandscapeMode = fromLandscapeMode;
