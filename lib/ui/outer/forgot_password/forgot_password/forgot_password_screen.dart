@@ -85,7 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         prefixIcon: Transform.translate(
                           offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                           child: Transform.scale(
-                            scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+                            scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                             child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
                           ),
                         ),

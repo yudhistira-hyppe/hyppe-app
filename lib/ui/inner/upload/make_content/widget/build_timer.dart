@@ -19,7 +19,7 @@ class BuildTimer extends StatelessWidget {
           ignoring: notifier.isRecordingVideo ? true : false,
           child: SizedBox(
             width: SizeWidget().calculateSize(250, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
-            height: 100 * (SizeConfig.screenHeight ?? context.getHeight()) / SizeWidget.baseHeightXD,
+            height: 100 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
             child: Stack(
               children: [
                 Align(

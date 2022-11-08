@@ -27,7 +27,7 @@ class ReportProfile extends StatelessWidget {
           ),
           Container(
               alignment: Alignment.center,
-              height: 84.5 * (SizeConfig.screenHeight ?? context.getHeight()) / SizeWidget.baseHeightXD,
+              height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
               child: BuildListTile(
                 onTap: () => ShowBottomSheet.onReportSpamContent(context),
                 icon: "${AssetPath.vectorPath}report.svg",

@@ -72,7 +72,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
   @override
   void dispose() {
     _storyController.dispose();
-    _animationController?.dispose();
+    _animationController!.dispose();
     super.dispose();
   }
 

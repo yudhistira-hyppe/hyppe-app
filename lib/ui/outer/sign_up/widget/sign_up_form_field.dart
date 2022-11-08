@@ -83,14 +83,14 @@ class SignUpForm extends StatelessWidget {
                 ? Transform.translate(
                     offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0),
                     child: Transform.scale(
-                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+                      scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                       child: prefixIcon,
                     ),
                   )
                 : const SizedBox.shrink(),
             suffixIcon: suffixIcon != null
                 ? Transform.scale(
-                    scale: SizeWidget().calculateSize(suffixIconSize ?? 1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+                    scale: SizeWidget().calculateSize(suffixIconSize ?? 1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                     child: suffixIcon,
                   )
                 : const SizedBox.shrink(),

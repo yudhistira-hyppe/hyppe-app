@@ -148,9 +148,9 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     // final notifier = context.watch<CameraNotifier>();
-    final deviceRatio = SizeConfig.screenWidth! / (SizeConfig.screenHeight ?? context.getHeight());
+    final deviceRatio = context.getWidth() / context.getHeight();
 
     return Consumer<CameraNotifier>(
       builder: (_, notifier, __) => Scaffold(
@@ -158,7 +158,7 @@ class _CameraViewState extends State<CameraView> {
         children: [
           notifier.deepArController == null
               ? const CustomLoading()
-              : notifier.deepArController?.isInitialized ?? false
+              : notifier.deepArController!.isInitialized
                   ? Platform.isIOS
                       ? DeepArPreview(notifier.deepArController!)
                       : AspectRatio(

@@ -181,6 +181,7 @@ class PreviewContentNotifier with ChangeNotifier {
         controlBarColor: Colors.black26,
       ),
     );
+    print('_url : $_url');
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       BetterPlayerDataSourceType.file,
       _url != null ? Platform.isIOS ? _url!.replaceAll(" ", "%20") : _url! : '',

@@ -40,11 +40,11 @@ class BuildBottomView extends StatelessWidget {
         : AnimatedPositioned(
             duration: const Duration(milliseconds: 300),
             bottom: MediaQuery.of(context).viewInsets.bottom,
-            height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+            height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
             child: Container(
               alignment: Alignment.center,
               width: SizeConfig.screenWidth,
-              height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+              height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

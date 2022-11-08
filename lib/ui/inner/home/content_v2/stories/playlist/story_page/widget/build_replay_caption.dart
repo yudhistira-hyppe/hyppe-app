@@ -24,9 +24,9 @@ class BuildReplayCaption extends StatelessWidget {
     SizeConfig().init(context);
 
     final double _showBottomPos =
-        (MediaQuery.of(context).viewInsets.bottom + SizeWidget().calculateSize(60, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()));
+        (MediaQuery.of(context).viewInsets.bottom + SizeWidget().calculateSize(60, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
 
-    final double _hideBottomPos = (-SizeWidget().calculateSize(100, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()));
+    final double _hideBottomPos = (-SizeWidget().calculateSize(100, SizeWidget.baseHeightXD, SizeConfig.screenHeight!));
 
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);
 
@@ -34,10 +34,10 @@ class BuildReplayCaption extends StatelessWidget {
       duration: const Duration(milliseconds: 800),
       bottom: notifier.isKeyboardActive ? _showBottomPos : _hideBottomPos,
       curve: Curves.bounceOut,
-      height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+      height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
       child: SizedBox(
         width: SizeConfig.screenWidth,
-        height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight ?? context.getHeight()),
+        height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

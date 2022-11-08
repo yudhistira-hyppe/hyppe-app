@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 
 import 'package:better_player/better_player.dart';
@@ -13,6 +15,8 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 
+import '../../../../constant/widget/custom_text_widget.dart';
+
 // import 'package:hyppe/core/constants/enum.dart';
 // import 'package:video_player/video_player.dart';
 
@@ -23,20 +27,18 @@ class PreviewVideoContent extends StatefulWidget {
 
 class _PreviewVideoContentState extends State<PreviewVideoContent> {
   BetterPlayerController? _videoPlayerController;
-
   @override
   void initState() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    if(notifier.betterPlayerController == null){
-      notifier.initVideoPlayer(context);
-    }
-
+    notifier.initVideoPlayer(context);
+    _videoPlayerController = notifier.betterPlayerController;
     super.initState();
   }
 
+
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
+    print('_PreviewVideoContentState disposed');
     super.dispose();
   }
 
@@ -50,12 +52,13 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
         notifier.betterPlayerController?.pause();
       }
     });
+    print('isVideoInitialized ${notifier.betterPlayerController?.isVideoInitialized()}');
     if(notifier.betterPlayerController == null){
       return const Center(
         child: CustomLoading(),
       );
     }
-    print('isVideoInitialized ${notifier.betterPlayerController?.isVideoInitialized()}');
+
     return notifier.betterPlayerController?.isVideoInitialized() ?? false
         ? GestureDetector(
             onTap: () {
@@ -80,6 +83,25 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                         : BetterPlayer(controller: notifier.betterPlayerController!),
                   ),
                 ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: InkWell(
+                //     onTap: (){
+                //
+                //     },
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.center,
+                //       children: const [
+                //         CustomIconWidget(
+                //           defaultColor: false,
+                //           iconData: "${AssetPath.vectorPath}circle_music.svg",
+                //         ),
+                //         fourPx,
+                //         CustomTextWidget(maxLines: 1, textToDisplay: "Rp.0", textAlign: TextAlign.left, textStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 if (!(notifier.betterPlayerController?.isPlaying() ?? false))
                   const CustomIconWidget(
                     defaultColor: false,
@@ -88,10 +110,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
               ],
             ),
           )
-        : Container(
-            child: const Center(
-              child: CustomLoading(),
-            ),
+        : const Center(
+            child: CustomLoading(),
           );
   }
 }

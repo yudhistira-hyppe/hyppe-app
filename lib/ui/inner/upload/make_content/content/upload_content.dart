@@ -45,7 +45,7 @@ class UploadContent extends StatelessWidget {
                   const CameraFlashButton(),
                   CustomTextWidget(
                     textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ],
               ),

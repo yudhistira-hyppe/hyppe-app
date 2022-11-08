@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -33,8 +34,8 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void initState() {
-    _uploadNotifier = Provider.of<UploadNotifier>(context, listen: false);
-    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+    _uploadNotifier = Provider.of<UploadNotifier>(materialAppKey.currentContext ?? context, listen: false);
+    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(materialAppKey.currentContext ?? context, listen: false);
     _eventService.addUploadHandler(EventKey.uploadEventKey, this);
     super.initState();
   }

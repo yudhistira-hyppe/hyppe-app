@@ -27,7 +27,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   bool get isRecordingPaused => deepArController?.isRecording ?? false;
   bool get isTakingPicture => cameraController?.value.isTakingPicture ?? false;
   bool get hasError => cameraController?.value.hasError ?? false;
-  double get cameraAspectRatio => deepArController?.imageDimensions.height ?? 0 / (deepArController?.imageDimensions.width ?? 0);
+  double get cameraAspectRatio => deepArController!.imageDimensions.height / deepArController!.imageDimensions.width;
   double get yScale => 1;
 
   bool _showEffected = false;
@@ -54,9 +54,10 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       flashMode = FlashMode.off;
       deepArController = DeepArController();
       if (Platform.isAndroid) {
-        deepArController?.destroy();
+        deepArController!.destroy();
       }
-      await deepArController?.initialize(
+      await deepArController!
+          .initialize(
         androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
         iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117",
         resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
@@ -87,11 +88,11 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onStoryPhotoVideo(bool isPhoto) async {
-    if (deepArController?.isRecording ?? false) {
+    if (deepArController!.isRecording) {
       // File? file = await _controller.stopVideoRecording();
       // OpenFile.open(file.path);
     } else {
-      await deepArController?.startVideoRecording();
+      await deepArController!.startVideoRecording();
     }
 
     // final _currentLensDirection = cameraController?.description.lensDirection;
@@ -138,7 +139,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future<void> onNewCameraSelected() async {
     print('DeepAR: balik kamera');
-    deepArController?.flipCamera();
+    deepArController!.flipCamera();
   }
 
   disposeCamera() async {
@@ -147,7 +148,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
         deepArController = DeepArController();
         deepArController = null;
       }
-      deepArController?.destroy();
+      deepArController!.destroy();
       deepArController = null;
     } catch (e) {
       e.logger();
@@ -194,11 +195,11 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onFlashButtonPressed() async {
-    deepArController?.toggleFlash();
+    deepArController!.toggleFlash();
   }
 
   String flashIcon() {
-    if (deepArController != null && (deepArController?.flashState ?? false)) {
+    if (deepArController != null && deepArController!.flashState) {
       return "${AssetPath.vectorPath}flash-off.svg";
     } else if (flashMode == FlashMode.auto) {
       return "${AssetPath.vectorPath}flash-auto.svg";
@@ -219,7 +220,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await deepArController?.takeScreenshot().then((file) {
+      await deepArController!.takeScreenshot().then((file) {
         _result2 = file;
 
         // OpenFile.open(file.path);
@@ -245,7 +246,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await deepArController?.startVideoRecording();
+      await deepArController!.startVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();
@@ -259,8 +260,8 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      File? file = await deepArController?.stopVideoRecording();
-      // final _xFile = await cameraController.stopVideoRecording();
+      File? file = await deepArController!.stopVideoRecording();
+      // final _xFile = await cameraController!.stopVideoRecording();
       notifyListeners();
       return file;
     } on CameraException catch (e) {
@@ -275,7 +276,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
-      await cameraController?.resumeVideoRecording();
+      await cameraController!.resumeVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
       e.logger();

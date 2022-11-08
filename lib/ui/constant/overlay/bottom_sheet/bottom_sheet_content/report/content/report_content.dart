@@ -35,7 +35,7 @@ class ReportContent extends StatelessWidget {
             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
           ),
           Container(
-            height: 84.5 * (SizeConfig.screenHeight ?? context.getHeight()) / SizeWidget.baseHeightXD,
+            height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
             alignment: Alignment.center,
             child: BuildListTile(
                 onTap: () => reportHide(context),
@@ -46,7 +46,7 @@ class ReportContent extends StatelessWidget {
           if (fromLandscapeMode) sixteenPx,
           Container(
             alignment: Alignment.center,
-            height: 84.5 * (SizeConfig.screenHeight ?? context.getHeight()) / SizeWidget.baseHeightXD,
+            height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
             child: BuildListTile(
                 onTap: () => reportReport(context),
                 icon: "${AssetPath.vectorPath}report.svg",
