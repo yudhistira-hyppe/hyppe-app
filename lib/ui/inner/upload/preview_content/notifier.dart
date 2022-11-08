@@ -217,8 +217,6 @@ class PreviewContentNotifier with ChangeNotifier {
       );
 
       // notifier.setVideoPlayerController(_betterPlayerController);
-    } catch (e) {
-      print('Setup data source error: $e');
     }
     finally{
       _isLoadVideo = false;

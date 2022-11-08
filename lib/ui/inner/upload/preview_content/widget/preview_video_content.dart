@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 
@@ -32,13 +33,13 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     notifier.initVideoPlayer(context);
     _videoPlayerController = notifier.betterPlayerController;
+
     super.initState();
   }
 
-
   @override
   void dispose() {
-    print('_PreviewVideoContentState disposed');
+    _videoPlayerController?.dispose();
     super.dispose();
   }
 
@@ -74,17 +75,20 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
               alignment: Alignment.center,
               children: [
                 Material(
-                  child: Center(
+                  child: !notifier.isLoadVideo ? Center(
                     child: Platform.isAndroid
                         ? AspectRatio(
                             child: BetterPlayer(controller: notifier.betterPlayerController! ),
                             aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0,
                           )
                         : BetterPlayer(controller: notifier.betterPlayerController!),
+                  ) : const Center(
+                    child: CustomLoading(),
                   ),
                 ),
-                // Align(
-                //   alignment: Alignment.centerRight,
+                // Positioned(
+                //   right: 16,
+                //   bottom: context.getHeight() * 0.4,
                 //   child: InkWell(
                 //     onTap: (){
                 //

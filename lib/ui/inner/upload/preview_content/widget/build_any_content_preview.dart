@@ -72,13 +72,8 @@ class BuildAnyContentPreviewer extends StatelessWidget {
                 );
               }
               notifier.toDiaryVideoPlayer(index, SourceFile.local);
-              if(notifier.isLoadVideo){
-                return const Center(
-                  child: CustomLoading(),
-                );
-              }else{
-                return PreviewVideoContent();
-              }
+              return PreviewVideoContent();
+
             },
           ),
           for (int index = 0; index < notifier.additionalItem.length; index++) ...[
