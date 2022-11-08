@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -93,213 +95,264 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     },
                     itemBuilder: (context, indexRoot) {
                       final data = _notifier.listData;
-                      if(data != null){
-
-                      }
+                      if (data != null) {}
                       return PageView.builder(
                           controller: _mainPageController,
                           itemCount: 2,
                           scrollDirection: Axis.vertical,
-                          itemBuilder: (context, indexPage){
+                          itemBuilder: (context, indexPage) {
                             final data = _notifier.listData?[indexRoot];
-                            if(data != null){
+                            if (data != null) {
                               return indexPage == 0
                                   ? Stack(
-                                children: [
-                                  // Background
-                                  CustomBackgroundLayer(
-                                    sigmaX: 30,
-                                    sigmaY: 30,
-                                    // thumbnail: picData.content[arguments].contentUrl,
-                                    thumbnail: (data.isApsara ?? false) ? data.mediaThumbUri : data.fullThumbPath,
-                                  ),
-                                  // Content
-                                  PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: data, transformationController: transformationController),
-                                  // Top action
-                                  SafeArea(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Row(
-                                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                CustomTextButton(
-                                                  onPressed: () {
-                                                    resetZooming();
-                                                    Routing().moveBack();
-                                                  },
-                                                  style: ButtonStyle(
-                                                    alignment: Alignment.topCenter,
-                                                    padding: MaterialStateProperty.all(EdgeInsets.zero),
-                                                  ),
-                                                  child: const DecoratedIconWidget(
-                                                    Icons.arrow_back_ios,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                                ProfileComponent(
-                                                  isDetail: true,
-                                                  show: true,
-                                                  following: true,
-                                                  onFollow: () {},
-                                                  haveStory: false,
-                                                  onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
-                                                  spaceProfileAndId: eightPx,
-                                                  featureType: FeatureType.pic,
-                                                  username: data.username,
-                                                  isCelebrity: data.privacy?.isCelebrity,
-                                                  imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
-                                                  createdAt: '${System().readTimestamp(
-                                                    DateTime.parse(data.createdAt ?? '').millisecondsSinceEpoch,
-                                                    context,
-                                                    fullCaption: true,
-                                                  )}',
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          (data.saleAmount ?? 0) > 0
-                                              ? const Padding(
-                                            padding: EdgeInsets.only(top: 10.0),
-                                            child: CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}sale.svg",
-                                              defaultColor: false,
-                                            ),
-                                          )
-                                              : const SizedBox(),
-                                          data.email == SharedPreference().readStorage(SpKeys.email)
-                                              ? _buildButtonV2(
-                                            context: context,
-                                            iconData: '${AssetPath.vectorPath}more.svg',
-                                            function: () => ShowBottomSheet.onShowOptionContent(
-                                              context,
-                                              contentData: data,
-                                              captionTitle: hyppePic,
-                                              // storyController: widget.storyController,
-                                              onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                                            ),
-                                          )
-                                              : const SizedBox(),
-                                          data.email != SharedPreference().readStorage(SpKeys.email)
-                                              ? _buildButtonV2(
-                                            context: context,
-                                            iconData: '${AssetPath.vectorPath}more.svg',
-                                            function: () => ShowBottomSheet.onReportContent(context, data, hyppePic),
-                                          )
-                                              : const SizedBox(),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                  // Bottom action
-                                  Align(
-                                    alignment: const Alignment(-1.0, 0.9),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Consumer<LikeNotifier>(
-                                              builder: (context, notifier, child) => _buildButtonV2(
-                                                context: context,
-                                                colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                                                iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                function: () => notifier.likePost(context, data),
-                                              ),
-                                            ),
-                                            _buildButtonV2(
-                                              context: context,
-                                              iconData: '${AssetPath.vectorPath}comment.svg',
-                                              function: _notifier.listData?[indexRoot] != null
-                                                  ? () {
-                                                ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
-                                              }
-                                                  : () {},
-                                            ),
-                                            _buildButtonV2(
-                                              context: context,
-                                              iconData: '${AssetPath.vectorPath}share.svg',
-                                              function: _notifier.listData?[indexRoot] != null
-                                                  ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data)
-                                                  : () {},
-                                            ),
-                                            if ((data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
-                                              _buildButtonV2(
-                                                context: context,
-                                                iconData: '${AssetPath.vectorPath}cart.svg',
-                                                function: () => ShowBottomSheet.onBuyContent(context, data: data),
-                                              ),
-                                          ],
+                                        // Background
+                                        CustomBackgroundLayer(
+                                          sigmaX: 30,
+                                          sigmaY: 30,
+                                          // thumbnail: picData.content[arguments].contentUrl,
+                                          thumbnail: (data.isApsara ?? false) ? data.mediaThumbUri : data.fullThumbPath,
                                         ),
-                                        data.tagPeople?.isNotEmpty ?? false || data.location != ''
-                                            ? Padding(
-                                          padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
-                                          child: Row(
-                                            children: [
-                                              data.tagPeople?.isNotEmpty ?? false
-                                                  ? PicTagLabel(
-                                                icon: 'user',
-                                                label: '${data.tagPeople?.length} people',
-                                                function: () {
-                                                  context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
-                                                },
-                                                width: 18,
-                                              )
-                                                  : const SizedBox(),
-                                              data.location == '' || data.location == null
-                                                  ? const SizedBox()
-                                                  : PicTagLabel(
-                                                icon: 'maptag-white',
-                                                label: "${data.location}",
-                                                function: () {},
-                                                width: 13,
+                                        // Content
+                                        data.isReport ?? false
+                                            ? Container()
+                                            : PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: data, transformationController: transformationController),
+                                        // Top action
+                                        data.isReport ?? false
+                                            ? Container()
+                                            : SafeArea(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 8.0),
+                                                  child: Row(
+                                                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Row(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            CustomTextButton(
+                                                              onPressed: () {
+                                                                resetZooming();
+                                                                Routing().moveBack();
+                                                              },
+                                                              style: ButtonStyle(
+                                                                alignment: Alignment.topCenter,
+                                                                padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                                              ),
+                                                              child: const DecoratedIconWidget(
+                                                                Icons.arrow_back_ios,
+                                                                color: Colors.white,
+                                                              ),
+                                                            ),
+                                                            ProfileComponent(
+                                                              isDetail: true,
+                                                              show: true,
+                                                              following: true,
+                                                              onFollow: () {},
+                                                              haveStory: false,
+                                                              onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
+                                                              spaceProfileAndId: eightPx,
+                                                              featureType: FeatureType.pic,
+                                                              username: data.username,
+                                                              isCelebrity: data.privacy?.isCelebrity,
+                                                              imageUrl: '${System().showUserPicture(data.avatar?.mediaEndpoint)}',
+                                                              createdAt: '${System().readTimestamp(
+                                                                DateTime.parse(data.createdAt ?? '').millisecondsSinceEpoch,
+                                                                context,
+                                                                fullCaption: true,
+                                                              )}',
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      (data.saleAmount ?? 0) > 0
+                                                          ? const Padding(
+                                                              padding: EdgeInsets.only(top: 10.0),
+                                                              child: CustomIconWidget(
+                                                                iconData: "${AssetPath.vectorPath}sale.svg",
+                                                                defaultColor: false,
+                                                              ),
+                                                            )
+                                                          : const SizedBox(),
+                                                      data.email == SharedPreference().readStorage(SpKeys.email)
+                                                          ? _buildButtonV2(
+                                                              context: context,
+                                                              iconData: '${AssetPath.vectorPath}more.svg',
+                                                              function: () => ShowBottomSheet.onShowOptionContent(
+                                                                context,
+                                                                contentData: data,
+                                                                captionTitle: hyppePic,
+                                                                // storyController: widget.storyController,
+                                                                onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                                                              ),
+                                                            )
+                                                          : const SizedBox(),
+                                                      data.email != SharedPreference().readStorage(SpKeys.email)
+                                                          ? _buildButtonV2(
+                                                              context: context,
+                                                              iconData: '${AssetPath.vectorPath}more.svg',
+                                                              function: () => ShowBottomSheet.onReportContent(
+                                                                context,
+                                                                data,
+                                                                hyppePic,
+                                                                onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                                                              ),
+                                                            )
+                                                          : const SizedBox(),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                            ],
-                                          ),
-                                        )
-                                            : const SizedBox(),
-                                        Padding(
-                                          child: Container(
-                                            padding: const EdgeInsets.all(2),
-                                            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
-                                            // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-
-                                            child: SingleChildScrollView(
+                                        data.isReport ?? false
+                                            ? SafeArea(
+                                                child: SizedBox(
+                                                width: SizeConfig.screenWidth,
+                                                child: Consumer<TranslateNotifierV2>(
+                                                  builder: (context, transnot, child) => Column(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: [
+                                                      const Spacer(),
+                                                      const CustomIconWidget(
+                                                        iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                                        defaultColor: false,
+                                                        height: 30,
+                                                      ),
+                                                      Text(transnot.translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                                      Text(transnot.translate.yourReportWillbeHandledImmediately!,
+                                                          style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 13,
+                                                          )),
+                                                      const Spacer(),
+                                                      Container(
+                                                        padding: const EdgeInsets.only(top: 8),
+                                                        margin: const EdgeInsets.all(8),
+                                                        width: SizeConfig.screenWidth,
+                                                        decoration: const BoxDecoration(
+                                                          border: Border(
+                                                            top: BorderSide(
+                                                              color: Colors.white,
+                                                              width: 1,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Text(
+                                                          "${transnot.translate.see} HyppePic",
+                                                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
+                                                      thirtyTwoPx,
+                                                    ],
+                                                  ),
+                                                ),
+                                              ))
+                                            : Container(),
+                                        // Bottom action
+                                        data.isReport ?? false
+                                            ? Container()
+                                            : Align(
+                                                alignment: const Alignment(-1.0, 0.9),
                                                 child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
-                                                    ReadMoreText(
-                                                      "${data.description}",
-                                                      // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                                      trimLines: 5,
-                                                      trimMode: TrimMode.Line,
-                                                      textAlign: TextAlign.left,
-                                                      trimExpandedText: 'Show less',
-                                                      trimCollapsedText: 'Show more',
-                                                      colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                                                      style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                                                      moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
-                                                      lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                    Row(
+                                                      children: [
+                                                        Consumer<LikeNotifier>(
+                                                          builder: (context, notifier, child) => _buildButtonV2(
+                                                            context: context,
+                                                            colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                                            iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                            function: () => notifier.likePost(context, data),
+                                                          ),
+                                                        ),
+                                                        _buildButtonV2(
+                                                          context: context,
+                                                          iconData: '${AssetPath.vectorPath}comment.svg',
+                                                          function: _notifier.listData?[indexRoot] != null
+                                                              ? () {
+                                                                  ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                                                                }
+                                                              : () {},
+                                                        ),
+                                                        _buildButtonV2(
+                                                          context: context,
+                                                          iconData: '${AssetPath.vectorPath}share.svg',
+                                                          function: _notifier.listData?[indexRoot] != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data) : () {},
+                                                        ),
+                                                        if ((data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
+                                                          _buildButtonV2(
+                                                            context: context,
+                                                            iconData: '${AssetPath.vectorPath}cart.svg',
+                                                            function: () => ShowBottomSheet.onBuyContent(context, data: data),
+                                                          ),
+                                                      ],
                                                     ),
+                                                    data.tagPeople?.isNotEmpty ?? false || data.location != ''
+                                                        ? Padding(
+                                                            padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                                                            child: Row(
+                                                              children: [
+                                                                data.tagPeople?.isNotEmpty ?? false
+                                                                    ? PicTagLabel(
+                                                                        icon: 'user',
+                                                                        label: '${data.tagPeople?.length} people',
+                                                                        function: () {
+                                                                          context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
+                                                                        },
+                                                                        width: 18,
+                                                                      )
+                                                                    : const SizedBox(),
+                                                                data.location == '' || data.location == null
+                                                                    ? const SizedBox()
+                                                                    : PicTagLabel(
+                                                                        icon: 'maptag-white',
+                                                                        label: "${data.location}",
+                                                                        function: () {},
+                                                                        width: 13,
+                                                                      ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        : const SizedBox(),
+                                                    Padding(
+                                                      child: Container(
+                                                        padding: const EdgeInsets.all(2),
+                                                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                                                        // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+
+                                                        child: SingleChildScrollView(
+                                                            child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            ReadMoreText(
+                                                              "${data.description}",
+                                                              // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                                              trimLines: 5,
+                                                              trimMode: TrimMode.Line,
+                                                              textAlign: TextAlign.left,
+                                                              trimExpandedText: 'Show less',
+                                                              trimCollapsedText: 'Show more',
+                                                              colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                                                              style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                                                              moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                              lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                                                            ),
+                                                          ],
+                                                        )),
+                                                      ),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                                    )
                                                   ],
-                                                )),
-                                          ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                        )
+                                                ),
+                                              ),
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              )
+                                    )
                                   : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data));
-                            }else{
+                            } else {
                               return Stack(
                                 children: [
                                   const CustomShimmer(),
@@ -307,8 +360,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                 ],
                               );
                             }
-
-                          } );
+                          });
                     })
                 : Stack(
                     children: [

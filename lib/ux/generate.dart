@@ -13,7 +13,6 @@ import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
-import 'package:hyppe/ui/constant/entities/report/report_content.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
@@ -148,7 +147,7 @@ class Generate {
       case Routes.messageDetail:
         return MaterialPageRoute(builder: (_) => message_detail_v2.MessageDetailScreen(argument: settings.arguments as MessageDetailArgument));
       case Routes.report:
-        return MaterialPageRoute(builder: (_) => HyppeReport());
+      // return MaterialPageRoute(builder: (_) => HyppeReport());
       case Routes.noInternetConnection:
         return MaterialPageRoute(builder: (_) => const PageNoInternetConnection());
       case Routes.moderatedContent:
@@ -305,10 +304,6 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportingDocsPreview());
       case Routes.verificationIDStepSupportDocsEula:
         return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportDocsEula());
-
-      case Routes.reportContent:
-        return MaterialPageRoute(builder: (_) => const ReportContentScreen());
-
       case Routes.help:
         return MaterialPageRoute(builder: (_) => const HelpScreen());
       case Routes.faqDetail:

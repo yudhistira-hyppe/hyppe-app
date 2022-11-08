@@ -79,8 +79,7 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      print('showUserPicture : $url ${SharedPreference().readStorage(SpKeys.email)}');
-      return Env.data.baseUrl + "/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      return Env.data.baseUrl + "/v4" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
 
       // return Env.data.baseUrl + url +
       //     "?x-auth-token=" +
@@ -877,7 +876,7 @@ class System {
     var uint8list = byteData?.buffer.asUint8List();
     final String _pathFile = path.join(await getSystemPath(params: 'editedImg'), '${DateTime.now().toIso8601String()}.png');
     File imgFile = File(_pathFile);
-    if(uint8list != null){
+    if (uint8list != null) {
       await imgFile.writeAsBytes(uint8list);
     }
     return imgFile.absolute.path;

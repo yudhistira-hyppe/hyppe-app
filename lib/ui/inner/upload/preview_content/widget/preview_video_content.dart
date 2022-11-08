@@ -40,7 +40,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
+    final notifier = context.read<PreviewContentNotifier>();
+    notifier.betterPlayerController!.dispose();
     super.dispose();
   }
 
@@ -55,7 +56,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
       }
     });
     print('isVideoInitialized ${notifier.betterPlayerController?.isVideoInitialized()}');
-    if(notifier.betterPlayerController == null){
+    if (notifier.betterPlayerController == null) {
       return const Center(
         child: CustomLoading(),
       );
@@ -76,16 +77,18 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
               alignment: Alignment.center,
               children: [
                 Material(
-                  child: !notifier.isLoadVideo ? Center(
-                    child: Platform.isAndroid
-                        ? AspectRatio(
-                            child: BetterPlayer(controller: notifier.betterPlayerController! ),
-                            aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0,
-                          )
-                        : BetterPlayer(controller: notifier.betterPlayerController!),
-                  ) : const Center(
-                    child: CustomLoading(),
-                  ),
+                  child: !notifier.isLoadVideo
+                      ? Center(
+                          child: Platform.isAndroid
+                              ? AspectRatio(
+                                  child: BetterPlayer(controller: notifier.betterPlayerController!),
+                                  aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0,
+                                )
+                              : BetterPlayer(controller: notifier.betterPlayerController!),
+                        )
+                      : const Center(
+                          child: CustomLoading(),
+                        ),
                 ),
                 Positioned(
                   right: 16,

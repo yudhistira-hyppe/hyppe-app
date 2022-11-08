@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -58,7 +59,7 @@ class HomeNotifier with ChangeNotifier {
   String _profileImage = '';
   String get profileImage => _profileImage;
 
-  set profileImage(String url){
+  set profileImage(String url) {
     _profileImage = url;
     notifyListeners();
   }
@@ -165,8 +166,6 @@ class HomeNotifier with ChangeNotifier {
         print("Error Load Pic : $e");
       }
 
-
-
       print('totLoading $totLoading');
       if (totLoading >= 3) {
         print("is finish shimmer");
@@ -176,7 +175,6 @@ class HomeNotifier with ChangeNotifier {
       }
 
       notifyListeners();
-
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
@@ -264,9 +262,11 @@ class HomeNotifier with ChangeNotifier {
     bool? saleView,
   }) {
     ContentData? _updatedData;
+    ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     switch (content) {
@@ -277,7 +277,8 @@ class HomeNotifier with ChangeNotifier {
         _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData2 = pic2.data;
         break;
       case hyppeStory:
         _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
@@ -293,7 +294,11 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.allowComments = allowComment;
       _updatedData.visibility = visibility;
       _updatedData.location = location;
-      _updatedData.saleAmount = num.parse(saleAmount != null ? saleAmount != '' ? saleAmount : '0' : '0');
+      _updatedData.saleAmount = num.parse(saleAmount != null
+          ? saleAmount != ''
+              ? saleAmount
+              : '0'
+          : '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleView = saleView;
       _updatedData.cats = [];
@@ -309,6 +314,36 @@ class HomeNotifier with ChangeNotifier {
           );
         }
       }
+
+      if (_updatedData2 != null) {
+        _updatedData2.tags = tags;
+        _updatedData2.description = description;
+        _updatedData2.allowComments = allowComment;
+        _updatedData2.visibility = visibility;
+        _updatedData2.location = location;
+        _updatedData2.saleAmount = num.parse(saleAmount != null
+            ? saleAmount != ''
+                ? saleAmount
+                : '0'
+            : '0');
+        _updatedData2.saleLike = saleLike;
+        _updatedData2.saleView = saleView;
+        _updatedData2.cats = [];
+        _updatedData2.tagPeople = [];
+        // _updatedData2.tagPeople = tagPeople;
+        _updatedData2.tagPeople!.addAll(tagPeople ?? []);
+        if (cats != null) {
+          for (var v in cats) {
+            _updatedData2.cats!.add(
+              Cats(
+                interestName: v,
+              ),
+            );
+          }
+        }
+      }
+
+      print(_updatedData.cats!.length);
     }
 
     notifyListeners();
@@ -316,9 +351,11 @@ class HomeNotifier with ChangeNotifier {
 
   void onReport(BuildContext context, {required String postID, required String content, bool? isReport}) {
     ContentData? _updatedData;
+    ContentData? _updatedData2;
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
     final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
     final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
     final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
     switch (content) {
@@ -330,6 +367,8 @@ class HomeNotifier with ChangeNotifier {
         break;
       case hyppePic:
         _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData2 = pic2.data;
+
         break;
       case hyppeStory:
         _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
@@ -341,7 +380,10 @@ class HomeNotifier with ChangeNotifier {
 
     if (_updatedData != null) {
       _updatedData.isReport = isReport;
-      // _updatedData.tagPeople = tagPeople;
+
+      if (_updatedData2 != null) {
+        _updatedData2.isReport = isReport;
+      }
     }
 
     notifyListeners();
@@ -413,14 +455,13 @@ class HomeNotifier with ChangeNotifier {
     }
 
     final index = vid.vidData?.indexWhere((element) => element.postID == postID);
-    if(index != null){
+    if (index != null) {
       vid.vidData?[index].tagPeople?.removeWhere((element) => element.email == email);
       vid.vidData?[index].description = 'asdaksdjha jsd';
 
       print(vid.vidData?[index].tagPeople?.length);
       _updatedData?.tagPeople?.removeWhere((element) => element.email == email);
     }
-
 
     notifyListeners();
   }

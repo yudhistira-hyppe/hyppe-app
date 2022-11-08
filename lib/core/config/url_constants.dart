@@ -10,7 +10,7 @@ class UrlConstants {
   /// Versioning
   static const String apiV1 = 'v1';
 
-  static const String apiV2 = 'v2hilang';
+  static const String apiV2 = 'v2';
 
   static const String apiV3 = 'v3';
 
@@ -22,7 +22,7 @@ class UrlConstants {
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
-  static const String stagingBaseApi = "https://staging.hyppe.id";
+  static const String stagingBaseApi = "https://staging.hyppe.app";
   // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 
   /// Prod Deeplink Base url
@@ -510,4 +510,8 @@ class UrlConstants {
 
   /// get => categorytickets
   static const String levelTickets = "/api/leveltickets/all";
+
+  //==========report============
+  static const String getOptionReport = "/api/reportreasons/all";
+  static const String insertReport = "/api/reportuser/create";
 }

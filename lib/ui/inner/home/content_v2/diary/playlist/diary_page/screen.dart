@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -116,92 +120,151 @@ class _DiaryPageState extends State<DiaryPage> {
               ))
           : Stack(
               children: [
-                StoryView(
-                  inline: false,
-                  repeat: true,
-                  progressColor: kHyppeLightButtonText,
-                  durationColor: kHyppeLightButtonText,
-                  storyItems: _storyItems,
-                  onDouble: () {
-                    context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
-                  },
-                  controller: _storyController,
-                  progressPosition: ProgressPosition.top,
-                  onStoryShow: (storyItem) {
-                    int pos = _storyItems.indexOf(storyItem);
+                widget.data?.isReport ?? false
+                    ? Container()
+                    : StoryView(
+                        inline: false,
+                        repeat: true,
+                        progressColor: kHyppeLightButtonText,
+                        durationColor: kHyppeLightButtonText,
+                        storyItems: _storyItems,
+                        onDouble: () {
+                          context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
+                        },
+                        controller: _storyController,
+                        progressPosition: ProgressPosition.top,
+                        onStoryShow: (storyItem) {
+                          int pos = _storyItems.indexOf(storyItem);
 
-                    context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
-                    // _addPostView();
-                    _storyController.playbackNotifier.listen((value) {
-                      if (value == PlaybackState.previous) {
-                        if (widget.controller?.page == 0) {
-                          // context.read<DiariesPlaylistNotifier>().onWillPop(true);
-                        } else {
-                          widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                        }
-                      }
-                    });
-                  },
-                  onInit: () {
-                    context.incrementAdsCount();
-                  },
-                  onRepeat: () {
-                    context.incrementAdsCount();
-                  },
-                  nextDebouncer: false,
-                  onComplete: () async {
-                    await notifier.initAdsData(context);
-                    // widget.controller.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
+                          // _addPostView();
+                          _storyController.playbackNotifier.listen((value) {
+                            if (value == PlaybackState.previous) {
+                              if (widget.controller?.page == 0) {
+                                // context.read<DiariesPlaylistNotifier>().onWillPop(true);
+                              } else {
+                                widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              }
+                            }
+                          });
+                        },
+                        onInit: () {
+                          context.incrementAdsCount();
+                        },
+                        onRepeat: () {
+                          context.incrementAdsCount();
+                        },
+                        nextDebouncer: false,
+                        onComplete: () async {
+                          await notifier.initAdsData(context);
+                          // widget.controller.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
-                    // _storyController.next();
-                    // widget.controller.
+                          // _storyController.next();
+                          // widget.controller.
 
-                    // final isLastPage = widget.total! - 1 == widget.controller.page;
-                    // widget.function();
-                    // if (isLastPage) {
-                    //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
-                    // }
-                  },
-                  onEverySecond: (duration) async {
-                    // final secondAds = secondOfAds(notifier.adsData);
-                    // print(' ZT secondAds : $secondAds');
-                    // print(' ZT secondVid : ${duration}');
-                    // print(' ZT URL : ${notifier.adsUrl}');
+                          // final isLastPage = widget.total! - 1 == widget.controller.page;
+                          // widget.function();
+                          // if (isLastPage) {
+                          //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
+                          // }
+                        },
+                        onEverySecond: (duration) async {
+                          // final secondAds = secondOfAds(notifier.adsData);
+                          // print(' ZT secondAds : $secondAds');
+                          // print(' ZT secondVid : ${duration}');
+                          // print(' ZT URL : ${notifier.adsUrl}');
 
-                    if (duration == secondOfAds(notifier.adsData)) {
-                      if (notifier.adsUrl.isNotEmpty) {
-                        final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+                          if (duration == secondOfAds(notifier.adsData)) {
+                            if (notifier.adsUrl.isNotEmpty) {
+                              final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
 
-                        if (!isShowAds) {
-                          _storyController.pause();
-                          await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
-                          _storyController.play();
-                        }
-                      }
-                    }
-                  },
-                  onVerticalSwipeComplete: (v) {
-                    if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
-                  },
-                ),
+                              if (!isShowAds) {
+                                _storyController.pause();
+                                await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
+                                _storyController.play();
+                              }
+                            }
+                          }
+                        },
+                        onVerticalSwipeComplete: (v) {
+                          if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
+                        },
+                      ),
+                widget.data!.isReport!
+                    ? CustomBackgroundLayer(
+                        sigmaX: 30,
+                        sigmaY: 30,
+                        // thumbnail: picData!.content[arguments].contentUrl,
+                        thumbnail: (widget.data!.isApsara ?? false) ? widget.data!.mediaThumbEndPoint : widget.data!.fullThumbPath,
+                      )
+                    : Container(),
+                widget.data!.isReport!
+                    ? SafeArea(
+                        child: SizedBox(
+                        width: SizeConfig.screenWidth,
+                        child: Consumer<TranslateNotifierV2>(
+                          builder: (context, transnot, child) => Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Spacer(),
+                              const CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                defaultColor: false,
+                                height: 30,
+                              ),
+                              Text(transnot.translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                              Text(transnot.translate.yourReportWillbeHandledImmediately!,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  )),
+                              const Spacer(),
+                              Container(
+                                padding: const EdgeInsets.only(top: 8),
+                                margin: const EdgeInsets.all(8),
+                                width: SizeConfig.screenWidth,
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                      color: Colors.white,
+                                      width: 1,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "${transnot.translate.see} HyppeDiary",
+                                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              thirtyTwoPx,
+                            ],
+                          ),
+                        ),
+                      ))
+                    : Container(),
                 TitlePlaylistDiaries(
                   data: widget.data,
                   storyController: _storyController,
                 ),
-                RightItems(
-                  data: widget.data ?? ContentData(),
-                ),
-                LeftItems(
-                  description: widget.data?.description,
-                  tags: widget.data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
-                  musicName: "Dangdut koplo remix",
-                  authorName: widget.data?.username,
-                  userName: widget.data?.username,
-                  location: widget.data?.location,
-                  postID: widget.data?.postID,
-                  storyController: _storyController,
-                  tagPeople: widget.data?.tagPeople,
-                ),
+                widget.data?.isReport ?? false
+                    ? Container()
+                    : RightItems(
+                        data: widget.data ?? ContentData(),
+                      ),
+                widget.data!.isReport!
+                    ? Container()
+                    : LeftItems(
+                        description: widget.data?.description,
+                        // tags: widget.data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
+                        musicName: "Dangdut koplo remix",
+                        authorName: widget.data?.username,
+                        userName: widget.data?.username,
+                        location: widget.data?.location,
+                        postID: widget.data?.postID,
+                        storyController: _storyController,
+                        tagPeople: widget.data?.tagPeople,
+                      ),
               ],
             );
     } else {

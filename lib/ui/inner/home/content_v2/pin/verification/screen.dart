@@ -52,7 +52,11 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
           extendBodyBehindAppBar: true,
           appBar: AppBar(
             leading: GestureDetector(
-              onTap: () => Routing().moveBack(),
+              onTap: () {
+                Routing().moveBack();
+                notifier.otpController.clear();
+                notifier.otpVerified = '';
+              },
               child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
             ),
             automaticallyImplyLeading: false,

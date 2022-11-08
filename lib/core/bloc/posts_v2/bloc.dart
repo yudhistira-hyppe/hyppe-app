@@ -221,6 +221,7 @@ class PostsBloc {
 
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
+
     print(System().basenameFiles(File(fileContents[0] ?? '').path));
     print(System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", ""));
 

@@ -5,6 +5,7 @@ import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_thumbnail_report.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -49,10 +50,12 @@ class PicDetailSlider extends StatelessWidget {
               onPageChanged: print,
               itemBuilder: (context, index) => InkWell(
                 child: Center(
-                  child: CustomThumbImage(
-                    boxFit: BoxFit.cover,
-                    imageUrl: picData?.isApsara ?? false ? picData?.mediaThumbUri : picData?.fullThumbPath,
-                  ),
+                  child: picData?.isReport ?? false
+                      ? PichTumbnailReport(pictData: picData)
+                      : CustomThumbImage(
+                          boxFit: BoxFit.cover,
+                          imageUrl: picData?.isApsara ?? false ? picData?.mediaThumbUri : picData?.fullThumbPath,
+                        ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
                 // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
@@ -77,91 +80,96 @@ class PicDetailSlider extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        (picData?.saleAmount ?? 0) > 0
-                            ? const Padding(
-                                padding: EdgeInsets.all(2.0),
-                                child: CustomIconWidget(
-                                  iconData: "${AssetPath.vectorPath}sale.svg",
-                                  defaultColor: false,
-                                ),
-                              )
-                            : const SizedBox(),
-                        picData?.email != SharedPreference().readStorage(SpKeys.email)
-                            ? SizedBox(
-                                width: 50,
-                                child: CustomTextButton(
-                                  onPressed: () => ShowBottomSheet.onReportContent(context, picData, hyppePic),
-                                  child: const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: '${AssetPath.vectorPath}more.svg',
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                        picData?.email == SharedPreference().readStorage(SpKeys.email)
-                            ? SizedBox(
-                                width: 50,
-                                child: CustomTextButton(
-                                  onPressed: () => ShowBottomSheet.onShowOptionContent(
-                                    context,
-                                    onDetail: onDetail,
-                                    contentData: picData ?? ContentData(),
-                                    captionTitle: hyppePic,
-                                    onUpdate: () => notifier.onUpdate(),
-                                  ),
-                                  child: const CustomIconWidget(
-                                    defaultColor: false,
-                                    iconData: '${AssetPath.vectorPath}more.svg',
-                                    color: kHyppeLightButtonText,
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                      ],
-                    ),
+                    picData?.isReport ?? false
+                        ? Container()
+                        : Row(
+                            children: [
+                              (picData?.saleAmount ?? 0) > 0
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(2.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        defaultColor: false,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                              picData?.email != SharedPreference().readStorage(SpKeys.email)
+                                  ? SizedBox(
+                                      width: 50,
+                                      child: CustomTextButton(
+                                        onPressed: () => ShowBottomSheet.onReportContent(context, picData, hyppePic),
+                                        child: const CustomIconWidget(
+                                          defaultColor: false,
+                                          iconData: '${AssetPath.vectorPath}more.svg',
+                                          color: kHyppeLightButtonText,
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              picData?.email == SharedPreference().readStorage(SpKeys.email)
+                                  ? SizedBox(
+                                      width: 50,
+                                      child: CustomTextButton(
+                                        onPressed: () => ShowBottomSheet.onShowOptionContent(
+                                          context,
+                                          onDetail: onDetail,
+                                          contentData: picData ?? ContentData(),
+                                          captionTitle: hyppePic,
+                                          onUpdate: () => notifier.onUpdate(),
+                                        ),
+                                        child: const CustomIconWidget(
+                                          defaultColor: false,
+                                          iconData: '${AssetPath.vectorPath}more.svg',
+                                          color: kHyppeLightButtonText,
+                                        ),
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
                   ],
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData?.postID, 'LIKE', 'Like', picData?.email);
-                      },
-                      child: CustomBalloonWidget(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              width: 20,
-                              height: 20,
-                              defaultColor: false,
-                              iconData: '${AssetPath.vectorPath}like.svg',
-                              color: kHyppeLightButtonText,
+
+            picData?.isReport ?? false
+                ? Container()
+                : Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
+                            },
+                            child: CustomBalloonWidget(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CustomIconWidget(
+                                    width: 20,
+                                    height: 20,
+                                    defaultColor: false,
+                                    iconData: '${AssetPath.vectorPath}like.svg',
+                                    color: kHyppeLightButtonText,
+                                  ),
+                                  fourPx,
+                                  CustomTextWidget(
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                    // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
+                                    textToDisplay: "${notifier.data?.insight?.likes}",
+                                  ),
+                                ],
+                              ),
                             ),
-                            fourPx,
-                            CustomTextWidget(
-                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                              // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
-                              textToDisplay: "${notifier.data?.insight?.likes}",
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),

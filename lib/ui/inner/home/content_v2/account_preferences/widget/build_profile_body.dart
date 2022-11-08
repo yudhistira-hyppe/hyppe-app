@@ -23,6 +23,7 @@ class BuildProfileBody extends StatelessWidget {
               labelText: "${notifier.language.userName}*",
               hintText: notifier.language.userName,
               inputAreaHeight: 50 * SizeConfig.scaleDiagonal,
+              readOnly: true,
             ),
             TextInputAccountPreferences(
               controller: notifier.emailController,

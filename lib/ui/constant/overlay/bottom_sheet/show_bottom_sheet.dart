@@ -1,7 +1,6 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -57,7 +56,6 @@ import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
 import 'bottom_sheet_content/on_coloured_sheet.dart';
-
 
 class ShowBottomSheet {
   ShowBottomSheet._private();
@@ -190,7 +188,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton ?? (){}, backButton: backButton),
+            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton ?? () {}, backButton: backButton),
           ),
         );
       },
@@ -250,7 +248,6 @@ class ShowBottomSheet {
       },
     ).whenComplete(() => forceStop = false);
   }
-
 
   static void onShowCommentV2(
     BuildContext _, {
@@ -794,7 +791,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController}) {
+  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController, Function? onUpdate}) {
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -813,6 +810,7 @@ class ShowBottomSheet {
             child: OnReportContentBottomSheet(
               postData: postData,
               type: type,
+              onUpdate: onUpdate,
             ),
           ),
         );
@@ -850,7 +848,13 @@ class ShowBottomSheet {
     });
   }
 
-  static onReportSpamContent(_, {StoryController? storyController, ContentData? postData, String? type}) {
+  static onReportSpamContent(
+    _, {
+    StoryController? storyController,
+    ContentData? postData,
+    String? type,
+    Function? onUpdate,
+  }) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
@@ -874,6 +878,8 @@ class ShowBottomSheet {
     ).whenComplete(() {
       if (storyController != null) storyController.play();
       Routing().moveBack();
+
+      if (onUpdate != null) onUpdate();
     });
   }
 

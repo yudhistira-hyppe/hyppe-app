@@ -6,9 +6,9 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
-import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
-import 'package:hyppe/ui/constant/entities/camera_devices//widgets/camera_flash_button.dart';
-import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_switch_button.dart';
+import 'package:hyppe/ui/constant/entities/camera/screen.dart';
+import 'package:hyppe/ui/constant/entities/camera//widgets/camera_flash_button.dart';
+import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -54,7 +54,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
           return false;
         },
         child: Scaffold(
-          body: CameraDevicesPage(
+          body: CameraPage(
             onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraNotifier = cameraNotifier,
             additionalViews: <Widget>[
               Align(
