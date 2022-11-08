@@ -16,6 +16,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 
+import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 
 // import 'package:hyppe/core/constants/enum.dart';
@@ -86,26 +87,26 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                     child: CustomLoading(),
                   ),
                 ),
-                // Positioned(
-                //   right: 16,
-                //   bottom: context.getHeight() * 0.4,
-                //   child: InkWell(
-                //     onTap: (){
-                //
-                //     },
-                //     child: Column(
-                //       crossAxisAlignment: CrossAxisAlignment.center,
-                //       children: const [
-                //         CustomIconWidget(
-                //           defaultColor: false,
-                //           iconData: "${AssetPath.vectorPath}circle_music.svg",
-                //         ),
-                //         fourPx,
-                //         CustomTextWidget(maxLines: 1, textToDisplay: "Rp.0", textAlign: TextAlign.left, textStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
-                //       ],
-                //     ),
-                //   ),
-                // ),
+                Positioned(
+                  right: 16,
+                  bottom: context.getHeight() * 0.4,
+                  child: InkWell(
+                    onTap: (){
+                      ShowBottomSheet.onChooseMusic(context);
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const CustomIconWidget(
+                          defaultColor: false,
+                          iconData: "${AssetPath.vectorPath}circle_music.svg",
+                        ),
+                        fourPx,
+                        CustomTextWidget(maxLines: 1, textToDisplay: notifier.language.music ?? '', textAlign: TextAlign.left, textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                      ],
+                    ),
+                  ),
+                ),
                 if (!(notifier.betterPlayerController?.isPlaying() ?? false))
                   const CustomIconWidget(
                     defaultColor: false,
