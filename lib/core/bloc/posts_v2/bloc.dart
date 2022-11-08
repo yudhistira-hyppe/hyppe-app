@@ -223,6 +223,10 @@ class PostsBloc {
     debugPrint(formData.fields.join(" - "));
     print(System().basenameFiles(File(fileContents[0]!).path));
     print(System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", ""));
+    print(MediaType(
+      System().lookupContentMimeType(File(fileContents[0]!).path)?.split('/')[0] ?? '',
+      System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", "") ?? "",
+    ));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -30,11 +32,6 @@ class PicCenterItem extends StatelessWidget {
       onTap: onTap as void Function()?,
       child: Stack(
         children: [
-          CustomBackgroundLayer(
-              sigmaX: 30,
-              sigmaY: 30,
-              // thumbnail: picData!.content[arguments].contentUrl,
-              thumbnail: data!.isApsara! ? data!.mediaThumbEndPoint : "${data?.fullThumbPath}"),
           CustomBaseCacheImage(
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
@@ -45,7 +42,10 @@ class PicCenterItem extends StatelessWidget {
               width: _scaling,
               height: 168,
               decoration: BoxDecoration(
-                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: BoxFit.cover,
+                ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: _buildBody(),
@@ -80,6 +80,19 @@ class PicCenterItem extends StatelessWidget {
       children: [
         if (isSale) PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 5.0,
+              sigmaY: 5.0,
+            ),
+            child: Container(
+              alignment: Alignment.center,
+              width: 200.0,
+              height: 200.0,
+            ),
+          ),
+        ),
       ],
     );
   }

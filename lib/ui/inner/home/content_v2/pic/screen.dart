@@ -60,7 +60,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
               child: context.read<ErrorService>().isInitialError(error, notifier.pic)
                   ? CustomErrorWidget(
                       errorType: ErrorType.pic,
-                      function: (){
+                      function: () {
                         print('initialPic : 4');
                         notifier.initialPic(context, reload: true);
                       },
