@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/services/shared_preference.dart';
@@ -48,7 +50,7 @@ class PicCenterItem extends StatelessWidget {
                 ),
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: _buildBody(),
+              child: _buildBody(context),
             ),
             errorWidget: (context, url, error) {
               print('errorWidget :  $error');
@@ -57,7 +59,7 @@ class PicCenterItem extends StatelessWidget {
                 // const EdgeInsets.symmetric(horizontal: 4.5),
                 width: _scaling,
                 height: 186,
-                child: _buildBody(),
+                child: _buildBody(context),
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: AssetImage('${AssetPath.pngPath}content-error.png'),
@@ -73,26 +75,43 @@ class PicCenterItem extends StatelessWidget {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(context) {
     final email = SharedPreference().readStorage(SpKeys.email);
     final isSale = data?.email != email;
+    final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     return Stack(
       children: [
         if (isSale) PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
-        ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 5.0,
-              sigmaY: 5.0,
-            ),
-            child: Container(
-              alignment: Alignment.center,
-              width: 200.0,
-              height: 200.0,
-            ),
-          ),
-        ),
+        data!.isReport!
+            ? ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 30.0,
+                    sigmaY: 30.0,
+                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 200.0,
+                    height: 200.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "${translate.translate.see} HyppePic",
+                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          textAlign: TextAlign.center,
+                        ),
+                        sixPx,
+                        sixPx,
+                        sixPx,
+                        sixPx,
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : Container(),
       ],
     );
   }

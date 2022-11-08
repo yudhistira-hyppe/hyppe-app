@@ -5,6 +5,7 @@ import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_thumbnail_report.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -49,10 +50,12 @@ class PicDetailSlider extends StatelessWidget {
               onPageChanged: print,
               itemBuilder: (context, index) => InkWell(
                 child: Center(
-                  child: CustomThumbImage(
-                    boxFit: BoxFit.cover,
-                    imageUrl: picData!.isApsara! ? picData?.mediaThumbUri : picData?.fullThumbPath,
-                  ),
+                  child: picData!.isReport!
+                      ? PichTumbnailReport(pictData: picData)
+                      : CustomThumbImage(
+                          boxFit: BoxFit.cover,
+                          imageUrl: picData!.isApsara! ? picData?.mediaThumbUri : picData?.fullThumbPath,
+                        ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
                 // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
@@ -88,7 +91,7 @@ class PicDetailSlider extends StatelessWidget {
                                 ),
                               )
                             : const SizedBox(),
-                        picData?.email != SharedPreference().readStorage(SpKeys.email)
+                        !picData!.isReport! && picData?.email != SharedPreference().readStorage(SpKeys.email)
                             ? SizedBox(
                                 width: 50,
                                 child: CustomTextButton(
@@ -101,7 +104,7 @@ class PicDetailSlider extends StatelessWidget {
                                 ),
                               )
                             : SizedBox(),
-                        picData?.email == SharedPreference().readStorage(SpKeys.email)
+                        !picData!.isReport! && picData?.email == SharedPreference().readStorage(SpKeys.email)
                             ? SizedBox(
                                 width: 50,
                                 child: CustomTextButton(
@@ -126,42 +129,44 @@ class PicDetailSlider extends StatelessWidget {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
-                      },
-                      child: CustomBalloonWidget(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const CustomIconWidget(
-                              width: 20,
-                              height: 20,
-                              defaultColor: false,
-                              iconData: '${AssetPath.vectorPath}like.svg',
-                              color: kHyppeLightButtonText,
+            picData!.isReport!
+                ? Container()
+                : Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
+                            },
+                            child: CustomBalloonWidget(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const CustomIconWidget(
+                                    width: 20,
+                                    height: 20,
+                                    defaultColor: false,
+                                    iconData: '${AssetPath.vectorPath}like.svg',
+                                    color: kHyppeLightButtonText,
+                                  ),
+                                  fourPx,
+                                  CustomTextWidget(
+                                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                                    // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
+                                    textToDisplay: "${notifier.data?.insight?.likes}",
+                                  ),
+                                ],
+                              ),
                             ),
-                            fourPx,
-                            CustomTextWidget(
-                              textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
-                              // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
-                              textToDisplay: "${notifier.data?.insight?.likes}",
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            )
+                  )
           ],
         ),
       ),

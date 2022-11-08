@@ -199,49 +199,51 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       ),
                                     ),
 
-                                    SafeArea(
-                                        child: SizedBox(
-                                      width: SizeConfig.screenWidth,
-                                      child: Consumer<TranslateNotifierV2>(
-                                        builder: (context, transnot, child) => Column(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            Spacer(),
-                                            const CustomIconWidget(
-                                              iconData: "${AssetPath.vectorPath}valid-invert.svg",
-                                              defaultColor: false,
-                                              height: 30,
-                                            ),
-                                            Text(transnot.translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                            Text(transnot.translate.yourReportWillbeHandledImmediately!,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13,
-                                                )),
-                                            Spacer(),
-                                            Container(
-                                              padding: const EdgeInsets.only(top: 8),
-                                              margin: const EdgeInsets.all(8),
-                                              width: SizeConfig.screenWidth,
-                                              decoration: const BoxDecoration(
-                                                border: Border(
-                                                  top: BorderSide(
-                                                    color: Colors.white,
-                                                    width: 1,
+                                    _notifier.listData![indexRoot].isReport!
+                                        ? SafeArea(
+                                            child: SizedBox(
+                                            width: SizeConfig.screenWidth,
+                                            child: Consumer<TranslateNotifierV2>(
+                                              builder: (context, transnot, child) => Column(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Spacer(),
+                                                  const CustomIconWidget(
+                                                    iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                                    defaultColor: false,
+                                                    height: 30,
                                                   ),
-                                                ),
-                                              ),
-                                              child: Text(
-                                                "${transnot.translate.see} HyppePic",
-                                                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                                                textAlign: TextAlign.center,
+                                                  Text(transnot.translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                                  Text(transnot.translate.yourReportWillbeHandledImmediately!,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 13,
+                                                      )),
+                                                  Spacer(),
+                                                  Container(
+                                                    padding: const EdgeInsets.only(top: 8),
+                                                    margin: const EdgeInsets.all(8),
+                                                    width: SizeConfig.screenWidth,
+                                                    decoration: const BoxDecoration(
+                                                      border: Border(
+                                                        top: BorderSide(
+                                                          color: Colors.white,
+                                                          width: 1,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Text(
+                                                      "${transnot.translate.see} HyppePic",
+                                                      style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  thirtyTwoPx,
+                                                ],
                                               ),
                                             ),
-                                            thirtyTwoPx,
-                                          ],
-                                        ),
-                                      ),
-                                    )),
+                                          ))
+                                        : Container(),
 
                                     // Bottom action
                                     _notifier.listData![indexRoot].isReport!
