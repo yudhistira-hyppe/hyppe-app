@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -769,7 +770,8 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController, Function? onUpdate}) {
+  static onReportContent(_, {ContentData? postData, AdsData? adsData, String? type, StoryController? storyController, Function? onUpdate}) {
+    print('pop up pertama');
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -789,14 +791,12 @@ class ShowBottomSheet {
               postData: postData,
               type: type,
               onUpdate: onUpdate,
+              adsData: adsData,
             ),
           ),
         );
       },
-    ).whenComplete(() {
-      if (storyController != null) storyController.play();
-    });
-    ;
+    ).whenComplete(() {});
   }
 
   static onReportFormContent(_, {StoryController? storyController}) {
@@ -821,7 +821,6 @@ class ShowBottomSheet {
         );
       },
     ).whenComplete(() {
-      if (storyController != null) storyController.play();
       Routing().moveBack();
     });
   }
@@ -830,6 +829,7 @@ class ShowBottomSheet {
     _, {
     StoryController? storyController,
     ContentData? postData,
+    AdsData? adsData,
     String? type,
     Function? onUpdate,
   }) {
@@ -837,26 +837,27 @@ class ShowBottomSheet {
       context: _,
       isScrollControlled: true,
       builder: (builder) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-          child: Container(
-            height: SizeConfig.screenHeight ?? 0 / 1.09,
-            decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            child: Container(
+              height: SizeConfig.screenHeight ?? 0 / 1.09,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
+              padding: const EdgeInsets.all(0),
+              child: OnReportSpamFormBottomSheet(postData: postData, type: type),
             ),
-            padding: const EdgeInsets.all(0),
-            child: OnReportSpamFormBottomSheet(postData: postData, type: type),
           ),
         );
       },
     ).whenComplete(() {
-      if (storyController != null) storyController.play();
       Routing().moveBack();
-
       if (onUpdate != null) onUpdate();
     });
   }

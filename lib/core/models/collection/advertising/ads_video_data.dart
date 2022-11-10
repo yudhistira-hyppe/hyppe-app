@@ -3,25 +3,21 @@ import '../../../constants/shared_preference_keys.dart';
 import '../../../response/generic_response.dart';
 import '../../../services/shared_preference.dart';
 
-class AdsVideo{
+class AdsVideo {
   int? responseCode;
   AdsData? data;
   Messages? messages;
 
-  AdsVideo({
-    this.responseCode,
-    this.data,
-    this.messages
-  });
+  AdsVideo({this.responseCode, this.data, this.messages});
 
-  AdsVideo.fromJson(Map<String, dynamic> json){
+  AdsVideo.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'] ?? 0;
     data = AdsData.fromJson(json['data']);
     messages = Messages.fromJson(json['messages']);
   }
 }
 
-class AdsData{
+class AdsData {
   String? adsId;
   String? adsUrlLink;
   String? adsDescription;
@@ -36,6 +32,7 @@ class AdsData{
   String? mediaType;
   String? videoId;
   double? duration;
+  bool? isReport;
 
   AdsData({
     this.adsId,
@@ -52,9 +49,10 @@ class AdsData{
     this.mediaType,
     this.videoId,
     this.duration,
+    this.isReport,
   });
 
-  AdsData.fromJson(Map<String, dynamic> json){
+  AdsData.fromJson(Map<String, dynamic> json) {
     adsId = json['adsId'] ?? '';
     adsUrlLink = json['adsUrlLink'] ?? '';
     adsDescription = json['adsDescription'] ?? '';
@@ -68,22 +66,23 @@ class AdsData{
     adsSkip = json['adsSkip'];
     mediaType = json['mediaType'];
     videoId = json['videoId'];
+    isReport = json['isReport'] ?? false;
     final value = json['duration'];
-    try{
-      if(value is int){
+    try {
+      if (value is int) {
         duration = value.toDouble();
-      }else{
+      } else {
         duration = value;
       }
-    }catch(e){
+    } catch (e) {
       print('$e');
     }
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['adsId'] = adsId ?? '';
-    data['adsUrlLink'] =  adsUrlLink ?? '';
+    data['adsUrlLink'] = adsUrlLink ?? '';
     data['adsDescription'] = adsDescription ?? '';
     data['useradsId'] = useradsId ?? '';
     data['idUser'] = idUser ?? '';
@@ -99,21 +98,16 @@ class AdsData{
   }
 }
 
-class AdsAvatar{
+class AdsAvatar {
   String? mediaBasePath;
   String? mediaUri;
   String? mediaType;
   String? mediaEndpoint;
   String? fullLinkURL;
 
-  AdsAvatar({
-    this.mediaBasePath,
-    this.mediaUri,
-    this.mediaType,
-    this.mediaEndpoint
-  });
+  AdsAvatar({this.mediaBasePath, this.mediaUri, this.mediaType, this.mediaEndpoint});
 
-  AdsAvatar.fromJson(Map<String, dynamic> json){
+  AdsAvatar.fromJson(Map<String, dynamic> json) {
     mediaBasePath = json['mediaBasePath'] ?? '';
     mediaUri = json['mediaUri'] ?? '';
     mediaType = json['mediaType'] ?? '';
@@ -121,7 +115,7 @@ class AdsAvatar{
     fullLinkURL = concatThumbUri();
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['mediaBasePath'] = mediaBasePath;
     data['mediaUri'] = mediaUri;
@@ -131,8 +125,6 @@ class AdsAvatar{
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl +
-        (mediaEndpoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    return Env.data.baseUrl + (mediaEndpoint ?? mediaEndpoint ?? '') + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 }

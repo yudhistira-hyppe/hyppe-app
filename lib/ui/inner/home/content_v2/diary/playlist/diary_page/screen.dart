@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -195,10 +198,10 @@ class _DiaryPageState extends State<DiaryPage> {
                         sigmaX: 30,
                         sigmaY: 30,
                         // thumbnail: picData!.content[arguments].contentUrl,
-                        thumbnail: (widget.data!.isApsara ?? false) ? widget.data!.mediaThumbEndPoint : widget.data!.fullThumbPath,
+                        thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint : widget.data?.fullThumbPath,
                       )
                     : Container(),
-                widget.data!.isReport!
+                widget.data?.isReport ?? false
                     ? SafeArea(
                         child: SizedBox(
                         width: SizeConfig.screenWidth,
@@ -212,29 +215,34 @@ class _DiaryPageState extends State<DiaryPage> {
                                 defaultColor: false,
                                 height: 30,
                               ),
-                              Text(transnot.translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                              Text(transnot.translate.yourReportWillbeHandledImmediately!,
+                              Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                              Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 13,
                                   )),
                               const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.only(top: 8),
-                                margin: const EdgeInsets.all(8),
-                                width: SizeConfig.screenWidth,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: Colors.white,
-                                      width: 1,
+                              GestureDetector(
+                                onTap: () {
+                                  context.read<ReportNotifier>().seeContent(context, widget.data!, hyppeDiary);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  margin: const EdgeInsets.all(8),
+                                  width: SizeConfig.screenWidth,
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Colors.white,
+                                        width: 1,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                child: Text(
-                                  "${transnot.translate.see} HyppeDiary",
-                                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.center,
+                                  child: Text(
+                                    "${transnot.translate.see} HyppeDiary",
+                                    style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                               thirtyTwoPx,
@@ -252,7 +260,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     : RightItems(
                         data: widget.data ?? ContentData(),
                       ),
-                widget.data!.isReport!
+                widget.data?.isReport ?? false
                     ? Container()
                     : LeftItems(
                         description: widget.data?.description,
@@ -265,6 +273,10 @@ class _DiaryPageState extends State<DiaryPage> {
                         storyController: _storyController,
                         tagPeople: widget.data?.tagPeople,
                       ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(height: 55, child: ContentViolationWidget(data: widget.data ?? ContentData())),
+                )
               ],
             );
     } else {

@@ -1,8 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
@@ -169,69 +176,71 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
               ))
           : Stack(
               children: [
-                StoryView(
-                  inline: false,
-                  repeat: false,
-                  progressColor: kHyppeLightButtonText,
-                  durationColor: kHyppeLightButtonText,
-                  onDouble: () {
-                    print('testtttt');
-                    context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
-                  },
-                  controller: _storyController,
-                  storyItems: _storyItems,
-                  progressPosition: ProgressPosition.top,
-                  onStoryShow: (storyItem) async {
-                    int pos = _storyItems.indexOf(storyItem);
-                    notifier.setCurrentStory(pos);
-                    if (pos > 0) {
-                      // notifier.when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), fullCaption: true);
-                      // setState(() => _when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), context, fullCaption: true));
-                      setState(() {
-                        _when = '${System().readTimestamp(
-                          DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
-                          context,
-                          fullCaption: true,
-                        )}';
-                      });
-                    }
+                widget.data?.isReport ?? false
+                    ? Container()
+                    : StoryView(
+                        inline: false,
+                        repeat: false,
+                        progressColor: kHyppeLightButtonText,
+                        durationColor: kHyppeLightButtonText,
+                        onDouble: () {
+                          print('testtttt');
+                          context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
+                        },
+                        controller: _storyController,
+                        storyItems: _storyItems,
+                        progressPosition: ProgressPosition.top,
+                        onStoryShow: (storyItem) async {
+                          int pos = _storyItems.indexOf(storyItem);
+                          notifier.setCurrentStory(pos);
+                          if (pos > 0) {
+                            // notifier.when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), fullCaption: true);
+                            // setState(() => _when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), context, fullCaption: true));
+                            setState(() {
+                              _when = '${System().readTimestamp(
+                                DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
+                                context,
+                                fullCaption: true,
+                              )}';
+                            });
+                          }
 
-                    _storyController.playbackNotifier.listen((value) {
-                      if (value == PlaybackState.previous) {
-                        if (widget.controller?.page == 0) {
-                          notifier.onCloseStory(mounted);
-                        } else {
-                          widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                        }
-                      }
-                    });
+                          _storyController.playbackNotifier.listen((value) {
+                            if (value == PlaybackState.previous) {
+                              if (widget.controller?.page == 0) {
+                                notifier.onCloseStory(mounted);
+                              } else {
+                                widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              }
+                            }
+                          });
 
-                    // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
-                  },
-                  onComplete: () {
-                    widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                    final currentIndex = notifier.dataUserStories.length - 1;
-                    final isLastPage = currentIndex == widget.controller?.page;
-                    // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                    // notifier.pageController =
-                    print('onComplete Diary');
-                    System().increaseViewCount(context, widget.data ?? ContentData()).whenComplete(() {});
-                    Timer(const Duration(seconds: 1), () {
-                      // widget.onNextPage();
-                      // notifier.onCloseStory(mounted);
-                      // notifier.nextPage();
-                      // _storyController.next();
-                    });
-                    if (isLastPage) {
-                      notifier.onCloseStory(mounted);
-                    }
-                  },
-                  onEverySecond: (duration) {},
-                  onVerticalSwipeComplete: (v) {
-                    // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
-                    if (v == Direction.down) notifier.onCloseStory(mounted);
-                  },
-                ),
+                          // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
+                        },
+                        onComplete: () {
+                          widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          final currentIndex = notifier.dataUserStories.length - 1;
+                          final isLastPage = currentIndex == widget.controller?.page;
+                          // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          // notifier.pageController =
+                          print('onComplete Diary');
+                          System().increaseViewCount(context, widget.data ?? ContentData()).whenComplete(() {});
+                          Timer(const Duration(seconds: 1), () {
+                            // widget.onNextPage();
+                            // notifier.onCloseStory(mounted);
+                            // notifier.nextPage();
+                            // _storyController.next();
+                          });
+                          if (isLastPage) {
+                            notifier.onCloseStory(mounted);
+                          }
+                        },
+                        onEverySecond: (duration) {},
+                        onVerticalSwipeComplete: (v) {
+                          // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
+                          if (v == Direction.down) notifier.onCloseStory(mounted);
+                        },
+                      ),
                 // Padding(
                 //   padding: const EdgeInsets.all(200.0),
                 //   child: Text("${widget.data.isApsara}"),
@@ -240,19 +249,82 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 //   padding: const EdgeInsets.only(top: 200.0),
                 //   child: SelectableText("${widget.data.fullThumbPath}"),
                 // ),
+                widget.data?.isReport ?? false
+                    ? Stack(
+                        children: [
+                          CustomBackgroundLayer(
+                            sigmaX: 30,
+                            sigmaY: 30,
+                            // thumbnail: picData!.content[arguments].contentUrl,
+                            thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint : widget.data?.fullThumbPath,
+                          ),
+                          SafeArea(
+                              child: SizedBox(
+                            width: SizeConfig.screenWidth,
+                            child: Consumer<TranslateNotifierV2>(
+                              builder: (context, transnot, child) => Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Spacer(),
+                                  const CustomIconWidget(
+                                    iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                    defaultColor: false,
+                                    height: 30,
+                                  ),
+                                  Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                  Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                      )),
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.read<ReportNotifier>().seeContent(context, widget.data!, hyppeStory);
+                                      context.read<StoriesPlaylistNotifier>().onUpdate();
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      margin: const EdgeInsets.all(8),
+                                      width: SizeConfig.screenWidth,
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                          top: BorderSide(
+                                            color: Colors.white,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "${transnot.translate.see} HyppeStory",
+                                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                  thirtyTwoPx,
+                                ],
+                              ),
+                            ),
+                          )),
+                        ],
+                      )
+                    : Container(),
                 BuildTopView(
                   when: _when,
                   data: widget.data,
                   storyController: _storyController,
                 ),
-                Form(
-                  child: BuildBottomView(
-                    data: widget.data,
-                    storyController: _storyController,
-                    currentStory: notifier.currentStory,
-                    animationController: _animationController,
-                  ),
-                ),
+                widget.data?.isReport ?? false
+                    ? Container()
+                    : Form(
+                        child: BuildBottomView(
+                          data: widget.data,
+                          storyController: _storyController,
+                          currentStory: notifier.currentStory,
+                          animationController: _animationController,
+                        ),
+                      ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 800),
                   transitionBuilder: (child, animation) {

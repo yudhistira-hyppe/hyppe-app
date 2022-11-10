@@ -709,5 +709,27 @@
   "newTicketIssue" : "Edisi Tiket Baru",
   "insertAnyAdditionalInfo" : "Masukkan info tambahan apa pun",
   "chooseCategoryIssue" : "Pilih Kategori Masalah",
-  "description" : "Deskripsi"
+  "description" : "Deskripsi",
+  "thisHyppeVidisSubjectToModeration" : "HyppeVid ini terkena moderasi.",
+  "thisHyppePicisSubjectToModeration" : "HyppePic ini terkena moderasi.",
+  "thisHyppeDiaryisSubjectToModeration" : "HyppeDiary ini terkena moderasi.",
+  "thisHyppeStoryisSubjectToModeration" : "HyppeStory ini terkena moderasi.",
+  "thisMessagecanOnlyBeSeenByYou" : "Pesan ini hanya dapat dilihat oleh kamu",
+  "contentViolation" : "Pelanggaran Konten",
+  "yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere" : "Konten Anda melanggar pedoman komunitas kami. Anda dapat menemukan pedoman kami di sini ",
+  "communityGuidelines" : "Pedoman Komunitas",
+  "videoDetails" : "Detail video",
+  "postedOn" : "Diposting pada",
+  "violationType" : "Jenis pelanggaran",
+  "appeal" : "Ajukan Banding",
+  "ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal" : "Jika Anda meninjau pedoman komunitas kami dan yakin bahwa konten Anda tidak seharusnya dihapus, beri tahu kami dengan mengajukan banding. saat kami menyelesaikan peninjauan, Anda akan menerima dan memperbarui di tab notifikasi Anda. \n\n Konten Anda dihapus karena melanggar pedoman komunitas kami. Untuk mengajukan banding atas keputusan ini, sertakan deskripsi masalah di bawah ini.",
+  "chooseanAppealReason" : "Pilih Alasan Banding",
+  "stateYourIssue" : "Nyatakan Masalah Anda",
+  "pleaseprovideadditionaldetails" : "Harap berikan detail tambahan",
+  "thisContentDoesntHaveSensitiveContent" : "Konten ini tidak memiliki konten sensitif", 
+  "thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols" : "Konten ini tidak mengandung ketelanjangan, konten seksual, kekerasan, darah kental, atau simbol kebencian.",
+  "thisContentHasAdditionalContext" : "Konten ini memiliki konteks tambahan",
+  "thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent" : "Konten ini menampilkan kekerasan grafis untuk konten dokumenter atau pendidikan atau menunjukkan ketelanjangan dalam konteks artistik, medis, kesehatan, atau pendidikan.",
+  "theReasonDoesntFitIntoTheseCategories" : "Alasannya tidak cocok dengan kategori ini. Anda dapat menambahkan info lebih lanjut di kotak deskripsi."
+ 
 }

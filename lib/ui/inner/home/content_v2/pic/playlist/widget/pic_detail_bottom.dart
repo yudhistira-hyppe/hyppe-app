@@ -5,6 +5,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -54,6 +55,7 @@ class PicDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ContentViolationWidget(data: data ?? ContentData()),
           twelvePx,
           _buildDescription(context),
           _buildDivider(context),

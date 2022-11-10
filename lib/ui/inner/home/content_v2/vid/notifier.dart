@@ -96,7 +96,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         if (reload) {
           print('reload contentsQuery : 15');
           res = await contentsQuery.reload(context);
-
         } else {
           res = await contentsQuery.loadNext(context);
         }
@@ -113,7 +112,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
           );
         }
         final _searchData = context.read<SearchNotifier>();
-        if(_searchData.initDataVid == null){
+        if (_searchData.initDataVid == null) {
           _searchData.initDataVid = [];
           if (visibility == 'PUBLIC') {
             try {
@@ -124,8 +123,8 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
               print('initDataVid is ${_searchData.initDataVid?.length}');
             }
           }
-        }else{
-          if(_searchData.initDataVid!.isEmpty){
+        } else {
+          if (_searchData.initDataVid!.isEmpty) {
             if (visibility == 'PUBLIC') {
               try {
                 _searchData.initDataVid = vidData?.sublist(0, 18);
@@ -137,7 +136,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
             }
           }
         }
-
       } else {
         print('initial video');
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;
@@ -188,7 +186,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context, ContentData data) {
     context.read<ReportNotifier>().contentData = data;
-    ShowBottomSheet.onReportContent(context, data, hyppeVid);
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid);
   }
 
   void showUserTag(BuildContext context, index, postId) {
@@ -199,10 +197,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     ContentData? _updatedData;
 
     final index = vidData?.indexWhere((element) => element.postID == postID);
-    if(index != null){
+    if (index != null) {
       vidData?[index].tagPeople?.removeWhere((element) => element.email == email);
     }
-
 
     notifyListeners();
   }

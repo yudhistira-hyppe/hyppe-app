@@ -13,6 +13,7 @@ import 'package:hyppe/core/arguments/referral_list_user.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
@@ -310,6 +311,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const FAQdetailScreen());
       case Routes.supportTicket:
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
+      case Routes.appeal:
+        return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

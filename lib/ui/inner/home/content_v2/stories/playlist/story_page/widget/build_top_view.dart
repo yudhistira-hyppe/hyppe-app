@@ -51,31 +51,33 @@ class _BuildTopViewState extends State<BuildTopView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Selector<SelfProfileNotifier, UserProfileModel?>(
-                  selector: (_, select) => select.user.profile,
-                  builder: (_, valueNotifier, __) {
-                    return ProfileComponent(
-                      isDetail: true,
-                      show: true,
-                      onFollow: () {},
-                      following: true,
-                      createdAt: widget.when,
-                      isCelebrity: false,
-                      onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
-                      featureType: FeatureType.pic,
-                      username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
-                      imageUrl: notifier.onProfilePicShow(
-                        "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
+            widget.data?.isReport ?? false
+                ? Container()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Selector<SelfProfileNotifier, UserProfileModel?>(
+                        selector: (_, select) => select.user.profile,
+                        builder: (_, valueNotifier, __) {
+                          return ProfileComponent(
+                            isDetail: true,
+                            show: true,
+                            onFollow: () {},
+                            following: true,
+                            createdAt: widget.when,
+                            isCelebrity: false,
+                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
+                            featureType: FeatureType.pic,
+                            username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
+                            imageUrl: notifier.onProfilePicShow(
+                              "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
+                            ),
+                            // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
+                          );
+                        },
                       ),
-                      // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
-                    );
-                  },
-                ),
-              ],
-            ),
+                    ],
+                  ),
             Row(
               children: [
                 widget.data?.email == SharedPreference().readStorage(SpKeys.email)
@@ -84,7 +86,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                           widget.storyController.pause();
                           ShowBottomSheet.onShowOptionContent(
                             context,
-                            contentData: widget.data ?? ContentData(),
+                            contentData: widget.data!,
                             captionTitle: hyppeStory,
                             onDetail: widget.onDetail,
                             storyController: widget.storyController,
@@ -96,10 +98,22 @@ class _BuildTopViewState extends State<BuildTopView> {
                           color: kHyppeLightButtonText,
                         ),
                       )
-                    : SizedBox(),
-                widget.data?.email != SharedPreference().readStorage(SpKeys.email)
+                    : const SizedBox(),
+                (widget.data?.isReport != true) && widget.data?.email != SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
-                        onTap: () => notifier.reportContent(context, widget.data ?? ContentData(), storyController: widget.storyController),
+                        onTap: () {
+                          widget.storyController.pause();
+                          ShowBottomSheet.onReportContent(
+                            context,
+                            postData: widget.data,
+                            adsData: null,
+                            type: hyppeStory,
+                            onUpdate: () {
+                              widget.storyController.pause();
+                              context.read<StoriesPlaylistNotifier>().onUpdate();
+                            },
+                          );
+                        },
                         child: const CustomIconWidget(
                           defaultColor: false,
                           iconData: '${AssetPath.vectorPath}more.svg',

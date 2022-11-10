@@ -43,104 +43,101 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
     return Consumer2<ReportNotifier, TranslateNotifierV2>(
       builder: (context, notifier, translate, child) => SafeArea(
         child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  Container(
-                    color: const Color(0xffF5F5F5),
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay: translate.translate.reportThisContent ?? '',
-                            textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          InkWell(
-                              onTap: () {
-                                Navigator.pop(context, true);
-                              },
-                              child: const Icon(Icons.close))
-                        ],
+          body: Column(
+            children: [
+              Container(
+                color: const Color(0xffF5F5F5),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomTextWidget(
+                        textToDisplay: translate.translate.reportThisContent ?? '',
+                        textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                    ),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: const Icon(Icons.close))
+                    ],
                   ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: notifier.loadingOption
-                          ? SizedBox(
-                              height: SizeConfig.screenHeight ?? 0 / 1.2,
-                              child: const CustomLoading(),
-                            )
-                          : Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                CustomTextWidget(
-                                  textToDisplay: translate.translate.whyareyoureportingthiscontent ?? '',
-                                  textStyle: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: notifier.initData?.data.length ?? 0,
-                                  itemBuilder: (context, index) {
-                                    return RadioListTile<String>(
-                                      contentPadding: const EdgeInsets.all(0),
-                                      groupValue: notifier.initData?.data[index].sId ?? '',
-                                      value: notifier.currentReport,
-                                      onChanged: (_) {
-                                        setState(() {
-                                          notifier.currentReport = notifier.initData?.data[index].sId ?? '';
-                                          notifier.currentReportDesc = notifier.initData?.data[index].description ?? '';
-                                        });
-                                      },
-                                      toggleable: true,
-                                      title: CustomTextWidget(
-                                        textAlign: TextAlign.left,
-                                        textToDisplay: notifier.initData?.data[index].description ?? '',
-                                        textStyle: Theme.of(context).primaryTextTheme.titleSmall,
-                                        maxLines: 2,
-                                      ),
-                                      controlAffinity: ListTileControlAffinity.trailing,
-                                      activeColor: Theme.of(context).colorScheme.primaryVariant,
-                                    );
-                                  },
-                                ),
-                                tenPx,
-                                CustomElevatedButton(
-                                    width: SizeConfig.screenWidth,
-                                    height: 50,
-                                    buttonStyle: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                        overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                        foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
-                                        shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
-                                    function: notifier.isLoading
-                                        ? null
-                                        : () {
-                                            notifier.reportPost(context);
-                                          },
-                                    child: notifier.isLoading
-                                        ? const CustomLoading()
-                                        : CustomTextWidget(
-                                            textToDisplay: translate.translate.report ?? '',
-                                            textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
-                                          )),
-                              ],
-                            ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: notifier.loadingOption
+                      ? SizedBox(
+                          height: SizeConfig.screenHeight ?? 0 / 1.2,
+                          child: const CustomLoading(),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              CustomTextWidget(
+                                textToDisplay: translate.translate.whyareyoureportingthiscontent ?? '',
+                                textStyle: Theme.of(context).primaryTextTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: notifier.initData?.data.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return RadioListTile<String>(
+                                    contentPadding: const EdgeInsets.all(0),
+                                    groupValue: notifier.initData?.data[index].sId ?? '',
+                                    value: notifier.currentReport,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        notifier.currentReport = notifier.initData?.data[index].sId ?? '';
+                                        notifier.currentReportDesc = notifier.initData?.data[index].description ?? '';
+                                      });
+                                    },
+                                    toggleable: true,
+                                    title: CustomTextWidget(
+                                      textAlign: TextAlign.left,
+                                      textToDisplay: notifier.initData?.data[index].description ?? '',
+                                      textStyle: Theme.of(context).primaryTextTheme.titleSmall,
+                                      maxLines: 2,
+                                    ),
+                                    controlAffinity: ListTileControlAffinity.trailing,
+                                    activeColor: Theme.of(context).colorScheme.primaryVariant,
+                                  );
+                                },
+                              ),
+                              tenPx,
+                              CustomElevatedButton(
+                                  width: SizeConfig.screenWidth,
+                                  height: 50,
+                                  buttonStyle: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
+                                      overlayColor: MaterialStateProperty.all<Color>(kHyppePrimary),
+                                      foregroundColor: MaterialStateProperty.all<Color>(kHyppePrimary),
+                                      shadowColor: MaterialStateProperty.all<Color>(kHyppePrimary)),
+                                  function: notifier.isLoading
+                                      ? null
+                                      : () {
+                                          notifier.reportPost(context);
+                                        },
+                                  child: notifier.isLoading
+                                      ? const CustomLoading()
+                                      : CustomTextWidget(
+                                          textToDisplay: translate.translate.report ?? '',
+                                          textStyle: _textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
+                                        )),
+                            ],
+                          ),
+                        ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

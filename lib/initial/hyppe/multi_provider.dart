@@ -1,5 +1,6 @@
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/appeal/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -219,5 +220,6 @@ class AppDependencies {
 
         ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
         ChangeNotifierProvider<SlidedPicDetailNotifier>(create: (context) => SlidedPicDetailNotifier()),
+        ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
       ];
 }

@@ -49,10 +49,10 @@ class AllContents extends HiveObject {
   Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
 
-    result['story'] = List<dynamic>.from(story??[].map((x) => x.toJson()));
-    result['diary'] = List<dynamic>.from(diary??[].map((x) => x.toJson()));
-    result['video'] = List<dynamic>.from(video??[].map((x) => x.toJson()));
-    result['pict'] = List<dynamic>.from(pict??[].map((x) => x.toJson()));
+    result['story'] = List<dynamic>.from(story ?? [].map((x) => x.toJson()));
+    result['diary'] = List<dynamic>.from(diary ?? [].map((x) => x.toJson()));
+    result['video'] = List<dynamic>.from(video ?? [].map((x) => x.toJson()));
+    result['pict'] = List<dynamic>.from(pict ?? [].map((x) => x.toJson()));
 
     return result;
   }
@@ -311,12 +311,13 @@ class ContentData extends HiveObject {
 
   String? concatThumbUri() {
     return Env.data.baseUrl +
+        '/v4/' +
         (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 
   String? concatContentUri() {
-    return Env.data.baseUrl + (mediaEndpoint ?? '');
+    return Env.data.baseUrl + '/v4/' + (mediaEndpoint ?? '');
   }
 }
 

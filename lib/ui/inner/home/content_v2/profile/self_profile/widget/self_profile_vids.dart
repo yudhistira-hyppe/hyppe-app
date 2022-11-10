@@ -56,7 +56,10 @@ class SelfProfileVids extends StatelessWidget {
                                             : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? '',
                                       ),
                                     ),
-                                    (notifier.item1?.vids?[index].saleAmount ?? 0)> 0
+                                    // SelectableText(notifier.iw tem1?.vids?[index].isApsara ?? false
+                                    //     ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
+                                    //     : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? ''),
+                                    (notifier.item1?.vids?[index].saleAmount ?? 0) > 0
                                         ? const Align(
                                             alignment: Alignment.topRight,
                                             child: Padding(

@@ -167,6 +167,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  void onUpdate() => notifyListeners();
+
   onChangeHandler(BuildContext context, String value) {
     if (_searchOnStoppedTyping != null) {
       _searchOnStoppedTyping!.cancel();
@@ -339,7 +341,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         transitionDuration: const Duration(milliseconds: 500),
         context: context,
         pageBuilder: (context, animation, secondaryAnimation) {
-          if(animationController != null){
+          if (animationController != null) {
             return ShowReactionsIcon(
                 onTap: () => _routing.moveBack(),
                 crossAxisCount: 3,
@@ -371,10 +373,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
                     ),
                   );
                 });
-          }else{
+          } else {
             return Container();
           }
-
         },
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
@@ -534,7 +535,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context, ContentData data, {StoryController? storyController}) {
     storyController?.pause();
-    ShowBottomSheet.onReportContent(context, data, hyppeStory);
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeStory);
   }
 }
-

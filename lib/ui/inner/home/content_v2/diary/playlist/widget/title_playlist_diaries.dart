@@ -142,10 +142,16 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                                   widget.storyController.pause();
                                   ShowBottomSheet.onReportContent(
                                     context,
-                                    widget.data,
-                                    hyppeDiary,
-                                    onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
+                                    postData: widget.data,
+                                    type: hyppeDiary,
+                                    adsData: null,
+                                    storyController: widget.storyController,
+                                    onUpdate: () {
+                                      context.read<DiariesPlaylistNotifier>().onUpdate();
+                                      widget.storyController.pause();
+                                    },
                                   );
+                                  widget.storyController.pause();
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,

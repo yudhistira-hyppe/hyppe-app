@@ -4,19 +4,17 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 // import 'package:hyppe/core/constants/thumb/profile_image.dart';
-
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 // import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
@@ -50,6 +48,7 @@ class VidDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ContentViolationWidget(data: data!),
           twelvePx,
           _buildDescription(context),
           _buildDivider(context),
@@ -143,7 +142,6 @@ class VidDetailBottom extends StatelessWidget {
                         '${AssetPath.vectorPath}comment.svg',
                         value2.translate.comment ?? '',
                         () {
-
                           ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
                         },
                       )
@@ -163,7 +161,6 @@ class VidDetailBottom extends StatelessWidget {
                   value2.translate.buy ?? '',
                   () => ShowBottomSheet.onBuyContent(context, data: data),
                 ),
-
           ],
         ),
       ),

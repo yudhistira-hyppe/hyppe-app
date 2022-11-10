@@ -104,8 +104,12 @@ class VideoThumbnail extends StatelessWidget {
                 Visibility(
                   visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
                   child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet.onReportContent(context, videoData, hyppeVid,
-                        onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate()),
+                    onPressed: () => ShowBottomSheet.onReportContent(
+                      context,
+                      postData: videoData,
+                      type: hyppeVid,
+                      onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                    ),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       iconData: '${AssetPath.vectorPath}more.svg',

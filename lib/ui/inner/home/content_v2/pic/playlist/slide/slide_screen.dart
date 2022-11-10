@@ -5,10 +5,13 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
@@ -195,8 +198,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               iconData: '${AssetPath.vectorPath}more.svg',
                                                               function: () => ShowBottomSheet.onReportContent(
                                                                 context,
-                                                                data,
-                                                                hyppePic,
+                                                                postData: data,
+                                                                adsData: null,
+                                                                type: hyppePic,
                                                                 onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
                                                               ),
                                                             )
@@ -226,22 +230,27 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                             fontSize: 13,
                                                           )),
                                                       const Spacer(),
-                                                      Container(
-                                                        padding: const EdgeInsets.only(top: 8),
-                                                        margin: const EdgeInsets.all(8),
-                                                        width: SizeConfig.screenWidth,
-                                                        decoration: const BoxDecoration(
-                                                          border: Border(
-                                                            top: BorderSide(
-                                                              color: Colors.white,
-                                                              width: 1,
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
+                                                        },
+                                                        child: Container(
+                                                          padding: const EdgeInsets.only(top: 8),
+                                                          margin: const EdgeInsets.all(8),
+                                                          width: SizeConfig.screenWidth,
+                                                          decoration: const BoxDecoration(
+                                                            border: Border(
+                                                              top: BorderSide(
+                                                                color: Colors.white,
+                                                                width: 1,
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        child: Text(
-                                                          "${transnot.translate.see} HyppePic",
-                                                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                                                          textAlign: TextAlign.center,
+                                                          child: Text(
+                                                            "${transnot.translate.see} HyppePic",
+                                                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                                            textAlign: TextAlign.center,
+                                                          ),
                                                         ),
                                                       ),
                                                       thirtyTwoPx,
@@ -254,7 +263,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                         data.isReport ?? false
                                             ? Container()
                                             : Align(
-                                                alignment: const Alignment(-1.0, 0.9),
+                                                alignment: Alignment.bottomCenter,
+                                                // alignment: const Alignment(0.0, 0.9),
                                                 child: Column(
                                                   mainAxisSize: MainAxisSize.min,
                                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,7 +355,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                         )),
                                                       ),
                                                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                                                    )
+                                                    ),
+                                                    twentyPx,
+                                                    ContentViolationWidget(data: data)
                                                   ],
                                                 ),
                                               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -96,7 +98,17 @@ class ContentItem extends StatelessWidget {
                                   //       statusFollowing: StatusFollowing.rejected,
                                   //     ),
                                 ),
-                                GestureDetector(onTap: () => ShowBottomSheet.onReportContent(context, data, hyppeVid), child: const Icon(Icons.more_vert)),
+                                data?.email != SharedPreference().readStorage(SpKeys.email)
+                                    ? GestureDetector(
+                                        onTap: () => ShowBottomSheet.onReportContent(
+                                              context,
+                                              postData: data,
+                                              type: hyppeVid,
+                                              adsData: null,
+                                              onUpdate: () => context.read<VidSeeAllNotifier>().onUpdate(),
+                                            ),
+                                        child: const Icon(Icons.more_vert))
+                                    : Container(),
                               ],
                             ),
                             twelvePx,
