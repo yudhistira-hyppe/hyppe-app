@@ -730,6 +730,8 @@
   "thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols" : "Konten ini tidak mengandung ketelanjangan, konten seksual, kekerasan, darah kental, atau simbol kebencian.",
   "thisContentHasAdditionalContext" : "Konten ini memiliki konteks tambahan",
   "thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent" : "Konten ini menampilkan kekerasan grafis untuk konten dokumenter atau pendidikan atau menunjukkan ketelanjangan dalam konteks artistik, medis, kesehatan, atau pendidikan.",
-  "theReasonDoesntFitIntoTheseCategories" : "Alasannya tidak cocok dengan kategori ini. Anda dapat menambahkan info lebih lanjut di kotak deskripsi."
+  "theReasonDoesntFitIntoTheseCategories" : "Alasannya tidak cocok dengan kategori ini. Anda dapat menambahkan info lebih lanjut di kotak deskripsi.",
+  "ticketIssueSuccessfullySubmitted" : "Masalah Tiket Berhasil Dikirim",
+  "yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare" : "Masalah Tiket Anda telah berhasil dikirimkan ke Hyppe Customer Care"
  
 }

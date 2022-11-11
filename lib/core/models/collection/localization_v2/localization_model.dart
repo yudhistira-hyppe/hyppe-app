@@ -726,6 +726,8 @@ class LocalizationModelV2 {
   String? thisContentHasAdditionalContext;
   String? thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent;
   String? theReasonDoesntFitIntoTheseCategories;
+  String? ticketIssueSuccessfullySubmitted;
+  String? yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare;
   String? appeal;
   String? communityGuidelines;
   String? description;
@@ -1459,6 +1461,8 @@ class LocalizationModelV2 {
     this.thisContentHasAdditionalContext,
     this.thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent,
     this.theReasonDoesntFitIntoTheseCategories,
+    this.ticketIssueSuccessfullySubmitted,
+    this.yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare,
     this.appeal,
     this.communityGuidelines,
     this.description,
@@ -2216,5 +2220,7 @@ class LocalizationModelV2 {
     thisContentHasAdditionalContext = json["thisContentHasAdditionalContext"];
     thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent = json["thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent"];
     theReasonDoesntFitIntoTheseCategories = json["theReasonDoesntFitIntoTheseCategories"];
+    ticketIssueSuccessfullySubmitted = json["ticketIssueSuccessfullySubmitted"];
+    yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare = json["yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare"];
   }
 }

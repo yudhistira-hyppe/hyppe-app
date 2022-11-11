@@ -44,6 +44,7 @@ class OnCategorySupportTicket extends StatelessWidget {
                       value: notifier.categoryData[index].nameCategory ?? '',
                       onChanged: (val) {
                         notifier.nameCategory = val ?? '';
+                        notifier.idCategory = notifier.categoryData[index].sId ?? '';
                         Routing().moveBack();
                       },
                       toggleable: true,

@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/link_copied_widget.dart';
@@ -162,16 +163,44 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
               color: Colors.black,
               width: 100,
               height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SizedBox(
-                    height: 90,
-                    child: SizedBox(
-                      height: 10,
-                      child: CustomLoading(),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          height: 90,
+                          child: SizedBox(
+                            height: 10,
+                            child: CustomLoading(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Positioned(
+                    top: 50,
+                    right: 20,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CustomTextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(left: 0.0),
+                          ),
+                        ),
+                        // onPressed: () => notifier.onCloseStory(context, arguments),
+                        onPressed: () => notifier.onCloseStory(mounted),
+                        child: const CustomIconWidget(
+                          defaultColor: false,
+                          color: kHyppeLightButtonText,
+                          iconData: "${AssetPath.vectorPath}close.svg",
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ))
           : Stack(
