@@ -69,6 +69,8 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   dio_http_formatter: ^2.1.0
+  ffmpeg_kit_flutter: ^5.1.0
+  audioplayers: ^1.1.1
 
   dynamic_widget: # Dynamic widget builder
     git:

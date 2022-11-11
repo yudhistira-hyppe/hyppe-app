@@ -45,6 +45,12 @@ extension contextScreen on BuildContext{
     SharedPreference().writeStorage(SpKeys.countAds, count);
   }
 
+  String getNameByDate(){
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
+    return formatter.format(now);
+  }
+
   void incrementAdsCount(){
     final current = getAdsCount();
     print('ads second : $current');

@@ -42,6 +42,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
   void dispose() {
     final notifier = context.read<PreviewContentNotifier>();
     notifier.betterPlayerController!.dispose();
+    notifier.disposeMusic();
     super.dispose();
   }
 
@@ -95,6 +96,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                   bottom: context.getHeight() * 0.4,
                   child: InkWell(
                     onTap: (){
+                      notifier.betterPlayerController?.pause();
                       ShowBottomSheet.onChooseMusic(context);
                     },
                     child: Column(

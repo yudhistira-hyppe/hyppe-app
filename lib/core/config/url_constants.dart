@@ -514,4 +514,10 @@ class UrlConstants {
   //==========report============
   static const String getOptionReport = "/api/reportreasons/all";
   static const String insertReport = "/api/reportuser/create";
+
+  /// ===music===
+  static const String getMusicGenre = "/api/genre/";
+  static const String getMusicTheme = "/api/theme/";
+  static const String getMusicMood = "/api/mood/";
+  static const String getMusics = "/api/music";
 }
