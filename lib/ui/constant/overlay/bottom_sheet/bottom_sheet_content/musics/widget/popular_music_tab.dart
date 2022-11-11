@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';
+import '../../../../../widget/custom_text_widget.dart';
 import 'music_item.dart';
 
 class PopularMusicTab extends StatefulWidget {
-  const PopularMusicTab({Key? key}) : super(key: key);
+  bool isExplored;
+
+  PopularMusicTab({Key? key, this.isExplored = false}) : super(key: key);
 
   @override
   State<PopularMusicTab> createState() => _PopularMusicTabState();
@@ -15,16 +19,14 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
 
   @override
   void initState() {
-    final notifier = context.read<PreviewContentNotifier>();
-    notifier.initListMusics();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    return ListView.builder(
-      itemCount: notifier.listMusics.length,
+    return !notifier.isLoadingMusic ? (!widget.isExplored ? notifier.listMusics : notifier.listExpMusics).isNotEmpty ? ListView.builder(
+      itemCount: ((!widget.isExplored ? notifier.listMusics : notifier.listExpMusics)).length,
       // controller: _scrollController,
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
@@ -49,8 +51,12 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
         //     fromFront: widget.fromFront,
         //   ),
         // );
-        return MusicItemScreen(music: notifier.listMusics[index], index: index,);
+        return MusicItemScreen(music: !widget.isExplored ? notifier.listMusics[index] : notifier.listExpMusics[index], index: index,);
       },
+    ): Center(
+      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
+    ): const Center(
+      child: CustomLoading(),
     );
   }
 }

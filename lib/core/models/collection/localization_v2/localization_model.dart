@@ -149,6 +149,8 @@ class LocalizationModelV2 {
   String? searchMusic;
   String? popular;
   String? explore;
+  String? genre;
+  String? mood;
   String? newPost;
   String? writeACaption;
   String? tagPeople;
@@ -864,6 +866,8 @@ class LocalizationModelV2 {
     this.searchMusic,
     this.popular,
     this.explore,
+    this.genre,
+    this.mood,
     this.newPost,
     this.writeACaption,
     this.tagPeople,
@@ -1580,6 +1584,8 @@ class LocalizationModelV2 {
     searchMusic = json['search_music'];
     popular = json['popular'];
     explore = json['explore'];
+    genre = json['genre'];
+    mood = json['mood'];
     newPost = json['newPost'];
     writeACaption = json['writeACaption'];
     tagPeople = json['tagPeople'];

@@ -13,14 +13,31 @@ import '../../../../../../core/constants/size_config.dart';
 import '../../../../widget/custom_icon_widget.dart';
 import '../../../../widget/custom_search_bar.dart';
 import '../../../../widget/custom_text_widget.dart';
+import '../../../../widget/icon_button_widget.dart';
 
-class OnChooseMusicBottomSheet extends StatelessWidget {
+class OnChooseMusicBottomSheet extends StatefulWidget {
   const OnChooseMusicBottomSheet({Key? key}) : super(key: key);
+
+  @override
+  State<OnChooseMusicBottomSheet> createState() => _OnChooseMusicBottomSheetState();
+}
+
+class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
+
+  @override
+  void initState() {
+    final notifier = context.read<PreviewContentNotifier>();
+    Future.delayed(Duration.zero, () async{
+      await notifier.initListMusics(context);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer<PreviewContentNotifier>(builder: (context, notifier, _){
+      final showListExp = notifier.seletedType != null;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -42,38 +59,56 @@ class OnChooseMusicBottomSheet extends StatelessWidget {
               },
             ),
           ),
-          Container(
-             child: const MusicTabsScreen()
-          ),
-          // SliverAppBar(
-          //   pinned: true,
-          //   flexibleSpace: ,
-          //   automaticallyImplyLeading: false,
-          //   backgroundColor: Theme.of(context).colorScheme.background,
-          // ),
-          Expanded(child: notifier.pageMusic == 0 ? const PopularMusicTab() : const ExploredMusicTab()),
-          if(notifier.selectedMusic != null)
-          Container(
-            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePurple),
+          !showListExp ? Container(
+              child: const MusicTabsScreen()
+          ) : Container(
+            margin: const EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 10),
             width: double.infinity,
-            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 8),
-            child: CustomTextButton(onPressed: (){
-              print('test');
-              notifier.videoMerger(notifier.selectedMusic!.url ?? '');
-              notifier.showSnackBar(
-                color: kHyppeDanger,
-                message: "Test",
-              );
-            },
-            child: CustomTextWidget(
-              textToDisplay: notifier.language.select ?? 'select',
-              textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
-            )),
-          )
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomIconButtonWidget(
+                    onPressed: (){
+                      notifier.seletedType = null;
+                    },
+                    color: Colors.black,
+                    iconData: '${AssetPath.vectorPath}back-arrow.svg',
+                    padding: const EdgeInsets.only(right: 16, left: 16),
+                ),
+                sixteenPx,
+                Expanded(
+                    child: CustomTextWidget(
+                      textAlign: TextAlign.left,
+                      textToDisplay: notifier.seletedType?.name ?? '',
+                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),))
+              ],
+            ),
+          ),
+          Expanded(child: notifier.pageMusic == 0 ? PopularMusicTab() : !showListExp ? const ExploredMusicTab() : PopularMusicTab(isExplored: true,)),
+          if(notifier.selectedMusic != null)
+            Container(
+              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePurple),
+              width: double.infinity,
+              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 8),
+              child: CustomTextButton(onPressed: () async{
+                print('test');
+                // notifier.isLoadVideo = true;
+                await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '');
+                Navigator.pop(context);
+              },
+                  child: CustomTextWidget(
+                    textToDisplay: notifier.language.select ?? 'select',
+                    textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+                  )),
+            )
         ],
       );
     });
   }
+
+
 }
+
 
 

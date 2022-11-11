@@ -97,6 +97,18 @@ extension ContentTypeDefine on String{
   }
 }
 
+extension IntegerExtension on int{
+  String getMinutes(){
+    if(this > 3600){
+      return 'more than 1 hour';
+    }else{
+      final minutes = Duration(seconds: this).inMinutes;
+      final seconds = this%60;
+      return '$minutes:$seconds';
+    }
+  }
+}
+
 // extension GetContentType on ContentType{
 //   String? getValue(){
 //     if(this == ContentType.video){

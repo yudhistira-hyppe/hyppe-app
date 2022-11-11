@@ -78,7 +78,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     if (isCheckedOwnership) {
       ShowBottomSheet.onShowSuccessPostContentOwnership(context);
     } else {
-      _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
+      ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
     }
   }
 
@@ -87,7 +87,8 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Failed with message ${message.message}'.logger();
     _uploadNotifier.message = '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
-    _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
+    ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
+    // _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
     _uploadNotifier.reset();
   }
 

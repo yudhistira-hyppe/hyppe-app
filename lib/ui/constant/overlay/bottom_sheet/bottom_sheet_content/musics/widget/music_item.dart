@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -14,7 +15,8 @@ import '../../../../../widget/custom_base_cache_image.dart';
 class MusicItemScreen extends StatefulWidget {
   final Music music;
   final int index;
-  const MusicItemScreen({Key? key, required this.music, required this.index}) : super(key: key);
+  bool isExplored;
+  MusicItemScreen({Key? key, required this.music, required this.index, this.isExplored = false }) : super(key: key);
 
   @override
   State<MusicItemScreen> createState() => _MusicItemScreenState();
@@ -28,12 +30,12 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
 
     return InkWell(
       onTap: (){
-        notifier.selectMusic(widget.music, widget.index);
+        notifier.selectMusic(widget.music, widget.index, widget.isExplored);
       },
       child: Container(
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
         width: double.infinity,
-        color: widget.music.isSelected ? kSkeletonHighlightColor : null,
+        color: (widget.isExplored ? notifier.listExpMusics[widget.index].isSelected : notifier.listMusics[widget.index].isSelected) ? kSkeletonHighlightColor : null,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -44,14 +46,15 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
               children: [
                 // Image.network(widget.music.urlThumbnail ?? '')
                 CustomBaseCacheImage(
-                  imageUrl: widget.music.urlThumbnail,
+                  imageUrl: widget.music.apsaraThumnailUrl,
                   imageBuilder: (_, imageProvider) {
                     return Container(
                       width: 48,
                       height: 48,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(8)),
-                        image: DecorationImage(image: imageProvider, fit: BoxFit.cover,),
+                      child: CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}ic_music.svg',
+                        // color: Theme.of(context).appBarTheme.iconTheme?.color,
                       ),
                     );
                   },
@@ -75,7 +78,7 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
                   children: [
                     CustomTextWidget(textToDisplay: widget.music.musicTitle ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),),
                     fourPx,
-                    CustomTextWidget(textToDisplay: '${widget.music.artistName} • 00:${widget.music.duration ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
+                    CustomTextWidget(textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
                   ],
                 )
               ],
@@ -86,7 +89,7 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
               icon: CustomIconWidget(iconData: widget.music.isPlay ? "${AssetPath.vectorPath}stop_circle.svg" : "${AssetPath.vectorPath}play_circle.svg"),
               splashRadius: 1,
               onPressed: () {
-                notifier.playMusic(widget.music, widget.index);
+                notifier.playMusic(context, widget.music, widget.index, widget.isExplored);
               },
             ) :
             UnconstrainedBox(

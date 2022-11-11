@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_type_item.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';
+import '../../../../../widget/custom_loading.dart';
 import 'category_music_item.dart';
-import 'music_item.dart';
 
 class ExploredMusicTab extends StatefulWidget {
   const ExploredMusicTab({Key? key}) : super(key: key);
@@ -12,24 +14,18 @@ class ExploredMusicTab extends StatefulWidget {
   State<ExploredMusicTab> createState() => _ExploredMusicTabState();
 }
 
-
-
-
 class _ExploredMusicTabState extends State<ExploredMusicTab> {
   @override
   void initState() {
-    final notifier = context.read<PreviewContentNotifier>();
-    notifier.initListMusics();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    return ListView.builder(
-      itemCount: notifier.listMusics.length,
+    return !notifier.isLoadingMusic ? notifier.listType.isNotEmpty ? ListView.builder(
+      itemCount: notifier.listType.length,
       // controller: _scrollController,
-      scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(bottom: 10),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -52,8 +48,12 @@ class _ExploredMusicTabState extends State<ExploredMusicTab> {
         //     fromFront: widget.fromFront,
         //   ),
         // );
-        return CategoryMusicItem();
+        return MusicTypeItem(name: notifier.listType[index], index: index,);
       },
+    ): Center(
+      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
+    ): const Center(
+    child: CustomLoading(),
     );
   }
 

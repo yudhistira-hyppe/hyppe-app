@@ -1,3 +1,5 @@
+import 'package:hyppe/core/extension/log_extension.dart';
+
 class Music{
   String? id;
   String? musicTitle;
@@ -12,15 +14,15 @@ class Music{
   String? createdAt;
   String? updatedAt;
   String? apsaraMusic;
-  int? duration;
-  String? url;
-  String? urlThumbnail;
+  MusicUrl? apsaraMusicUrl;
+  String? apsaraThumnail;
+  String? apsaraThumnailUrl;
   bool isPlay = false;
   bool isLoad = false;
   bool isSelected = false;
   Music({this.id, this.musicTitle, this.artistName, this.albumName, this.releaseDate,
     this.genre, this.theme, this.mood, this.createdAt, this.updatedAt, this.isDelete,
-    this.isActive, this.apsaraMusic, this.duration, this.url, this.urlThumbnail});
+    this.isActive, this.apsaraMusic, this.apsaraMusicUrl, this.apsaraThumnail, this.apsaraThumnailUrl});
 
   Music.fromJson(Map<String, dynamic> map){
     id = map['_id'];
@@ -36,9 +38,9 @@ class Music{
     createdAt = map['createdAt'];
     updatedAt = map['updatedAt'];
     apsaraMusic = map['apsaraMusic'];
-    duration = map['duration'];
-    url = map['url'];
-    urlThumbnail = map['url_thumbnail'];
+    apsaraMusicUrl = MusicUrl.fromJson(map['apsaraMusicUrl']);
+    apsaraThumnail = map['apsaraThumnail'];
+    apsaraThumnailUrl = map['apsaraThumnailUrl'];
     isPlay = false;
     isLoad = false;
     isSelected = false;
@@ -59,12 +61,37 @@ class Music{
     result['createdAt'] = createdAt;
     result['updatedAt'] = updatedAt;
     result['apsaraMusic'] = apsaraMusic;
-    result['duration'] = duration;
-    result['url'] = url;
-    result['url_thumbnail'] = urlThumbnail;
+    result['apsaraMusicUrl'] = apsaraMusicUrl;
+    result['apsaraThumnail'] = apsaraThumnail;
+    result['apsaraThumnailUrl'] = apsaraThumnailUrl;
     result['is_play'] = isPlay;
     result['is_load'] = isLoad;
     result['is_selected'] = isSelected;
+    return result;
+  }
+}
+
+class MusicUrl{
+  String? playUrl;
+  double? duration;
+
+  MusicUrl({this.playUrl, this.duration});
+
+  MusicUrl.fromJson(Map<String, dynamic> map){
+    playUrl = map['PlayURL'];
+    try{
+      final String dur = map['Duration'];
+      duration = double.parse(dur);
+    }catch(e){
+      'Error get String Duration : $e'.logger();
+    }
+
+  }
+
+  Map<String, dynamic> toJson(){
+    final result = <String, dynamic>{};
+    result['PlayURL'] = playUrl;
+    result['Duration'] = duration;
     return result;
   }
 }

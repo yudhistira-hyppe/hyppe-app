@@ -1,10 +1,14 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:better_player/better_player.dart';
+import 'package:dio/dio.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
+import 'package:hyppe/core/bloc/music/bloc.dart';
+import 'package:hyppe/core/bloc/music/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
@@ -29,6 +33,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../app.dart';
 import '../../../../core/models/collection/music/music.dart';
+import '../../../../core/models/collection/music/music_type.dart';
 import '../../../constant/overlay/bottom_sheet/bottom_sheet_content/musics/on_choose_music.dart';
 
 class PreviewContentNotifier with ChangeNotifier {
@@ -38,35 +43,37 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  final dataMusics1 = [
-    Music(musicTitle: 'audio1', artistName: 'artis audio1', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio2', artistName: 'artis audio2', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio3', artistName: 'artis audio3', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio4', artistName: 'artis audio4', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio5', artistName: 'artis audio5', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio6', artistName: 'artis audio6', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio7', artistName: 'artis audio7', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio8', artistName: 'artis audio8', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio9', artistName: 'artis audio9', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio10', artistName: 'artis audio10', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio11', artistName: 'artis audio11', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio12', artistName: 'artis audio12', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  ];
+  // final dataMusics1 = [
+  //   Music(musicTitle: 'audio1', artistName: 'artis audio1', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio2', artistName: 'artis audio2', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio3', artistName: 'artis audio3', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio4', artistName: 'artis audio4', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio5', artistName: 'artis audio5', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio6', artistName: 'artis audio6', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio7', artistName: 'artis audio7', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio8', artistName: 'artis audio8', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio9', artistName: 'artis audio9', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio10', artistName: 'artis audio10', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio11', artistName: 'artis audio11', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio12', artistName: 'artis audio12', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  // ];
+  //
+  // final dataMusics2 = [
+  //   Music(musicTitle: 'audio5', artistName: 'artis audio5', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio6', artistName: 'artis audio6', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio7', artistName: 'artis audio7', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio8', artistName: 'artis audio8', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
+  //   Music(musicTitle: 'audio9', artistName: 'artis audio9', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio10', artistName: 'artis audio10', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio11', artistName: 'artis audio11', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio12', artistName: 'artis audio12', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
+  //   Music(musicTitle: 'audio1', artistName: 'artis audio1', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio2', artistName: 'artis audio2', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio3', artistName: 'artis audio3', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  //   Music(musicTitle: 'audio4', artistName: 'artis audio4', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
+  // ];
 
-  final dataMusics2 = [
-    Music(musicTitle: 'audio5', artistName: 'artis audio5', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio6', artistName: 'artis audio6', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio7', artistName: 'artis audio7', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio8', artistName: 'artis audio8', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-    Music(musicTitle: 'audio9', artistName: 'artis audio9', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio10', artistName: 'artis audio10', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio11', artistName: 'artis audio11', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio12', artistName: 'artis audio12', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-    Music(musicTitle: 'audio1', artistName: 'artis audio1', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio2', artistName: 'artis audio2', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio3', artistName: 'artis audio3', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-    Music(musicTitle: 'audio4', artistName: 'artis audio4', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  ];
+
 
   double? _aspectRatio;
   FeatureType? _featureType;
@@ -95,8 +102,22 @@ class PreviewContentNotifier with ChangeNotifier {
   Duration? get totalDuration => _totalDuration;
   bool _isLoadVideo = false;
   bool get isLoadVideo => _isLoadVideo;
+  bool _isLoadingMusic = true;
+  bool get isLoadingMusic => _isLoadingMusic;
+  List<String> _listTypes = [];
+  List<String> get listType => _listTypes;
   List<Music> _listMusics = [];
   List<Music> get listMusics => _listMusics;
+  List<Music> _listExpMusics = [];
+  List<Music> get listExpMusics => _listExpMusics;
+  MusicType? _selectedType;
+  MusicType? get seletedType => _selectedType;
+  List<MusicType> _listGenres = [];
+  List<MusicType> get listGenres => _listGenres;
+  List<MusicType> _listThemes = [];
+  List<MusicType> get listThemes => _listThemes;
+  List<MusicType> _listMoods = [];
+  List<MusicType> get listMoods => _listMoods;
 
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
@@ -129,6 +150,11 @@ class PreviewContentNotifier with ChangeNotifier {
   FeatureType? get featureType => _featureType;
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
+
+  set isLoadVideo(bool val){
+    _isLoadVideo = val;
+    notifyListeners();
+  }
 
   set showNext(bool val) {
     _showNext = val;
@@ -175,6 +201,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set isLoadingMusic(bool state){
+    _isLoadingMusic = state;
+    notifyListeners();
+  }
+
   set sourceFile(SourceFile? val) {
     _sourceFile = val;
     notifyListeners();
@@ -187,6 +218,13 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set pageMusic(int state){
     _pageMusic = state;
+    _selectedMusic = null;
+    for(var music in _listMusics){
+      if(music.isSelected){
+        final index = _listMusics.indexOf(music);
+        _listMusics[index].isSelected = false;
+      }
+    }
     notifyListeners();
   }
 
@@ -205,10 +243,39 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set listType(List<String> values){
+    _listTypes = values;
+    notifyListeners();
+  }
+
   set listMusics(List<Music> values){
     _listMusics = values;
     notifyListeners();
+  }
 
+  set listExpMusics(List<Music> values){
+    _listExpMusics = values;
+    notifyListeners();
+  }
+
+  set seletedType(MusicType? type){
+    _selectedType = type;
+    notifyListeners();
+  }
+
+  set listGenres(List<MusicType> types){
+    _listGenres = types;
+    notifyListeners();
+  }
+
+  set listThemes(List<MusicType> types){
+    _listThemes = types;
+    notifyListeners();
+  }
+
+  set listMoods(List<MusicType> types){
+    _listMoods = types;
+    notifyListeners();
   }
 
   set currentMusic(Music? music){
@@ -221,21 +288,83 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void initListMusics(){
-    switch(_pageMusic){
-      case 0:{
-        _currentMusic = null;
-        _listMusics = dataMusics1;
-        audioPlayer.stop();
-        break;
-      }
-      case 1:{
-        _currentMusic = null;
-        _listMusics = dataMusics2;
-        audioPlayer.stop();
-        break;
-      }
+  // void initListMusics(){
+  //   switch(_pageMusic){
+  //     case 0:{
+  //       _currentMusic = null;
+  //       _listMusics = dataMusics1;
+  //       audioPlayer.stop();
+  //       break;
+  //     }
+  //     case 1:{
+  //       _currentMusic = null;
+  //       _listMusics = dataMusics2;
+  //       audioPlayer.stop();
+  //       break;
+  //     }
+  //   }
+  // }
+
+  Future initListMusics(BuildContext context) async{
+    _isLoadingMusic = true;
+    try{
+      _listTypes = [language.theme ?? 'Theme', language.genre ?? 'Genre', language.mood ?? 'Mood'];
+      _listMusics = await getMusics(context);
+      _listGenres = await getMusicCategories(context, MusicEnum.genre);
+      _listThemes = await getMusicCategories(context, MusicEnum.theme);
+      _listMoods = await getMusicCategories(context, MusicEnum.mood);
+      notifyListeners();
+    }catch(e){
+      'Error initListMusics : $e'.logger();
+    }finally{
+      _isLoadingMusic = false;
     }
+  }
+
+  Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
+    _listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
+    notifyListeners();
+  }
+
+  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
+    List<Music>? res = [];
+    _isLoadingMusic = true;
+    try{
+      final bloc = MusicDataBloc();
+      await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood);
+      final fetch = bloc.musicDataFetch;
+      if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
+        res = (fetch.data as List<dynamic>?)?.map((item) => Music.fromJson(item as Map<String, dynamic>)).toList();
+        print('res length = ${res?.length}');
+        return res ?? [];
+      }else if(fetch.musicDataState == MusicState.getMusicBlocError){
+        throw '${(fetch.data as DioError).message}';
+      }
+    }catch(e){
+      print('Error getMusics : $e');
+    }finally{
+
+      _isLoadingMusic = false;
+    }
+    return [];
+  }
+
+  Future<List<MusicType>> getMusicCategories(BuildContext context, MusicEnum type, {String keyword = ''}) async{
+    List<MusicType>? res = [];
+    try{
+      final bloc = MusicDataBloc();
+      await bloc.getTypeMusic(context, type, keyword: keyword);
+      final fetch = bloc.musicDataFetch;
+      if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
+        res = (fetch.data as List<dynamic>?)?.map((item) => MusicType.fromJson(item as Map<String, dynamic>)).toList();
+
+      }else if(fetch.musicDataState == MusicState.getMusicBlocError){
+        throw '${(fetch.data as DioError).message}';
+      }
+    }catch(e){
+      print('Error getMusicCategories : $e');
+    }
+    return res ?? [];
   }
 
   void setFilterMatrix(List<double> val) {
@@ -243,7 +372,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> videoMerger(String urlAudio) async{
+  Future<void> videoMerger(BuildContext context, String urlAudio) async{
     try{
       if(urlAudio.isNotEmpty){
         _isLoadVideo = true;
@@ -260,16 +389,24 @@ class PreviewContentNotifier with ChangeNotifier {
             _fileContent?[_indexView] = outputPath;
             _url = fileContent?[_indexView];
             _sourceFile = SourceFile.local;
+            _isLoadVideo = true;
+            _betterPlayerController = null;
+            notifyListeners();
+            initVideoPlayer(context);
             // _betterPlayerController = null;
-            if(path.isNotEmpty){
-              await File(path).delete();
-            }
+            // if(path.isNotEmpty){
+            //   await File(path).delete();
+            // }
             // _betterPlayerController?.seekTo(const Duration(seconds: 0));
           }else if(ReturnCode.isCancel(codeSession)){
             print('ReturnCode = Cancel');
+            _isLoadVideo = false;
+            notifyListeners();
             // Cancel
           }else{
             print('ReturnCode = Error');
+            _isLoadVideo = false;
+            notifyListeners();
             // Error
           }
 
@@ -284,6 +421,7 @@ class PreviewContentNotifier with ChangeNotifier {
       'videoMerger Error : $e'.logger();
     }finally{
       _isLoadVideo = false;
+      notifyListeners();
     }
 
   }
@@ -293,40 +431,64 @@ class PreviewContentNotifier with ChangeNotifier {
     await audioPlayer.dispose();
   }
 
-  void playMusic(Music music, int index) async{
+  void playMusic(BuildContext context, Music music, int index, bool isExplored) async{
     try{
       // final currentMusic = notifier.currentMusic;
-      _listMusics[index].isLoad = true;
+      if(isExplored){
+        _listExpMusics[index].isLoad = true;
+      }else{
+        _listMusics[index].isLoad = true;
+      }
+
       notifyListeners();
-      final url = music.url;
-      if(url != null){
-        if(_currentMusic != null){
-          final currentIndex = _listMusics.indexOf(_currentMusic!);
-          if(music.isPlay){
-            await audioPlayer.stop();
-            _listMusics[index].isPlay = false;
-            currentMusic?.isPlay = false;
-            notifyListeners();
+      var url = music.apsaraMusicUrl?.playUrl ?? '';
+      if(_currentMusic != null){
+
+        final currentIndex = isExplored ? _listExpMusics.indexOf(_currentMusic!) : _listMusics.indexOf(_currentMusic!);
+        if(music.isPlay){
+          await audioPlayer.stop();
+          if(isExplored){
+            _listExpMusics[index].isPlay = false;
           }else{
-            await audioPlayer.stop();
-            await audioPlayer.play(UrlSource(url));
-            _listMusics[currentIndex].isPlay = false;
-            _currentMusic = music;
-            currentMusic?.isPlay = true;
-            _listMusics[index].isPlay = true;
-            notifyListeners();
+            _listMusics[index].isPlay = false;
           }
+
+          currentMusic?.isPlay = false;
+          notifyListeners();
         }else{
           await audioPlayer.stop();
-          await audioPlayer.play(UrlSource(url));
+          if(url != null){
+            await audioPlayer.play(UrlSource(url));
+          }else{
+            throw 'url music is null';
+          }
+
           _currentMusic = music;
           currentMusic?.isPlay = true;
-          _listMusics[index].isPlay = true;
+
+          if(isExplored){
+            _listExpMusics[currentIndex].isPlay = false;
+            _listExpMusics[index].isPlay = true;
+          }else{
+            _listMusics[currentIndex].isPlay = false;
+            _listMusics[index].isPlay = true;
+          }
+
           notifyListeners();
         }
       }else{
-        throw 'url music is null';
+        await audioPlayer.stop();
+        if(url != null){
+          await audioPlayer.play(UrlSource(url));
+        }else{
+          throw 'url music is null';
+        }
+        _currentMusic = music;
+        currentMusic?.isPlay = true;
+        _listMusics[index].isPlay = true;
+        notifyListeners();
       }
+
     }catch(e){
 
       'Error Play Music : $e'.logger();
@@ -340,20 +502,37 @@ class PreviewContentNotifier with ChangeNotifier {
 
   }
 
-  void selectMusic(Music music, int index){
+  void selectMusic(Music music, int index, bool isExplored){
 
     if(_selectedMusic != null){
       if(_selectedMusic!.musicTitle == music.musicTitle){
         _selectedMusic = null;
-        _listMusics[index].isSelected = false;
+        notifyListeners();
+        if(isExplored){
+          _listExpMusics[index].isSelected = false;
+        }else{
+          _listMusics[index].isSelected = false;
+        }
+
       }else{
-        _listMusics[_listMusics.indexOf(_selectedMusic!)].isSelected = false;
+        if(isExplored){
+          _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
+          _listExpMusics[index].isSelected = true;
+        }else{
+          _listMusics[_listMusics.indexOf(_selectedMusic!)].isSelected = false;
+          _listMusics[index].isSelected = true;
+        }
+
         _selectedMusic = music;
-        _listMusics[index].isSelected = true;
       }
     }else{
+
+      if(isExplored){
+        _listExpMusics[index].isSelected = true;
+      }else{
+        _listMusics[index].isSelected = true;
+      }
       _selectedMusic = music;
-      _listMusics[index].isSelected = true;
     }
     notifyListeners();
   }
@@ -425,6 +604,8 @@ class PreviewContentNotifier with ChangeNotifier {
 
       // notifier.setVideoPlayerController(_betterPlayerController);
 
+    }catch(e){
+      "Error Init Video $e".logger();
     } finally {
       _isLoadVideo = false;
     }

@@ -2,6 +2,7 @@ import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/post_follow_user.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
@@ -105,12 +106,17 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
 
   String label(String? tile) {
     String label = '';
-    if (tile == 'requested') {
-      label = 'Requested';
-    } else {
-      final index = _listFollow.indexWhere((element) => element["code"] == tile);
-      label = _listFollow[index]['name'];
+    try{
+      if (tile == 'requested') {
+        label = 'Requested';
+      } else {
+        final index = _listFollow.indexWhere((element) => element["code"] == tile);
+        label = _listFollow[index]['name'];
+      }
+    }catch(e){
+      'get Label Error : $e'.logger();
     }
+
     print(label);
 
     return label;

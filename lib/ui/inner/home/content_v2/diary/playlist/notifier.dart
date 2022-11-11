@@ -173,9 +173,6 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         Map jsonMap = json.decode(fetch.data.toString());
         print('jsonMap video Apsara : $jsonMap');
         return jsonMap['PlayUrl'];
-        // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
-        print('get Ads Video');
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
       'Failed to fetch ads data ${e}'.logger();
