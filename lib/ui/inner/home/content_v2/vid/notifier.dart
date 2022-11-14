@@ -125,7 +125,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
             }
           }
         }else{
-          if(_searchData.initDataVid!.isEmpty){
+          if(_searchData.initDataVid?.isEmpty ?? true){
             if (visibility == 'PUBLIC') {
               try {
                 _searchData.initDataVid = vidData?.sublist(0, 18);
@@ -147,7 +147,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       print('ini video data');
       print(_searchData);
       print(_searchData.allContents);
-      // print(_searchData.allContents!.vids);
+      // print(_searchData.allContents.vids);
       if (_searchData.initDataVid == null) {
         // _searchData.vidContentsQuery.featureType = FeatureType.vid;
         print('initDataVid is null');

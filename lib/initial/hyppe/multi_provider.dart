@@ -119,7 +119,7 @@ class AppDependencies {
         ChangeNotifierProxyProvider<storyV2.PreviewStoriesNotifier, ViewerStoriesNotifier>(
           create: (context) => ViewerStoriesNotifier(),
           update: (context, value, previous) => previous!..viewers = 0,
-          // update: (context, value, previous) => previous!..viewers = value.myStoriesData?.totalViews,
+          // update: (context, value, previous) => previous..viewers = value.myStoriesData?.totalViews,
         ),
 
         /// Report
@@ -136,7 +136,7 @@ class AppDependencies {
         // Wallet
         // ChangeNotifierProxyProvider3<HomeNotifier, SelfProfileNotifier, TranslateNotifierV2, WalletNotifier>(
         //   create: (context) => WalletNotifier(),
-        //   update: (context, value, value2, value3, previous) => previous!
+        //   update: (context, value, value2, value3, previous) => previous
         //     ..sessionID = value.sessionID
         //     ..user = value2.user
         //     ..language = value3.translate,

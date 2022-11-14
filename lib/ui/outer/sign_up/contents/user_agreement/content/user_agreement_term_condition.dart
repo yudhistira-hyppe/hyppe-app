@@ -11,7 +11,7 @@ class UserAgreementTermCondition extends StatelessWidget {
   Widget build(BuildContext context) {
     final notifier = Provider.of<UserAgreementNotifier>(context);
     if (notifier.eula != null && notifier.eula?.data[0].eulaContent != null) {
-      return DynamicWidgetBuilder.build(notifier.eula!.data[0].eulaContent!, context, DefaultClickListener())!;
+      return DynamicWidgetBuilder.build(notifier.eula?.data[0].eulaContent ?? '', context, DefaultClickListener()) ?? Container();
     } else if (notifier.isLoading) {
       return const CustomLoading();
     } else {

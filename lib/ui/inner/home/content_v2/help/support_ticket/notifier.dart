@@ -117,7 +117,7 @@ class SupportTicketNotifier with ChangeNotifier {
         if (value.values.single != null) {
           // pickedSupportingDocs = value.values.single;
           for (var element in value.values.single!) {
-            pickedSupportingDocs!.add(element);
+            pickedSupportingDocs?.add(element);
           }
           notifyListeners();
         } else {
@@ -129,7 +129,7 @@ class SupportTicketNotifier with ChangeNotifier {
       });
     } catch (e) {
       // isLoading = false;
-      // ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      // ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred);
     }
   }
 }

@@ -43,7 +43,7 @@ class _HashtagScreenState extends State<HashtagScreen> {
           children: [
             Container(
               margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              child: Text(notifier.language.popularHashtag!, style: const TextStyle(color: kHyppeLightSecondary, fontSize: 14, fontWeight: FontWeight.bold),),
+              child: Text(notifier.language.popularHashtag ?? 'Popular Hashtag', style: const TextStyle(color: kHyppeLightSecondary, fontSize: 14, fontWeight: FontWeight.bold),),
             ),
             eightPx,
             notifier.isLoading != null ? notifier.isLoading! ? ListView.builder(

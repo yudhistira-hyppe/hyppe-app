@@ -106,7 +106,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               fourPx,
               CustomTextWidget(
                 textToDisplay: System().formatterNumber(data?.likes ?? 0),
-                textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
               )
             ],
           ),

@@ -15,7 +15,7 @@ class CustomCacheImage extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return CachedNetworkImage(
-      imageUrl: imageUrl!,
+      imageUrl: imageUrl ?? '',
       errorWidget: errorWidget,
       imageBuilder: imageBuilder,
       filterQuality: FilterQuality.none,

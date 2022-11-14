@@ -10,7 +10,7 @@ class UpdateCommentReaction {
       reactions = [];
     } else {
       json["data"]["reactions"].forEach((v) {
-        reactions!.add(v["icon"]);
+        reactions?.add(v["icon"]);
       });
     }
   }

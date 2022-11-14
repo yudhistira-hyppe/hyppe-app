@@ -14,11 +14,11 @@ class MusicDataBloc{
   MusicDataFetch get musicDataFetch => _musicDataFetch;
   setCommentFetch(MusicDataFetch val) => _musicDataFetch = val;
 
-  Future getTypeMusic(BuildContext context, MusicEnum type, {String keyword = ''}) async{
+  Future getTypeMusic(BuildContext context, MusicEnum type, {String keyword = '', int pageNumber = 0, int pageRow = 10}) async{
     setCommentFetch(MusicDataFetch(MusicState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
-    final param = keyword.isEmpty ? '?pageNumber=0&pageRow=20' : '?pageNumber=0&pageRow=20&search=$keyword';
+    final param = keyword.isEmpty ? '?pageNumber=$pageNumber&pageRow=$pageRow' : '?pageNumber=$pageNumber&pageRow=$pageRow&search=$keyword';
     await Repos().reposPost(context, (onResult){
       if ((onResult.statusCode ?? 300)  > HTTP_CODE) {
         setCommentFetch(MusicDataFetch(MusicState.getMusicBlocError));
@@ -39,7 +39,7 @@ class MusicDataBloc{
         });
   }
 
-  Future getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
+  Future getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood ='', int pageNumber = 0, int pageRow = 10}) async{
     setCommentFetch(MusicDataFetch(MusicState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
@@ -47,8 +47,8 @@ class MusicDataBloc{
     final paramGenre = '&genre=$idGenre';
     final paramTheme = '&theme=$idTheme';
     final paramMood = '&mood=$idMood';
-    final paramKeyword = keyword.isEmpty ? '?pageNumber=0&pageRow=20${idGenre.isNotEmpty ? paramGenre : ''}${idTheme.isNotEmpty ? paramTheme : ''}${idMood.isNotEmpty ? paramMood : ''}'
-        : '?pageNumber=0&pageRow=20&search=$keyword${idGenre.isNotEmpty ? paramGenre : ''}${idTheme.isNotEmpty ? paramTheme : ''}${idMood.isNotEmpty ? paramMood : ''}';
+    final paramKeyword = keyword.isEmpty ? '?pageNumber=$pageNumber&pageRow=$pageRow${idGenre.isNotEmpty ? paramGenre : ''}${idTheme.isNotEmpty ? paramTheme : ''}${idMood.isNotEmpty ? paramMood : ''}'
+        : '?pageNumber=$pageNumber&pageRow=$pageRow&search=$keyword${idGenre.isNotEmpty ? paramGenre : ''}${idTheme.isNotEmpty ? paramTheme : ''}${idMood.isNotEmpty ? paramMood : ''}';
     await Repos().reposPost(context, (onResult){
       if ((onResult.statusCode ?? 300)  > HTTP_CODE) {
         setCommentFetch(MusicDataFetch(MusicState.getMusicBlocError));

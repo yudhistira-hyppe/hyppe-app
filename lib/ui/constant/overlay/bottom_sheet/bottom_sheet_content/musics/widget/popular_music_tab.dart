@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 
@@ -19,39 +20,53 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
 
   @override
   void initState() {
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.scrollController.addListener(() {
+      notifier.onScrollMusics(materialAppKey.currentContext!);
+    });
+    notifier.scrollExpController.addListener(() {
+      notifier.onScrollExpMusics(materialAppKey.currentContext!);
+    });
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
     return !notifier.isLoadingMusic ? (!widget.isExplored ? notifier.listMusics : notifier.listExpMusics).isNotEmpty ? ListView.builder(
-      itemCount: ((!widget.isExplored ? notifier.listMusics : notifier.listExpMusics)).length,
-      // controller: _scrollController,
+      itemCount: !widget.isExplored ? (!notifier.isNextMusic ? notifier.listMusics.length : notifier.listMusics.length + 1 ) : (!notifier.isNextExpMusic ? notifier.listExpMusics.length : notifier.listExpMusics.length + 1),
+      controller: !widget.isExplored ? notifier.scrollController : notifier.scrollExpController,
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(bottom: 10),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      // separatorBuilder: (context, index) =>
-      //     const Divider(
-      //   thickness: 0.95,
-      //   color: Color(0xfffffffff),
-      // ),
       itemBuilder: (context, index) {
-        // if (index == notifier.commentData?.length && notifier.hasNext) {
-        //   return const CustomLoading();
-        // }
-        //
-        // final comments = notifier.commentData?[index];
-        //
-        // return Padding(
-        //   padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-        //   child: CommentListTile(
-        //     data: comments,
-        //     fromFront: widget.fromFront,
-        //   ),
-        // );
-        return MusicItemScreen(music: !widget.isExplored ? notifier.listMusics[index] : notifier.listExpMusics[index], index: index,);
+        if(widget.isExplored){
+          if (index == notifier.listExpMusics.length && notifier.isNextExpMusic) {
+            return Container(
+              width: double.infinity,
+              height: 30,
+              alignment: Alignment.center,
+              child: const CustomLoading(),
+            );
+          }
+        }else{
+          if (index == notifier.listMusics.length && notifier.isNextMusic) {
+            return Container(
+              width: double.infinity,
+              height: 30,
+              alignment: Alignment.center,
+              child: const CustomLoading(),
+            );
+          }
+        }
+        return MusicItemScreen(music: !widget.isExplored ? notifier.listMusics[index] : notifier.listExpMusics[index], index: index, isExplored: widget.isExplored,);
       },
     ): Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),

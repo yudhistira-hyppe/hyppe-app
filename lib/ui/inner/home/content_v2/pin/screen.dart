@@ -50,7 +50,7 @@ class _PinScreenState extends State<PinScreen> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: setPin == 'true' ? notifier2.translate.changePin! : 'Set New Pin',
+            textToDisplay: setPin == 'true' ? notifier2.translate.changePin ?? 'Change Pin' : 'Set New Pin',
             textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
           ),
           centerTitle: false,
@@ -68,13 +68,13 @@ class _PinScreenState extends State<PinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: setPin == 'true' && !notifier.checkPin ? notifier2.translate.enterYourCurrentPin! : notifier2.translate.enterNewPin!,
-                textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                textToDisplay: setPin == 'true' && !notifier.checkPin ? notifier2.translate.enterYourCurrentPin ?? 'Enter Your Current Pin' : notifier2.translate.enterNewPin ?? 'Eneter New Pin',
+                textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
+              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
               twelvePx,
               CustomRectangleInput(setPin == 'true' && !notifier.checkPin ? notifier.pin3Controller : notifier.pin1Controller, onChanged: (value) {
                 if (setPin == 'true' && !notifier.checkPin) {
@@ -87,7 +87,7 @@ class _PinScreenState extends State<PinScreen> {
                   ? GestureDetector(
                       onTap: () => notifier.forgotPin(context),
                       child: CustomTextWidget(
-                        textToDisplay: notifier2.translate.forgotPin!,
+                        textToDisplay: notifier2.translate.forgotPin ?? 'Forgot Pin',
                         maxLines: 3,
                         textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
                       ),

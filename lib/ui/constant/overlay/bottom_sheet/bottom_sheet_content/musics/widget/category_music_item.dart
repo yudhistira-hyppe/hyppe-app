@@ -27,6 +27,7 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
     return InkWell(
       onTap: (){
         notifier.seletedType = widget.type;
+        notifier.selectedMusicEnum = widget.myEnum;
         notifier.selectedMusic = null;
         final myId = widget.type.id;
         if(myId != null){

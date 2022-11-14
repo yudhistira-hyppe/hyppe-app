@@ -219,8 +219,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                         defaultColor: false,
                                                         height: 30,
                                                       ),
-                                                      Text(transnot.translate.reportReceived!, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                                      Text(transnot.translate.yourReportWillbeHandledImmediately!,
+                                                      Text(transnot.translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                                      Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
                                                           style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 13,

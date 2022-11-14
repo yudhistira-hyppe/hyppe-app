@@ -75,9 +75,9 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   TextStyle verifyTextColor(BuildContext context) {
     if (isOTPCodeFullFilled) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
     }
   }
 
@@ -185,7 +185,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     try {
       // TODO: old code
       // setLoading(false);
-      // await ShowBottomSheet().onShowColouredSheet(context, language.verified!, subCaption: message);
+      // await ShowBottomSheet().onShowColouredSheet(context, language.verified, subCaption: message);
       // Routing().moveAndRemoveUntil(
       //   signUpVerified,
       //   root,

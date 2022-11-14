@@ -49,13 +49,13 @@ class PinWithdrawalScreen extends StatelessWidget {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: notifier2.translate.enterYourCurrentPin!,
-                textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                textToDisplay: notifier2.translate.enterYourCurrentPin ?? 'Enter Your Current Pin',
+                textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
+              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
               twelvePx,
               PinWithdrawal(
                 controller: notifier.pinController,

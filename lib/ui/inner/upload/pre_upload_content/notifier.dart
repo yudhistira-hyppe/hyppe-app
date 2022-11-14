@@ -12,6 +12,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/music/music.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
@@ -111,6 +112,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? _tags;
   String _visibility = "PUBLIC";
   dynamic _thumbNail;
+  Music? _musicSelected;
 
   List<String> _interestData = [];
   List<InterestData> _interest = [];
@@ -142,6 +144,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
+  Music? get musicSelected => _musicSelected;
   List<InterestData> get interest => _interest;
   List<InterestData> get interestList => _interestList;
   List<UserData> get userList => _userList;
@@ -157,7 +160,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
-  // UpdateContentsArgument get updateArguments => _arguments!;
+  // UpdateContentsArgument get updateArguments => _arguments;
 
   set ownershipEULA(bool val) {
     _ownershipEULA = val;
@@ -231,6 +234,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set thumbNail(val) {
     _thumbNail = val;
+    notifyListeners();
+  }
+
+  set musicSelected(Music? music){
+    _musicSelected = music;
     notifyListeners();
   }
 
@@ -478,6 +486,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         description: captionController.text,
         cats: _interestData,
         tagPeople: userTagData,
+        idMusic: _musicSelected?.id,
         saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
         saleLike: _includeTotalLikes,
         saleView: _includeTotalViews,

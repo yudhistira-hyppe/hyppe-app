@@ -19,7 +19,7 @@ class ModelGoogleMapPlace {
       );
 
   Map<String, dynamic> toJson() => {
-        "predictions": List<dynamic>.from(predictions!.map((x) => x.toJson())),
+        "predictions": List<dynamic>.from(predictions?.map((x) => x.toJson()) ?? []),
         "status": status,
       };
 }
@@ -55,12 +55,12 @@ class Prediction {
 
   Map<String, dynamic> toJson() => {
         "description": description,
-        "matched_substrings": List<dynamic>.from(matchedSubstrings!.map((x) => x.toJson())),
+        "matched_substrings": List<dynamic>.from(matchedSubstrings?.map((x) => x.toJson()) ?? []),
         "place_id": placeId,
         "reference": reference,
-        "structured_formatting": structuredFormatting!.toJson(),
-        "terms": List<dynamic>.from(terms!.map((x) => x.toJson())),
-        "types": List<dynamic>.from(types!.map((x) => x)),
+        "structured_formatting": structuredFormatting?.toJson(),
+        "terms": List<dynamic>.from(terms?.map((x) => x.toJson()) ?? []),
+        "types": List<dynamic>.from(types?.map((x) => x) ?? []),
       };
 }
 
@@ -103,7 +103,7 @@ class StructuredFormatting {
 
   Map<String, dynamic> toJson() => {
         "main_text": mainText,
-        "main_text_matched_substrings": List<dynamic>.from(mainTextMatchedSubstrings!.map((x) => x.toJson())),
+        "main_text_matched_substrings": List<dynamic>.from(mainTextMatchedSubstrings?.map((x) => x.toJson()) ?? []),
         "secondary_text": secondaryText,
       };
 }

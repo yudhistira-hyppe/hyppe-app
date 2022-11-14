@@ -317,7 +317,6 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (!System().canOnlyContainLettersNumbersPeriodsAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
             await ShowBottomSheet().onShowColouredSheet(
                 context,
-                // language.successUploadId!,
                 'Username only contain letters, numbers, periods, and underscore',
                 color: Colors.red,
                 iconSvg: "${AssetPath.vectorPath}remove.svg",
@@ -516,14 +515,14 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       //         _assignDioCancelToken();
 
       //         progress = "0%";
-      //         Overlay.of(context)?.insert(uploadProgress!);
+      //         Overlay.of(context)?.insert(uploadProgress);
 
       //         final notifier = UserBloc();
       //         await notifier.uploadProfilePictureBlocV2(
       //           context,
       //           verifyID: true,
       //           cancelToken: _dioCancelToken,
-      //           file: value.values.single.files.single.path!,
+      //           file: value.values.single.files.single.path,
       //           email: SharedPreference().readStorage(SpKeys.email),
       //           onSendProgress: (received, total) {
       //             _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
@@ -536,7 +535,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       //           progress = "${language.finishingUp}...";
       //           Provider.of<MainNotifier>(context, listen: false).initMain(context, onUpdateProfile: true).then((value) {
       //             hold = false;
-      //             ShowBottomSheet().onShowColouredSheet(context, language.successUploadId!);
+      //             ShowBottomSheet().onShowColouredSheet(context, language.successUploadId);
       //             _determineIdProofStatusUser(context);
       //             notifyListeners();
       //           }).whenComplete(() {
@@ -547,7 +546,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       //         if (fetch.userState == UserState.uploadProfilePictureError) {
       //           ShowBottomSheet().onShowColouredSheet(
       //             context,
-      //             language.failedUploadId!,
+      //             language.failedUploadId,
       //             color: Theme.of(context).colorScheme.error,
       //             iconSvg: "${AssetPath.vectorPath}remove.svg",
       //           );

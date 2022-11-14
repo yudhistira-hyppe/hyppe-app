@@ -92,7 +92,7 @@ class ContentItem extends StatelessWidget {
                                   // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
                                   //       context,
                                   //       currentValue: vidData,
-                                  //       fUserId: vidData.userID!,
+                                  //       fUserId: vidData.userID,
                                   //       statusFollowing: StatusFollowing.rejected,
                                   //     ),
                                 ),

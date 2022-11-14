@@ -43,7 +43,7 @@ class _ReferralState extends State<Referral> {
           ),
           titleSpacing: 0,
           title: CustomTextWidget(
-            textToDisplay: notifier.language.referralID!,
+            textToDisplay: notifier.language.referralID ?? '',
             textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18),
           ),
           centerTitle: false,

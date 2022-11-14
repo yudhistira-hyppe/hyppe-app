@@ -77,7 +77,7 @@
 //     try {
 //       'Stomp is running ${_stomp.isRunning}'.logger();
 
-//       _stomp.eventsSubscribe(StompService.WALLET_RECV + _userID! + "_" + sessionID!, (result) {
+//       _stomp.eventsSubscribe(StompService.WALLET_RECV + _userID + "_" + sessionID, (result) {
 //         result.body.logger();
 //         _handleOnEvent(result.body, fromHome: fromHome);
 //       });

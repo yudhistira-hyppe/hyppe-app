@@ -35,7 +35,7 @@
 //               onPressed: () => context.read<NotificationNotifier>().getNotification(context, notificationCategory),
 //               child: CustomTextWidget(
 //                 textToDisplay: 'Load more',
-//                 textStyle: Theme.of(context).textTheme.button!.copyWith(color: color),
+//                 textStyle: Theme.of(context).textTheme.button.copyWith(color: color),
 //               ),
 //             )
 //           else

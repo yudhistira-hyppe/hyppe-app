@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
@@ -34,7 +33,6 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import '../../../../app.dart';
 import '../../../../core/models/collection/music/music.dart';
 import '../../../../core/models/collection/music/music_type.dart';
-import '../../../constant/overlay/bottom_sheet/bottom_sheet_content/musics/on_choose_music.dart';
 
 class PreviewContentNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -42,38 +40,6 @@ class PreviewContentNotifier with ChangeNotifier {
     language = translate;
     notifyListeners();
   }
-
-  // final dataMusics1 = [
-  //   Music(musicTitle: 'audio1', artistName: 'artis audio1', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio2', artistName: 'artis audio2', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio3', artistName: 'artis audio3', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio4', artistName: 'artis audio4', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio5', artistName: 'artis audio5', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio6', artistName: 'artis audio6', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio7', artistName: 'artis audio7', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio8', artistName: 'artis audio8', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio9', artistName: 'artis audio9', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio10', artistName: 'artis audio10', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio11', artistName: 'artis audio11', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio12', artistName: 'artis audio12', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  // ];
-  //
-  // final dataMusics2 = [
-  //   Music(musicTitle: 'audio5', artistName: 'artis audio5', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio6', artistName: 'artis audio6', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio7', artistName: 'artis audio7', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio8', artistName: 'artis audio8', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample4.aac', urlThumbnail: 'https://i.scdn.co/image/ab67616d0000b2735320a1b471ae75632ef787e5'),
-  //   Music(musicTitle: 'audio9', artistName: 'artis audio9', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio10', artistName: 'artis audio10', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio11', artistName: 'artis audio11', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio12', artistName: 'artis audio12', duration: 20, url: 'https://filesamples.com/samples/audio/aac/sample1.aac', urlThumbnail: 'https://i.pinimg.com/originals/c9/f5/08/c9f5083d6cc3579a036646311f07280b.jpg'),
-  //   Music(musicTitle: 'audio1', artistName: 'artis audio1', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio2', artistName: 'artis audio2', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio3', artistName: 'artis audio3', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  //   Music(musicTitle: 'audio4', artistName: 'artis audio4', duration: 20, url: 'https://file-examples.com/storage/feb1825f1e635ae95f6f16d/2017/11/file_example_MP3_700KB.mp3', urlThumbnail: 'https://m.media-amazon.com/images/I/51sBKjJOwOL._SY580_.jpg'),
-  // ];
-
-
 
   double? _aspectRatio;
   FeatureType? _featureType;
@@ -108,10 +74,20 @@ class PreviewContentNotifier with ChangeNotifier {
   List<String> get listType => _listTypes;
   List<Music> _listMusics = [];
   List<Music> get listMusics => _listMusics;
+  bool _isNextMusic = false;
+  bool get isNextMusic => _isNextMusic;
+  bool _isLoadNextMusic = false;
+  bool get isLoadNextMusic => _isLoadNextMusic;
   List<Music> _listExpMusics = [];
   List<Music> get listExpMusics => _listExpMusics;
+  bool _isNextExpMusic = false;
+  bool get isNextExpMusic => _isNextExpMusic;
+  bool _isLoadNextExpMusic = false;
+  bool get isLoadNextExpMusic => _isLoadNextExpMusic;
   MusicType? _selectedType;
-  MusicType? get seletedType => _selectedType;
+  MusicType? get selectedType => _selectedType;
+  MusicEnum? _selectedMusicEnum;
+  MusicEnum? get selectedMusicEnum => _selectedMusicEnum;
   List<MusicType> _listGenres = [];
   List<MusicType> get listGenres => _listGenres;
   List<MusicType> _listThemes = [];
@@ -123,6 +99,10 @@ class PreviewContentNotifier with ChangeNotifier {
   PersistentBottomSheetController? _persistentBottomSheetController;
   final TransformationController _transformationController = TransformationController();
   final audioPlayer = AudioPlayer();
+  final searchController = TextEditingController();
+  final scrollController = ScrollController();
+  final scrollExpController = ScrollController();
+  final focusNode = FocusNode();
 
   BetterPlayerController? get betterPlayerController => _betterPlayerController;
   TransformationController get transformationController => _transformationController;
@@ -250,16 +230,28 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set listMusics(List<Music> values){
     _listMusics = values;
+    _isNextMusic = (values.length%10 == 0);
+    notifyListeners();
+  }
+
+  set isNextMusic(bool state){
+    _isNextMusic = state;
     notifyListeners();
   }
 
   set listExpMusics(List<Music> values){
     _listExpMusics = values;
+    _isNextExpMusic = (values.length%10 == 0);
     notifyListeners();
   }
 
   set seletedType(MusicType? type){
     _selectedType = type;
+    notifyListeners();
+  }
+
+  set selectedMusicEnum(MusicEnum? val){
+    _selectedMusicEnum = val;
     notifyListeners();
   }
 
@@ -288,28 +280,119 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  // void initListMusics(){
-  //   switch(_pageMusic){
-  //     case 0:{
-  //       _currentMusic = null;
-  //       _listMusics = dataMusics1;
-  //       audioPlayer.stop();
-  //       break;
-  //     }
-  //     case 1:{
-  //       _currentMusic = null;
-  //       _listMusics = dataMusics2;
-  //       audioPlayer.stop();
-  //       break;
-  //     }
-  //   }
-  // }
+  set isLoadNextMusic(bool state){
+    _isLoadNextMusic = state;
+    notifyListeners();
+  }
+
+  set isLoadNextExpMusic(bool state){
+    _isLoadNextExpMusic = state;
+    notifyListeners();
+  }
+
+  void onScrollExpMusics(BuildContext context, )async{
+    if(scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange){
+      if(!_isLoadNextExpMusic){
+
+        print('Test onScrollExpMusics');
+        if(_isNextExpMusic){
+          try{
+            _isLoadNextExpMusic = true;
+            final int pageNumber = _listExpMusics.length~/10;
+            List<Music> res = [];
+            final myId = _selectedType?.id;
+            if(myId != null){
+              if(_selectedMusicEnum == MusicEnum.mood){
+                res = await getMusics(context, keyword: searchController.text, idMood: myId, pageNumber: pageNumber);
+              }else if(_selectedMusicEnum == MusicEnum.genre){
+                res = await getMusics(context, keyword: searchController.text, idGenre: myId, pageNumber: pageNumber);
+              }else{
+                res = await getMusics(context, keyword: searchController.text, idTheme: myId, pageNumber: pageNumber);
+              }
+              _isNextExpMusic = res.isEmpty ? false : res.length%10 == 0;
+              _listExpMusics.addAll(res);
+            }
+
+            notifyListeners();
+          }catch(e){
+            'Error onScrollMusics : $e'.logger();
+          }finally{
+            _isLoadNextExpMusic = false;
+          }
+        }
+      }
+    }
+  }
+
+  void onScrollMusics(BuildContext context) async{
+    if(scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange){
+      if(!_isLoadNextMusic){
+        if(_isNextMusic){
+          try{
+            _isLoadNextMusic = true;
+            final int pageNumber = _listMusics.length~/10;
+            final res = await getMusics(context, keyword: searchController.text, pageNumber: pageNumber);
+            _isNextMusic = res.isEmpty ? false : res.length%10 == 0;
+            _listMusics.addAll(res);
+            notifyListeners();
+          }catch(e){
+            'Error onScrollMusics : $e'.logger();
+          }finally{
+            _isLoadNextMusic = false;
+          }
+        }
+      }
+
+    }
+  }
+
+  void onScrollMusicTypes(){
+
+  }
+
+  void onChangeSearchMusic(BuildContext context, String value) {
+    if(value.length > 2){
+      _selectedMusic = null;
+      for(var music in _listMusics){
+        if(music.isSelected){
+          final index = _listMusics.indexOf(music);
+          _listMusics[index].isSelected = false;
+        }
+      }
+      _selectedType = null;
+      notifyListeners();
+      Future.delayed(const Duration(milliseconds: 500), () async{
+        final currentValue = searchController.text;
+        if(currentValue == value){
+          _isLoadingMusic = true;
+          notifyListeners();
+          try{
+            listMusics = await getMusics(context, keyword: value);
+            _listGenres = await getMusicCategories(context, MusicEnum.genre, keyword: value);
+            _listThemes = await getMusicCategories(context, MusicEnum.theme, keyword: value);
+            _listMoods = await getMusicCategories(context, MusicEnum.mood, keyword: value);
+            notifyListeners();
+          }catch(e){
+            'Error onChangeSearchMusic : $e'.logger();
+          }finally{
+            _isLoadingMusic = false;
+            notifyListeners();
+          }
+
+        }
+      });
+    }else{
+      if(value.isEmpty){
+        initListMusics(context);
+      }
+    }
+  }
 
   Future initListMusics(BuildContext context) async{
     _isLoadingMusic = true;
     try{
       _listTypes = [language.theme ?? 'Theme', language.genre ?? 'Genre', language.mood ?? 'Mood'];
-      _listMusics = await getMusics(context);
+      listMusics = await getMusics(context);
       _listGenres = await getMusicCategories(context, MusicEnum.genre);
       _listThemes = await getMusicCategories(context, MusicEnum.theme);
       _listMoods = await getMusicCategories(context, MusicEnum.mood);
@@ -322,16 +405,16 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
-    _listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
+    listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
     notifyListeners();
   }
 
-  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
+  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood ='', int pageNumber = 0, int pageRow = 10}) async{
     List<Music>? res = [];
     _isLoadingMusic = true;
     try{
       final bloc = MusicDataBloc();
-      await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood);
+      await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood, pageNumber: pageNumber, pageRow: pageRow);
       final fetch = bloc.musicDataFetch;
       if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
         res = (fetch.data as List<dynamic>?)?.map((item) => Music.fromJson(item as Map<String, dynamic>)).toList();
@@ -376,6 +459,7 @@ class PreviewContentNotifier with ChangeNotifier {
     try{
       if(urlAudio.isNotEmpty){
         _isLoadVideo = true;
+        notifyListeners();
         String outputPath = await System().getSystemPath(params: 'postVideo');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
@@ -389,15 +473,12 @@ class PreviewContentNotifier with ChangeNotifier {
             _fileContent?[_indexView] = outputPath;
             _url = fileContent?[_indexView];
             _sourceFile = SourceFile.local;
-            _isLoadVideo = true;
             _betterPlayerController = null;
             notifyListeners();
             initVideoPlayer(context);
-            // _betterPlayerController = null;
-            // if(path.isNotEmpty){
-            //   await File(path).delete();
-            // }
-            // _betterPlayerController?.seekTo(const Duration(seconds: 0));
+            if(path.isNotEmpty){
+              await File(path).delete();
+            }
           }else if(ReturnCode.isCancel(codeSession)){
             print('ReturnCode = Cancel');
             _isLoadVideo = false;
@@ -729,7 +810,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.thumbNail = _thumbNails != null ? _thumbNails![0] : null;
     notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
-
+    notifier.musicSelected = _selectedMusic;
     // notifier.compressVideo();
 
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);

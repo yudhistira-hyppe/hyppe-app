@@ -159,7 +159,7 @@ class LikeNotifier with ChangeNotifier {
       //   }
       // }
 
-      // await notifier.likePostUserBloc(context, postId: postData.postID!, emailOwner: postData.email!, isLike: postData.isLiked!);
+      // await notifier.likePostUserBloc(context, postId: postData.postID, emailOwner: postData.email, isLike: postData.isLiked);
       // final fetch = notifier.likeFetch;
       // if (fetch.likeState == LikeState.likeUserPostSuccess) {
       //   "Like post success".logger();

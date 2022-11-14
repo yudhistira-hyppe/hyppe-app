@@ -47,7 +47,7 @@
 //                 automaticallyImplyLeading: false,
 //                 elevation: 0.0,
 //                 title: CustomTextWidget(
-//                     textAlign: TextAlign.left, textToDisplay: notifier.appBar!, textStyle: _themes.textTheme.button!.apply(fontWeightDelta: 1)),
+//                     textAlign: TextAlign.left, textToDisplay: notifier.appBar!, textStyle: _themes.textTheme.button.apply(fontWeightDelta: 1)),
 //                 actions: [
 //                   GestureDetector(
 //                     child: Container(
@@ -99,7 +99,7 @@
 //                                     onChanged: (int? v) {
 //                                       notifier.selectedIndex = v;
 //                                       if (v != null) {
-//                                         // notifier.remarkID = notifier.initData!.data[v].remarkID!;
+//                                         // notifier.remarkID = notifier.initData!.data[v].remarkID;
 //                                       } else {
 //                                         notifier.remarkID = '';
 //                                       }

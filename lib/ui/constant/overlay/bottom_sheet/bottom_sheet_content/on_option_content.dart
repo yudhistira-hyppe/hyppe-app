@@ -169,7 +169,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.ownershipEULA = widget.contentData.certified ?? false;
 
                     if (widget.contentData.location != null) {
-                      notifier.locationName = widget.contentData.location!;
+                      notifier.locationName = widget.contentData.location ?? '';
                     } else {
                       notifier.locationName = notifier.language.addLocation ?? '';
                     }

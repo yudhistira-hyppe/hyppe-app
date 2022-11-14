@@ -26,7 +26,7 @@ class BuildOkButton extends StatelessWidget {
           fivePx,
           CustomTextWidget(
               textToDisplay: 'Ok',
-              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText, fontWeight: FontWeight.bold),
+              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText, fontWeight: FontWeight.bold),
           ),
         ],
       ),

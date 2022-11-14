@@ -49,7 +49,7 @@ class SelfProfileTop extends StatelessWidget {
                           ),
                           SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                           CustomTextWidget(
-                            textToDisplay: notifier.language.posts!,
+                            textToDisplay: notifier.language.posts ?? 'Posts',
                             textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                           )
                         ],
@@ -72,7 +72,7 @@ class SelfProfileTop extends StatelessWidget {
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.followers!,
+                              textToDisplay: notifier.language.followers ?? 'Followers',
                               textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
@@ -96,7 +96,7 @@ class SelfProfileTop extends StatelessWidget {
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.following!,
+                              textToDisplay: notifier.language.following ?? 'Following',
                               textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
@@ -137,7 +137,7 @@ class SelfProfileTop extends StatelessWidget {
             //                 ),
             //                 SizedBox(height: 8 * SizeConfig.scaleDiagonal),
             //                 CustomTextWidget(
-            //                   textToDisplay: notifier.language.posts!,
+            //                   textToDisplay: notifier.language.posts,
             //                   textStyle: Theme.of(context)
             //                       .textTheme
             //                       .bodyText2!
@@ -168,7 +168,7 @@ class SelfProfileTop extends StatelessWidget {
             //                   ),
             //                   SizedBox(height: 8 * SizeConfig.scaleDiagonal),
             //                   CustomTextWidget(
-            //                     textToDisplay: notifier.language.followers!,
+            //                     textToDisplay: notifier.language.followers,
             //                     textStyle: Theme.of(context)
             //                         .textTheme
             //                         .bodyText2!
@@ -200,7 +200,7 @@ class SelfProfileTop extends StatelessWidget {
             //                   ),
             //                   SizedBox(height: 8 * SizeConfig.scaleDiagonal),
             //                   CustomTextWidget(
-            //                     textToDisplay: notifier.language.following!,
+            //                     textToDisplay: notifier.language.following,
             //                     textStyle: Theme.of(context)
             //                         .textTheme
             //                         .bodyText2!
@@ -221,7 +221,7 @@ class SelfProfileTop extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
               child: CustomTextWidget(
-                textToDisplay: notifier.displayFullName()!,
+                textToDisplay: notifier.displayFullName() ?? '',
                 textAlign: TextAlign.start,
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ),
@@ -245,7 +245,7 @@ class SelfProfileTop extends StatelessWidget {
                           color: kHyppePrimary,
                         ),
                         CustomTextWidget(
-                          textToDisplay: notifier.displayPlace()!,
+                          textToDisplay: notifier.displayPlace() ?? '',
                           textStyle: const TextStyle(color: kHyppePrimary),
                         )
                       ],

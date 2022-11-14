@@ -147,9 +147,9 @@ class RegisterNotifier with ChangeNotifier {
 
   TextStyle nextTextColor(BuildContext context) {
     if (_validationRegister()) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
     }
   }
 
@@ -159,7 +159,7 @@ class RegisterNotifier with ChangeNotifier {
         if (!_system.validateEmail(email)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.checkYourEmail!,
+            language.checkYourEmail ?? 'Check Your Email',
             subCaption: language.notAValidEmailAddress,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -169,7 +169,7 @@ class RegisterNotifier with ChangeNotifier {
         } else if (!_system.atLeastEightCharacter(text: password)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.incorrectPassword!,
+            language.incorrectPassword ?? 'Incorrect Password',
             subCaption: language.atLeast8Characters,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -179,7 +179,7 @@ class RegisterNotifier with ChangeNotifier {
         } else if (!_system.atLeastContainOneCharacterAndOneNumber(text: password)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.incorrectPassword!,
+            language.incorrectPassword ?? 'Incorrect Password',
             sizeIcon: 15,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -218,7 +218,7 @@ class RegisterNotifier with ChangeNotifier {
               SharedPreference().writeStorage(SpKeys.email, _result.email);
               SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
               // signUpPinNotifier.userToken = fetch.data['token'];
-              // signUpPinNotifier.userID = _result.userID!; >>>>> Backend tidak memberikan key userID
+              // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
               signUpPinNotifier.username = _result.userName ?? "";
               signUpPinNotifier.email = _result.email ?? "";
               // signUpEulaNotifier.fullName = _result.fullName ?? "";

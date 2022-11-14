@@ -54,7 +54,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       flashMode = FlashMode.off;
       deepArController = DeepArController();
       if (Platform.isAndroid) {
-        deepArController!.destroy();
+        if(deepArController != null){
+          deepArController!.destroy();
+        }
       }
       await deepArController!
           .initialize(
@@ -141,7 +143,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
         deepArController = DeepArController();
         deepArController = null;
       }
-      deepArController!.destroy();
+      if(deepArController != null){
+        deepArController!.destroy();
+      }
       deepArController = null;
     } catch (e) {
       e.logger();

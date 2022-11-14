@@ -37,7 +37,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Consumer<PreviewContentNotifier>(builder: (context, notifier, _){
-      final showListExp = notifier.seletedType != null;
+      final showListExp = notifier.selectedType != null;
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -50,8 +50,11 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
             child: CustomSearchBar(
               hintText: notifier.language.searchMusic,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              // focusNode: notifier.focusNode1,
-              // controller: notifier.searchController1,
+              focusNode: notifier.focusNode,
+              controller: notifier.searchController,
+              onChanged: (value){
+                notifier.onChangeSearchMusic(context, value);
+              },
               // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
               // onPressedIcon: () => notifier.onSearchPost(context),
               onTap: (){
@@ -71,6 +74,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 CustomIconButtonWidget(
                     onPressed: (){
                       notifier.seletedType = null;
+                      notifier.selectedMusicEnum = null;
                     },
                     color: Colors.black,
                     iconData: '${AssetPath.vectorPath}back-arrow.svg',
@@ -80,7 +84,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 Expanded(
                     child: CustomTextWidget(
                       textAlign: TextAlign.left,
-                      textToDisplay: notifier.seletedType?.name ?? '',
+                      textToDisplay: notifier.selectedType?.name ?? '',
                       textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),))
               ],
             ),

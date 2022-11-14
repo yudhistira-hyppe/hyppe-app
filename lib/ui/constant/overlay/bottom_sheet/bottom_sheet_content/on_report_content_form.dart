@@ -79,7 +79,7 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                   ),
                   CustomTextWidget(
                     textToDisplay: "Tell us why you don't want to see this",
-                    textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   ListView.builder(
                     physics: NeverScrollableScrollPhysics(),

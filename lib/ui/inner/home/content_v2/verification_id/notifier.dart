@@ -457,31 +457,34 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       await System().getLocalMedia(featureType: FeatureType.other, context: context).then((value) async {
         debugPrint('Pick => ' + value.toString());
         debugPrint('Pick =>  ${value.values.length}');
-        if (pickedSupportingDocs!.length < 3) {
-          if (value.values.single != null) {
-            // pickedSupportingDocs = value.values.single;
-            for (var element in value.values.single!) {
-              if (pickedSupportingDocs!.length < 3) {
-                pickedSupportingDocs!.add(element);
-              } else {
-                ShowGeneralDialog.pickFileErrorAlert(context, 'Max 3 image');
+        if(pickedSupportingDocs != null){
+          if (pickedSupportingDocs!.length < 3) {
+            if (value.values.single != null) {
+              // pickedSupportingDocs = value.values.single;
+              for (var element in value.values.single!) {
+                if (pickedSupportingDocs!.length < 3) {
+                  pickedSupportingDocs!.add(element);
+                } else {
+                  ShowGeneralDialog.pickFileErrorAlert(context, 'Max 3 image');
+                }
+              }
+
+              // fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
+
+              isLoading = false;
+              Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
+            } else {
+              isLoading = false;
+              if (value.keys.single.isNotEmpty) {
+                ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
               }
             }
-
-            // fetch.data['data'].forEach((v) => dataAllTransaction?.add(TransactionHistoryModel.fromJSON(v)));
-
-            isLoading = false;
-            Routing().moveAndPop(Routes.verificationIDStepSupportingDocsPreview);
           } else {
+            ShowGeneralDialog.pickFileErrorAlert(context, 'Max 3 image');
             isLoading = false;
-            if (value.keys.single.isNotEmpty) {
-              ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
-            }
           }
-        } else {
-          ShowGeneralDialog.pickFileErrorAlert(context, 'Max 3 image');
-          isLoading = false;
         }
+
       });
     } catch (e) {
       isLoading = false;

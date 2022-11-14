@@ -56,9 +56,7 @@ class ContentDataInsight extends HiveObject {
     following = json['following'];
     reactions = json['reactions'];
     views = json['views'];
-    likes = json['likes'];
-    // isPostLiked = insightLogs != null && insightLogs!.where((element) => element.eventInsight?.toLowerCase() == 'like').isNotEmpty;
-    isPostLiked = isLike;
+    likes = json['likes'];isPostLiked = isLike;
     isView = (json['isView'] != null) ? json['isView'] : false;
   }
 

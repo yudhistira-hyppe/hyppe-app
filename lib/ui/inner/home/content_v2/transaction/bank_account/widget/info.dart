@@ -26,7 +26,7 @@ class infoMaxAccount extends StatelessWidget {
           CustomTextWidget(
             textToDisplay: title,
             textAlign: TextAlign.start,
-            textStyle: Theme.of(context).textTheme.bodySmall!.copyWith(),
+            textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(),
           ),
         ],
       ),

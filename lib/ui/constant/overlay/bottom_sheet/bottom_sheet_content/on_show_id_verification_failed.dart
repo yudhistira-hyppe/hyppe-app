@@ -41,8 +41,7 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
                 textToDisplay: "Upload Supporting Document",
                 textStyle: Theme.of(context)
                     .textTheme
-                    .button!
-                    .copyWith(color: kHyppePrimary),
+                    .button?.copyWith(color: kHyppePrimary),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
@@ -55,8 +54,7 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
                 textToDisplay: "Re-Take ID Picture",
                 textStyle: Theme.of(context)
                     .textTheme
-                    .button!
-                    .copyWith(color: kHyppeLightButtonText),
+                    .button?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,

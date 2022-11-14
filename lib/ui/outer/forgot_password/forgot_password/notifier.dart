@@ -62,7 +62,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
           // signUpPinNotifier.email = emailController.text;
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.checkYourEmail!,
+            language.checkYourEmail ?? 'Check Your Email',
             subCaption: language.weHaveSentAVerificationCodeToYourEmail,
           );
           _sharedPrefs.writeStorage(SpKeys.email, emailController.text);
@@ -82,7 +82,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     } else {
       // ShowBottomSheet().onShowColouredSheet(
       //   context,
-      //   language .formAccountDoesNotContainEmail!,
+      //   language .formAccountDoesNotContainEmail,
       //   maxLines: 2,
       //   sizeIcon: 15,
       //   color: kHyppeTextWarning,
@@ -114,9 +114,9 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
 
   TextStyle emailNextTextColor(BuildContext context) {
     if (_system.validateEmail(text) && !isLoading) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
     }
   }
 

@@ -25,9 +25,9 @@
 //                 RadioListTile(
 //                   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
 //                   title: CustomTextWidget(
-//                     textToDisplay: notifier.language.mustNotContainYourEmail!,
+//                     textToDisplay: notifier.language.mustNotContainYourEmail,
 //                     textAlign: TextAlign.start,
-//                     textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+//                     textStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                   ),
 //                   value: notifier.firstValidation(),
 //                   activeColor: Theme.of(context).colorScheme.primaryVariant,
@@ -38,7 +38,7 @@
 //                 RadioListTile(
 //                   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 6),
 //                   title: CustomTextWidget(
-//                     textToDisplay: notifier.language.atLeast8Characters!,
+//                     textToDisplay: notifier.language.atLeast8Characters,
 //                     textAlign: TextAlign.start,
 //                     textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                   ),
@@ -77,12 +77,12 @@
 //                   ),
 //                 ),
 //                 TextSpan(
-//                   text: notifier.isEmail ? "" : notifier.language.and! + " ",
-//                   style: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+//                   text: notifier.isEmail ? "" : notifier.language.and + " ",
+//                   style: Theme.of(context).textTheme.bodyText2.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
 //                 ),
 //                 TextSpan(
 //                   text: notifier.isEmail ? "" : notifier.language.termsOfService,
-//                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
+//                   style: Theme.of(context).textTheme.bodyText2.copyWith(
 //                     color: Theme.of(context).colorScheme.primaryVariant,
 //                     fontWeight: FontWeight.bold,
 //                   ),

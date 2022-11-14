@@ -21,6 +21,6 @@
 //             backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
 //             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)))),
 //         child: CustomTextWidget(
-//             textToDisplay: context.read<TranslateNotifier>().translate.markAllAsRead!, textStyle: Theme.of(context).textTheme.button));
+//             textToDisplay: context.read<TranslateNotifier>().translate.markAllAsRead, textStyle: Theme.of(context).textTheme.button));
 //   }
 // }

@@ -29,13 +29,13 @@ class CustomFollowButton extends StatelessWidget {
     return Consumer<TranslateNotifierV2>(builder: (context, value, _) {
       switch (isFollowing) {
         case StatusFollowing.requested:
-          title = value.translate.requested!;
+          title = value.translate.requested ?? 'Requested';
           break;
         case StatusFollowing.following:
-          title = value.translate.following!;
+          title = value.translate.following ?? 'Following';
           break;
         default:
-          title = value.translate.follow ?? '';
+          title = value.translate.follow ?? 'Follow';
       }
       isFollowing == StatusFollowing.requested;
       return InkWell(

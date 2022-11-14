@@ -54,7 +54,7 @@ class OtherProfileTop extends StatelessWidget {
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.posts!,
+                              textToDisplay: notifier.language.posts ?? 'Posts',
                               textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
@@ -67,7 +67,7 @@ class OtherProfileTop extends StatelessWidget {
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.followers!,
+                              textToDisplay: notifier.language.followers ?? 'Followers',
                               textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
@@ -80,7 +80,7 @@ class OtherProfileTop extends StatelessWidget {
                             ),
                             SizedBox(height: 8 * SizeConfig.scaleDiagonal),
                             CustomTextWidget(
-                              textToDisplay: notifier.language.following!,
+                              textToDisplay: notifier.language.following ?? 'Following',
                               textStyle: Theme.of(context).textTheme.bodyText2!.apply(color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
                             )
                           ],
@@ -94,7 +94,7 @@ class OtherProfileTop extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(top: 13 * SizeConfig.scaleDiagonal),
               child: CustomTextWidget(
-                textToDisplay: notifier.displayFullName()!,
+                textToDisplay: notifier.displayFullName() ?? '',
                 textAlign: TextAlign.start,
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ),
@@ -120,7 +120,7 @@ class OtherProfileTop extends StatelessWidget {
                           color: kHyppePrimary,
                         ),
                         CustomTextWidget(
-                          textToDisplay: notifier.displayPlace()!,
+                          textToDisplay: notifier.displayPlace() ?? '',
                           textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppePrimary),
                         )
                       ],

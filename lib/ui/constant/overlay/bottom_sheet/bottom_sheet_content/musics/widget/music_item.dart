@@ -51,7 +51,7 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
                     return Container(
                       width: 48,
                       height: 48,
-                      child: CustomIconWidget(
+                      child: const CustomIconWidget(
                         defaultColor: false,
                         iconData: '${AssetPath.vectorPath}ic_music.svg',
                         // color: Theme.of(context).appBarTheme.iconTheme?.color,

@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_loading.dart';
-import 'category_music_item.dart';
 
 class ExploredMusicTab extends StatefulWidget {
   const ExploredMusicTab({Key? key}) : super(key: key);

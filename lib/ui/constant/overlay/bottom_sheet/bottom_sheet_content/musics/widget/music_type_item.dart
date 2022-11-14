@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/category_music_item.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../inner/upload/preview_content/notifier.dart';
 
 class MusicTypeItem extends StatefulWidget {
@@ -23,7 +21,7 @@ class _MusicTypeItemState extends State<MusicTypeItem> {
     final notifier = Provider.of<PreviewContentNotifier>(context);
     final list = widget.name == notifier.language.theme ? notifier.listThemes : widget.name == notifier.language.genre ? notifier.listGenres : notifier.listMoods;
     final myEnum = widget.name == notifier.language.theme ? MusicEnum.theme : widget.name == notifier.language.genre ? MusicEnum.genre : MusicEnum.mood;
-    return Container(
+    return list.isNotEmpty ? Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -54,6 +52,6 @@ class _MusicTypeItemState extends State<MusicTypeItem> {
           )
         ],
       ),
-    );
+    ) : const SizedBox(height: 0,);
   }
 }

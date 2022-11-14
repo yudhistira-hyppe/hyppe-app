@@ -21,7 +21,7 @@ class ApiAction {
     _dio = Dio(
       BaseOptions(
         baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV4}',
-        validateStatus: (status) => status! < 500,
+        validateStatus: (status) => (status ?? 0) < 500,
       ),
     );
 

@@ -344,8 +344,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     );
 
     print('ini dataSource');
-    // print(dataSource.adsConfiguration!.postID);
-    // print(dataSource.adsConfiguration!.rolls);
+    // print(dataSource.adsConfiguration.postID);
+    // print(dataSource.adsConfiguration.rolls);
 
     _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
 

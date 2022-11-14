@@ -28,7 +28,7 @@ class RemarkWithdrawalDialog extends StatelessWidget {
           ),
           twelvePx,
           Text(
-            translate.translate.aVerifiedBankDoesNotNeed!,
+            translate.translate.aVerifiedBankDoesNotNeed ?? '',
             maxLines: 5,
           ),
         ],

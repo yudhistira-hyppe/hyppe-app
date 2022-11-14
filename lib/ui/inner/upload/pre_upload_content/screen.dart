@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -101,6 +102,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         _buildDivider(context),
                         twentyFourPx,
                         categoryWidget(textTheme, notifier),
+                        _buildDivider(context),
+                        eightPx,
+                        if(notifier.musicSelected != null)
+                          musicTitle(notifier),
                         _buildDivider(context),
                         twentyFourPx,
                         tagPeopleWidget(textTheme, notifier),
@@ -350,6 +355,18 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget musicTitle(PreUploadContentNotifier notifier){
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextWidget(textToDisplay: notifier.musicSelected?.musicTitle ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),),
+        fourPx,
+        CustomTextWidget(textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
       ],
     );
   }

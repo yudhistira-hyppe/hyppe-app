@@ -88,16 +88,16 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
   }
 
   void _setPreSuccess(ContentData currentValue, BuildContext context) {
-    // context.read<PreviewVidNotifier>().vidData?.data.updateFollowingData(currentValue.userID!, true);
-    // context.read<PreviewDiaryNotifier>().diaryData?.data.updateFollowingData(currentValue.userID!, true);
-    // context.read<PreviewPicNotifier>().pic?.data.updateFollowingData(currentValue.userID!, true);
+    // context.read<PreviewVidNotifier>().vidData?.data.updateFollowingData(currentValue.userID, true);
+    // context.read<PreviewDiaryNotifier>().diaryData?.data.updateFollowingData(currentValue.userID, true);
+    // context.read<PreviewPicNotifier>().pic?.data.updateFollowingData(currentValue.userID, true);
     notifyListeners();
   }
 
   void _revertIfError(BuildContext context, ContentData currentValue) {
-    // context.read<PreviewVidNotifier>().vidData?.data.updateFollowingData(currentValue.userID!, false);
-    // context.read<PreviewDiaryNotifier>().diaryData?.data.updateFollowingData(currentValue.userID!, false);
-    // context.read<PreviewPicNotifier>().pic?.data.updateFollowingData(currentValue.userID!, false);
+    // context.read<PreviewVidNotifier>().vidData?.data.updateFollowingData(currentValue.userID, false);
+    // context.read<PreviewDiaryNotifier>().diaryData?.data.updateFollowingData(currentValue.userID, false);
+    // context.read<PreviewPicNotifier>().pic?.data.updateFollowingData(currentValue.userID, false);
     notifyListeners();
     ShowBottomSheet.onShowSomethingWhenWrong(context);
   }
