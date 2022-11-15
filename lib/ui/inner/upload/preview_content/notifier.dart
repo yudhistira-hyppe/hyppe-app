@@ -223,6 +223,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void setFileContent(String path, int index){
+    _fileContent?[index] = path;
+    notifyListeners();
+  }
+
   set listType(List<String> values){
     _listTypes = values;
     notifyListeners();

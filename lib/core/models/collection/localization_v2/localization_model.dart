@@ -37,6 +37,7 @@ class LocalizationModelV2 {
   String? atLeastContain1CharacterAnd1Number;
   String? next;
   String? submit;
+  String? rotate;
   String? passwordDoesntMatch;
   String? register;
   String? joinTheCommunityCreateOrWatchAndGetMoney;
@@ -143,6 +144,7 @@ class LocalizationModelV2 {
   String? news;
   String? whatAreYouFindOut;
   String? editProfile;
+  String? editImage;
   String? librarys;
   String? post;
   String? music;
@@ -753,6 +755,7 @@ class LocalizationModelV2 {
     this.atLeast8Characters,
     this.atLeastContain1CharacterAnd1Number,
     this.next,
+    this.rotate,
     this.submit,
     this.passwordDoesntMatch,
     this.register,
@@ -860,6 +863,7 @@ class LocalizationModelV2 {
     this.news,
     this.whatAreYouFindOut,
     this.editProfile,
+    this.editImage,
     this.librarys,
     this.post,
     this.music,
@@ -1471,6 +1475,7 @@ class LocalizationModelV2 {
     atLeast8Characters = json['atLeast8Characters'];
     atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
     next = json['next'];
+    rotate = json['rotate'];
     submit = json['submit'];
     passwordDoesntMatch = json['passwordDoesntMatch'];
     register = json['register'];
@@ -1578,6 +1583,7 @@ class LocalizationModelV2 {
     news = json['news'];
     whatAreYouFindOut = json['whatAreYouFindOut'];
     editProfile = json['editProfile'];
+    editImage = json['editImage'];
     librarys = json['librarys'];
     post = json['post'];
     music = json['music'];
