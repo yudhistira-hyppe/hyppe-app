@@ -146,7 +146,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     deepArController!.flipCamera();
   }
 
-  disposeCamera() async {
+  disposeCamera(BuildContext context) async {
     try {
       if (Platform.isAndroid) {
         deepArController = DeepArController();

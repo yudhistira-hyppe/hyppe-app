@@ -39,7 +39,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
 
   @override
   void dispose() {
-    notifier.disposeCamera();
+    notifier.disposeCamera(context);
     widget.onCameraNotifierUpdate(CameraNotifier());
     super.dispose();
   }
@@ -52,7 +52,7 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
     }
     if (state == AppLifecycleState.inactive) {
       if (widget.onChangeAppLifecycleState != null) widget.onChangeAppLifecycleState!();
-      notifier.disposeCamera();
+      notifier.disposeCamera(context);
     } else if (state == AppLifecycleState.resumed) {
       notifier.onNewCameraSelected();
     }
