@@ -11,6 +11,7 @@ import 'package:camera/camera.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class CameraNotifier extends LoadingNotifier with ChangeNotifier {
@@ -55,7 +56,15 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       deepArController = DeepArController();
       if (Platform.isAndroid) {
         if(deepArController != null){
-          deepArController!.destroy();
+          final isGranted = await System().requestPermission(context, permissions: [
+            Permission.storage,
+            Permission.camera
+          ]);
+          if(isGranted){
+            print('destroy deepArController 1');
+            deepArController!.destroy();
+          }
+
         }
       }
       await deepArController!
@@ -144,7 +153,14 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
         deepArController = null;
       }
       if(deepArController != null){
-        deepArController!.destroy();
+        final isGranted = await System().requestPermission(context, permissions: [
+          Permission.storage,
+          Permission.camera
+        ]);
+        if(isGranted){
+          print('destroy deepArController 2');
+          deepArController!.destroy();
+        }
       }
       deepArController = null;
     } catch (e) {

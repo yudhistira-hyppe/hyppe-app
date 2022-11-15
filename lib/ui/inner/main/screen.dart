@@ -37,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
     SizeConfig().init(context);
     final _themes = Theme.of(context);
     return Consumer<MainNotifier>(
-      builder: (_, notifier, __) {
+      builder: (consumerContext, notifier, __) {
         return SafeArea(
           child: Scaffold(
             backgroundColor: _themes.backgroundColor,
@@ -56,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
                     notifier.pageIndex = index;
                   });
                 } else {
-                  await notifier.onShowPostContent(context);
+                  await notifier.onShowPostContent(consumerContext);
                 }
 
               },

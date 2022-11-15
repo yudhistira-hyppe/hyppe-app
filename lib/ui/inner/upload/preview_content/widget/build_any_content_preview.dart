@@ -12,7 +12,6 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/preview_video_content.dart';
 
 import '../../../../../core/constants/asset_path.dart';
-import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 
 

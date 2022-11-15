@@ -45,7 +45,7 @@ class ThumbnailContentSearch extends StatelessWidget {
           CustomBaseCacheImage(
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: "$gambar",
+            imageUrl: gambar ,
             imageBuilder: (context, imageProvider) => Container(
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),
