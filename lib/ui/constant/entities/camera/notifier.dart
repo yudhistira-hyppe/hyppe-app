@@ -57,7 +57,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       if (Platform.isAndroid) {
         if(deepArController != null){
           final isGranted = await System().requestPermission(context, permissions: [
-            Permission.storage,
             Permission.camera
           ]);
           if(isGranted){
@@ -154,7 +153,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       }
       if(deepArController != null){
         final isGranted = await System().requestPermission(context, permissions: [
-          Permission.storage,
           Permission.camera
         ]);
         if(isGranted){
@@ -199,13 +197,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
-      return ResolutionPreset.high;
-    } else {
-      return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
-    }
-  }
+  // ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
+  //   if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
+  //     return ResolutionPreset.high;
+  //   } else {
+  //     return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
+  //   }
+  // }
 
   Future<void> onFlashButtonPressed() async {
     deepArController!.toggleFlash();
