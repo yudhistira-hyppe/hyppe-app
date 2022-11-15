@@ -346,9 +346,9 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  void onScrollMusicTypes(){
-
-  }
+  // void onScrollMusicTypes(){
+  //
+  // }
 
   void onChangeSearchMusic(BuildContext context, String value) {
     if(value.length > 2){

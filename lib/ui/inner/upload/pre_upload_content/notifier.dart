@@ -426,6 +426,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _locationName = '';
     _userTagData = [];
     _privacyTitle = '';
+    _musicSelected = null;
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
