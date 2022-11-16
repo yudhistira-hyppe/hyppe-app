@@ -105,8 +105,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         _buildDivider(context),
                         eightPx,
                         if(notifier.musicSelected != null)
-                          musicTitle(notifier),
-                        _buildDivider(context),
+                          layoutMusic(notifier),
                         twentyFourPx,
                         tagPeopleWidget(textTheme, notifier),
                         _buildDivider(context),
@@ -189,6 +188,15 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget layoutMusic(PreUploadContentNotifier notifier){
+    return Column(
+      children: [
+        musicTitle(notifier),
+        _buildDivider(context),
+      ],
     );
   }
 
