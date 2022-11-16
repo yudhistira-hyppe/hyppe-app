@@ -51,7 +51,7 @@ class _ExplorerMusicsScreenState extends State<ExplorerMusicsScreen> {
             child: const CustomLoading(),
           );
         }
-        return MusicItemScreen(music: notifier.listExpMusics[index], index: index);
+        return MusicItemScreen(music: notifier.listExpMusics[index], index: index, isExplored: true,);
       },
     ): Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
