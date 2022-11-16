@@ -7,21 +7,21 @@ import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_text_widget.dart';
 import 'music_item.dart';
 
-class PopularMusicTab extends StatefulWidget {
+class ExplorerMusicsScreen extends StatefulWidget {
 
-  const PopularMusicTab({Key? key}) : super(key: key);
+  const ExplorerMusicsScreen({Key? key}) : super(key: key);
 
   @override
-  State<PopularMusicTab> createState() => _PopularMusicTabState();
+  State<ExplorerMusicsScreen> createState() => _ExplorerMusicsScreenState();
 }
 
-class _PopularMusicTabState extends State<PopularMusicTab> {
+class _ExplorerMusicsScreenState extends State<ExplorerMusicsScreen> {
 
   @override
   void initState() {
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    notifier.scrollController.addListener(() {
-      notifier.onScrollMusics(materialAppKey.currentContext!);
+    notifier.scrollExpController.addListener(() {
+      notifier.onScrollExpMusics(materialAppKey.currentContext!);
     });
     super.initState();
   }
@@ -35,15 +35,15 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    return !notifier.isLoadingMusic ? notifier.listMusics.isNotEmpty ? ListView.builder(
-      itemCount: !notifier.isNextMusic ? notifier.listMusics.length : notifier.listMusics.length + 1 ,
-      controller: notifier.scrollController,
+    return !notifier.isLoadingMusic ? notifier.listExpMusics.isNotEmpty ? ListView.builder(
+      itemCount: !notifier.isNextExpMusic ? notifier.listExpMusics.length : notifier.listExpMusics.length + 1,
+      controller: notifier.scrollExpController,
       scrollDirection: Axis.vertical,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.only(bottom: 10),
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       itemBuilder: (context, index) {
-        if (index == notifier.listMusics.length && notifier.isNextMusic) {
+        if (index == notifier.listExpMusics.length && notifier.isNextExpMusic) {
           return Container(
             width: double.infinity,
             height: 30,
@@ -51,7 +51,7 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
             child: const CustomLoading(),
           );
         }
-        return MusicItemScreen(music: notifier.listMusics[index], index: index);
+        return MusicItemScreen(music: notifier.listExpMusics[index], index: index);
       },
     ): Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),

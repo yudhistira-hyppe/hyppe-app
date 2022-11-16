@@ -205,6 +205,12 @@ class PreviewContentNotifier with ChangeNotifier {
         _listMusics[index].isSelected = false;
       }
     }
+    for(var music in _listExpMusics){
+      if(music.isSelected){
+        final index = _listExpMusics.indexOf(music);
+        _listExpMusics[index].isSelected = false;
+      }
+    }
     notifyListeners();
   }
 
@@ -517,27 +523,19 @@ class PreviewContentNotifier with ChangeNotifier {
     await audioPlayer.dispose();
   }
 
-  void playMusic(BuildContext context, Music music, int index, bool isExplored) async{
+  void playExpMusic(BuildContext context, Music music, int index) async{
     try{
       // final currentMusic = notifier.currentMusic;
-      if(isExplored){
-        _listExpMusics[index].isLoad = true;
-      }else{
-        _listMusics[index].isLoad = true;
-      }
+      _listExpMusics[index].isLoad = true;
 
       notifyListeners();
       var url = music.apsaraMusicUrl?.playUrl ?? '';
       if(_currentMusic != null){
 
-        final currentIndex = isExplored ? _listExpMusics.indexOf(_currentMusic!) : _listMusics.indexOf(_currentMusic!);
+        final currentIndex = _listExpMusics.indexOf(_currentMusic!);
         if(music.isPlay){
           await audioPlayer.stop();
-          if(isExplored){
-            _listExpMusics[index].isPlay = false;
-          }else{
-            _listMusics[index].isPlay = false;
-          }
+          _listExpMusics[index].isPlay = false;
 
           currentMusic?.isPlay = false;
           notifyListeners();
@@ -552,13 +550,65 @@ class PreviewContentNotifier with ChangeNotifier {
           _currentMusic = music;
           currentMusic?.isPlay = true;
 
-          if(isExplored){
-            _listExpMusics[currentIndex].isPlay = false;
-            _listExpMusics[index].isPlay = true;
+          _listExpMusics[currentIndex].isPlay = false;
+          _listExpMusics[index].isPlay = true;
+
+          notifyListeners();
+        }
+      }else{
+        await audioPlayer.stop();
+        if(url != null){
+          await audioPlayer.play(UrlSource(url));
+        }else{
+          throw 'url music is null';
+        }
+        _currentMusic = music;
+        currentMusic?.isPlay = true;
+        _listExpMusics[index].isPlay = true;
+        notifyListeners();
+      }
+
+    }catch(e){
+
+      'Error Play Music : $e'.logger();
+
+      _listExpMusics[index].isPlay = false;
+      notifyListeners();
+    }finally{
+      _listExpMusics[index].isLoad = false;
+      notifyListeners();
+    }
+  }
+
+  void playMusic(BuildContext context, Music music, int index) async{
+    try{
+      // final currentMusic = notifier.currentMusic;
+      _listMusics[index].isLoad = true;
+
+      notifyListeners();
+      var url = music.apsaraMusicUrl?.playUrl ?? '';
+      if(_currentMusic != null){
+
+        final currentIndex = _listMusics.indexOf(_currentMusic!);
+        if(music.isPlay){
+          await audioPlayer.stop();
+          _listMusics[index].isPlay = false;
+
+          currentMusic?.isPlay = false;
+          notifyListeners();
+        }else{
+          await audioPlayer.stop();
+          if(url != null){
+            await audioPlayer.play(UrlSource(url));
           }else{
-            _listMusics[currentIndex].isPlay = false;
-            _listMusics[index].isPlay = true;
+            throw 'url music is null';
           }
+
+          _currentMusic = music;
+          currentMusic?.isPlay = true;
+
+          _listMusics[currentIndex].isPlay = false;
+          _listMusics[index].isPlay = true;
 
           notifyListeners();
         }
@@ -588,36 +638,42 @@ class PreviewContentNotifier with ChangeNotifier {
 
   }
 
-  void selectMusic(Music music, int index, bool isExplored){
+  void selectExpMusic(Music music, int index){
 
     if(_selectedMusic != null){
-      if(_selectedMusic!.musicTitle == music.musicTitle){
+      if(_selectedMusic!.id == music.id){
         _selectedMusic = null;
         notifyListeners();
-        if(isExplored){
-          _listExpMusics[index].isSelected = false;
-        }else{
-          _listMusics[index].isSelected = false;
-        }
+        _listExpMusics[index].isSelected = false;
 
       }else{
-        if(isExplored){
-          _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
-          _listExpMusics[index].isSelected = true;
-        }else{
-          _listMusics[_listMusics.indexOf(_selectedMusic!)].isSelected = false;
-          _listMusics[index].isSelected = true;
-        }
+        _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
+        _listExpMusics[index].isSelected = true;
 
         _selectedMusic = music;
       }
     }else{
 
-      if(isExplored){
-        _listExpMusics[index].isSelected = true;
+      _listExpMusics[index].isSelected = true;
+      _selectedMusic = music;
+    }
+    notifyListeners();
+  }
+
+  void selectMusic(Music music, int index){
+
+    if(_selectedMusic != null){
+      if(_selectedMusic!.id == music.id){
+        _selectedMusic = null;
+        notifyListeners();
+        _listMusics[index].isSelected = false;
       }else{
+        _listMusics[_listMusics.indexOf(_selectedMusic!)].isSelected = false;
         _listMusics[index].isSelected = true;
+        _selectedMusic = music;
       }
+    }else{
+      _listMusics[index].isSelected = true;
       _selectedMusic = music;
     }
     notifyListeners();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/explored_music_tab.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/explorer_musics_screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_tabs.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/popular_music_tab.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -89,7 +90,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               ],
             ),
           ),
-          Expanded(child: notifier.pageMusic == 0 ? PopularMusicTab() : !showListExp ? const ExploredMusicTab() : PopularMusicTab(isExplored: true,)),
+          Expanded(child: notifier.pageMusic == 0 ? PopularMusicTab() : !showListExp ? const ExploredMusicTab() : const ExplorerMusicsScreen()),
           if(notifier.selectedMusic != null)
             Container(
               decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePurple),
