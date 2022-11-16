@@ -27,22 +27,31 @@ class AllContents extends HiveObject {
   AllContents.fromJson(Map<String, dynamic> json) {
     if (json['story'] != null) {
       story = [];
-      json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
+      if(json['story'].isNotEmpty){
+        json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
+      }
     }
 
     if (json['diary'] != null) {
       diary = [];
-      json['diary'].forEach((v) => diary?.add(ContentData.fromJson(v)));
+      if(json['diary'].isNotEmpty){
+        json['diary'].forEach((v) => diary?.add(ContentData.fromJson(v)));
+      }
     }
 
     if (json['video'] != null) {
       video = [];
-      json['video'].forEach((v) => video?.add(ContentData.fromJson(v)));
+      if(json['video'].isNotEmpty){
+        json['video'].forEach((v) => video?.add(ContentData.fromJson(v)));
+      }
+
     }
 
     if (json['pict'] != null) {
       pict = [];
-      json['pict'].forEach((v) => pict?.add(ContentData.fromJson(v)));
+      if(json['pict'].isNotEmpty){
+        json['pict'].forEach((v) => pict?.add(ContentData.fromJson(v)));
+      }
     }
   }
 
