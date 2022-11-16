@@ -405,6 +405,8 @@ class System {
         return TransactionType.buy;
       case "Withdrawal":
         return TransactionType.withdrawal;
+      case "BOOST_CONTENT":
+        return TransactionType.boost;
       default:
         return TransactionType.none;
     }

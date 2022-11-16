@@ -752,5 +752,6 @@
   "afternoon" : "Sore",
   "night" : "Malam",
   "boostPrice" : "Harga Boost",
-  "contentType" : "Tipe Konten"
+  "contentType" : "Tipe Konten",
+  "by" : "oleh"
 }

@@ -746,6 +746,7 @@ class LocalizationModelV2 {
   String? contentType;
   String? morning;
   String? afternoon;
+  String? by;
   String? night;
   String? minutes;
   String? appeal;
@@ -1501,6 +1502,7 @@ class LocalizationModelV2 {
     this.contentType,
     this.morning,
     this.afternoon,
+    this.by,
     this.night,
     this.minutes,
     this.appeal,
@@ -2281,6 +2283,7 @@ class LocalizationModelV2 {
     contentType = json["contentType"];
     morning = json["morning"];
     afternoon = json["afternoon"];
+    by = json["by"];
     night = json["night"];
   }
 }

@@ -53,6 +53,14 @@ class BuySellWidget extends StatelessWidget {
         fullname = data?.penjual ?? '';
         email = data?.emailpenjual ?? '';
         break;
+      case TransactionType.boost:
+        keterangan = language?.by ?? 'by';
+        titleColor = kHyppeJingga;
+        blockColor = kHyppeJinggaLight;
+        title = language?.postBoost ?? 'Post Boost';
+        fullname = data?.penjual ?? '';
+        email = data?.emailpenjual ?? '';
+        break;
       default:
         keterangan = language?.forr ?? '';
         titleColor = kHyppeGreen;

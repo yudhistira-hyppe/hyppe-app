@@ -65,3 +65,5 @@ const kHyppePurpleLight = Color(0xffF6EEFF);
 const kHyppeGrey = Color(0xff737373);
 const kHyppeGreyLight = Color(0xffF1F1F1);
 const kHyppePrimaryLight = Color(0xfff6ebf7);
+const kHyppeJingga = Color(0xffF29924);
+const kHyppeJinggaLight = Color(0xfffef5e9);
