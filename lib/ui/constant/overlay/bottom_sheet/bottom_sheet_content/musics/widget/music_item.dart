@@ -30,12 +30,17 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
 
     return InkWell(
       onTap: (){
-        notifier.selectMusic(widget.music, widget.index, widget.isExplored);
+        if(!widget.isExplored){
+          notifier.selectMusic(widget.music, widget.index);
+        }else{
+          notifier.selectExpMusic(widget.music, widget.index);
+        }
+
       },
       child: Container(
         padding: const EdgeInsets.only(top: 8, bottom: 8, left: 16, right: 16),
         width: double.infinity,
-        color: (widget.isExplored ? notifier.listExpMusics[widget.index].isSelected : notifier.listMusics[widget.index].isSelected) ? kSkeletonHighlightColor : null,
+        color: widget.music.isSelected ? kSkeletonHighlightColor : null,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,7 +94,12 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
               icon: CustomIconWidget(iconData: widget.music.isPlay ? "${AssetPath.vectorPath}stop_circle.svg" : "${AssetPath.vectorPath}play_circle.svg"),
               splashRadius: 1,
               onPressed: () {
-                notifier.playMusic(context, widget.music, widget.index, widget.isExplored);
+                if(!widget.isExplored){
+                  notifier.playMusic(context, widget.music, widget.index);
+                }else{
+                  notifier.playExpMusic(context, widget.music, widget.index);
+                }
+
               },
             ) :
             UnconstrainedBox(
