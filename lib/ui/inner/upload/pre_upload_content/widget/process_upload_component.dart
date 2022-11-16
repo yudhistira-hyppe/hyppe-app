@@ -78,7 +78,8 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     if (isCheckedOwnership) {
       ShowBottomSheet.onShowSuccessPostContentOwnership(context);
     } else {
-      _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
+      ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message);
+      // _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
     }
   }
 
@@ -108,7 +109,6 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               children: [
                 Row(
                   children: [
-
                     CustomTextWidget(
                       textToDisplay: notifier.message,
                       textStyle: Theme.of(context).textTheme.caption,

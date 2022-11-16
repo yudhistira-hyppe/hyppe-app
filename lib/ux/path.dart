@@ -112,4 +112,5 @@ class Routes {
   static const String faqDetail = '/faq-detail';
   static const String supportTicket = '/support-ticket';
   static const String appeal = '/appeal';
+  static const String boostUpload = '/boost-upload';
 }

@@ -415,6 +415,9 @@ class UrlConstants {
   /// post => Get Notification
   static const String getNotification = "$postRouteV2/getnotification";
 
+  /// post => Get Notification
+  static const String getBoostMaster = "$postRoute/boostmaster";
+
   /// post => Get Ads Roster
   static const String getAdsRoster = "$bizRoute/adsroster";
 
@@ -462,6 +465,9 @@ class UrlConstants {
 
   /// post => Get Withdraw Detail
   static const String withdraw = "$transactionRoute/withdraw";
+
+  /// post => Get Withdraw Detail
+  static const String boostContent = "$transactionRoute/boostcontent";
 
   /// get => Get All Bank
   static const String getAllBank = "$bankRoute/all";

@@ -241,6 +241,8 @@ class System {
       value = DateFormat('d MMM yyyy').format(DateTime.parse(dateParams));
     } else if (displayOption == 4) {
       value = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(dateParams));
+    } else if (displayOption == 5) {
+      value = DateFormat('dd/MM/yyyy').format(DateTime.parse(dateParams));
     }
     return value;
   }

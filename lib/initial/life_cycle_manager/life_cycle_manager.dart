@@ -80,7 +80,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         try {
           await activity.activityAwake(context);
           final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
-          if(isOnHomeScreen){
+          if (isOnHomeScreen) {
             print("isOnHomeScreen hit ads");
             await getAdsApsara();
           }
@@ -129,7 +129,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
-          if(!isShowAds){
+          if (!isShowAds) {
             System().adsPopUp(context, ads, adsUrl);
           }
 

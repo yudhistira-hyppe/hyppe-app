@@ -728,6 +728,19 @@ class LocalizationModelV2 {
   String? theReasonDoesntFitIntoTheseCategories;
   String? ticketIssueSuccessfullySubmitted;
   String? yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare;
+  String? postBoost;
+  String? startDate;
+  String? autoSelect;
+  String? selectManual;
+  String? boostTime;
+  String? interval;
+  String? contentWillbeBoostedfor30days;
+  String? boostPrice;
+  String? contentType;
+  String? morning;
+  String? afternoon;
+  String? night;
+  String? minutes;
   String? appeal;
   String? communityGuidelines;
   String? description;
@@ -1463,6 +1476,19 @@ class LocalizationModelV2 {
     this.theReasonDoesntFitIntoTheseCategories,
     this.ticketIssueSuccessfullySubmitted,
     this.yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare,
+    this.postBoost,
+    this.startDate,
+    this.autoSelect,
+    this.selectManual,
+    this.boostTime,
+    this.interval,
+    this.contentWillbeBoostedfor30days,
+    this.boostPrice,
+    this.contentType,
+    this.morning,
+    this.afternoon,
+    this.night,
+    this.minutes,
     this.appeal,
     this.communityGuidelines,
     this.description,
@@ -2222,5 +2248,18 @@ class LocalizationModelV2 {
     theReasonDoesntFitIntoTheseCategories = json["theReasonDoesntFitIntoTheseCategories"];
     ticketIssueSuccessfullySubmitted = json["ticketIssueSuccessfullySubmitted"];
     yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare = json["yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare"];
+    postBoost = json["postBoost"];
+    startDate = json["startDate"];
+    autoSelect = json["autoSelect"];
+    selectManual = json["selectManual"];
+    boostTime = json["boostTime"];
+    interval = json["interval"];
+    minutes = json["minutes"];
+    contentWillbeBoostedfor30days = json["contentWillbeBoostedfor30days"];
+    boostPrice = json["boostPrice"];
+    contentType = json["contentType"];
+    morning = json["morning"];
+    afternoon = json["afternoon"];
+    night = json["night"];
   }
 }

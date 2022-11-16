@@ -13,6 +13,8 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/utils/boost/boost_content_model.dart';
+import 'package:hyppe/core/models/collection/utils/boost/boost_master_model.dart';
 import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
@@ -92,6 +94,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<SearchPeolpleData> get searchPeolpleData => _searchPeolpleData;
   List<Map<String, dynamic>> _searchPeopleACData = [];
   List<Map<String, dynamic>> get searchPeopleACData => _searchPeopleACData;
+  BoostMasterModel? boostMasterData;
+  BoostContent? _boostContent;
+  BoostContent? get boostContent => _boostContent;
 
   TextEditingController _priceController = TextEditingController();
   TextEditingController _captionController = TextEditingController();
@@ -157,6 +162,25 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
+  DateTime _tmpstartDate = DateTime(1000);
+  DateTime _tmpfinsihDate = DateTime(1000);
+  String _tmpBoost = '';
+  String get tmpBoost => _tmpBoost;
+  String _tmpBoostTime = '';
+  String get tmpBoostTime => _tmpBoostTime;
+  String _tmpBoostInterval = '';
+  String get tmpBoostInterval => _tmpBoostInterval;
+  String _tmpBoostTimeId = '';
+  String get tmpBoostTimeId => _tmpBoostTimeId;
+  String _tmpBoostIntervalId = '';
+  String get tmpBoostIntervalId => _tmpBoostIntervalId;
+
+  String _Boost = '';
+  String get Boost => _Boost;
+  String _BoostTime = '';
+  String get BoostTime => _BoostTime;
+  String _BoostInterval = '';
+  String get BoostInterval => _BoostInterval;
   // UpdateContentsArgument get updateArguments => _arguments!;
 
   set ownershipEULA(bool val) {
@@ -342,6 +366,43 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime get tmpstartDate => _tmpstartDate;
+  set tmpstartDate(DateTime val) {
+    _tmpstartDate = val;
+    notifyListeners();
+  }
+
+  DateTime get tmpfinsihDate => _tmpfinsihDate;
+  set tmpfinsihDate(DateTime val) {
+    _tmpfinsihDate = val;
+    notifyListeners();
+  }
+
+  set tmpBoost(String val) {
+    _tmpBoost = val;
+    notifyListeners();
+  }
+
+  set tmpBoostTime(String val) {
+    _tmpBoostTime = val;
+    notifyListeners();
+  }
+
+  set tmpBoostInterval(String val) {
+    _tmpBoostInterval = val;
+    notifyListeners();
+  }
+
+  set tmpBoostTimeId(String val) {
+    _tmpBoostTimeId = val;
+    notifyListeners();
+  }
+
+  set tmpBoostIntervalId(String val) {
+    _tmpBoostIntervalId = val;
+    notifyListeners();
+  }
+
   // set setUpdateArguments(UpdateContentsArgument args) {
   //   _arguments = args;
   //   notifyListeners();
@@ -440,18 +501,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     List<String> hastagCaption = [];
     _tagRegex.allMatches(captionController.text).map((z) {
       final val = z.group(0)?.substring(1);
-      if(val != null){
+      if (val != null) {
         userTagCaption.add(val);
       }
-
     }).toList();
 
     _tagHastagRegex.allMatches(captionController.text).map((z) {
       final val = z.group(0)?.substring(1);
-      if(val != null){
+      if (val != null) {
         hastagCaption.add(val);
       }
-
     }).toList();
 
     // if (featureType == FeatureType.vid && progressCompress != 100) {
@@ -491,6 +550,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
       ).then((value) {
         _uploadSuccess = value;
+        print(_uploadSuccess);
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         _eventService.notifyUploadSuccess(_uploadSuccess);
@@ -1121,5 +1181,88 @@ class PreUploadContentNotifier with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future getMasterBoost(BuildContext context) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final notifier = UtilsBlocV2();
+    await notifier.getMasterBoost(context);
+    final fetch = notifier.utilsFetch;
+
+    if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
+      boostMasterData = BoostMasterModel.fromJson(fetch.data);
+      _isLoading = false;
+      notifyListeners();
+    } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  navigateToBoost(BuildContext context) {
+    if (boostMasterData == null) getMasterBoost(context);
+    Routing().move(Routes.boostUpload);
+  }
+
+  bool enableBoostConfirm() {
+    if (_tmpstartDate != DateTime(1000) && (tmpBoost != '')) {
+      if (tmpBoost == 'manual') {
+        if (tmpBoostTime != '' && tmpBoostInterval != '') {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  Future boostButton(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      _isLoading = true;
+      notifyListeners();
+      Map data = {
+        "dateStart": _tmpstartDate.toString().substring(0, 10),
+        "dateEnd": _tmpfinsihDate.toString().substring(0, 10),
+        "type": _tmpBoost,
+      };
+      if (_tmpBoost == 'manual') {
+        data['interval'] = _tmpBoostIntervalId;
+        data['session'] = _tmpBoostTimeId;
+      }
+      final notifier = UtilsBlocV2();
+      await notifier.postBostContentPre(context, data: data);
+      final fetch = notifier.utilsFetch;
+
+      if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
+        _boostContent = BoostContent.fromJson(fetch.data);
+        Routing().moveBack();
+        _isLoading = false;
+        notifyListeners();
+      } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
+        _isLoading = false;
+        notifyListeners();
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        boostButton(context);
+      });
+    }
+  }
+
+  exitBoostPage() {
+    _tmpstartDate = DateTime(1000);
+    _tmpfinsihDate = DateTime(1000);
+    _tmpBoost = '';
+    _tmpBoostTime = '';
+    tmpBoostInterval = '';
+    Routing().moveBack();
   }
 }

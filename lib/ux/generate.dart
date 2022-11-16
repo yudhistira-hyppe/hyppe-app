@@ -72,6 +72,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
@@ -313,6 +314,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:
         return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
+      case Routes.boostUpload:
+        return MaterialPageRoute(builder: (_) => const BoostUploadScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

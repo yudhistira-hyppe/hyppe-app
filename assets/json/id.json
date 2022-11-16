@@ -732,6 +732,18 @@
   "thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent" : "Konten ini menampilkan kekerasan grafis untuk konten dokumenter atau pendidikan atau menunjukkan ketelanjangan dalam konteks artistik, medis, kesehatan, atau pendidikan.",
   "theReasonDoesntFitIntoTheseCategories" : "Alasannya tidak cocok dengan kategori ini. Anda dapat menambahkan info lebih lanjut di kotak deskripsi.",
   "ticketIssueSuccessfullySubmitted" : "Masalah Tiket Berhasil Dikirim",
-  "yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare" : "Masalah Tiket Anda telah berhasil dikirimkan ke Hyppe Customer Care"
- 
+  "yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare" : "Masalah Tiket Anda telah berhasil dikirimkan ke Hyppe Customer Care",
+  "postBoost" : "Boost Postingan",
+  "startDate" : "Tanggal Mulai",
+  "autoSelect" : "Pilih Otomatis",
+  "selectManual" : "Pilih Manual",
+  "boostTime" : "Waktu Boost",
+  "interval" : "Selang Waktu",
+  "contentWillbeBoostedfor30days" : "Konten akan diboost selama 30 hari. Terhitung dari masa pembayaran telah berhasil dan schedule waktu yang ditentukan",
+  "minutes" : "Menit",
+  "morning" : "Pagi",
+  "afternoon" : "Sore",
+  "night" : "Malam",
+  "boostPrice" : "Harga Boost",
+  "contentType" : "Tipe Konten"
 }

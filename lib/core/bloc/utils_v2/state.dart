@@ -35,6 +35,8 @@ enum UtilsState {
   updateLangSuccess,
   getSettingSuccess,
   getSettingError,
+  getMasterBoostSuccess,
+  getMasterBoostError,
 }
 
 class UtilsFetch {

@@ -114,6 +114,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                         notifier.certified ? detailTotalPrice(notifier) : Container(),
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
+                        notifier.featureType != FeatureType.story ? boostWidget(textTheme, notifier) : Container(),
+                        notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
 
                         twentyFourPx,
                         twentyFourPx,
@@ -126,59 +128,114 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               ),
             ),
             backgroundColor: Theme.of(context).backgroundColor,
-            floatingActionButton: Visibility(
+            bottomSheet: Visibility(
               visible: !keyboardIsOpen,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: CustomElevatedButton(
-                  width: 375.0 * SizeConfig.scaleDiagonal,
-                  height: 44.0 * SizeConfig.scaleDiagonal,
-                  // function: () => notifier.onClickPost(
-                  //   context,
-                  //   onEdit: widget.arguments.onEdit,
-                  //   data: widget.arguments.contentData,
-                  //   content: widget.arguments.content,
-                  // ),
-                  function: () {
-                    if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
-                      notifier.onClickPost(
-                        context,
-                        onEdit: widget.arguments.onEdit,
-                        data: widget.arguments.contentData,
-                        content: widget.arguments.content,
-                      );
-                    } else {
-                      !notifier.certified
-                          ? notifier.onShowStatement(context, onCancel: () {
-                              notifier.onClickPost(
-                                context,
-                                onEdit: widget.arguments.onEdit,
-                                data: widget.arguments.contentData,
-                                content: widget.arguments.content,
-                              );
-                            })
-                          : notifier.onClickPost(
+              child: notifier.boostContent != null
+                  ? Container(
+                      color: kHyppeLightSurface,
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(notifier.language.total ?? ''),
+                              Text(
+                                System().currencyFormat(amount: notifier.boostContent?.priceTotal ?? 0),
+                                style: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                          twentyFourPx,
+                          CustomElevatedButton(
+                            function: () {
+                              if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
+                                notifier.onClickPost(
+                                  context,
+                                  onEdit: widget.arguments.onEdit,
+                                  data: widget.arguments.contentData,
+                                  content: widget.arguments.content,
+                                );
+                              } else {
+                                !notifier.certified
+                                    ? notifier.onShowStatement(context, onCancel: () {
+                                        notifier.onClickPost(
+                                          context,
+                                          onEdit: widget.arguments.onEdit,
+                                          data: widget.arguments.contentData,
+                                          content: widget.arguments.content,
+                                        );
+                                      })
+                                    : notifier.onClickPost(
+                                        context,
+                                        onEdit: widget.arguments.onEdit,
+                                        data: widget.arguments.contentData,
+                                        content: widget.arguments.content,
+                                      );
+                              }
+                            },
+                            width: 375.0 * SizeConfig.scaleDiagonal,
+                            height: 44.0 * SizeConfig.scaleDiagonal,
+                            child: CustomTextWidget(
+                              textToDisplay: widget.arguments.onEdit ? notifier.language.choosePaymentMethods ?? 'Choose Payment Method' : notifier.language.confirm ?? 'confirm',
+                              textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                            ),
+                            buttonStyle: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: CustomElevatedButton(
+                        width: 375.0 * SizeConfig.scaleDiagonal,
+                        height: 44.0 * SizeConfig.scaleDiagonal,
+                        function: () {
+                          if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
+                            notifier.onClickPost(
                               context,
                               onEdit: widget.arguments.onEdit,
                               data: widget.arguments.contentData,
                               content: widget.arguments.content,
                             );
-                    }
-                  },
-                  child: widget.arguments.onEdit && notifier.updateContent
-                      ? const CustomLoading()
-                      : CustomTextWidget(
-                          textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
-                          textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                          } else {
+                            !notifier.certified
+                                ? notifier.onShowStatement(context, onCancel: () {
+                                    notifier.onClickPost(
+                                      context,
+                                      onEdit: widget.arguments.onEdit,
+                                      data: widget.arguments.contentData,
+                                      content: widget.arguments.content,
+                                    );
+                                  })
+                                : notifier.onClickPost(
+                                    context,
+                                    onEdit: widget.arguments.onEdit,
+                                    data: widget.arguments.contentData,
+                                    content: widget.arguments.content,
+                                  );
+                          }
+                        },
+                        child: widget.arguments.onEdit && notifier.updateContent
+                            ? const CustomLoading()
+                            : CustomTextWidget(
+                                textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                              ),
+                        buttonStyle: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                         ),
-                  buttonStyle: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  ),
-                ),
-              ),
+                      ),
+                    ),
             ),
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
           ),
@@ -331,6 +388,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 padding: const EdgeInsets.all(2.0),
                 child: CustomTextButton(
                   onPressed: () {
+                    FocusScope.of(context).unfocus();
                     notifier.insertInterest(context, index);
                   },
                   style: TextButton.styleFrom(
@@ -358,6 +416,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     return notifier.userTagData.isEmpty
         ? ListTile(
             onTap: () {
+              FocusScope.of(context).unfocus();
               notifier.showPeopleSearch(context);
             },
             contentPadding: EdgeInsets.zero,
@@ -414,6 +473,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   Widget tagLocationWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
       onTap: () {
+        FocusScope.of(context).unfocus();
         notifier.showLocation(context);
       },
       contentPadding: EdgeInsets.zero,
@@ -436,7 +496,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget privacyWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: () => notifier.onClickPrivacyPost(context),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        notifier.onClickPrivacyPost(context);
+      },
       title: CustomTextWidget(
         textToDisplay: notifier.language.privacy ?? 'privacy',
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
@@ -448,6 +511,32 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         children: [
           CustomTextWidget(
             textToDisplay: notifier.privacyTitle,
+            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+          ),
+          twentyPx,
+          const Icon(Icons.arrow_forward_ios_rounded),
+        ],
+      ),
+    );
+  }
+
+  Widget boostWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
+    return ListTile(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+        notifier.navigateToBoost(context);
+      },
+      title: CustomTextWidget(
+        textToDisplay: notifier.language.postBoost ?? 'Post Boost',
+        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+        textAlign: TextAlign.start,
+      ),
+      contentPadding: EdgeInsets.zero,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CustomTextWidget(
+            textToDisplay: notifier.boostContent != null ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '') : notifier.language.no ?? 'no',
             textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
           ),
           twentyPx,
@@ -517,6 +606,39 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   ],
                 )
               : Container()
+        ],
+      ),
+    );
+  }
+
+  Widget detailBoostContent(PreUploadContentNotifier notifier) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 60),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).colorScheme.secondary,
+      ),
+      child: Column(
+        children: [
+          detailText(
+              notifier.language.contentType ?? '',
+              System().convertTypeContent(
+                System().validatePostTypeV2(notifier.featureType),
+              )),
+          sixteenPx,
+          notifier.tmpBoost == 'automatic'
+              ? detailText(notifier.language.boostTime, System().capitalizeFirstLetter(notifier.boostContent?.sessionBoost?.name ?? ''))
+              : detailText(notifier.language.boostTime,
+                  "${System().capitalizeFirstLetter(notifier.boostContent?.sessionBoost?.name ?? '')} (${notifier.boostContent?.sessionBoost?.start?.substring(0, 5)} - ${notifier.boostContent?.sessionBoost?.end?.substring(0, 5)} WIB) "),
+          sixteenPx,
+          detailText(notifier.language.interval, '${notifier.boostContent?.intervalBoost?.value} ${notifier.boostContent?.intervalBoost?.remark}'),
+          sixteenPx,
+          detailText(notifier.language.startDate, '${System().dateFormatter(notifier.boostContent?.dateBoostStart ?? '', 5)},  ${notifier.boostContent?.sessionBoost?.start?.substring(0, 5)}'),
+          sixteenPx,
+          detailText(notifier.language.boostPrice, System().currencyFormat(amount: notifier.boostContent?.priceBoost)),
+          sixteenPx,
+          detailText(notifier.language.adminFee, System().currencyFormat(amount: notifier.boostContent?.priceBankVaCharge)),
         ],
       ),
     );
