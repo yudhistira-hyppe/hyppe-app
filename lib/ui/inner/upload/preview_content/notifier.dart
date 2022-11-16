@@ -98,7 +98,7 @@ class PreviewContentNotifier with ChangeNotifier {
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
   final TransformationController _transformationController = TransformationController();
-  final audioPlayer = AudioPlayer();
+  var audioPlayer = AudioPlayer();
   final searchController = TextEditingController();
   var scrollController = ScrollController();
   var scrollExpController = ScrollController();
@@ -199,6 +199,7 @@ class PreviewContentNotifier with ChangeNotifier {
   set pageMusic(int state){
     _pageMusic = state;
     _selectedMusic = null;
+    audioPlayer.stop();
     for(var music in _listMusics){
       if(music.isSelected){
         final index = _listMusics.indexOf(music);

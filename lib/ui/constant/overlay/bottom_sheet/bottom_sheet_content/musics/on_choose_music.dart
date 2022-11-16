@@ -90,7 +90,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               ],
             ),
           ),
-          Expanded(child: notifier.pageMusic == 0 ? PopularMusicTab() : !showListExp ? const ExploredMusicTab() : const ExplorerMusicsScreen()),
+          Expanded(child: notifier.pageMusic == 0 ? const PopularMusicTab() : !showListExp ? const ExploredMusicTab() : const ExplorerMusicsScreen()),
           if(notifier.selectedMusic != null)
             Container(
               decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePurple),
@@ -99,6 +99,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               child: CustomTextButton(onPressed: () async{
                 print('test');
                 // notifier.isLoadVideo = true;
+                await notifier.audioPlayer.stop();
                 await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '');
                 Navigator.pop(context);
               },
