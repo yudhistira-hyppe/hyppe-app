@@ -100,8 +100,8 @@ class PreviewContentNotifier with ChangeNotifier {
   final TransformationController _transformationController = TransformationController();
   final audioPlayer = AudioPlayer();
   final searchController = TextEditingController();
-  final scrollController = ScrollController();
-  final scrollExpController = ScrollController();
+  var scrollController = ScrollController();
+  var scrollExpController = ScrollController();
   final focusNode = FocusNode();
 
   BetterPlayerController? get betterPlayerController => _betterPlayerController;

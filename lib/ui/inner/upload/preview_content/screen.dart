@@ -23,6 +23,8 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
   void initState() {
     final _notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     _notifier.initialMatrixColor();
+    _notifier.scrollController = ScrollController();
+    _notifier.scrollExpController = ScrollController();
     super.initState();
   }
 

@@ -92,6 +92,8 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     try {
       if (list != null) {
         res.addAll(list);
+        contentsQuery.hasNext = res.length == 18;
+        if (res != null) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : 15');
