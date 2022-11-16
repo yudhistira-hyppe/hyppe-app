@@ -129,7 +129,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          _language.translate.turnOffCommenting!,
+                          _language.translate.turnOffCommenting ?? '',
                           style: Theme.of(context).textTheme.bodyText1?.copyWith(
                                 color: const Color.fromRGBO(63, 63, 63, 1),
                               ),

@@ -33,7 +33,7 @@ class ProofPicture extends StatelessWidget {
                   children: [
                     twelvePx,
                     CustomTextWidget(
-                      textToDisplay: notifier.language.idVerification!,
+                      textToDisplay: notifier.language.idVerification ?? 'ID Verification',
                       textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold),
                     ),
                     // eightPx,

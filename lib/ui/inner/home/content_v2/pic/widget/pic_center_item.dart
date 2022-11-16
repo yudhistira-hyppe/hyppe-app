@@ -83,7 +83,7 @@ class PicCenterItem extends StatelessWidget {
       children: [
         if (isSale) PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
-        data!.isReport!
+        data?.isReport ?? false
             ? ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(

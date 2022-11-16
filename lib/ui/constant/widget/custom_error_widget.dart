@@ -61,7 +61,7 @@ class CustomErrorWidget extends StatelessWidget {
                       if (errorType != ErrorType.peopleStory)
                         CustomTextWidget(
                             textToDisplay: "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
-                            textStyle: theme.textTheme.caption!.copyWith(color: theme.colorScheme.secondaryVariant))
+                            textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondaryVariant))
                     ],
                   ),
                 )

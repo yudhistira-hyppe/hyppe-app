@@ -1,13 +1,20 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:better_player/better_player.dart';
+import 'package:dio/dio.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
+import 'package:hyppe/core/bloc/music/bloc.dart';
+import 'package:hyppe/core/bloc/music/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
 import 'package:hyppe/core/constants/filter_matrix.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_service.dart';
@@ -15,15 +22,17 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/widget/custom_snackbar.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_field_for_overlay.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
+
+import '../../../../app.dart';
+import '../../../../core/models/collection/music/music.dart';
+import '../../../../core/models/collection/music/music_type.dart';
 
 class PreviewContentNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -37,7 +46,10 @@ class PreviewContentNotifier with ChangeNotifier {
   List<String?>? _fileContent;
   List<Uint8List?>? _thumbNails;
   int _indexView = 0;
+  int _pageMusic = 0;
   String? _url;
+  Music? _currentMusic;
+  Music? _selectedMusic;
   SourceFile? _sourceFile;
   int _pageNo = 0;
   bool _nextVideo = false;
@@ -56,10 +68,41 @@ class PreviewContentNotifier with ChangeNotifier {
   Duration? get totalDuration => _totalDuration;
   bool _isLoadVideo = false;
   bool get isLoadVideo => _isLoadVideo;
+  bool _isLoadingMusic = true;
+  bool get isLoadingMusic => _isLoadingMusic;
+  List<String> _listTypes = [];
+  List<String> get listType => _listTypes;
+  List<Music> _listMusics = [];
+  List<Music> get listMusics => _listMusics;
+  bool _isNextMusic = false;
+  bool get isNextMusic => _isNextMusic;
+  bool _isLoadNextMusic = false;
+  bool get isLoadNextMusic => _isLoadNextMusic;
+  List<Music> _listExpMusics = [];
+  List<Music> get listExpMusics => _listExpMusics;
+  bool _isNextExpMusic = false;
+  bool get isNextExpMusic => _isNextExpMusic;
+  bool _isLoadNextExpMusic = false;
+  bool get isLoadNextExpMusic => _isLoadNextExpMusic;
+  MusicType? _selectedType;
+  MusicType? get selectedType => _selectedType;
+  MusicEnum? _selectedMusicEnum;
+  MusicEnum? get selectedMusicEnum => _selectedMusicEnum;
+  List<MusicType> _listGenres = [];
+  List<MusicType> get listGenres => _listGenres;
+  List<MusicType> _listThemes = [];
+  List<MusicType> get listThemes => _listThemes;
+  List<MusicType> _listMoods = [];
+  List<MusicType> get listMoods => _listMoods;
 
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
   final TransformationController _transformationController = TransformationController();
+  final audioPlayer = AudioPlayer();
+  final searchController = TextEditingController();
+  final scrollController = ScrollController();
+  final scrollExpController = ScrollController();
+  final focusNode = FocusNode();
 
   BetterPlayerController? get betterPlayerController => _betterPlayerController;
   TransformationController get transformationController => _transformationController;
@@ -78,12 +121,20 @@ class PreviewContentNotifier with ChangeNotifier {
   bool get nextVideo => _nextVideo;
   bool get isForcePaused => _isForcePaused;
   String? get url => _url;
+  Music? get currentMusic => _currentMusic;
+  Music? get selectedMusic => _selectedMusic;
   SourceFile? get sourceFile => _sourceFile;
   int get indexView => _indexView;
+  int get pageMusic => _pageMusic;
   double? get aspectRation => _aspectRatio;
   FeatureType? get featureType => _featureType;
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
+
+  set isLoadVideo(bool val){
+    _isLoadVideo = val;
+    notifyListeners();
+  }
 
   set showNext(bool val) {
     _showNext = val;
@@ -130,6 +181,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set isLoadingMusic(bool state){
+    _isLoadingMusic = state;
+    notifyListeners();
+  }
+
   set sourceFile(SourceFile? val) {
     _sourceFile = val;
     notifyListeners();
@@ -137,6 +193,18 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set indexView(int val) {
     _indexView = val;
+    notifyListeners();
+  }
+
+  set pageMusic(int state){
+    _pageMusic = state;
+    _selectedMusic = null;
+    for(var music in _listMusics){
+      if(music.isSelected){
+        final index = _listMusics.indexOf(music);
+        _listMusics[index].isSelected = false;
+      }
+    }
     notifyListeners();
   }
 
@@ -155,10 +223,411 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void setFileContent(String path, int index){
+    _fileContent?[index] = path;
+    notifyListeners();
+  }
+
+  set listType(List<String> values){
+    _listTypes = values;
+    notifyListeners();
+  }
+
+  set listMusics(List<Music> values){
+    _listMusics = values;
+    _isNextMusic = (values.length%10 == 0);
+    notifyListeners();
+  }
+
+  set isNextMusic(bool state){
+    _isNextMusic = state;
+    notifyListeners();
+  }
+
+  set listExpMusics(List<Music> values){
+    _listExpMusics = values;
+    _isNextExpMusic = (values.length%10 == 0);
+    notifyListeners();
+  }
+
+  set seletedType(MusicType? type){
+    _selectedType = type;
+    notifyListeners();
+  }
+
+  set selectedMusicEnum(MusicEnum? val){
+    _selectedMusicEnum = val;
+    notifyListeners();
+  }
+
+  set listGenres(List<MusicType> types){
+    _listGenres = types;
+    notifyListeners();
+  }
+
+  set listThemes(List<MusicType> types){
+    _listThemes = types;
+    notifyListeners();
+  }
+
+  set listMoods(List<MusicType> types){
+    _listMoods = types;
+    notifyListeners();
+  }
+
+  set currentMusic(Music? music){
+    _currentMusic = music;
+    notifyListeners();
+  }
+
+  set selectedMusic(Music? music){
+    _selectedMusic = music;
+    notifyListeners();
+  }
+
+  set isLoadNextMusic(bool state){
+    _isLoadNextMusic = state;
+    notifyListeners();
+  }
+
+  set isLoadNextExpMusic(bool state){
+    _isLoadNextExpMusic = state;
+    notifyListeners();
+  }
+
+  void onScrollExpMusics(BuildContext context, )async{
+    if(scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange){
+      if(!_isLoadNextExpMusic){
+
+        print('Test onScrollExpMusics');
+        if(_isNextExpMusic){
+          try{
+            _isLoadNextExpMusic = true;
+            final int pageNumber = _listExpMusics.length~/10;
+            List<Music> res = [];
+            final myId = _selectedType?.id;
+            if(myId != null){
+              if(_selectedMusicEnum == MusicEnum.mood){
+                res = await getMusics(context, keyword: searchController.text, idMood: myId, pageNumber: pageNumber);
+              }else if(_selectedMusicEnum == MusicEnum.genre){
+                res = await getMusics(context, keyword: searchController.text, idGenre: myId, pageNumber: pageNumber);
+              }else{
+                res = await getMusics(context, keyword: searchController.text, idTheme: myId, pageNumber: pageNumber);
+              }
+              _isNextExpMusic = res.isEmpty ? false : res.length%10 == 0;
+              _listExpMusics.addAll(res);
+            }
+
+            notifyListeners();
+          }catch(e){
+            'Error onScrollMusics : $e'.logger();
+          }finally{
+            _isLoadNextExpMusic = false;
+          }
+        }
+      }
+    }
+  }
+
+  void onScrollMusics(BuildContext context) async{
+    if(scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange){
+      if(!_isLoadNextMusic){
+        if(_isNextMusic){
+          try{
+            _isLoadNextMusic = true;
+            final int pageNumber = _listMusics.length~/10;
+            final res = await getMusics(context, keyword: searchController.text, pageNumber: pageNumber);
+            _isNextMusic = res.isEmpty ? false : res.length%10 == 0;
+            _listMusics.addAll(res);
+            notifyListeners();
+          }catch(e){
+            'Error onScrollMusics : $e'.logger();
+          }finally{
+            _isLoadNextMusic = false;
+          }
+        }
+      }
+
+    }
+  }
+
+  // void onScrollMusicTypes(){
+  //
+  // }
+
+  void onChangeSearchMusic(BuildContext context, String value) {
+    if(value.length > 2){
+      _selectedMusic = null;
+      for(var music in _listMusics){
+        if(music.isSelected){
+          final index = _listMusics.indexOf(music);
+          _listMusics[index].isSelected = false;
+        }
+      }
+      _selectedType = null;
+      notifyListeners();
+      Future.delayed(const Duration(milliseconds: 500), () async{
+        final currentValue = searchController.text;
+        if(currentValue == value){
+          _isLoadingMusic = true;
+          notifyListeners();
+          try{
+            listMusics = await getMusics(context, keyword: value);
+            _listGenres = await getMusicCategories(context, MusicEnum.genre, keyword: value);
+            _listThemes = await getMusicCategories(context, MusicEnum.theme, keyword: value);
+            _listMoods = await getMusicCategories(context, MusicEnum.mood, keyword: value);
+            notifyListeners();
+          }catch(e){
+            'Error onChangeSearchMusic : $e'.logger();
+          }finally{
+            _isLoadingMusic = false;
+            notifyListeners();
+          }
+
+        }
+      });
+    }else{
+      if(value.isEmpty){
+        initListMusics(context);
+      }
+    }
+  }
+
+  Future initListMusics(BuildContext context) async{
+    _isLoadingMusic = true;
+    try{
+      _listTypes = [language.theme ?? 'Theme', language.genre ?? 'Genre', language.mood ?? 'Mood'];
+      listMusics = await getMusics(context);
+      _listGenres = await getMusicCategories(context, MusicEnum.genre);
+      _listThemes = await getMusicCategories(context, MusicEnum.theme);
+      _listMoods = await getMusicCategories(context, MusicEnum.mood);
+      notifyListeners();
+    }catch(e){
+      'Error initListMusics : $e'.logger();
+    }finally{
+      _isLoadingMusic = false;
+    }
+  }
+
+  Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
+    listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
+    notifyListeners();
+  }
+
+  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood ='', int pageNumber = 0, int pageRow = 10}) async{
+    List<Music>? res = [];
+    _isLoadingMusic = true;
+    try{
+      final bloc = MusicDataBloc();
+      await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood, pageNumber: pageNumber, pageRow: pageRow);
+      final fetch = bloc.musicDataFetch;
+      if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
+        res = (fetch.data as List<dynamic>?)?.map((item) => Music.fromJson(item as Map<String, dynamic>)).toList();
+        print('res length = ${res?.length}');
+        return res ?? [];
+      }else if(fetch.musicDataState == MusicState.getMusicBlocError){
+        throw '${(fetch.data as DioError).message}';
+      }
+    }catch(e){
+      print('Error getMusics : $e');
+    }finally{
+
+      _isLoadingMusic = false;
+    }
+    return [];
+  }
+
+  Future<List<MusicType>> getMusicCategories(BuildContext context, MusicEnum type, {String keyword = ''}) async{
+    List<MusicType>? res = [];
+    try{
+      final bloc = MusicDataBloc();
+      await bloc.getTypeMusic(context, type, keyword: keyword);
+      final fetch = bloc.musicDataFetch;
+      if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
+        res = (fetch.data as List<dynamic>?)?.map((item) => MusicType.fromJson(item as Map<String, dynamic>)).toList();
+
+      }else if(fetch.musicDataState == MusicState.getMusicBlocError){
+        throw '${(fetch.data as DioError).message}';
+      }
+    }catch(e){
+      print('Error getMusicCategories : $e');
+    }
+    return res ?? [];
+  }
+
   void setFilterMatrix(List<double> val) {
     _filterMatrix[indexView] = val;
     notifyListeners();
   }
+
+  Future<void> videoMerger(BuildContext context, String urlAudio) async{
+    try{
+      if(urlAudio.isNotEmpty){
+        _isLoadVideo = true;
+        notifyListeners();
+        String outputPath = await System().getSystemPath(params: 'postVideo');
+        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+
+        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
+        await FFmpegKit.executeAsync(command, (session) async{
+          final codeSession = await session.getReturnCode();
+          if(ReturnCode.isSuccess(codeSession)){
+            print('ReturnCode = Success');
+            final path = _fileContent?[_indexView] ?? '';
+
+            _fileContent?[_indexView] = outputPath;
+            _url = fileContent?[_indexView];
+            _sourceFile = SourceFile.local;
+            _betterPlayerController = null;
+            notifyListeners();
+            initVideoPlayer(context);
+            if(path.isNotEmpty){
+              await File(path).delete();
+            }
+          }else if(ReturnCode.isCancel(codeSession)){
+            print('ReturnCode = Cancel');
+            _isLoadVideo = false;
+            notifyListeners();
+            // Cancel
+          }else{
+            print('ReturnCode = Error');
+            _isLoadVideo = false;
+            notifyListeners();
+            // Error
+          }
+
+        }, (log){
+          print('FFmpegKit ${log.getMessage()}');
+        },);
+      }else{
+        throw 'urlAudio is empty';
+      }
+
+    }catch(e){
+      'videoMerger Error : $e'.logger();
+    }finally{
+      _isLoadVideo = false;
+      notifyListeners();
+    }
+
+  }
+
+  void disposeMusic() async{
+    await audioPlayer.stop();
+    await audioPlayer.dispose();
+  }
+
+  void playMusic(BuildContext context, Music music, int index, bool isExplored) async{
+    try{
+      // final currentMusic = notifier.currentMusic;
+      if(isExplored){
+        _listExpMusics[index].isLoad = true;
+      }else{
+        _listMusics[index].isLoad = true;
+      }
+
+      notifyListeners();
+      var url = music.apsaraMusicUrl?.playUrl ?? '';
+      if(_currentMusic != null){
+
+        final currentIndex = isExplored ? _listExpMusics.indexOf(_currentMusic!) : _listMusics.indexOf(_currentMusic!);
+        if(music.isPlay){
+          await audioPlayer.stop();
+          if(isExplored){
+            _listExpMusics[index].isPlay = false;
+          }else{
+            _listMusics[index].isPlay = false;
+          }
+
+          currentMusic?.isPlay = false;
+          notifyListeners();
+        }else{
+          await audioPlayer.stop();
+          if(url != null){
+            await audioPlayer.play(UrlSource(url));
+          }else{
+            throw 'url music is null';
+          }
+
+          _currentMusic = music;
+          currentMusic?.isPlay = true;
+
+          if(isExplored){
+            _listExpMusics[currentIndex].isPlay = false;
+            _listExpMusics[index].isPlay = true;
+          }else{
+            _listMusics[currentIndex].isPlay = false;
+            _listMusics[index].isPlay = true;
+          }
+
+          notifyListeners();
+        }
+      }else{
+        await audioPlayer.stop();
+        if(url != null){
+          await audioPlayer.play(UrlSource(url));
+        }else{
+          throw 'url music is null';
+        }
+        _currentMusic = music;
+        currentMusic?.isPlay = true;
+        _listMusics[index].isPlay = true;
+        notifyListeners();
+      }
+
+    }catch(e){
+
+      'Error Play Music : $e'.logger();
+
+      _listMusics[index].isPlay = false;
+      notifyListeners();
+    }finally{
+      _listMusics[index].isLoad = false;
+      notifyListeners();
+    }
+
+  }
+
+  void selectMusic(Music music, int index, bool isExplored){
+
+    if(_selectedMusic != null){
+      if(_selectedMusic!.musicTitle == music.musicTitle){
+        _selectedMusic = null;
+        notifyListeners();
+        if(isExplored){
+          _listExpMusics[index].isSelected = false;
+        }else{
+          _listMusics[index].isSelected = false;
+        }
+
+      }else{
+        if(isExplored){
+          _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
+          _listExpMusics[index].isSelected = true;
+        }else{
+          _listMusics[_listMusics.indexOf(_selectedMusic!)].isSelected = false;
+          _listMusics[index].isSelected = true;
+        }
+
+        _selectedMusic = music;
+      }
+    }else{
+
+      if(isExplored){
+        _listExpMusics[index].isSelected = true;
+      }else{
+        _listMusics[index].isSelected = true;
+      }
+      _selectedMusic = music;
+    }
+    notifyListeners();
+  }
+
+  // void _resetSelectMusic(){
+  //   for(var music in _listMusics){
+  //     if(sele)
+  //   }
+  // }
 
   void initialMatrixColor() {
     if (_fileContent != null) {
@@ -221,6 +690,8 @@ class PreviewContentNotifier with ChangeNotifier {
 
       // notifier.setVideoPlayerController(_betterPlayerController);
 
+    }catch(e){
+      "Error Init Video $e".logger();
     } finally {
       _isLoadVideo = false;
     }
@@ -344,7 +815,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.thumbNail = _thumbNails != null ? _thumbNails![0] : null;
     notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
-
+    notifier.musicSelected = _selectedMusic;
     // notifier.compressVideo();
 
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);

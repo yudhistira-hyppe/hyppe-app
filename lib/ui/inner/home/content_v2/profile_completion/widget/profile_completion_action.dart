@@ -27,12 +27,11 @@ class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,
             child: CustomTextWidget(
-              textToDisplay: notifier.language.confirm!,
+              textToDisplay: notifier.language.confirm ?? 'Confirm',
               textStyle: notifier.somethingChanged(context)
                   ? Theme.of(context)
                       .textTheme
-                      .button!
-                      .copyWith(color: kHyppeLightButtonText)
+                      .button?.copyWith(color: kHyppeLightButtonText)
                   : Theme.of(context).primaryTextTheme.button,
             ),
             function: () => notifier.onClickCompletionProfile(context),
@@ -50,7 +49,7 @@ class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,
             child: CustomTextWidget(
-              textToDisplay: notifier.language.cancel!,
+              textToDisplay: notifier.language.cancel ?? 'Cancel',
               textStyle: Theme.of(context).primaryTextTheme.button,
             ),
             function: () => {Routing().moveBack()},

@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -10,8 +12,12 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/music/music.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/boost_response.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/buy_response.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_content_model.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_master_model.dart';
@@ -21,7 +27,9 @@ import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
@@ -116,6 +124,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? _tags;
   String _visibility = "PUBLIC";
   dynamic _thumbNail;
+  Music? _musicSelected;
 
   List<String> _interestData = [];
   List<InterestData> _interest = [];
@@ -147,6 +156,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String>? get tags => _tags;
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
+  Music? get musicSelected => _musicSelected;
   List<InterestData> get interest => _interest;
   List<InterestData> get interestList => _interestList;
   List<UserData> get userList => _userList;
@@ -162,6 +172,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
+
   DateTime _tmpstartDate = DateTime(1000);
   DateTime _tmpfinsihDate = DateTime(1000);
   String _tmpBoost = '';
@@ -181,7 +192,18 @@ class PreUploadContentNotifier with ChangeNotifier {
   String get BoostTime => _BoostTime;
   String _BoostInterval = '';
   String get BoostInterval => _BoostInterval;
+
+  String _postIdPanding = '';
+  String get postIdPanding => _postIdPanding;
   // UpdateContentsArgument get updateArguments => _arguments!;
+
+  BoostResponse? _boostPaymentResponse;
+  BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
+  set boostPaymentResponse(BoostResponse? value) {
+    _boostPaymentResponse = value;
+    print(value);
+    notifyListeners();
+  }
 
   set ownershipEULA(bool val) {
     _ownershipEULA = val;
@@ -255,6 +277,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set thumbNail(val) {
     _thumbNail = val;
+    notifyListeners();
+  }
+
+  set musicSelected(Music? music) {
+    _musicSelected = music;
     notifyListeners();
   }
 
@@ -479,6 +506,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _locationName = '';
     _userTagData = [];
     _privacyTitle = '';
+    _musicSelected = null;
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
@@ -487,6 +515,13 @@ class PreUploadContentNotifier with ChangeNotifier {
     includeTotalLikes = false;
     includeTotalLikes = false;
     isUpdate = false;
+    _postIdPanding = '';
+    _boostContent = null;
+    _tmpstartDate = DateTime(1000);
+    _tmpfinsihDate = DateTime(1000);
+    _tmpBoost = '';
+    _tmpBoostTime = '';
+    tmpBoostInterval = '';
   }
 
   Future _createPostContentV2() async {
@@ -537,6 +572,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         description: captionController.text,
         cats: _interestData,
         tagPeople: userTagData,
+        idMusic: _musicSelected?.id,
         saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
         saleLike: _includeTotalLikes,
         saleView: _includeTotalViews,
@@ -550,12 +586,16 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
       ).then((value) {
         _uploadSuccess = value;
-        print(_uploadSuccess);
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         _eventService.notifyUploadSuccess(_uploadSuccess);
+        final decode = json.decode(_uploadSuccess.toString());
+        _postIdPanding = decode['data']['postID'];
+        print('ini boost content');
+        print(_boostContent);
+        if (_boostContent != null) _boostContentBuy(context);
       });
-      clearUpAndBackToHome(context);
+      if (_boostContent == null) clearUpAndBackToHome(context);
     } catch (e) {
       _eventService.notifyUploadFailed(
         DioError(
@@ -567,7 +607,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       );
       'e'.logger();
     } finally {
-      _onExit();
+      if (_boostContent == null) _onExit();
     }
   }
 
@@ -689,6 +729,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     context.read<CameraNotifier>().orientation = null;
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
+    if (_boostContent != null) _onExit();
     Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
   }
 
@@ -1255,6 +1296,54 @@ class PreUploadContentNotifier with ChangeNotifier {
         boostButton(context);
       });
     }
+  }
+
+  Future paymentMethod(context) async {
+    // _createPostContentV2();
+    print(_boostContent);
+    Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
+  }
+
+  Future uploadPanding() async {
+    _createPostContentV2();
+  }
+
+  Future<void> _boostContentBuy(BuildContext context) async {
+    final bankCode = context.read<PaymentMethodNotifier>().bankSelected;
+    isLoading = true;
+    Map data = {
+      "dateStart": _boostContent?.dateBoostStart,
+      "dateEnd": _boostContent?.dateBoostStart,
+      "type": _boostContent?.typeBoost,
+      "bankcode": bankCode,
+      "paymentmethod": "VA",
+      "postID": postIdPanding
+    };
+    if (_boostContent?.typeBoost == 'manual') {
+      data['interval'] = _boostContent?.intervalBoost?.sId;
+      data['session'] = _boostContent?.sessionBoost?.sId;
+    }
+    try {
+      final notifier = UtilsBlocV2();
+      await notifier.postBostContentPre(context, data: data);
+      final fetch = notifier.utilsFetch;
+
+      if (fetch.utilsState == UtilsState.getMasterBoostError) {
+        isLoading = false;
+        var errorData = ErrorModel.fromJson(fetch.data);
+        ShowBottomSheet().onShowColouredSheet(context, '${errorData.message}', color: kHyppeDanger);
+      } else if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
+        boostPaymentResponse = BoostResponse.fromJson(fetch.data);
+        Future.delayed(const Duration(seconds: 0), () {
+          Routing().move(Routes.boostPaymentSummary);
+        });
+        _isLoading = false;
+      }
+    } catch (e) {
+      print(e);
+      ShowBottomSheet().onShowColouredSheet(context, 'Somethink Wrong', color: kHyppeDanger);
+    }
+    notifyListeners();
   }
 
   exitBoostPage() {

@@ -63,7 +63,7 @@
 //                   ),
 //                 ),
 //         ),
-//         inputAreaWidth: SizeConfig.screenWidth!,
+//         inputAreaWidth: SizeConfig.screenWidth,
 //         inputAreaHeight: 50 * SizeConfig.scaleDiagonal,
 //       ),
 //     );

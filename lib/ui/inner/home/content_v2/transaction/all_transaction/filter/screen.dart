@@ -24,7 +24,7 @@ class AllTransactionFilter extends StatelessWidget {
                   onPressed: () => notifier.resetFilter(context),
                   child: CustomTextWidget(
                     textToDisplay: 'Reset',
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: !notifier.checkButton() ? kHyppeGrey : kHyppePrimary, fontWeight: FontWeight.bold),
+                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: !notifier.checkButton() ? kHyppeGrey : kHyppePrimary, fontWeight: FontWeight.bold),
                   ))
             ],
           ),
@@ -39,7 +39,7 @@ class AllTransactionFilter extends StatelessWidget {
               style: ButtonStyle(backgroundColor: !notifier.checkButton() ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
               child: CustomTextWidget(
                 textToDisplay: 'Apply',
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
             ),
           ),
@@ -53,7 +53,7 @@ class AllTransactionFilter extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         textToDisplay: 'Date',
-                        textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kHyppeGrey, fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppeGrey, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(
@@ -78,7 +78,7 @@ class AllTransactionFilter extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         textToDisplay: 'Type',
-                        textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: kHyppeGrey, fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: kHyppeGrey, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.start,
                       ),
                       SizedBox(

@@ -62,7 +62,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
             if (notifier.isRecordingVideo) {
               _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
                 context,
-                notifier.language.cancelRecording!,
+                notifier.language.cancelRecording ?? 'Cancel Recording',
                 color: kHyppeTextWarning,
               );
             }

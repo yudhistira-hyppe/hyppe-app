@@ -45,7 +45,9 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
     } else {
       try {
         _loading.value = true;
-        await widget.function!();
+        if(widget.function != null){
+          await widget.function!();
+        }
         _loading.value = false;
       } catch (_) {
       } finally {
@@ -101,7 +103,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                       width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
                       child: CustomTextWidget(
                         maxLines: widget.maxLines,
-                        textToDisplay: widget.subCaption!,
+                        textToDisplay: widget.subCaption ?? '',
                         textOverflow: TextOverflow.visible,
                         textAlign: TextAlign.left,
                         textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),

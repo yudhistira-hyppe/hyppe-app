@@ -37,6 +37,7 @@ class LocalizationModelV2 {
   String? atLeastContain1CharacterAnd1Number;
   String? next;
   String? submit;
+  String? rotate;
   String? passwordDoesntMatch;
   String? register;
   String? joinTheCommunityCreateOrWatchAndGetMoney;
@@ -143,9 +144,15 @@ class LocalizationModelV2 {
   String? news;
   String? whatAreYouFindOut;
   String? editProfile;
+  String? editImage;
   String? librarys;
   String? post;
   String? music;
+  String? searchMusic;
+  String? popular;
+  String? explore;
+  String? genre;
+  String? mood;
   String? newPost;
   String? writeACaption;
   String? tagPeople;
@@ -784,6 +791,7 @@ class LocalizationModelV2 {
     this.atLeast8Characters,
     this.atLeastContain1CharacterAnd1Number,
     this.next,
+    this.rotate,
     this.submit,
     this.passwordDoesntMatch,
     this.register,
@@ -891,9 +899,15 @@ class LocalizationModelV2 {
     this.news,
     this.whatAreYouFindOut,
     this.editProfile,
+    this.editImage,
     this.librarys,
     this.post,
     this.music,
+    this.searchMusic,
+    this.popular,
+    this.explore,
+    this.genre,
+    this.mood,
     this.newPost,
     this.writeACaption,
     this.tagPeople,
@@ -1533,6 +1547,7 @@ class LocalizationModelV2 {
     atLeast8Characters = json['atLeast8Characters'];
     atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
     next = json['next'];
+    rotate = json['rotate'];
     submit = json['submit'];
     passwordDoesntMatch = json['passwordDoesntMatch'];
     register = json['register'];
@@ -1640,9 +1655,15 @@ class LocalizationModelV2 {
     news = json['news'];
     whatAreYouFindOut = json['whatAreYouFindOut'];
     editProfile = json['editProfile'];
+    editImage = json['editImage'];
     librarys = json['librarys'];
     post = json['post'];
     music = json['music'];
+    searchMusic = json['search_music'];
+    popular = json['popular'];
+    explore = json['explore'];
+    genre = json['genre'];
+    mood = json['mood'];
     newPost = json['newPost'];
     writeACaption = json['writeACaption'];
     tagPeople = json['tagPeople'];

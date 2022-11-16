@@ -162,22 +162,24 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 ),
                 ListView.separated(
                   shrinkWrap: true,
-                  itemCount: supportNotifier.pickedSupportingDocs!.length,
+                  itemCount: supportNotifier.pickedSupportingDocs?.length ?? 0,
                   itemBuilder: (context, index) => ListTile(
-                    title: Text(path.basename(supportNotifier.pickedSupportingDocs![index].path)),
-                    // subtitle: Text(supportNotifier.pickedSupportingDocs![index].lengthSync().toString()),
-                    // leading: Image.file(supportNotifier.pickedSupportingDocs![index]),
+                    title: Text(path.basename(supportNotifier.pickedSupportingDocs?[index].path ?? '')),
+                    // subtitle: Text(supportNotifier.pickedSupportingDocs[index].lengthSync().toString()),
+                    // leading: Image.file(supportNotifier.pickedSupportingDocs[index]),
                     trailing: GestureDetector(
                       onTap: () {
                         setState(() {
-                          supportNotifier.pickedSupportingDocs!.removeAt(index);
+                          if(supportNotifier.pickedSupportingDocs != null){
+                            supportNotifier.pickedSupportingDocs?.removeAt(index);
+                          }
                         });
                       },
                       child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(border: Border.all(color: kHyppePrimary), borderRadius: BorderRadius.circular(8)),
                           child: Text(
-                            notifier.translate.delete!,
+                            notifier.translate.delete ?? 'delete',
                             style: const TextStyle(color: kHyppePrimary),
                           )),
                     ),

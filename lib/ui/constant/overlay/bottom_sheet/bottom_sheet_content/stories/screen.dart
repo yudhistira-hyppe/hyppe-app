@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/stories/viewer_stories_data.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stories/widget/account_component.dart';
@@ -59,12 +60,12 @@ class _ViewedStoriesScreenState extends State<ViewedStoriesScreen> {
                       controller: scrollController,
                       itemCount: value.viewerStories == null ? 0 : value.viewerStories!.storyViews.length,
                       itemBuilder: (context, index) {
-                        if (value.viewerStories!.storyViews[index].isLoading == null) {
+                        if (value.viewerStories?.storyViews[index].isLoading ?? [] == null) {
                           return TileComponent(
                             function: () {},
-                            title: '${value.viewerStories!.storyViews[index].fullName}',
-                            subtitle: '${value.viewerStories!.storyViews[index].username}',
-                            leading: AccountComponent(data: value.viewerStories!.storyViews[index]),
+                            title: '${value.viewerStories?.storyViews[index].fullName}',
+                            subtitle: '${value.viewerStories?.storyViews[index].username}',
+                            leading: AccountComponent(data: value.viewerStories?.storyViews[index] ?? StoryViewsData()),
                           );
                         } else {
                           return const CustomLoading();

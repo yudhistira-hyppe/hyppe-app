@@ -520,6 +520,13 @@ class UrlConstants {
   //==========report============
   static const String getOptionReport = "/api/reportreasons/all";
   static const String insertReport = "/api/reportuser/create";
+
   static const String appealPost = "/api/reportuser/appeal";
   static const String createTicket = "/api/usertickets/createticket";
+
+  /// ===music===
+  static const String getMusicGenre = "/api/genre/";
+  static const String getMusicTheme = "/api/theme/";
+  static const String getMusicMood = "/api/mood/";
+  static const String getMusics = "/api/music";
 }

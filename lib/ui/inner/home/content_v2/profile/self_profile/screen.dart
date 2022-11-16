@@ -23,7 +23,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
 
   @override
   void initState() {
-    final notifier = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final notifier = context.read<SelfProfileNotifier>();
     notifier.initialSelfProfile(context);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();

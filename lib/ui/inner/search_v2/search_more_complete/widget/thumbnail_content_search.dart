@@ -45,7 +45,7 @@ class ThumbnailContentSearch extends StatelessWidget {
           CustomBaseCacheImage(
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: "$gambar",
+            imageUrl: gambar ,
             imageBuilder: (context, imageProvider) => Container(
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),
@@ -106,7 +106,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               fourPx,
               CustomTextWidget(
                 textToDisplay: System().formatterNumber(data?.likes ?? 0),
-                textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
               )
             ],
           ),

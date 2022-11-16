@@ -66,13 +66,13 @@ class _ForgotPinScreenState extends State<ForgotPinScreen> {
                 ),
               ),
               CustomTextWidget(
-                textToDisplay: notifier2.translate.enterNewPin!,
-                textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                textToDisplay: notifier2.translate.enterNewPin ?? 'Enter New Pin',
+                textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.onBackground,
                     ),
               ),
               sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin!),
+              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
               twelvePx,
               CustomRectangleInput(notifier.pin4Controller, onChanged: (value) {
                 notifier.setPinInForgot(context, value);

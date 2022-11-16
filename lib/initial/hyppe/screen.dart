@@ -45,7 +45,7 @@ class _HyppeState extends State<Hyppe> {
               navigatorKey: Routing.navigatorKey,
               scaffoldMessengerKey: Routing.scaffoldMessengerKey,
               builder: (context, child) => MediaQuery(
-                child: child!,
+                child: child ?? Container(),
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
               ),
             );

@@ -278,7 +278,7 @@ class HomeNotifier with ChangeNotifier {
         _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic!.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         _updatedData2 = pic2.data;
         break;
       case hyppeStory:
@@ -344,7 +344,7 @@ class HomeNotifier with ChangeNotifier {
         }
       }
 
-      print(_updatedData.cats!.length);
+      print('${_updatedData.cats?.length}');
     }
 
     notifyListeners();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -11,12 +12,14 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class PaymentMethodScreen extends StatefulWidget {
-  const PaymentMethodScreen({Key? key}) : super(key: key);
+  final TransactionArgument? argument;
+  const PaymentMethodScreen({Key? key, this.argument}) : super(key: key);
 
   @override
   State<PaymentMethodScreen> createState() => _PaymentMethodScreenState();
@@ -52,48 +55,55 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           ),
           centerTitle: false,
         ),
-        body: notifier.data != null ? notifier.data?.isNotEmpty ?? false
-            ? SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? '', textStyle: textTheme.titleMedium),
-                    const SizedBox(height: 5),
-                    CustomTextWidget(
-                      textToDisplay: notifier.reviewBuyNotifier.data != null ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount?.toInt()) : '',
-                      textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+        body: notifier.data != null
+            ? notifier.data?.isNotEmpty ?? false
+                ? SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const ProcessUploadComponent(),
+                        CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? '', textStyle: textTheme.titleMedium),
+                        const SizedBox(height: 5),
+                        CustomTextWidget(
+                          textToDisplay: widget.argument?.totalAmount != null
+                              ? System().currencyFormat(amount: widget.argument?.totalAmount?.toInt())
+                              : notifier.reviewBuyNotifier.data != null
+                                  ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount?.toInt())
+                                  : '',
+                          textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                        ),
+                        const SizedBox(height: 24),
+                        CustomTextWidget(textToDisplay: "Virtual Account", textStyle: textTheme.bodyMedium),
+                        const SizedBox(height: 12),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
+                          child: Column(children: [
+                            ..._getListBank(notifier),
+                          ]),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 24),
-                    CustomTextWidget(textToDisplay: "Virtual Account", textStyle: textTheme.bodyMedium),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
-                      child: Column(children: [
-                        ..._getListBank(notifier),
-                      ]),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                  ],
-                ),
-              )
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  )
             : const Center(
                 child: CircularProgressIndicator(),
-              ): const Center(
-          child: CircularProgressIndicator(),
-        ),
+              ),
         floatingActionButton: CustomElevatedButton(
           width: 375.0 * SizeConfig.scaleDiagonal,
           height: 44.0 * SizeConfig.scaleDiagonal,
-          function: () => notifier.submitPay(context),
+          function: () => notifier.submitPay(context, price: widget.argument?.totalAmount),
           // function: () => Routing().move(Routes.paymentSummaryScreen),
           child: notifier.isLoading
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: notifier.language.pay ?? 'pay',
+                  textToDisplay: widget.argument?.totalAmount != null ? "${notifier.language.upload} & ${notifier.language.pay}" : notifier.language.pay ?? 'pay',
                   textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
           buttonStyle: ButtonStyle(

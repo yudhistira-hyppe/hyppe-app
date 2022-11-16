@@ -57,9 +57,9 @@ class _DiarySeeAllScreenState extends State<DiarySeeAllScreen> with SingleTicker
             // bottom: TabBar(
             //   controller: _tabController,
             //   tabs: [
-            //     Tab(text: _language.trends!),
-            //     Tab(text: _language.news!),
-            //     Tab(text: _language.following!),
+            //     Tab(text: _language.trends),
+            //     Tab(text: _language.news),
+            //     Tab(text: _language.following),
             //     // FiltersButton(),
             //   ],
             //   onTap: (value) {

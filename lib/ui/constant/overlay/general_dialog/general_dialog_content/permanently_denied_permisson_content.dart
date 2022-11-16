@@ -17,14 +17,14 @@ class PermanentlyDeniedPermissionContent extends StatelessWidget {
       builder: (_, notifier, __) => CupertinoAlertDialog(
         content: CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText1,
-            textToDisplay: notifier.translate.hyppeDoesNotHaveAccessToYourPermission!+' '+permissions,
+            textToDisplay: notifier.translate.hyppeDoesNotHaveAccessToYourPermission ?? ''+' '+permissions,
             textOverflow: TextOverflow.visible),
         actions: [
           CustomTextButton(
             onPressed: () => Routing().moveBack(),
             child: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.button!.apply(color: Theme.of(context).colorScheme.primaryVariant),
-              textToDisplay: notifier.translate.cancel!,
+              textStyle: Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primaryVariant),
+              textToDisplay: notifier.translate.cancel ?? 'Cancel',
             ),
           ),
           CustomTextButton(
@@ -32,8 +32,8 @@ class PermanentlyDeniedPermissionContent extends StatelessWidget {
               await System().openSetting().whenComplete(() => Routing().moveBack());
             },
             child: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.button!.apply(color: Theme.of(context).colorScheme.primaryVariant),
-              textToDisplay: notifier.translate.settings!,
+              textStyle: Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primaryVariant),
+              textToDisplay: notifier.translate.settings ?? 'Settings',
             ),
           )
         ],

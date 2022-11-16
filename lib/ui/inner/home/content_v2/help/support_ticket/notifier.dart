@@ -155,7 +155,7 @@ class SupportTicketNotifier with ChangeNotifier {
       });
     } catch (e) {
       // isLoading = false;
-      // ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      // ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred);
     }
   }
 

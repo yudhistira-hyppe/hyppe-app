@@ -105,7 +105,7 @@ mixin GeneralMixin {
         child: const UnconstrainedBox(child: CustomLoading()),
       ),
     );
-    Overlay.of(context)!.insert(_popupDialog);
+    Overlay.of(context)?.insert(_popupDialog);
     var _result = await System()
         .createdDynamicLink(
           context,

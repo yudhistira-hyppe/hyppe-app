@@ -11,6 +11,7 @@ import 'package:camera/camera.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class CameraNotifier extends LoadingNotifier with ChangeNotifier {
@@ -54,7 +55,16 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       flashMode = FlashMode.off;
       deepArController = DeepArController();
       if (Platform.isAndroid) {
-        deepArController!.destroy();
+        if(deepArController != null){
+          final isGranted = await System().requestPermission(context, permissions: [
+            Permission.camera
+          ]);
+          if(isGranted){
+            print('destroy deepArController 1');
+            deepArController!.destroy();
+          }
+
+        }
       }
       await deepArController!
           .initialize(
@@ -135,13 +145,21 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     deepArController!.flipCamera();
   }
 
-  disposeCamera() async {
+  disposeCamera(BuildContext context) async {
     try {
       if (Platform.isAndroid) {
         deepArController = DeepArController();
         deepArController = null;
       }
-      deepArController!.destroy();
+      if(deepArController != null){
+        final isGranted = await System().requestPermission(context, permissions: [
+          Permission.camera
+        ]);
+        if(isGranted){
+          print('destroy deepArController 2');
+          deepArController!.destroy();
+        }
+      }
       deepArController = null;
     } catch (e) {
       e.logger();
@@ -179,13 +197,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
-      return ResolutionPreset.high;
-    } else {
-      return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
-    }
-  }
+  // ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
+  //   if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
+  //     return ResolutionPreset.high;
+  //   } else {
+  //     return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
+  //   }
+  // }
 
   Future<void> onFlashButtonPressed() async {
     deepArController!.toggleFlash();

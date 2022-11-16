@@ -64,7 +64,7 @@ class FAQdetailScreen extends StatelessWidget {
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSurface)),
                                 child: CustomTextWidget(
                                   textToDisplay: notifier.translate.no ?? '',
-                                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppePrimary),
+                                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
                                 ),
                               ),
                               sixPx,
@@ -74,8 +74,8 @@ class FAQdetailScreen extends StatelessWidget {
                                 },
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                                 child: CustomTextWidget(
-                                  textToDisplay: notifier.translate.yes!,
-                                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: Colors.white),
+                                  textToDisplay: notifier.translate.yes ?? 'yes',
+                                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
                                 ),
                               ),
                             ],

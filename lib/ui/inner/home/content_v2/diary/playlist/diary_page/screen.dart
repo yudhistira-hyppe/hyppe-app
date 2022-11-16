@@ -165,7 +165,7 @@ class _DiaryPageState extends State<DiaryPage> {
                           // _storyController.next();
                           // widget.controller.
 
-                          // final isLastPage = widget.total! - 1 == widget.controller.page;
+                          // final isLastPage = widget.total - 1 == widget.controller.page;
                           // widget.function();
                           // if (isLastPage) {
                           //   context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
@@ -193,12 +193,13 @@ class _DiaryPageState extends State<DiaryPage> {
                           if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                         },
                       ),
-                widget.data!.isReport!
+                widget.data?.isReport ?? false
                     ? CustomBackgroundLayer(
                         sigmaX: 30,
                         sigmaY: 30,
                         // thumbnail: picData!.content[arguments].contentUrl,
-                        thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint : widget.data?.fullThumbPath,
+
+                        thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint ?? '' : widget.data?.fullThumbPath ?? '',
                       )
                     : Container(),
                 widget.data?.isReport ?? false
@@ -215,7 +216,7 @@ class _DiaryPageState extends State<DiaryPage> {
                                 defaultColor: false,
                                 height: 30,
                               ),
-                              Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                              Text(transnot.translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                               Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
                                   style: const TextStyle(
                                     color: Colors.white,

@@ -28,7 +28,7 @@ class _InterestScreenState extends State<InterestScreen> {
               margin: const EdgeInsets.only(
                   left: 10, right: 10, top: 10, bottom: 10),
               child: Text(
-                notifier.language.findYourInterests!,
+                notifier.language.findYourInterests ?? '',
                 style: const TextStyle(
                     color: kHyppeLightSecondary,
                     fontSize: 14,

@@ -29,6 +29,7 @@ import 'package:hyppe/ui/inner/search_v2/hashtag/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
@@ -120,7 +121,7 @@ class AppDependencies {
         ChangeNotifierProxyProvider<storyV2.PreviewStoriesNotifier, ViewerStoriesNotifier>(
           create: (context) => ViewerStoriesNotifier(),
           update: (context, value, previous) => previous!..viewers = 0,
-          // update: (context, value, previous) => previous!..viewers = value.myStoriesData?.totalViews,
+          // update: (context, value, previous) => previous..viewers = value.myStoriesData?.totalViews,
         ),
 
         /// Report
@@ -137,7 +138,7 @@ class AppDependencies {
         // Wallet
         // ChangeNotifierProxyProvider3<HomeNotifier, SelfProfileNotifier, TranslateNotifierV2, WalletNotifier>(
         //   create: (context) => WalletNotifier(),
-        //   update: (context, value, value2, value3, previous) => previous!
+        //   update: (context, value, value2, value3, previous) => previous
         //     ..sessionID = value.sessionID
         //     ..user = value2.user
         //     ..language = value3.translate,
@@ -221,5 +222,6 @@ class AppDependencies {
         ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
         ChangeNotifierProvider<SlidedPicDetailNotifier>(create: (context) => SlidedPicDetailNotifier()),
         ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
+        ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),
       ];
 }

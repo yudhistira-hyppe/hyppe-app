@@ -5,6 +5,8 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../app.dart';
+
 class PreviewContentScreen extends StatefulWidget {
   const PreviewContentScreen({Key? key}) : super(key: key);
 
@@ -22,6 +24,16 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
     final _notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     _notifier.initialMatrixColor();
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    print('dispose PreviewContentScreen');
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.scrollController.dispose();
+    notifier.scrollExpController.dispose();
+    super.dispose();
   }
 
   @override

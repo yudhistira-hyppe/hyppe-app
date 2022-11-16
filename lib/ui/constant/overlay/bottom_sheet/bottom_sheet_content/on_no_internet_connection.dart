@@ -31,13 +31,13 @@ class OnNoInternetConnectionBottomSheet extends StatelessWidget {
             ),
             SizedBox(height: 35 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
-              textToDisplay: notifier.translate.noInternetConnection!,
+              textToDisplay: notifier.translate.noInternetConnection ?? 'No Internet Connection',
               textAlign: TextAlign.center,
               textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 14 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
-              textToDisplay: notifier.translate.pleaseCheckYourInternetConnectionAgain!,
+              textToDisplay: notifier.translate.pleaseCheckYourInternetConnectionAgain ?? '',
               textAlign: TextAlign.center,
               textStyle: Theme.of(context).textTheme.bodyText2,
               textOverflow: TextOverflow.clip,
@@ -50,7 +50,7 @@ class OnNoInternetConnectionBottomSheet extends StatelessWidget {
                   child: CustomTextButton(
                     onPressed: onBackButton ?? () => Routing().moveBack(),
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.back!,
+                      textToDisplay: notifier.translate.back ?? 'Back',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                   ),
@@ -59,7 +59,7 @@ class OnNoInternetConnectionBottomSheet extends StatelessWidget {
                   flex: 1,
                   child: CustomElevatedButton(
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.tryAgain!,
+                      textToDisplay: notifier.translate.tryAgain ?? 'Try Again',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                     width: 164 * SizeConfig.scaleDiagonal,

@@ -60,14 +60,14 @@ class ContentThumbnail extends StatelessWidget {
                       fourPx,
                       CustomTextWidget(
                         textToDisplay: _system.formatterNumber(vidData?.insight?.likes),
-                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                       )
                     ],
                   ),
                 ),
                 CustomBalloonWidget(
                   child: CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                     textToDisplay: System().formatDuration(Duration(seconds: vidData?.metadata?.duration ?? 0).inMilliseconds),
                   ),
                 ),

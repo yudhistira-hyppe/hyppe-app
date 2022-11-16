@@ -55,7 +55,7 @@ class PinWithdrawal extends StatelessWidget {
           hintCharacter: '●',
           obscuringWidget: CustomTextWidget(
             textToDisplay: '●',
-            textStyle: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Theme.of(context).colorScheme.onBackground),
+            textStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Theme.of(context).colorScheme.onBackground),
           ),
           blinkWhenObscuring: true,
           obscuringCharacter: '●'),

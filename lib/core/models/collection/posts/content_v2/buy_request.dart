@@ -33,7 +33,7 @@ class BuyRequest {
       type: json['type']);
 
   Map<String, dynamic> toJson() => {
-        "postid": List<dynamic>.from(postid!.map((x) => x.toJson())),
+        "postid": List<dynamic>.from(postid?.map((x) => x.toJson()) ?? []),
         "amount": amount,
         "bankcode": bankcode,
         "paymentmethod": paymentmethod,

@@ -84,7 +84,7 @@ class ContentItem extends StatelessWidget {
                                       fourPx,
                                       CustomTextWidget(
                                         textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                                       )
                                     ],
                                   ),

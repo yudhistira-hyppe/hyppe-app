@@ -37,7 +37,7 @@ class TileComponent extends StatelessWidget {
                 CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: subtitle,
-                  textStyle: theme.textTheme.caption!.copyWith(
+                  textStyle: theme.textTheme.caption?.copyWith(
                     color: theme.colorScheme.secondaryVariant,
                   ),
                 ),

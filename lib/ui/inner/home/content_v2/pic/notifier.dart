@@ -73,7 +73,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       }
       final _searchData = context.read<SearchNotifier>();
       print('ini pict initial');
-      if (_searchData.initDataPic == null) {
+      if (_searchData.initDataPic != null) {
         print('initDataPic is null');
         if (visibility == 'PUBLIC') {
           try {
@@ -97,7 +97,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
           }
         }
         // _searchData.picContentsQuery.featureType = FeatureType.pic;
-        // _searchData.allContents!.pics = pic;
+        // _searchData.allContents.pics = pic;
       }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();

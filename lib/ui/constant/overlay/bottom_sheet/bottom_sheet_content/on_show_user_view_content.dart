@@ -97,7 +97,7 @@ class _OnShowUserViewContentBottomSheetState extends State<OnShowUserViewContent
                                 // subtitle: Text("${notifier.searchPeolpleData[index].fullName}"),
                                 // trailing: Consumer<PreUploadContentNotifier>(
                                 //   builder: (_, notifier, __) {
-                                //     notifier.statusFollow = notifier.label(widget.value[index].status!);
+                                //     notifier.statusFollow = notifier.label(widget.value[index].status);
                                 //     return SizedBox(
                                 //       width: 100,
                                 //       child: CustomTextButton(

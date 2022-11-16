@@ -153,7 +153,7 @@ class _SignInFormState extends State<SignInForm> {
           //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
           //   children: [
           //     CustomTextWidget(
-          //       textToDisplay: "${notifier.language.forgotPassword!}?",
+          //       textToDisplay: "${notifier.language.forgotPassword}?",
           //       textStyle: Theme.of(context).primaryTextTheme.button,
           //     ),
           //     notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
@@ -161,8 +161,8 @@ class _SignInFormState extends State<SignInForm> {
           //         : CustomTextButton(
           //             onPressed: () => notifier.onClickForgotPassword(context),
           //             child: CustomTextWidget(
-          //               textToDisplay: "${notifier.language.forgotPassword!}?",
-          //               textStyle: Theme.of(context).primaryTextTheme.button!.copyWith(color: kHyppePrimary),
+          //               textToDisplay: "${notifier.language.forgotPassword}?",
+          //               textStyle: Theme.of(context).primaryTextTheme.button.copyWith(color: kHyppePrimary),
           //             ),
           //           ),
           //   ],
@@ -172,8 +172,8 @@ class _SignInFormState extends State<SignInForm> {
               : CustomTextButton(
                   onPressed: () => notifier.onClickForgotPassword(context),
                   child: CustomTextWidget(
-                    textToDisplay: "${notifier.language.forgotPassword!}?",
-                    textStyle: Theme.of(context).primaryTextTheme.button!.copyWith(color: kHyppePrimary),
+                    textToDisplay: "${notifier.language.forgotPassword}?",
+                    textStyle: Theme.of(context).primaryTextTheme.button?.copyWith(color: kHyppePrimary),
                   ),
                 ),
           fourPx,
@@ -198,8 +198,8 @@ class _SignInFormState extends State<SignInForm> {
             child: notifier.isLoading
                 ? const CustomLoading()
                 : CustomTextWidget(
-                    textToDisplay: notifier.language.logIn!,
-                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
+                    textToDisplay: notifier.language.logIn ?? 'Log In',
+                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                   ),
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,

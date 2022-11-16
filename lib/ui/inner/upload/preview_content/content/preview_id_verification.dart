@@ -52,12 +52,12 @@ class PreviewIDVerification extends StatelessWidget {
             child: Consumer<AccountPreferencesNotifier>(
               builder: (_, notifier, __) => Row(
                 // TODO: Need to be refactored, waiting for the new design
-                // mainAxisAlignment: notifier.picIDVerification == null || !System().validateUrl(notifier.picIDVerification!)
+                // mainAxisAlignment: notifier.picIDVerification == null || !System().validateUrl(notifier.picIDVerification)
                 //     ? MainAxisAlignment.spaceBetween
                 //     : MainAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // if (notifier.picIDVerification == null || !System().validateUrl(notifier.picIDVerification!))
+                  // if (notifier.picIDVerification == null || !System().validateUrl(notifier.picIDVerification))
                   CustomTextButton(
                     onPressed: () {
                       // Routing().moveAndPop(makeContent);
@@ -87,7 +87,7 @@ class PreviewIDVerification extends StatelessWidget {
                   //         onPressed: () async => await notifier.onUploadProofPicture(context, picture),
                   //         child: Row(
                   //           children: [
-                  //             CustomTextWidget(textToDisplay: notifier.language.upload!, textStyle: Theme.of(context).textTheme.subtitle1),
+                  //             CustomTextWidget(textToDisplay: notifier.language.upload, textStyle: Theme.of(context).textTheme.subtitle1),
                   //             SizedBox(width: 8),
                   //             CustomIconWidget(iconData: "${AssetPath.vectorPath}arrow.svg", defaultColor: false),
                   //           ],

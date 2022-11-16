@@ -43,7 +43,7 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
               maxLines: 1,
               textAlign: TextAlign.left,
               textToDisplay: "${widget.title}!",
-              textStyle: _themes.textTheme.button!.apply(
+              textStyle: _themes.textTheme.button?.apply(
                 color: _themes.bottomNavigationBarTheme.unselectedItemColor,
               ),
             ),
@@ -56,7 +56,7 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
                 onTap: widget.onPressed,
                 child: CustomTextWidget(
                   maxLines: 1,
-                  textToDisplay: context.watch<TranslateNotifierV2>().translate.seeAll!,
+                  textToDisplay: context.watch<TranslateNotifierV2>().translate.seeAll ?? 'See All',
                   textAlign: TextAlign.right,
                   textStyle: _themes.textTheme.subtitle2?.copyWith(
                     fontWeight: FontWeight.bold,

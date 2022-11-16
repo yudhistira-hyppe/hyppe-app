@@ -79,7 +79,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                               following: true,
                               imageUrl: notifier.argument.photoReceiver,
                               // imageUrl:
-                              //     notifier.photoUrl!.endsWith(JPG) || notifier.photoUrl!.endsWith(JPEG) ? notifier.photoUrl! : notifier.photoUrl! + SMALL,
+                              //     notifier.photoUrl.endsWith(JPG) || notifier.photoUrl.endsWith(JPEG) ? notifier.photoUrl : notifier.photoUrl + SMALL,
                             ),
                           ),
                           sixteenPx,

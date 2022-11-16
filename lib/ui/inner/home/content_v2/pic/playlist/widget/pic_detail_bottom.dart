@@ -132,7 +132,7 @@ class PicDetailBottom extends StatelessWidget {
                       maxLines: 2,
                       textAlign: TextAlign.left,
                       textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondaryVariant),
-                      // textToDisplay: '${_system.formatterNumber(data.totalViews)}x ${notifier.language.views!}',
+                      // textToDisplay: '${_system.formatterNumber(data.totalViews)}x ${notifier.language.views}',
                       textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
                     ),
                   )

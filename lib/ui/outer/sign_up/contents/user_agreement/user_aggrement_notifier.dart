@@ -47,9 +47,9 @@ class UserAgreementNotifier extends ChangeNotifier with LoadingNotifier {
 
   TextStyle nextTextColor(BuildContext context, bool state) {
     if (state) {
-      return Theme.of(context).textTheme.button!;
+      return Theme.of(context).textTheme.button ?? const TextStyle();
     } else {
-      return Theme.of(context).textTheme.button!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant);
+      return Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant) ?? const TextStyle();
     }
   }
 

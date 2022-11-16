@@ -169,7 +169,7 @@ class StoryImageState extends State<StoryImage> {
 
     final nextFrame = await widget.imageLoader.frames?.getNextFrame();
 
-    if(nextFrame!= null){
+    if(nextFrame != null){
       currentFrame = nextFrame.image;
 
       if (nextFrame.duration > const Duration(milliseconds: 0)) {

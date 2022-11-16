@@ -94,7 +94,7 @@ class UploadContent extends StatelessWidget {
           visible: notifier?.conditionalShowingOkButton() ?? false,
           child: Align(
             alignment: const Alignment(0.77, 0.705),
-            child: BuildOkButton(mounted: mounted!),
+            child: BuildOkButton(mounted: mounted ?? false),
           ),
         ),
         // Widget modal, this is widget appear, if loading state is true

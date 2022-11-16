@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -13,6 +14,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_b
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_category_support_ticket.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/on_choose_music.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_interest_list.dart';
@@ -66,6 +68,25 @@ class ShowBottomSheet {
 
   factory ShowBottomSheet() {
     return _instance;
+  }
+
+  static onChooseMusic(context) async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              height: context.getHeight() * 0.92,
+              child: const OnChooseMusicBottomSheet(),
+            ),
+          );
+        });
   }
 
   static onUploadContent(context) async {
@@ -240,7 +261,7 @@ class ShowBottomSheet {
     //   uploadContentAction: false,
     //   action: () {
 
-    final _routing = Routing();
+    // final _routing = Routing();
 
     showModalBottomSheet(
       isScrollControlled: true,

@@ -80,7 +80,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   @override
   void onMessageReceived(MessageDataV2 message) {
     try {
-      // addMessage(logs: message.disqusLogs.firstOrNull!, context: context);
+      // addMessage(logs: message.disqusLogs.firstOrNull, context: context);
       addMessage(logs: message.disqusLogs.firstOrNull ?? DisqusLogs());
     } catch (e) {
       '$e'.logger();
@@ -99,7 +99,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //         try {
   //           final msgData = MessageDataV2.fromJson(result);
   //           msgData.toJson().logger();
-  //           addMessage(logs: msgData.disqusLogs.firstOrNull!, context: context);
+  //           addMessage(logs: msgData.disqusLogs.firstOrNull, context: context);
   //         } catch (e) {
   //           '$e'.logger();
   //         }
@@ -369,7 +369,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //   if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
   //     bool connection = await System().checkConnections();
   //     if (connection) {
-  //       _lCts = (int.parse(_lCts!) - 1).toString();
+  //       _lCts = (int.parse(_lCts) - 1).toString();
   //       syncDetailChatFromServer(context, lCts: _lCts);
   //     } else {
   //       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {

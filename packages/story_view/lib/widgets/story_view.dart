@@ -687,10 +687,12 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     // get the next playing page
     final storyItem = widget.storyItems.firstWhere((it) {
       return !(it?.shown ?? false);
-    })!;
+    });
 
     if (widget.onStoryShow != null) {
-      widget.onStoryShow!(storyItem);
+      if(storyItem != null){
+        widget.onStoryShow!(storyItem);
+      }
     }
 
     // init duration when file is video
@@ -723,13 +725,16 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     _animationController = AnimationController(
       vsync: this,
-      // duration: storyItem.isVideoFile != null && _fileVideoDuration != null ? Duration(milliseconds: _fileVideoDuration!) : storyItem.duration,
-      duration: storyItem.duration,
+      // duration: storyItem.isVideoFile != null && _fileVideoDuration != null ? Duration(milliseconds: _fileVideoDuration) : storyItem.duration,
+      duration: storyItem?.duration ?? Duration.zero,
     );
 
     _animationController?.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        storyItem.shown = true;
+        if(storyItem != null){
+          storyItem.shown = true;
+        }
+
 
         if (widget.storyItems.last != storyItem) {
           _beginPlay();

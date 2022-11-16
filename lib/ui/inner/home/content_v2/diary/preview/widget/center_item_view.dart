@@ -85,7 +85,7 @@ class CenterItemView extends StatelessWidget {
             ],
           ),
         ),
-        data!.isReport!
+        data?.isReport ?? false
             ? ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(

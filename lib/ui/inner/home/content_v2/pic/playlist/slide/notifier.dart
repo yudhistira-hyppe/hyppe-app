@@ -174,7 +174,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
         print('getAdsVideo : ${fetch.data.toString()}');
         final _newClipData = fetch.data;
         _adsData = _newClipData.data;
-        return await getAdsVideoApsara(context, _newClipData.data.videoId!);
+        return await getAdsVideoApsara(context, _newClipData.data.videoId ?? '');
       }
     } catch (e) {
       'Failed to fetch ads data $e'.logger();

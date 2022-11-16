@@ -35,7 +35,7 @@ class BottomItemView extends StatelessWidget {
                   CustomTextWidget(
                     // textToDisplay: '${data.lCount}',
                     textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                   )
                 ],
               ),

@@ -9,7 +9,7 @@ class SignInText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<LoginNotifier>(
       builder: (_, notifier, __) => CustomTextWidget(
-        textToDisplay: notifier.language.login!,
+        textToDisplay: notifier.language.login ?? 'Login',
         textStyle: Theme.of(context).primaryTextTheme.headline5,
       ),
     );

@@ -211,9 +211,9 @@ class SignUpPinNotifier with ChangeNotifier {
 
   TextStyle verifyTextColor(BuildContext context) {
     if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
     }
   }
 
@@ -257,9 +257,9 @@ class SignUpPinNotifier with ChangeNotifier {
 
   TextStyle resendStyle(BuildContext context) {
     if (_timer != "00:00") {
-      return Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant);
+      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant) ?? const TextStyle();
     } else {
-      return Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.primaryVariant);
+      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primaryVariant) ?? const TextStyle();
     }
   }
 
@@ -293,7 +293,7 @@ class SignUpPinNotifier with ChangeNotifier {
               _handleVerifyAction(
                 context: context,
                 verifyPageArgument: argument,
-                message: language.yourResetCodeHasBeenVerified!,
+                message: language.yourResetCodeHasBeenVerified ?? '',
               );
             } else {
               _loading = false;
@@ -319,7 +319,7 @@ class SignUpPinNotifier with ChangeNotifier {
               _handleVerifyAction(
                 context: context,
                 verifyPageArgument: argument,
-                message: language.yourEmailHasBeenVerified!,
+                message: language.yourEmailHasBeenVerified ?? '',
               );
             } else {
               _loading = false;
@@ -346,7 +346,7 @@ class SignUpPinNotifier with ChangeNotifier {
     required VerifyPageArgument verifyPageArgument,
   }) async {
     loading = false;
-    await ShowBottomSheet().onShowColouredSheet(context, language.verified!, subCaption: message).whenComplete(() async {
+    await ShowBottomSheet().onShowColouredSheet(context, language.verified ?? 'Verified', subCaption: message).whenComplete(() async {
       switch (verifyPageArgument.redirect) {
         case VerifyPageRedirection.toLogin:
           Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
@@ -403,8 +403,8 @@ class SignUpPinNotifier with ChangeNotifier {
         print('Resend code success');
         ShowBottomSheet().onShowColouredSheet(
           context,
-          language.checkYourEmail!,
-          subCaption: language.weHaveSentAVerificationCodeToYourEmail!,
+          language.checkYourEmail ?? 'Check Your Email',
+          subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
         );
         _timer = '';
         startTimer();

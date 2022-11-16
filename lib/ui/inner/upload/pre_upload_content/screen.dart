@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -17,6 +18,7 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/path.dart';
@@ -102,6 +104,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         twentyFourPx,
                         categoryWidget(textTheme, notifier),
                         _buildDivider(context),
+                        eightPx,
+                        if (notifier.musicSelected != null) musicTitle(notifier),
+                        _buildDivider(context),
                         twentyFourPx,
                         tagPeopleWidget(textTheme, notifier),
                         _buildDivider(context),
@@ -116,6 +121,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
                         notifier.featureType != FeatureType.story ? boostWidget(textTheme, notifier) : Container(),
                         notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
+                        twentyFourPx,
 
                         twentyFourPx,
                         twentyFourPx,
@@ -150,35 +156,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                           twentyFourPx,
                           CustomElevatedButton(
                             function: () {
-                              if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
-                                notifier.onClickPost(
-                                  context,
-                                  onEdit: widget.arguments.onEdit,
-                                  data: widget.arguments.contentData,
-                                  content: widget.arguments.content,
-                                );
-                              } else {
-                                !notifier.certified
-                                    ? notifier.onShowStatement(context, onCancel: () {
-                                        notifier.onClickPost(
-                                          context,
-                                          onEdit: widget.arguments.onEdit,
-                                          data: widget.arguments.contentData,
-                                          content: widget.arguments.content,
-                                        );
-                                      })
-                                    : notifier.onClickPost(
-                                        context,
-                                        onEdit: widget.arguments.onEdit,
-                                        data: widget.arguments.contentData,
-                                        content: widget.arguments.content,
-                                      );
-                              }
+                              notifier.paymentMethod(context);
                             },
                             width: 375.0 * SizeConfig.scaleDiagonal,
                             height: 44.0 * SizeConfig.scaleDiagonal,
                             child: CustomTextWidget(
-                              textToDisplay: widget.arguments.onEdit ? notifier.language.choosePaymentMethods ?? 'Choose Payment Method' : notifier.language.confirm ?? 'confirm',
+                              textToDisplay: notifier.language.choosePaymentMethods ?? 'Choose Payment Method',
                               textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                             ),
                             buttonStyle: ButtonStyle(
@@ -192,7 +175,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       ),
                     )
                   : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                       child: CustomElevatedButton(
                         width: 375.0 * SizeConfig.scaleDiagonal,
                         height: 44.0 * SizeConfig.scaleDiagonal,
@@ -408,6 +391,24 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget musicTitle(PreUploadContentNotifier notifier) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomTextWidget(
+          textToDisplay: notifier.musicSelected?.musicTitle ?? '',
+          textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+        ),
+        fourPx,
+        CustomTextWidget(
+          textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
+          textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+        )
       ],
     );
   }

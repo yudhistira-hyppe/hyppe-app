@@ -188,7 +188,8 @@ class PostsBloc {
       List<String>? tagDescription,
       String? saleAmount,
       bool? saleLike,
-      bool? saleView}) async {
+      bool? saleView,
+      String? idMusic}) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -209,6 +210,10 @@ class PostsBloc {
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
+    if(idMusic != null){
+      formData.fields.add(MapEntry('musicId', idMusic));
+    }
+
 
     formData.fields.add(MapEntry('location', location ?? ''));
     formData.fields.add(MapEntry('tagDescription', tagDescription?.join(',') ?? ''));

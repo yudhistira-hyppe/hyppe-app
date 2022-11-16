@@ -43,7 +43,7 @@ class ChatInputWidget extends StatelessWidget {
             suffixIcon: notifier.messageController.text.isNotEmpty
                 ? CustomTextButton(
                     child: CustomTextWidget(
-                      textToDisplay: notifier2.translate.send!,
+                      textToDisplay: notifier2.translate.send ?? 'Send',
                       textStyle: TextStyle(
                         color: Theme.of(context).colorScheme.primaryVariant,
                         fontSize: 16,

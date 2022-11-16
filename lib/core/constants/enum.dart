@@ -1,4 +1,5 @@
 enum FeatureType { vid, diary, pic, story, txtMsg, other }
+enum MusicEnum {genre, theme, mood}
 enum ContentType { image, video, text }
 enum StatusFollowing { rejected, requested, following, none }
 enum ReportType { profile, comment, story, post }

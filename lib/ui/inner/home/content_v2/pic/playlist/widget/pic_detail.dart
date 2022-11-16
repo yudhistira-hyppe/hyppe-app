@@ -153,7 +153,7 @@ class _PicDetailState extends State<PicDetail> {
                               ),
                             )
                           : SizedBox(),
-                      widget.arguments!.email != SharedPreference().readStorage(SpKeys.email)
+                      widget.arguments?.email != SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
@@ -202,7 +202,7 @@ class _PicDetailState extends State<PicDetail> {
                           iconData: '${AssetPath.vectorPath}share.svg',
                           function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
                         ),
-                        if ((widget.arguments?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments!.email)
+                        if ((widget.arguments?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments?.email)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
@@ -231,7 +231,7 @@ class _PicDetailState extends State<PicDetail> {
                                         icon: 'user',
                                         label: '${widget.arguments?.tagPeople?.length} people',
                                         function: () {
-                                          context.read<PicDetailNotifier>().showUserTag(context, widget.arguments!.tagPeople, widget.arguments?.postID);
+                                          context.read<PicDetailNotifier>().showUserTag(context, widget.arguments?.tagPeople ?? [], widget.arguments?.postID);
                                         },
                                         width: 18,
                                       )

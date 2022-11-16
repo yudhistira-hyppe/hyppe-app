@@ -104,7 +104,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             textOverflow: TextOverflow.clip,
             textSpan: TextSpan(
               text: title,
-              style: Theme.of(context).textTheme.caption!.copyWith(height: 1.5),
+              style: Theme.of(context).textTheme.caption?.copyWith(height: 1.5),
             ),
           ),
         ),

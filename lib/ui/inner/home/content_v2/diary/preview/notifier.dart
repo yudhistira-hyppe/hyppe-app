@@ -117,7 +117,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
           }
 
         }else{
-          if(_searchData.initDataDiary!.isEmpty){
+          if(_searchData.initDataDiary?.isEmpty ?? true){
             if (visibility == 'PUBLIC') {
               try {
                 _searchData.initDataDiary = diaryData?.sublist(0, 18);

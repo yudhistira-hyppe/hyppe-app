@@ -45,6 +45,12 @@ extension contextScreen on BuildContext{
     SharedPreference().writeStorage(SpKeys.countAds, count);
   }
 
+  String getNameByDate(){
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
+    return formatter.format(now);
+  }
+
   void incrementAdsCount(){
     final current = getAdsCount();
     print('ads second : $current');
@@ -88,6 +94,18 @@ extension ContentTypeDefine on String{
       return ContentType.image;
     }
     return null;
+  }
+}
+
+extension IntegerExtension on int{
+  String getMinutes(){
+    if(this > 3600){
+      return 'more than 1 hour';
+    }else{
+      final minutes = Duration(seconds: this).inMinutes;
+      final seconds = this%60;
+      return '$minutes:$seconds';
+    }
   }
 }
 
