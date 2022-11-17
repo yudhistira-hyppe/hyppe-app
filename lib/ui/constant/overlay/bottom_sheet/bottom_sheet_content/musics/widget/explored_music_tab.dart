@@ -22,19 +22,27 @@ class _ExploredMusicTabState extends State<ExploredMusicTab> {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    return !notifier.isLoadingMusic ? notifier.listType.isNotEmpty ? ListView.builder(
-      itemCount: notifier.listType.length,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 10),
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      itemBuilder: (context, index) {
-        return MusicTypeItem(group: notifier.listType[index], index: index,);
-      },
-    ): Center(
-      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    ): const Center(
-    child: CustomLoading(),
-    );
+    final isNoData = notifier.isNoDataTypes();
+
+    if(!isNoData){
+      return !notifier.isLoadingMusic ? notifier.listType.isNotEmpty ? ListView.builder(
+        itemCount: notifier.listType.length,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 10),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        itemBuilder: (context, index) {
+          return MusicTypeItem(group: notifier.listType[index], index: index,);
+        },
+      ): Center(
+        child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
+      ): const Center(
+        child: CustomLoading(),
+      );
+    }else{
+      return Center(
+        child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
+      );
+    }
   }
 
 

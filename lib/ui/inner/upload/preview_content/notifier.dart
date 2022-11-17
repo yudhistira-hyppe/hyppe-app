@@ -307,6 +307,27 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool isNoDataTypes(){
+    var isNoData = false;
+    var count = 0;
+    if(_listThemes.isEmpty){
+      count += 1;
+    }
+
+    if(_listMoods.isEmpty){
+      count += 1;
+    }
+
+    if(_listGenres.isEmpty){
+      count += 1;
+    }
+    if(count > 2){
+      isNoData = true;
+    }
+
+    return isNoData;
+  }
+
   void onScrollExpMusics(BuildContext context, )async{
     if(scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange){
       if(!_isLoadNextExpMusic){
@@ -329,12 +350,11 @@ class PreviewContentNotifier with ChangeNotifier {
               _isNextExpMusic = res.isEmpty ? false : res.length%10 == 0;
               _listExpMusics.addAll(res);
             }
-
-            notifyListeners();
           }catch(e){
             'Error onScrollMusics : $e'.logger();
           }finally{
             _isLoadNextExpMusic = false;
+            notifyListeners();
           }
         }
       }
@@ -388,19 +408,19 @@ class PreviewContentNotifier with ChangeNotifier {
             _listGenres = await getMusicCategories(context, MusicEnum.genre, keyword: value);
             _listThemes = await getMusicCategories(context, MusicEnum.theme, keyword: value);
             _listMoods = await getMusicCategories(context, MusicEnum.mood, keyword: value);
-            notifyListeners();
           }catch(e){
             'Error onChangeSearchMusic : $e'.logger();
           }finally{
             _isLoadingMusic = false;
+            FocusScope.of(context).unfocus();
             notifyListeners();
           }
-
         }
       });
     }else{
       if(value.isEmpty){
         initListMusics(context);
+        FocusScope.of(context).unfocus();
       }
     }
   }
