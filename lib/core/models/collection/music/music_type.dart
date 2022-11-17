@@ -1,3 +1,4 @@
+
 class MusicType{
   String? id;
   String? name;
@@ -23,4 +24,10 @@ class MusicType{
     result['updatedAt'] = updatedAt;
     return result;
   }
+}
+
+class MusicGroupType{
+  String group;
+  bool isSeeAll;
+  MusicGroupType({required this.group, required this.isSeeAll});
 }

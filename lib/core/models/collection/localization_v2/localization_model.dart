@@ -91,6 +91,7 @@ class LocalizationModelV2 {
   String? yourStory;
   String? justNow;
   String? seeAll;
+  String? seeSome;
   String? replyTo;
   String? posts;
   String? followers;
@@ -810,6 +811,7 @@ class LocalizationModelV2 {
     this.yourStory,
     this.justNow,
     this.seeAll,
+    this.seeSome,
     this.replyTo,
     this.posts,
     this.followers,
@@ -1530,6 +1532,7 @@ class LocalizationModelV2 {
     yourStory = json['yourStory'];
     justNow = json['justNow'];
     seeAll = json['seeAll'];
+    seeSome = json['seeSome'];
     replyTo = json['replyTo'];
     posts = json['posts'];
     followers = json['followers'];

@@ -51,11 +51,10 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Image.network(widget.music.urlThumbnail ?? '')
-                Container(
+                const SizedBox(
                   width: 48,
                   height: 48,
-                  child: const CustomIconWidget(
+                  child: CustomIconWidget(
                     defaultColor: false,
                     iconData: '${AssetPath.vectorPath}ic_music.svg',
                   ),

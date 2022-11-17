@@ -56,8 +56,6 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               onChanged: (value){
                 notifier.onChangeSearchMusic(context, value);
               },
-              // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-              // onPressedIcon: () => notifier.onSearchPost(context),
               onTap: (){
 
               },

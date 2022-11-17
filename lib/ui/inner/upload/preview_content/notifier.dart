@@ -70,8 +70,8 @@ class PreviewContentNotifier with ChangeNotifier {
   bool get isLoadVideo => _isLoadVideo;
   bool _isLoadingMusic = true;
   bool get isLoadingMusic => _isLoadingMusic;
-  List<String> _listTypes = [];
-  List<String> get listType => _listTypes;
+  List<MusicGroupType> _listTypes = [];
+  List<MusicGroupType> get listType => _listTypes;
   List<Music> _listMusics = [];
   List<Music> get listMusics => _listMusics;
   bool _isNextMusic = false;
@@ -235,8 +235,13 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set listType(List<String> values){
+  set listType(List<MusicGroupType> values){
     _listTypes = values;
+    notifyListeners();
+  }
+
+  void setMusicGroupState(int index, bool state){
+    _listTypes[index].isSeeAll = state;
     notifyListeners();
   }
 
@@ -403,7 +408,7 @@ class PreviewContentNotifier with ChangeNotifier {
   Future initListMusics(BuildContext context) async{
     _isLoadingMusic = true;
     try{
-      _listTypes = [language.theme ?? 'Theme', language.genre ?? 'Genre', language.mood ?? 'Mood'];
+      _listTypes = [MusicGroupType(group: language.theme ?? 'Theme', isSeeAll: false), MusicGroupType(group: language.genre ?? 'Genre', isSeeAll: false), MusicGroupType(group: language.mood ?? 'Mood', isSeeAll: false)];
       listMusics = await getMusics(context);
       _listGenres = await getMusicCategories(context, MusicEnum.genre);
       _listThemes = await getMusicCategories(context, MusicEnum.theme);
