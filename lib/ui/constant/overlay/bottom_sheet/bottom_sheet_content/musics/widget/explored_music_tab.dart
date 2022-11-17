@@ -22,38 +22,27 @@ class _ExploredMusicTabState extends State<ExploredMusicTab> {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    return !notifier.isLoadingMusic ? notifier.listType.isNotEmpty ? ListView.builder(
-      itemCount: notifier.listType.length,
-      // controller: _scrollController,
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.only(bottom: 10),
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-      // separatorBuilder: (context, index) =>
-      //     const Divider(
-      //   thickness: 0.95,
-      //   color: Color(0xfffffffff),
-      // ),
-      itemBuilder: (context, index) {
-        // if (index == notifier.commentData?.length && notifier.hasNext) {
-        //   return const CustomLoading();
-        // }
-        //
-        // final comments = notifier.commentData?[index];
-        //
-        // return Padding(
-        //   padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-        //   child: CommentListTile(
-        //     data: comments,
-        //     fromFront: widget.fromFront,
-        //   ),
-        // );
-        return MusicTypeItem(name: notifier.listType[index], index: index,);
-      },
-    ): Center(
-      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    ): const Center(
-    child: CustomLoading(),
-    );
+    final isNoData = notifier.isNoDataTypes();
+
+    if(!isNoData){
+      return !notifier.isLoadingMusic ? notifier.listType.isNotEmpty ? ListView.builder(
+        itemCount: notifier.listType.length,
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.only(bottom: 10),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        itemBuilder: (context, index) {
+          return MusicTypeItem(group: notifier.listType[index], index: index,);
+        },
+      ): Center(
+        child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
+      ): const Center(
+        child: CustomLoading(),
+      );
+    }else{
+      return Center(
+        child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
+      );
+    }
   }
 
 
