@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
@@ -383,10 +384,6 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  // void onScrollMusicTypes(){
-  //
-  // }
-
   void onChangeSearchMusic(BuildContext context, String value) {
     if(value.length > 2){
       _selectedMusic = null;
@@ -425,7 +422,45 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  void forceResetPlayer(){
+    print('forceResetPlayer');
+    audioPlayer.stop();
+    for(var data in _listMusics){
+      data.isPlay = false;
+    }
+    for(var data in _listExpMusics){
+      data.isPlay = false;
+    }
+  }
+
   Future initListMusics(BuildContext context) async{
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      if(event == PlayerState.completed){
+        try{
+          if(_currentMusic != null){
+            final index = _listMusics.indexOf(_currentMusic!);
+            if(index != -1){
+              _listMusics[index].isPlay = false;
+            }else{
+              final expIndex = _listExpMusics.indexOf(_currentMusic!);
+              if(expIndex != -1){
+                _listExpMusics[_indexView].isPlay = false;
+              }else{
+                forceResetPlayer();
+              }
+            }
+          }else{
+            forceResetPlayer();
+          }
+        }catch(e){
+          forceResetPlayer();
+          e.logger();
+        }finally{
+          notifyListeners();
+        }
+
+      }
+    });
     _isLoadingMusic = true;
     try{
       _listTypes = [MusicGroupType(group: language.theme ?? 'Theme', isSeeAll: false), MusicGroupType(group: language.genre ?? 'Genre', isSeeAll: false), MusicGroupType(group: language.mood ?? 'Mood', isSeeAll: false)];
@@ -517,14 +552,17 @@ class PreviewContentNotifier with ChangeNotifier {
               await File(path).delete();
             }
           }else if(ReturnCode.isCancel(codeSession)){
+
             print('ReturnCode = Cancel');
             _isLoadVideo = false;
             notifyListeners();
+            throw 'FFmpegKit ReturnCode = Cancel';
             // Cancel
           }else{
             print('ReturnCode = Error');
             _isLoadVideo = false;
             notifyListeners();
+            throw 'FFmpegKit ReturnCode = Error';
             // Error
           }
 
@@ -532,11 +570,12 @@ class PreviewContentNotifier with ChangeNotifier {
           print('FFmpegKit ${log.getMessage()}');
         },);
       }else{
-        throw 'urlAudio is empty';
+        throw 'FFmpegKit urlAudio is empty';
       }
 
     }catch(e){
       'videoMerger Error : $e'.logger();
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     }finally{
       _isLoadVideo = false;
       notifyListeners();
