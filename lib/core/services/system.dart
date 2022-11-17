@@ -1132,4 +1132,26 @@ class System {
         return notifier.waitingtoTransfer ?? '';
     }
   }
+
+  void getSchedule() {
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+    print('hahahaha');
+  }
 }

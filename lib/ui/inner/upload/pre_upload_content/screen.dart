@@ -533,7 +533,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     return ListTile(
       onTap: () {
         FocusScope.of(context).unfocus();
-        notifier.navigateToBoost(context);
+        if (!notifier.certified) {
+          System().actionReqiredIdCard(context, action: () {
+            notifier.navigateToBoost(context);
+          });
+        } else {
+          notifier.navigateToBoost(context);
+        }
       },
       title: CustomTextWidget(
         textToDisplay: notifier.language.postBoost ?? 'Post Boost',
@@ -557,11 +563,15 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget ownershipSellingWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: () => !notifier.certified
-          ? System().actionReqiredIdCard(context, action: () {
-              notifier.navigateToOwnership(context);
-            })
-          : notifier.navigateToOwnership(context),
+      onTap: () {
+        if (!notifier.certified) {
+          System().actionReqiredIdCard(context, action: () {
+            notifier.navigateToOwnership(context);
+          });
+        } else {
+          notifier.navigateToOwnership(context);
+        }
+      },
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling ?? '',
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),

@@ -107,7 +107,7 @@ class BoostUploadScreen extends StatelessWidget {
                             final DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: notifier.tmpstartDate == DateTime(1000) ? DateTime.now() : notifier.tmpstartDate,
-                                firstDate: DateTime(1000),
+                                firstDate: DateTime.now(),
                                 lastDate: DateTime(3000),
                                 builder: (context, child) {
                                   return Theme(

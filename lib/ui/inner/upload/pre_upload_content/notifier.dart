@@ -1313,7 +1313,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     isLoading = true;
     Map data = {
       "dateStart": _boostContent?.dateBoostStart,
-      "dateEnd": _boostContent?.dateBoostStart,
+      "dateEnd": _boostContent?.dateBoostEnd,
       "type": _boostContent?.typeBoost,
       "bankcode": bankCode,
       "paymentmethod": "VA",
@@ -1336,6 +1336,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {
           Routing().move(Routes.boostPaymentSummary);
+          context.read<MainNotifier>().startTimer();
         });
         _isLoading = false;
       }
