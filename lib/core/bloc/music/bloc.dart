@@ -14,7 +14,7 @@ class MusicDataBloc{
   MusicDataFetch get musicDataFetch => _musicDataFetch;
   setCommentFetch(MusicDataFetch val) => _musicDataFetch = val;
 
-  Future getTypeMusic(BuildContext context, MusicEnum type, {String keyword = '', int pageNumber = 0, int pageRow = 10}) async{
+  Future getTypeMusic(BuildContext context, MusicEnum type, {String keyword = '', int pageNumber = 0, int pageRow = 100}) async{
     setCommentFetch(MusicDataFetch(MusicState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
