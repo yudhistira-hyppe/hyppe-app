@@ -7,10 +7,10 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 class MiddleBuySellDetailWidget extends StatelessWidget {
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
 
-  MiddleBuySellDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const MiddleBuySellDetailWidget({Key? key, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

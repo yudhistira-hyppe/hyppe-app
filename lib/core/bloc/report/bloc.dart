@@ -101,11 +101,10 @@ class ReportBloc {
         }
       },
       (errorData) {
-        print('error2');
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setReportFetch(ReportFetch(ReportState.getReportOptionsError));
       },
-      data: {"lang": SharedPreference().readStorage(SpKeys.isoCode)},
+      // data: {"lang": SharedPreference().readStorage(SpKeys.isoCode)},
       host: UrlConstants.getOptionReport,
       withAlertMessage: false,
       methodType: MethodType.post,

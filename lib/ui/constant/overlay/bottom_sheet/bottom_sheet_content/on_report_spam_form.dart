@@ -103,7 +103,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                     toggleable: true,
                                     title: CustomTextWidget(
                                       textAlign: TextAlign.left,
-                                      textToDisplay: notifier.initData?.data[index].description ?? '',
+                                      textToDisplay: notifier.titleLang(notifier.initData?.data[index].reason ?? '', notifier.initData?.data[index].reasonEn ?? ''),
                                       textStyle: Theme.of(context).primaryTextTheme.titleSmall,
                                       maxLines: 2,
                                     ),

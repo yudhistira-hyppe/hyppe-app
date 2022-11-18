@@ -108,7 +108,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
     final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
     if (price != null) {
       final notifier = context.read<PreUploadContentNotifier>();
-      await notifier.uploadPanding();
+      await notifier.uploadPanding(context);
     } else {
       if (cek ?? false) _postSubmitBuy(context);
     }

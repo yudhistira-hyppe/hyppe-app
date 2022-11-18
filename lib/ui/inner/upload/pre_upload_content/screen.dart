@@ -98,6 +98,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         loadingCompress(notifier.progressCompress),
                         // Text("${notifier.progressCompress}"),
                         // Text("${notifier.videoSize / 1000000} mb"),
+
                         captionWidget(textTheme, notifier),
                         sixteenPx,
                         _buildDivider(context),
@@ -505,10 +506,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget privacyWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        notifier.onClickPrivacyPost(context);
-      },
+      onTap: notifier.boostContent != null
+          ? null
+          : () {
+              FocusScope.of(context).unfocus();
+              notifier.onClickPrivacyPost(context);
+            },
       title: CustomTextWidget(
         textToDisplay: notifier.language.privacy ?? 'privacy',
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),

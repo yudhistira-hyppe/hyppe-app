@@ -270,6 +270,26 @@ class SelfProfileTop extends StatelessWidget {
                         function: () => notifier.navigateToEditProfile(),
                       ),
                     ),
+                  ],
+                )),
+            Padding(
+                padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      // when button library is active, remove this expanded and set width value
+                      child: CustomElevatedButton(
+                        child: CustomTextWidget(
+                          textToDisplay: notifier.language.editProfile ?? '',
+                          textStyle: Theme.of(context).textTheme.button,
+                        ),
+                        width: null,
+                        height: 42 * SizeConfig.scaleDiagonal,
+                        buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                        function: () => notifier.navigateToEditProfile(),
+                      ),
+                    ),
                     // CustomElevatedButton(
                     //   child: CustomTextWidget(
                     //     textToDisplay: "Library",
@@ -281,7 +301,7 @@ class SelfProfileTop extends StatelessWidget {
                     //   function: () {},
                     // )
                   ],
-                ))
+                )),
           ],
         ),
       ),

@@ -62,7 +62,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const ProcessUploadComponent(),
                         CustomTextWidget(textToDisplay: notifier.language.totalPayment ?? '', textStyle: textTheme.titleMedium),
                         const SizedBox(height: 5),
                         CustomTextWidget(

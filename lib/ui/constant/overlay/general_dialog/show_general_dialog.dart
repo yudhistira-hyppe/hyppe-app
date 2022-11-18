@@ -328,7 +328,7 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future loadingDialog(BuildContext context) async {
+  static Future loadingDialog(BuildContext context, {bool? uploadProses}) async {
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -337,8 +337,8 @@ class ShowGeneralDialog {
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (context, animation, secondAnimation) => WillPopScope(
         onWillPop: () async => false,
-        child: const AlertDialog(
-          content: LoadingDialog(),
+        child: AlertDialog(
+          content: LoadingDialog(uploadProses: uploadProses ?? false),
           contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
         ),
       ),

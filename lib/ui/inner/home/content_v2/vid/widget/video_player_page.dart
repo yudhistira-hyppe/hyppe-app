@@ -369,6 +369,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           _handleOpenFullScreenEvent();
         } else if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
           _handleHideFullScreenEvent();
+        } else if (event.betterPlayerEventType == BetterPlayerEventType.pipStop) {
+          // _betterPlayerController?.pause();
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
           if (widget.afterView != null) {

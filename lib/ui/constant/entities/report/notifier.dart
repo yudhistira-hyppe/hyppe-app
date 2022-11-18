@@ -220,6 +220,15 @@ class ReportNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  String titleLang(id, en) {
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
+    if (lang == 'en') {
+      return en;
+    } else {
+      return id;
+    }
+  }
+
   // void onClickButton(context) async {
   //   if (remarkID.isNotEmpty) {
   //     isLoading = true;

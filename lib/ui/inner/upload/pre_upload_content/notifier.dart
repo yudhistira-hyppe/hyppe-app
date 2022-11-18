@@ -17,7 +17,6 @@ import 'package:hyppe/core/models/collection/google_map_place/model_google_map_p
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/music/music.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/boost_response.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/buy_response.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_content_model.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_master_model.dart';
@@ -27,9 +26,9 @@ import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +51,6 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
-
 // import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
@@ -726,7 +724,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void clearUpAndBackToHome(BuildContext context) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
 
-    context.read<CameraNotifier>().orientation = null;
+    context.read<CameraNotifier>().disposeCamera(context);
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
     if (_boostContent != null) _onExit();
@@ -1283,6 +1281,8 @@ class PreUploadContentNotifier with ChangeNotifier {
 
       if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
         _boostContent = BoostContent.fromJson(fetch.data);
+        _privacyTitle = language.public ?? 'PUBLIC';
+        privacyValue = 'PUBLIC';
         Routing().moveBack();
         _isLoading = false;
         notifyListeners();
@@ -1301,10 +1301,20 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future paymentMethod(context) async {
     // _createPostContentV2();
     print(_boostContent);
-    Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
+    if (_validateDescription() && _validateCategory()) {
+      Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
+    } else {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 2,
+      );
+    }
   }
 
-  Future uploadPanding() async {
+  Future uploadPanding(context) async {
+    ShowGeneralDialog.loadingDialog(context, uploadProses: true);
     _createPostContentV2();
   }
 
@@ -1335,7 +1345,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       } else if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {
-          Routing().move(Routes.boostPaymentSummary);
+          Routing().moveAndPop(Routes.boostPaymentSummary);
           context.read<MainNotifier>().startTimer();
         });
         _isLoading = false;
