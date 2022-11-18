@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
@@ -48,6 +49,7 @@ class PreviewContentNotifier with ChangeNotifier {
   int _indexView = 0;
   int _pageMusic = 0;
   String? _url;
+  String? _defaultPath;
   Music? _currentMusic;
   Music? _selectedMusic;
   SourceFile? _sourceFile;
@@ -121,6 +123,7 @@ class PreviewContentNotifier with ChangeNotifier {
   bool get nextVideo => _nextVideo;
   bool get isForcePaused => _isForcePaused;
   String? get url => _url;
+  String? get defaultPath => _defaultPath;
   Music? get currentMusic => _currentMusic;
   Music? get selectedMusic => _selectedMusic;
   SourceFile? get sourceFile => _sourceFile;
@@ -199,6 +202,8 @@ class PreviewContentNotifier with ChangeNotifier {
   set pageMusic(int state){
     _pageMusic = state;
     _selectedMusic = null;
+    _currentMusic = null;
+    _selectedType = null;
     audioPlayer.stop();
     for(var music in _listMusics){
       if(music.isSelected){
@@ -383,19 +388,16 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  // void onScrollMusicTypes(){
-  //
-  // }
-
   void onChangeSearchMusic(BuildContext context, String value) {
     if(value.length > 2){
-      _selectedMusic = null;
       for(var music in _listMusics){
         if(music.isSelected){
           final index = _listMusics.indexOf(music);
           _listMusics[index].isSelected = false;
         }
       }
+      _currentMusic = null;
+      _selectedMusic = null;
       _selectedType = null;
       notifyListeners();
       Future.delayed(const Duration(milliseconds: 500), () async{
@@ -425,7 +427,51 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  void forceResetPlayer(){
+    print('forceResetPlayer');
+    audioPlayer.stop();
+    for(var data in _listMusics){
+      if(data.isPlay){
+        data.isPlay = false;
+        break;
+      }
+    }
+    for(var data in _listExpMusics){
+      if(data.isPlay){
+        data.isPlay = false;
+        break;
+      }
+    }
+  }
+
   Future initListMusics(BuildContext context) async{
+    audioPlayer.onPlayerStateChanged.listen((event) {
+      if(event == PlayerState.completed){
+        try{
+          if(_currentMusic != null){
+            final index = _listMusics.indexOf(_currentMusic!);
+            if(index != -1){
+              _listMusics[index].isPlay = false;
+            }else{
+              final expIndex = _listExpMusics.indexOf(_currentMusic!);
+              if(expIndex != -1){
+                _listExpMusics[_indexView].isPlay = false;
+              }else{
+                forceResetPlayer();
+              }
+            }
+          }else{
+            forceResetPlayer();
+          }
+        }catch(e){
+          forceResetPlayer();
+          e.logger();
+        }finally{
+          notifyListeners();
+        }
+
+      }
+    });
     _isLoadingMusic = true;
     try{
       _listTypes = [MusicGroupType(group: language.theme ?? 'Theme', isSeeAll: false), MusicGroupType(group: language.genre ?? 'Genre', isSeeAll: false), MusicGroupType(group: language.mood ?? 'Mood', isSeeAll: false)];
@@ -514,17 +560,22 @@ class PreviewContentNotifier with ChangeNotifier {
             notifyListeners();
             initVideoPlayer(context);
             if(path.isNotEmpty){
-              await File(path).delete();
+              if(path != _defaultPath){
+                await File(path).delete();
+              }
             }
           }else if(ReturnCode.isCancel(codeSession)){
+
             print('ReturnCode = Cancel');
             _isLoadVideo = false;
             notifyListeners();
+            throw 'FFmpegKit ReturnCode = Cancel';
             // Cancel
           }else{
             print('ReturnCode = Error');
             _isLoadVideo = false;
             notifyListeners();
+            throw 'FFmpegKit ReturnCode = Error';
             // Error
           }
 
@@ -532,11 +583,12 @@ class PreviewContentNotifier with ChangeNotifier {
           print('FFmpegKit ${log.getMessage()}');
         },);
       }else{
-        throw 'urlAudio is empty';
+        throw 'FFmpegKit urlAudio is empty';
       }
 
     }catch(e){
       'videoMerger Error : $e'.logger();
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     }finally{
       _isLoadVideo = false;
       notifyListeners();
@@ -545,7 +597,7 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void disposeMusic() async{
-    await audioPlayer.stop();
+    forceResetPlayer();
     await audioPlayer.dispose();
   }
 
@@ -675,11 +727,9 @@ class PreviewContentNotifier with ChangeNotifier {
       }else{
         _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
         _listExpMusics[index].isSelected = true;
-
         _selectedMusic = music;
       }
     }else{
-
       _listExpMusics[index].isSelected = true;
       _selectedMusic = music;
     }
@@ -704,12 +754,6 @@ class PreviewContentNotifier with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  // void _resetSelectMusic(){
-  //   for(var music in _listMusics){
-  //     if(sele)
-  //   }
-  // }
 
   void initialMatrixColor() {
     if (_fileContent != null) {
@@ -930,6 +974,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void toDiaryVideoPlayer(int index, SourceFile sourceFile) {
     _url = fileContent?[index];
+    _defaultPath = fileContent?[index];
     _sourceFile = sourceFile;
   }
 

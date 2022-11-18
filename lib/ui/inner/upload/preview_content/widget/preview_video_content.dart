@@ -1,9 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hyppe/app.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'package:better_player/better_player.dart';
@@ -90,6 +91,42 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                       : const Center(
                           child: CustomLoading(),
                         ),
+                ),
+                Positioned.fill(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 40, right: 40),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.5),borderRadius: const BorderRadius.all(Radius.circular(16))),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              onTap: (){
+
+                              },
+                              child: const CustomIconWidget(
+                                  height: 12,
+                                  width: 12,
+                                  iconData: "${AssetPath.vectorPath}close_ads.svg",
+                              ),
+                            ),
+                            fourPx,
+                            Container(
+                              width: 1,
+                              height: 13,
+                              color: kHyppeGrey,
+                            ),
+                            sixPx,
+                            CustomTextWidget(
+                              maxLines: 3,
+                              textToDisplay: 'jkldas aldkhaskjd alsdjaskla sdlakhsda hkahds aosdhka alsdjal alskdja', textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),)
+                          ],
+                        ),
+                      ),
+                    ),
                 ),
                 Positioned(
                   right: 16,

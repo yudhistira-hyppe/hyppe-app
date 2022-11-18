@@ -22,12 +22,13 @@ class MusicItemScreen extends StatefulWidget {
   State<MusicItemScreen> createState() => _MusicItemScreenState();
 }
 
-class _MusicItemScreenState extends State<MusicItemScreen> {
+class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingObserver {
+
+
+
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-
-
     return InkWell(
       onTap: (){
         if(!widget.isExplored){
@@ -112,4 +113,10 @@ class _MusicItemScreenState extends State<MusicItemScreen> {
       ),
     );
   }
+
+  @override
+  void deactivate() {
+    print('deactive music item');
+  }
+
 }

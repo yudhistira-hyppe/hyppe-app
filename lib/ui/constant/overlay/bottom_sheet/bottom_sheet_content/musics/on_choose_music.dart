@@ -4,6 +4,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musi
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/explorer_musics_screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_tabs.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/popular_music_tab.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -88,7 +89,8 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               ],
             ),
           ),
-          Expanded(child: notifier.pageMusic == 0 ? const PopularMusicTab() : !showListExp ? const ExploredMusicTab() : const ExplorerMusicsScreen()),
+          Expanded(child: !notifier.isLoadingMusic ? notifier.pageMusic == 0 ? const PopularMusicTab() : !showListExp ? const ExploredMusicTab()
+              : const ExplorerMusicsScreen() : const Center(child: CustomLoading(),)),
           if(notifier.selectedMusic != null)
             Container(
               decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePurple),

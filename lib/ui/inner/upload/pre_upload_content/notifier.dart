@@ -504,7 +504,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _locationName = '';
     _userTagData = [];
     _privacyTitle = '';
-    _musicSelected = null;
+    musicSelected = null;
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];

@@ -104,7 +104,12 @@ extension IntegerExtension on int{
     }else{
       final minutes = Duration(seconds: this).inMinutes;
       final seconds = this%60;
-      return '$minutes:$seconds';
+      if(seconds < 10){
+        return '$minutes:0$seconds';
+      }else{
+        return '$minutes:$seconds';
+      }
+
     }
   }
 }
