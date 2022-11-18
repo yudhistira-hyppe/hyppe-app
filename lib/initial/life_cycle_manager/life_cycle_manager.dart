@@ -2,6 +2,7 @@ import 'dart:async' show Timer;
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -14,12 +15,14 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/bloc/ads_video/bloc.dart';
 import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
+import '../../ui/inner/upload/preview_content/notifier.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget? child;
@@ -58,6 +61,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     print("Status Lifecycle: $state");
     if (state == AppLifecycleState.inactive) {
+      final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+      if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){
+        notifier.forceResetPlayer();
+      }
       "App Inactive".logger();
       final _userToken = SharedPreference().readStorage(SpKeys.userToken);
       if (_userToken != null) {

@@ -93,7 +93,7 @@ class HyppeDeleteAccoount extends StatelessWidget {
                     width: SizeConfig.screenWidth,
                     height: 49 * SizeConfig.scaleDiagonal,
                     child: CustomTextWidget(
-                      textToDisplay: notifier.language.next ?? '',
+                      textToDisplay: notifier.language.next ?? 'Next',
                       textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                     function: () => notifier.navigateToConfirmDeleteProfile(),

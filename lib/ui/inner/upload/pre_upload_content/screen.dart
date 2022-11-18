@@ -193,6 +193,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget layoutMusic(PreUploadContentNotifier notifier){
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         musicTitle(notifier),
         _buildDivider(context),

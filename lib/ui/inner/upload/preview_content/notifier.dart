@@ -49,6 +49,7 @@ class PreviewContentNotifier with ChangeNotifier {
   int _indexView = 0;
   int _pageMusic = 0;
   String? _url;
+  String? _defaultPath;
   Music? _currentMusic;
   Music? _selectedMusic;
   SourceFile? _sourceFile;
@@ -122,6 +123,7 @@ class PreviewContentNotifier with ChangeNotifier {
   bool get nextVideo => _nextVideo;
   bool get isForcePaused => _isForcePaused;
   String? get url => _url;
+  String? get defaultPath => _defaultPath;
   Music? get currentMusic => _currentMusic;
   Music? get selectedMusic => _selectedMusic;
   SourceFile? get sourceFile => _sourceFile;
@@ -200,6 +202,8 @@ class PreviewContentNotifier with ChangeNotifier {
   set pageMusic(int state){
     _pageMusic = state;
     _selectedMusic = null;
+    _currentMusic = null;
+    _selectedType = null;
     audioPlayer.stop();
     for(var music in _listMusics){
       if(music.isSelected){
@@ -386,13 +390,14 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void onChangeSearchMusic(BuildContext context, String value) {
     if(value.length > 2){
-      _selectedMusic = null;
       for(var music in _listMusics){
         if(music.isSelected){
           final index = _listMusics.indexOf(music);
           _listMusics[index].isSelected = false;
         }
       }
+      _currentMusic = null;
+      _selectedMusic = null;
       _selectedType = null;
       notifyListeners();
       Future.delayed(const Duration(milliseconds: 500), () async{
@@ -426,10 +431,16 @@ class PreviewContentNotifier with ChangeNotifier {
     print('forceResetPlayer');
     audioPlayer.stop();
     for(var data in _listMusics){
-      data.isPlay = false;
+      if(data.isPlay){
+        data.isPlay = false;
+        break;
+      }
     }
     for(var data in _listExpMusics){
-      data.isPlay = false;
+      if(data.isPlay){
+        data.isPlay = false;
+        break;
+      }
     }
   }
 
@@ -549,7 +560,9 @@ class PreviewContentNotifier with ChangeNotifier {
             notifyListeners();
             initVideoPlayer(context);
             if(path.isNotEmpty){
-              await File(path).delete();
+              if(path != _defaultPath){
+                await File(path).delete();
+              }
             }
           }else if(ReturnCode.isCancel(codeSession)){
 
@@ -584,7 +597,7 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void disposeMusic() async{
-    await audioPlayer.stop();
+    forceResetPlayer();
     await audioPlayer.dispose();
   }
 
@@ -714,11 +727,9 @@ class PreviewContentNotifier with ChangeNotifier {
       }else{
         _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
         _listExpMusics[index].isSelected = true;
-
         _selectedMusic = music;
       }
     }else{
-
       _listExpMusics[index].isSelected = true;
       _selectedMusic = music;
     }
@@ -743,12 +754,6 @@ class PreviewContentNotifier with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  // void _resetSelectMusic(){
-  //   for(var music in _listMusics){
-  //     if(sele)
-  //   }
-  // }
 
   void initialMatrixColor() {
     if (_fileContent != null) {
@@ -969,6 +974,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void toDiaryVideoPlayer(int index, SourceFile sourceFile) {
     _url = fileContent?[index];
+    _defaultPath = fileContent?[index];
     _sourceFile = sourceFile;
   }
 

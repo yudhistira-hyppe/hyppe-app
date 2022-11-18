@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -20,6 +21,8 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
   @override
   void initState() {
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.scrollController = ScrollController();
+    notifier.audioPlayer = AudioPlayer();
     notifier.scrollController.addListener(() {
       notifier.onScrollMusics(materialAppKey.currentContext!);
     });
@@ -29,13 +32,16 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
 
   @override
   void dispose() {
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.disposeMusic();
+    notifier.scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
-    return !notifier.isLoadingMusic ? notifier.listMusics.isNotEmpty ? ListView.builder(
+    return notifier.listMusics.isNotEmpty ? ListView.builder(
       itemCount: !notifier.isNextMusic ? notifier.listMusics.length : notifier.listMusics.length + 1 ,
       controller: notifier.scrollController,
       scrollDirection: Axis.vertical,
@@ -55,8 +61,6 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
       },
     ): Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    ): const Center(
-      child: CustomLoading(),
     );
   }
 }

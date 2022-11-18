@@ -37,8 +37,14 @@ class BuildTopWidget extends StatelessWidget {
                             backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                             padding: MaterialStateProperty.all(const EdgeInsets.only(top: 0.0, bottom: 0.0)),
                           ),
-                          onPressed: () => notifier.addTextItemMode ? notifier.applyTextItem(globalKey) : notifier.navigateToPreUploaded(context),
-                        )
+                          onPressed: (){
+                            if(notifier.addTextItemMode){
+                              notifier.applyTextItem(globalKey);
+                            }else{
+                              notifier.forceResetPlayer();
+                              notifier.navigateToPreUploaded(context);
+                            }
+                          },)
                       : const SizedBox.shrink(),
                 ),
               ),
