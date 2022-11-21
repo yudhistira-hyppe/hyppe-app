@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/boosted.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
@@ -27,29 +28,28 @@ class AllContents extends HiveObject {
   AllContents.fromJson(Map<String, dynamic> json) {
     if (json['story'] != null) {
       story = [];
-      if(json['story'].isNotEmpty){
+      if (json['story'].isNotEmpty) {
         json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
       }
     }
 
     if (json['diary'] != null) {
       diary = [];
-      if(json['diary'].isNotEmpty){
+      if (json['diary'].isNotEmpty) {
         json['diary'].forEach((v) => diary?.add(ContentData.fromJson(v)));
       }
     }
 
     if (json['video'] != null) {
       video = [];
-      if(json['video'].isNotEmpty){
+      if (json['video'].isNotEmpty) {
         json['video'].forEach((v) => video?.add(ContentData.fromJson(v)));
       }
-
     }
 
     if (json['pict'] != null) {
       pict = [];
-      if(json['pict'].isNotEmpty){
+      if (json['pict'].isNotEmpty) {
         json['pict'].forEach((v) => pict?.add(ContentData.fromJson(v)));
       }
     }
@@ -179,44 +179,56 @@ class ContentData extends HiveObject {
 
   bool? isReport;
 
-  ContentData(
-      {this.metadata,
-      this.mediaBasePath,
-      this.postType,
-      this.mediaUri,
-      this.isLiked,
-      this.description,
-      this.active,
-      this.privacy,
-      this.mediaType,
-      this.mediaThumbEndPoint,
-      this.postID,
-      this.title,
-      this.isViewed,
-      this.tags = const [],
-      this.allowComments,
-      this.certified,
-      this.createdAt,
-      this.insight,
-      this.mediaThumbUri,
-      this.mediaEndpoint,
-      this.email,
-      this.updatedAt,
-      this.username,
-      this.fullThumbPath,
-      this.fullContentPath,
-      this.avatar,
-      this.location,
-      this.visibility,
-      this.cats,
-      this.tagPeople,
-      this.likes,
-      this.saleAmount,
-      this.saleView,
-      this.saleLike,
-      this.isApsara,
-      this.apsaraId,
-      this.isReport});
+  Boosted? boosted;
+  int? boostCount;
+  int? isBoost;
+  int? boostJangkauan;
+  String? statusBoost;
+
+  ContentData({
+    this.metadata,
+    this.mediaBasePath,
+    this.postType,
+    this.mediaUri,
+    this.isLiked,
+    this.description,
+    this.active,
+    this.privacy,
+    this.mediaType,
+    this.mediaThumbEndPoint,
+    this.postID,
+    this.title,
+    this.isViewed,
+    this.tags = const [],
+    this.allowComments,
+    this.certified,
+    this.createdAt,
+    this.insight,
+    this.mediaThumbUri,
+    this.mediaEndpoint,
+    this.email,
+    this.updatedAt,
+    this.username,
+    this.fullThumbPath,
+    this.fullContentPath,
+    this.avatar,
+    this.location,
+    this.visibility,
+    this.cats,
+    this.tagPeople,
+    this.likes,
+    this.saleAmount,
+    this.saleView,
+    this.saleLike,
+    this.isApsara,
+    this.apsaraId,
+    this.isReport,
+    this.boosted,
+    this.boostCount,
+    this.isBoost,
+    this.boostJangkauan,
+    this.statusBoost,
+  });
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -269,6 +281,11 @@ class ContentData extends HiveObject {
     isApsara = json['isApsara'] ?? false;
     apsaraId = json['apsaraId'] ?? '';
     isReport = json['isReport'] ?? false;
+    boosted = json['boosted'] != null ? Boosted.fromJson(json['boosted']) : null;
+    boostCount = json['boostCount'] ?? 0;
+    isBoost = json['isBoost'] ?? 0;
+    boostJangkauan = json['boostJangkauan'] ?? 0;
+    statusBoost = json['statusBoost'] ?? '';
   }
 
   Map<String, dynamic> toJson() {

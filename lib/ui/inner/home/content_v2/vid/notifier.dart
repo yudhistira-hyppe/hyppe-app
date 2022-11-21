@@ -87,6 +87,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list = null, String? visibility = null}) async {
+    print('ini reload ${reload}');
     List<ContentData> res = [];
 
     try {
@@ -144,9 +145,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
       }
       final _searchData = context.read<SearchNotifier>();
       _searchData.allContents = UserInfoModel();
-      print('ini video data');
-      print(_searchData);
-      print(_searchData.allContents);
       // print(_searchData.allContents.vids);
       if (_searchData.initDataVid == null) {
         // _searchData.vidContentsQuery.featureType = FeatureType.vid;

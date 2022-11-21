@@ -254,23 +254,25 @@ class SelfProfileTop extends StatelessWidget {
                 : const SizedBox.shrink(),
             Padding(
                 padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      // when button library is active, remove this expanded and set width value
-                      child: CustomElevatedButton(
-                        child: CustomTextWidget(
-                          textToDisplay: notifier.language.editProfile ?? '',
-                          textStyle: Theme.of(context).textTheme.button,
-                        ),
-                        width: null,
-                        height: 42 * SizeConfig.scaleDiagonal,
-                        buttonStyle: Theme.of(context).elevatedButtonTheme.style,
-                        function: () => notifier.navigateToEditProfile(),
+                child: CustomElevatedButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomTextWidget(
+                        textToDisplay: notifier.language.boostedPostList ?? 'Boosted Post List',
+                        textStyle: Theme.of(context).textTheme.button,
                       ),
-                    ),
-                  ],
+                      Icon(
+                        Icons.arrow_forward_ios,
+                        color: Theme.of(context).colorScheme.secondaryVariant,
+                        size: 13,
+                      )
+                    ],
+                  ),
+                  width: null,
+                  height: 42 * SizeConfig.scaleDiagonal,
+                  buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                  function: () => Routing().move(Routes.boostList),
                 )),
             Padding(
                 padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),

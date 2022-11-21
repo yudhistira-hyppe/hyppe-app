@@ -49,6 +49,8 @@ class OnReportContentBottomSheet extends StatelessWidget {
             ListTile(
               visualDensity: VisualDensity.adaptivePlatformDensity,
               onTap: () {
+                print('postData?.postID');
+                print(postData?.postID);
                 ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData);
                 context.read<ReportNotifier>().contentData = postData;
                 context.read<ReportNotifier>().adsData = adsData;

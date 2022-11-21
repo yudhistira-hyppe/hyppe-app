@@ -754,5 +754,8 @@
   "night" : "Night",
   "boostPrice" : "Boost Price",
   "contentType" : "Content Type",
-  "by" : "by "
+  "by" : "by ",
+  "boostedPostList" : "Boosted Post List",
+  "reach" : "reach",
+  "viewDetails" : "View Details"
 }

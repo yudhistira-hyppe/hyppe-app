@@ -258,6 +258,8 @@ class UrlConstants {
   /// post => View Like and View.
   static const String viewLike = "$postRoute/viewlike";
 
+  static const String getListMyBoost = "$postsRoute/getboost";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Reaction */
   /// post Add Reaction to content.

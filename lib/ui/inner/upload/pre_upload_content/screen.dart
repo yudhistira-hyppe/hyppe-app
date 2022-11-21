@@ -2,7 +2,6 @@ import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -18,11 +17,8 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_auto_complete_user_tag.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class PreUploadContentScreen extends StatefulWidget {
@@ -650,13 +646,15 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               System().convertTypeContent(
                 System().validatePostTypeV2(notifier.featureType),
               )),
-          sixteenPx,
-          notifier.tmpBoost == 'automatic'
-              ? detailText(notifier.language.boostTime, System().capitalizeFirstLetter(notifier.boostContent?.sessionBoost?.name ?? ''))
+          notifier.boostContent?.typeBoost == 'automatic' ? const SizedBox() : sixteenPx,
+          notifier.boostContent?.typeBoost == 'automatic'
+              ? SizedBox()
               : detailText(notifier.language.boostTime,
                   "${System().capitalizeFirstLetter(notifier.boostContent?.sessionBoost?.name ?? '')} (${notifier.boostContent?.sessionBoost?.start?.substring(0, 5)} - ${notifier.boostContent?.sessionBoost?.end?.substring(0, 5)} WIB) "),
-          sixteenPx,
-          detailText(notifier.language.interval, '${notifier.boostContent?.intervalBoost?.value} ${notifier.boostContent?.intervalBoost?.remark}'),
+          notifier.boostContent?.typeBoost == 'automatic' ? const SizedBox() : sixteenPx,
+          notifier.boostContent?.typeBoost == 'automatic'
+              ? SizedBox()
+              : detailText(notifier.language.interval, '${notifier.boostContent?.intervalBoost?.value} ${notifier.boostContent?.intervalBoost?.remark}'),
           sixteenPx,
           detailText(notifier.language.startDate, '${System().dateFormatter(notifier.boostContent?.dateBoostStart ?? '', 5)},  ${notifier.boostContent?.sessionBoost?.start?.substring(0, 5)}'),
           sixteenPx,

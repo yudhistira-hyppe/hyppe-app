@@ -158,6 +158,8 @@ class BoostUploadScreen extends StatelessWidget {
                             notifier.tmpBoost = val ?? '';
                             notifier.tmpBoostTime = '';
                             notifier.tmpBoostInterval = '';
+                            notifier.tmpBoostIntervalId = '';
+                            notifier.tmpBoostTimeId = '';
                           },
                           title: CustomTextWidget(
                             textAlign: TextAlign.left,
@@ -288,16 +290,20 @@ class BoostUploadScreen extends StatelessWidget {
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomTextButton(
-              onPressed: notifier.enableBoostConfirm()
-                  ? () {
-                      notifier.boostButton(context);
-                    }
-                  : null,
+              onPressed: notifier.isLoading
+                  ? null
+                  : notifier.enableBoostConfirm()
+                      ? () {
+                          notifier.boostButton(context);
+                        }
+                      : null,
               style: ButtonStyle(backgroundColor: notifier.enableBoostConfirm() ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
-              child: CustomTextWidget(
-                textToDisplay: notifier.language.confirm ?? 'confirm',
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-              ),
+              child: notifier.isLoading
+                  ? const SizedBox(height: 20, child: CustomLoading())
+                  : CustomTextWidget(
+                      textToDisplay: notifier.language.confirm ?? 'confirm',
+                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    ),
             ),
           ),
         ),

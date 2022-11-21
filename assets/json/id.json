@@ -754,5 +754,8 @@
   "night" : "Malam",
   "boostPrice" : "Harga Boost",
   "contentType" : "Tipe Konten",
-  "by" : "oleh"
+  "by" : "oleh",
+  "boostedPostList" : "List Postingan Diboost",
+  "reach" : "jangkauan",
+  "viewDetails" : "Lihat Detail"
 }

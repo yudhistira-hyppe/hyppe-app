@@ -34,6 +34,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
@@ -316,10 +317,14 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:
         return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
+
+      //------boost
       case Routes.boostUpload:
         return MaterialPageRoute(builder: (_) => const BoostUploadScreen());
       case Routes.boostPaymentSummary:
         return MaterialPageRoute(builder: (_) => const PaymentBoostSummaryScreen());
+      case Routes.boostList:
+        return MaterialPageRoute(builder: (_) => const ListBoostScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

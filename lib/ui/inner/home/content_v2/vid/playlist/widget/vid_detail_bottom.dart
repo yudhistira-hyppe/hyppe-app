@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
@@ -51,6 +52,7 @@ class VidDetailBottom extends StatelessWidget {
           ContentViolationWidget(data: data!),
           twelvePx,
           _buildDescription(context),
+          data?.email == SharedPreference().readStorage(SpKeys.email) ? const ButtonBoost() : Container(),
           _buildDivider(context),
           _buildTopRightControl(context),
           fourPx,

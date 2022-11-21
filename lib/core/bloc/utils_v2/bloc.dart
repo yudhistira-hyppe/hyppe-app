@@ -399,4 +399,31 @@ class UtilsBlocV2 {
       withAlertMessage: false,
     );
   }
+
+  Future<void> getListBoost(BuildContext context, String param) async {
+    setUtilsFetch(UtilsFetch(UtilsState.loading));
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostError));
+        } else {
+          setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostError));
+      },
+      host: UrlConstants.getListMyBoost + param,
+      headers: {
+        "x-auth-token": token,
+        "x-auth-user": email,
+      },
+      withCheckConnection: false,
+      methodType: MethodType.get,
+      withAlertMessage: false,
+    );
+  }
 }

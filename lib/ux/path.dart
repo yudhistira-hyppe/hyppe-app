@@ -116,4 +116,5 @@ class Routes {
   //boost
   static const String boostUpload = '/boost-upload';
   static const String boostPaymentSummary = '/boost-payment-summary';
+  static const String boostList = '/boost-list';
 }

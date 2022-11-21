@@ -5,6 +5,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -43,7 +44,6 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
     super.initState();
   }
 
-
   @override
   void dispose() {
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -81,7 +81,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                     ? vidNotifier.vidData?.isEmpty ?? false
                         ? const NoResultFound()
                         : SizedBox(
-                            height: 350,
+                            height: 390,
                             child: NotificationListener<ScrollNotification>(
                               onNotification: (ScrollNotification scrollInfo) {
                                 if (scrollInfo is ScrollStartNotification) {
@@ -111,151 +111,155 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                     return const CustomLoading(size: 5);
                                   }
                                   final vidData = vidNotifier.vidData?[index];
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // SelectableText("${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}"),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Consumer<FollowRequestUnfollowNotifier>(
-                                              builder: (context, value, child) {
-                                                return ProfileComponent(
-                                                  show: true,
-                                                  onFollow: () {},
-                                                  following: true,
-                                                  haveStory: false,
-                                                  username: vidData?.username,
-                                                  featureType: FeatureType.vid,
-                                                  isCelebrity: vidData?.privacy?.isCelebrity,
-                                                  imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                                  onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
-                                                  createdAt: '${System().readTimestamp(
-                                                    DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
-                                                    context,
-                                                    fullCaption: true,
-                                                  )}',
-                                                );
-                                              },
-                                            ),
-                                            GestureDetector(
-                                                onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData()),
-                                                child: Visibility(
-                                                  visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
-                                                  child: const Icon(Icons.more_vert),
-                                                )),
-                                          ],
-                                        ),
-                                      ),
-                                      twelvePx,
-                                      // Consumer<PreviewVidNotifier>(
-                                      //   builder: (context, value, _) {
-                                      //     return Column(
-                                      //       children: [
-                                      //         Text("${value.vidData?[index].username}"),
-                                      //         InkWell(
-                                      //           onTap: () {
-                                      //             value.vidData?[index].username = 'hahahaha';
-                                      //           },
-                                      //           child: Text('asd'),
-                                      //         ),
-                                      //       ],
-                                      //     );
-                                      //   },
-                                      // ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                        child: Stack(
-                                          children: [
-                                            AspectRatio(
-                                              aspectRatio: 16 / 9,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(8),
-                                                  color: Colors.black,
-                                                ),
-                                                child: VideoPlayerPage(
-                                                  onDetail: false,
-                                                  videoData: vidNotifier.vidData?[index],
-                                                  key: ValueKey(vidNotifier.vidPostState),
-                                                  afterView: () => System().increaseViewCount(context, vidNotifier.vidData?[index] ?? ContentData()),
-                                                ),
+                                  return SizedBox(
+                                    height: vidData?.email == SharedPreference().readStorage(SpKeys.email) ? 390 : 200,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // SelectableText("${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}"),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                                          child: Row(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Consumer<FollowRequestUnfollowNotifier>(
+                                                builder: (context, value, child) {
+                                                  return ProfileComponent(
+                                                    show: true,
+                                                    onFollow: () {},
+                                                    following: true,
+                                                    haveStory: false,
+                                                    username: vidData?.username,
+                                                    featureType: FeatureType.vid,
+                                                    isCelebrity: vidData?.privacy?.isCelebrity,
+                                                    imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
+                                                    onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
+                                                    createdAt: '${System().readTimestamp(
+                                                      DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                                                      context,
+                                                      fullCaption: true,
+                                                    )}',
+                                                  );
+                                                },
                                               ),
-                                            ),
-                                          ],
+                                              GestureDetector(
+                                                  onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData()),
+                                                  child: Visibility(
+                                                    visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
+                                                    child: const Icon(Icons.more_vert),
+                                                  )),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      vidData?.tagPeople?.isNotEmpty ?? false || vidData?.location != ''
-                                          ? Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
-                                              child: Row(
-                                                children: [
-                                                  vidData?.tagPeople?.isNotEmpty ?? false
-                                                      ? TagLabel(
-                                                          icon: 'user',
-                                                          label: '${vidData?.tagPeople?.length} people',
-                                                          function: () {
-                                                            vidNotifier.showUserTag(context, index, vidData?.postID);
-                                                          },
-                                                        )
-                                                      : const SizedBox(),
-                                                  vidData?.location == '' || vidData?.location == null
-                                                      ? const SizedBox()
-                                                      : TagLabel(
-                                                          icon: 'maptag',
-                                                          label: "${vidData?.location}",
-                                                          function: () {},
-                                                        ),
-                                                ],
-                                              ),
-                                            )
-                                          : const SizedBox(),
 
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12.0),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                vidNotifier.navigateToHyppeVidDetail(context, vidData);
-                                              },
-                                              child: SizedBox(
-                                                width: 240,
-                                                child: CustomTextWidget(
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.left,
-                                                  // textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                                  textToDisplay: "${vidData?.description}",
-                                                  textStyle: Theme.of(context).textTheme.caption,
-                                                ),
-                                              ),
-                                            ),
-                                            Consumer<LikeNotifier>(
-                                              builder: (context, notifier, child) => Align(
-                                                alignment: Alignment.bottomRight,
-                                                child: InkWell(
-                                                  child: CustomIconWidget(
-                                                    defaultColor: false,
-                                                    color: (vidData?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
-                                                    iconData: '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                        twelvePx,
+                                        // Consumer<PreviewVidNotifier>(
+                                        //   builder: (context, value, _) {
+                                        //     return Column(
+                                        //       children: [
+                                        //         Text("${value.vidData?[index].username}"),
+                                        //         InkWell(
+                                        //           onTap: () {
+                                        //             value.vidData?[index].username = 'hahahaha';
+                                        //           },
+                                        //           child: Text('asd'),
+                                        //         ),
+                                        //       ],
+                                        //     );
+                                        //   },
+                                        // ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                                          child: Stack(
+                                            children: [
+                                              AspectRatio(
+                                                aspectRatio: 16 / 9,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(8),
+                                                    color: Colors.black,
                                                   ),
-                                                  onTap: (){
-                                                    if(vidData != null){
-                                                      notifier.likePost(context, vidData);
-                                                    }
-
-                                                  } ,
+                                                  child: VideoPlayerPage(
+                                                    onDetail: false,
+                                                    videoData: vidNotifier.vidData?[index],
+                                                    key: ValueKey(vidNotifier.vidPostState),
+                                                    afterView: () => System().increaseViewCount(context, vidNotifier.vidData?[index] ?? ContentData()),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        vidData?.tagPeople?.isNotEmpty ?? false || vidData?.location != ''
+                                            ? Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 10.0),
+                                                child: Row(
+                                                  children: [
+                                                    vidData?.tagPeople?.isNotEmpty ?? false
+                                                        ? TagLabel(
+                                                            icon: 'user',
+                                                            label: '${vidData?.tagPeople?.length} people',
+                                                            function: () {
+                                                              vidNotifier.showUserTag(context, index, vidData?.postID);
+                                                            },
+                                                          )
+                                                        : const SizedBox(),
+                                                    vidData?.location == '' || vidData?.location == null
+                                                        ? const SizedBox()
+                                                        : TagLabel(
+                                                            icon: 'maptag',
+                                                            label: "${vidData?.location}",
+                                                            function: () {},
+                                                          ),
+                                                  ],
+                                                ),
+                                              )
+                                            : const SizedBox(),
+
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 12.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () {
+                                                  vidNotifier.navigateToHyppeVidDetail(context, vidData);
+                                                },
+                                                child: SizedBox(
+                                                  width: 240,
+                                                  child: CustomTextWidget(
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.left,
+                                                    // textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                                    textToDisplay: "${vidData?.description}",
+                                                    textStyle: Theme.of(context).textTheme.caption,
+                                                  ),
+                                                ),
+                                              ),
+                                              Consumer<LikeNotifier>(
+                                                builder: (context, notifier, child) => Align(
+                                                  alignment: Alignment.bottomRight,
+                                                  child: InkWell(
+                                                    child: CustomIconWidget(
+                                                      defaultColor: false,
+                                                      color: (vidData?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
+                                                      iconData: '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                    ),
+                                                    onTap: () {
+                                                      if (vidData != null) {
+                                                        notifier.likePost(context, vidData);
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        vidData?.email == SharedPreference().readStorage(SpKeys.email) ? const ButtonBoost() : Container(),
+                                      ],
+                                    ),
                                   );
                                 },
                               ),

@@ -63,12 +63,12 @@ class OnBoostIntervalContent extends StatelessWidget {
                       }),
                   twentyFourPx,
                   CustomTextButton(
-                    onPressed: notifier.tmpBoostInterval != ''
+                    onPressed: notifier.tmpBoostIntervalId != ''
                         ? () {
                             Routing().moveBack();
                           }
                         : null,
-                    style: ButtonStyle(backgroundColor: notifier.tmpBoostInterval != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+                    style: ButtonStyle(backgroundColor: notifier.tmpBoostIntervalId != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
                     child: Container(
                       width: SizeConfig.screenWidth,
                       padding: const EdgeInsets.all(10),

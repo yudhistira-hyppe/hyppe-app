@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
@@ -24,6 +25,7 @@ import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -1241,7 +1243,15 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   navigateToBoost(BuildContext context) {
-    if (boostMasterData == null) getMasterBoost(context);
+    if (boostMasterData == null) {
+      getMasterBoost(context);
+    }
+
+    if (_boostContent != null) {
+      tmpstartDate = DateTime.parse(_boostContent?.dateBoostStart ?? '');
+      tmpfinsihDate = DateTime.parse(_boostContent?.dateBoostEnd ?? '');
+      tmpBoost = _boostContent?.typeBoost ?? '';
+    }
     Routing().move(Routes.boostUpload);
   }
 
@@ -1302,6 +1312,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     // _createPostContentV2();
     print(_boostContent);
     if (_validateDescription() && _validateCategory()) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
       Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
     } else {
       ShowBottomSheet().onShowColouredSheet(
@@ -1358,11 +1369,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   exitBoostPage() {
-    _tmpstartDate = DateTime(1000);
-    _tmpfinsihDate = DateTime(1000);
-    _tmpBoost = '';
-    _tmpBoostTime = '';
-    tmpBoostInterval = '';
+    // _tmpstartDate = DateTime(1000);
+    // _tmpfinsihDate = DateTime(1000);
+    // _tmpBoost = '';
+    // _tmpBoostTime = '';
+    // tmpBoostInterval = '';
     Routing().moveBack();
   }
 }
