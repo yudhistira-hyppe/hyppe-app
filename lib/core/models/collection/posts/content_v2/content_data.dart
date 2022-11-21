@@ -6,6 +6,8 @@ import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
+import '../../music/music.dart';
+
 part 'content_data.g.dart';
 
 @HiveType(typeId: 0)
@@ -177,6 +179,8 @@ class ContentData extends HiveObject {
   @HiveField(35)
   String? apsaraId;
 
+  Music? music;
+
   bool? isReport;
 
   ContentData(
@@ -216,6 +220,7 @@ class ContentData extends HiveObject {
       this.saleLike,
       this.isApsara,
       this.apsaraId,
+      this.music,
       this.isReport});
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -268,6 +273,7 @@ class ContentData extends HiveObject {
     saleLike = json['saleLike'] ?? false;
     isApsara = json['isApsara'] ?? false;
     apsaraId = json['apsaraId'] ?? '';
+    music = json['music'] != null ? Music.fromJson(json['music']) : Music();
     isReport = json['isReport'] ?? false;
   }
 
@@ -314,6 +320,9 @@ class ContentData extends HiveObject {
     data['likes'] = likes;
     data['isApsara'] = isApsara;
     data['apsaraId'] = apsaraId;
+    if(music != null){
+      data['music'] = music!.toJson();
+    }
 
     return data;
   }

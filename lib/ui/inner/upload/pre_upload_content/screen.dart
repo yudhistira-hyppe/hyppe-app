@@ -106,7 +106,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         eightPx,
                         if(notifier.musicSelected != null)
                           layoutMusic(notifier),
-                        twentyFourPx,
                         tagPeopleWidget(textTheme, notifier),
                         _buildDivider(context),
                         tagLocationWidget(textTheme, notifier),
@@ -197,6 +196,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         musicTitle(notifier),
+        eightPx,
         _buildDivider(context),
       ],
     );

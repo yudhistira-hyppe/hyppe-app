@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'package:better_player/better_player.dart';
@@ -20,9 +20,6 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 
-// import 'package:hyppe/core/constants/enum.dart';
-// import 'package:video_player/video_player.dart';
-
 class PreviewVideoContent extends StatefulWidget {
   @override
   _PreviewVideoContentState createState() => _PreviewVideoContentState();
@@ -33,19 +30,12 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    notifier.initVideoPlayer(context);
+    notifier.initVideoPlayer(context, isSaveDefault: true);
     _videoPlayerController = notifier.betterPlayerController;
-
     super.initState();
   }
 
-  @override
-  void dispose() {
-    final notifier = context.read<PreviewContentNotifier>();
-    notifier.betterPlayerController!.dispose();
-    notifier.disposeMusic();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +74,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                           child: Platform.isAndroid
                               ? AspectRatio(
                                   child: BetterPlayer(controller: notifier.betterPlayerController!),
-                                  aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0,
+                                  aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 1,
                                 )
                               : BetterPlayer(controller: notifier.betterPlayerController!),
                         )
@@ -92,6 +82,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                           child: CustomLoading(),
                         ),
                 ),
+                if(notifier.fixSelectedMusic != null)
                 Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
@@ -105,7 +96,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                           children: [
                             InkWell(
                               onTap: (){
-
+                                notifier.setDefaultVideo(context);
                               },
                               child: const CustomIconWidget(
                                   height: 12,
@@ -120,9 +111,13 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
                               color: kHyppeGrey,
                             ),
                             sixPx,
-                            CustomTextWidget(
-                              maxLines: 3,
-                              textToDisplay: 'jkldas aldkhaskjd alsdjaskla sdlakhsda hkahds aosdhka alsdjal alskdja', textStyle: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),)
+                            Expanded(
+                              child: CustomTextWidget(
+                                textOverflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                textToDisplay: '${notifier.fixSelectedMusic?.musicTitle} - ${notifier.fixSelectedMusic?.artistName}',
+                                textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),),
+                            )
                           ],
                         ),
                       ),
@@ -160,5 +155,17 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
         : const Center(
             child: CustomLoading(),
           );
+  }
+
+  @override
+  void dispose() {
+    print('PreviewVideoContent is disposed');
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    if(notifier.betterPlayerController != null){
+      notifier.betterPlayerController!.dispose();
+    }
+    notifier.defaultPath = null;
+    notifier.disposeMusic();
+    super.dispose();
   }
 }

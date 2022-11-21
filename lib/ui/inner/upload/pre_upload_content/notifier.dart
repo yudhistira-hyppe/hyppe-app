@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
@@ -427,6 +428,9 @@ class PreUploadContentNotifier with ChangeNotifier {
     _userTagData = [];
     _privacyTitle = '';
     musicSelected = null;
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.defaultPath = null;
+    notifier.betterPlayerController!.dispose();
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];

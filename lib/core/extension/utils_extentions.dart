@@ -9,6 +9,7 @@ import '../../ui/inner/home/notifier_v2.dart';
 import '../constants/shared_preference_keys.dart';
 import '../models/collection/posts/content_v2/content_data.dart';
 import '../services/shared_preference.dart';
+import '../services/system.dart';
 
 extension contextScreen on BuildContext{
   double getWidth(){
@@ -86,7 +87,7 @@ extension contextScreen on BuildContext{
 
 }
 
-extension ContentTypeDefine on String{
+extension StringDefine on String{
   ContentType? translateType(){
     if (this == "video") {
       return ContentType.video;
@@ -94,6 +95,10 @@ extension ContentTypeDefine on String{
       return ContentType.image;
     }
     return null;
+  }
+
+  bool isImageFormat(){
+    return System().lookupContentMimeType(this)?.contains('image') ?? false;
   }
 }
 

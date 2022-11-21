@@ -68,7 +68,7 @@ class ShowBottomSheet {
   }
 
 
-  static onChooseMusic(context) async{
+  static onChooseMusic(context, {isPic = false}) async{
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -81,7 +81,7 @@ class ShowBottomSheet {
             child: Container(
               decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.92,
-              child: const OnChooseMusicBottomSheet(),
+              child: OnChooseMusicBottomSheet(isPic: isPic,),
             ),
           );
         });

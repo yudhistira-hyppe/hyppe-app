@@ -120,6 +120,67 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
+  Future initHome(BuildContext context) async{
+    print('init Home');
+    bool isConnected = await System().checkConnections();
+    if(isConnected){
+      _isLoadingVid = true;
+      _isLoadingDiary = true;
+      _isLoadingPict = true;
+      int totLoading = 0;
+      final profile = Provider.of<MainNotifier>(context, listen: false);
+      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      try {
+        await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
+      } catch (e) {
+        print(e);
+      }
+
+      final allContents = await allReload(context);
+      // Refresh content
+      try {
+        await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Story : $e");
+      }
+      try {
+        await vid.initialVid(context, reload: true, list: allContents.video, visibility: 'PUBLIC').then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Video : $e");
+      }
+      try {
+        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: 'PUBLIC').then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Diary : $e");
+      }
+      try {
+        print('initialPic : 1');
+        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: 'PUBLIC').then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Pic : $e");
+      }
+
+      print('totLoading $totLoading');
+      if (totLoading >= 3) {
+        print("is finish shimmer");
+        _isLoadingVid = false;
+        _isLoadingDiary = false;
+        _isLoadingPict = false;
+      }
+
+      notifyListeners();
+
+    }else{
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onRefresh(context, 'PUBLIC');
+      });
+    }
+  }
+
   Future onRefresh(BuildContext context, String visibility) async {
     print('home notifier');
     bool isConnected = await System().checkConnections();

@@ -38,7 +38,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
-    notifier.initialVid(context, reload: true);
+    // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     super.initState();
   }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -12,6 +13,8 @@ import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/preview_video_content.dart';
 
 import '../../../../../core/constants/asset_path.dart';
+import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 
 
@@ -24,6 +27,7 @@ class BuildAnyContentPreviewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
+
     return RepaintBoundary(
       key: globalKey,
       child: Stack(
@@ -34,15 +38,131 @@ class BuildAnyContentPreviewer extends StatelessWidget {
             physics: notifier.addTextItemMode ? const NeverScrollableScrollPhysics() : null,
             itemCount: notifier.fileContent?.length,
             itemBuilder: (context, index) {
-              final _isImage = System().lookupContentMimeType(notifier.fileContent?[index] ?? '')?.contains('image');
-
-              if ((_isImage ?? false) || _isImage == null) {
+              final _isImage = (notifier.fileContent?[index]??'').isImageFormat();
+              final validateUrl = System().validateUrl(notifier.fileContent?[index] ?? '');
+              print('validateUrl $validateUrl');
+              if (_isImage || _isImage == null) {
                 return InteractiveViewer(
                   child: ColorFiltered(
                     colorFilter: ColorFilter.matrix(notifier.filterMatrix(index)),
-                    child: !System().validateUrl(notifier.fileContent?[index] ?? '')
+                    child: !validateUrl
                         ? Image.file(
                             File(notifier.fileContent?[index] ?? ''),
+                            filterQuality: FilterQuality.high,
+                            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                              // if (wasSynchronouslyLoaded) {
+                              //   return child;
+                              // }
+                              return Stack(
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    child: wasSynchronouslyLoaded ? child : AnimatedOpacity(
+                                      child: child,
+                                      opacity: frame == null ? 0 : 1,
+                                      duration: const Duration(seconds: 1),
+                                      curve: Curves.easeOut,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 16,
+                                      bottom: context.getHeight() * 0.4,
+                                      child: Column(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Container(
+                                                height: 48,
+                                                width: 48,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                  color: Colors.black.withOpacity(0.5)
+                                                ),
+                                                child: CustomIconButtonWidget(
+                                                  onPressed: () async{
+                                                    try{
+                                                      final pathFile = notifier.fileContent?[index];
+                                                      if(pathFile != null){
+                                                        final newFile = await ImageCropper().cropImage(
+                                                          sourcePath: pathFile,
+                                                          compressFormat: ImageCompressFormat.jpg,
+                                                          compressQuality: 100,
+                                                          uiSettings: [
+                                                            AndroidUiSettings(
+                                                                toolbarTitle: notifier.language.editImage,
+                                                                toolbarColor: kHyppePrimary,
+                                                                toolbarWidgetColor: Colors.white,
+                                                                initAspectRatio: CropAspectRatioPreset.original,
+                                                                lockAspectRatio: false),
+                                                            IOSUiSettings(
+                                                              title: notifier.language.editImage,
+                                                            ),
+                                                            WebUiSettings(
+                                                              context: context,
+                                                              presentStyle: CropperPresentStyle.page,
+                                                              // boundary: const CroppieBoundary(
+                                                              //   width: 520,
+                                                              //   height: 520,
+                                                              // ),
+                                                              // viewPort:
+                                                              // const CroppieViewPort(width: 480, height: 480, type: 'circle'),
+                                                              enableExif: true,
+                                                              enableZoom: true,
+                                                              showZoomer: true,
+                                                            ),
+                                                          ],
+                                                        );
+                                                        if(newFile != null){
+                                                          await File(pathFile).delete();
+                                                          notifier.setFileContent(newFile.path, index);
+                                                        }else{
+                                                          throw 'file result is null';
+                                                        }
+                                                      }else{
+                                                        throw 'file is null';
+                                                      }
+                                                    }catch(e){
+                                                      print('Error ImageCropper: $e');
+                                                      // ShowBottomSheet().onShowColouredSheet(context, e.toString(), color: kHyppeDanger, maxLines: 2);
+                                                    }
+
+                                                  },
+                                                  iconData: "${AssetPath.vectorPath}edit.svg",
+                                                ),
+                                              ),
+                                              eightPx,
+                                              CustomTextWidget(textToDisplay: notifier.language.edit ?? 'Rotate', textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                                            ],
+                                          ),
+                                          twentyFourPx,
+                                          InkWell(
+                                            onTap: (){
+                                              ShowBottomSheet.onChooseMusic(context, isPic: true);
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                const CustomIconWidget(
+                                                  defaultColor: false,
+                                                  iconData: "${AssetPath.vectorPath}circle_music.svg",
+                                                ),
+                                                fourPx,
+                                                CustomTextWidget(maxLines: 1, textToDisplay: notifier.language.music ?? '', textAlign: TextAlign.left, textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                  ),
+                                ],
+                              );
+                            },
+                          )
+                        : Image.network(
+                            notifier.fileContent?[index] ?? '',
                             filterQuality: FilterQuality.high,
                             frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                               if (wasSynchronouslyLoaded) {
@@ -64,89 +184,95 @@ class BuildAnyContentPreviewer extends StatelessWidget {
                                   ),
                                   Positioned(
                                     right: 16,
-                                      bottom: context.getHeight() * 0.4,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: 48,
-                                            width: 48,
-                                            decoration: BoxDecoration(
-                                              borderRadius: const BorderRadius.all(Radius.circular(24)),
-                                              color: Colors.black.withOpacity(0.5)
-                                            ),
-                                            child: CustomIconButtonWidget(
-                                              onPressed: () async{
-                                                try{
-                                                  final pathFile = notifier.fileContent?[index];
-                                                  if(pathFile != null){
-                                                    final newFile = await ImageCropper().cropImage(
-                                                      sourcePath: pathFile,
-                                                      compressFormat: ImageCompressFormat.jpg,
-                                                      compressQuality: 100,
-                                                      uiSettings: [
-                                                        AndroidUiSettings(
-                                                            toolbarTitle: notifier.language.editImage,
-                                                            toolbarColor: kHyppePrimary,
-                                                            toolbarWidgetColor: Colors.white,
-                                                            initAspectRatio: CropAspectRatioPreset.original,
-                                                            lockAspectRatio: false),
-                                                        IOSUiSettings(
-                                                          title: notifier.language.editImage,
-                                                        ),
-                                                        WebUiSettings(
-                                                          context: context,
-                                                          presentStyle: CropperPresentStyle.page,
-                                                          // boundary: const CroppieBoundary(
-                                                          //   width: 520,
-                                                          //   height: 520,
-                                                          // ),
-                                                          // viewPort:
-                                                          // const CroppieViewPort(width: 480, height: 480, type: 'circle'),
-                                                          enableExif: true,
-                                                          enableZoom: true,
-                                                          showZoomer: true,
-                                                        ),
-                                                      ],
-                                                    );
-                                                    if(newFile != null){
-                                                      await File(pathFile).delete();
-                                                      notifier.setFileContent(newFile.path, index);
+                                    bottom: context.getHeight() * 0.4,
+                                    child: Column(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Container(
+                                              height: 48,
+                                              width: 48,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                                  color: Colors.black.withOpacity(0.5)
+                                              ),
+                                              child: CustomIconButtonWidget(
+                                                onPressed: () async{
+                                                  try{
+                                                    final pathFile = notifier.fileContent?[index];
+                                                    if(pathFile != null){
+                                                      final newFile = await ImageCropper().cropImage(
+                                                        sourcePath: pathFile,
+                                                        compressFormat: ImageCompressFormat.jpg,
+                                                        compressQuality: 100,
+                                                        uiSettings: [
+                                                          AndroidUiSettings(
+                                                              toolbarTitle: notifier.language.editImage,
+                                                              toolbarColor: kHyppePrimary,
+                                                              toolbarWidgetColor: Colors.white,
+                                                              initAspectRatio: CropAspectRatioPreset.original,
+                                                              lockAspectRatio: false),
+                                                          IOSUiSettings(
+                                                            title: notifier.language.editImage,
+                                                          ),
+                                                          WebUiSettings(
+                                                            context: context,
+                                                            presentStyle: CropperPresentStyle.page,
+                                                            // boundary: const CroppieBoundary(
+                                                            //   width: 520,
+                                                            //   height: 520,
+                                                            // ),
+                                                            // viewPort:
+                                                            // const CroppieViewPort(width: 480, height: 480, type: 'circle'),
+                                                            enableExif: true,
+                                                            enableZoom: true,
+                                                            showZoomer: true,
+                                                          ),
+                                                        ],
+                                                      );
+                                                      if(newFile != null){
+                                                        await File(pathFile).delete();
+                                                        notifier.setFileContent(newFile.path, index);
+                                                      }else{
+                                                        throw 'file result is null';
+                                                      }
                                                     }else{
-                                                      throw 'file result is null';
+                                                      throw 'file is null';
                                                     }
-                                                  }else{
-                                                    throw 'file is null';
+                                                  }catch(e){
+                                                    print('Error ImageCropper: $e');
+                                                    // ShowBottomSheet().onShowColouredSheet(context, e.toString(), color: kHyppeDanger, maxLines: 2);
                                                   }
-                                                }catch(e){
-                                                  print('Error ImageCropper: $e');
-                                                  // ShowBottomSheet().onShowColouredSheet(context, e.toString(), color: kHyppeDanger, maxLines: 2);
-                                                }
 
-                                              },
-                                              iconData: "${AssetPath.vectorPath}edit.svg",
+                                                },
+                                                iconData: "${AssetPath.vectorPath}edit.svg",
+                                              ),
                                             ),
+                                            eightPx,
+                                            CustomTextWidget(textToDisplay: notifier.language.edit ?? 'Rotate', textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                                          ],
+                                        ),
+                                        twentyFourPx,
+                                        InkWell(
+                                          onTap: (){
+                                            ShowBottomSheet.onChooseMusic(context, isPic: true);
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              const CustomIconWidget(
+                                                defaultColor: false,
+                                                iconData: "${AssetPath.vectorPath}circle_music.svg",
+                                              ),
+                                              fourPx,
+                                              CustomTextWidget(maxLines: 1, textToDisplay: notifier.language.music ?? '', textAlign: TextAlign.left, textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                                            ],
                                           ),
-                                          eightPx,
-                                          CustomTextWidget(textToDisplay: notifier.language.edit ?? 'Rotate', textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
-                                        ],
-                                      )
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ],
-                              );
-                            },
-                          )
-                        : Image.network(
-                            notifier.fileContent?[index] ?? '',
-                            filterQuality: FilterQuality.high,
-                            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                              if (wasSynchronouslyLoaded) {
-                                return child;
-                              }
-                              return AnimatedOpacity(
-                                child: child,
-                                opacity: frame == null ? 0 : 1,
-                                duration: const Duration(seconds: 1),
-                                curve: Curves.easeOut,
                               );
                             },
                           ),

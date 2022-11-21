@@ -96,9 +96,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
 
     Future.delayed(Duration.zero, () {
-      context.read<HomeNotifier>().setSessionID();
+      final notifier = context.read<HomeNotifier>();
+      notifier.setSessionID();
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
+      notifier.initHome(context);
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
           {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
