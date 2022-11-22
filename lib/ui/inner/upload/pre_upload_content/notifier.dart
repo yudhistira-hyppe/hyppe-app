@@ -479,6 +479,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     try {
       _connectAndListenToSocket(context);
       final notifier = PostsBloc();
+      print('featureType : $featureType');
       notifier.postContentsBlocV2(
         context,
         type: featureType ?? FeatureType.other,

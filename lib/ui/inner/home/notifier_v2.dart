@@ -259,8 +259,8 @@ class HomeNotifier with ChangeNotifier {
       res = AllContents.fromJson(fetch.data);
       return res;
     } catch (e) {
-      '$e'.logger();
-      rethrow;
+      'landing page error : $e'.logger();
+      return AllContents(story: [], video: [], diary: [], pict: []);
     }
   }
 

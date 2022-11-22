@@ -10,11 +10,14 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../core/models/collection/music/music.dart';
+import '../../../../../../constant/widget/music_status_page_widget.dart';
+
 class LeftItems extends StatefulWidget {
   final String? userName;
   final String? description;
   final String? tags;
-  final String? musicName;
+  final Music? music;
   final String? authorName;
   final StoryController? storyController;
   final String? postID;
@@ -26,7 +29,7 @@ class LeftItems extends StatefulWidget {
     this.userName,
     this.description,
     this.tags,
-    this.musicName,
+    this.music,
     this.authorName,
     this.storyController,
     this.postID,
@@ -65,9 +68,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      width: SizeConfig.screenWidth! / 1.3,
-      alignment: const Alignment(-1.0, 0.75),
-      padding: const EdgeInsets.only(left: 15.0),
+      width: widget.music != null ? double.infinity : SizeConfig.screenWidth! / 1.3,
+      alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
+      padding: const EdgeInsets.only(left: 15.0, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -117,6 +120,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               ),
             ),
           ),
+          if(widget.music != null)
+          MusicStatusPage(
+              music: widget.music!)
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
           // _musicInfo(),
         ],

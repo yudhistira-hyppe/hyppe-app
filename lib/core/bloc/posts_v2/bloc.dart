@@ -126,7 +126,7 @@ class PostsBloc {
 
   Future getAllContentsBlocV2(
     BuildContext context, {
-    int pageRows = 18,
+    int pageRows = 15,
     bool myContent = false,
     bool otherContent = false,
     required String visibility,
@@ -226,6 +226,9 @@ class PostsBloc {
 
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
+
+    print('createPost : ');
+    print(formData.fields.map((e) => e).join(','));
 
     print(System().basenameFiles(File(fileContents[0] ?? '').path));
     print(System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", ""));

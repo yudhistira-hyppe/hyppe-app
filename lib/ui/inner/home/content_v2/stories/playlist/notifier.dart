@@ -204,19 +204,42 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
     _result = [];
     if (data.mediaType?.translateType() == ContentType.image) {
-      _result.add(
-        StoryItem.pageImage(
-          url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
-          controller: storyController,
-          imageFit: BoxFit.contain,
-          isImages: true,
-          requestHeaders: {
-            'post-id': data.postID ?? '',
-            'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-            'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-          },
-        ),
-      );
+      if(data.music?.id != null){
+        String urlApsara = '';
+        if (data.isApsara ?? false) {
+          await getVideoApsara(context, data.apsaraId ?? '').then((value) {
+            urlApsara = value;
+          });
+        }
+        print('StoryItem.pageVideo ${data.postID} : ${data.fullContentPath}, ${data.metadata?.duration}');
+        _result.add(
+          StoryItem.pageVideo(
+            urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
+            controller: storyController,
+            requestHeaders: {
+              'post-id': data.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+            duration: Duration(seconds: data.metadata?.duration ?? 15),
+          ),
+        );
+      }else{
+        _result.add(
+          StoryItem.pageImage(
+            url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
+            controller: storyController,
+            imageFit: BoxFit.contain,
+            isImages: true,
+            requestHeaders: {
+              'post-id': data.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+          ),
+        );
+      }
+
     }
     if (data.mediaType?.translateType() == ContentType.video) {
       String urlApsara = '';

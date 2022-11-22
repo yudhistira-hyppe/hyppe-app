@@ -34,8 +34,8 @@ class UploadContent extends StatelessWidget {
         // Camera / Video
         Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
         // Flash button
+        if(Platform.isAndroid)
         SafeArea(
-          top: Platform.isIOS,
           child: Visibility(
             visible: !(notifier?.isRecordingVideo ?? true),
             child: Align(
@@ -85,7 +85,17 @@ class UploadContent extends StatelessWidget {
               if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
               BuildEffect(mounted: mounted),
               Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
-              if (!(notifier?.isRecordingVideo ?? true)) const Expanded(flex: 4, child: CameraSwitchButton())
+              if(Platform.isIOS && !(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1,child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const CameraFlashButton(),
+                  CustomTextWidget(
+                    textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                  ),
+                ],
+              ),),
+              if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 4, child: CameraSwitchButton())
             ],
           ),
         ),

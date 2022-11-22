@@ -103,7 +103,9 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 // notifier.isLoadVideo = true;
                 await notifier.audioPlayer.stop();
                 if(widget.isPic){
-                  await notifier.imageMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', Duration(seconds: notifier.selectedMusic?.apsaraMusicUrl?.duration?.toInt() ?? 10).inMinutes);
+                  // notifier.isLoadVideo = true;
+                  print('isLoadVideo : ${notifier.isLoadVideo}');
+                  notifier.imageMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', Duration(seconds: notifier.selectedMusic?.apsaraMusicUrl?.duration?.toInt() ?? 10).inMinutes);
                 }else{
                   await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '');
                 }
@@ -112,6 +114,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 notifier.forceResetPlayer();
                 notifier.searchController.text = '';
                 Navigator.pop(context);
+
               },
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.select ?? 'select',

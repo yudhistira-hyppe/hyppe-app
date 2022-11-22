@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -32,6 +33,8 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 
 // import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+
+import '../../../../../../../core/models/collection/music/music.dart';
 
 class VidDetailBottom extends StatelessWidget {
   final ContentData? data;
@@ -104,6 +107,10 @@ class VidDetailBottom extends StatelessWidget {
                   ? CustomTextWidget(maxLines: 2, textAlign: TextAlign.left, textStyle: Theme.of(context).textTheme.bodyText2, textToDisplay: "${data?.description}")
                   : const CustomShimmer(height: 16, radius: 4),
             ),
+            eightPx,
+            if(data?.music != null)
+            MusicStatusDetail(music: data!.music!),
+            if(data?.music != null)
             eightPx,
             data != null
                 ? GestureDetector(

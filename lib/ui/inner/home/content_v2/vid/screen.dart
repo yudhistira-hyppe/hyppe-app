@@ -78,7 +78,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                     ),
                   )
                 : (vidNotifier.vidData != null)
-                    ? vidNotifier.vidData?.isEmpty ?? false
+                    ? vidNotifier.vidData?.isEmpty ?? true
                         ? const NoResultFound()
                         : SizedBox(
                             height: 350,

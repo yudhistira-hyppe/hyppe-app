@@ -70,7 +70,9 @@ class PreviewContentNotifier with ChangeNotifier {
   Duration? _totalDuration;
   Duration? get totalDuration => _totalDuration;
   bool _isLoadVideo = false;
+  bool _isLoadMerge = false;
   bool get isLoadVideo => _isLoadVideo;
+  bool get isLoadMerge => _isLoadMerge;
   bool _isLoadingMusic = true;
   bool get isLoadingMusic => _isLoadingMusic;
   List<MusicGroupType> _listTypes = [];
@@ -138,6 +140,11 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set isLoadVideo(bool val){
     _isLoadVideo = val;
+    notifyListeners();
+  }
+
+  set isLoadMerge(bool val){
+    _isLoadMerge = val;
     notifyListeners();
   }
 
@@ -548,10 +555,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> imageMerger(BuildContext context, String urlAudio, int duration) async{
+  void imageMerger(BuildContext context, String urlAudio, int duration) async{
+    final tempPath = _fileContent?[_indexView];
     try{
       if(urlAudio.isNotEmpty){
-        _isLoadVideo = true;
+        _isLoadMerge = true;
         notifyListeners();
         String tempVideoPath = await System().getSystemPath(params: 'tempVid');
         tempVideoPath = '${tempVideoPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
@@ -591,20 +599,20 @@ class PreviewContentNotifier with ChangeNotifier {
                 print('URL default 2 : $_defaultPath');
                 _fileContent?[_indexView] = outputPath;
                 _url = fileContent?[_indexView];
-                _isLoadVideo = false;
+                _isLoadMerge = false;
                 _sourceFile = SourceFile.local;
                 _betterPlayerController = null;
                 _defaultPath = path;
                 notifyListeners();
               }else if(ReturnCode.isCancel(codeSession)){
                 print('ReturnCode = Cancel');
-                _isLoadVideo = false;
+                _isLoadMerge = false;
                 notifyListeners();
                 throw 'Merge picture is canceled';
                 // Cancel
               }else{
                 print('ReturnCode = Error');
-                _isLoadVideo = false;
+                _isLoadMerge = false;
                 notifyListeners();
                 throw 'Merge picture is error';
                 // Error
@@ -616,13 +624,13 @@ class PreviewContentNotifier with ChangeNotifier {
 
           }else if(ReturnCode.isCancel(codeSession)){
             print('ReturnCode = Cancel');
-            _isLoadVideo = false;
+            _isLoadMerge = false;
             notifyListeners();
             throw 'Merge picture is canceled';
             // Cancel
           }else{
             print('ReturnCode = Error');
-            _isLoadVideo = false;
+            _isLoadMerge = false;
             notifyListeners();
             throw 'Merge picture is error';
             // Error
@@ -634,11 +642,9 @@ class PreviewContentNotifier with ChangeNotifier {
       }
     }catch(e){
       'imageMerger Error : $e'.logger();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }finally{
-      _isLoadVideo = false;
+      _isLoadMerge = false;
       notifyListeners();
-
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
     }
   }
 
@@ -1105,17 +1111,22 @@ class PreviewContentNotifier with ChangeNotifier {
       showNext = true;
     } else {
       _thumbNails = [];
-      for (int i = 0; i <= index; i++) {
-        print('adsasdasd asdads');
-        print(fileContent![index]!);
-        Uint8List? _thumbnail = await VideoThumbnail.thumbnailData(
-          video: fileContent?[index] ?? '',
-          imageFormat: ImageFormat.JPEG,
-          maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-          quality: 25,
-        );
-        _thumbNails?.add(_thumbnail);
+      try{
+        for (int i = 0; i <= index; i++) {
+          print('adsasdasd asdads');
+          print(fileContent![index]!);
+          Uint8List? _thumbnail = await VideoThumbnail.thumbnailData(
+            video: fileContent?[index] ?? '',
+            imageFormat: ImageFormat.JPEG,
+            maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+            quality: 25,
+          );
+          _thumbNails?.add(_thumbnail);
+        }
+      }catch(e){
+        print('makeThumbnail Error $e');
       }
+
       if (_thumbNails?.isNotEmpty ?? false) {
         showNext = true;
       } else {

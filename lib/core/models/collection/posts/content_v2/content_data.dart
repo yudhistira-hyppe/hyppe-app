@@ -273,7 +273,7 @@ class ContentData extends HiveObject {
     saleLike = json['saleLike'] ?? false;
     isApsara = json['isApsara'] ?? false;
     apsaraId = json['apsaraId'] ?? '';
-    music = json['music'] != null ? Music.fromJson(json['music']) : Music();
+    music = json['music'] != null ? Music.fromJson(json['music']) : null;
     isReport = json['isReport'] ?? false;
   }
 

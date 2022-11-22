@@ -27,8 +27,10 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import '../../../../../../../core/models/collection/music/music.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
+import '../../../../../../constant/widget/music_status_page_widget.dart';
 import '../../../diary/playlist/widget/right_items_shimmer.dart';
 import '../screen.dart';
 import 'notifier.dart';
@@ -341,6 +343,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                             ),
+                                                            if(_notifier.listData?[indexRoot].music != null)
+                                                            MusicStatusPage(
+                                                                music: _notifier.listData![indexRoot].music!)
                                                           ],
                                                         )),
                                                       ),

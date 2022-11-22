@@ -53,12 +53,15 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                 CustomBaseCacheImage(
                   imageUrl: widget.music.apsaraThumnailUrl,
                   imageBuilder: (_, imageProvider) {
-                    return const SizedBox(
+                    return Container(
                       width: 48,
                       height: 48,
-                      child: CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}ic_music.svg',
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(24)),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: imageProvider,
+                        ),
                       ),
                     );
                   },
