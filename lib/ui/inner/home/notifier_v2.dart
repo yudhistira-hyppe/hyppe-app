@@ -147,18 +147,18 @@ class HomeNotifier with ChangeNotifier {
         print("Error Load Story : $e");
       }
       try {
-        await vid.initialVid(context, reload: true, list: allContents.video, visibility: 'PUBLIC').then((value) => totLoading += 1);
+        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Video : $e");
       }
       try {
-        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: 'PUBLIC').then((value) => totLoading += 1);
+        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Diary : $e");
       }
       try {
         print('initialPic : 1');
-        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: 'PUBLIC').then((value) => totLoading += 1);
+        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Pic : $e");
       }
@@ -211,18 +211,18 @@ class HomeNotifier with ChangeNotifier {
         print("Error Load Story : $e");
       }
       try {
-        await vid.initialVid(context, reload: true, list: allContents.video, visibility: visibilty).then((value) => totLoading += 1);
+        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Video : $e");
       }
       try {
-        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: visibilty).then((value) => totLoading += 1);
+        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Diary : $e");
       }
       try {
         print('initialPic : 1');
-        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: visibilty).then((value) => totLoading += 1);
+        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Pic : $e");
       }
@@ -250,6 +250,13 @@ class HomeNotifier with ChangeNotifier {
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
     print('ambil semua data ${notifierMain.visibilty}');
     const page = 0;
+    // final notifier = PostsBloc();
+    //
+    // await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+    // final fetch = notifier.postsFetch;
+    // '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+    // res = AllContents.fromJson(fetch.data);
+    // return res;
     try {
       final notifier = PostsBloc();
 

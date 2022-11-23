@@ -62,7 +62,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   bool get hasNext => peopleContentsQuery.hasNext;
 
-  Future initialStories(BuildContext context, {List<ContentData>? list = null}) async {
+  Future initialStories(BuildContext context, {List<ContentData>? list}) async {
     initialMyStories(context);
     print('hariyanto3');
     initialPeopleStories(context, reload: true, list: list);
@@ -93,18 +93,20 @@ class PreviewStoriesNotifier with ChangeNotifier {
   Future<void> initialPeopleStories(
     BuildContext context, {
     bool reload = false,
-        List<ContentData>? list = null
+        List<ContentData>? list
   }) async {
     List<ContentData> res = [];
 
     try {
       if (list != null) {
         res.addAll(list);
+        peopleContentsQuery.hasNext = res.length == peopleContentsQuery.limit;
+        if (res.isNotEmpty) peopleContentsQuery.page++;
       } else {
         if(reload){
           res = await peopleContentsQuery.reload(context);
         }else{
-          res = await peopleContentsQuery.loadNext(context);
+          res = await peopleContentsQuery.loadNext(context, isLandingPage: true);
         }
 
       }

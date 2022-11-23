@@ -21,11 +21,12 @@ import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 
 class PreviewVideoContent extends StatefulWidget {
+  PreviewVideoContent({Key? key});
   @override
   _PreviewVideoContentState createState() => _PreviewVideoContentState();
 }
 
-class _PreviewVideoContentState extends State<PreviewVideoContent> {
+class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAware {
   BetterPlayerController? _videoPlayerController;
   @override
   void initState() {
@@ -35,7 +36,21 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> {
     super.initState();
   }
 
+  @override
+  void didPopNext() {
+    final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+    if(notifier.url != notifier.fileContent?[notifier.indexView]){
+      notifier.initVideoPlayer(context, isSaveDefault: true);
+      _videoPlayerController = notifier.betterPlayerController;
+    }
+    super.didPopNext();
+  }
 
+  @override
+  void deactivate() {
+
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {

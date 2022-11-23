@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
@@ -158,8 +159,7 @@ class ContentItem extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 240,
+                                  Expanded(
                                     child: CustomTextWidget(
                                       maxLines: 2,
                                       textAlign: TextAlign.left,
@@ -167,6 +167,7 @@ class ContentItem extends StatelessWidget {
                                       textStyle: Theme.of(context).textTheme.caption,
                                     ),
                                   ),
+                                  eightPx,
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Consumer<LikeNotifier>(
@@ -183,6 +184,10 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            if(data?.music != null)
+                            fourPx,
+                            if(data?.music != null)
+                            MusicStatusDetail(music: data!.music!)
                           ],
                         ),
                       );

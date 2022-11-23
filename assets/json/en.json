@@ -150,6 +150,8 @@
   "post": "Post",
   "music": "Music",
   "search_music": "Search Music",
+  "add_music": "Add music",
+  "loading": "loading...",
   "popular": "Popular",
   "explore": "Explore",
   "genre": "Genre",

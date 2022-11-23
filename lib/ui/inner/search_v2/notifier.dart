@@ -45,7 +45,7 @@ class SearchNotifier with ChangeNotifier {
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
-  UserInfoModel? _allContents;
+  UserInfoModel _allContents = UserInfoModel();
   List<ContentData>? _listContentData;
 
   final _focusNode = FocusNode();
@@ -56,32 +56,32 @@ class SearchNotifier with ChangeNotifier {
   int _pageIndex = 0;
   int _skip = 0;
 
-  UserInfoModel? get allContents => _allContents;
+  UserInfoModel get allContents => _allContents;
   List<ContentData>? get listContentData => _listContentData;
   int get pageIndex => _pageIndex;
   FocusNode get focusNode => _focusNode;
   FocusNode get focusNode1 => _focusNode1;
 
-  List<ContentData>? _initDataVid = null;
-  List<ContentData>? get initDataVid => _initDataVid;
-  set initDataVid(List<ContentData>? data){
-    _initDataVid = data;
-    notifyListeners();
-  }
-
-  List<ContentData>? _initDataDiary = null;
-  List<ContentData>? get initDataDiary => _initDataDiary;
-  set initDataDiary(List<ContentData>? data){
-    _initDataDiary = data;
-    notifyListeners();
-  }
-
-  List<ContentData>? _initDataPic = null;
-  List<ContentData>? get initDataPic => _initDataPic;
-  set initDataPic(List<ContentData>? data){
-    _initDataPic = data;
-    notifyListeners();
-  }
+  // List<ContentData>? _initDataVid = null;
+  // List<ContentData>? get initDataVid => _initDataVid;
+  // set initDataVid(List<ContentData>? data){
+  //   _initDataVid = data;
+  //   notifyListeners();
+  // }
+  //
+  // List<ContentData>? _initDataDiary = null;
+  // List<ContentData>? get initDataDiary => _initDataDiary;
+  // set initDataDiary(List<ContentData>? data){
+  //   _initDataDiary = data;
+  //   notifyListeners();
+  // }
+  //
+  // List<ContentData>? _initDataPic = null;
+  // List<ContentData>? get initDataPic => _initDataPic;
+  // set initDataPic(List<ContentData>? data){
+  //   _initDataPic = data;
+  //   notifyListeners();
+  // }
 
   int get vidCount => _searchContent?.vid?.data == null
       ? 18
@@ -122,7 +122,7 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set allContents(UserInfoModel? val) {
+  set allContents(UserInfoModel val) {
     _allContents = val;
     notifyListeners();
   }
@@ -139,9 +139,9 @@ class SearchNotifier with ChangeNotifier {
 
   onInitialSearch(BuildContext context) async {
     print('initial search');
-    print(allContents?.diaries);
-    print(allContents?.diaries?[0].isApsara);
-    if (allContents?.vids == null && allContents?.diaries == null && allContents?.pics == null) {
+    print(allContents.diaries);
+    print(allContents.diaries?[0].isApsara);
+    if (allContents.vids == null && allContents.diaries == null && allContents.pics == null) {
       vidContentsQuery.featureType = FeatureType.vid;
       diaryContentsQuery.featureType = FeatureType.diary;
       picContentsQuery.featureType = FeatureType.pic;
@@ -152,15 +152,14 @@ class SearchNotifier with ChangeNotifier {
 
       allContents = UserInfoModel();
       print('reload contentsQuery : 23');
-      allContents?.vids = await vidContentsQuery.reload(context);
-      allContents?.diaries = await diaryContentsQuery.reload(context);
-      allContents?.pics = await picContentsQuery.reload(context);
+      allContents.vids = await vidContentsQuery.reload(context);
+      allContents.diaries = await diaryContentsQuery.reload(context);
+      allContents.pics = await picContentsQuery.reload(context);
       notifyListeners();
     }
   }
 
   onInitialSearchNew(BuildContext context) async{
-    String search = searchController.text;
     focusNode.unfocus();
     isLoading = true;
     _searchContent = SearchContentModel();
@@ -170,27 +169,22 @@ class SearchNotifier with ChangeNotifier {
     _searchContent?.vid?.data = [];
     _searchContent?.pict = Diary();
     _searchContent?.pict?.data = [];
-    if(_initDataVid == null || _initDataDiary == null || _initDataPic == null){
-      _vidHasNext = true;
-      _diaryHasNext = true;
-      _picHasNext = true;
-      _skip += 18;
+    _vidHasNext = true;
+    _diaryHasNext = true;
+    _picHasNext = true;
+    _skip += 18;
+    try{
       _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
       _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
       _searchContent?.pict?.data = await getListPosts(context, FeatureType.pic);
-    }else{
-      _vidHasNext = true;
-      _diaryHasNext = true;
-      _picHasNext = true;
-      _skip += 18;
-      _searchContent?.vid?.data = _initDataVid;
-      _searchContent?.diary?.data = _initDataDiary;
-      _searchContent?.pict?.data = _initDataPic;
+    }catch(e){
+      'onInitialSearchNew : $e'.logger();
+    }finally{
+      isLoading = false;
+
+      notifyListeners();
     }
 
-    isLoading = false;
-
-    notifyListeners();
   }
 
   Future<List<ContentData>> getListPosts(BuildContext context, FeatureType type, {bool myContent = false, bool otherContent = false}) async {
@@ -204,7 +198,7 @@ class SearchNotifier with ChangeNotifier {
           pageRows: 18,
           pageNumber: 0,
           type: type,
-          searchText: "",
+          searchText: searchController.text,
           onlyMyData: false,
           visibility: 'PUBLIC',
           myContent: myContent,

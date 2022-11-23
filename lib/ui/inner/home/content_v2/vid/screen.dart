@@ -94,7 +94,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                               child: PageView.builder(
                                 controller: vidNotifier.pageController,
                                 scrollDirection: Axis.horizontal,
-                                onPageChanged: (index) {
+                                onPageChanged: (index) async {
+                                  if(index == (vidNotifier.itemCount - 2)){
+                                    final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                                    if(values.isNotEmpty){
+                                      vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
+                                    }
+                                  }
                                   // context.read<PreviewVidNotifier>().nextVideo = false;
                                   // context.read<PreviewVidNotifier>().initializeVideo = false;
                                 },

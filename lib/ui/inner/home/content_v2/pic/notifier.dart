@@ -42,18 +42,20 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   bool get hasNext => contentsQuery.hasNext;
 
-  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list = null, String? visibility = null}) async {
+  Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 
     try {
       if (list != null) {
         res.addAll(list);
+        contentsQuery.hasNext = res.length == contentsQuery.limit;
+        if (res.isNotEmpty) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : satu');
           res = await contentsQuery.reload(context);
         } else {
-          res = await contentsQuery.loadNext(context);
+          res = await contentsQuery.loadNext(context, isLandingPage: true);
         }
       }
 
@@ -71,34 +73,34 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       } else {
         pic = [...(pic ?? [] as List<ContentData>)] + res;
       }
-      final _searchData = context.read<SearchNotifier>();
-      print('ini pict initial');
-      if (_searchData.initDataPic != null) {
-        print('initDataPic is null');
-        if (visibility == 'PUBLIC') {
-          try {
-            _searchData.initDataPic = pic?.sublist(0, 18);
-            print('initDataPic is ${_searchData.initDataPic?.length}');
-          } catch (e) {
-            _searchData.initDataPic = pic;
-            print('initDataPic is ${_searchData.initDataPic?.length}');
-          }
-        }else{
-          if(_searchData.initDataPic!.isEmpty){
-            if (visibility == 'PUBLIC') {
-              try {
-                _searchData.initDataPic = pic?.sublist(0, 18);
-                print('initDataVid is ${_searchData.initDataPic?.length}');
-              } catch (e) {
-                _searchData.initDataPic = pic;
-                print('initDataVid is ${_searchData.initDataPic?.length}');
-              }
-            }
-          }
-        }
-        // _searchData.picContentsQuery.featureType = FeatureType.pic;
-        // _searchData.allContents.pics = pic;
-      }
+      // final _searchData = context.read<SearchNotifier>();
+      // print('ini pict initial');
+      // if (_searchData.initDataPic != null) {
+      //   print('initDataPic is null');
+      //   if (visibility == 'PUBLIC') {
+      //     try {
+      //       _searchData.initDataPic = pic?.sublist(0, 18);
+      //       print('initDataPic is ${_searchData.initDataPic?.length}');
+      //     } catch (e) {
+      //       _searchData.initDataPic = pic;
+      //       print('initDataPic is ${_searchData.initDataPic?.length}');
+      //     }
+      //   }else{
+      //     if(_searchData.initDataPic!.isEmpty){
+      //       if (visibility == 'PUBLIC') {
+      //         try {
+      //           _searchData.initDataPic = pic?.sublist(0, 18);
+      //           print('initDataVid is ${_searchData.initDataPic?.length}');
+      //         } catch (e) {
+      //           _searchData.initDataPic = pic;
+      //           print('initDataVid is ${_searchData.initDataPic?.length}');
+      //         }
+      //       }
+      //     }
+      //   }
+      //   // _searchData.picContentsQuery.featureType = FeatureType.pic;
+      //   // _searchData.allContents.pics = pic;
+      // }
     } catch (e) {
       'load pic list: ERROR: $e'.logger();
     }

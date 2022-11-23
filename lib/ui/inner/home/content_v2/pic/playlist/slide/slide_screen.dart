@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -32,6 +33,7 @@ import '../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
 import '../../../../../../constant/widget/music_status_page_widget.dart';
 import '../../../diary/playlist/widget/right_items_shimmer.dart';
+import '../../notifier.dart';
 import '../screen.dart';
 import 'notifier.dart';
 
@@ -87,23 +89,31 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
         },
         child: GestureDetector(
           onDoubleTap: () => resetZooming(),
-          child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(builder: (context, value, child) {
-            return _notifier.listData != null
+          child: Scaffold(body: Consumer<SlidedPicDetailNotifier>(builder: (context, notifier, child) {
+            return notifier.listData != null
                 ? PageView.builder(
                     controller: _pageController,
-                    itemCount: _notifier.listData?.length ?? 0,
+                    itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
-                      await _notifier.initAdsVideo(context);
+                      if(value == ((notifier.listData?.length ?? 0) - 2)){
+                        final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
+                        if(values.isNotEmpty){
+                          notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;
+                        }
+                        final prev = context.read<PreviewPicNotifier>();
+                        prev.initialPic(context, list: values);
+                      }
+                      await notifier.initAdsVideo(context);
                     },
                     itemBuilder: (context, indexRoot) {
-                      final data = _notifier.listData;
+                      final data = notifier.listData;
                       if (data != null) {}
                       return PageView.builder(
                           controller: _mainPageController,
                           itemCount: 2,
                           scrollDirection: Axis.vertical,
                           itemBuilder: (context, indexPage) {
-                            final data = _notifier.listData?[indexRoot];
+                            final data = notifier.listData?[indexRoot];
                             if (data != null) {
                               return indexPage == 0
                                   ? Stack(
@@ -118,7 +128,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                         // Content
                                         data.isReport ?? false
                                             ? Container()
-                                            : PicPlaylishScreen(data: value.adsData, url: value.adsUrl, contentData: data, transformationController: transformationController),
+                                            : PicPlaylishScreen(data: notifier.adsData, url: notifier.adsUrl, contentData: data, transformationController: transformationController),
                                         // Top action
                                         data.isReport ?? false
                                             ? Container()
@@ -274,7 +284,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                         _buildButtonV2(
                                                           context: context,
                                                           iconData: '${AssetPath.vectorPath}comment.svg',
-                                                          function: _notifier.listData?[indexRoot] != null
+                                                          function: notifier.listData?[indexRoot] != null
                                                               ? () {
                                                                   ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
                                                                 }
@@ -283,7 +293,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                         _buildButtonV2(
                                                           context: context,
                                                           iconData: '${AssetPath.vectorPath}share.svg',
-                                                          function: _notifier.listData?[indexRoot] != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data) : () {},
+                                                          function: notifier.listData?[indexRoot] != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data) : () {},
                                                         ),
                                                         if ((data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
                                                           _buildButtonV2(
@@ -343,9 +353,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                             ),
-                                                            if(_notifier.listData?[indexRoot].music != null)
+                                                            if(notifier.listData?[indexRoot].music != null)
                                                             MusicStatusPage(
-                                                                music: _notifier.listData![indexRoot].music!)
+                                                                music: notifier.listData![indexRoot].music!)
                                                           ],
                                                         )),
                                                       ),

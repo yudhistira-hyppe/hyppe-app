@@ -74,19 +74,20 @@ class PreviewDiaryNotifier with ChangeNotifier {
     return _result;
   }
 
-  Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list = null,
-    String? visibility = null}) async {
+  Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 
     try {
       if (list != null) {
         res.addAll(list);
+        contentsQuery.hasNext = res.length == contentsQuery.limit;
+        if (res.isNotEmpty) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : 4');
           res = await contentsQuery.reload(context);
         } else {
-          res = await contentsQuery.loadNext(context);
+          res = await contentsQuery.loadNext(context, isLandingPage: true);
         }
       }
 
@@ -103,33 +104,33 @@ class PreviewDiaryNotifier with ChangeNotifier {
       } else {
         diaryData = [...(diaryData ?? [] as List<ContentData>)] + res;
       }
-      final _searchData = context.read<SearchNotifier>();
-      if (_searchData.initDataDiary == null) {
-        // _searchData.diaryContentsQuery.featureType = FeatureType.diary;
-        print('initDataDiary is null');
-        if(visibility == 'PUBLIC'){
-          try{
-            _searchData.initDataDiary = diaryData?.sublist(0, 18);
-            print('initDataDiary is ${_searchData.initDataDiary?.length}');
-          }catch(e){
-            _searchData.initDataDiary = diaryData;
-            print('initDataDiary is ${_searchData.initDataDiary?.length}');
-          }
-
-        }else{
-          if(_searchData.initDataDiary?.isEmpty ?? true){
-            if (visibility == 'PUBLIC') {
-              try {
-                _searchData.initDataDiary = diaryData?.sublist(0, 18);
-                print('initDataVid is ${_searchData.initDataDiary?.length}');
-              } catch (e) {
-                _searchData.initDataDiary = diaryData;
-                print('initDataVid is ${_searchData.initDataDiary?.length}');
-              }
-            }
-          }
-        }
-      }
+      // final _searchData = context.read<SearchNotifier>();
+      // if (_searchData.initDataDiary == null) {
+      //   // _searchData.diaryContentsQuery.featureType = FeatureType.diary;
+      //   print('initDataDiary is null');
+      //   if(visibility == 'PUBLIC'){
+      //     try{
+      //       _searchData.initDataDiary = diaryData?.sublist(0, 18);
+      //       print('initDataDiary is ${_searchData.initDataDiary?.length}');
+      //     }catch(e){
+      //       _searchData.initDataDiary = diaryData;
+      //       print('initDataDiary is ${_searchData.initDataDiary?.length}');
+      //     }
+      //
+      //   }else{
+      //     if(_searchData.initDataDiary?.isEmpty ?? true){
+      //       if (visibility == 'PUBLIC') {
+      //         try {
+      //           _searchData.initDataDiary = diaryData?.sublist(0, 18);
+      //           print('initDataVid is ${_searchData.initDataDiary?.length}');
+      //         } catch (e) {
+      //           _searchData.initDataDiary = diaryData;
+      //           print('initDataVid is ${_searchData.initDataDiary?.length}');
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     } catch (e) {
       'load diary list: ERROR: $e'.logger();
     }

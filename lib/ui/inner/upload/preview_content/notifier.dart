@@ -193,6 +193,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set url(String? val){
+    _url = val;
+    notifyListeners();
+  }
+
   set isLoadingMusic(bool state){
     _isLoadingMusic = state;
     notifyListeners();

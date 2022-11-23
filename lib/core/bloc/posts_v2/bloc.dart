@@ -126,9 +126,10 @@ class PostsBloc {
 
   Future getAllContentsBlocV2(
     BuildContext context, {
-    int pageRows = 15,
-    bool myContent = false,
-    bool otherContent = false,
+      int pageRows = 5,
+        bool myContent = false,
+        bool otherContent = false,
+        String? postType,
     required String visibility,
     required int pageNumber,
   }) async {
@@ -140,6 +141,9 @@ class PostsBloc {
     formData.fields.add(const MapEntry('withActive', 'true'));
     formData.fields.add(const MapEntry('withDetail', 'true'));
     formData.fields.add(const MapEntry('withInsight', 'true'));
+    if(postType != null){
+      formData.fields.add(MapEntry('postType', postType));
+    }
     formData.fields.add(MapEntry('visibility', visibility));
     // formData.fields.add(MapEntry('endDate', currentDate));
     formData.fields.add(MapEntry('pageRow', '$pageRows'));
@@ -229,6 +233,7 @@ class PostsBloc {
 
     print('createPost : ');
     print(formData.fields.map((e) => e).join(','));
+    print('file upload: ${formData.files.toString()}');
 
     print(System().basenameFiles(File(fileContents[0] ?? '').path));
     print(System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", ""));
@@ -237,13 +242,16 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
+        print('Error Create Post ${onResult.statusCode}');
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
         }
       },
       (errorData) {
+        print('Error Create Post $errorData');
         setPostsFetch(PostsFetch(PostsState.postContentsError));
       },
       data: formData,

@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
@@ -11,6 +13,7 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/music/music.dart';
@@ -75,6 +78,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isLoadingLoadMore => _isLoadingLoadMore;
   bool _isShowAutoComplete = false;
   bool get isShowAutoComplete => _isShowAutoComplete;
+  bool _isLoadMerge = false;
+  bool get isLoadMerge => _isLoadMerge;
+
   String _temporarySearch = '';
   String get temporarySearch => _temporarySearch;
 
@@ -291,6 +297,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set isLoadMerge(bool val){
+    _isLoadMerge = val;
+    notifyListeners();
+  }
+
   set selectedLocation(String val) {
     _selectedLocation = val;
     notifyListeners();
@@ -303,6 +314,13 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set fileContent(List<String?>? val) {
     _fileContent = val;
+    notifyListeners();
+  }
+
+  void setDefaultFileContent(BuildContext context){
+    final notifierPre = context.read<PreviewContentNotifier>();
+    _fileContent?[0] = notifierPre.defaultPath;
+    _musicSelected = null;
     notifyListeners();
   }
 
@@ -378,6 +396,146 @@ class PreUploadContentNotifier with ChangeNotifier {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+  }
+
+  void imageMerger(BuildContext context, String urlAudio, int duration) async{
+    try{
+      if(urlAudio.isNotEmpty){
+        _isLoadMerge = true;
+        notifyListeners();
+        String tempVideoPath = await System().getSystemPath(params: 'tempVid');
+        tempVideoPath = '${tempVideoPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+        String outputPath = await System().getSystemPath(params: 'postPic');File image = File(_fileContent?[0] ?? ''); // Or any other way to get a File instance.
+        final decodedImage = await decodeImageFromList(image.readAsBytesSync());
+        print('real image : ${decodedImage.height}:${decodedImage.width}');
+        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+        double heightImage = decodedImage.height.toDouble();
+        double widthImage = decodedImage.width.toDouble();
+        const maxScale = 1080;
+        var multiValue = 1.0;
+        if(heightImage > maxScale || widthImage > maxScale){
+
+          if(heightImage > maxScale && widthImage > maxScale){
+            if(heightImage > widthImage){
+              multiValue = maxScale/heightImage;
+            }else{
+              multiValue = maxScale/widthImage;
+            }
+          }else if(heightImage > maxScale){
+            multiValue = maxScale/heightImage;
+          }else if(widthImage> maxScale){
+            multiValue = maxScale/widthImage;
+          }
+        }
+        String command = '-framerate 1 -i ${_fileContent?[0]} -r 30 -pix_fmt yuv420p -vf scale=${decodedImage.width/multiValue}:${decodedImage.height/multiValue} -c:v mpeg4 $tempVideoPath';
+        await FFmpegKit.executeAsync(command, (session) async{
+          final codeSession = await session.getReturnCode();
+          if(ReturnCode.isSuccess(codeSession)){
+            print('ReturnCode = Success');
+            command = '-stream_loop -1 -i $tempVideoPath -i $urlAudio -shortest -c:v mpeg4 $outputPath';
+            await FFmpegKit.executeAsync(command, (session) async{
+              final codeSession = await session.getReturnCode();
+              if(ReturnCode.isSuccess(codeSession)){
+                final path = _fileContent?[0] ?? '';
+                print('URL now : $path');
+                final notifier = context.read<PreviewContentNotifier>();
+                print('URL default 2 : ${notifier.defaultPath}');
+                _fileContent?[0] = outputPath;
+                notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
+                _isLoadMerge = false;
+                notifyListeners();
+              }else if(ReturnCode.isCancel(codeSession)){
+                print('ReturnCode = Cancel');
+                _isLoadMerge = false;
+                notifyListeners();
+                throw 'Merge picture is canceled';
+                // Cancel
+              }else{
+                print('ReturnCode = Error');
+                _isLoadMerge = false;
+                notifyListeners();
+                throw 'Merge picture is error';
+                // Error
+              }
+
+            }, (log){
+              print('FFmpegKit Image ${log.getMessage()}');
+            },);
+
+          }else if(ReturnCode.isCancel(codeSession)){
+            print('ReturnCode = Cancel');
+            _isLoadMerge = false;
+            notifyListeners();
+            throw 'Merge picture is canceled';
+            // Cancel
+          }else{
+            print('ReturnCode = Error');
+            _isLoadMerge = false;
+            notifyListeners();
+            throw 'Merge picture is error';
+            // Error
+          }
+
+        }, (log){
+          print('FFmpegKit Image ${log.getMessage()}');
+        },);
+      }
+    }catch(e){
+      'imageMerger Error : $e'.logger();
+      _isLoadMerge = false;
+      notifyListeners();
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+    }
+  }
+
+  Future<void> videoMerger(BuildContext context, String urlAudio) async{
+    try{
+      if(urlAudio.isNotEmpty){
+        _isLoadMerge = true;
+        notifyListeners();
+        String outputPath = await System().getSystemPath(params: 'postVideo');
+        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
+
+        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[0]} -shortest -c copy $outputPath';
+        await FFmpegKit.executeAsync(command, (session) async{
+          final codeSession = await session.getReturnCode();
+          if(ReturnCode.isSuccess(codeSession)){
+            print('ReturnCode = Success');
+            final path = _fileContent?[0] ?? '';
+            final notifier = context.read<PreviewContentNotifier>();
+            print('URL now : $path');
+            print('URL default 2 : ${notifier.defaultPath}');
+            _fileContent?[0] = outputPath;
+            notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
+          }else if(ReturnCode.isCancel(codeSession)){
+            print('ReturnCode = Cancel');
+            _isLoadMerge = false;
+            notifyListeners();
+            throw 'Merge video is canceled';
+            // Cancel
+          }else{
+            print('ReturnCode = Error');
+            _isLoadMerge = false;
+            notifyListeners();
+            throw 'Merge video is Error';
+            // Error
+          }
+
+        }, (log){
+          print('FFmpegKit ${log.getMessage()}');
+        },);
+      }else{
+        throw 'UrlAudio is empty';
+      }
+
+    }catch(e){
+      'videoMerger Error : $e'.logger();
+      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
+    }finally{
+      _isLoadMerge = false;
+      notifyListeners();
+    }
+
   }
 
   void _connectAndListenToSocket(BuildContext context) async {
@@ -512,6 +670,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       });
       clearUpAndBackToHome(context);
     } catch (e) {
+      print('Error create post : $e');
       _eventService.notifyUploadFailed(
         DioError(
           requestOptions: RequestOptions(

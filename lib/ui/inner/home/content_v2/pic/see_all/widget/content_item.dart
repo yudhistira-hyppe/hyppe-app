@@ -24,6 +24,8 @@ import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_notifier.dart';
 
+import '../../../../../../constant/widget/music_status_detail_widget.dart';
+
 class ContentItem extends StatelessWidget {
   const ContentItem({Key? key}) : super(key: key);
 
@@ -100,7 +102,7 @@ class ContentItem extends StatelessWidget {
                                     ? const Align(
                                         alignment: Alignment.topRight,
                                         child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
+                                          padding: EdgeInsets.all(4.0),
                                           child: CustomIconWidget(
                                             iconData: "${AssetPath.vectorPath}sale.svg",
                                             height: 20,
@@ -142,8 +144,7 @@ class ContentItem extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 240,
+                                  Expanded(
                                     child: CustomTextWidget(
                                       maxLines: 2,
                                       textAlign: TextAlign.left,
@@ -151,6 +152,7 @@ class ContentItem extends StatelessWidget {
                                       textStyle: Theme.of(context).textTheme.caption,
                                     ),
                                   ),
+                                  eightPx,
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Consumer<LikeNotifier>(
@@ -167,6 +169,10 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            if(data?.music != null)
+                              fourPx,
+                            if(data?.music != null)
+                              MusicStatusDetail(music: data!.music!)
                           ],
                         ),
                       );
