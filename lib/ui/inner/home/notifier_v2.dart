@@ -1,5 +1,4 @@
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
@@ -20,7 +19,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
 import '../../../core/bloc/posts_v2/bloc.dart';
-import '../../../core/models/hive_box/boxes.dart';
 
 class HomeNotifier with ChangeNotifier {
   //for visibilty
@@ -271,22 +269,6 @@ class HomeNotifier with ChangeNotifier {
     }
   }
 
-  bool _availableToHitAgain(AllContents all, int limit) {
-    if ((all.story?.length ?? 0) < limit) {
-      return true;
-    }
-    if ((all.diary?.length ?? 0) < limit) {
-      return true;
-    }
-    if ((all.video?.length ?? 0) < limit) {
-      return true;
-    }
-    if ((all.pict?.length ?? 0) < limit) {
-      return true;
-    }
-
-    return false;
-  }
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);

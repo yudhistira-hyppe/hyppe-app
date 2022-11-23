@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:hive/hive.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 class CommentDataV2 {
@@ -208,18 +207,13 @@ class SenderInfo {
   }
 }
 
-@HiveType(typeId: 9)
 class Avatar {
-  @HiveField(0)
   String? mediaBasePath;
 
-  @HiveField(1)
   String? mediaUri;
 
-  @HiveField(2)
   String? mediaType;
 
-  @HiveField(3)
   String? mediaEndpoint;
 
   Avatar({

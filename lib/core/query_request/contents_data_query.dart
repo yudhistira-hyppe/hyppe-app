@@ -3,14 +3,11 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 
 import 'package:flutter/material.dart' show BuildContext;
-import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/interface/pagination_query_interface.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/models/hive_box/boxes.dart';
-import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';

@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/models/hive_box/boxes.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -68,22 +67,22 @@ extension contextScreen on BuildContext{
     return formatter.format(now);
   }
 
-  Future setAllContents(AllContents value) async{
-    final box = Boxes.boxDataContents;
-    await box.putAt(0, value);
-  }
-
-  AllContents? getAllContents(){
-    final box = Boxes.boxDataContents;
-    final value = box.getAt(0);
-    return value;
-  }
-
-  bool isLandPageNotEmpty(){
-    final notifierMain = Provider.of<HomeNotifier>(this, listen: false);
-    final box = Boxes.boxDataContents;
-    return box.get(notifierMain.visibilty) != null;
-  }
+  // Future setAllContents(AllContents value) async{
+  //   final box = Boxes.boxDataContents;
+  //   await box.putAt(0, value);
+  // }
+  //
+  // AllContents? getAllContents(){
+  //   final box = Boxes.boxDataContents;
+  //   final value = box.getAt(0);
+  //   return value;
+  // }
+  //
+  // bool isLandPageNotEmpty(){
+  //   final notifierMain = Provider.of<HomeNotifier>(this, listen: false);
+  //   final box = Boxes.boxDataContents;
+  //   return box.get(notifierMain.visibilty) != null;
+  // }
 
 }
 
