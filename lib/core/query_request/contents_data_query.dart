@@ -25,7 +25,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
   @override
   Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false, bool isLandingPage = false}) async {
-    print('loadnext');
+    print('loadnext : $hasNext');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     if (!hasNext) return [];
@@ -67,6 +67,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
         final notifier = PostsBloc();
         await notifier.getAllContentsBlocV2(
             context,
+            pageRows: limit,
             pageNumber: page,
             visibility: notifierMain.visibilty,
             myContent: myContent,

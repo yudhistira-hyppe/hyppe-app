@@ -52,6 +52,7 @@ import 'package:story_view/story_view.dart';
 
 class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery myContentsQuery = ContentsDataQuery()
+  ..limit = 5
     ..onlyMyData = true
     ..featureType = FeatureType.story;
 

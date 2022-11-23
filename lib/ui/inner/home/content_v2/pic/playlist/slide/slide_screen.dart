@@ -95,7 +95,9 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     controller: _pageController,
                     itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
-                      if(value == ((notifier.listData?.length ?? 0) - 2)){
+                      print('onPageChanged Image : $value : ${notifier.listData?.length}');
+                      if(value == ((notifier.listData?.length ?? 0) - 1)){
+                        print('onPageChanged Image : masuk');
                         final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
                         if(values.isNotEmpty){
                           notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;

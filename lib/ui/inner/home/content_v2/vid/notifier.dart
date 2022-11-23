@@ -31,7 +31,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
   final _routing = Routing();
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.vid;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit = 5..featureType = FeatureType.vid;
   PageController pageController = PageController();
 
   List<ContentData>? _vidData;

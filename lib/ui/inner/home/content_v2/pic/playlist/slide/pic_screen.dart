@@ -69,7 +69,9 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
     if(widget.contentData.music?.id != null){
       return _isLoadVideo ? const Center(
         child: CustomLoading(),
-      ) : (_betterPlayerController!.isVideoInitialized() ?? false) ? InteractiveViewer(
+      ) : _betterPlayerController == null ? const Center(
+        child: CustomLoading(),
+      ): (_betterPlayerController!.isVideoInitialized() ?? false) ? InteractiveViewer(
         transformationController: widget.transformationController,
         child: InkWell(
           onDoubleTap: () {
