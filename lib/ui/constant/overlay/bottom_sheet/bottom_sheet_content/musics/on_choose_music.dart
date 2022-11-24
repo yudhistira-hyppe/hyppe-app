@@ -18,7 +18,8 @@ import '../../../../widget/custom_text_widget.dart';
 import '../../../../widget/icon_button_widget.dart';
 
 class OnChooseMusicBottomSheet extends StatefulWidget {
-  const OnChooseMusicBottomSheet({Key? key}) : super(key: key);
+  bool isPic;
+  OnChooseMusicBottomSheet({Key? key, required this.isPic}) : super(key: key);
 
   @override
   State<OnChooseMusicBottomSheet> createState() => _OnChooseMusicBottomSheetState();
@@ -30,6 +31,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
   void initState() {
     final notifier = context.read<PreviewContentNotifier>();
     Future.delayed(Duration.zero, () async{
+      notifier.isLoadingMusic = true;
       await notifier.initListMusics(context);
     });
     super.initState();
@@ -100,8 +102,19 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 print('test');
                 // notifier.isLoadVideo = true;
                 await notifier.audioPlayer.stop();
-                await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '');
+                if(widget.isPic){
+                  // notifier.isLoadVideo = true;
+                  print('isLoadVideo : ${notifier.isLoadVideo}');
+                  notifier.imageMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', Duration(seconds: notifier.selectedMusic?.apsaraMusicUrl?.duration?.toInt() ?? 10).inMinutes);
+                }else{
+                  await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '');
+                }
+                notifier.fixSelectedMusic = notifier.selectedMusic;
+                notifier.selectedMusic = null;
+                notifier.forceResetPlayer();
+                notifier.searchController.text = '';
                 Navigator.pop(context);
+
               },
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.select ?? 'select',

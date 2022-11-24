@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
@@ -14,11 +13,14 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../../core/models/collection/music/music.dart';
+import '../../../../../../constant/widget/music_status_page_widget.dart';
+
 class LeftItems extends StatefulWidget {
   final String? userName;
   final String? description;
   final String? tags;
-  final String? musicName;
+  final Music? music;
   final String? authorName;
   final StoryController? storyController;
   final String? postID;
@@ -26,8 +28,19 @@ class LeftItems extends StatefulWidget {
   final List<TagPeople>? tagPeople;
   final ContentData? data;
 
-  const LeftItems({Key? key, this.userName, this.description, this.tags, this.musicName, this.authorName, this.storyController, this.postID, this.location, this.tagPeople, this.data})
-      : super(key: key);
+  const LeftItems({
+    Key? key,
+    this.userName,
+    this.description,
+    this.tags,
+    this.music,
+    this.authorName,
+    this.storyController,
+    this.postID,
+    this.location,
+    this.tagPeople,
+    this.data,
+  }) : super(key: key);
 
   @override
   _LeftItemsState createState() => _LeftItemsState();
@@ -60,10 +73,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      width: SizeConfig.screenWidth! / 1.3,
-      // alignment: const Alignment(-1.0, 0.75),
-      alignment: Alignment.bottomLeft,
-      padding: const EdgeInsets.only(left: 15.0, bottom: 40),
+      width: widget.music != null ? double.infinity : SizeConfig.screenWidth! / 1.3,
+      alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
+      padding: const EdgeInsets.only(left: 15.0, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -113,6 +125,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               ),
             ),
           ),
+
           twelvePx,
           widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(
@@ -122,7 +135,10 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     contentData: widget.data,
                   ),
                 )
-              : Container()
+              : Container(),
+
+          if (widget.music != null) MusicStatusPage(music: widget.music!)
+
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
           // _musicInfo(),
         ],

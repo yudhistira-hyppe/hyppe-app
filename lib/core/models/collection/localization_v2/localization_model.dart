@@ -150,6 +150,8 @@ class LocalizationModelV2 {
   String? post;
   String? music;
   String? searchMusic;
+  String? addMusic;
+  String? loading;
   String? popular;
   String? explore;
   String? genre;
@@ -917,6 +919,8 @@ class LocalizationModelV2 {
     this.post,
     this.music,
     this.searchMusic,
+    this.addMusic,
+    this.loading,
     this.popular,
     this.explore,
     this.genre,
@@ -1685,6 +1689,8 @@ class LocalizationModelV2 {
     post = json['post'];
     music = json['music'];
     searchMusic = json['search_music'];
+    addMusic = json['add_music'];
+    loading = json['loading'];
     popular = json['popular'];
     explore = json['explore'];
     genre = json['genre'];

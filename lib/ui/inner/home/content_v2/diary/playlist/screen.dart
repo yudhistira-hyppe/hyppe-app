@@ -10,6 +10,8 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/diary_page/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items_shimmer.dart';
 
+import '../preview/notifier.dart';
+
 class HyppePlaylistDiaries extends StatefulWidget {
   final DiaryDetailScreenArgument argument;
 
@@ -61,6 +63,16 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                   ? PageView.builder(
                       controller: _pageController,
                       itemCount: notifier.listData?.length ?? 0,
+                      onPageChanged: (index) async{
+                        if(index == ((notifier.listData?.length ?? 0) - 1)){
+                          final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
+                          if(values.isNotEmpty){
+                            notifier.listData = [...(notifier.listData ?? [] as List<ContentData>)] + values;
+                            final prev = context.read<PreviewDiaryNotifier>();
+                            prev.initialDiary(context, list: values);
+                          }
+                        }
+                      },
                       itemBuilder: (context, rootIndex) {
                         if (notifier.listData?.isNotEmpty ?? false) {
                           if (notifier.currentPage?.floor() == rootIndex) {

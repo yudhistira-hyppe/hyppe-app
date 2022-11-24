@@ -1,11 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/config/url_constants.dart';
-import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:provider/provider.dart';
 
-import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
@@ -26,6 +23,8 @@ import 'package:hyppe/core/models/collection/error/error_model.dart';
 
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+
+import '../../services/event_service.dart';
 
 class Repos {
   Repos._private();
@@ -238,7 +237,15 @@ class Repos {
         context.read<ErrorService>().addErrorObject(errorServiceType, e.message);
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        // EventService().notifyUploadFailed(
+        //   DioError(
+        //     requestOptions: RequestOptions(
+        //       path: UrlConstants.createuserposts,
+        //     ),
+        //     error: e,
+        //   ),
+        // );
+        // _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
       dataError['log'] = 'Error detail in DioError catch ${e.message.toString()} with status code ${e.response?.statusCode}, and host $host and paramdata $data';
       // final responError = await postLogError(context, dataError, headers, onReceiveProgress);

@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 
 class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   static final _system = System();
-  DeepArController? deepArController;
+  DeepArController? deepArController = DeepArController();
   String? _iOSVersion;
   CameraController? cameraController;
   List<CameraDescription> camera = [];
@@ -28,7 +28,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   bool get isRecordingPaused => deepArController?.isRecording ?? false;
   bool get isTakingPicture => cameraController?.value.isTakingPicture ?? false;
   bool get hasError => cameraController?.value.hasError ?? false;
-  double get cameraAspectRatio => deepArController!.imageDimensions.height / deepArController!.imageDimensions.width;
+  double get cameraAspectRatio => (deepArController?.imageDimensions.height ?? 0.0) / (deepArController?.imageDimensions.width ?? 0.0);
   double get yScale => 1;
 
   bool _showEffected = false;

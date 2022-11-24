@@ -39,7 +39,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
-    notifier.initialVid(context, reload: true);
+    // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
     super.initState();
   }
@@ -78,7 +78,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                     ),
                   )
                 : (vidNotifier.vidData != null)
-                    ? vidNotifier.vidData?.isEmpty ?? false
+                    ? vidNotifier.vidData?.isEmpty ?? true
                         ? const NoResultFound()
                         : SizedBox(
                             height: 350,
@@ -94,7 +94,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                               child: PageView.builder(
                                 controller: vidNotifier.pageController,
                                 scrollDirection: Axis.horizontal,
-                                onPageChanged: (index) {
+                                onPageChanged: (index) async {
+                                  if(index == (vidNotifier.itemCount - 1)){
+                                    final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
+                                    if(values.isNotEmpty){
+                                      vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
+                                    }
+                                  }
                                   // context.read<PreviewVidNotifier>().nextVideo = false;
                                   // context.read<PreviewVidNotifier>().initializeVideo = false;
                                 },

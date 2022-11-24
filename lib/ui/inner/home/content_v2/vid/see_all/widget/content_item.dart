@@ -6,17 +6,15 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
+import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/error_service.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -181,8 +179,7 @@ class ContentItem extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: 240,
+                                  Expanded(
                                     child: CustomTextWidget(
                                       maxLines: 2,
                                       textAlign: TextAlign.left,
@@ -190,6 +187,7 @@ class ContentItem extends StatelessWidget {
                                       textStyle: Theme.of(context).textTheme.caption,
                                     ),
                                   ),
+                                  eightPx,
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Consumer<LikeNotifier>(
@@ -206,6 +204,8 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            if (data?.music != null) fourPx,
+                            if (data?.music != null) MusicStatusDetail(music: data!.music!)
                           ],
                         ),
                       );

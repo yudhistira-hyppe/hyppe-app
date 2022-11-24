@@ -1,5 +1,4 @@
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
@@ -21,7 +20,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
 import '../../../core/bloc/posts_v2/bloc.dart';
-import '../../../core/models/hive_box/boxes.dart';
 
 class HomeNotifier with ChangeNotifier {
   //for visibilty
@@ -121,6 +119,67 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
+  Future initHome(BuildContext context) async{
+    print('init Home');
+    bool isConnected = await System().checkConnections();
+    if(isConnected){
+      _isLoadingVid = true;
+      _isLoadingDiary = true;
+      _isLoadingPict = true;
+      int totLoading = 0;
+      final profile = Provider.of<MainNotifier>(context, listen: false);
+      final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+      final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+      final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+      final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+      try {
+        await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
+      } catch (e) {
+        print(e);
+      }
+
+      final allContents = await allReload(context);
+      // Refresh content
+      try {
+        await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Story : $e");
+      }
+      try {
+        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Video : $e");
+      }
+      try {
+        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Diary : $e");
+      }
+      try {
+        print('initialPic : 1');
+        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
+      } catch (e) {
+        print("Error Load Pic : $e");
+      }
+
+      print('totLoading $totLoading');
+      if (totLoading >= 3) {
+        print("is finish shimmer");
+        _isLoadingVid = false;
+        _isLoadingDiary = false;
+        _isLoadingPict = false;
+      }
+
+      notifyListeners();
+
+    }else{
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        onRefresh(context, 'PUBLIC');
+      });
+    }
+  }
+
   Future onRefresh(BuildContext context, String visibility) async {
     print('home notifier');
     bool isConnected = await System().checkConnections();
@@ -151,18 +210,18 @@ class HomeNotifier with ChangeNotifier {
         print("Error Load Story : $e");
       }
       try {
-        await vid.initialVid(context, reload: true, list: allContents.video, visibility: visibilty).then((value) => totLoading += 1);
+        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Video : $e");
       }
       try {
-        await diary.initialDiary(context, reload: true, list: allContents.diary, visibility: visibilty).then((value) => totLoading += 1);
+        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Diary : $e");
       }
       try {
         print('initialPic : 1');
-        await pic.initialPic(context, reload: true, list: allContents.pict, visibility: visibilty).then((value) => totLoading += 1);
+        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
         print("Error Load Pic : $e");
       }
@@ -190,6 +249,13 @@ class HomeNotifier with ChangeNotifier {
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
     print('ambil semua data ${notifierMain.visibilty}');
     const page = 0;
+    // final notifier = PostsBloc();
+    //
+    // await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+    // final fetch = notifier.postsFetch;
+    // '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+    // res = AllContents.fromJson(fetch.data);
+    // return res;
     try {
       final notifier = PostsBloc();
 
@@ -199,27 +265,11 @@ class HomeNotifier with ChangeNotifier {
       res = AllContents.fromJson(fetch.data);
       return res;
     } catch (e) {
-      '$e'.logger();
-      rethrow;
+      'landing page error : $e'.logger();
+      return AllContents(story: [], video: [], diary: [], pict: []);
     }
   }
 
-  bool _availableToHitAgain(AllContents all, int limit) {
-    if ((all.story?.length ?? 0) < limit) {
-      return true;
-    }
-    if ((all.diary?.length ?? 0) < limit) {
-      return true;
-    }
-    if ((all.video?.length ?? 0) < limit) {
-      return true;
-    }
-    if ((all.pict?.length ?? 0) < limit) {
-      return true;
-    }
-
-    return false;
-  }
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);

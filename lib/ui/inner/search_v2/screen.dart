@@ -12,8 +12,6 @@ import 'package:hyppe/ui/inner/search_v2/widget/search_content.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
 
-import 'hashtag/screen.dart';
-
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();

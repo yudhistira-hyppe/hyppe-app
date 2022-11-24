@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/models/hive_box/boxes.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +8,7 @@ import '../../ui/inner/home/notifier_v2.dart';
 import '../constants/shared_preference_keys.dart';
 import '../models/collection/posts/content_v2/content_data.dart';
 import '../services/shared_preference.dart';
+import '../services/system.dart';
 
 extension contextScreen on BuildContext{
   double getWidth(){
@@ -67,26 +67,26 @@ extension contextScreen on BuildContext{
     return formatter.format(now);
   }
 
-  Future setAllContents(AllContents value) async{
-    final box = Boxes.boxDataContents;
-    await box.putAt(0, value);
-  }
-
-  AllContents? getAllContents(){
-    final box = Boxes.boxDataContents;
-    final value = box.getAt(0);
-    return value;
-  }
-
-  bool isLandPageNotEmpty(){
-    final notifierMain = Provider.of<HomeNotifier>(this, listen: false);
-    final box = Boxes.boxDataContents;
-    return box.get(notifierMain.visibilty) != null;
-  }
+  // Future setAllContents(AllContents value) async{
+  //   final box = Boxes.boxDataContents;
+  //   await box.putAt(0, value);
+  // }
+  //
+  // AllContents? getAllContents(){
+  //   final box = Boxes.boxDataContents;
+  //   final value = box.getAt(0);
+  //   return value;
+  // }
+  //
+  // bool isLandPageNotEmpty(){
+  //   final notifierMain = Provider.of<HomeNotifier>(this, listen: false);
+  //   final box = Boxes.boxDataContents;
+  //   return box.get(notifierMain.visibilty) != null;
+  // }
 
 }
 
-extension ContentTypeDefine on String{
+extension StringDefine on String{
   ContentType? translateType(){
     if (this == "video") {
       return ContentType.video;
@@ -94,6 +94,10 @@ extension ContentTypeDefine on String{
       return ContentType.image;
     }
     return null;
+  }
+
+  bool isImageFormat(){
+    return System().lookupContentMimeType(this)?.contains('image') ?? false;
   }
 }
 

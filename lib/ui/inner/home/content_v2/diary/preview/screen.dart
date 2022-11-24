@@ -32,7 +32,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-    notifier.initialDiary(context, reload: true);
+    // notifier.initialDiary(context, reload: true);
     notifier.scrollController.addListener(() => notifier.scrollListener(materialAppKey.currentContext ?? context));
     super.initState();
   }

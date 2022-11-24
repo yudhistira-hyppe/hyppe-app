@@ -110,6 +110,8 @@ class _CameraViewState extends State<CameraView> {
     //         // resolution: _notifier.configureResolutionDeepArPreset(onStoryIsPhoto: _notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
     //         )
     //     .then((value) => setState(() {}));
+    final notifier = context.read<CameraNotifier>();
+    notifier.deepArController ??= DeepArController();
     _effectsList2 = [
       {"path": "BurningEffect", "efect": "burning_effect.deepar", "preview": "preview.png"},
       {"path": "DevilNeonHorns", "efect": "Neon_Devil_Horns.deepar", "preview": "preview.png"},
@@ -181,6 +183,7 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Positioned listEfect(DeepArController _controller) {
+    print('listEfect');
     return Positioned(
         top: 40,
         left: 0,

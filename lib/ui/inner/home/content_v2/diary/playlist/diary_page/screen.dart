@@ -10,9 +10,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -198,7 +195,6 @@ class _DiaryPageState extends State<DiaryPage> {
                         sigmaX: 30,
                         sigmaY: 30,
                         // thumbnail: picData!.content[arguments].contentUrl,
-
                         thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint ?? '' : widget.data?.fullThumbPath ?? '',
                       )
                     : Container(),
@@ -266,7 +262,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     : LeftItems(
                         description: widget.data?.description,
                         // tags: widget.data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
-                        musicName: "Dangdut koplo remix",
+                        music: widget.data?.music,
                         authorName: widget.data?.username,
                         userName: widget.data?.username,
                         location: widget.data?.location,

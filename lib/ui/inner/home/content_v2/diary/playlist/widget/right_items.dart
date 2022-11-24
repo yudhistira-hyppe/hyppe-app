@@ -39,7 +39,7 @@ class RightItems extends StatelessWidget {
       builder: (_, value, value2, __) => Stack(
         children: [
           Align(
-            alignment: const Alignment(1.0, 0.70),
+            alignment: const Alignment(1.0, 0.10),
             child: SizedBox(
               height: 400 * SizeConfig.scaleDiagonal,
               child: Column(

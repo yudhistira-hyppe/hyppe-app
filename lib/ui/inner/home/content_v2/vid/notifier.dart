@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../constant/entities/camera/notifier.dart';
 
 class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -31,7 +25,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
   final _routing = Routing();
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.vid;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..limit = 5
+    ..featureType = FeatureType.vid;
   PageController pageController = PageController();
 
   List<ContentData>? _vidData;
@@ -86,8 +82,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list = null, String? visibility = null}) async {
-    print('ini reload ${reload}');
+  Future<void> initialVid(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 
     try {
@@ -114,52 +109,56 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
             curve: Curves.easeIn,
           );
         }
-        final _searchData = context.read<SearchNotifier>();
-        if (_searchData.initDataVid == null) {
-          _searchData.initDataVid = [];
-          if (visibility == 'PUBLIC') {
-            try {
-              _searchData.initDataVid = vidData?.sublist(0, 18);
-              print('initDataVid is ${_searchData.initDataVid?.length}');
-            } catch (e) {
-              _searchData.initDataVid = vidData;
-              print('initDataVid is ${_searchData.initDataVid?.length}');
-            }
-          }
-        } else {
-          if (_searchData.initDataVid?.isEmpty ?? true) {
-            if (visibility == 'PUBLIC') {
-              try {
-                _searchData.initDataVid = vidData?.sublist(0, 18);
-                print('initDataVid is ${_searchData.initDataVid?.length}');
-              } catch (e) {
-                _searchData.initDataVid = vidData;
-                print('initDataVid is ${_searchData.initDataVid?.length}');
-              }
-            }
-          }
-        }
+        // final _searchData = context.read<SearchNotifier>();
+        // if(_searchData.initDataVid == null){
+        //   _searchData.initDataVid = [];
+        //   if (visibility == 'PUBLIC') {
+        //     try {
+        //       _searchData.initDataVid = vidData?.sublist(0, 18);
+        //       print('initDataVid is ${_searchData.initDataVid?.length}');
+        //     } catch (e) {
+        //       _searchData.initDataVid = vidData;
+        //       print('initDataVid is ${_searchData.initDataVid?.length}');
+        //     }
+        //   }
+        // }else{
+        //   if(_searchData.initDataVid?.isEmpty ?? true){
+        //     if (visibility == 'PUBLIC') {
+        //       try {
+        //         _searchData.initDataVid = vidData?.sublist(0, 18);
+        //         print('initDataVid is ${_searchData.initDataVid?.length}');
+        //       } catch (e) {
+        //         _searchData.initDataVid = vidData;
+        //         print('initDataVid is ${_searchData.initDataVid?.length}');
+        //       }
+        //     }
+        //   }
+        // }
+
       } else {
         print('initial video');
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;
       }
-      final _searchData = context.read<SearchNotifier>();
-      _searchData.allContents = UserInfoModel();
-      // print(_searchData.allContents.vids);
-      if (_searchData.initDataVid == null) {
-        // _searchData.vidContentsQuery.featureType = FeatureType.vid;
-        print('initDataVid is null');
-        if (visibility == 'PUBLIC') {
-          try {
-            _searchData.initDataVid = vidData?.sublist(0, 18);
-            print('initDataVid is ${_searchData.initDataVid?.length}');
-          } catch (e) {
-            _searchData.initDataVid = vidData;
-            print('initDataVid is ${_searchData.initDataVid?.length}');
-          }
-        }
-      }
-      print('ini video data22');
+      // final _searchData = context.read<SearchNotifier>();
+      // _searchData.allContents = UserInfoModel();
+      // print('ini video data');
+      // print(_searchData);
+      // print(_searchData.allContents);
+      // // print(_searchData.allContents.vids);
+      // if (_searchData.initDataVid == null) {
+      //   // _searchData.vidContentsQuery.featureType = FeatureType.vid;
+      //   print('initDataVid is null');
+      //   if (visibility == 'PUBLIC') {
+      //     try {
+      //       _searchData.initDataVid = vidData?.sublist(0, 18);
+      //       print('initDataVid is ${_searchData.initDataVid?.length}');
+      //     } catch (e) {
+      //       _searchData.initDataVid = vidData;
+      //       print('initDataVid is ${_searchData.initDataVid?.length}');
+      //     }
+      //   }
+      // }
+      // print('ini video data22');
       // print(_searchData.allContents?.vids);
     } catch (e) {
       'load vid list: ERROR: $e'.logger();

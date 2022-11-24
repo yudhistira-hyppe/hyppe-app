@@ -1,5 +1,3 @@
-import 'package:hyppe/core/bloc/posts_v2/state.dart';
-import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -11,11 +9,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
-
-import '../../../../../../core/bloc/posts_v2/bloc.dart';
-import '../../../../../../core/models/hive_box/boxes.dart';
-import '../../../../../../core/services/check_version.dart';
-import '../../../notifier_v2.dart';
 
 class PreviewStoriesNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -69,7 +62,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   bool get hasNext => peopleContentsQuery.hasNext;
 
-  Future initialStories(BuildContext context, {List<ContentData>? list = null}) async {
+  Future initialStories(BuildContext context, {List<ContentData>? list}) async {
     initialMyStories(context);
     print('hariyanto3');
     initialPeopleStories(context, reload: true, list: list);
@@ -100,18 +93,20 @@ class PreviewStoriesNotifier with ChangeNotifier {
   Future<void> initialPeopleStories(
     BuildContext context, {
     bool reload = false,
-        List<ContentData>? list = null
+        List<ContentData>? list
   }) async {
     List<ContentData> res = [];
 
     try {
       if (list != null) {
         res.addAll(list);
+        peopleContentsQuery.hasNext = res.length == peopleContentsQuery.limit;
+        if (res.isNotEmpty) peopleContentsQuery.page++;
       } else {
         if(reload){
           res = await peopleContentsQuery.reload(context);
         }else{
-          res = await peopleContentsQuery.loadNext(context);
+          res = await peopleContentsQuery.loadNext(context, isLandingPage: true);
         }
 
       }

@@ -7,32 +7,26 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
+import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 // import 'package:hyppe/core/constants/thumb/profile_image.dart';
-
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 // import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
-
 // import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-
 import 'package:hyppe/core/services/system.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-
 // import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 
@@ -125,6 +119,8 @@ class PicDetailBottom extends StatelessWidget {
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
+            if (data?.music != null) MusicStatusDetail(music: data!.music!),
+            if (data?.music != null) eightPx,
             data != null
                 ? GestureDetector(
                     onTap: () {

@@ -41,7 +41,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
   final _sharedPrefs = SharedPreference();
   ScrollController scrollController = ScrollController();
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.pic;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit = 5..featureType = FeatureType.pic;
 
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following

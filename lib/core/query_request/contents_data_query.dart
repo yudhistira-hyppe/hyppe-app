@@ -3,14 +3,12 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 
 import 'package:flutter/material.dart' show BuildContext;
-import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/interface/pagination_query_interface.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/models/hive_box/boxes.dart';
-import 'package:hyppe/core/services/check_version.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +24,8 @@ class ContentsDataQuery extends PaginationQueryInterface {
   ContentsDataQuery();
 
   @override
-  Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
-    print('loadnext');
+  Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false, bool isLandingPage = false}) async {
+    print('loadnext : $hasNext');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     if (!hasNext) return [];
@@ -38,31 +36,65 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
     List<ContentData>? res;
 
-    try {
-      final notifier = PostsBloc();
-      await notifier.getContentsBlocV2(
-        context,
-        pageRows: limit,
-        pageNumber: page,
-        type: featureType ?? FeatureType.other,
-        searchText: searchText,
-        onlyMyData: onlyMyData,
-        visibility: notifierMain.visibilty,
-        myContent: myContent,
-        otherContent: otherContent,
-      );
-      final fetch = notifier.postsFetch;
+    if(!isLandingPage){
+      try {
+        final notifier = PostsBloc();
+        await notifier.getContentsBlocV2(
+          context,
+          pageRows: limit,
+          pageNumber: page,
+          type: featureType ?? FeatureType.other,
+          searchText: searchText,
+          onlyMyData: onlyMyData,
+          visibility: notifierMain.visibilty,
+          myContent: myContent,
+          otherContent: otherContent,
+        );
+        final fetch = notifier.postsFetch;
 
-      res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+        res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
 
-      hasNext = res?.length == limit;
-      if (res?.length != null) page++;
-    } catch (e) {
-      'error loadNext : $e'.logger();
-      rethrow;
-    } finally {
-      loading = false;
+        hasNext = res?.length == limit;
+        if (res?.length != null) page++;
+      } catch (e) {
+        'error loadNext : $e'.logger();
+        rethrow;
+      } finally {
+        loading = false;
+      }
+    }else{
+      try {
+        final notifier = PostsBloc();
+        await notifier.getAllContentsBlocV2(
+            context,
+            pageRows: limit,
+            pageNumber: page,
+            visibility: notifierMain.visibilty,
+            myContent: myContent,
+            otherContent: otherContent,
+            postType: System().validatePostTypeV2(featureType),
+        );
+        final fetch = notifier.postsFetch;
+        final resAll = AllContents.fromJson(fetch.data);
+        if(featureType == FeatureType.story){
+          res = resAll.story;
+        }else if(featureType == FeatureType.vid){
+          res = resAll.video;
+        }else if(featureType == FeatureType.diary){
+          res = resAll.diary;
+        }else if(featureType == FeatureType.pic){
+          res = resAll.pict;
+        }
+        hasNext = res?.length == limit;
+        if (res?.length != null) page++;
+      } catch (e) {
+        'error loadNext : $e'.logger();
+        rethrow;
+      } finally {
+        loading = false;
+      }
     }
+
 
     return res ?? [];
   }

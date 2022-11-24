@@ -38,7 +38,12 @@ class Music{
     createdAt = map['createdAt'];
     updatedAt = map['updatedAt'];
     apsaraMusic = map['apsaraMusic'];
-    apsaraMusicUrl = MusicUrl.fromJson(map['apsaraMusicUrl']);
+    if(map['apsaraMusicUrl'] != null){
+      apsaraMusicUrl = MusicUrl.fromJson(map['apsaraMusicUrl']);
+    }else{
+      apsaraMusicUrl = MusicUrl();
+    }
+
     apsaraThumnail = map['apsaraThumnail'];
     apsaraThumnailUrl = map['apsaraThumnailUrl'];
     isPlay = false;
