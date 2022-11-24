@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../constant/entities/camera/notifier.dart';
 
 class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -91,9 +85,13 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       if (list != null) {
+        if (reload) {
+          contentsQuery.page = 1;
+          contentsQuery.hasNext = true;
+        }
         res.addAll(list);
-        contentsQuery.hasNext = res.length == 18;
-        if (res != null) contentsQuery.page++;
+        contentsQuery.hasNext = list.length == 18;
+        if (list != null) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : 15');
@@ -198,7 +196,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void onDeleteSelfTagUserContent(BuildContext context, {required String postID, required String content, required String email}) {
-    ContentData? _updatedData;
+    // ContentData? _updatedData;
 
     final index = vidData?.indexWhere((element) => element.postID == postID);
     if(index != null){

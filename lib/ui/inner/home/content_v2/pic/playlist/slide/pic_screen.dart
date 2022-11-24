@@ -66,7 +66,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
   @override
   Widget build(BuildContext context) {
 
-    if(widget.contentData.music?.id != null){
+    if(widget.contentData.music?.id != null && (widget.contentData.apsaraId ?? '').isNotEmpty){
       return _isLoadVideo ? const Center(
         child: CustomLoading(),
       ) : _betterPlayerController == null ? const Center(

@@ -355,7 +355,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                             ),
-                                                            if(notifier.listData?[indexRoot].music != null)
+                                                            if(notifier.listData?[indexRoot].music != null && (notifier.listData?[indexRoot].apsaraId ?? '').isNotEmpty)
                                                             MusicStatusPage(
                                                                 music: notifier.listData![indexRoot].music!)
                                                           ],
