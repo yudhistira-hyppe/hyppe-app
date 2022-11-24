@@ -765,7 +765,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
-        _eventService.notifyUploadSuccess(_uploadSuccess);
+        eventService.notifyUploadSuccess(_uploadSuccess);
         final decode = json.decode(_uploadSuccess.toString());
         _postIdPanding = decode['data']['postID'];
         print('ini boost content');

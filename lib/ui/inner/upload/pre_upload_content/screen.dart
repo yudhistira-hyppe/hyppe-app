@@ -193,6 +193,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                     textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
                                     textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                   ),
+                        buttonStyle: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                        ),
                       ),
                     ),
             ),
