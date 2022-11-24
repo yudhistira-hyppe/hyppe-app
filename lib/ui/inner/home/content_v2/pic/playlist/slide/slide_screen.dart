@@ -13,6 +13,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
+import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
@@ -100,10 +101,10 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
-                      if(value == ((notifier.listData?.length ?? 0) - 1)){
+                      if (value == ((notifier.listData?.length ?? 0) - 1)) {
                         print('onPageChanged Image : masuk');
                         final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
-                        if(values.isNotEmpty){
+                        if (values.isNotEmpty) {
                           notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;
                         }
                         final prev = context.read<PreviewPicNotifier>();
@@ -294,6 +295,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                   children: [
                                                     Row(
                                                       children: [
+                                                        sixteenPx,
                                                         Consumer<LikeNotifier>(
                                                           builder: (context, notifier, child) => _buildButtonV2(
                                                             context: context,
@@ -374,16 +376,23 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                             ),
-                                                            if(notifier.listData?[indexRoot].music != null)
-                                                            MusicStatusPage(
-                                                                music: notifier.listData![indexRoot].music!)
+                                                            if (notifier.listData?[indexRoot].music != null) MusicStatusPage(music: notifier.listData![indexRoot].music!)
                                                           ],
                                                         )),
                                                       ),
                                                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                                     ),
                                                     twentyPx,
-                                                    data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
+                                                    data.isBoost == null && data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
+                                                    data.isBoost != null && data.email == SharedPreference().readStorage(SpKeys.email)
+                                                        ? Padding(
+                                                            padding: const EdgeInsets.all(16.0),
+                                                            child: JangkaunStatus(
+                                                              jangkauan: data.boostJangkauan ?? 0,
+                                                              isDiary: true,
+                                                            ),
+                                                          )
+                                                        : Container(),
                                                     data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200
                                                         ? ContentViolationWidget(data: data)
                                                         : Container(),
