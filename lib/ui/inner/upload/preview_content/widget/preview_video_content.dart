@@ -70,7 +70,9 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     print('didPopNext PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     if(notifier.defaultPath != notifier.fileContent?[notifier.indexView]){
-      notifier.initVideoPlayer(context, isSaveDefault: true);
+      notifier.initVideoPlayer(context);
+    }else{
+      notifier.setDefaultVideo(context);
     }
     super.didPopNext();
   }
