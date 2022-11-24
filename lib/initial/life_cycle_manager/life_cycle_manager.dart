@@ -60,8 +60,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     final activity = DeviceBloc();
 
     print("Status Lifecycle: $state");
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (state == AppLifecycleState.inactive) {
-      final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+
       if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){
         notifier.forceResetPlayer();
       }
@@ -78,6 +79,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     }
     if (state == AppLifecycleState.resumed) {
       "App Resumed".logger();
+      try{
+        notifier.audioPreviewPlayer.resume();
+      }catch(e){
+        e.logger();
+      }
+
       final _userToken = SharedPreference().readStorage(SpKeys.userToken);
 
       if (_userToken != null) {
