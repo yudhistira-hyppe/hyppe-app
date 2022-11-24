@@ -171,29 +171,54 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         ],
                       ),
                     )
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                      child: CustomElevatedButton(
-                        width: 375.0 * SizeConfig.scaleDiagonal,
-                        height: 44.0 * SizeConfig.scaleDiagonal,
-                        function: () {
-                          if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
-                            notifier.onClickPost(
-                              context,
-                              onEdit: widget.arguments.onEdit,
-                              data: widget.arguments.contentData,
-                              content: widget.arguments.content,
-                            );
-                          }
-                        },
-                        child: (widget.arguments.onEdit && notifier.updateContent)
-                            ? const CustomLoading()
-                            : notifier.isLoadMerge
-                                ? const CustomLoading()
-                                : CustomTextWidget(
-                                    textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
-                                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                                  ),
+                  : Material(
+                      color: Theme.of(context).colorScheme.background,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                        child: CustomElevatedButton(
+                          width: 375.0 * SizeConfig.scaleDiagonal,
+                          height: 44.0 * SizeConfig.scaleDiagonal,
+                          function: () {
+                            if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
+                              notifier.onClickPost(
+                                context,
+                                onEdit: widget.arguments.onEdit,
+                                data: widget.arguments.contentData,
+                                content: widget.arguments.content,
+                              );
+                            } else {
+                              !notifier.certified
+                                  ? notifier.onShowStatement(context, onCancel: () {
+                                      notifier.onClickPost(
+                                        context,
+                                        onEdit: widget.arguments.onEdit,
+                                        data: widget.arguments.contentData,
+                                        content: widget.arguments.content,
+                                      );
+                                    })
+                                  : notifier.onClickPost(
+                                      context,
+                                      onEdit: widget.arguments.onEdit,
+                                      data: widget.arguments.contentData,
+                                      content: widget.arguments.content,
+                                    );
+                            }
+                          },
+                          child: (widget.arguments.onEdit && notifier.updateContent)
+                              ? const CustomLoading()
+                              : notifier.isLoadMerge
+                                  ? const CustomLoading()
+                                  : CustomTextWidget(
+                                      textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                    ),
+                          buttonStyle: ButtonStyle(
+                            foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                            shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                            overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          ),
+                        ),
                       ),
                     ),
             ),
