@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:better_player/better_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -15,7 +14,6 @@ import '../../../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
-import '../../../../../../../core/models/collection/music/music.dart';
 import '../../../../../../../core/services/system.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
 import '../../../../../../constant/widget/custom_cache_image.dart';
@@ -33,14 +31,14 @@ class PicPlaylishScreen extends StatefulWidget {
 
 class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
-  BetterPlayerController? _betterPlayerController;
-  bool _isLoadVideo = false;
+  var audioPlayer = AudioPlayer();
+  bool _isLoadMusic = false;
 
   @override
   void initState() {
     context.incrementAdsCount();
-    if(widget.contentData.apsaraId != null && widget.contentData.music?.id != null){
-      initVideo(context, widget.contentData.apsaraId!);
+    if(widget.contentData.music?.apsaraMusic != null){
+      initMusic(context, widget.contentData.music!.apsaraMusic!);
     }
 
     Future.delayed(Duration.zero, () async {
@@ -56,119 +54,67 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   void dispose() {
-    if(_betterPlayerController != null){
-      _betterPlayerController!.pause();
-      _betterPlayerController!.dispose();
-    }
+    audioPlayer.stop();
+    audioPlayer.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.contentData.music?.id != null && (widget.contentData.apsaraId ?? '').isNotEmpty){
-      return _isLoadVideo ? const Center(
-        child: CustomLoading(),
-      ) : _betterPlayerController == null ? const Center(
-        child: CustomLoading(),
-      ): (_betterPlayerController!.isVideoInitialized() ?? false) ? InteractiveViewer(
-        transformationController: widget.transformationController,
-        child: InkWell(
-          onDoubleTap: () {
-            context.read<LikeNotifier>().likePost(context, widget.contentData);
+    return _isLoadMusic ? const Center(
+      child: CustomLoading(),
+    ) : InteractiveViewer(
+      transformationController: widget.transformationController,
+      child: InkWell(
+        onDoubleTap: () {
+          context.read<LikeNotifier>().likePost(context, widget.contentData);
+        },
+        child: CustomCacheImage(
+          // imageUrl: picData.content[arguments].contentUrl,
+          imageUrl: (widget.contentData.isApsara ?? false) ? widget.contentData.mediaEndpoint : widget.contentData.fullThumbPath,
+          imageBuilder: (ctx, imageProvider) {
+            return Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+              ),
+            );
           },
-          child: Platform.isAndroid
-              ? AspectRatio(
-            child: BetterPlayer(controller: _betterPlayerController!),
-            aspectRatio: _betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 1,
-          )
-              : BetterPlayer(controller: _betterPlayerController!),
-        ),
-      ): const Center(
-        child: CustomLoading(),
-      );
-    }else{
-      return InteractiveViewer(
-        transformationController: widget.transformationController,
-        child: InkWell(
-          onDoubleTap: () {
-            context.read<LikeNotifier>().likePost(context, widget.contentData);
+          errorWidget: (_, __, ___) {
+            return Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.contain,
+                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                ),
+              ),
+            );
           },
-          child: CustomCacheImage(
-            // imageUrl: picData.content[arguments].contentUrl,
-            imageUrl: (widget.contentData.isApsara ?? false) ? widget.contentData.mediaEndpoint : widget.contentData.fullThumbPath,
-            imageBuilder: (ctx, imageProvider) {
-              return Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
-                ),
-              );
-            },
-            errorWidget: (_, __, ___) {
-              return Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                  ),
-                ),
-              );
-            },
-          ),
         ),
-      );
-    }
-    // print('PicPlaylishScreen : ${widget.contentData.isApsara} = ${widget.contentData.mediaEndpoint}, ${widget.contentData.fullThumbPath}');
-
+      ),
+    );
   }
 
-  void initVideo(BuildContext context, String apsaraId) async{
-    BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
-      autoPlay: false,
-      fit: BoxFit.contain,
-      showPlaceholderUntilPlay: true,
-      controlsConfiguration: BetterPlayerControlsConfiguration(
-        showControls: false,
-        enableFullscreen: false,
-        controlBarColor: Colors.black26,
-      ),
-    );
-    final _url = await _getAdsVideoApsara(context, apsaraId);
-    BetterPlayerDataSource dataSource = BetterPlayerDataSource(
-      BetterPlayerDataSourceType.network,
-      _url != null
-          ? Platform.isIOS
-          ? _url.replaceAll(" ", "%20")
-          : _url
-          : '',
-      bufferingConfiguration: const BetterPlayerBufferingConfiguration(
-        minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
-        maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,
-        bufferForPlaybackMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackMs,
-        bufferForPlaybackAfterRebufferMs: BetterPlayerBufferingConfiguration.defaultBufferForPlaybackAfterRebufferMs,
-      ),
-    );
-
-    _betterPlayerController = BetterPlayerController(betterPlayerConfiguration);
-
+  void initMusic(BuildContext context, String apsaraId) async{
+    audioPlayer = AudioPlayer();
     try {
+
+      await audioPlayer.setReleaseMode(ReleaseMode.loop);
       setState(() {
-        _isLoadVideo = true;
+        _isLoadMusic = true;
       });
-
-      await _betterPlayerController?.setupDataSource(dataSource).then((_) {
-        setState(() {
-          _betterPlayerController?.play();
-          _betterPlayerController?.setLooping(true);
-          _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0.0);
-        });
-
-      });
-
+      final urlMusic = await _getAdsVideoApsara(context, apsaraId);
+      if(urlMusic != null){
+        audioPlayer.play(UrlSource(urlMusic));
+      }else{
+        throw 'URL Music is null';
+      }
     }catch(e){
       "Error Init Video $e".logger();
     } finally {
-      _isLoadVideo = false;
+      setState(() {
+        _isLoadMusic = false;
+      });
+
     }
   }
 

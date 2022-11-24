@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPush() {
-    print('didPush isOnHomeScreen true');
+    print('didPush isOnHomeScreen false');
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
   }
 

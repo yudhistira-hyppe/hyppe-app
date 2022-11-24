@@ -451,20 +451,21 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         },
                         child: const CustomIconWidget(
                           iconData: '${AssetPath.vectorPath}close_ads.svg',
-                          width: 12,
-                          height: 12,
+                          width: 25,
+                          height: 25,
                         ))
                   ],
                 ),
               )
             : InkWell(
                 onTap: () {
-                  ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
+                  ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat(), isInit: false);
                 },
                 child: SizedBox(
                   width: double.infinity,
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.addMusic ?? 'Add music',
+                    textAlign: TextAlign.start,
                     textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
                   ),
                 ),

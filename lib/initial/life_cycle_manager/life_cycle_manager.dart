@@ -65,6 +65,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){
         notifier.forceResetPlayer();
       }
+      notifier.audioPreviewPlayer.pause();
       "App Inactive".logger();
       final _userToken = SharedPreference().readStorage(SpKeys.userToken);
       if (_userToken != null) {

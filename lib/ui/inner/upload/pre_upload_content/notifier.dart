@@ -370,8 +370,17 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
-    _fileContent?[0] = notifierPre.defaultPath;
-    _musicSelected = null;
+    final isPic = _fileContent?[0]?.isImageFormat();
+    if(isPic ?? false){
+      _musicSelected = null;
+      notifierPre.fixSelectedMusic = null;
+    }else{
+      _musicSelected = null;
+      notifierPre.fixSelectedMusic = null;
+      final index = notifierPre.indexView;
+      notifierPre.fileContent?[index] = notifierPre.defaultPath;
+      _fileContent?[0] = notifierPre.defaultPath;
+    }
     notifyListeners();
   }
 
@@ -467,7 +476,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onWillPop(BuildContext context) => ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit());
+  void onWillPop(BuildContext context) => ShowBottomSheet.onShowCancelPost(context, onCancel: () => _onExit(isDisposeVid: false));
 
   void handleTapOnLocation(String value) => selectedLocation = value;
 
@@ -660,7 +669,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void _onExit() {
+  void _onExit({bool isDisposeVid = true}) {
     print('ini exit');
     _progressCompress = 0;
     // if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
@@ -680,9 +689,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _userTagData = [];
     _privacyTitle = '';
     musicSelected = null;
-    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    notifier.defaultPath = null;
-    notifier.betterPlayerController!.dispose();
+
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
@@ -698,6 +705,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoost = '';
     _tmpBoostTime = '';
     tmpBoostInterval = '';
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    if(isDisposeVid){
+      notifier.defaultPath = null;
+      if(notifier.betterPlayerController != null){
+        notifier.betterPlayerController!.dispose();
+      }
+    }
+
   }
 
   Future _createPostContentV2() async {
