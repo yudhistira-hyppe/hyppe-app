@@ -252,7 +252,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       DeviceBloc().activityAwake(context);
-      Routing().moveReplacement(Routes.lobby);
+      Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {
       print('apa2 ${signData.userType?.index}');
       final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);

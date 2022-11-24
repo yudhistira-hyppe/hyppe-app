@@ -755,7 +755,15 @@
   "boostPrice" : "Boost Price",
   "contentType" : "Content Type",
   "by" : "by ",
-  "boostedPostList" : "Boosted Post List",
+  "boostedPostList" : "Boosted List",
   "reach" : "reach",
-  "viewDetails" : "View Details"
+  "viewDetails" : "View Details",
+  "ongoing" : "Ongoing",
+  "scheduled" : "Scheduled",
+  "postPrivacyisNotAllowed" : "Post privacy is not allowed “Only me”",
+  "toContinueTheBoostPostProcess" : "To continue the boost post process, you must first change the privacy of your post. Switch to public posting first.",
+  "otherPostsInProcessOfPayment" : "Other Posts In Process Of Payment",
+  "thePostisintheProcessofPayment" : "The post is in the process of payment, please complete the payment first to continue. ",
+  "viewPaymentStatus" : "View Payment Status"
+  
 }

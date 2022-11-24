@@ -179,11 +179,13 @@ class ContentData extends HiveObject {
 
   bool? isReport;
 
-  Boosted? boosted;
+  List<Boosted>? boosted;
   int? boostCount;
   int? isBoost;
   int? boostJangkauan;
   String? statusBoost;
+  String? reportedStatus;
+  int? reportedUserCount;
 
   ContentData({
     this.metadata,
@@ -228,6 +230,8 @@ class ContentData extends HiveObject {
     this.isBoost,
     this.boostJangkauan,
     this.statusBoost,
+    this.reportedStatus,
+    this.reportedUserCount,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -262,7 +266,7 @@ class ContentData extends HiveObject {
     fullContentPath = concatContentUri();
 
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
-    location = json['location'];
+    location = json['location'] ?? '';
     visibility = json['visibility'];
     if (json['cats'] != null) {
       cats = [];
@@ -281,11 +285,16 @@ class ContentData extends HiveObject {
     isApsara = json['isApsara'] ?? false;
     apsaraId = json['apsaraId'] ?? '';
     isReport = json['isReport'] ?? false;
-    boosted = json['boosted'] != null ? Boosted.fromJson(json['boosted']) : null;
+    if (json['boosted'] != null) {
+      boosted = [];
+      json['boosted'].forEach((v) => boosted?.add(Boosted.fromJson(v)));
+    }
     boostCount = json['boostCount'] ?? 0;
     isBoost = json['isBoost'] ?? 0;
     boostJangkauan = json['boostJangkauan'] ?? 0;
     statusBoost = json['statusBoost'] ?? '';
+    reportedStatus = json['reportedStatus'] ?? 'ALL';
+    reportedUserCount = json['reportedUserCount'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {

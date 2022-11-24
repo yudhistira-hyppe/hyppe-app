@@ -10,7 +10,9 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
@@ -205,6 +207,13 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               ),
                                                             )
                                                           : const SizedBox(),
+                                                      Visibility(
+                                                        visible: (data.saleAmount == 0 && (data.certified ?? false)),
+                                                        child: const Padding(
+                                                          padding: EdgeInsets.all(8.0),
+                                                          child: IconOwnership(correct: true),
+                                                        ),
+                                                      ),
                                                     ],
                                                   ),
                                                 ),
@@ -223,7 +232,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                         defaultColor: false,
                                                         height: 30,
                                                       ),
-                                                      Text(transnot.translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                                      Text(transnot.translate.reportReceived ?? 'Report Received',
+                                                          style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                                                       Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
                                                           style: const TextStyle(
                                                             color: Colors.white,
@@ -357,7 +367,10 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                                     ),
                                                     twentyPx,
-                                                    ContentViolationWidget(data: data)
+                                                    data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
+                                                    data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200
+                                                        ? ContentViolationWidget(data: data)
+                                                        : Container(),
                                                   ],
                                                 ),
                                               ),
@@ -392,15 +405,18 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     required Function function,
     required BuildContext context,
   }) {
-    return CustomTextButton(
-      onPressed: function,
-      style: ButtonStyle(
-        padding: MaterialStateProperty.all(EdgeInsets.zero),
-      ),
-      child: CustomIconWidget(
-        defaultColor: false,
-        iconData: iconData,
-        color: colorIcon ?? kHyppeLightButtonText,
+    return SizedBox(
+      width: 30,
+      child: CustomTextButton(
+        onPressed: function,
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+        ),
+        child: CustomIconWidget(
+          defaultColor: false,
+          iconData: iconData,
+          color: colorIcon ?? kHyppeLightButtonText,
+        ),
       ),
     );
   }

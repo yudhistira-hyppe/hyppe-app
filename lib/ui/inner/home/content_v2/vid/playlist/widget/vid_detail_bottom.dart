@@ -5,6 +5,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
@@ -49,10 +50,11 @@ class VidDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ContentViolationWidget(data: data!),
+          data?.reportedStatus == 'OWNED' || data?.reportedStatus == "BLURRED" || (data?.reportedUserCount ?? 0) > 200 ? ContentViolationWidget(data: data!) : Container(),
           twelvePx,
           _buildDescription(context),
-          data?.email == SharedPreference().readStorage(SpKeys.email) ? const ButtonBoost() : Container(),
+          (data?.isBoost ?? 0) == 0 && data?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
+          (data?.isBoost ?? 0) > 0 && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
           _buildDivider(context),
           _buildTopRightControl(context),
           fourPx,

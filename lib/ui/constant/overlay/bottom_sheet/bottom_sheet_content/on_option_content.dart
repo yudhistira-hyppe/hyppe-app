@@ -157,6 +157,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   icon: 'edit-content.svg',
                   onTap: () {
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    notifier.editData = widget.contentData;
                     notifier.isEdit = true;
                     notifier.isUpdate = true;
                     notifier.captionController.text = widget.contentData.description ?? "";
@@ -168,7 +169,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                     notifier.certified = widget.contentData.certified ?? false;
                     notifier.ownershipEULA = widget.contentData.certified ?? false;
 
-                    if (widget.contentData.location != null) {
+                    if (widget.contentData.location != '') {
                       notifier.locationName = widget.contentData.location ?? '';
                     } else {
                       notifier.locationName = notifier.language.addLocation ?? '';

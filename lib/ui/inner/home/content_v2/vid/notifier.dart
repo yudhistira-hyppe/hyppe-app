@@ -160,7 +160,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         }
       }
       print('ini video data22');
-      print(_searchData.allContents?.vids);
+      // print(_searchData.allContents?.vids);
     } catch (e) {
       'load vid list: ERROR: $e'.logger();
     }
@@ -186,7 +186,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context, ContentData data) {
     context.read<ReportNotifier>().contentData = data;
-    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid);
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid, inDetail: false);
   }
 
   void showUserTag(BuildContext context, index, postId) {

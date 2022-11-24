@@ -12,6 +12,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/core/models/collection/report/report_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -23,12 +24,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ReportNotifier with ChangeNotifier {
-  LocalizationModelV2 language = LocalizationModelV2();
-  translate(LocalizationModelV2 translate) {
-    language = translate;
-    notifyListeners();
-  }
-
   bool _loadingOption = false;
   bool get loadingOption => _loadingOption;
 
@@ -148,7 +143,7 @@ class ReportNotifier with ChangeNotifier {
     _loadingOption = false;
   }
 
-  Future reportPost(BuildContext context) async {
+  Future reportPost(BuildContext context, {bool inDetail = true}) async {
     _isLoading = true;
     final data = {
       "postID": contentData != null ? contentData?.postID ?? '' : adsData?.adsId ?? '',
@@ -165,10 +160,6 @@ class ReportNotifier with ChangeNotifier {
         }
       ]
     };
-    print('report post');
-    print(contentData);
-    print(adsData);
-    print(data);
     final notifier = ReportBloc();
     await notifier.reports(context, data: data);
     final fetch = notifier.reportFetch;
@@ -184,7 +175,11 @@ class ReportNotifier with ChangeNotifier {
 
       _isLoading = false;
       Routing().moveBack();
-      // ShowBottomSheet().onShowColouredSheet(context, _showMessage, color: Theme.of(context).colorScheme.onError);
+      if (inDetail) {
+        Routing().moveBack();
+      }
+      final language = context.read<TranslateNotifierV2>().translate;
+      ShowBottomSheet().onShowColouredSheet(context, language.reportReceived ?? '', subCaption: language.yourReportWillbeHandledImmediately, color: kHyppeTextSuccess);
     } else {
       _isLoading = false;
       ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: kHyppeRed);

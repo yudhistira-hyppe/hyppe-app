@@ -58,7 +58,7 @@ class ReportUserSecondLayer extends StatelessWidget {
     final notifier = Provider.of<ReportNotifier>(context, listen: false);
     Routing().moveBack();
     notifier.data = {'userID': userID, 'ruserID': SharedPreference().readStorage(SpKeys.userID), 'reportType': 'profile'};
-    notifier.appBar = notifier.language.reportThisProfile;
+    // notifier.appBar = notifier.language.reportThisProfile;
     notifier.reportType = ReportType.profile;
     notifier.reportAction = ReportAction.report;
     Routing().move(Routes.report);
@@ -68,8 +68,8 @@ class ReportUserSecondLayer extends StatelessWidget {
     final notifier = Provider.of<ReportNotifier>(context, listen: false);
     Routing().moveBack();
     notifier.data = {'userID': userID, 'ruserID': SharedPreference().readStorage(SpKeys.userID), 'reportType': 'profile'};
-    notifier.appBar = notifier.language.blockHeader;
-    notifier.fABCaption = notifier.language.block ?? '';
+    // notifier.appBar = notifier.language.blockHeader;
+    // notifier.fABCaption = notifier.language.block ?? '';
     notifier.reportType = ReportType.profile;
     notifier.reportAction = ReportAction.block;
     Routing().move(Routes.report);

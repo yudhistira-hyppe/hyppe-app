@@ -1,10 +1,12 @@
 class BoostMasterModel {
+  int? pendingTransaction;
   List<Interval>? interval;
   List<Session>? session;
 
   BoostMasterModel({this.interval, this.session});
 
   BoostMasterModel.fromJson(Map<String, dynamic> json) {
+    pendingTransaction = json['pendingTransaction'] ?? 0;
     if (json['interval'] != null) {
       interval = <Interval>[];
       json['interval'].forEach((v) {

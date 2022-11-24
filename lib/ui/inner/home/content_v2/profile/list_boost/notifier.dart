@@ -13,12 +13,13 @@ class ListBoostNotifier with ChangeNotifier {
   int _pageNumber = 0;
   int get pageNumber => _pageNumber;
 
-  List<ContentData>? boostData = [];
+  List<ContentData> boostData = [];
 
-  Future getInitBoost(BuildContext context) async {
-    _isLoading = true;
+  Future getInitBoost(BuildContext context, {bool reload = false}) async {
+    if (reload == false) _isLoading = true;
     bool connect = await System().checkConnections();
     if (connect) {
+      if (!reload) _pageNumber = 0;
       String param = '?pageNumber=$_pageNumber&pageRow=10';
 
       final notifier = UtilsBlocV2();
@@ -26,7 +27,11 @@ class ListBoostNotifier with ChangeNotifier {
       final fetch = notifier.utilsFetch;
 
       if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
-        boostData = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+        if (_pageNumber == 0) {
+          boostData = (fetch.data as List<dynamic>).map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+        } else {
+          fetch.data.forEach((v) => boostData.add(ContentData.fromJson(v)));
+        }
 
         _isLoading = false;
         notifyListeners();
@@ -41,5 +46,12 @@ class ListBoostNotifier with ChangeNotifier {
       });
     }
     notifyListeners();
+  }
+
+  void scrollList(BuildContext context, ScrollController scrollController) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      _pageNumber += 1;
+      await getInitBoost(context, reload: true);
+    }
   }
 }

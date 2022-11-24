@@ -196,12 +196,19 @@ class PreUploadContentNotifier with ChangeNotifier {
   String _postIdPanding = '';
   String get postIdPanding => _postIdPanding;
   // UpdateContentsArgument get updateArguments => _arguments!;
+  ContentData? _editData;
+  ContentData? get editData => _editData;
 
   BoostResponse? _boostPaymentResponse;
   BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
   set boostPaymentResponse(BoostResponse? value) {
     _boostPaymentResponse = value;
     print(value);
+    notifyListeners();
+  }
+
+  set editData(ContentData? val) {
+    _editData = val;
     notifyListeners();
   }
 
@@ -1234,6 +1241,23 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
       boostMasterData = BoostMasterModel.fromJson(fetch.data);
+      if (boostMasterData?.pendingTransaction == 1) {
+        Routing().moveBack();
+        await ShowBottomSheet().onShowColouredSheet(context, language.otherPostsInProcessOfPayment ?? '',
+            subCaption: language.thePostisintheProcessofPayment,
+            subCaptionButton: language.viewPaymentStatus,
+            color: kHyppeRed,
+            iconSvg: '${AssetPath.vectorPath}remove.svg',
+            maxLines: 10, functionSubCaption: () {
+          Routing().moveAndPop(Routes.transaction);
+          Routing().moveBack();
+          Routing().moveBack();
+          Routing().moveBack();
+          Routing().moveBack();
+          _onExit();
+        });
+        Routing().move(Routes.transaction);
+      }
       _isLoading = false;
       notifyListeners();
     } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
@@ -1242,17 +1266,35 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  navigateToBoost(BuildContext context) {
-    if (boostMasterData == null) {
-      getMasterBoost(context);
-    }
+  navigateToBoost(BuildContext context) async {
+    getMasterBoost(context);
 
     if (_boostContent != null) {
       tmpstartDate = DateTime.parse(_boostContent?.dateBoostStart ?? '');
       tmpfinsihDate = DateTime.parse(_boostContent?.dateBoostEnd ?? '');
       tmpBoost = _boostContent?.typeBoost ?? '';
+      if (_boostContent?.typeBoost == 'manual') {
+        tmpBoostTime =
+            "${System().capitalizeFirstLetter(_boostContent?.sessionBoost?.name ?? '')} (${_boostContent?.sessionBoost?.start?.substring(0, 5)} - ${_boostContent?.sessionBoost?.end?.substring(0, 5)} WIB)";
+        tmpBoostTimeId = _boostContent?.sessionBoost?.sId ?? '';
+        tmpBoostInterval = "${_boostContent?.intervalBoost?.value} ${System().capitalizeFirstLetter(_boostContent?.intervalBoost?.remark ?? '')}";
+        tmpBoostIntervalId = _boostContent?.intervalBoost?.sId ?? '';
+      }
     }
-    Routing().move(Routes.boostUpload);
+    if (privacyValue != 'PUBLIC') {
+      ShowBottomSheet.onWarningBottom(
+        context,
+        title: language.postPrivacyisNotAllowed,
+        bodyText: language.toContinueTheBoostPostProcess,
+        icon: "${AssetPath.vectorPath}warning.svg",
+        buttonText: 'Oke',
+        onSave: () {
+          Routing().moveAndPop(Routes.boostUpload);
+        },
+      );
+    } else {
+      Routing().move(Routes.boostUpload);
+    }
   }
 
   bool enableBoostConfirm() {
@@ -1293,7 +1335,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _boostContent = BoostContent.fromJson(fetch.data);
         _privacyTitle = language.public ?? 'PUBLIC';
         privacyValue = 'PUBLIC';
-        Routing().moveBack();
+        exitBoostPage();
         _isLoading = false;
         notifyListeners();
       } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
@@ -1325,8 +1367,13 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future uploadPanding(context) async {
-    ShowGeneralDialog.loadingDialog(context, uploadProses: true);
-    _createPostContentV2();
+    if (isEdit) {
+      _postIdPanding = editData?.postID ?? '';
+      _boostContentBuy(context);
+    } else {
+      ShowGeneralDialog.loadingDialog(context, uploadProses: true);
+      _createPostContentV2();
+    }
   }
 
   Future<void> _boostContentBuy(BuildContext context) async {
@@ -1369,11 +1416,14 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   exitBoostPage() {
-    // _tmpstartDate = DateTime(1000);
-    // _tmpfinsihDate = DateTime(1000);
-    // _tmpBoost = '';
-    // _tmpBoostTime = '';
-    // tmpBoostInterval = '';
+    tmpstartDate = DateTime(1000);
+    tmpfinsihDate = DateTime(1000);
+    tmpBoost = '';
+    tmpBoostTime = '';
+    tmpBoostInterval = '';
+    tmpBoostIntervalId = '';
+    tmpBoostTimeId = '';
+    notifyListeners();
     Routing().moveBack();
   }
 }

@@ -14,8 +14,9 @@ import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 class OnReportSpamFormBottomSheet extends StatefulWidget {
   final ContentData? postData;
   final String? type;
+  final bool inDetail;
 
-  const OnReportSpamFormBottomSheet({Key? key, this.type, this.postData}) : super(key: key);
+  const OnReportSpamFormBottomSheet({Key? key, this.type, this.postData, this.inDetail = true}) : super(key: key);
 
   @override
   State<OnReportSpamFormBottomSheet> createState() => _OnReportSpamFormBottomSheetState();
@@ -124,7 +125,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   function: notifier.isLoading
                                       ? null
                                       : () {
-                                          notifier.reportPost(context);
+                                          notifier.reportPost(context, inDetail: widget.inDetail);
                                         },
                                   child: notifier.isLoading
                                       ? const CustomLoading()

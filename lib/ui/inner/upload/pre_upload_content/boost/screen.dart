@@ -3,11 +3,13 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
@@ -18,7 +20,6 @@ class BoostUploadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return Consumer<PreUploadContentNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
@@ -59,14 +60,57 @@ class BoostUploadScreen extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                height: 90,
-                                width: 90,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: const ValidateType(editContent: false),
-                              ),
+                              notifier.isEdit
+                                  ? Container(
+                                      height: 90,
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: CustomBaseCacheImage(
+                                        widthPlaceHolder: 80,
+                                        heightPlaceHolder: 80,
+                                        imageUrl: notifier.editData?.isApsara ?? false ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath}',
+                                        imageBuilder: (context, imageProvider) => Container(
+                                          // margin: margin,
+                                          // // const EdgeInsets.symmetric(horizontal: 4.5),
+                                          // width: _scaling,
+                                          height: 168,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) {
+                                          print('errorWidget :  $error');
+                                          return Container(
+                                            // margin: margin,
+                                            // // const EdgeInsets.symmetric(horizontal: 4.5),
+                                            // width: _scaling,
+                                            height: 186,
+                                            // child: _buildBody(context),
+                                            decoration: BoxDecoration(
+                                              image: const DecorationImage(
+                                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius: BorderRadius.circular(8.0),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 90,
+                                      width: 90,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: const ValidateType(editContent: false),
+                                    ),
                               sixPx,
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

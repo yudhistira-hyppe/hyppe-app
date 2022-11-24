@@ -43,6 +43,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_ownership.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_pin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_warning.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/reportProfile.dart';
@@ -524,6 +525,8 @@ class ShowBottomSheet {
     bool enableDrag = true,
     bool dismissible = true,
     EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
+    final Function()? functionSubCaption,
+    final String? subCaptionButton,
   }) async {
     final _result = await showModalBottomSheet<bool>(
       isScrollControlled: enableDrag,
@@ -545,6 +548,8 @@ class ShowBottomSheet {
                 iconColor: iconColor,
                 function: function,
                 textOverflow: textOverflow,
+                subCaptionButton: subCaptionButton,
+                functionSubCaption: functionSubCaption,
               )),
         );
       },
@@ -793,7 +798,15 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, {ContentData? postData, AdsData? adsData, String? type, StoryController? storyController, Function? onUpdate}) {
+  static onReportContent(
+    _, {
+    ContentData? postData,
+    AdsData? adsData,
+    String? type,
+    StoryController? storyController,
+    Function? onUpdate,
+    bool? inDetail,
+  }) {
     print('pop up pertama');
     showModalBottomSheet(
       context: _,
@@ -815,6 +828,7 @@ class ShowBottomSheet {
               type: type,
               onUpdate: onUpdate,
               adsData: adsData,
+              inDetail: inDetail,
             ),
           ),
         );
@@ -855,6 +869,7 @@ class ShowBottomSheet {
     AdsData? adsData,
     String? type,
     Function? onUpdate,
+    bool? inDetail,
   }) {
     showModalBottomSheet(
       context: _,
@@ -874,13 +889,16 @@ class ShowBottomSheet {
                 ),
               ),
               padding: const EdgeInsets.all(0),
-              child: OnReportSpamFormBottomSheet(postData: postData, type: type),
+              child: OnReportSpamFormBottomSheet(
+                postData: postData,
+                type: type,
+                inDetail: inDetail ?? true,
+              ),
             ),
           ),
         );
       },
     ).whenComplete(() {
-      Routing().moveBack();
       if (onUpdate != null) onUpdate();
     });
   }
@@ -1352,6 +1370,40 @@ class ShowBottomSheet {
             ),
           ),
           child: const OnCategorySupportTicket(),
+        );
+      },
+    );
+  }
+
+  static onWarningBottom(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    bodyText = '',
+    buttonText = '',
+    icon = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnWarningBottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+            title: title,
+            bodyText: bodyText,
+            buttonText: buttonText,
+            icon: icon,
+          ),
         );
       },
     );

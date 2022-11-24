@@ -752,6 +752,13 @@ class LocalizationModelV2 {
   String? boostedPostList;
   String? reach;
   String? viewDetails;
+  String? scheduled;
+  String? ongoing;
+  String? postPrivacyisNotAllowed;
+  String? toContinueTheBoostPostProcess;
+  String? otherPostsInProcessOfPayment;
+  String? thePostisintheProcessofPayment;
+  String? viewPaymentStatus;
   String? minutes;
   String? appeal;
   String? communityGuidelines;
@@ -1512,6 +1519,13 @@ class LocalizationModelV2 {
     this.boostedPostList,
     this.reach,
     this.viewDetails,
+    this.scheduled,
+    this.ongoing,
+    this.postPrivacyisNotAllowed,
+    this.toContinueTheBoostPostProcess,
+    this.otherPostsInProcessOfPayment,
+    this.thePostisintheProcessofPayment,
+    this.viewPaymentStatus,
     this.minutes,
     this.appeal,
     this.communityGuidelines,
@@ -2297,5 +2311,12 @@ class LocalizationModelV2 {
     boostedPostList = json["boostedPostList"];
     reach = json["reach"];
     viewDetails = json["viewDetails"];
+    scheduled = json["scheduled"];
+    ongoing = json["ongoing"];
+    postPrivacyisNotAllowed = json["postPrivacyisNotAllowed"];
+    toContinueTheBoostPostProcess = json["toContinueTheBoostPostProcess"];
+    otherPostsInProcessOfPayment = json["otherPostsInProcessOfPayment"];
+    thePostisintheProcessofPayment = json["thePostisintheProcessofPayment"];
+    viewPaymentStatus = json["viewPaymentStatus"];
   }
 }

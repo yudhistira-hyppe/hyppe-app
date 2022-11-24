@@ -20,7 +20,7 @@ class ReportContent extends StatelessWidget {
   final String? storyID;
   final String? commentID;
   final ReportType? reportType;
-  ReportContent({this.fromLandscapeMode = false, this.userID, this.postID, this.storyID, this.commentID, this.reportType});
+  ReportContent({Key? key, this.fromLandscapeMode = false, this.userID, this.postID, this.storyID, this.commentID, this.reportType}) : super(key: key);
 
   final _routing = Routing();
 

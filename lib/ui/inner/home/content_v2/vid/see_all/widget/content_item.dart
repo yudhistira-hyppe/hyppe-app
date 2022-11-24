@@ -5,6 +5,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
@@ -138,6 +139,16 @@ class ContentItem extends StatelessWidget {
                                           ),
                                         ))
                                     : Container(),
+                                Visibility(
+                                  visible: (data?.saleAmount == 0 && (data?.certified ?? false)),
+                                  child: const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: IconOwnership(correct: true),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                             data?.tagPeople?.isNotEmpty ?? false || data?.location != ''

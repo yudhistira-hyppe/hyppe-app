@@ -772,6 +772,18 @@ class System {
     }
   }
 
+  String getStatusBoost(BuildContext context, String status) {
+    final translate = context.read<TranslateNotifierV2>().translate;
+    switch (status) {
+      case 'BERLANGSUNG':
+        return translate.ongoing ?? '';
+      case 'AKAN DATANG':
+        return translate.scheduled ?? '';
+      default:
+        return translate.finish ?? '';
+    }
+  }
+
   readTimestamp(int timestamp, BuildContext context, {required bool fullCaption}) {
     final translate = context.read<TranslateNotifierV2>().translate;
     String time = '';

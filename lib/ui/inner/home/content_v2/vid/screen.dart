@@ -81,7 +81,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                     ? vidNotifier.vidData?.isEmpty ?? false
                         ? const NoResultFound()
                         : SizedBox(
-                            height: 390,
+                            height: 350,
                             child: NotificationListener<ScrollNotification>(
                               onNotification: (ScrollNotification scrollInfo) {
                                 if (scrollInfo is ScrollStartNotification) {
@@ -257,7 +257,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                             ],
                                           ),
                                         ),
-                                        vidData?.email == SharedPreference().readStorage(SpKeys.email) ? const ButtonBoost() : Container(),
+                                        // vidData?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: vidData) : Container(),
                                       ],
                                     ),
                                   );

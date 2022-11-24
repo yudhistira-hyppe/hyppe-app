@@ -361,32 +361,39 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        vid.vidData?.removeWhere((element) => element.postID == postID);
+        // _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+        diary.diaryData?.removeWhere((element) => element.postID == postID);
+        // _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        pic.pic?.removeWhere((element) => element.postID == postID);
+        // _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        // _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         _updatedData2 = pic2.data;
         break;
       case hyppeStory:
-        _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
+        stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
+        // _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
 
-    print('kesini story');
-    print(_updatedData);
+    // print('kesini story');
+    // print(_updatedData);
 
-    if (_updatedData != null) {
-      _updatedData.isReport = isReport;
-    }
-    if (_updatedData2 != null) {
-      _updatedData2.isReport = isReport;
-    }
+    // if (_updatedData != null) {
+    //   _updatedData.delete();
+    //   // _updatedData.isReport = isReport;
+    // }
+    // if (_updatedData2 != null) {
+    //   _updatedData2.delete();
+    //   _updatedData2.isReport = isReport;
+    // }
 
     notifyListeners();
   }

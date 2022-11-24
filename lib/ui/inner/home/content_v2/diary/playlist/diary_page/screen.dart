@@ -273,10 +273,13 @@ class _DiaryPageState extends State<DiaryPage> {
                         postID: widget.data?.postID,
                         storyController: _storyController,
                         tagPeople: widget.data?.tagPeople,
+                        data: widget.data,
                       ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: SizedBox(height: 55, child: ContentViolationWidget(data: widget.data ?? ContentData())),
+                  child: widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED" || (widget.data?.reportedUserCount ?? 0) > 200
+                      ? ContentViolationWidget(data: widget.data!)
+                      : Container(),
                 )
               ],
             );

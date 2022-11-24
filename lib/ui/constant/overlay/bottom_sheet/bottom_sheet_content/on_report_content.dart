@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnReportContentBottomSheet extends StatelessWidget {
@@ -15,8 +16,9 @@ class OnReportContentBottomSheet extends StatelessWidget {
   final ContentData? postData;
   final AdsData? adsData;
   final Function? onUpdate;
+  final bool? inDetail;
 
-  const OnReportContentBottomSheet({Key? key, this.postData, this.type, this.onUpdate, this.adsData}) : super(key: key);
+  const OnReportContentBottomSheet({Key? key, this.postData, this.type, this.onUpdate, this.adsData, this.inDetail}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -51,7 +53,8 @@ class OnReportContentBottomSheet extends StatelessWidget {
               onTap: () {
                 print('postData?.postID');
                 print(postData?.postID);
-                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData);
+                Routing().moveBack();
+                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData, inDetail: inDetail);
                 context.read<ReportNotifier>().contentData = postData;
                 context.read<ReportNotifier>().adsData = adsData;
                 context.read<ReportNotifier>().typeContent = type ?? '';
