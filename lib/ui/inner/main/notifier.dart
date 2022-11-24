@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:collection/collection.dart' show IterableExtension;
@@ -43,6 +44,8 @@ class MainNotifier with ChangeNotifier {
 
   bool _openValidationIDCamera = false;
   bool get openValidationIDCamera => _openValidationIDCamera;
+  Timer? countdownTimer;
+  Duration myDuration = const Duration(minutes: 1);
 
   set openValidationIDCamera(bool val) {
     _openValidationIDCamera = val;
@@ -205,5 +208,30 @@ class MainNotifier with ChangeNotifier {
     // } else {
     //   return ShowGeneralDialog.permanentlyDeniedPermission(context);
     // }
+  }
+
+  void startTimer() {
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void stopTimer() {
+    countdownTimer!.cancel();
+    notifyListeners();
+  }
+
+  void resetTimer() {
+    stopTimer();
+    myDuration = const Duration(minutes: 1);
+  }
+
+  void setCountDown() {
+    const reduceSecondsBy = 1;
+    final seconds = myDuration.inSeconds - reduceSecondsBy;
+    if (seconds < 0) {
+      resetTimer();
+      System().getSchedule();
+    } else {
+      myDuration = Duration(seconds: seconds);
+    }
   }
 }

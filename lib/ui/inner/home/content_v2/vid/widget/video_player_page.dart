@@ -7,10 +7,13 @@ import 'package:hyppe/core/bloc/ads_video/bloc.dart';
 import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
@@ -34,6 +37,7 @@ import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
+import 'package:provider/provider.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final ContentData? videoData;
@@ -365,9 +369,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           _handleOpenFullScreenEvent();
         } else if (event.betterPlayerEventType == BetterPlayerEventType.hideFullscreen) {
           _handleHideFullScreenEvent();
+        } else if (event.betterPlayerEventType == BetterPlayerEventType.pipStop) {
+          // _betterPlayerController?.pause();
         }
         if (event.betterPlayerEventType == BetterPlayerEventType.finished) {
-          if(widget.afterView != null){
+          if (widget.afterView != null) {
             widget.afterView!();
           }
         }
@@ -504,6 +510,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           enableProgressBarDrag: false,
           controlBarColor: Colors.black26,
           imagesAdsVid: (widget.videoData?.isApsara ?? false) ? widget.videoData?.mediaThumbEndPoint : widget.videoData?.fullThumbPath,
+          reportFuntion: () {
+            _betterPlayerControllerMap?.pause();
+            ShowBottomSheet.onReportSpamContent(context, postData: null, type: adsPopUp, onUpdate: () {
+              _betterPlayerControllerMap?.nextVideoTimeStream;
+            }, adsData: _newClipData?.data ?? AdsData());
+            context.read<ReportNotifier>().adsData = _newClipData?.data;
+            context.read<ReportNotifier>().typeContent = adsPopUp;
+          },
         ),
       );
       BetterPlayerDataSource dataSource = BetterPlayerDataSource(

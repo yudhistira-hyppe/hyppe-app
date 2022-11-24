@@ -71,7 +71,8 @@ dependencies:
   dio_http_formatter: ^2.1.0
   ffmpeg_kit_flutter: ^5.1.0
   audioplayers: ^1.1.1
-  image_cropper: ^3.0.1
+  image_cropper: ^3.0.1 
+
 
   dynamic_widget: # Dynamic widget builder
     git:

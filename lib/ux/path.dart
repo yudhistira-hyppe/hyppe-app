@@ -111,4 +111,10 @@ class Routes {
   static const String help = '/help';
   static const String faqDetail = '/faq-detail';
   static const String supportTicket = '/support-ticket';
+  static const String appeal = '/appeal';
+
+  //boost
+  static const String boostUpload = '/boost-upload';
+  static const String boostPaymentSummary = '/boost-payment-summary';
+  static const String boostList = '/boost-list';
 }

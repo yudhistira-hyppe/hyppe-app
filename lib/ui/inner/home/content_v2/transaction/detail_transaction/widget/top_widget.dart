@@ -10,10 +10,10 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/two_column_widget.dart';
 
 class TopDetailWidget extends StatelessWidget {
-  TransactionHistoryModel? data;
-  LocalizationModelV2? language;
+  final TransactionHistoryModel? data;
+  final LocalizationModelV2? language;
 
-  TopDetailWidget({Key? key, this.data, this.language}) : super(key: key);
+  const TopDetailWidget({Key? key, this.data, this.language}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +44,13 @@ class TopDetailWidget extends StatelessWidget {
           text2: 'See Invoice',
           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
-        TwoColumnWidget(
-          language?.from ?? 'from',
-          text2: data?.namapenjual,
-          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
-        ),
+        data?.jenis == 'BOOST_CONTENT'
+            ? Container()
+            : TwoColumnWidget(
+                language?.from ?? 'from',
+                text2: data?.namapenjual,
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+              ),
         TwoColumnWidget('Status', text2: data?.status),
         TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
         TwoColumnWidget(

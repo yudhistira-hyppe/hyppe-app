@@ -6,6 +6,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -142,10 +143,16 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                                   widget.storyController.pause();
                                   ShowBottomSheet.onReportContent(
                                     context,
-                                    widget.data,
-                                    hyppeDiary,
-                                    onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
+                                    postData: widget.data,
+                                    type: hyppeDiary,
+                                    adsData: null,
+                                    storyController: widget.storyController,
+                                    onUpdate: () {
+                                      context.read<DiariesPlaylistNotifier>().onUpdate();
+                                      widget.storyController.pause();
+                                    },
                                   );
+                                  widget.storyController.pause();
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,
@@ -155,6 +162,13 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                               ),
                             )
                           : const SizedBox(),
+                      Visibility(
+                        visible: (widget.data?.saleAmount == 0 && (widget.data?.certified ?? false)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: IconOwnership(correct: true),
+                        ),
+                      ),
                       SizedBox(
                         width: 40,
                         height: 40,

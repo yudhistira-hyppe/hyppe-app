@@ -137,7 +137,7 @@ class _PicDetailState extends State<PicDetail> {
                               context,
                               fullCaption: true,
                             )}',
-                            ),
+                          ),
                         ],
                       ),
                       widget.arguments?.email == SharedPreference().readStorage(SpKeys.email)
@@ -157,7 +157,13 @@ class _PicDetailState extends State<PicDetail> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet.onReportContent(context, widget.arguments ?? ContentData(), hyppePic),
+                              function: () => ShowBottomSheet.onReportContent(
+                                context,
+                                postData: widget.arguments,
+                                type: hyppePic,
+                                adsData: null,
+                                onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                              ),
                             )
                           : SizedBox(),
                     ],

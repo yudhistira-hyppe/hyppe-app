@@ -45,7 +45,7 @@ class TotalBalance extends StatelessWidget {
                   iconData: "${AssetPath.vectorPath}info-icon.svg",
                   height: 14,
                 ),
-              )
+              ),
             ],
           ),
           CustomTextWidget(

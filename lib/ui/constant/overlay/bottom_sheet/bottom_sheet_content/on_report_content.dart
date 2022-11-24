@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -7,14 +8,17 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class OnReportContentBottomSheet extends StatelessWidget {
   final String? type;
   final ContentData? postData;
+  final AdsData? adsData;
   final Function? onUpdate;
+  final bool? inDetail;
 
-  const OnReportContentBottomSheet({Key? key, this.postData, this.type, this.onUpdate}) : super(key: key);
+  const OnReportContentBottomSheet({Key? key, this.postData, this.type, this.onUpdate, this.adsData, this.inDetail}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -47,8 +51,12 @@ class OnReportContentBottomSheet extends StatelessWidget {
             ListTile(
               visualDensity: VisualDensity.adaptivePlatformDensity,
               onTap: () {
-                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate);
+                print('postData?.postID');
+                print(postData?.postID);
+                Routing().moveBack();
+                ShowBottomSheet.onReportSpamContent(context, postData: postData, type: type, onUpdate: onUpdate, adsData: adsData, inDetail: inDetail);
                 context.read<ReportNotifier>().contentData = postData;
+                context.read<ReportNotifier>().adsData = adsData;
                 context.read<ReportNotifier>().typeContent = type ?? '';
               },
               dense: true,

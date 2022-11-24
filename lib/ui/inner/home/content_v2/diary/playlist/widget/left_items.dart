@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:readmore/readmore.dart';
@@ -23,6 +26,7 @@ class LeftItems extends StatefulWidget {
   final String? postID;
   final String? location;
   final List<TagPeople>? tagPeople;
+  final ContentData? data;
 
   const LeftItems({
     Key? key,
@@ -35,6 +39,7 @@ class LeftItems extends StatefulWidget {
     this.postID,
     this.location,
     this.tagPeople,
+    this.data,
   }) : super(key: key);
 
   @override
@@ -74,7 +79,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
           widget.tagPeople?.isNotEmpty ?? false || widget.location != ''
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 5),
@@ -120,9 +125,20 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               ),
             ),
           ),
-          if(widget.music != null)
-          MusicStatusPage(
-              music: widget.music!)
+
+          twelvePx,
+          widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              ? Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ButtonBoost(
+                    marginBool: true,
+                    contentData: widget.data,
+                  ),
+                )
+              : Container(),
+
+          if (widget.music != null) MusicStatusPage(music: widget.music!)
+
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
           // _musicInfo(),
         ],

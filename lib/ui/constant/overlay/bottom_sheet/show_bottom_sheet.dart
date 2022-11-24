@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
@@ -8,6 +9,8 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_interval.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_time.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_category_support_ticket.dart';
@@ -40,6 +43,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_ownership.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_pin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_warning.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/reportProfile.dart';
@@ -67,26 +71,26 @@ class ShowBottomSheet {
     return _instance;
   }
 
-
-  static onChooseMusic(context, {isPic = false}) async{
+  static onChooseMusic(context, {isPic = false}) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
         enableDrag: true,
         isDismissible: true,
         backgroundColor: Colors.transparent,
-        builder: (context){
+        builder: (context) {
           return Padding(
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Container(
               decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
               height: context.getHeight() * 0.92,
-              child: OnChooseMusicBottomSheet(isPic: isPic,),
+              child: OnChooseMusicBottomSheet(
+                isPic: isPic,
+              ),
             ),
           );
         });
   }
-
 
   static onUploadContent(context) async {
     await showModalBottomSheet(
@@ -523,6 +527,8 @@ class ShowBottomSheet {
     bool enableDrag = true,
     bool dismissible = true,
     EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
+    final Function()? functionSubCaption,
+    final String? subCaptionButton,
   }) async {
     final _result = await showModalBottomSheet<bool>(
       isScrollControlled: enableDrag,
@@ -544,6 +550,8 @@ class ShowBottomSheet {
                 iconColor: iconColor,
                 function: function,
                 textOverflow: textOverflow,
+                subCaptionButton: subCaptionButton,
+                functionSubCaption: functionSubCaption,
               )),
         );
       },
@@ -792,7 +800,16 @@ class ShowBottomSheet {
     );
   }
 
-  static onReportContent(_, ContentData? postData, String type, {StoryController? storyController, Function? onUpdate}) {
+  static onReportContent(
+    _, {
+    ContentData? postData,
+    AdsData? adsData,
+    String? type,
+    StoryController? storyController,
+    Function? onUpdate,
+    bool? inDetail,
+  }) {
+    print('pop up pertama');
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -812,14 +829,13 @@ class ShowBottomSheet {
               postData: postData,
               type: type,
               onUpdate: onUpdate,
+              adsData: adsData,
+              inDetail: inDetail,
             ),
           ),
         );
       },
-    ).whenComplete(() {
-      if (storyController != null) storyController.play();
-    });
-    ;
+    ).whenComplete(() {});
   }
 
   static onReportFormContent(_, {StoryController? storyController}) {
@@ -844,7 +860,6 @@ class ShowBottomSheet {
         );
       },
     ).whenComplete(() {
-      if (storyController != null) storyController.play();
       Routing().moveBack();
     });
   }
@@ -853,33 +868,39 @@ class ShowBottomSheet {
     _, {
     StoryController? storyController,
     ContentData? postData,
+    AdsData? adsData,
     String? type,
     Function? onUpdate,
+    bool? inDetail,
   }) {
     showModalBottomSheet(
       context: _,
       isScrollControlled: true,
       builder: (builder) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-          child: Container(
-            height: SizeConfig.screenHeight ?? 0 / 1.09,
-            decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            child: Container(
+              height: SizeConfig.screenHeight ?? 0 / 1.09,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.all(0),
+              child: OnReportSpamFormBottomSheet(
+                postData: postData,
+                type: type,
+                inDetail: inDetail ?? true,
               ),
             ),
-            padding: const EdgeInsets.all(0),
-            child: OnReportSpamFormBottomSheet(postData: postData, type: type),
           ),
         );
       },
     ).whenComplete(() {
-      if (storyController != null) storyController.play();
-      Routing().moveBack();
-
       if (onUpdate != null) onUpdate();
     });
   }
@@ -1351,6 +1372,82 @@ class ShowBottomSheet {
             ),
           ),
           child: const OnCategorySupportTicket(),
+        );
+      },
+    );
+  }
+
+  static onWarningBottom(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    bodyText = '',
+    buttonText = '',
+    icon = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnWarningBottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+            title: title,
+            bodyText: bodyText,
+            buttonText: buttonText,
+            icon: icon,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowBoostTime(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: const OnBoostTimeContent(),
+        );
+      },
+    );
+  }
+
+  static onShowBoostInterval(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: const OnBoostIntervalContent(),
         );
       },
     );

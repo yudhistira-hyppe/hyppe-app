@@ -31,6 +31,12 @@ class DetailTransaction extends StatelessWidget {
               blockColor = kHyppeRedLight;
               title = notifier2.translate.buy ?? '';
               bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
+              if (notifier.dataTransactionDetail?.jenis == 'BOOST_CONTENT') {
+                titleColor = kHyppeJingga;
+                blockColor = kHyppeJinggaLight;
+                title = notifier2.translate.postBoost ?? 'Post Boost';
+              }
+
               break;
             case TransactionType.withdrawal:
               titleColor = kHyppeCyan;

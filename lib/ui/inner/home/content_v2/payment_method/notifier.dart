@@ -10,6 +10,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/buy_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/buy_response.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -103,10 +104,14 @@ class PaymentMethodNotifier extends ChangeNotifier {
     );
   }
 
-  void submitPay(BuildContext context) {
+  void submitPay(BuildContext context, {num? price}) async {
     final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
-
-    if (cek ?? false) _postSubmitBuy(context);
+    if (price != null) {
+      final notifier = context.read<PreUploadContentNotifier>();
+      await notifier.uploadPanding(context);
+    } else {
+      if (cek ?? false) _postSubmitBuy(context);
+    }
   }
 
   Color colorButton(context) {
@@ -137,8 +142,6 @@ class PaymentMethodNotifier extends ChangeNotifier {
         type: 'CONTENT',
         salelike: reviewBuyNotifier.data?.saleLike,
         saleview: reviewBuyNotifier.data?.saleView);
-
-    print('data: ${params.toJson()}.');
 
     try {
       final notifier = BuyBloc();

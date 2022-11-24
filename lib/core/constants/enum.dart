@@ -1,5 +1,5 @@
 enum FeatureType { vid, diary, pic, story, txtMsg, other }
-enum MusicEnum {genre, theme, mood}
+enum MusicEnum { genre, theme, mood }
 enum ContentType { image, video, text }
 enum StatusFollowing { rejected, requested, following, none }
 enum ReportType { profile, comment, story, post }
@@ -44,7 +44,7 @@ enum ErrorType {
   register,
   login
 }
-enum TransactionType { sell, buy, withdrawal, none }
+enum TransactionType { sell, buy, withdrawal, boost, none }
 enum VideoOrientation { landscape, portrait }
 enum WalletEventEnum { miniDana, acquiring }
 enum WalletResourceType { maskDanaId, balance, userKYC, transactionUrl, topUpUrl, oauthUrl }

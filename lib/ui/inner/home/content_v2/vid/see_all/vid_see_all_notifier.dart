@@ -13,7 +13,7 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
-class VidSeeAllNotifier extends ChangeNotifier {
+class VidSeeAllNotifier with ChangeNotifier {
   final _system = System();
   final _routing = Routing();
 
@@ -39,6 +39,8 @@ class VidSeeAllNotifier extends ChangeNotifier {
           : (_vidData?.length ?? 0);
 
   bool get hasNext => contentsQuery.hasNext;
+
+  void onUpdate() => notifyListeners();
 
   void initState(BuildContext context) {
     initialVid(context, reload: true);
@@ -90,7 +92,7 @@ class VidSeeAllNotifier extends ChangeNotifier {
   }
 
   void reportContent(BuildContext context, ContentData data) {
-    ShowBottomSheet.onReportContent(context, data, hyppeVid);
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid);
   }
 
   void showUserTag(BuildContext context, index) {

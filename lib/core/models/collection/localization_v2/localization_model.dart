@@ -717,6 +717,53 @@ class LocalizationModelV2 {
   String? newTicketIssue;
   String? insertAnyAdditionalInfo;
   String? chooseCategoryIssue;
+  String? thisHyppeVidisSubjectToModeration;
+  String? thisHyppePicisSubjectToModeration;
+  String? thisHyppeDiaryisSubjectToModeration;
+  String? thisHyppeStoryisSubjectToModeration;
+  String? thisMessagecanOnlyBeSeenByYou;
+  String? contentViolation;
+  String? yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere;
+  String? videoDetails;
+  String? postedOn;
+  String? violationType;
+  String? ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal;
+  String? chooseanAppealReason;
+  String? stateYourIssue;
+  String? pleaseprovideadditionaldetails;
+  String? thisContentDoesntHaveSensitiveContent;
+  String? thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols;
+  String? thisContentHasAdditionalContext;
+  String? thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent;
+  String? theReasonDoesntFitIntoTheseCategories;
+  String? ticketIssueSuccessfullySubmitted;
+  String? yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare;
+  String? postBoost;
+  String? startDate;
+  String? autoSelect;
+  String? selectManual;
+  String? boostTime;
+  String? interval;
+  String? contentWillbeBoostedfor30days;
+  String? boostPrice;
+  String? contentType;
+  String? morning;
+  String? afternoon;
+  String? by;
+  String? night;
+  String? boostedPostList;
+  String? reach;
+  String? viewDetails;
+  String? scheduled;
+  String? ongoing;
+  String? postPrivacyisNotAllowed;
+  String? toContinueTheBoostPostProcess;
+  String? otherPostsInProcessOfPayment;
+  String? thePostisintheProcessofPayment;
+  String? viewPaymentStatus;
+  String? minutes;
+  String? appeal;
+  String? communityGuidelines;
   String? description;
   String? report;
 
@@ -1439,6 +1486,53 @@ class LocalizationModelV2 {
     this.newTicketIssue,
     this.insertAnyAdditionalInfo,
     this.chooseCategoryIssue,
+    this.thisHyppeVidisSubjectToModeration,
+    this.thisHyppePicisSubjectToModeration,
+    this.thisHyppeDiaryisSubjectToModeration,
+    this.thisHyppeStoryisSubjectToModeration,
+    this.thisMessagecanOnlyBeSeenByYou,
+    this.contentViolation,
+    this.yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere,
+    this.videoDetails,
+    this.postedOn,
+    this.violationType,
+    this.ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal,
+    this.chooseanAppealReason,
+    this.stateYourIssue,
+    this.pleaseprovideadditionaldetails,
+    this.thisContentDoesntHaveSensitiveContent,
+    this.thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols,
+    this.thisContentHasAdditionalContext,
+    this.thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent,
+    this.theReasonDoesntFitIntoTheseCategories,
+    this.ticketIssueSuccessfullySubmitted,
+    this.yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare,
+    this.postBoost,
+    this.startDate,
+    this.autoSelect,
+    this.selectManual,
+    this.boostTime,
+    this.interval,
+    this.contentWillbeBoostedfor30days,
+    this.boostPrice,
+    this.contentType,
+    this.morning,
+    this.afternoon,
+    this.by,
+    this.night,
+    this.boostedPostList,
+    this.reach,
+    this.viewDetails,
+    this.scheduled,
+    this.ongoing,
+    this.postPrivacyisNotAllowed,
+    this.toContinueTheBoostPostProcess,
+    this.otherPostsInProcessOfPayment,
+    this.thePostisintheProcessofPayment,
+    this.viewPaymentStatus,
+    this.minutes,
+    this.appeal,
+    this.communityGuidelines,
     this.description,
     this.report,
   });
@@ -2180,7 +2274,55 @@ class LocalizationModelV2 {
     newTicketIssue = json["newTicketIssue"];
     insertAnyAdditionalInfo = json["insertAnyAdditionalInfo"];
     chooseCategoryIssue = json["chooseCategoryIssue"];
+    thisHyppeVidisSubjectToModeration = json["thisHyppeVidisSubjectToModeration"];
+    thisHyppePicisSubjectToModeration = json["thisHyppePicisSubjectToModeration"];
+    thisHyppeDiaryisSubjectToModeration = json["thisHyppeDiaryisSubjectToModeration"];
+    thisHyppeStoryisSubjectToModeration = json["thisHyppeStoryisSubjectToModeration"];
+    thisMessagecanOnlyBeSeenByYou = json["thisMessagecanOnlyBeSeenByYou"];
     description = json["description"];
     report = json["report"];
+    contentViolation = json["contentViolation"];
+    yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere = json["yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere"];
+    videoDetails = json["videoDetails"];
+    postedOn = json["postedOn"];
+    violationType = json["violationType"];
+    appeal = json["appeal"];
+    communityGuidelines = json["communityGuidelines"];
+    ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal =
+        json["ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal"];
+    chooseanAppealReason = json["chooseanAppealReason"];
+    stateYourIssue = json["stateYourIssue"];
+    pleaseprovideadditionaldetails = json["pleaseprovideadditionaldetails"];
+    thisContentDoesntHaveSensitiveContent = json["thisContentDoesntHaveSensitiveContent"];
+    thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols = json["thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols"];
+    thisContentHasAdditionalContext = json["thisContentHasAdditionalContext"];
+    thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent = json["thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent"];
+    theReasonDoesntFitIntoTheseCategories = json["theReasonDoesntFitIntoTheseCategories"];
+    ticketIssueSuccessfullySubmitted = json["ticketIssueSuccessfullySubmitted"];
+    yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare = json["yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare"];
+    postBoost = json["postBoost"];
+    startDate = json["startDate"];
+    autoSelect = json["autoSelect"];
+    selectManual = json["selectManual"];
+    boostTime = json["boostTime"];
+    interval = json["interval"];
+    minutes = json["minutes"];
+    contentWillbeBoostedfor30days = json["contentWillbeBoostedfor30days"];
+    boostPrice = json["boostPrice"];
+    contentType = json["contentType"];
+    morning = json["morning"];
+    afternoon = json["afternoon"];
+    by = json["by"];
+    night = json["night"];
+    boostedPostList = json["boostedPostList"];
+    reach = json["reach"];
+    viewDetails = json["viewDetails"];
+    scheduled = json["scheduled"];
+    ongoing = json["ongoing"];
+    postPrivacyisNotAllowed = json["postPrivacyisNotAllowed"];
+    toContinueTheBoostPostProcess = json["toContinueTheBoostPostProcess"];
+    otherPostsInProcessOfPayment = json["otherPostsInProcessOfPayment"];
+    thePostisintheProcessofPayment = json["thePostisintheProcessofPayment"];
+    viewPaymentStatus = json["viewPaymentStatus"];
   }
 }

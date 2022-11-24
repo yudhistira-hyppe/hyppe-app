@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -108,8 +109,10 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                           contentInfo(textTheme, title: System().capitalizeFirstLetter(notifier.language.from ?? 'from'), value: widget.arguments?.username ?? ''),
                           contentInfo(textTheme, title: notifier.language.time ?? '', value: notifier.data?.createdAt ?? ''),
                           contentInfo(textTheme, title: notifier.language.sellingPrice ?? '', value: System().currencyFormat(amount: notifier.data?.price?.toInt())),
-                          contentInfo(textTheme, title: notifier.language.includeTotalViews ?? '', value: notifier.data?.saleView ?? false ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no'),
-                          contentInfo(textTheme, title: notifier.language.includeTotalLikes ?? '', value: notifier.data?.saleView ?? false ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no'),
+                          contentInfo(textTheme,
+                              title: notifier.language.includeTotalViews ?? '', value: notifier.data?.saleView ?? false ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no'),
+                          contentInfo(textTheme,
+                              title: notifier.language.includeTotalLikes ?? '', value: notifier.data?.saleView ?? false ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no'),
                           contentInfo(textTheme, title: 'Service Fee (${notifier.data?.prosentaseAdminFee})', value: System().currencyFormat(amount: notifier.data?.adminFee?.toInt())),
                           contentInfo(textTheme, title: "Admin Fee", value: System().currencyFormat(amount: notifier.data?.serviceFee?.toInt())),
                         ],
@@ -144,7 +147,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       CustomElevatedButton(
                         width: 375.0 * SizeConfig.scaleDiagonal,
                         height: 44.0 * SizeConfig.scaleDiagonal,
-                        function: () => Routing().move(Routes.paymentMethodScreen),
+                        function: () => Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: null)),
                         child: CustomTextWidget(
                           textToDisplay: notifier.language.choosePaymentMethods ?? '',
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),

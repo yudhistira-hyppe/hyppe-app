@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -50,22 +53,27 @@ class VideoThumbnailReport extends StatelessWidget {
         Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              padding: const EdgeInsets.only(top: 8),
-              margin: const EdgeInsets.all(8),
-              width: SizeConfig.screenWidth,
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.white,
-                    width: 1,
+            GestureDetector(
+              onTap: () {
+                context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
+              },
+              child: Container(
+                padding: const EdgeInsets.only(top: 8),
+                margin: const EdgeInsets.all(8),
+                width: SizeConfig.screenWidth,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Colors.white,
+                      width: 1,
+                    ),
                   ),
                 ),
-              ),
-              child: Text(
-                "${translate.see} HyppeVid",
-                style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                textAlign: TextAlign.center,
+                child: Text(
+                  "${translate.see} HyppeVid",
+                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ],

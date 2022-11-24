@@ -109,7 +109,6 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               children: [
                 Row(
                   children: [
-
                     CustomTextWidget(
                       textToDisplay: notifier.message,
                       textStyle: Theme.of(context).textTheme.caption,

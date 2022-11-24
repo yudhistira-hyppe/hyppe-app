@@ -258,6 +258,8 @@ class UrlConstants {
   /// post => View Like and View.
   static const String viewLike = "$postRoute/viewlike";
 
+  static const String getListMyBoost = "$postsRoute/getboost";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Reaction */
   /// post Add Reaction to content.
@@ -415,6 +417,9 @@ class UrlConstants {
   /// post => Get Notification
   static const String getNotification = "$postRouteV2/getnotification";
 
+  /// post => Get Notification
+  static const String getBoostMaster = "$postRoute/boostmaster";
+
   /// post => Get Ads Roster
   static const String getAdsRoster = "$bizRoute/adsroster";
 
@@ -462,6 +467,9 @@ class UrlConstants {
 
   /// post => Get Withdraw Detail
   static const String withdraw = "$transactionRoute/withdraw";
+
+  /// post => Get Withdraw Detail
+  static const String boostContent = "$transactionRoute/boostcontent";
 
   /// get => Get All Bank
   static const String getAllBank = "$bankRoute/all";
@@ -514,6 +522,9 @@ class UrlConstants {
   //==========report============
   static const String getOptionReport = "/api/reportreasons/all";
   static const String insertReport = "/api/reportuser/create";
+
+  static const String appealPost = "/api/reportuser/appeal";
+  static const String createTicket = "/api/usertickets/createticket";
 
   /// ===music===
   static const String getMusicGenre = "/api/genre/";

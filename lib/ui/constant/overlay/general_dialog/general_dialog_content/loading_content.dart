@@ -1,10 +1,11 @@
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ux/routing.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 
 class LoadingDialog extends StatelessWidget {
-  const LoadingDialog({Key? key}) : super(key: key);
+  final bool uploadProses;
+  const LoadingDialog({Key? key, this.uploadProses = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class LoadingDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          const CustomLoading(),
+          !uploadProses ? const CustomLoading() : const ProcessUploadComponent(),
           GestureDetector(
             // onTap: () => Routing().moveBack(),
             child: CustomTextWidget(

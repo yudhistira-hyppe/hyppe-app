@@ -5,6 +5,8 @@ enum SupportTicketState {
   getCategoryIssueError,
   getLevelSuccess,
   getLevelError,
+  postTicketSuccess,
+  postTicketError,
 }
 
 class SupportTicketFetch {

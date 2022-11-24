@@ -5,18 +5,24 @@ import 'package:hyppe/core/bloc/support_ticket/bloc.dart';
 import 'package:hyppe/core/bloc/support_ticket/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/support_ticket/category_model.dart';
 import 'package:hyppe/core/models/collection/support_ticket/level_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 class SupportTicketNotifier with ChangeNotifier {
   bool _isLoadingCategory = false;
   bool get isLoadingCategory => _isLoadingCategory;
+
+  bool _isLoadingCreate = false;
+  bool get isLoadingCreate => _isLoadingCreate;
 
   bool _isLoadingLevel = false;
   bool get isLoadingLevel => _isLoadingLevel;
@@ -24,16 +30,34 @@ class SupportTicketNotifier with ChangeNotifier {
   String _nameCategory = '';
   String get nameCategory => _nameCategory;
 
+  String _idCategory = '';
+  String get idCategory => _idCategory;
+
+  String _idLevelTicket = '';
+  String get idLevelTicket => _idLevelTicket;
+
   String _nameLevel = '';
   String get nameLevel => _nameLevel;
 
   List<CategoryTicketModel> categoryData = [];
   List<LevelTicketModel> levelData = [];
   List<File>? _pickedSupportingDocs = [];
-
   List<File>? get pickedSupportingDocs => _pickedSupportingDocs;
+
+  TextEditingController descriptionController = TextEditingController();
+
   set pickedSupportingDocs(List<File>? val) {
     _pickedSupportingDocs = val;
+    notifyListeners();
+  }
+
+  set idCategory(String val) {
+    _idCategory = val;
+    notifyListeners();
+  }
+
+  set idLevelTicket(String val) {
+    _idLevelTicket = val;
     notifyListeners();
   }
 
@@ -108,16 +132,18 @@ class SupportTicketNotifier with ChangeNotifier {
     ShowBottomSheet.onShowCategorySupportTicket(context);
   }
 
-  void onPickSupportedDocument(BuildContext context, mounted) async {
+  void onPickSupportedDocument(BuildContext context, mounted, {bool pdf = false}) async {
     // isLoading = true;
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     try {
-      await System().getLocalMedia(featureType: FeatureType.other, context: context).then((value) async {
+      await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: pdf).then((value) async {
         debugPrint('Pick => ' + value.toString());
         if (value.values.single != null) {
           // pickedSupportingDocs = value.values.single;
           for (var element in value.values.single!) {
-            pickedSupportingDocs?.add(element);
+            if ((pickedSupportingDocs?.length ?? 0) < 3) {
+              pickedSupportingDocs!.add(element);
+            }
           }
           notifyListeners();
         } else {
@@ -130,6 +156,53 @@ class SupportTicketNotifier with ChangeNotifier {
     } catch (e) {
       // isLoading = false;
       // ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred);
+    }
+  }
+
+  bool enableButton() {
+    if (idCategory == '' || idLevelTicket == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  Future createTicket(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      _isLoadingCreate = true;
+      notifyListeners();
+      final notifier = SupportTicketBloc();
+      Map<String, dynamic> data = {
+        'subject': 'pengaduan',
+        'body': descriptionController.text,
+        'categoryTicket': idCategory,
+        'levelTicket': idLevelTicket,
+        // 'sourceTicket': 'asdasd',
+        'status': 'new',
+      };
+      print(data);
+      await notifier.postTicketBloc(
+        context,
+        data: data,
+        docFiles: pickedSupportingDocs,
+      );
+      final fetch = notifier.supportTicketFetch;
+      if (fetch.postsState == SupportTicketState.postTicketSuccess) {
+        Routing().moveBack();
+        final translate = context.read<TranslateNotifierV2>().translate;
+        ShowBottomSheet().onShowColouredSheet(context, translate.ticketIssueSuccessfullySubmitted ?? '',
+            subCaption: translate.yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare, color: kHyppeTextSuccess);
+      }
+
+      if (fetch.postsState == SupportTicketState.postTicketError) {}
+      _isLoadingCreate = false;
+      notifyListeners();
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        getInitSupportTicket(context);
+      });
     }
   }
 }

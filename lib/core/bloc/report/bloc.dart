@@ -101,11 +101,10 @@ class ReportBloc {
         }
       },
       (errorData) {
-        print('error2');
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
         setReportFetch(ReportFetch(ReportState.getReportOptionsError));
       },
-      data: {"lang": SharedPreference().readStorage(SpKeys.isoCode)},
+      // data: {"lang": SharedPreference().readStorage(SpKeys.isoCode)},
       host: UrlConstants.getOptionReport,
       withAlertMessage: false,
       methodType: MethodType.post,
@@ -119,7 +118,9 @@ class ReportBloc {
       context,
       (onResult) {
         if (onResult.statusCode! > HTTP_CODE) {
-          setReportFetch(ReportFetch(ReportState.reportsError));
+          setReportFetch(
+            ReportFetch(ReportState.reportsError, message: onResult.data['message']),
+          );
         } else {
           setReportFetch(ReportFetch(ReportState.reportsSuccess));
         }
@@ -129,6 +130,29 @@ class ReportBloc {
         setReportFetch(ReportFetch(ReportState.reportsError));
       },
       host: UrlConstants.insertReport,
+      data: data,
+      withAlertMessage: false,
+      methodType: MethodType.post,
+      withCheckConnection: false,
+    );
+  }
+
+  Future appealPost(BuildContext context, {required Map data}) async {
+    setReportFetch(ReportFetch(ReportState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setReportFetch(ReportFetch(ReportState.appealError, message: onResult.data['message']));
+        } else {
+          setReportFetch(ReportFetch(ReportState.appealSuccess));
+        }
+      },
+      (errorData) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        setReportFetch(ReportFetch(ReportState.appealError));
+      },
+      host: UrlConstants.appealPost,
       data: data,
       withAlertMessage: false,
       methodType: MethodType.post,

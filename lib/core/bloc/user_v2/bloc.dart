@@ -224,6 +224,7 @@ class UserBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          print('salah 1');
           setUserFetch(UserFetch(UserState.LoginError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
           setUserFetch(UserFetch(UserState.LoginSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
@@ -231,6 +232,7 @@ class UserBloc {
         }
       },
       (errorData) {
+        print('salah 2');
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           Routing().moveBack();
           function();

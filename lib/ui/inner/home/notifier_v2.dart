@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -410,31 +411,39 @@ class HomeNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        vid.vidData?.removeWhere((element) => element.postID == postID);
+        // _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+        diary.diaryData?.removeWhere((element) => element.postID == postID);
+        // _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        pic.pic?.removeWhere((element) => element.postID == postID);
+        // _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        // _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
         _updatedData2 = pic2.data;
-
         break;
       case hyppeStory:
-        _updatedData = stories.myStoriesData?.firstWhereOrNull((element) => element.postID == postID);
+        stories.peopleStoriesData?.removeWhere((element) => element.postID == postID);
+        // _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
 
-    if (_updatedData != null) {
-      _updatedData.isReport = isReport;
+    // print('kesini story');
+    // print(_updatedData);
 
-      if (_updatedData2 != null) {
-        _updatedData2.isReport = isReport;
-      }
-    }
+    // if (_updatedData != null) {
+    //   _updatedData.delete();
+    //   // _updatedData.isReport = isReport;
+    // }
+    // if (_updatedData2 != null) {
+    //   _updatedData2.delete();
+    //   _updatedData2.isReport = isReport;
+    // }
 
     notifyListeners();
   }

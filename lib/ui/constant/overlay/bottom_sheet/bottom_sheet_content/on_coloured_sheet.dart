@@ -18,11 +18,14 @@ class OnColouredSheet extends StatefulWidget {
   final bool fromSnackBar;
   final Color? iconColor;
   final Function? function;
+  final Function()? functionSubCaption;
+  final String? subCaptionButton;
   final TextOverflow? textOverflow;
   const OnColouredSheet({
     Key? key,
     required this.caption,
     this.subCaption,
+    this.subCaptionButton,
     this.iconSvg,
     this.sizeIcon,
     this.maxLines,
@@ -30,6 +33,7 @@ class OnColouredSheet extends StatefulWidget {
     this.iconColor,
     this.function,
     this.textOverflow,
+    this.functionSubCaption,
   }) : super(key: key);
 
   @override
@@ -45,7 +49,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
     } else {
       try {
         _loading.value = true;
-        if(widget.function != null){
+        if (widget.function != null) {
           await widget.function!();
         }
         _loading.value = false;
@@ -97,20 +101,42 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
               ],
             ),
             widget.subCaption != null
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 40),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
-                      child: CustomTextWidget(
-                        maxLines: widget.maxLines,
-                        textToDisplay: widget.subCaption ?? '',
-                        textOverflow: TextOverflow.visible,
-                        textAlign: TextAlign.left,
-                        textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                ? Row(
+                    children: [
+                      GestureDetector(
+                        onTap: widget.functionSubCaption,
+                        child: Container(
+                            width: SizeConfig.screenWidth,
+                            padding: const EdgeInsets.only(left: 40, bottom: 10, top: 6),
+                            child: Text.rich(
+                              TextSpan(
+                                text: "${widget.subCaption} ",
+                                style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                children: [
+                                  widget.subCaptionButton != null
+                                      ? TextSpan(
+                                          text: '${widget.subCaptionButton}',
+                                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                                color: kHyppeLightButtonText,
+                                                decoration: TextDecoration.underline,
+                                              ),
+                                        )
+                                      : const TextSpan()
+                                ],
+                              ),
+                            )
+                            //        CustomTextWidget(
+                            //         maxLines: widget.maxLines,
+                            //         textToDisplay: widget.subCaption ?? '',
+                            //         textOverflow: TextOverflow.visible,
+                            //         textAlign: TextAlign.left,
+                            //         textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                            //       ),
+                            ),
                       ),
-                    ),
+                    ],
                   )
-                : const SizedBox.shrink(),
+                : Container()
           ],
         ),
         widget.subCaption != null
@@ -126,7 +152,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
                       if (value) {
                         return const SizedBox(height: 40, width: 40, child: CustomLoading());
                       }
-    
+
                       return CustomTextWidget(
                         maxLines: 1,
                         textToDisplay: 'Ok',

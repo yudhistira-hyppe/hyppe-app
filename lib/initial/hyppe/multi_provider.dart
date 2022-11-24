@@ -1,5 +1,6 @@
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/appeal/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -14,6 +15,7 @@ import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/notifier.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
@@ -28,6 +30,7 @@ import 'package:hyppe/ui/inner/search_v2/hashtag/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
@@ -219,5 +222,8 @@ class AppDependencies {
 
         ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
         ChangeNotifierProvider<SlidedPicDetailNotifier>(create: (context) => SlidedPicDetailNotifier()),
+        ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
+        ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),
+        ChangeNotifierProvider<ListBoostNotifier>(create: (context) => ListBoostNotifier()),
       ];
 }

@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
@@ -252,6 +253,7 @@ class SelfProfileTop extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
+
             Padding(
                 padding: EdgeInsets.only(top: 12 * SizeConfig.scaleDiagonal),
                 child: Row(
@@ -270,18 +272,19 @@ class SelfProfileTop extends StatelessWidget {
                         function: () => notifier.navigateToEditProfile(),
                       ),
                     ),
-                    // CustomElevatedButton(
-                    //   child: CustomTextWidget(
-                    //     textToDisplay: "Library",
-                    //     textStyle: Theme.of(context).textTheme.button,
-                    //   ),
-                    //   width: 167 * SizeConfig.scaleDiagonal,
-                    //   height: 42 * SizeConfig.scaleDiagonal,
-                    //   buttonStyle: Theme.of(context).elevatedButtonTheme.style,
-                    //   function: () {},
-                    // )
+                    sixPx,
+                    CustomElevatedButton(
+                      child: CustomTextWidget(
+                        textToDisplay: notifier.language.boostedPostList ?? 'Boosted List',
+                        textStyle: Theme.of(context).textTheme.button,
+                      ),
+                      width: 167 * SizeConfig.scaleDiagonal,
+                      height: 42 * SizeConfig.scaleDiagonal,
+                      buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                      function: () => Routing().move(Routes.boostList),
+                    )
                   ],
-                ))
+                )),
           ],
         ),
       ),

@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/error_service.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -97,7 +97,17 @@ class ContentItem extends StatelessWidget {
                                   //       statusFollowing: StatusFollowing.rejected,
                                   //     ),
                                 ),
-                                GestureDetector(onTap: () => ShowBottomSheet.onReportContent(context, data, hyppeVid), child: const Icon(Icons.more_vert)),
+                                data?.email != SharedPreference().readStorage(SpKeys.email)
+                                    ? GestureDetector(
+                                        onTap: () => ShowBottomSheet.onReportContent(
+                                              context,
+                                              postData: data,
+                                              type: hyppeVid,
+                                              adsData: null,
+                                              onUpdate: () => context.read<VidSeeAllNotifier>().onUpdate(),
+                                            ),
+                                        child: const Icon(Icons.more_vert))
+                                    : Container(),
                               ],
                             ),
                             twelvePx,
@@ -127,6 +137,16 @@ class ContentItem extends StatelessWidget {
                                           ),
                                         ))
                                     : Container(),
+                                Visibility(
+                                  visible: (data?.saleAmount == 0 && (data?.certified ?? false)),
+                                  child: const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: IconOwnership(correct: true),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                             data?.tagPeople?.isNotEmpty ?? false || data?.location != ''
@@ -184,10 +204,8 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            if(data?.music != null)
-                            fourPx,
-                            if(data?.music != null)
-                            MusicStatusDetail(music: data!.music!)
+                            if (data?.music != null) fourPx,
+                            if (data?.music != null) MusicStatusDetail(music: data!.music!)
                           ],
                         ),
                       );

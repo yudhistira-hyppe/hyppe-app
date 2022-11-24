@@ -4,24 +4,26 @@ import 'package:hyppe/core/bloc/report/bloc.dart';
 import 'package:hyppe/core/bloc/report/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/core/models/collection/report/report_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ReportNotifier with ChangeNotifier {
-  LocalizationModelV2 language = LocalizationModelV2();
-  translate(LocalizationModelV2 translate) {
-    language = translate;
-    notifyListeners();
-  }
-
   bool _loadingOption = false;
   bool get loadingOption => _loadingOption;
 
@@ -47,6 +49,7 @@ class ReportNotifier with ChangeNotifier {
   Map<String, dynamic>? get data => _data;
   ReportAction? get reportAction => _reportAction;
   ContentData? contentData;
+  AdsData? adsData;
   String typeContent = '';
 
   set currentReport(String val) {
@@ -140,11 +143,11 @@ class ReportNotifier with ChangeNotifier {
     _loadingOption = false;
   }
 
-  Future reportPost(BuildContext context) async {
+  Future reportPost(BuildContext context, {bool inDetail = true}) async {
     _isLoading = true;
     final data = {
-      "postID": contentData?.postID ?? '',
-      "type": "content",
+      "postID": contentData != null ? contentData?.postID ?? '' : adsData?.adsId ?? '',
+      "type": contentData != null ? "content" : "ads",
       "reportedStatus": "ALL",
       "contentModeration": false,
       "contentModerationResponse": "",
@@ -161,23 +164,64 @@ class ReportNotifier with ChangeNotifier {
     await notifier.reports(context, data: data);
     final fetch = notifier.reportFetch;
     if (fetch.reportState == ReportState.reportsSuccess) {
-      context.read<HomeNotifier>().onReport(
-            context,
-            postID: contentData?.postID ?? '',
-            content: typeContent,
-            isReport: true,
-          );
+      if (contentData != null) {
+        context.read<HomeNotifier>().onReport(
+              context,
+              postID: contentData?.postID ?? '',
+              content: typeContent,
+              isReport: true,
+            );
+      }
+
       _isLoading = false;
       Routing().moveBack();
-      // _showMessage("Your feedback will help us to improve your experience.");
-
+      if (inDetail) {
+        Routing().moveBack();
+      }
+      final language = context.read<TranslateNotifierV2>().translate;
+      ShowBottomSheet().onShowColouredSheet(context, language.reportReceived ?? '', subCaption: language.yourReportWillbeHandledImmediately, color: kHyppeTextSuccess);
     } else {
       _isLoading = false;
-      var _showMessage = 'Error';
-      ShowBottomSheet().onShowColouredSheet(context, _showMessage, color: Theme.of(context).colorScheme.onError);
+      ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: kHyppeRed);
     }
 
     notifyListeners();
+  }
+
+  void seeContent(BuildContext context, ContentData data, String typeContent) {
+    context.read<HomeNotifier>().onReport(
+          context,
+          postID: data.postID ?? '',
+          content: typeContent,
+          isReport: false,
+        );
+
+    switch (typeContent) {
+      case hyppeVid:
+        context.read<VidDetailNotifier>().onUpdate();
+        break;
+      case hyppeDiary:
+        context.read<DiariesPlaylistNotifier>().onUpdate();
+        break;
+      case hyppePic:
+        context.read<PicDetailNotifier>().onUpdate();
+        context.read<SlidedPicDetailNotifier>().onUpdate();
+        break;
+      default:
+        '';
+        break;
+    }
+
+    notifyListeners();
+  }
+
+  String titleLang(id, en) {
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
+    if (lang == 'en') {
+      return en;
+    } else {
+      return id;
+    }
   }
 
   // void onClickButton(context) async {

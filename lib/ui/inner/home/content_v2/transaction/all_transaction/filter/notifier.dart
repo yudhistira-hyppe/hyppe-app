@@ -75,6 +75,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {"id": 2, 'name': "${language.buy}", 'icon': ''},
       {"id": 3, 'name': "${language.sell}", 'icon': ''},
       {"id": 4, 'name': "${language.withdrawal}", 'icon': ''},
+      {"id": 5, 'name': "${language.postBoost}", 'icon': ''},
     ];
   }
 
@@ -84,6 +85,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {'id': 1, 'name': language.buy},
       {'id': 2, 'name': language.sell},
       {'id': 3, 'name': language.withdrawal},
+      {'id': 4, 'name': language.postBoost},
       // {'id': 4, 'name': language.ownership},
     ];
   }
@@ -94,6 +96,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       {'id': 2, 'selected': false, 'name': language.buy},
       {'id': 3, 'selected': false, 'name': language.sell},
       {'id': 4, 'selected': false, 'name': language.withdrawal},
+      {'id': 5, 'selected': false, 'name': language.postBoost},
       // {'id': 5, 'selected': false, 'name': language.ownership},
     ];
   }
@@ -120,6 +123,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
       (id == 2) ? _param.addAll({"buy": true}) : _param.addAll({"buy": false});
       (id == 3) ? _param.addAll({"sell": true}) : _param.addAll({"sell": false});
       (id == 4) ? _param.addAll({"withdrawal": true}) : _param.addAll({"withdrawal": false});
+      (id == 5) ? _param.addAll({"boost": true}) : _param.addAll({"boost": false});
       final email = SharedPreference().readStorage(SpKeys.email);
       _skip = 0;
       _param.addAll({"skip": _skip, "limit": _limit, "email": email});
@@ -192,6 +196,14 @@ class FilterTransactionNotifier extends ChangeNotifier {
     } else {
       _param.addAll({"withdrawal": false});
     }
+
+    if (filterChecked.contains(4)) {
+      _param.addAll({"boost": true});
+      final index = newFilterList.indexWhere((element) => element['id'] == 5);
+      newFilterList[index]['selected'] = true;
+    } else {
+      _param.addAll({"boost": false});
+    }
     // (filterChecked.contains(3)) ? _param.addAll({"withdrawal": true}) : _param.addAll({"withdrawal": false});
     final email = SharedPreference().readStorage(SpKeys.email);
     _param.addAll({"skip": 0, "limit": _limit, "email": email});
@@ -209,7 +221,7 @@ class FilterTransactionNotifier extends ChangeNotifier {
         final email = SharedPreference().readStorage(SpKeys.email);
         DateTime dateToday = DateTime.now();
         String date = dateToday.toString().substring(0, 10);
-        final param = {"email": email, "sell": true, "buy": true, "withdrawal": true, "startdate": "2020-08-12", "enddate": date, "skip": _skip, "limit": _limit};
+        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, "boost": false, "startdate": "2020-08-12", "enddate": date, "skip": _skip, "limit": _limit};
         final notifier = TransactionBloc();
         await notifier.getHistoryTransaction(context, params: param2 ?? param);
         final fetch = notifier.transactionFetch;

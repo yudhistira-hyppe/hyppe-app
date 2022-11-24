@@ -59,7 +59,7 @@ class FAQdetailScreen extends StatelessWidget {
                             children: [
                               CustomTextButton(
                                 onPressed: () {
-                                  Routing().move(Routes.supportTicket);
+                                  Routing().moveAndPop(Routes.supportTicket);
                                 },
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSurface)),
                                 child: CustomTextWidget(

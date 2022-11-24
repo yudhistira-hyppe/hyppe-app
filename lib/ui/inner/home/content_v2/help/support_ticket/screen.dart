@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -22,7 +23,14 @@ class SupportTicketScreen extends StatefulWidget {
 class _SupportTicketScreenState extends State<SupportTicketScreen> {
   @override
   void initState() {
-    Provider.of<SupportTicketNotifier>(context, listen: false).getInitSupportTicket(context);
+    final notifier = Provider.of<SupportTicketNotifier>(context, listen: false);
+    notifier.getInitSupportTicket(context);
+    notifier.descriptionController.clear();
+    notifier.idCategory = '';
+    notifier.idLevelTicket = '';
+    notifier.pickedSupportingDocs = [];
+    notifier.nameCategory = '';
+    notifier.nameLevel = '';
     super.initState();
   }
 
@@ -98,6 +106,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                         value: supportNotifier.levelData[index].descLevel ?? '',
                         onChanged: (val) {
                           supportNotifier.nameLevel = val ?? '';
+                          supportNotifier.idLevelTicket = supportNotifier.levelData[index].sId ?? '';
                         },
                         toggleable: true,
                         title: CustomTextWidget(
@@ -130,7 +139,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   },
                   keyboardAppearance: Brightness.dark,
                   cursorColor: const Color(0xff8A3181),
-                  // controller: notifier.captionController,
+                  controller: supportNotifier.descriptionController,
                   textInputAction: TextInputAction.newline,
                   style: Theme.of(context).primaryTextTheme.caption,
                   decoration: InputDecoration(
@@ -148,7 +157,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   children: [
                     GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted), child: CustomIconWidget(iconData: "${AssetPath.vectorPath}storage.svg")),
                     twentyFourPx,
-                    CustomIconWidget(iconData: "${AssetPath.vectorPath}sisipkan.svg"),
+                    // GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted, pdf: true), child: CustomIconWidget(iconData: "${AssetPath.vectorPath}sisipkan.svg")),
                   ],
                 ),
                 ListView.separated(
@@ -181,19 +190,28 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                     );
                   },
                 ),
+                (supportNotifier.pickedSupportingDocs?.length ?? 0) > 1 ? Text('Max 3 Files') : Container(),
                 twentyPx,
                 SizedBox(
                   width: SizeConfig.screenWidth,
+                  height: 50,
                   child: CustomTextButton(
-                    onPressed: () {
-                      // notifier.navigateToWithDrawal();
-                      // notifier.initBankAccount(context);
-                    },
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.translate.submit ?? 'submit',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                    ),
+                    onPressed: supportNotifier.enableButton()
+                        ? supportNotifier.isLoadingCreate
+                            ? null
+                            : () {
+                                supportNotifier.createTicket(context);
+                              }
+                        : null,
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(supportNotifier.enableButton() ? kHyppePrimary : kHyppeDisabled)),
+                    child: supportNotifier.isLoadingCreate
+                        ? const CustomLoading(
+                            size: 4,
+                          )
+                        : CustomTextWidget(
+                            textToDisplay: notifier.translate.submit ?? 'submit',
+                            textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                          ),
                   ),
                 ),
               ],

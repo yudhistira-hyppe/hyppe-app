@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/models/collection/music/music.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/music_status_page_widget.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
-import 'package:hyppe/ux/routing.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -35,12 +33,7 @@ class DiaryPage extends StatefulWidget {
   final PageController? controller;
   final int? total;
 
-  const DiaryPage(
-      {this.data,
-      this.isScrolling,
-      required this.function,
-      this.controller,
-      this.total});
+  const DiaryPage({this.data, this.isScrolling, required this.function, this.controller, this.total});
 
   @override
   _DiaryPageState createState() => _DiaryPageState();
@@ -66,11 +59,9 @@ class _DiaryPageState extends State<DiaryPage> {
     setState(() {
       isLoading = true;
     });
-    final notifier =
-        Provider.of<DiariesPlaylistNotifier>(context, listen: false);
+    final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      notifier.initializeData(
-          context, _storyController, widget.data ?? ContentData());
+      notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       _storyItems = notifier.result;
       isLoading = false;
     });
@@ -98,14 +89,12 @@ class _DiaryPageState extends State<DiaryPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _forcePause =
-        context.select((DiariesPlaylistNotifier value) => value.forcePause);
+    final _forcePause = context.select((DiariesPlaylistNotifier value) => value.forcePause);
     final notifier = Provider.of<DiariesPlaylistNotifier>(context);
     // logic when list isScrolled, pause the story
     if (widget.isScrolling ?? false) {
       _storyController.pause();
-    } else if (_storyController.playbackNotifier.valueOrNull ==
-        PlaybackState.pause) {
+    } else if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause) {
       _storyController.play();
     }
 
@@ -140,27 +129,21 @@ class _DiaryPageState extends State<DiaryPage> {
                         durationColor: kHyppeLightButtonText,
                         storyItems: _storyItems,
                         onDouble: () {
-                          context
-                              .read<LikeNotifier>()
-                              .likePost(context, widget.data ?? ContentData());
+                          context.read<LikeNotifier>().likePost(context, widget.data ?? ContentData());
                         },
                         controller: _storyController,
                         progressPosition: ProgressPosition.top,
                         onStoryShow: (storyItem) {
                           int pos = _storyItems.indexOf(storyItem);
 
-                          context
-                              .read<DiariesPlaylistNotifier>()
-                              .setCurrentDiary(pos);
+                          context.read<DiariesPlaylistNotifier>().setCurrentDiary(pos);
                           // _addPostView();
                           _storyController.playbackNotifier.listen((value) {
                             if (value == PlaybackState.previous) {
                               if (widget.controller?.page == 0) {
                                 // context.read<DiariesPlaylistNotifier>().onWillPop(true);
                               } else {
-                                widget.controller?.previousPage(
-                                    duration: const Duration(seconds: 1),
-                                    curve: Curves.easeInOut);
+                                widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                               }
                             }
                           });
@@ -193,24 +176,18 @@ class _DiaryPageState extends State<DiaryPage> {
 
                           if (duration == secondOfAds(notifier.adsData)) {
                             if (notifier.adsUrl.isNotEmpty) {
-                              final isShowAds = SharedPreference()
-                                  .readStorage(SpKeys.isShowPopAds);
+                              final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
 
                               if (!isShowAds) {
                                 _storyController.pause();
-                                await System().adsPopUp(
-                                    context, notifier.adsData, notifier.adsUrl,
-                                    isSponsored: notifier.isSponsored);
+                                await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
                                 _storyController.play();
                               }
                             }
                           }
                         },
                         onVerticalSwipeComplete: (v) {
-                          if (v == Direction.down)
-                            context
-                                .read<DiariesPlaylistNotifier>()
-                                .onWillPop(mounted);
+                          if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                         },
                       ),
                 widget.data?.isReport ?? false
@@ -218,9 +195,7 @@ class _DiaryPageState extends State<DiaryPage> {
                         sigmaX: 30,
                         sigmaY: 30,
                         // thumbnail: picData!.content[arguments].contentUrl,
-                        thumbnail: (widget.data?.isApsara ?? false)
-                            ? widget.data?.mediaThumbEndPoint ?? ''
-                            : widget.data?.fullThumbPath ?? '',
+                        thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint ?? '' : widget.data?.fullThumbPath ?? '',
                       )
                     : Container(),
                 widget.data?.isReport ?? false
@@ -233,46 +208,38 @@ class _DiaryPageState extends State<DiaryPage> {
                             children: [
                               Spacer(),
                               const CustomIconWidget(
-                                iconData:
-                                    "${AssetPath.vectorPath}valid-invert.svg",
+                                iconData: "${AssetPath.vectorPath}valid-invert.svg",
                                 defaultColor: false,
                                 height: 30,
                               ),
-                              Text(
-                                  transnot.translate.reportReceived ??
-                                      'Report Received',
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600)),
-                              Text(
-                                  transnot.translate
-                                          .yourReportWillbeHandledImmediately ??
-                                      '',
+                              Text(transnot.translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                              Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 13,
                                   )),
                               const Spacer(),
-                              Container(
-                                padding: const EdgeInsets.only(top: 8),
-                                margin: const EdgeInsets.all(8),
-                                width: SizeConfig.screenWidth,
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: Colors.white,
-                                      width: 1,
+                              GestureDetector(
+                                onTap: () {
+                                  context.read<ReportNotifier>().seeContent(context, widget.data!, hyppeDiary);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(top: 8),
+                                  margin: const EdgeInsets.all(8),
+                                  width: SizeConfig.screenWidth,
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Colors.white,
+                                        width: 1,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                child: Text(
-                                  "${transnot.translate.see} HyppeDiary",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600),
-                                  textAlign: TextAlign.center,
+                                  child: Text(
+                                    "${transnot.translate.see} HyppeDiary",
+                                    style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ),
                               thirtyTwoPx,
@@ -302,7 +269,14 @@ class _DiaryPageState extends State<DiaryPage> {
                         postID: widget.data?.postID,
                         storyController: _storyController,
                         tagPeople: widget.data?.tagPeople,
+                        data: widget.data,
                       ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED" || (widget.data?.reportedUserCount ?? 0) > 200
+                      ? ContentViolationWidget(data: widget.data!)
+                      : Container(),
+                )
               ],
             );
     } else {
@@ -327,20 +301,14 @@ class _DiaryPageState extends State<DiaryPage> {
             : Center(
                 child: GestureDetector(
                   // onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(context, widget.arguments),
-                  onTap: () => context
-                      .read<DiariesPlaylistNotifier>()
-                      .onWillPop(mounted),
+                  onTap: () => context.read<DiariesPlaylistNotifier>().onWillPop(mounted),
                   child: Container(
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.center,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: Provider.of<TranslateNotifierV2>(context,
-                                  listen: false)
-                              .translate
-                              .noData ??
-                          '',
+                      textToDisplay: Provider.of<TranslateNotifierV2>(context, listen: false).translate.noData ?? '',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                     margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -388,9 +356,7 @@ class _DiaryPageState extends State<DiaryPage> {
         result = mid != 0 ? mid : (duration / 2).toInt();
         break;
       case 'End':
-        result = (widget.data?.metadata?.postRoll ?? 2) != 0
-            ? widget.data?.metadata?.postRoll ?? 1
-            : duration - 1;
+        result = (widget.data?.metadata?.postRoll ?? 2) != 0 ? widget.data?.metadata?.postRoll ?? 1 : duration - 1;
         break;
       default:
         result = 2;

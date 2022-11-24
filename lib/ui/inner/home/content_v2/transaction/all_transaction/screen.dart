@@ -101,7 +101,8 @@ class _AllTransactionState extends State<AllTransaction> {
                                       textToDisplay: notifier.newFilterList[index]['name'],
                                       textStyle: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium?.copyWith(color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                                          .bodyMedium
+                                          ?.copyWith(color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
                                     )),
                               ),
                             ),
@@ -139,7 +140,8 @@ class _AllTransactionState extends State<AllTransaction> {
                                       textToDisplay: notifier.filterList[index]['name'],
                                       textStyle: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium?.copyWith(color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                                          .bodyMedium
+                                          ?.copyWith(color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
                                     )),
                               ),
                             ),
@@ -159,27 +161,30 @@ class _AllTransactionState extends State<AllTransaction> {
                             ),
                           ],
                         ))
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: notifier.dataAllTransaction?.length,
-                          itemBuilder: (context, index) {
-                            String title = '';
-                            switch (notifier.dataAllTransaction?[index].type) {
-                              case TransactionType.withdrawal:
-                                title = notifier2.translate.withdrawal ?? '';
-                                return WithdrawalWidget(
-                                  title: title,
-                                  language: notifier2.translate,
-                                  data: notifier.dataAllTransaction?[index],
-                                );
-                              default:
-                                return BuySellWidget(
-                                  data: notifier.dataAllTransaction?[index],
-                                  language: notifier2.translate,
-                                );
-                            }
-                          }),
+                      : Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: notifier.dataAllTransaction?.length,
+                              itemBuilder: (context, index) {
+                                String title = '';
+                                switch (notifier.dataAllTransaction?[index].type) {
+                                  case TransactionType.withdrawal:
+                                    title = notifier2.translate.withdrawal ?? '';
+                                    return WithdrawalWidget(
+                                      title: title,
+                                      language: notifier2.translate,
+                                      data: notifier.dataAllTransaction?[index],
+                                    );
+                                  default:
+                                    return BuySellWidget(
+                                      data: notifier.dataAllTransaction?[index],
+                                      language: notifier2.translate,
+                                    );
+                                }
+                              }),
+                        ),
               notifier.isScrollLoading ? const CustomLoading() : const SizedBox(),
             ]),
           ),

@@ -78,6 +78,10 @@ void mainApp(EnvType env) async {
     }
 
     runApp(Hyppe());
+    // runApp(ChangeNotifierProvider.value(
+    //     value: MainNotifier(), // Same object as above
+    //     child: Hyppe()));
+
     if (kDebugMode) {
       // Force disable Crashlytics collection while doing every day development.
       // Temporarily toggle this to true if you want to test crash reporting in your app.

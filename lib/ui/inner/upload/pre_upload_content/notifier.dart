@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter/services.dart';
+import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/google_map_place/bloc.dart';
 import 'package:hyppe/core/bloc/google_map_place/state.dart';
@@ -13,17 +17,24 @@ import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/google_map_place/model_google_map_place.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/music/music.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/boost_response.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/models/collection/utils/boost/boost_content_model.dart';
+import 'package:hyppe/core/models/collection/utils/boost/boost_master_model.dart';
 import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -47,7 +58,6 @@ import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
-
 // import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
@@ -100,6 +110,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<SearchPeolpleData> get searchPeolpleData => _searchPeolpleData;
   List<Map<String, dynamic>> _searchPeopleACData = [];
   List<Map<String, dynamic>> get searchPeopleACData => _searchPeopleACData;
+  BoostMasterModel? boostMasterData;
+  BoostContent? _boostContent;
+  BoostContent? get boostContent => _boostContent;
 
   TextEditingController _priceController = TextEditingController();
   TextEditingController _captionController = TextEditingController();
@@ -167,7 +180,45 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get priceIsFilled => _priceIsFilled;
   bool get isSavedPrice => _isSavedPrice;
   bool get isUpdate => _isUpdate;
-  // UpdateContentsArgument get updateArguments => _arguments;
+
+  DateTime _tmpstartDate = DateTime(1000);
+  DateTime _tmpfinsihDate = DateTime(1000);
+  String _tmpBoost = '';
+  String get tmpBoost => _tmpBoost;
+  String _tmpBoostTime = '';
+  String get tmpBoostTime => _tmpBoostTime;
+  String _tmpBoostInterval = '';
+  String get tmpBoostInterval => _tmpBoostInterval;
+  String _tmpBoostTimeId = '';
+  String get tmpBoostTimeId => _tmpBoostTimeId;
+  String _tmpBoostIntervalId = '';
+  String get tmpBoostIntervalId => _tmpBoostIntervalId;
+
+  String _Boost = '';
+  String get Boost => _Boost;
+  String _BoostTime = '';
+  String get BoostTime => _BoostTime;
+  String _BoostInterval = '';
+  String get BoostInterval => _BoostInterval;
+
+  String _postIdPanding = '';
+  String get postIdPanding => _postIdPanding;
+  // UpdateContentsArgument get updateArguments => _arguments!;
+  ContentData? _editData;
+  ContentData? get editData => _editData;
+
+  BoostResponse? _boostPaymentResponse;
+  BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
+  set boostPaymentResponse(BoostResponse? value) {
+    _boostPaymentResponse = value;
+    print(value);
+    notifyListeners();
+  }
+
+  set editData(ContentData? val) {
+    _editData = val;
+    notifyListeners();
+  }
 
   set ownershipEULA(bool val) {
     _ownershipEULA = val;
@@ -244,7 +295,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set musicSelected(Music? music){
+  set musicSelected(Music? music) {
     _musicSelected = music;
     notifyListeners();
   }
@@ -297,7 +348,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set isLoadMerge(bool val){
+  set isLoadMerge(bool val) {
     _isLoadMerge = val;
     notifyListeners();
   }
@@ -317,7 +368,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setDefaultFileContent(BuildContext context){
+  void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
     _fileContent?[0] = notifierPre.defaultPath;
     _musicSelected = null;
@@ -369,6 +420,43 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime get tmpstartDate => _tmpstartDate;
+  set tmpstartDate(DateTime val) {
+    _tmpstartDate = val;
+    notifyListeners();
+  }
+
+  DateTime get tmpfinsihDate => _tmpfinsihDate;
+  set tmpfinsihDate(DateTime val) {
+    _tmpfinsihDate = val;
+    notifyListeners();
+  }
+
+  set tmpBoost(String val) {
+    _tmpBoost = val;
+    notifyListeners();
+  }
+
+  set tmpBoostTime(String val) {
+    _tmpBoostTime = val;
+    notifyListeners();
+  }
+
+  set tmpBoostInterval(String val) {
+    _tmpBoostInterval = val;
+    notifyListeners();
+  }
+
+  set tmpBoostTimeId(String val) {
+    _tmpBoostTimeId = val;
+    notifyListeners();
+  }
+
+  set tmpBoostIntervalId(String val) {
+    _tmpBoostIntervalId = val;
+    notifyListeners();
+  }
+
   // set setUpdateArguments(UpdateContentsArgument args) {
   //   _arguments = args;
   //   notifyListeners();
@@ -398,14 +486,15 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  void imageMerger(BuildContext context, String urlAudio, int duration) async{
-    try{
-      if(urlAudio.isNotEmpty){
+  void imageMerger(BuildContext context, String urlAudio, int duration) async {
+    try {
+      if (urlAudio.isNotEmpty) {
         _isLoadMerge = true;
         notifyListeners();
         String tempVideoPath = await System().getSystemPath(params: 'tempVid');
         tempVideoPath = '${tempVideoPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-        String outputPath = await System().getSystemPath(params: 'postPic');File image = File(_fileContent?[0] ?? ''); // Or any other way to get a File instance.
+        String outputPath = await System().getSystemPath(params: 'postPic');
+        File image = File(_fileContent?[0] ?? ''); // Or any other way to get a File instance.
         final decodedImage = await decodeImageFromList(image.readAsBytesSync());
         print('real image : ${decodedImage.height}:${decodedImage.width}');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
@@ -413,74 +502,78 @@ class PreUploadContentNotifier with ChangeNotifier {
         double widthImage = decodedImage.width.toDouble();
         const maxScale = 1080;
         var multiValue = 1.0;
-        if(heightImage > maxScale || widthImage > maxScale){
-
-          if(heightImage > maxScale && widthImage > maxScale){
-            if(heightImage > widthImage){
-              multiValue = maxScale/heightImage;
-            }else{
-              multiValue = maxScale/widthImage;
+        if (heightImage > maxScale || widthImage > maxScale) {
+          if (heightImage > maxScale && widthImage > maxScale) {
+            if (heightImage > widthImage) {
+              multiValue = maxScale / heightImage;
+            } else {
+              multiValue = maxScale / widthImage;
             }
-          }else if(heightImage > maxScale){
-            multiValue = maxScale/heightImage;
-          }else if(widthImage> maxScale){
-            multiValue = maxScale/widthImage;
+          } else if (heightImage > maxScale) {
+            multiValue = maxScale / heightImage;
+          } else if (widthImage > maxScale) {
+            multiValue = maxScale / widthImage;
           }
         }
-        String command = '-framerate 1 -i ${_fileContent?[0]} -r 30 -pix_fmt yuv420p -vf scale=${decodedImage.width/multiValue}:${decodedImage.height/multiValue} -c:v mpeg4 $tempVideoPath';
-        await FFmpegKit.executeAsync(command, (session) async{
-          final codeSession = await session.getReturnCode();
-          if(ReturnCode.isSuccess(codeSession)){
-            print('ReturnCode = Success');
-            command = '-stream_loop -1 -i $tempVideoPath -i $urlAudio -shortest -c:v mpeg4 $outputPath';
-            await FFmpegKit.executeAsync(command, (session) async{
-              final codeSession = await session.getReturnCode();
-              if(ReturnCode.isSuccess(codeSession)){
-                final path = _fileContent?[0] ?? '';
-                print('URL now : $path');
-                final notifier = context.read<PreviewContentNotifier>();
-                print('URL default 2 : ${notifier.defaultPath}');
-                _fileContent?[0] = outputPath;
-                notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
-                _isLoadMerge = false;
-                notifyListeners();
-              }else if(ReturnCode.isCancel(codeSession)){
-                print('ReturnCode = Cancel');
-                _isLoadMerge = false;
-                notifyListeners();
-                throw 'Merge picture is canceled';
-                // Cancel
-              }else{
-                print('ReturnCode = Error');
-                _isLoadMerge = false;
-                notifyListeners();
-                throw 'Merge picture is error';
-                // Error
-              }
-
-            }, (log){
-              print('FFmpegKit Image ${log.getMessage()}');
-            },);
-
-          }else if(ReturnCode.isCancel(codeSession)){
-            print('ReturnCode = Cancel');
-            _isLoadMerge = false;
-            notifyListeners();
-            throw 'Merge picture is canceled';
-            // Cancel
-          }else{
-            print('ReturnCode = Error');
-            _isLoadMerge = false;
-            notifyListeners();
-            throw 'Merge picture is error';
-            // Error
-          }
-
-        }, (log){
-          print('FFmpegKit Image ${log.getMessage()}');
-        },);
+        String command = '-framerate 1 -i ${_fileContent?[0]} -r 30 -pix_fmt yuv420p -vf scale=${decodedImage.width / multiValue}:${decodedImage.height / multiValue} -c:v mpeg4 $tempVideoPath';
+        await FFmpegKit.executeAsync(
+          command,
+          (session) async {
+            final codeSession = await session.getReturnCode();
+            if (ReturnCode.isSuccess(codeSession)) {
+              print('ReturnCode = Success');
+              command = '-stream_loop -1 -i $tempVideoPath -i $urlAudio -shortest -c:v mpeg4 $outputPath';
+              await FFmpegKit.executeAsync(
+                command,
+                (session) async {
+                  final codeSession = await session.getReturnCode();
+                  if (ReturnCode.isSuccess(codeSession)) {
+                    final path = _fileContent?[0] ?? '';
+                    print('URL now : $path');
+                    final notifier = context.read<PreviewContentNotifier>();
+                    print('URL default 2 : ${notifier.defaultPath}');
+                    _fileContent?[0] = outputPath;
+                    notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
+                    _isLoadMerge = false;
+                    notifyListeners();
+                  } else if (ReturnCode.isCancel(codeSession)) {
+                    print('ReturnCode = Cancel');
+                    _isLoadMerge = false;
+                    notifyListeners();
+                    throw 'Merge picture is canceled';
+                    // Cancel
+                  } else {
+                    print('ReturnCode = Error');
+                    _isLoadMerge = false;
+                    notifyListeners();
+                    throw 'Merge picture is error';
+                    // Error
+                  }
+                },
+                (log) {
+                  print('FFmpegKit Image ${log.getMessage()}');
+                },
+              );
+            } else if (ReturnCode.isCancel(codeSession)) {
+              print('ReturnCode = Cancel');
+              _isLoadMerge = false;
+              notifyListeners();
+              throw 'Merge picture is canceled';
+              // Cancel
+            } else {
+              print('ReturnCode = Error');
+              _isLoadMerge = false;
+              notifyListeners();
+              throw 'Merge picture is error';
+              // Error
+            }
+          },
+          (log) {
+            print('FFmpegKit Image ${log.getMessage()}');
+          },
+        );
       }
-    }catch(e){
+    } catch (e) {
       'imageMerger Error : $e'.logger();
       _isLoadMerge = false;
       notifyListeners();
@@ -488,54 +581,55 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> videoMerger(BuildContext context, String urlAudio) async{
-    try{
-      if(urlAudio.isNotEmpty){
+  Future<void> videoMerger(BuildContext context, String urlAudio) async {
+    try {
+      if (urlAudio.isNotEmpty) {
         _isLoadMerge = true;
         notifyListeners();
         String outputPath = await System().getSystemPath(params: 'postVideo');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
         String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[0]} -shortest -c copy $outputPath';
-        await FFmpegKit.executeAsync(command, (session) async{
-          final codeSession = await session.getReturnCode();
-          if(ReturnCode.isSuccess(codeSession)){
-            print('ReturnCode = Success');
-            final path = _fileContent?[0] ?? '';
-            final notifier = context.read<PreviewContentNotifier>();
-            print('URL now : $path');
-            print('URL default 2 : ${notifier.defaultPath}');
-            _fileContent?[0] = outputPath;
-            notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
-          }else if(ReturnCode.isCancel(codeSession)){
-            print('ReturnCode = Cancel');
-            _isLoadMerge = false;
-            notifyListeners();
-            throw 'Merge video is canceled';
-            // Cancel
-          }else{
-            print('ReturnCode = Error');
-            _isLoadMerge = false;
-            notifyListeners();
-            throw 'Merge video is Error';
-            // Error
-          }
-
-        }, (log){
-          print('FFmpegKit ${log.getMessage()}');
-        },);
-      }else{
+        await FFmpegKit.executeAsync(
+          command,
+          (session) async {
+            final codeSession = await session.getReturnCode();
+            if (ReturnCode.isSuccess(codeSession)) {
+              print('ReturnCode = Success');
+              final path = _fileContent?[0] ?? '';
+              final notifier = context.read<PreviewContentNotifier>();
+              print('URL now : $path');
+              print('URL default 2 : ${notifier.defaultPath}');
+              _fileContent?[0] = outputPath;
+              notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
+            } else if (ReturnCode.isCancel(codeSession)) {
+              print('ReturnCode = Cancel');
+              _isLoadMerge = false;
+              notifyListeners();
+              throw 'Merge video is canceled';
+              // Cancel
+            } else {
+              print('ReturnCode = Error');
+              _isLoadMerge = false;
+              notifyListeners();
+              throw 'Merge video is Error';
+              // Error
+            }
+          },
+          (log) {
+            print('FFmpegKit ${log.getMessage()}');
+          },
+        );
+      } else {
         throw 'UrlAudio is empty';
       }
-
-    }catch(e){
+    } catch (e) {
       'videoMerger Error : $e'.logger();
       ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }finally{
+    } finally {
       _isLoadMerge = false;
       notifyListeners();
     }
-
   }
 
   void _connectAndListenToSocket(BuildContext context) async {
@@ -597,6 +691,13 @@ class PreUploadContentNotifier with ChangeNotifier {
     includeTotalLikes = false;
     includeTotalLikes = false;
     isUpdate = false;
+    _postIdPanding = '';
+    _boostContent = null;
+    _tmpstartDate = DateTime(1000);
+    _tmpfinsihDate = DateTime(1000);
+    _tmpBoost = '';
+    _tmpBoostTime = '';
+    tmpBoostInterval = '';
   }
 
   Future _createPostContentV2() async {
@@ -611,18 +712,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     List<String> hastagCaption = [];
     _tagRegex.allMatches(captionController.text).map((z) {
       final val = z.group(0)?.substring(1);
-      if(val != null){
+      if (val != null) {
         userTagCaption.add(val);
       }
-
     }).toList();
 
     _tagHastagRegex.allMatches(captionController.text).map((z) {
       final val = z.group(0)?.substring(1);
-      if(val != null){
+      if (val != null) {
         hastagCaption.add(val);
       }
-
     }).toList();
 
     // if (featureType == FeatureType.vid && progressCompress != 100) {
@@ -666,9 +765,14 @@ class PreUploadContentNotifier with ChangeNotifier {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
-        eventService.notifyUploadSuccess(_uploadSuccess);
+        _eventService.notifyUploadSuccess(_uploadSuccess);
+        final decode = json.decode(_uploadSuccess.toString());
+        _postIdPanding = decode['data']['postID'];
+        print('ini boost content');
+        print(_boostContent);
+        if (_boostContent != null) _boostContentBuy(context);
       });
-      clearUpAndBackToHome(context);
+      if (_boostContent == null) clearUpAndBackToHome(context);
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
@@ -681,7 +785,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       );
       'e'.logger();
     } finally {
-      _onExit();
+      if (_boostContent == null) _onExit();
     }
   }
 
@@ -800,9 +904,10 @@ class PreUploadContentNotifier with ChangeNotifier {
   void clearUpAndBackToHome(BuildContext context) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
 
-    context.read<CameraNotifier>().orientation = null;
+    context.read<CameraNotifier>().disposeCamera(context);
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
+    if (_boostContent != null) _onExit();
     Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
   }
 
@@ -1295,5 +1400,201 @@ class PreUploadContentNotifier with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future getMasterBoost(BuildContext context) async {
+    _isLoading = true;
+    notifyListeners();
+
+    final notifier = UtilsBlocV2();
+    await notifier.getMasterBoost(context);
+    final fetch = notifier.utilsFetch;
+
+    if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
+      boostMasterData = BoostMasterModel.fromJson(fetch.data);
+      if (boostMasterData?.pendingTransaction == 1) {
+        Routing().moveBack();
+        await ShowBottomSheet().onShowColouredSheet(context, language.otherPostsInProcessOfPayment ?? '',
+            subCaption: language.thePostisintheProcessofPayment,
+            subCaptionButton: language.viewPaymentStatus,
+            color: kHyppeRed,
+            iconSvg: '${AssetPath.vectorPath}remove.svg',
+            maxLines: 10, functionSubCaption: () {
+          Routing().moveAndPop(Routes.transaction);
+          Routing().moveBack();
+          Routing().moveBack();
+          Routing().moveBack();
+          Routing().moveBack();
+          _onExit();
+        });
+        Routing().move(Routes.transaction);
+      }
+      _isLoading = false;
+      notifyListeners();
+    } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  navigateToBoost(BuildContext context) async {
+    getMasterBoost(context);
+
+    if (_boostContent != null) {
+      tmpstartDate = DateTime.parse(_boostContent?.dateBoostStart ?? '');
+      tmpfinsihDate = DateTime.parse(_boostContent?.dateBoostEnd ?? '');
+      tmpBoost = _boostContent?.typeBoost ?? '';
+      if (_boostContent?.typeBoost == 'manual') {
+        tmpBoostTime =
+            "${System().capitalizeFirstLetter(_boostContent?.sessionBoost?.name ?? '')} (${_boostContent?.sessionBoost?.start?.substring(0, 5)} - ${_boostContent?.sessionBoost?.end?.substring(0, 5)} WIB)";
+        tmpBoostTimeId = _boostContent?.sessionBoost?.sId ?? '';
+        tmpBoostInterval = "${_boostContent?.intervalBoost?.value} ${System().capitalizeFirstLetter(_boostContent?.intervalBoost?.remark ?? '')}";
+        tmpBoostIntervalId = _boostContent?.intervalBoost?.sId ?? '';
+      }
+    }
+    if (privacyValue != 'PUBLIC') {
+      ShowBottomSheet.onWarningBottom(
+        context,
+        title: language.postPrivacyisNotAllowed,
+        bodyText: language.toContinueTheBoostPostProcess,
+        icon: "${AssetPath.vectorPath}warning.svg",
+        buttonText: 'Oke',
+        onSave: () {
+          Routing().moveAndPop(Routes.boostUpload);
+        },
+      );
+    } else {
+      Routing().move(Routes.boostUpload);
+    }
+  }
+
+  bool enableBoostConfirm() {
+    if (_tmpstartDate != DateTime(1000) && (tmpBoost != '')) {
+      if (tmpBoost == 'manual') {
+        if (tmpBoostTime != '' && tmpBoostInterval != '') {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  Future boostButton(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    if (connect) {
+      _isLoading = true;
+      notifyListeners();
+      Map data = {
+        "dateStart": _tmpstartDate.toString().substring(0, 10),
+        "dateEnd": _tmpfinsihDate.toString().substring(0, 10),
+        "type": _tmpBoost,
+      };
+      if (_tmpBoost == 'manual') {
+        data['interval'] = _tmpBoostIntervalId;
+        data['session'] = _tmpBoostTimeId;
+      }
+      final notifier = UtilsBlocV2();
+      await notifier.postBostContentPre(context, data: data);
+      final fetch = notifier.utilsFetch;
+
+      if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
+        _boostContent = BoostContent.fromJson(fetch.data);
+        _privacyTitle = language.public ?? 'PUBLIC';
+        privacyValue = 'PUBLIC';
+        exitBoostPage();
+        _isLoading = false;
+        notifyListeners();
+      } else if (fetch.utilsState == UtilsState.getMasterBoostError) {
+        _isLoading = false;
+        notifyListeners();
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        boostButton(context);
+      });
+    }
+  }
+
+  Future paymentMethod(context) async {
+    // _createPostContentV2();
+    print(_boostContent);
+    if (_validateDescription() && _validateCategory()) {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+      Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
+    } else {
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
+        color: Theme.of(context).colorScheme.error,
+        maxLines: 2,
+      );
+    }
+  }
+
+  Future uploadPanding(context) async {
+    if (isEdit) {
+      _postIdPanding = editData?.postID ?? '';
+      _boostContentBuy(context);
+    } else {
+      ShowGeneralDialog.loadingDialog(context, uploadProses: true);
+      _createPostContentV2();
+    }
+  }
+
+  Future<void> _boostContentBuy(BuildContext context) async {
+    final bankCode = context.read<PaymentMethodNotifier>().bankSelected;
+    isLoading = true;
+    Map data = {
+      "dateStart": _boostContent?.dateBoostStart,
+      "dateEnd": _boostContent?.dateBoostEnd,
+      "type": _boostContent?.typeBoost,
+      "bankcode": bankCode,
+      "paymentmethod": "VA",
+      "postID": postIdPanding
+    };
+    if (_boostContent?.typeBoost == 'manual') {
+      data['interval'] = _boostContent?.intervalBoost?.sId;
+      data['session'] = _boostContent?.sessionBoost?.sId;
+    }
+    try {
+      final notifier = UtilsBlocV2();
+      await notifier.postBostContentPre(context, data: data);
+      final fetch = notifier.utilsFetch;
+
+      if (fetch.utilsState == UtilsState.getMasterBoostError) {
+        isLoading = false;
+        var errorData = ErrorModel.fromJson(fetch.data);
+        ShowBottomSheet().onShowColouredSheet(context, '${errorData.message}', color: kHyppeDanger);
+      } else if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
+        boostPaymentResponse = BoostResponse.fromJson(fetch.data);
+        Future.delayed(const Duration(seconds: 0), () {
+          Routing().moveAndPop(Routes.boostPaymentSummary);
+          context.read<MainNotifier>().startTimer();
+        });
+        _isLoading = false;
+      }
+    } catch (e) {
+      print(e);
+      ShowBottomSheet().onShowColouredSheet(context, 'Somethink Wrong', color: kHyppeDanger);
+    }
+    notifyListeners();
+  }
+
+  exitBoostPage() {
+    tmpstartDate = DateTime(1000);
+    tmpfinsihDate = DateTime(1000);
+    tmpBoost = '';
+    tmpBoostTime = '';
+    tmpBoostInterval = '';
+    tmpBoostIntervalId = '';
+    tmpBoostTimeId = '';
+    notifyListeners();
+    Routing().moveBack();
   }
 }

@@ -10,9 +10,11 @@ import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_list_user.dart';
+import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
@@ -32,6 +34,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/verification/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
@@ -71,7 +74,9 @@ import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
@@ -251,7 +256,7 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PaymentScreen());
 
       case Routes.paymentMethodScreen:
-        return MaterialPageRoute(builder: (_) => const PaymentMethodScreen());
+        return MaterialPageRoute(builder: (_) => PaymentMethodScreen(argument: settings.arguments as TransactionArgument));
 
       case Routes.paymentSummaryScreen:
         return MaterialPageRoute(builder: (_) => const PaymentSummaryScreen());
@@ -310,6 +315,16 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const FAQdetailScreen());
       case Routes.supportTicket:
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
+      case Routes.appeal:
+        return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
+
+      //------boost
+      case Routes.boostUpload:
+        return MaterialPageRoute(builder: (_) => const BoostUploadScreen());
+      case Routes.boostPaymentSummary:
+        return MaterialPageRoute(builder: (_) => const PaymentBoostSummaryScreen());
+      case Routes.boostList:
+        return MaterialPageRoute(builder: (_) => const ListBoostScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

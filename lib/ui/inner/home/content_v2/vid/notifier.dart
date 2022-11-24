@@ -25,7 +25,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   final _system = System();
   final _routing = Routing();
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit = 5..featureType = FeatureType.vid;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..limit = 5
+    ..featureType = FeatureType.vid;
   PageController pageController = PageController();
 
   List<ContentData>? _vidData;
@@ -96,7 +98,6 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         if (reload) {
           print('reload contentsQuery : 15');
           res = await contentsQuery.reload(context);
-
         } else {
           res = await contentsQuery.loadNext(context);
         }
@@ -188,7 +189,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
   void reportContent(BuildContext context, ContentData data) {
     context.read<ReportNotifier>().contentData = data;
-    ShowBottomSheet.onReportContent(context, data, hyppeVid);
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid, inDetail: false);
   }
 
   void showUserTag(BuildContext context, index, postId) {
@@ -199,10 +200,9 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     // ContentData? _updatedData;
 
     final index = vidData?.indexWhere((element) => element.postID == postID);
-    if(index != null){
+    if (index != null) {
       vidData?[index].tagPeople?.removeWhere((element) => element.email == email);
     }
-
 
     notifyListeners();
   }

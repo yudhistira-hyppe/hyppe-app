@@ -1,22 +1,19 @@
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/boosted.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
 
 import '../../music/music.dart';
 
-
 class AllContents {
   List<ContentData>? story;
 
-
   List<ContentData>? video;
 
-
   List<ContentData>? diary;
-
 
   List<ContentData>? pict;
 
@@ -25,29 +22,28 @@ class AllContents {
   AllContents.fromJson(Map<String, dynamic> json) {
     if (json['story'] != null) {
       story = [];
-      if(json['story'].isNotEmpty){
+      if (json['story'].isNotEmpty) {
         json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
       }
     }
 
     if (json['diary'] != null) {
       diary = [];
-      if(json['diary'].isNotEmpty){
+      if (json['diary'].isNotEmpty) {
         json['diary'].forEach((v) => diary?.add(ContentData.fromJson(v)));
       }
     }
 
     if (json['video'] != null) {
       video = [];
-      if(json['video'].isNotEmpty){
+      if (json['video'].isNotEmpty) {
         json['video'].forEach((v) => video?.add(ContentData.fromJson(v)));
       }
-
     }
 
     if (json['pict'] != null) {
       pict = [];
-      if(json['pict'].isNotEmpty){
+      if (json['pict'].isNotEmpty) {
         json['pict'].forEach((v) => pict?.add(ContentData.fromJson(v)));
       }
     }
@@ -56,16 +52,16 @@ class AllContents {
   Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
 
-    result['story'] = List<dynamic>.from(story??[].map((x) => x.toJson()));
-    result['diary'] = List<dynamic>.from(diary??[].map((x) => x.toJson()));
-    result['video'] = List<dynamic>.from(video??[].map((x) => x.toJson()));
-    result['pict'] = List<dynamic>.from(pict??[].map((x) => x.toJson()));
+    result['story'] = List<dynamic>.from(story ?? [].map((x) => x.toJson()));
+    result['diary'] = List<dynamic>.from(diary ?? [].map((x) => x.toJson()));
+    result['video'] = List<dynamic>.from(video ?? [].map((x) => x.toJson()));
+    result['pict'] = List<dynamic>.from(pict ?? [].map((x) => x.toJson()));
 
     return result;
   }
 }
 
-class ContentData{
+class ContentData {
   Metadata? metadata;
 
   String? mediaBasePath;
@@ -142,45 +138,61 @@ class ContentData{
 
   bool? isReport;
 
-  ContentData(
-      {this.metadata,
-      this.mediaBasePath,
-      this.postType,
-      this.mediaUri,
-      this.isLiked,
-      this.description,
-      this.active,
-      this.privacy,
-      this.mediaType,
-      this.mediaThumbEndPoint,
-      this.postID,
-      this.title,
-      this.isViewed,
-      this.tags = const [],
-      this.allowComments,
-      this.certified,
-      this.createdAt,
-      this.insight,
-      this.mediaThumbUri,
-      this.mediaEndpoint,
-      this.email,
-      this.updatedAt,
-      this.username,
-      this.fullThumbPath,
-      this.fullContentPath,
-      this.avatar,
-      this.location,
-      this.visibility,
-      this.cats,
-      this.tagPeople,
-      this.likes,
-      this.saleAmount,
-      this.saleView,
-      this.saleLike,
-      this.isApsara,
-      this.apsaraId,
-      this.music,
-      this.isReport});
+  List<Boosted>? boosted;
+  int? boostCount;
+  int? isBoost;
+  int? boostJangkauan;
+  String? statusBoost;
+  String? reportedStatus;
+  int? reportedUserCount;
+
+  ContentData({
+    this.metadata,
+    this.mediaBasePath,
+    this.postType,
+    this.mediaUri,
+    this.isLiked,
+    this.description,
+    this.active,
+    this.privacy,
+    this.mediaType,
+    this.mediaThumbEndPoint,
+    this.postID,
+    this.title,
+    this.isViewed,
+    this.tags = const [],
+    this.allowComments,
+    this.certified,
+    this.createdAt,
+    this.insight,
+    this.mediaThumbUri,
+    this.mediaEndpoint,
+    this.email,
+    this.updatedAt,
+    this.username,
+    this.fullThumbPath,
+    this.fullContentPath,
+    this.avatar,
+    this.location,
+    this.visibility,
+    this.cats,
+    this.tagPeople,
+    this.likes,
+    this.saleAmount,
+    this.saleView,
+    this.saleLike,
+    this.isApsara,
+    this.apsaraId,
+    this.isReport,
+    this.boosted,
+    this.boostCount,
+    this.isBoost,
+    this.boostJangkauan,
+    this.statusBoost,
+    this.reportedStatus,
+    this.music,
+    this.reportedUserCount,
+  });
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -214,7 +226,7 @@ class ContentData{
     fullContentPath = concatContentUri();
 
     avatar = json['avatar'] != null ? UserProfileAvatarModel.fromJson(json['avatar']) : null;
-    location = json['location'];
+    location = json['location'] ?? '';
     visibility = json['visibility'];
     if (json['cats'] != null) {
       cats = [];
@@ -234,6 +246,16 @@ class ContentData{
     apsaraId = json['apsaraId'] ?? '';
     music = json['music'] != null ? Music.fromJson(json['music']) : null;
     isReport = json['isReport'] ?? false;
+    if (json['boosted'] != null) {
+      boosted = [];
+      json['boosted'].forEach((v) => boosted?.add(Boosted.fromJson(v)));
+    }
+    boostCount = json['boostCount'] ?? 0;
+    isBoost = json['isBoost'];
+    boostJangkauan = json['boostJangkauan'] ?? 0;
+    statusBoost = json['statusBoost'] ?? '';
+    reportedStatus = json['reportedStatus'] ?? 'ALL';
+    reportedUserCount = json['reportedUserCount'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -279,7 +301,7 @@ class ContentData{
     data['likes'] = likes;
     data['isApsara'] = isApsara;
     data['apsaraId'] = apsaraId;
-    if(music != null){
+    if (music != null) {
       data['music'] = music!.toJson();
     }
 
@@ -288,12 +310,13 @@ class ContentData{
 
   String? concatThumbUri() {
     return Env.data.baseUrl +
+        '/v4/' +
         (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 
   String? concatContentUri() {
-    return Env.data.baseUrl + (mediaEndpoint ?? '');
+    return Env.data.baseUrl + '/v4/' + (mediaEndpoint ?? '');
   }
 }
 

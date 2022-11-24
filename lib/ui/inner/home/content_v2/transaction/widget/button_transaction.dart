@@ -37,23 +37,25 @@ class ButtonTransaction extends StatelessWidget {
           sixPx,
           Expanded(
             child: CustomTextButton(
-              onPressed: SharedPreference().readStorage(SpKeys.setPin) == 'true'
-                  ? () {
-                      notifier.navigateToWithDrawal();
-                      notifier.initBankAccount(context);
-                    }
-                  : () {
-                      ShowBottomSheet.onShowStatementPin(
-                        context,
-                        onCancel: () {},
-                        onSave: () {
-                          Routing().moveAndPop(Routes.homePageSignInSecurity);
+              onPressed: notifier.accountBalance?.totalsaldo == 0
+                  ? null
+                  : SharedPreference().readStorage(SpKeys.setPin) == 'true'
+                      ? () {
+                          notifier.navigateToWithDrawal();
+                          notifier.initBankAccount(context);
+                        }
+                      : () {
+                          ShowBottomSheet.onShowStatementPin(
+                            context,
+                            onCancel: () {},
+                            onSave: () {
+                              Routing().moveAndPop(Routes.homePageSignInSecurity);
+                            },
+                            title: notifier2.translate.addYourHyppePinFirst,
+                            bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin ?? '',
+                          );
                         },
-                        title: notifier2.translate.addYourHyppePinFirst,
-                        bodyText: notifier2.translate.toAccessTransactionPageYouNeedToSetYourPin ?? '',
-                      );
-                    },
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(notifier.accountBalance?.totalsaldo == 0 ? kHyppeDisabled : kHyppePrimary)),
               child: CustomTextWidget(
                 textToDisplay: notifier2.translate.withdrawal ?? '',
                 textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),

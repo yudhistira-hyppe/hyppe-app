@@ -28,7 +28,9 @@ class SocketService {
 
   /// connect to socket
   void connectToSocket(VoidCallback onEvent, {required String host, required Map<String, dynamic> options}) {
+    print('host socket io');
     print(host);
+    print(options);
     _socket = io(host, options);
 
     _socket?.connect();

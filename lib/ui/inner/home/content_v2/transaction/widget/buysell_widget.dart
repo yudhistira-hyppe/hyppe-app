@@ -52,7 +52,16 @@ class BuySellWidget extends StatelessWidget {
         title = language?.buy ?? 'buy';
         fullname = data?.penjual ?? '';
         email = data?.emailpenjual ?? '';
+        if (data?.jenis == 'BOOST_CONTENT') {
+          keterangan = language?.by ?? 'by';
+          titleColor = kHyppeJingga;
+          blockColor = kHyppeJinggaLight;
+          title = language?.postBoost ?? 'Post Boost';
+          fullname = data?.fullName ?? '';
+          email = data?.email ?? '';
+        }
         break;
+
       default:
         keterangan = language?.forr ?? '';
         titleColor = kHyppeGreen;
@@ -123,7 +132,11 @@ class BuySellWidget extends StatelessWidget {
                       child: CustomCacheImage(
                         imageUrl: data?.apsara ?? false
                             ? data?.media?.imageInfo?.isEmpty ?? false
-                                ? (data?.media?.videoList?[0].coverURL ?? '')
+                                ? (data?.media?.videoList != null
+                                    ? data!.media!.videoList!.isNotEmpty
+                                        ? "${data?.media?.videoList?[0].coverURL}"
+                                        : ""
+                                    : '')
                                 : (data?.media?.imageInfo?[0].url ?? '')
                             : data?.fullThumbPath ?? '',
                         imageBuilder: (_, imageProvider) {

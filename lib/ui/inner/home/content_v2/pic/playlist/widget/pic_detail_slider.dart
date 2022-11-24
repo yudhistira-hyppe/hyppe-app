@@ -5,6 +5,8 @@ import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_thumbnail_report.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -97,7 +99,7 @@ class PicDetailSlider extends StatelessWidget {
                                   ? SizedBox(
                                       width: 50,
                                       child: CustomTextButton(
-                                        onPressed: () => ShowBottomSheet.onReportContent(context, picData, hyppePic),
+                                        onPressed: () => ShowBottomSheet.onReportContent(context, postData: picData, type: hyppePic, adsData: null, onUpdate: () => notifier.onUpdate()),
                                         child: const CustomIconWidget(
                                           defaultColor: false,
                                           iconData: '${AssetPath.vectorPath}more.svg',
@@ -105,7 +107,7 @@ class PicDetailSlider extends StatelessWidget {
                                         ),
                                       ),
                                     )
-                                  : SizedBox(),
+                                  : const SizedBox(),
                               picData?.email == SharedPreference().readStorage(SpKeys.email)
                                   ? SizedBox(
                                       width: 50,
@@ -125,6 +127,13 @@ class PicDetailSlider extends StatelessWidget {
                                       ),
                                     )
                                   : const SizedBox(),
+                              Visibility(
+                                visible: (picData?.saleAmount == 0 && (picData?.certified ?? false)),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: IconOwnership(correct: true),
+                                ),
+                              ),
                             ],
                           ),
                   ],
@@ -169,7 +178,7 @@ class PicDetailSlider extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                  ),
           ],
         ),
       ),

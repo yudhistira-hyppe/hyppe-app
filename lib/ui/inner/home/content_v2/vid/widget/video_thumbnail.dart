@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -68,11 +69,12 @@ class VideoThumbnail extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
+
                 Visibility(
                   visible: (videoData?.saleAmount ?? 0) > 0,
                   child: Padding(
                     padding: EdgeInsets.all(videoData?.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13),
-                    child: CustomIconWidget(
+                    child: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}sale.svg",
                       defaultColor: false,
                     ),
@@ -104,13 +106,24 @@ class VideoThumbnail extends StatelessWidget {
                 Visibility(
                   visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
                   child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet.onReportContent(context, videoData, hyppeVid,
-                        onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate()),
+                    onPressed: () => ShowBottomSheet.onReportContent(
+                      context,
+                      postData: videoData,
+                      type: hyppeVid,
+                      onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                    ),
                     child: const CustomIconWidget(
                       defaultColor: false,
                       iconData: '${AssetPath.vectorPath}more.svg',
                       color: kHyppeLightButtonText,
                     ),
+                  ),
+                ),
+                Visibility(
+                  visible: (videoData?.saleAmount == 0 && (videoData?.certified ?? false)),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: IconOwnership(correct: true),
                   ),
                 ),
               ],

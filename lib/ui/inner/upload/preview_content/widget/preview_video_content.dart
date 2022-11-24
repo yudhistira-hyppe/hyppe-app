@@ -39,7 +39,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
   @override
   void didPopNext() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    if(notifier.url != notifier.fileContent?[notifier.indexView]){
+    if (notifier.url != notifier.fileContent?[notifier.indexView]) {
       notifier.initVideoPlayer(context, isSaveDefault: true);
       _videoPlayerController = notifier.betterPlayerController;
     }
@@ -48,7 +48,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
 
   @override
   void deactivate() {
-
     super.deactivate();
   }
 
@@ -97,26 +96,26 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                           child: CustomLoading(),
                         ),
                 ),
-                if(notifier.fixSelectedMusic != null)
-                Positioned.fill(
+                if (notifier.fixSelectedMusic != null)
+                  Positioned.fill(
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
                         margin: const EdgeInsets.only(left: 40, right: 40),
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.5),borderRadius: const BorderRadius.all(Radius.circular(16))),
+                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: (){
+                              onTap: () {
                                 notifier.setDefaultVideo(context);
                               },
                               child: const CustomIconWidget(
-                                  height: 12,
-                                  width: 12,
-                                  iconData: "${AssetPath.vectorPath}close_ads.svg",
+                                height: 12,
+                                width: 12,
+                                iconData: "${AssetPath.vectorPath}close_ads.svg",
                               ),
                             ),
                             fourPx,
@@ -131,18 +130,19 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                                 textOverflow: TextOverflow.ellipsis,
                                 maxLines: 3,
                                 textToDisplay: '${notifier.fixSelectedMusic?.musicTitle} - ${notifier.fixSelectedMusic?.artistName}',
-                                textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),),
+                                textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                              ),
                             )
                           ],
                         ),
                       ),
                     ),
-                ),
+                  ),
                 Positioned(
                   right: 16,
                   bottom: context.getHeight() * 0.4,
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       notifier.betterPlayerController?.pause();
                       ShowBottomSheet.onChooseMusic(context);
                     },
@@ -154,7 +154,15 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                           iconData: "${AssetPath.vectorPath}circle_music.svg",
                         ),
                         fourPx,
-                        CustomTextWidget(maxLines: 1, textToDisplay: notifier.language.music ?? '', textAlign: TextAlign.left, textStyle: const TextStyle(fontWeight: FontWeight.normal, color: Colors.white, fontSize: 14, ))
+                        CustomTextWidget(
+                            maxLines: 1,
+                            textToDisplay: notifier.language.music ?? '',
+                            textAlign: TextAlign.left,
+                            textStyle: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white,
+                              fontSize: 14,
+                            ))
                       ],
                     ),
                   ),
@@ -176,7 +184,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
   void dispose() {
     print('PreviewVideoContent is disposed');
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    if(notifier.betterPlayerController != null){
+    if (notifier.betterPlayerController != null) {
       notifier.betterPlayerController!.dispose();
     }
     notifier.defaultPath = null;

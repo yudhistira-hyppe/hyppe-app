@@ -3,21 +3,21 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 // import 'package:hyppe/core/constants/thumb/profile_image.dart';
-
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 // import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
@@ -53,8 +53,11 @@ class VidDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          data?.reportedStatus == 'OWNED' || data?.reportedStatus == "BLURRED" || (data?.reportedUserCount ?? 0) > 200 ? ContentViolationWidget(data: data!) : Container(),
           twelvePx,
           _buildDescription(context),
+          (data?.isBoost ?? 0) == 0 && data?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
+          data?.isBoost != null && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
           _buildDivider(context),
           _buildTopRightControl(context),
           fourPx,
@@ -108,10 +111,8 @@ class VidDetailBottom extends StatelessWidget {
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
-            if(data?.music != null)
-            MusicStatusDetail(music: data!.music!),
-            if(data?.music != null)
-            eightPx,
+            if (data?.music != null) MusicStatusDetail(music: data!.music!),
+            if (data?.music != null) eightPx,
             data != null
                 ? GestureDetector(
                     onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID ?? '', 'VIEW', 'Viewer', data?.email),
@@ -150,7 +151,6 @@ class VidDetailBottom extends StatelessWidget {
                         '${AssetPath.vectorPath}comment.svg',
                         value2.translate.comment ?? '',
                         () {
-
                           ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
                         },
                       )
@@ -170,7 +170,6 @@ class VidDetailBottom extends StatelessWidget {
                   value2.translate.buy ?? '',
                   () => ShowBottomSheet.onBuyContent(context, data: data),
                 ),
-
           ],
         ),
       ),

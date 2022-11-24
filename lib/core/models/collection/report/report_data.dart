@@ -4,14 +4,16 @@ class ReportData {
   String? language;
   String? reason;
   String? type;
+  String? reasonEn;
 
-  ReportData({this.sId, this.description, this.language, this.reason, this.type});
+  ReportData({this.sId, this.description, this.language, this.reason, this.type, this.reasonEn});
 
   ReportData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     description = json['description'];
     language = json['language'];
     reason = json['reason'];
+    reasonEn = json['reasonEn'];
     type = json['type'];
   }
 
@@ -21,6 +23,7 @@ class ReportData {
     data['description'] = description;
     data['language'] = language;
     data['reason'] = reason;
+    data['reasonEn'] = reasonEn;
     data['type'] = type;
     return data;
   }
