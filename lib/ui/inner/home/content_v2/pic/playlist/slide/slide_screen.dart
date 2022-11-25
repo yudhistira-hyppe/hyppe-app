@@ -133,12 +133,33 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                           thumbnail: (data.isApsara ?? false) ? data.mediaThumbUri : data.fullThumbPath,
                                         ),
                                         // Content
-                                        data.isReport ?? false
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
                                             ? Container()
                                             : PicPlaylishScreen(data: notifier.adsData, url: notifier.adsUrl, contentData: data, transformationController: transformationController),
                                         // Top action
-                                        data.isReport ?? false
-                                            ? Container()
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
+                                            ? SafeArea(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 8.0),
+                                                  child: Align(
+                                                    alignment: Alignment.topLeft,
+                                                    child: CustomTextButton(
+                                                      onPressed: () {
+                                                        resetZooming();
+                                                        Routing().moveBack();
+                                                      },
+                                                      style: ButtonStyle(
+                                                        alignment: Alignment.topCenter,
+                                                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                                      ),
+                                                      child: const DecoratedIconWidget(
+                                                        Icons.arrow_back_ios,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
                                             : SafeArea(
                                                 child: Padding(
                                                   padding: const EdgeInsets.only(top: 8.0),
@@ -232,7 +253,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                   ),
                                                 ),
                                               ),
-                                        data.isReport ?? false
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
                                             ? SafeArea(
                                                 child: SizedBox(
                                                 width: SizeConfig.screenWidth,
@@ -284,7 +305,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                               ))
                                             : Container(),
                                         // Bottom action
-                                        data.isReport ?? false
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
                                             ? Container()
                                             : Align(
                                                 alignment: Alignment.bottomCenter,
@@ -376,7 +397,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                             ),
-                                                            if (notifier.listData?[indexRoot].music != null) MusicStatusPage(music: notifier.listData![indexRoot].music!)
+                                                            if (notifier.listData?[indexRoot].music != null && (notifier.listData?[indexRoot].apsaraId ?? '').isNotEmpty)
+                                                              MusicStatusPage(music: notifier.listData![indexRoot].music!)
                                                           ],
                                                         )),
                                                       ),
@@ -393,7 +415,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                             ),
                                                           )
                                                         : Container(),
-                                                    data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200
+                                                    data.email == SharedPreference().readStorage(SpKeys.email) &&
+                                                            (data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200)
                                                         ? ContentViolationWidget(data: data)
                                                         : Container(),
                                                   ],

@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -120,7 +121,7 @@ class _DiaryPageState extends State<DiaryPage> {
               ))
           : Stack(
               children: [
-                widget.data?.isReport ?? false
+                widget.data?.reportedStatus == "BLURRED"
                     ? Container()
                     : StoryView(
                         inline: false,
@@ -190,7 +191,7 @@ class _DiaryPageState extends State<DiaryPage> {
                           if (v == Direction.down) context.read<DiariesPlaylistNotifier>().onWillPop(mounted);
                         },
                       ),
-                widget.data?.isReport ?? false
+                widget.data?.reportedStatus == "BLURRED"
                     ? CustomBackgroundLayer(
                         sigmaX: 30,
                         sigmaY: 30,
@@ -198,66 +199,17 @@ class _DiaryPageState extends State<DiaryPage> {
                         thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint ?? '' : widget.data?.fullThumbPath ?? '',
                       )
                     : Container(),
-                widget.data?.isReport ?? false
-                    ? SafeArea(
-                        child: SizedBox(
-                        width: SizeConfig.screenWidth,
-                        child: Consumer<TranslateNotifierV2>(
-                          builder: (context, transnot, child) => Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Spacer(),
-                              const CustomIconWidget(
-                                iconData: "${AssetPath.vectorPath}valid-invert.svg",
-                                defaultColor: false,
-                                height: 30,
-                              ),
-                              Text(transnot.translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                              Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                  )),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {
-                                  context.read<ReportNotifier>().seeContent(context, widget.data!, hyppeDiary);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(top: 8),
-                                  margin: const EdgeInsets.all(8),
-                                  width: SizeConfig.screenWidth,
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                      top: BorderSide(
-                                        color: Colors.white,
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    "${transnot.translate.see} HyppeDiary",
-                                    style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              thirtyTwoPx,
-                            ],
-                          ),
-                        ),
-                      ))
-                    : Container(),
+                widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == "BLURRED") ? DiarySensitive(data: widget.data) : Container(),
                 TitlePlaylistDiaries(
                   data: widget.data,
                   storyController: _storyController,
                 ),
-                widget.data?.isReport ?? false
+                widget.data?.reportedStatus == "BLURRED"
                     ? Container()
                     : RightItems(
                         data: widget.data ?? ContentData(),
                       ),
-                widget.data?.isReport ?? false
+                widget.data?.reportedStatus == "BLURRED"
                     ? Container()
                     : LeftItems(
                         description: widget.data?.description,
@@ -273,7 +225,8 @@ class _DiaryPageState extends State<DiaryPage> {
                       ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED" || (widget.data?.reportedUserCount ?? 0) > 200
+                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) &&
+                          (widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED" || (widget.data?.reportedUserCount ?? 0) > 200)
                       ? ContentViolationWidget(data: widget.data!)
                       : Container(),
                 )

@@ -768,6 +768,8 @@
   "thePostisintheProcessofPayment" : "The post is in the process of payment, please complete the payment first to continue. ",
   "viewPaymentStatus" : "View Payment Status",
   "appealsReceived" : "Appeals received",
-  "weWillSendYouaNotificationasSoonasweHaveanUpdate" : "We will send you a notification as soon as we have an update"
+  "weWillSendYouaNotificationasSoonasweHaveanUpdate" : "We will send you a notification as soon as we have an update",
+  "sensitiveContent" : "Sensitive Content",
+  "ContentContainsSensitiveMaterial" : "content contains sensitive material which some people may find offensive or disturbing"
   
 }

@@ -1102,7 +1102,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.isEdit = false;
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
-    notifier.thumbNail = _thumbNails != null ? _thumbNails![0] : null;
+    notifier.thumbNail = _thumbNails != null ? _thumbNails!.isNotEmpty ? _thumbNails![0] : null : null;
     notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
     notifier.musicSelected = _fixSelectedMusic;
@@ -1136,7 +1136,7 @@ class PreviewContentNotifier with ChangeNotifier {
         showNext = true;
       } else {
         if (betterPlayerController != null) isForcePaused = true;
-        ShowBottomSheet.onShowSomethingWhenWrong(context, onClose: () => onWillPop(context));
+        // ShowBottomSheet.onShowSomethingWhenWrong(context, onClose: () => onWillPop(context));
       }
     }
   }

@@ -15,7 +15,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
   ScrollController scrollController = ScrollController();
 
   ContentsDataQuery peopleContentsQuery = ContentsDataQuery()
-    ..limit = 10
+    ..limit = 5
     ..featureType = FeatureType.story;
 
   ContentsDataQuery myContentsQuery = ContentsDataQuery()
@@ -99,9 +99,13 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
     try {
       if (list != null) {
+        if (reload) {
+          peopleContentsQuery.page = 1;
+          peopleContentsQuery.hasNext = true;
+        }
         res.addAll(list);
-        peopleContentsQuery.hasNext = res.length == peopleContentsQuery.limit;
-        if (res.isNotEmpty) peopleContentsQuery.page++;
+        peopleContentsQuery.hasNext = list.length == peopleContentsQuery.limit;
+        if (list.isNotEmpty) peopleContentsQuery.page++;
       } else {
         if(reload){
           res = await peopleContentsQuery.reload(context);
@@ -113,11 +117,13 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
       if (reload) {
         peopleStoriesData = res;
-        scrollController.animateTo(
-          scrollController.initialScrollOffset,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeIn,
-        );
+        if(scrollController.hasClients){
+          scrollController.animateTo(
+            scrollController.initialScrollOffset,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn,
+          );
+        }
       } else {
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
       }

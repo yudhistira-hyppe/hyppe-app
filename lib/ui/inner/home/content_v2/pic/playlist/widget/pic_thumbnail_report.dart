@@ -36,12 +36,13 @@ class PichTumbnailReport extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                iconData: "${AssetPath.vectorPath}eye-off.svg",
                 defaultColor: false,
                 height: 30,
               ),
-              Text(translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text(translate.yourReportWillbeHandledImmediately ?? '',
+              Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+              Text("HyppePic ${translate.ContentContainsSensitiveMaterial}",
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,

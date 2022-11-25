@@ -51,7 +51,9 @@ class PicDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data?.reportedStatus == 'OWNED' || data?.reportedStatus == "BLURRED" || (data?.reportedUserCount ?? 0) > 200 ? ContentViolationWidget(data: data ?? ContentData()) : Container(),
+          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED' || data?.reportedStatus == "BLURRED" || (data?.reportedUserCount ?? 0) > 200)
+              ? ContentViolationWidget(data: data ?? ContentData())
+              : Container(),
           twelvePx,
           _buildDescription(context),
           data?.isBoost == null && data?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),

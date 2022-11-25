@@ -29,7 +29,9 @@ class PreviewDiaryNotifier with ChangeNotifier {
   final _routing = Routing();
   ScrollController scrollController = ScrollController();
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.diary;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..limit = 5
+    ..featureType = FeatureType.diary;
 
   List<ContentData>? _diaryData;
 
@@ -79,9 +81,13 @@ class PreviewDiaryNotifier with ChangeNotifier {
 
     try {
       if (list != null) {
+        if (reload) {
+          contentsQuery.page = 1;
+          contentsQuery.hasNext = true;
+        }
         res.addAll(list);
-        contentsQuery.hasNext = res.length == contentsQuery.limit;
-        if (res.isNotEmpty) contentsQuery.page++;
+        contentsQuery.hasNext = list.length == contentsQuery.limit;
+        if (list.isNotEmpty) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : 4');

@@ -61,8 +61,8 @@ import 'package:path_provider/path_provider.dart' as path;
 // import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
-  final _eventService = EventService();
-  final _socketService = SocketService();
+  final eventService = EventService();
+  final socketService = SocketService();
   // UpdateContentsArgument? _arguments;
 
   LocalizationModelV2 language = LocalizationModelV2();
@@ -636,14 +636,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
-    if (_socketService.isRunning) _socketService.closeSocket();
-    _socketService.connectToSocket(
+    if (socketService.isRunning) socketService.closeSocket();
+    socketService.connectToSocket(
       () {
-        _socketService.events(SocketService.eventNotif, (result) {
+        socketService.events(SocketService.eventNotif, (result) {
           '$result'.logger();
           homeNotifier.onRefresh(context, _visibility);
           // homeNotifier.isHaveSomethingNew = true;
-          _socketService.closeSocket();
+          socketService.closeSocket();
         });
       },
       host: Env.data.baseUrl,
@@ -758,16 +758,16 @@ class PreUploadContentNotifier with ChangeNotifier {
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
         onReceiveProgress: (count, total) async {
-          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
         },
         onSendProgress: (received, total) async {
-          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
         },
       ).then((value) {
         _uploadSuccess = value;
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
-        _eventService.notifyUploadSuccess(_uploadSuccess);
+        eventService.notifyUploadSuccess(_uploadSuccess);
         final decode = json.decode(_uploadSuccess.toString());
         _postIdPanding = decode['data']['postID'];
         if (_boostContent != null) _boostContentBuy(context);
@@ -775,7 +775,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (_boostContent == null) clearUpAndBackToHome(context);
     } catch (e) {
       print('Error create post : $e');
-      _eventService.notifyUploadFailed(
+      eventService.notifyUploadFailed(
         DioError(
           requestOptions: RequestOptions(
             path: UrlConstants.createuserposts,
@@ -1571,7 +1571,13 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (fetch.utilsState == UtilsState.getMasterBoostError) {
         isLoading = false;
         var errorData = ErrorModel.fromJson(fetch.data);
-        ShowBottomSheet().onShowColouredSheet(context, '${errorData.message}', color: kHyppeDanger);
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          errorData.message ?? '',
+          maxLines: 2,
+          iconSvg: "${AssetPath.vectorPath}remove.svg",
+          color: kHyppeDanger,
+        );
       } else if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {

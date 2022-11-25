@@ -694,7 +694,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     return ValueListenableBuilder<bool>(
       valueListenable: _initializeVideo,
       builder: (_, value, __) => !value
-          ? widget.videoData?.isReport ?? false
+          ? widget.videoData?.email != SharedPreference().readStorage(SpKeys.email) && (widget.videoData?.reportedStatus == "BLURRED")
               ? VideoThumbnailReport(
                   videoData: widget.videoData,
                 )

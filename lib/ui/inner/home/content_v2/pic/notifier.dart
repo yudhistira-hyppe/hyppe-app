@@ -27,7 +27,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.pic;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit=5..featureType = FeatureType.pic;
 
   List<ContentData>? _pic;
 
@@ -44,12 +44,16 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
-
+    print('initialPic page : ${contentsQuery.page}');
     try {
       if (list != null) {
+        if (reload) {
+          contentsQuery.page = 1;
+          contentsQuery.hasNext = true;
+        }
         res.addAll(list);
-        contentsQuery.hasNext = res.length == contentsQuery.limit;
-        if (res.isNotEmpty) contentsQuery.page++;
+        contentsQuery.hasNext = list.length == contentsQuery.limit;
+        if (list.isNotEmpty) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : satu');

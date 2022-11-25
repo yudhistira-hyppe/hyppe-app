@@ -768,6 +768,8 @@
   "thePostisintheProcessofPayment" : "Postingan sedang dalam proses pembayaran, harap selesaikan pembayaran terlebih dahulu untuk melanjutkan. ",
   "viewPaymentStatus" : "Lihat Status Pembayaran",
   "appealsReceived" : "Banding diterima",
-  "weWillSendYouaNotificationasSoonasweHaveanUpdate" : "Kami akan mengirimkan pemberitahuan kepada Anda segera setelah kami memiliki pembaruan"
+  "weWillSendYouaNotificationasSoonasweHaveanUpdate" : "Kami akan mengirimkan pemberitahuan kepada Anda segera setelah kami memiliki pembaruan",
+  "sensitiveContent" : "Konten Sensitif",
+  "ContentContainsSensitiveMaterial" : "konten berisi materi sensitif yang mungkin dianggap menyinggung atau mengganggu oleh sebagian orang"
 
 }

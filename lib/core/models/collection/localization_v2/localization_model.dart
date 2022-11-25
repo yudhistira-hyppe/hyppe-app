@@ -763,6 +763,8 @@ class LocalizationModelV2 {
   String? viewPaymentStatus;
   String? appealsReceived;
   String? weWillSendYouaNotificationasSoonasweHaveanUpdate;
+  String? ContentContainsSensitiveMaterial;
+  String? sensitiveContent;
   String? minutes;
   String? appeal;
   String? communityGuidelines;
@@ -1534,6 +1536,8 @@ class LocalizationModelV2 {
     this.viewPaymentStatus,
     this.appealsReceived,
     this.weWillSendYouaNotificationasSoonasweHaveanUpdate,
+    this.ContentContainsSensitiveMaterial,
+    this.sensitiveContent,
     this.minutes,
     this.appeal,
     this.communityGuidelines,
@@ -2330,5 +2334,7 @@ class LocalizationModelV2 {
     viewPaymentStatus = json["viewPaymentStatus"];
     appealsReceived = json["appealsReceived"];
     weWillSendYouaNotificationasSoonasweHaveanUpdate = json["weWillSendYouaNotificationasSoonasweHaveanUpdate"];
+    ContentContainsSensitiveMaterial = json["ContentContainsSensitiveMaterial"];
+    sensitiveContent = json["sensitiveContent"];
   }
 }

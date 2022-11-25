@@ -17,6 +17,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -189,13 +190,19 @@ class ReportNotifier with ChangeNotifier {
   }
 
   void seeContent(BuildContext context, ContentData data, String typeContent) {
-    context.read<HomeNotifier>().onReport(
+    context.read<HomeNotifier>().showContentSensitive(
           context,
           postID: data.postID ?? '',
           content: typeContent,
           isReport: false,
         );
-
+    context.read<OtherProfileNotifier>().showContentSensitive(
+          context,
+          postID: data.postID ?? '',
+          content: typeContent,
+          isReport: false,
+        );
+    context.read<OtherProfileNotifier>().onUpdate();
     switch (typeContent) {
       case hyppeVid:
         context.read<VidDetailNotifier>().onUpdate();

@@ -87,9 +87,13 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       if (list != null) {
+        if (reload) {
+          contentsQuery.page = 1;
+          contentsQuery.hasNext = true;
+        }
         res.addAll(list);
-        contentsQuery.hasNext = res.length == 18;
-        if (res != null) contentsQuery.page++;
+        contentsQuery.hasNext = list.length == 18;
+        if (list != null) contentsQuery.page++;
       } else {
         if (reload) {
           print('reload contentsQuery : 15');
@@ -193,7 +197,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void onDeleteSelfTagUserContent(BuildContext context, {required String postID, required String content, required String email}) {
-    ContentData? _updatedData;
+    // ContentData? _updatedData;
 
     final index = vidData?.indexWhere((element) => element.postID == postID);
     if (index != null) {

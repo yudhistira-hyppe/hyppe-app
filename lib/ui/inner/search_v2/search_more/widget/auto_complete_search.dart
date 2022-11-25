@@ -74,7 +74,7 @@ class AutoCompleteSearch extends StatelessWidget {
                           )
                 : Container(),
             notifier.searchPeolpleData != null
-                ? notifier.searchPeolpleData?.isNotEmpty ?? false || notifier.searchController.text != ''
+                ? notifier.searchController.text != ''
                     ? ListTile(
                         onTap: () => notifier.onSearchPost(context),
                         title: CustomTextWidget(

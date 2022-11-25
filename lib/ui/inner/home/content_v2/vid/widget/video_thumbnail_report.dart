@@ -3,7 +3,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/models/collection/report/report.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
@@ -22,10 +21,10 @@ class VideoThumbnailReport extends StatelessWidget {
       children: [
         Center(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
+            // borderRadius: BorderRadius.circular(8.0),
             child: CustomBackgroundLayer(
-              sigmaX: 30,
-              sigmaY: 30,
+              sigmaX: 10,
+              sigmaY: 10,
               thumbnail: videoData?.isApsara ?? false ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
             ),
           ),
@@ -36,12 +35,14 @@ class VideoThumbnailReport extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                iconData: "${AssetPath.vectorPath}eye-off.svg",
                 defaultColor: false,
                 height: 30,
+                color: Colors.white,
               ),
-              Text(translate.reportReceived ?? 'Report Received', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text(translate.yourReportWillbeHandledImmediately ?? '',
+              Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+              Text("HyppeVid ${translate.ContentContainsSensitiveMaterial}",
+                  textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
