@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -41,6 +42,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
+AudioPlayer? globalAudioPlayer;
 
 void mainApp(EnvType env) async {
   // HttpOverrides.global = MyHttpOverrides();

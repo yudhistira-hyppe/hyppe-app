@@ -350,6 +350,22 @@ class PreviewContentNotifier with ChangeNotifier {
     return isNoData;
   }
 
+  void resumeAudioPreview(){
+    try{
+      audioPreviewPlayer.resume();
+    }catch(e){
+      e.logger();
+    }
+  }
+
+  void pauseAudioPreview(){
+    try{
+      audioPreviewPlayer.pause();
+    }catch(e){
+      e.logger();
+    }
+  }
+
   void onScrollExpMusics(BuildContext context, )async{
     if(scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange){
       if(!_isLoadNextExpMusic){
@@ -838,6 +854,11 @@ class PreviewContentNotifier with ChangeNotifier {
     );
     print('_url : $_url');
     if(isSaveDefault){
+      _fixSelectedMusic = null;
+      _selectedMusic = null;
+      _currentMusic = null;
+      _selectedType = null;
+      notifyListeners();
       final _isImage = (_defaultPath ?? '').isImageFormat();
       if(!_isImage){
         _defaultPath = _url;
@@ -944,6 +965,7 @@ class PreviewContentNotifier with ChangeNotifier {
     _currentMusic = null;
     _selectedType = null;
     _showNext = false;
+    notifyListeners();
     if (_isSheetOpen) closeFilters();
     clearAdditionalItem();
     if (context.read<OverlayHandlerProvider>().overlayActive) {

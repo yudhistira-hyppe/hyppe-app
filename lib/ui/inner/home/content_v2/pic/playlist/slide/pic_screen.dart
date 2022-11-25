@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../../../../core/bloc/posts_v2/bloc.dart';
-import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../../core/services/system.dart';
@@ -23,7 +18,11 @@ class PicPlaylishScreen extends StatefulWidget {
   final String url;
   final ContentData contentData;
   final TransformationController transformationController;
-  const PicPlaylishScreen({Key? key, required this.data, required this.url, required this.contentData, required this.transformationController}) : super(key: key);
+  final String urlMusic;
+  final int index;
+  const PicPlaylishScreen({Key? key,
+    required this.data, required this.url,
+    required this.contentData, required this.transformationController, required this.urlMusic, required this.index}) : super(key: key);
 
   @override
   State<PicPlaylishScreen> createState() => _PicPlaylishScreenState();
@@ -32,24 +31,30 @@ class PicPlaylishScreen extends StatefulWidget {
 class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   var audioPlayer = AudioPlayer();
-  bool _isLoadMusic = false;
 
   @override
   void initState() {
     context.incrementAdsCount();
-    if(widget.contentData.music?.apsaraMusic != null){
-      initMusic(context, widget.contentData.music!.apsaraMusic!);
+    if(widget.urlMusic.isNotEmpty){
+      initMusic(context, widget.urlMusic);
     }
 
     Future.delayed(Duration.zero, () async {
       if (widget.url.isNotEmpty && widget.data.adsId != null) {
         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
         if (!isShowAds) {
-          await System().adsPopUp(context, widget.data, widget.url);
+          await System().adsPopUp(materialAppKey.currentContext!, widget.data, widget.url);
         }
       }
     });
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    print('deactivate PicPlaylishScreen ${widget.index}');
+    globalAudioPlayer = null;
+    super.deactivate();
   }
 
   @override
@@ -61,9 +66,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isLoadMusic ? const Center(
-      child: CustomLoading(),
-    ) : InteractiveViewer(
+    return InteractiveViewer(
       transformationController: widget.transformationController,
       child: InkWell(
         onDoubleTap: () {
@@ -94,45 +97,19 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
     );
   }
 
-  void initMusic(BuildContext context, String apsaraId) async{
+  void initMusic(BuildContext context, String urlMusic) async{
     audioPlayer = AudioPlayer();
     try {
 
       await audioPlayer.setReleaseMode(ReleaseMode.loop);
-      setState(() {
-        _isLoadMusic = true;
-      });
-      final urlMusic = await _getAdsVideoApsara(context, apsaraId);
-      if(urlMusic != null){
+      if(urlMusic.isNotEmpty){
+        globalAudioPlayer = audioPlayer;
         audioPlayer.play(UrlSource(urlMusic));
       }else{
-        throw 'URL Music is null';
+        throw 'URL Music is empty';
       }
     }catch(e){
       "Error Init Video $e".logger();
-    } finally {
-      setState(() {
-        _isLoadMusic = false;
-      });
-
     }
-  }
-
-  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
-    try {
-      final notifier = PostsBloc();
-      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
-
-      final fetch = notifier.postsFetch;
-
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
-        return jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      'Failed to fetch ads data ${e}'.logger();
-    }
-    return null;
   }
 }

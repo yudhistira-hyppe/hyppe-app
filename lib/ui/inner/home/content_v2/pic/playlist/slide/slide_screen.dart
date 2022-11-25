@@ -15,6 +15,7 @@ import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/loading_music_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -32,8 +33,10 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:readmore/readmore.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
-import '../../../../../../../core/models/collection/music/music.dart';
+import '../../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
+import '../../../../../../constant/widget/custom_loading.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
 import '../../../../../../constant/widget/music_status_page_widget.dart';
 import '../../../diary/playlist/widget/right_items_shimmer.dart';
@@ -68,6 +71,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     _pageController = PageController(initialPage: widget.arguments.index.toInt());
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
+
     super.initState();
   }
 
@@ -100,6 +104,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
+                      notifier.isLoadMusic = true;
                       if(value == ((notifier.listData?.length ?? 0) - 1)){
                         print('onPageChanged Image : masuk');
                         final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
@@ -112,15 +117,24 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                       await notifier.initAdsVideo(context);
                     },
                     itemBuilder: (context, indexRoot) {
-                      final data = notifier.listData;
-                      if (data != null) {}
+
                       return PageView.builder(
                           controller: _mainPageController,
                           itemCount: 2,
                           scrollDirection: Axis.vertical,
+                          onPageChanged: (verticalIndex){
+                            if(verticalIndex == 0){
+                              notifier.isLoadMusic = true;
+                            }else{
+                              final detailNotifier = context.read<PicDetailNotifier>();
+                              detailNotifier.isLoadMusic = true;
+                            }
+
+                          },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];
                             if (data != null) {
+
                               return indexPage == 0
                                   ? Stack(
                                       children: [
@@ -134,7 +148,12 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                         // Content
                                         data.isReport ?? false
                                             ? Container()
-                                            : PicPlaylishScreen(data: notifier.adsData, url: notifier.adsUrl, contentData: data, transformationController: transformationController),
+                                            : notifier.isLoadMusic ? LoadingMusicScreen(apsaraMusic: data.music?.apsaraMusic ?? ''): PicPlaylishScreen(
+                                            data: notifier.adsData,
+                                            url: notifier.adsUrl,
+                                            contentData: data,
+                                            index: indexRoot,
+                                            transformationController: transformationController, urlMusic: notifier.urlMusic,),
                                         // Top action
                                         data.isReport ?? false
                                             ? Container()
@@ -414,6 +433,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       ),
     );
   }
+
+
 
   Widget _buildButtonV2({
     Color? colorIcon,

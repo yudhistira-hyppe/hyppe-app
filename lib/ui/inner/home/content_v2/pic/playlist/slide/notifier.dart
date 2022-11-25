@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -38,7 +37,7 @@ import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 
 class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
-  final _system = System();
+  // final _system = System();
   final _sharedPrefs = SharedPreference();
   ScrollController scrollController = ScrollController();
   ContentsDataQuery contentsQuery = ContentsDataQuery()..limit = 5..featureType = FeatureType.pic;
@@ -57,6 +56,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   AdsData get adsData => _adsData;
   String _adsUrl = '';
   String get adsUrl => _adsUrl;
+  bool _isLoadMusic = true;
+  bool get isLoadMusic => _isLoadMusic;
+  String _urlMusic = '';
+  String get urlMusic => _urlMusic;
 
   SlidedPicDetailScreenArgument? _routeArgument;
 
@@ -65,6 +68,16 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   bool _checkIsLoading = false;
   double? get currentPage => _currentPage;
   bool get checkIsLoading => _checkIsLoading;
+
+  set isLoadMusic(bool state){
+    _isLoadMusic = state;
+    notifyListeners();
+  }
+
+  set urlMusic(String val){
+    _urlMusic = val;
+    notifyListeners();
+  }
 
   set currentPage(double? val) {
     _currentPage = val;
@@ -92,7 +105,62 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  // void pauseAudioPlayer(){
+  //   try{
+  //     audioPlayer.pause();
+  //   }catch(e){
+  //     e.logger();
+  //   }
+  // }
+
+  // void resumeAudioPlayer(){
+  //   try{
+  //     audioPlayer.resume();
+  //   }catch(e){
+  //     e.logger();
+  //   }
+  // }
+
   void onUpdate() => notifyListeners();
+
+  void initMusic(BuildContext context, String apsaraId) async{
+    try {
+      isLoadMusic = true;
+      if(apsaraId.isNotEmpty){
+        final url = await _getAdsVideoApsara(context, apsaraId);
+        if(url != null){
+          _urlMusic = url;
+          notifyListeners();
+        }else{
+          throw 'url music is null';
+        }
+      }else{
+        throw 'apsaramusic is empty';
+      }
+      isLoadMusic = false;
+    }catch(e){
+      "Error Init Video $e".logger();
+      isLoadMusic = false;
+    }
+  }
+
+  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        return jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
+  }
 
   Future initAdsVideo(BuildContext context) async {
     _adsUrl = '';

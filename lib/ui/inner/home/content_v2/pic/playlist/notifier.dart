@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -27,6 +29,9 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 import 'package:story_view/controller/story_controller.dart';
 
+import '../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../core/bloc/posts_v2/state.dart';
+
 class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.pic;
 
@@ -37,12 +42,26 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentData? _data;
   int contentIndex = 0;
   StatusFollowing _statusFollowing = StatusFollowing.none;
+  bool _isLoadMusic = true;
+  bool get isLoadMusic => _isLoadMusic;
+  String _urlMusic = '';
+  String get urlMusic => _urlMusic;
 
   PicDetailScreenArgument? _routeArgument;
 
   StatusFollowing get statusFollowing => _statusFollowing;
   bool _checkIsLoading = false;
   bool get checkIsLoading => _checkIsLoading;
+
+  set isLoadMusic(bool state){
+    _isLoadMusic = state;
+    notifyListeners();
+  }
+
+  set urlMusic(String val){
+    _urlMusic = val;
+    notifyListeners();
+  }
 
   set checkIsLoading(bool val) {
     _checkIsLoading = val;
@@ -74,6 +93,45 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
     }
+  }
+
+  void initMusic(BuildContext context, String apsaraId) async{
+    try {
+      isLoadMusic = true;
+      if(apsaraId.isNotEmpty){
+        final url = await _getAdsVideoApsara(context, apsaraId);
+        if(url != null){
+          _urlMusic = url;
+          notifyListeners();
+        }else{
+          throw 'url music is null';
+        }
+      }else{
+        throw 'apsaramusic is empty';
+      }
+      isLoadMusic = false;
+    }catch(e){
+      "Error Init Video $e".logger();
+      isLoadMusic = false;
+    }
+  }
+
+  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        return jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
   }
 
   Future<void> _initialPic(
