@@ -283,13 +283,13 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                     children: [
                                                       const Spacer(),
                                                       const CustomIconWidget(
-                                                        iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                                        iconData: "${AssetPath.vectorPath}eye-off.svg",
                                                         defaultColor: false,
                                                         height: 30,
                                                       ),
-                                                      Text(transnot.translate.reportReceived ?? 'Report Received',
+                                                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content',
                                                           style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                                      Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
+                                                      Text("HyppePic ${transnot.translate.ContentContainsSensitiveMaterial}",
                                                           style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 13,

@@ -30,9 +30,9 @@ class NotificationBloc {
 
     final FormData formData = FormData();
 
-    formData.fields.add(MapEntry("senderOrReceiver", argument.senderOrReceiver));
-    formData.fields.add(MapEntry("postID", argument.postID));
-    formData.fields.add(MapEntry("eventType", eventType));
+    if (argument.senderOrReceiver != '') formData.fields.add(MapEntry("senderOrReceiver", argument.senderOrReceiver));
+    if (argument.postID != '') formData.fields.add(MapEntry("postID", argument.postID));
+    if (eventType != '') formData.fields.add(MapEntry("eventType", eventType));
     formData.fields.add(MapEntry("pageRow", argument.pageRow.toString()));
     formData.fields.add(MapEntry("pageNumber", argument.pageNumber.toString()));
 

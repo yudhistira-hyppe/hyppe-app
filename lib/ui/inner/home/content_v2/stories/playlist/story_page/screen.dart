@@ -296,12 +296,12 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                                 children: [
                                   Spacer(),
                                   const CustomIconWidget(
-                                    iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                    iconData: "${AssetPath.vectorPath}eye-off.svg",
                                     defaultColor: false,
                                     height: 30,
                                   ),
-                                  Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                  Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
+                                  Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                  Text("HyppeStory ${transnot.translate.ContentContainsSensitiveMaterial}",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 13,

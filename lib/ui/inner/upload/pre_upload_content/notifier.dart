@@ -703,6 +703,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoost = '';
     _tmpBoostTime = '';
     tmpBoostInterval = '';
+    editData = null;
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
       notifier.defaultPath = null;
@@ -1419,25 +1420,32 @@ class PreUploadContentNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     await notifier.getMasterBoost(context);
     final fetch = notifier.utilsFetch;
+    int toTransaktion = 1;
 
     if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
       boostMasterData = BoostMasterModel.fromJson(fetch.data);
       if (boostMasterData?.pendingTransaction == 1) {
         Routing().moveBack();
-        await ShowBottomSheet().onShowColouredSheet(context, language.otherPostsInProcessOfPayment ?? '',
-            subCaption: language.thePostisintheProcessofPayment,
-            subCaptionButton: language.viewPaymentStatus,
-            color: kHyppeRed,
-            iconSvg: '${AssetPath.vectorPath}remove.svg',
-            maxLines: 10, functionSubCaption: () {
-          Routing().moveAndPop(Routes.transaction);
-          Routing().moveBack();
-          Routing().moveBack();
-          Routing().moveBack();
-          Routing().moveBack();
-          _onExit();
-        });
-        Routing().move(Routes.transaction);
+
+        await ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.otherPostsInProcessOfPayment ?? '',
+          subCaption: language.thePostisintheProcessofPayment,
+          subCaptionButton: language.viewPaymentStatus,
+          color: kHyppeRed,
+          iconSvg: '${AssetPath.vectorPath}remove.svg',
+          maxLines: 10,
+          functionSubCaption: () {
+            toTransaktion = 2;
+            Routing().moveAndPop(Routes.transaction);
+            // Routing().moveBack();
+            // Routing().moveBack();
+            // Routing().moveBack();
+            // Routing().moveBack();
+            // _onExit();
+          },
+        );
+        if (toTransaktion == 1) Routing().move(Routes.transaction);
       }
       _isLoading = false;
       notifyListeners();
