@@ -144,7 +144,7 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                     child: Align(
                       alignment: Alignment.center,
                       child: Container(
-                        margin: const EdgeInsets.only(left: 40, right: 40),
+                        margin: const EdgeInsets.only(left: 70, right: 70),
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                         decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
                         child: Row(
