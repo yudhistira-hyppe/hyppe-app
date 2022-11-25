@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 class OnjectContentWidget extends StatelessWidget {
   final ContentData data;
   final String cat;
-  const OnjectContentWidget({Key? key, required this.data, this.cat = ''}) : super(key: key);
+  final String reason;
+  const OnjectContentWidget({Key? key, required this.data, this.cat = '', this.reason = ''}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,10 +96,10 @@ class OnjectContentWidget extends StatelessWidget {
               textAlign: TextAlign.start,
             ),
             Text(
-              "Adult nudity and sexual activity",
+              reason,
               style: Theme.of(context).textTheme.bodyText2,
               textAlign: TextAlign.start,
-              maxLines: 2,
+              maxLines: 3,
             ),
           ],
         ),

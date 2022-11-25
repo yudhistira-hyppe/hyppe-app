@@ -761,6 +761,8 @@ class LocalizationModelV2 {
   String? otherPostsInProcessOfPayment;
   String? thePostisintheProcessofPayment;
   String? viewPaymentStatus;
+  String? appealsReceived;
+  String? weWillSendYouaNotificationasSoonasweHaveanUpdate;
   String? minutes;
   String? appeal;
   String? communityGuidelines;
@@ -1530,6 +1532,8 @@ class LocalizationModelV2 {
     this.otherPostsInProcessOfPayment,
     this.thePostisintheProcessofPayment,
     this.viewPaymentStatus,
+    this.appealsReceived,
+    this.weWillSendYouaNotificationasSoonasweHaveanUpdate,
     this.minutes,
     this.appeal,
     this.communityGuidelines,
@@ -2324,5 +2328,7 @@ class LocalizationModelV2 {
     otherPostsInProcessOfPayment = json["otherPostsInProcessOfPayment"];
     thePostisintheProcessofPayment = json["thePostisintheProcessofPayment"];
     viewPaymentStatus = json["viewPaymentStatus"];
+    appealsReceived = json["appealsReceived"];
+    weWillSendYouaNotificationasSoonasweHaveanUpdate = json["weWillSendYouaNotificationasSoonasweHaveanUpdate"];
   }
 }

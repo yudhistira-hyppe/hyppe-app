@@ -15,8 +15,8 @@ import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
+import 'package:hyppe/ui/constant/entities/appeal/success_appeal.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
@@ -28,7 +28,6 @@ import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_slider.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
@@ -317,6 +316,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:
         return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
+      case Routes.appealSuccess:
+        return MaterialPageRoute(builder: (_) => SuccessAppeal(data: settings.arguments as ContentData));
 
       //------boost
       case Routes.boostUpload:

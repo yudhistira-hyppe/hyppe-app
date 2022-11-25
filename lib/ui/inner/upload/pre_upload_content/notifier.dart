@@ -682,7 +682,9 @@ class PreUploadContentNotifier with ChangeNotifier {
     musicSelected = null;
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     notifier.defaultPath = null;
-    notifier.betterPlayerController!.dispose();
+    if (notifier.betterPlayerController != null) {
+      notifier.betterPlayerController!.dispose();
+    }
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
@@ -768,8 +770,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         _eventService.notifyUploadSuccess(_uploadSuccess);
         final decode = json.decode(_uploadSuccess.toString());
         _postIdPanding = decode['data']['postID'];
-        print('ini boost content');
-        print(_boostContent);
         if (_boostContent != null) _boostContentBuy(context);
       });
       if (_boostContent == null) clearUpAndBackToHome(context);
@@ -1522,8 +1522,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future paymentMethod(context) async {
+    print('asdasdasdasdasd');
     // _createPostContentV2();
-    print(_boostContent);
+    // print(_boostContent);
     if (_validateDescription() && _validateCategory()) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
       Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
@@ -1575,7 +1576,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {
           Routing().moveAndPop(Routes.boostPaymentSummary);
-          context.read<MainNotifier>().startTimer();
+          // context.read<MainNotifier>().startTimer();
         });
         _isLoading = false;
       }

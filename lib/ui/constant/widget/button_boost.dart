@@ -35,6 +35,7 @@ class ButtonBoost extends StatelessWidget {
             onTap: _isKyc == VERIFIED
                 ? () {
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
+                    notifier.editData = contentData;
                     notifier.isEdit = true;
                     notifier.isUpdate = true;
                     notifier.captionController.text = contentData?.description ?? "";

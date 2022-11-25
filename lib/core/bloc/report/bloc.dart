@@ -159,4 +159,27 @@ class ReportBloc {
       withCheckConnection: false,
     );
   }
+
+  Future reportReasonAppeal(BuildContext context, {required Map data}) async {
+    setReportFetch(ReportFetch(ReportState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if (onResult.statusCode! > HTTP_CODE) {
+          setReportFetch(ReportFetch(ReportState.appealError, message: onResult.data['message']));
+        } else {
+          setReportFetch(ReportFetch(ReportState.appealSuccess, data: onResult.data));
+        }
+      },
+      (errorData) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        setReportFetch(ReportFetch(ReportState.appealError));
+      },
+      host: UrlConstants.detailTypeAppeal,
+      data: data,
+      withAlertMessage: false,
+      methodType: MethodType.post,
+      withCheckConnection: false,
+    );
+  }
 }

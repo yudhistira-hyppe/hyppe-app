@@ -7,6 +7,7 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -26,6 +27,8 @@ class PaymentBoostSummaryScreen extends StatefulWidget {
 }
 
 class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     var nn = Provider.of<PaymentBoostSummaryNotifier>(context, listen: false);
@@ -126,7 +129,7 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                                 GestureDetector(
                                   onTap: () {
                                     Clipboard.setData(ClipboardData(text: notifier.paymentMethodNotifier.boostPaymentResponse?.nova ?? ''));
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(translate.vaCopyToClipboard ?? '')));
+                                    ShowBottomSheet().onShowColouredSheet(_, translate.vaCopyToClipboard ?? '', maxLines: 2, color: kHyppeTextLightPrimary);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
