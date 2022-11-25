@@ -652,6 +652,8 @@ class PreviewContentNotifier with ChangeNotifier {
       if(_isImage){
         _selectedMusic = null;
         _fixSelectedMusic = null;
+        audioPreviewPlayer.stop();
+        audioPreviewPlayer.dispose();
         notifyListeners();
       }else{
         if(_defaultPath != null){

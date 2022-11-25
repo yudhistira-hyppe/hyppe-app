@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_content.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -37,8 +38,16 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     notifier.audioPlayer.stop();
     notifier.audioPlayer.dispose();
-    notifier.scrollController.dispose();
-    notifier.scrollExpController.dispose();
+    try{
+      notifier.scrollController.dispose();
+    }catch(e){
+      e.logger();
+    }
+    try{
+      notifier.scrollExpController.dispose();
+    }catch(e){
+      e.logger();
+    }
     super.dispose();
   }
 
