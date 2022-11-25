@@ -5,6 +5,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:better_player/better_player.dart';
@@ -17,7 +18,9 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 
+import '../../../../../core/services/route_observer_service.dart';
 import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import '../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 
 class PreviewVideoContent extends StatefulWidget {
@@ -26,29 +29,69 @@ class PreviewVideoContent extends StatefulWidget {
   _PreviewVideoContentState createState() => _PreviewVideoContentState();
 }
 
-class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAware {
+class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAware, AfterFirstLayoutMixin {
   BetterPlayerController? _videoPlayerController;
   @override
   void initState() {
+    print('initState PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     notifier.initVideoPlayer(context, isSaveDefault: true);
     _videoPlayerController = notifier.betterPlayerController;
     super.initState();
   }
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+  }
+
+  @override
+  void didPop() {
+    print('didPop PreviewVideoContent');
+    super.didPop();
+  }
+
+  // @override
+  // void didPush() {
+  //   Future.delayed(Duration(seconds: 1), (){
+  //     print('didPush isOnHomeScreen ${!SharedPreference().readStorage(SpKeys.isOnHomeScreen)}');
+  //     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, !SharedPreference().readStorage(SpKeys.isOnHomeScreen));
+  //   });
+  //   super.didPush();
+  // }
 
   @override
   void didPopNext() {
+    print('didPopNext PreviewVideoContent');
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    if (notifier.url != notifier.fileContent?[notifier.indexView]) {
-      notifier.initVideoPlayer(context, isSaveDefault: true);
-      _videoPlayerController = notifier.betterPlayerController;
+    if(notifier.defaultPath != notifier.fileContent?[notifier.indexView]){
+      notifier.initVideoPlayer(context);
+    }else{
+      notifier.setDefaultVideo(context);
     }
     super.didPopNext();
   }
 
   @override
+  void didPushNext() {
+    print('didPushNext PreviewVideoContent');
+    super.didPushNext();
+  }
+
+  @override
   void deactivate() {
+    print('deactivate PreviewVideoContent');
     super.deactivate();
+  }
+
+  @override
+  void didPush() {
+    print('didPush PreviewVideoContent');
   }
 
   @override
@@ -189,6 +232,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     }
     notifier.defaultPath = null;
     notifier.disposeMusic();
+
+    CustomRouteObserver.routeObserver.unsubscribe(this);
     super.dispose();
   }
 }

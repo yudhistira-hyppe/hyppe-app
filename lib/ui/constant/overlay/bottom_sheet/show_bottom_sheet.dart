@@ -71,7 +71,7 @@ class ShowBottomSheet {
     return _instance;
   }
 
-  static onChooseMusic(context, {isPic = false}) async {
+  static onChooseMusic(context, {isPic = false, isInit = true}) async {
     await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -86,6 +86,7 @@ class ShowBottomSheet {
               height: context.getHeight() * 0.92,
               child: OnChooseMusicBottomSheet(
                 isPic: isPic,
+                isInit: isInit,
               ),
             ),
           );

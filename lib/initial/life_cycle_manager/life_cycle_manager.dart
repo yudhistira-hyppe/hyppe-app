@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -22,6 +23,7 @@ import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
+import '../../ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
 
 class LifeCycleManager extends StatefulWidget {
@@ -60,11 +62,20 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     final activity = DeviceBloc();
 
     print("Status Lifecycle: $state");
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    final picNotifier = materialAppKey.currentContext!.read<SlidedPicDetailNotifier>();
     if (state == AppLifecycleState.inactive) {
-      final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+
       if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){
         notifier.forceResetPlayer();
       }
+      notifier.pauseAudioPreview();
+      // picNotifier.pauseAudioPlayer();
+      if(globalAudioPlayer != null){
+        print('globalAudioPlayer!.pause');
+        globalAudioPlayer!.pause();
+      }
+
       "App Inactive".logger();
       final _userToken = SharedPreference().readStorage(SpKeys.userToken);
       if (_userToken != null) {
@@ -77,6 +88,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     }
     if (state == AppLifecycleState.resumed) {
       "App Resumed".logger();
+      notifier.resumeAudioPreview();
+      if(globalAudioPlayer != null){
+        print('globalAudioPlayer!.resume');
+        globalAudioPlayer!.resume();
+      }
+
       final _userToken = SharedPreference().readStorage(SpKeys.userToken);
 
       if (_userToken != null) {

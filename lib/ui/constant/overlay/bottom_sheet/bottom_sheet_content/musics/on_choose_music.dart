@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musi
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,8 @@ import '../../../../widget/icon_button_widget.dart';
 
 class OnChooseMusicBottomSheet extends StatefulWidget {
   bool isPic;
-  OnChooseMusicBottomSheet({Key? key, required this.isPic}) : super(key: key);
+  bool isInit;
+  OnChooseMusicBottomSheet({Key? key, required this.isPic, this.isInit = true}) : super(key: key);
 
   @override
   State<OnChooseMusicBottomSheet> createState() => _OnChooseMusicBottomSheetState();
@@ -64,9 +66,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               },
             ),
           ),
-          !showListExp ? Container(
-              child: const MusicTabsScreen()
-          ) : Container(
+          !showListExp ? const MusicTabsScreen() : Container(
             margin: const EdgeInsets.only(left: 16, top: 10, bottom: 10, right: 10),
             width: double.infinity,
             child: Row(
@@ -99,17 +99,19 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               width: double.infinity,
               margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 8),
               child: CustomTextButton(onPressed: () async{
+                final uploadNotifier = context.read<PreUploadContentNotifier>();
                 print('test');
                 // notifier.isLoadVideo = true;
                 await notifier.audioPlayer.stop();
                 if(widget.isPic){
                   // notifier.isLoadVideo = true;
                   print('isLoadVideo : ${notifier.isLoadVideo}');
-                  notifier.imageMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', Duration(seconds: notifier.selectedMusic?.apsaraMusicUrl?.duration?.toInt() ?? 10).inMinutes);
+
                 }else{
-                  await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '');
+                  await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', isInit: widget.isInit);
                 }
                 notifier.fixSelectedMusic = notifier.selectedMusic;
+                uploadNotifier.musicSelected = notifier.selectedMusic;
                 notifier.selectedMusic = null;
                 notifier.forceResetPlayer();
                 notifier.searchController.text = '';

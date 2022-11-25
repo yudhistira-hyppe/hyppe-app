@@ -45,7 +45,7 @@ class PreviewContent extends StatelessWidget {
         // Build bottom left component
         Align(
             alignment: Alignment.bottomLeft,
-            child: notifier.isLoadMerge ? Container(
+            child: notifier.isLoadVideo ? Container(
                 width: 80.0 * SizeConfig.scaleDiagonal,
                 height: 80.0 * SizeConfig.scaleDiagonal,
                 margin: const EdgeInsets.symmetric(horizontal: 5.0),

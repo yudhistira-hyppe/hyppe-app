@@ -70,9 +70,7 @@ class PreviewContentNotifier with ChangeNotifier {
   Duration? _totalDuration;
   Duration? get totalDuration => _totalDuration;
   bool _isLoadVideo = false;
-  bool _isLoadMerge = false;
   bool get isLoadVideo => _isLoadVideo;
-  bool get isLoadMerge => _isLoadMerge;
   bool _isLoadingMusic = true;
   bool get isLoadingMusic => _isLoadingMusic;
   List<MusicGroupType> _listTypes = [];
@@ -104,6 +102,7 @@ class PreviewContentNotifier with ChangeNotifier {
   PersistentBottomSheetController? _persistentBottomSheetController;
   final TransformationController _transformationController = TransformationController();
   var audioPlayer = AudioPlayer();
+  var audioPreviewPlayer = AudioPlayer();
   final searchController = TextEditingController();
   var scrollController = ScrollController();
   var scrollExpController = ScrollController();
@@ -140,11 +139,6 @@ class PreviewContentNotifier with ChangeNotifier {
 
   set isLoadVideo(bool val){
     _isLoadVideo = val;
-    notifyListeners();
-  }
-
-  set isLoadMerge(bool val){
-    _isLoadMerge = val;
     notifyListeners();
   }
 
@@ -356,6 +350,22 @@ class PreviewContentNotifier with ChangeNotifier {
     return isNoData;
   }
 
+  void resumeAudioPreview(){
+    try{
+      audioPreviewPlayer.resume();
+    }catch(e){
+      e.logger();
+    }
+  }
+
+  void pauseAudioPreview(){
+    try{
+      audioPreviewPlayer.pause();
+    }catch(e){
+      e.logger();
+    }
+  }
+
   void onScrollExpMusics(BuildContext context, )async{
     if(scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange){
       if(!_isLoadNextExpMusic){
@@ -560,100 +570,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void imageMerger(BuildContext context, String urlAudio, int duration) async{
-    final tempPath = _fileContent?[_indexView];
-    try{
-      if(urlAudio.isNotEmpty){
-        _isLoadMerge = true;
-        notifyListeners();
-        String tempVideoPath = await System().getSystemPath(params: 'tempVid');
-        tempVideoPath = '${tempVideoPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-        String outputPath = await System().getSystemPath(params: 'postPic');File image = File(_fileContent?[_indexView] ?? ''); // Or any other way to get a File instance.
-        final decodedImage = await decodeImageFromList(image.readAsBytesSync());
-        print('real image : ${decodedImage.height}:${decodedImage.width}');
-        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-        double heightImage = decodedImage.height.toDouble();
-        double widthImage = decodedImage.width.toDouble();
-        const maxScale = 1080;
-        var multiValue = 1.0;
-        if(heightImage > maxScale || widthImage > maxScale){
-
-          if(heightImage > maxScale && widthImage > maxScale){
-            if(heightImage > widthImage){
-              multiValue = maxScale/heightImage;
-            }else{
-              multiValue = maxScale/widthImage;
-            }
-          }else if(heightImage > maxScale){
-            multiValue = maxScale/heightImage;
-          }else if(widthImage> maxScale){
-            multiValue = maxScale/widthImage;
-          }
-        }
-        String command = '-framerate 1 -i ${_fileContent?[_indexView]} -r 30 -pix_fmt yuv420p -vf scale=${decodedImage.width/multiValue}:${decodedImage.height/multiValue} -c:v mpeg4 $tempVideoPath';
-        await FFmpegKit.executeAsync(command, (session) async{
-          final codeSession = await session.getReturnCode();
-          if(ReturnCode.isSuccess(codeSession)){
-            print('ReturnCode = Success');
-            command = '-stream_loop -1 -i $tempVideoPath -i $urlAudio -shortest -c:v mpeg4 $outputPath';
-            await FFmpegKit.executeAsync(command, (session) async{
-              final codeSession = await session.getReturnCode();
-              if(ReturnCode.isSuccess(codeSession)){
-                final path = _fileContent?[_indexView] ?? '';
-                print('URL now : $path');
-                print('URL default 2 : $_defaultPath');
-                _fileContent?[_indexView] = outputPath;
-                _url = fileContent?[_indexView];
-                _isLoadMerge = false;
-                _sourceFile = SourceFile.local;
-                _betterPlayerController = null;
-                _defaultPath = path;
-                notifyListeners();
-              }else if(ReturnCode.isCancel(codeSession)){
-                print('ReturnCode = Cancel');
-                _isLoadMerge = false;
-                notifyListeners();
-                throw 'Merge picture is canceled';
-                // Cancel
-              }else{
-                print('ReturnCode = Error');
-                _isLoadMerge = false;
-                notifyListeners();
-                throw 'Merge picture is error';
-                // Error
-              }
-
-            }, (log){
-              print('FFmpegKit Image ${log.getMessage()}');
-            },);
-
-          }else if(ReturnCode.isCancel(codeSession)){
-            print('ReturnCode = Cancel');
-            _isLoadMerge = false;
-            notifyListeners();
-            throw 'Merge picture is canceled';
-            // Cancel
-          }else{
-            print('ReturnCode = Error');
-            _isLoadMerge = false;
-            notifyListeners();
-            throw 'Merge picture is error';
-            // Error
-          }
-
-        }, (log){
-          print('FFmpegKit Image ${log.getMessage()}');
-        },);
-      }
-    }catch(e){
-      'imageMerger Error : $e'.logger();
-      _isLoadMerge = false;
-      notifyListeners();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }
-  }
-
-  Future<void> videoMerger(BuildContext context, String urlAudio) async{
+  Future<void> videoMerger(BuildContext context, String urlAudio, {isInit = false}) async{
     try{
       if(urlAudio.isNotEmpty){
         _isLoadVideo = true;
@@ -666,7 +583,7 @@ class PreviewContentNotifier with ChangeNotifier {
           final codeSession = await session.getReturnCode();
           if(ReturnCode.isSuccess(codeSession)){
             print('ReturnCode = Success');
-            await restartVideoPlayer(outputPath, context);
+            await restartVideoPlayer(outputPath, context, isInit: isInit);
           }else if(ReturnCode.isCancel(codeSession)){
             print('ReturnCode = Cancel');
             _isLoadVideo = false;
@@ -698,7 +615,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   }
 
-  Future restartVideoPlayer(String outputPath, BuildContext context) async {
+  Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
     final path = _fileContent?[_indexView] ?? '';
     print('URL now : $path');
     print('URL default 2 : $_defaultPath');
@@ -707,7 +624,9 @@ class PreviewContentNotifier with ChangeNotifier {
     _sourceFile = SourceFile.local;
     _betterPlayerController = null;
     notifyListeners();
-    initVideoPlayer(context);
+    if(isInit){
+      initVideoPlayer(context);
+    }
     if(path.isNotEmpty){
       if(path != _defaultPath){
         await File(path).delete();
@@ -715,32 +634,36 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
+  // void setReloadVid()async{
+  //   isLoadVideo = true;
+  //   // await restartVideoPlayer(_fileContent?[_indexView] ?? _defaultPath ?? '', materialAppKey.currentContext!);
+  //   Future.delayed(const Duration(milliseconds: 500),() {
+  //     print('state setReloadVid $isLoadVideo');
+  //     isLoadVideo = false;
+  //     print('state setReloadVid $isLoadVideo');
+  //   });
+  // }
+
   void setDefaultVideo(BuildContext context) async{
     try{
       _isLoadVideo = true;
       notifyListeners();
-      if(_defaultPath != null){
-        final _isImage = (_defaultPath ?? '').isImageFormat();
-        if(_isImage){
-          final path = _fileContent?[_indexView] ?? '';
-          _fileContent?[_indexView] = _defaultPath;
-          _betterPlayerController = null;
-          notifyListeners();
-          if(path.isNotEmpty){
-            if(path != _defaultPath){
-              await File(path).delete();
-            }
-          }
-        }else{
+      final _isImage = (_fileContent?[_indexView] ?? '').isImageFormat();
+      if(_isImage){
+        _selectedMusic = null;
+        _fixSelectedMusic = null;
+        notifyListeners();
+      }else{
+        if(_defaultPath != null){
           await restartVideoPlayer(_defaultPath!, context);
           _selectedMusic = null;
           _fixSelectedMusic = null;
           notifyListeners();
+        }else{
+          throw 'defaultPath is null';
         }
-
-      }else{
-        throw 'defaultPath is null';
       }
+
     }catch(e){
       e.logger();
       ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
@@ -931,6 +854,11 @@ class PreviewContentNotifier with ChangeNotifier {
     );
     print('_url : $_url');
     if(isSaveDefault){
+      _fixSelectedMusic = null;
+      _selectedMusic = null;
+      _currentMusic = null;
+      _selectedType = null;
+      notifyListeners();
       final _isImage = (_defaultPath ?? '').isImageFormat();
       if(!_isImage){
         _defaultPath = _url;
@@ -1037,6 +965,7 @@ class PreviewContentNotifier with ChangeNotifier {
     _currentMusic = null;
     _selectedType = null;
     _showNext = false;
+    notifyListeners();
     if (_isSheetOpen) closeFilters();
     clearAdditionalItem();
     if (context.read<OverlayHandlerProvider>().overlayActive) {
