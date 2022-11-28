@@ -63,13 +63,15 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                       controller: _pageController,
                       itemCount: notifier.dataUserStories.length,
                       onPageChanged: (index) async{
-                        if(index == (notifier.dataUserStories.length - 1)){
-                          final values = await notifier.myContentsQuery.loadNext(context, isLandingPage: true);
-                          if(values.isNotEmpty){
-                            notifier.dataUserStories = [...(notifier.dataUserStories)] + values;
+                        if(notifier.dataUserStories.length > 5){
+                          if(index == (notifier.dataUserStories.length - 1)){
+                            final values = await notifier.myContentsQuery.loadNext(context, isLandingPage: true);
+                            if(values.isNotEmpty){
+                              notifier.dataUserStories = [...(notifier.dataUserStories)] + values;
+                            }
+                            final prev = context.read<PreviewStoriesNotifier>();
+                            prev.initialPeopleStories(context, list: values);
                           }
-                          final prev = context.read<PreviewStoriesNotifier>();
-                          prev.initialPeopleStories(context, list: values);
                         }
                       },
                       itemBuilder: (context, index) {

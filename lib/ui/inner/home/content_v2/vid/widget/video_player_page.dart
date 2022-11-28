@@ -441,6 +441,17 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                       ),
                                     );
                                   },
+                                  emptyWidget: Container(
+                                    width: 27,
+                                    height: 27,
+                                    decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 sixteenPx,
                                 Column(

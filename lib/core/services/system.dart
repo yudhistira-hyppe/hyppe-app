@@ -53,6 +53,7 @@ import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../../app.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 
 class System {
@@ -1108,6 +1109,7 @@ class System {
   }
 
   Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
+
     return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
   }
 

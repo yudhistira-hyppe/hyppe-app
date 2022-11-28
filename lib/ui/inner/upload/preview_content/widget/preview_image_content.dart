@@ -26,6 +26,9 @@ class PreviewImageContent extends StatefulWidget {
 }
 
 class _PreviewImageContentState extends State<PreviewImageContent> {
+
+
+
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<PreviewContentNotifier>(context);
@@ -288,5 +291,13 @@ class _PreviewImageContentState extends State<PreviewImageContent> {
       },
       transformationController: notifier.transformationController,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final notifier = context.read<PreviewContentNotifier>();
+    notifier.selectedMusic = null;
+    notifier.fixSelectedMusic = null;
   }
 }

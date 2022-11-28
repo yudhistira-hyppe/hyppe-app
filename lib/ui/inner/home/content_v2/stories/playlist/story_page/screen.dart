@@ -346,7 +346,8 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 ),
                 widget.data?.isReport ?? false
                     ? Container()
-                    : Form(
+                    : Align(
+                  alignment: Alignment.bottomCenter,
                         child: BuildBottomView(
                           data: widget.data,
                           storyController: _storyController,

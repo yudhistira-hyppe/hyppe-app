@@ -77,6 +77,16 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                       ),
                     );
                   },
+                  emptyWidget: Container(
+                    width: 48,
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.contain,
+                        image: AssetImage('${AssetPath.vectorPath}ic_music.svg'),
+                      ),
+                    ),
+                  ),
                 ),
                 twelvePx,
                 Column(

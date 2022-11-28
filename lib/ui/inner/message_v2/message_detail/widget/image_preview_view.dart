@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 
+import '../../../../../core/constants/asset_path.dart';
+
 class ImagePreviewView extends StatelessWidget {
   final ImagePreviewArgument argument;
 
@@ -58,6 +60,15 @@ class ImagePreviewView extends StatelessWidget {
                                 );
                               },
                               imageUrl: argument.sourceImage,
+                              emptyWidget: Container(
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),

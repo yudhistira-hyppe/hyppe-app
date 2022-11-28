@@ -74,6 +74,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _isKeyboardActive = false;
   bool _linkCopied = false;
   bool _forceStop = false;
+  bool _isLoadMusic = true;
+  String? _urlMusic;
   double? _currentPage = 0;
   Timer? _searchOnStoppedTyping;
   Color? _sendButtonColor;
@@ -92,6 +94,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool get isKeyboardActive => _isKeyboardActive;
   bool get linkCopied => _linkCopied;
   bool get forceStop => _forceStop;
+  bool get isLoadMusic => _isLoadMusic;
+  String? get urlMusic => _urlMusic;
   double? get currentPage => _currentPage;
   Color? get buttonColor => _sendButtonColor;
   PageController? get pageController => _pageController;
@@ -125,6 +129,15 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   set forceStop(bool val) {
     _forceStop = val;
+    notifyListeners();
+  }
+
+  set isLoadMusic(bool state){
+    _isLoadMusic = state;
+  }
+
+  set urlMusic(String? val){
+    _urlMusic = val;
     notifyListeners();
   }
 
@@ -199,6 +212,48 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
     animationController.reset();
     animationController.forward();
+  }
+
+  void initMusic(BuildContext context, String apsaraId) async{
+    try {
+      isLoadMusic = true;
+      notifyListeners();
+      if(apsaraId.isNotEmpty){
+        final url = await _getAdsVideoApsara(context, apsaraId);
+        if(url != null){
+          _urlMusic = url;
+          notifyListeners();
+        }else{
+          throw 'url music is null';
+        }
+      }else{
+        throw 'apsaramusic is empty';
+      }
+      isLoadMusic = false;
+      notifyListeners();
+    }catch(e){
+      "Error Init Video $e".logger();
+      isLoadMusic = false;
+      notifyListeners();
+    }
+  }
+
+  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        return jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
   }
 
   // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {

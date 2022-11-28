@@ -43,7 +43,13 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
       if (widget.url.isNotEmpty && widget.data.adsId != null) {
         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
         if (!isShowAds) {
+          if(globalAudioPlayer != null){
+            globalAudioPlayer!.pause();
+          }
           await System().adsPopUp(materialAppKey.currentContext!, widget.data, widget.url);
+          if(globalAudioPlayer != null){
+            globalAudioPlayer!.resume();
+          }
         }
       }
     });
@@ -92,6 +98,14 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
               ),
             );
           },
+          emptyWidget: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+              ),
+            ),
+          ),
         ),
       ),
     );

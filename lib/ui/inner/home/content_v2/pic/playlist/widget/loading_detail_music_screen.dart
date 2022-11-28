@@ -28,7 +28,7 @@ class _LoadingDetailMusicScreenState extends State<LoadingDetailMusicScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration(milliseconds: 500), (){
+    Future.delayed(const Duration(milliseconds: 500), (){
       final notifier = context.read<PicDetailNotifier>();
       notifier.urlMusic = '';
       if(globalAudioPlayer != null){

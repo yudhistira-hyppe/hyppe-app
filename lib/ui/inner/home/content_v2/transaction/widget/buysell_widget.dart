@@ -158,6 +158,15 @@ class BuySellWidget extends StatelessWidget {
                             ),
                           );
                         },
+                        emptyWidget: Container(
+                          height: 50,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.contain,
+                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                     sixPx,

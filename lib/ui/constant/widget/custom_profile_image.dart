@@ -55,6 +55,19 @@ class CustomProfileImage extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
+        emptyWidget: Container(
+          width: width,
+          height: height,
+          child: _buildBody(),
+          alignment: Alignment.bottomCenter,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+            ),
+            shape: BoxShape.circle,
+          ),
+        ),
       ),
     );
   }

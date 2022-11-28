@@ -120,6 +120,14 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                                   ),
                                 );
                               },
+                              emptyWidget: Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.contain,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -271,6 +279,17 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                                 ),
                               );
                             },
+                            emptyWidget: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            ),
                           ),
                           twelvePx,
                           Column(

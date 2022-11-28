@@ -7,6 +7,8 @@ import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 
+import '../../../../../core/constants/asset_path.dart';
+
 class ContentMessageLayout extends StatelessWidget {
   final DisqusLogs? message;
 
@@ -43,6 +45,15 @@ class ContentMessageLayout extends StatelessWidget {
               );
             },
             imageUrl: message?.content.first.fullThumbPath,
+            emptyWidget: Container(
+            height: 50,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+              ),
+            ),
+          ),
           ),
         ),
       ),

@@ -20,6 +20,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 
+import '../../../../../../../app.dart';
 import '../../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../../core/services/shared_preference.dart';
@@ -180,7 +181,13 @@ class _DiaryPageState extends State<DiaryPage> {
 
                               if (!isShowAds) {
                                 _storyController.pause();
+                                if(globalAudioPlayer != null){
+                                  globalAudioPlayer!.pause();
+                                }
                                 await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
+                                if(globalAudioPlayer != null){
+                                  globalAudioPlayer!.resume();
+                                }
                                 _storyController.play();
                               }
                             }
