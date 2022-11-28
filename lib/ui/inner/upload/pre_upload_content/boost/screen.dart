@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -59,6 +60,7 @@ class BoostUploadScreen extends StatelessWidget {
                           ),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               notifier.isEdit
                                   ? Container(
@@ -144,11 +146,15 @@ class BoostUploadScreen extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Text(
-                                    notifier.captionController.text,
-                                    style: Theme.of(context).textTheme.caption?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                  SizedBox(
+                                    width: SizeConfig.screenWidth! * 0.55,
+                                    child: Text(
+                                      notifier.captionController.text,
+                                      style: Theme.of(context).textTheme.caption?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                      maxLines: 4,
+                                    ),
                                   ),
                                 ],
                               )

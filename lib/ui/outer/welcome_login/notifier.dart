@@ -251,6 +251,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'false');
       SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
+      print('iduser');
+      print(signData.idUser);
+      print(SharedPreference().readStorage(SpKeys.userID));
       DeviceBloc().activityAwake(context);
       Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {

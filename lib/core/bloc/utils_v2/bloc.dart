@@ -380,7 +380,7 @@ class UtilsBlocV2 {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostError));
+          setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostError, data: onResult.data));
         } else {
           setUtilsFetch(UtilsFetch(UtilsState.getMasterBoostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }

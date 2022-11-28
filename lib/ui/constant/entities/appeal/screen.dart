@@ -26,7 +26,7 @@ class _AppealScreenState extends State<AppealScreen> {
   @override
   void initState() {
     final noti = Provider.of<AppealNotifier>(context, listen: false);
-    noti.initializeData(context);
+    noti.initializeData(context, widget.data);
     noti.appealReason = '';
     super.initState();
   }
@@ -80,6 +80,7 @@ class _AppealScreenState extends State<AppealScreen> {
                 OnjectContentWidget(
                   data: widget.data,
                   cat: notifier.getCategory(widget.data.cats),
+                  reason: notifier.reason,
                 ),
                 twentyFourPx,
                 const Divider(
@@ -165,7 +166,7 @@ class _AppealScreenState extends State<AppealScreen> {
                         : notifier.appealReason == ''
                             ? null
                             : () {
-                                notifier.appealPost(context, widget.data.postID ?? '');
+                                notifier.appealPost(context, widget.data);
                               },
                     style: ButtonStyle(backgroundColor: notifier.appealReason == '' ? MaterialStateProperty.all(kHyppeDisabled) : MaterialStateProperty.all(kHyppePrimary)),
                     child: notifier.loadingAppel

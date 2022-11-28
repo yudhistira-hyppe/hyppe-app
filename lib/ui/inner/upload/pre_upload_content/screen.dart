@@ -152,6 +152,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                           twentyFourPx,
                           CustomElevatedButton(
                             function: () {
+                              print('asdasd');
                               notifier.paymentMethod(context);
                             },
                             width: 375.0 * SizeConfig.scaleDiagonal,
@@ -597,16 +598,18 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget boostWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        if (!notifier.certified) {
-          System().actionReqiredIdCard(context, action: () {
-            notifier.navigateToBoost(context);
-          });
-        } else {
-          notifier.navigateToBoost(context);
-        }
-      },
+      onTap: notifier.editData?.isBoost != null
+          ? null
+          : () {
+              FocusScope.of(context).unfocus();
+              if (!notifier.certified) {
+                System().actionReqiredIdCard(context, action: () {
+                  notifier.navigateToBoost(context);
+                });
+              } else {
+                notifier.navigateToBoost(context);
+              }
+            },
       title: CustomTextWidget(
         textToDisplay: notifier.language.postBoost ?? 'Post Boost',
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
@@ -617,7 +620,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextWidget(
-            textToDisplay: notifier.boostContent != null ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '') : notifier.language.no ?? 'no',
+            textToDisplay: notifier.editData?.isBoost != null
+                ? notifier.language.yes ?? ''
+                : notifier.boostContent != null
+                    ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
+                    : notifier.language.no ?? 'no',
             textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
           ),
           twentyPx,

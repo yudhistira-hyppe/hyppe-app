@@ -16,9 +16,9 @@ class SearchContentBloc {
 
   Future getSearchContent(BuildContext context, {String? keys, int skip = 0, int limit = 10}) async {
     String email = SharedPreference().readStorage(SpKeys.email);
-    var req = {"keys": keys, "skip": skip, "limit": limit};
-    if(keys?.isEmpty ?? true){
-      req = {"skip": skip, "limit": limit};
+    var req = {"email": email, "keys": keys, "skip": skip, "limit": limit};
+    if (keys?.isEmpty ?? true) {
+      req = {"email": email, "skip": skip, "limit": limit};
     }
     await Repos().reposPost(
       context,

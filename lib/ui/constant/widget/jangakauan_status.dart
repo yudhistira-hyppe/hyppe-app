@@ -10,7 +10,8 @@ import 'package:provider/provider.dart';
 
 class JangkaunStatus extends StatelessWidget {
   final int jangkauan;
-  const JangkaunStatus({Key? key, this.jangkauan = 0}) : super(key: key);
+  final bool isDiary;
+  const JangkaunStatus({Key? key, this.jangkauan = 0, this.isDiary = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,23 +22,32 @@ class JangkaunStatus extends StatelessWidget {
       ),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        margin: isDiary ? const EdgeInsets.all(0) : const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: kHyppeLightInactive1,
+          color: isDiary ? Colors.black.withOpacity(0.3) : kHyppeLightInactive1,
         ),
         width: SizeConfig.screenWidth,
         child: Row(
           children: [
-            const CustomIconWidget(iconData: "${AssetPath.vectorPath}reach-fill.svg"),
+            CustomIconWidget(
+              iconData: "${AssetPath.vectorPath}reach-fill.svg",
+              defaultColor: false,
+              color: isDiary ? Colors.white : kHyppeLightIcon,
+            ),
             sixPx,
             RichText(
-                text: TextSpan(text: "${System().formatterNumber(jangkauan)} ", style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700), children: [
-              TextSpan(
-                text: "${language.reach}",
-                style: Theme.of(context).textTheme.subtitle2?.copyWith(),
-              ),
-            ])),
+                text: TextSpan(
+                    text: "${System().formatterNumber(jangkauan)} ",
+                    style: isDiary
+                        ? Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700)
+                        : Theme.of(context).primaryTextTheme.subtitle2?.copyWith(fontWeight: FontWeight.w700),
+                    children: [
+                  TextSpan(
+                    text: "${language.reach}",
+                    style: isDiary ? Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white) : Theme.of(context).textTheme.subtitle2?.copyWith(),
+                  ),
+                ])),
           ],
         ),
       ),

@@ -766,5 +766,10 @@
   "toContinueTheBoostPostProcess" : "Untuk melanjutkan proses boost post, kamu harus mengubah privasi postingan kamu terlebih dahulu. Beralih lah menjadi postingan publik terlebih dahulu.",
   "otherPostsInProcessOfPayment" : "Postingan Lain Dalam Proses Pembayaran",
   "thePostisintheProcessofPayment" : "Postingan sedang dalam proses pembayaran, harap selesaikan pembayaran terlebih dahulu untuk melanjutkan. ",
-  "viewPaymentStatus" : "Lihat Status Pembayaran"
+  "viewPaymentStatus" : "Lihat Status Pembayaran",
+  "appealsReceived" : "Banding diterima",
+  "weWillSendYouaNotificationasSoonasweHaveanUpdate" : "Kami akan mengirimkan pemberitahuan kepada Anda segera setelah kami memiliki pembaruan",
+  "sensitiveContent" : "Konten Sensitif",
+  "ContentContainsSensitiveMaterial" : "konten berisi materi sensitif yang mungkin dianggap menyinggung atau mengganggu oleh sebagian orang"
+
 }

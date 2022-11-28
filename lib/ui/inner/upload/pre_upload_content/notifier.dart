@@ -30,7 +30,6 @@ import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
-import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -364,10 +363,10 @@ class PreUploadContentNotifier with ChangeNotifier {
   void setDefaultFileContent(BuildContext context) {
     final notifierPre = context.read<PreviewContentNotifier>();
     final isPic = _fileContent?[0]?.isImageFormat();
-    if(isPic ?? false){
+    if (isPic ?? false) {
       _musicSelected = null;
       notifierPre.fixSelectedMusic = null;
-    }else{
+    } else {
       _musicSelected = null;
       notifierPre.fixSelectedMusic = null;
       final index = notifierPre.indexView;
@@ -540,7 +539,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     _userTagData = [];
     _privacyTitle = '';
     musicSelected = null;
-
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
@@ -556,14 +554,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoost = '';
     _tmpBoostTime = '';
     tmpBoostInterval = '';
+    editData = null;
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    if(isDisposeVid){
+    if (isDisposeVid) {
       notifier.defaultPath = null;
-      if(notifier.betterPlayerController != null){
+      if (notifier.betterPlayerController != null) {
         notifier.betterPlayerController!.dispose();
       }
     }
-
   }
 
   Future _createPostContentV2() async {
@@ -634,8 +632,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         eventService.notifyUploadSuccess(_uploadSuccess);
         final decode = json.decode(_uploadSuccess.toString());
         _postIdPanding = decode['data']['postID'];
-        print('ini boost content');
-        print(_boostContent);
         if (_boostContent != null) _boostContentBuy(context);
       });
       if (_boostContent == null) clearUpAndBackToHome(context);
@@ -1275,25 +1271,32 @@ class PreUploadContentNotifier with ChangeNotifier {
     final notifier = UtilsBlocV2();
     await notifier.getMasterBoost(context);
     final fetch = notifier.utilsFetch;
+    int toTransaktion = 1;
 
     if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
       boostMasterData = BoostMasterModel.fromJson(fetch.data);
       if (boostMasterData?.pendingTransaction == 1) {
         Routing().moveBack();
-        await ShowBottomSheet().onShowColouredSheet(context, language.otherPostsInProcessOfPayment ?? '',
-            subCaption: language.thePostisintheProcessofPayment,
-            subCaptionButton: language.viewPaymentStatus,
-            color: kHyppeRed,
-            iconSvg: '${AssetPath.vectorPath}remove.svg',
-            maxLines: 10, functionSubCaption: () {
-          Routing().moveAndPop(Routes.transaction);
-          Routing().moveBack();
-          Routing().moveBack();
-          Routing().moveBack();
-          Routing().moveBack();
-          _onExit();
-        });
-        Routing().move(Routes.transaction);
+
+        await ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.otherPostsInProcessOfPayment ?? '',
+          subCaption: language.thePostisintheProcessofPayment,
+          subCaptionButton: language.viewPaymentStatus,
+          color: kHyppeRed,
+          iconSvg: '${AssetPath.vectorPath}remove.svg',
+          maxLines: 10,
+          functionSubCaption: () {
+            toTransaktion = 2;
+            Routing().moveAndPop(Routes.transaction);
+            // Routing().moveBack();
+            // Routing().moveBack();
+            // Routing().moveBack();
+            // Routing().moveBack();
+            // _onExit();
+          },
+        );
+        if (toTransaktion == 1) Routing().move(Routes.transaction);
       }
       _isLoading = false;
       notifyListeners();
@@ -1388,8 +1391,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future paymentMethod(context) async {
+    print('asdasdasdasdasd');
     // _createPostContentV2();
-    print(_boostContent);
+    // print(_boostContent);
     if (_validateDescription() && _validateCategory()) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
       Routing().move(Routes.paymentMethodScreen, argument: TransactionArgument(totalAmount: _boostContent?.priceTotal));
@@ -1436,12 +1440,18 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (fetch.utilsState == UtilsState.getMasterBoostError) {
         isLoading = false;
         var errorData = ErrorModel.fromJson(fetch.data);
-        ShowBottomSheet().onShowColouredSheet(context, '${errorData.message}', color: kHyppeDanger);
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          errorData.message ?? '',
+          maxLines: 2,
+          iconSvg: "${AssetPath.vectorPath}remove.svg",
+          color: kHyppeDanger,
+        );
       } else if (fetch.utilsState == UtilsState.getMasterBoostSuccess) {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {
           Routing().moveAndPop(Routes.boostPaymentSummary);
-          context.read<MainNotifier>().startTimer();
+          // context.read<MainNotifier>().startTimer();
         });
         _isLoading = false;
       }

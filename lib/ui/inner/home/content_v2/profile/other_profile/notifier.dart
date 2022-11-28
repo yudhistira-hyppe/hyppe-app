@@ -11,6 +11,7 @@ import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/utils.dart';
 // import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -76,19 +77,13 @@ class OtherProfileNotifier with ChangeNotifier {
   bool _isCheckLoading = false;
   bool get isCheckLoading => _isCheckLoading;
 
-  int get vidCount => vidContentsQuery.hasNext
-      ? (user.vids?.length ?? 0) + 2
-      : (user.vids?.length ?? 0);
+  int get vidCount => vidContentsQuery.hasNext ? (user.vids?.length ?? 0) + 2 : (user.vids?.length ?? 0);
   bool get vidHasNext => vidContentsQuery.hasNext;
 
-  int get diaryCount => diaryContentsQuery.hasNext
-      ? (user.diaries?.length ?? 0) + 2
-      : (user.diaries?.length ?? 0);
+  int get diaryCount => diaryContentsQuery.hasNext ? (user.diaries?.length ?? 0) + 2 : (user.diaries?.length ?? 0);
   bool get diaryHasNext => diaryContentsQuery.hasNext;
 
-  int get picCount => picContentsQuery.hasNext
-      ? (user.pics?.length ?? 0) + 2
-      : (user.pics?.length ?? 0);
+  int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
 
   setReportPeople(UserInfoModel val) => _user = val;
@@ -137,6 +132,8 @@ class OtherProfileNotifier with ChangeNotifier {
     _isCheckLoading = val;
     notifyListeners();
   }
+
+  void onUpdate() => notifyListeners();
 
   String displayUserName() => user.profile != null
       ? "@" + (user.profile?.username ?? '')
@@ -399,6 +396,38 @@ class OtherProfileNotifier with ChangeNotifier {
       'load following request list: ERROR: $e'.logger();
       isCheckLoading = false;
     }
+    notifyListeners();
+  }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    ContentData? _updatedData;
+    ContentData? _updatedData2;
+
+    switch (content) {
+      case hyppeVid:
+        _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    print('show other profil');
+    print(_updatedData);
+
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = '';
+    }
+    if (_updatedData2 != null) {
+      _updatedData2.reportedStatus = '';
+    }
+
     notifyListeners();
   }
 }

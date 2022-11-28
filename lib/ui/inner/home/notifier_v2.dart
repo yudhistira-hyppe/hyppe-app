@@ -119,10 +119,10 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future initHome(BuildContext context) async{
+  Future initHome(BuildContext context) async {
     print('init Home');
     bool isConnected = await System().checkConnections();
-    if(isConnected){
+    if (isConnected) {
       _isLoadingVid = true;
       _isLoadingDiary = true;
       _isLoadingPict = true;
@@ -171,8 +171,7 @@ class HomeNotifier with ChangeNotifier {
       }
 
       notifyListeners();
-
-    }else{
+    } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();
         onRefresh(context, 'PUBLIC');
@@ -269,7 +268,6 @@ class HomeNotifier with ChangeNotifier {
       return AllContents(story: [], video: [], diary: [], pict: []);
     }
   }
-
 
   void onDeleteSelfPostContent(BuildContext context, {required String postID, required String content}) {
     final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
@@ -444,6 +442,46 @@ class HomeNotifier with ChangeNotifier {
     //   _updatedData2.delete();
     //   _updatedData2.isReport = isReport;
     // }
+
+    notifyListeners();
+  }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    ContentData? _updatedData;
+    ContentData? _updatedData2;
+    final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
+    final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
+    final pic2 = Provider.of<SlidedPicDetailNotifier>(context, listen: false);
+    final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+
+    switch (content) {
+      case hyppeVid:
+        _updatedData = vid.vidData?.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        pic.pic?.removeWhere((element) => element.postID == postID);
+        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
+        _updatedData2 = pic2.data;
+        break;
+      case hyppeStory:
+        _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = '';
+    }
+    if (_updatedData2 != null) {
+      _updatedData2.reportedStatus = '';
+    }
 
     notifyListeners();
   }

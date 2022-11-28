@@ -52,7 +52,7 @@ class PicDetailSlider extends StatelessWidget {
               onPageChanged: print,
               itemBuilder: (context, index) => InkWell(
                 child: Center(
-                  child: picData?.isReport ?? false
+                  child: picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
                       ? PichTumbnailReport(pictData: picData)
                       : CustomThumbImage(
                           boxFit: BoxFit.cover,
@@ -82,8 +82,8 @@ class PicDetailSlider extends StatelessWidget {
                         ),
                       ),
                     ),
-                    picData?.isReport ?? false
-                        ? Container()
+                    picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
+                        ? SizedBox()
                         : Row(
                             children: [
                               (picData?.saleAmount ?? 0) > 0
@@ -141,7 +141,7 @@ class PicDetailSlider extends StatelessWidget {
               ),
             ),
 
-            picData?.isReport ?? false
+            picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
                 ? Container()
                 : Align(
                     alignment: Alignment.bottomLeft,

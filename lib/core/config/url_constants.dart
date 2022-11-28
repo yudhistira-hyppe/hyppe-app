@@ -522,6 +522,7 @@ class UrlConstants {
   //==========report============
   static const String getOptionReport = "/api/reportreasons/all";
   static const String insertReport = "/api/reportuser/create";
+  static const String detailTypeAppeal = "/api/reportuser/detailreason";
 
   static const String appealPost = "/api/reportuser/appeal";
   static const String createTicket = "/api/usertickets/createticket";

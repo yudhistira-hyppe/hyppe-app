@@ -9,6 +9,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/buy_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/buy_response.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -150,7 +151,17 @@ class PaymentMethodNotifier extends ChangeNotifier {
       if (fetch.postsState == BuyState.postContentsError) {
         isLoading = false;
         var errorData = ErrorModel.fromJson(fetch.data);
-        _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
+        print('error');
+        print(errorData);
+        print(errorData.message);
+        // _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          errorData.message ?? '',
+          maxLines: 2,
+          iconSvg: "${AssetPath.vectorPath}remove.svg",
+          color: kHyppeDanger,
+        );
       } else if (fetch.postsState == BuyState.postContentsSuccess) {
         BuyResponse? res = BuyResponse.fromJson(fetch.data);
         postResponse = res;

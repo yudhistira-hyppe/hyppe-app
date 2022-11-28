@@ -194,13 +194,13 @@ class Repos {
                 alertMessage = _language.alreadyRegistered ?? '';
               }
             }
-            _showSnackBar(kHyppeDanger, alertMessage, "");
+            _showSnackBar(context, kHyppeDanger, alertMessage, "");
           }
         } else {
           print('dadasdasd');
           if (withAlertMessage) {
-            // _showSnackBar(kHyppeDanger, _language.unfortunately, "${_errorData.message}");
-            _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+            // _showSnackBar(context, kHyppeDanger, _language.unfortunately, "${_errorData.message}");
+            _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
 
           dataError['log'] = 'Error detail with no alertMessage ${_errorData.message.toString()} and host $host and paramdata $data';
@@ -223,7 +223,7 @@ class Repos {
           }
 
           if (withAlertMessage) {
-            _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+            _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
         } else {
           'Success with message in host $host with status code ${_response.statusCode}'.logger();
@@ -245,7 +245,7 @@ class Repos {
         //     error: e,
         //   ),
         // );
-        // _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        // _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
       dataError['log'] = 'Error detail in DioError catch ${e.message.toString()} with status code ${e.response?.statusCode}, and host $host and paramdata $data';
       // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
@@ -262,7 +262,7 @@ class Repos {
         eIn.toString().logger();
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       } else {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
@@ -297,27 +297,35 @@ class Repos {
     // );
   }
 
-  void _showSnackBar(Color color, String message, String desc, {Function? function}) {
-    _routing.showSnackBar(
-      snackBar: SnackBar(
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        behavior: SnackBarBehavior.floating,
-        content: SafeArea(
-          child: SizedBox(
-            height: 56,
-            child: OnColouredSheet(
-              maxLines: 2,
-              caption: message,
-              subCaption: desc,
-              fromSnackBar: true,
-              iconSvg: "${AssetPath.vectorPath}remove.svg",
-              function: function,
-            ),
-          ),
-        ),
-        backgroundColor: color,
-      ),
+  void _showSnackBar(BuildContext context, Color color, String message, String desc, {Function? function}) {
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      message,
+      subCaption: desc,
+      iconSvg: "${AssetPath.vectorPath}remove.svg",
+      maxLines: 2,
+      color: color,
     );
+    // _routing.showSnackBar(
+    //   snackBar: SnackBar(
+    //     margin: EdgeInsets.zero,
+    //     padding: EdgeInsets.zero,
+    //     behavior: SnackBarBehavior.floating,
+    //     content: SafeArea(
+    //       child: SizedBox(
+    //         height: 56,
+    //         child: OnColouredSheet(
+    //           maxLines: 2,
+    //           caption: message,
+    //           subCaption: desc,
+    //           fromSnackBar: true,
+    //           iconSvg: "${AssetPath.vectorPath}remove.svg",
+    //           function: function,
+    //         ),
+    //       ),
+    //     ),
+    //     backgroundColor: color,
+    //   ),
+    // );
   }
 }

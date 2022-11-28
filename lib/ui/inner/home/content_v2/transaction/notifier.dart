@@ -262,7 +262,7 @@ class TransactionNotifier extends ChangeNotifier {
     if (connect) {
       try {
         String email = SharedPreference().readStorage(SpKeys.email);
-        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, "status": "WAITING_PAYMENT", "skip": _skip, "limit": _limit};
+        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, "status": "WAITING_PAYMENT", "boost": false, "skip": _skip, "limit": _limit};
         final notifier = TransactionBloc();
         await notifier.getHistoryTransaction(context, params: param);
         final fetch = notifier.transactionFetch;

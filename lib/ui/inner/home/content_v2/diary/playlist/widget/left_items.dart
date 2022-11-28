@@ -4,6 +4,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 import 'package:readmore/readmore.dart';
@@ -136,7 +137,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                   ),
                 )
               : Container(),
-
+          widget.data?.isBoost != null && widget.data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: widget.data?.boostJangkauan ?? 0) : Container(),
           if (widget.music != null) MusicStatusPage(music: widget.music!)
 
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),

@@ -13,6 +13,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
+import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/loading_music_screen.dart';
@@ -105,10 +106,10 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     onPageChanged: (value) async {
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
                       notifier.isLoadMusic = true;
-                      if(value == ((notifier.listData?.length ?? 0) - 1)){
+                      if (value == ((notifier.listData?.length ?? 0) - 1)) {
                         print('onPageChanged Image : masuk');
                         final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
-                        if(values.isNotEmpty){
+                        if (values.isNotEmpty) {
                           notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;
                         }
                         final prev = context.read<PreviewPicNotifier>();
@@ -117,24 +118,21 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                       await notifier.initAdsVideo(context);
                     },
                     itemBuilder: (context, indexRoot) {
-
                       return PageView.builder(
                           controller: _mainPageController,
                           itemCount: 2,
                           scrollDirection: Axis.vertical,
-                          onPageChanged: (verticalIndex){
-                            if(verticalIndex == 0){
+                          onPageChanged: (verticalIndex) {
+                            if (verticalIndex == 0) {
                               notifier.isLoadMusic = true;
-                            }else{
+                            } else {
                               final detailNotifier = context.read<PicDetailNotifier>();
                               detailNotifier.isLoadMusic = true;
                             }
-
                           },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];
                             if (data != null) {
-
                               return indexPage == 0
                                   ? Stack(
                                       children: [
@@ -146,17 +144,42 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                           thumbnail: (data.isApsara ?? false) ? data.mediaThumbUri : data.fullThumbPath,
                                         ),
                                         // Content
-                                        data.isReport ?? false
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
                                             ? Container()
-                                            : notifier.isLoadMusic ? LoadingMusicScreen(apsaraMusic: data.music?.apsaraMusic ?? ''): PicPlaylishScreen(
-                                            data: notifier.adsData,
-                                            url: notifier.adsUrl,
-                                            contentData: data,
-                                            index: indexRoot,
-                                            transformationController: transformationController, urlMusic: notifier.urlMusic,),
+                                            : notifier.isLoadMusic
+                                                ? LoadingMusicScreen(apsaraMusic: data.music?.apsaraMusic ?? '')
+                                                : PicPlaylishScreen(
+                                                    data: notifier.adsData,
+                                                    url: notifier.adsUrl,
+                                                    contentData: data,
+                                                    index: indexRoot,
+                                                    transformationController: transformationController,
+                                                    urlMusic: notifier.urlMusic,
+                                                  ),
                                         // Top action
-                                        data.isReport ?? false
-                                            ? Container()
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
+                                            ? SafeArea(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 8.0),
+                                                  child: Align(
+                                                    alignment: Alignment.topLeft,
+                                                    child: CustomTextButton(
+                                                      onPressed: () {
+                                                        resetZooming();
+                                                        Routing().moveBack();
+                                                      },
+                                                      style: ButtonStyle(
+                                                        alignment: Alignment.topCenter,
+                                                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                                                      ),
+                                                      child: const DecoratedIconWidget(
+                                                        Icons.arrow_back_ios,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
                                             : SafeArea(
                                                 child: Padding(
                                                   padding: const EdgeInsets.only(top: 8.0),
@@ -250,7 +273,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                   ),
                                                 ),
                                               ),
-                                        data.isReport ?? false
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
                                             ? SafeArea(
                                                 child: SizedBox(
                                                 width: SizeConfig.screenWidth,
@@ -260,13 +283,13 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                     children: [
                                                       const Spacer(),
                                                       const CustomIconWidget(
-                                                        iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                                                        iconData: "${AssetPath.vectorPath}eye-off.svg",
                                                         defaultColor: false,
                                                         height: 30,
                                                       ),
-                                                      Text(transnot.translate.reportReceived ?? 'Report Received',
+                                                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content',
                                                           style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                                      Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
+                                                      Text("HyppePic ${transnot.translate.ContentContainsSensitiveMaterial}",
                                                           style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 13,
@@ -302,7 +325,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                               ))
                                             : Container(),
                                         // Bottom action
-                                        data.isReport ?? false
+                                        data.email != SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == "BLURRED")
                                             ? Container()
                                             : Align(
                                                 alignment: Alignment.bottomCenter,
@@ -313,6 +336,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                   children: [
                                                     Row(
                                                       children: [
+                                                        sixteenPx,
                                                         Consumer<LikeNotifier>(
                                                           builder: (context, notifier, child) => _buildButtonV2(
                                                             context: context,
@@ -393,17 +417,26 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                                                             ),
-                                                            if(notifier.listData?[indexRoot].music != null && (notifier.listData?[indexRoot].apsaraId ?? '').isNotEmpty)
-                                                            MusicStatusPage(
-                                                                music: notifier.listData![indexRoot].music!)
+                                                            if (notifier.listData?[indexRoot].music != null && (notifier.listData?[indexRoot].apsaraId ?? '').isNotEmpty)
+                                                              MusicStatusPage(music: notifier.listData![indexRoot].music!)
                                                           ],
                                                         )),
                                                       ),
                                                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                                     ),
                                                     twentyPx,
-                                                    data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
-                                                    data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200
+                                                    data.isBoost == null && data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
+                                                    data.isBoost != null && data.email == SharedPreference().readStorage(SpKeys.email)
+                                                        ? Padding(
+                                                            padding: const EdgeInsets.all(16.0),
+                                                            child: JangkaunStatus(
+                                                              jangkauan: data.boostJangkauan ?? 0,
+                                                              isDiary: true,
+                                                            ),
+                                                          )
+                                                        : Container(),
+                                                    data.email == SharedPreference().readStorage(SpKeys.email) &&
+                                                            (data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200)
                                                         ? ContentViolationWidget(data: data)
                                                         : Container(),
                                                   ],
@@ -433,8 +466,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       ),
     );
   }
-
-
 
   Widget _buildButtonV2({
     Color? colorIcon,
