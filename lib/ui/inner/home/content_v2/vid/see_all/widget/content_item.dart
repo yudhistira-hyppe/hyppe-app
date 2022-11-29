@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
@@ -70,7 +72,9 @@ class ContentItem extends StatelessWidget {
                       }
 
                       final data = notifier.vidData?[index];
-                      print('woy ${data?.isLiked}');
+                      if (kDebugMode) {
+                        'woy ${data?.isLiked}'.logger();
+                      }
                       return Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(
@@ -129,7 +133,7 @@ class ContentItem extends StatelessWidget {
                                     ? const Align(
                                         alignment: Alignment.topRight,
                                         child: Padding(
-                                          padding: const EdgeInsets.all(4.0),
+                                          padding: EdgeInsets.all(4.0),
                                           child: CustomIconWidget(
                                             iconData: "${AssetPath.vectorPath}sale.svg",
                                             height: 20,
@@ -204,8 +208,10 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            if (data?.music != null) fourPx,
-                            if (data?.music != null) MusicStatusDetail(music: data!.music!)
+                            if (data?.music?.musicTitle != null) fourPx,
+                            if (data?.music?.musicTitle != null) Container(
+                              alignment: Alignment.centerLeft,
+                                child: MusicStatusDetail(music: data!.music!))
                           ],
                         ),
                       );

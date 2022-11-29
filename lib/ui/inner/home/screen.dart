@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPop() {
-    print('didPop isOnHomeScreen false');
+    'didPop isOnHomeScreen false'.logger();
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.didPop();
   }
@@ -54,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   void didPopNext() {
     Future.delayed(Duration(milliseconds: 500), () {
-      print('didPopNext isOnHomeScreen true');
+      'didPopNext isOnHomeScreen true'.logger();
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
     });
 
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPushNext() {
-    print('didPushNext isOnHomeScreen false');
+    'didPushNext isOnHomeScreen false'.logger();
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.didPushNext();
   }
@@ -78,14 +79,14 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void deactivate() {
-    print('deactivate isOnHomeScreen false');
+    'deactivate isOnHomeScreen false'.logger();
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.deactivate();
   }
 
   @override
   void didPush() {
-    print('didPush isOnHomeScreen false');
+    'didPush isOnHomeScreen false'.logger();
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
   }
 
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       setState(() => {});
     }
     super.initState();
-    print('ini iniststate home');
+    'ini iniststate home'.logger();
 
     // Future.delayed(const Duration(seconds: 10), () {
     //   if (mounted) {

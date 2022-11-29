@@ -169,7 +169,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
         // print('data : ${fetch.data.toString()}');
         _newClipData = fetch.data;
-        print('videoId : ${_newClipData?.data?.videoId}');
+        'videoId : ${_newClipData?.data?.videoId}'.logger();
         await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
       }
     } catch (e) {
@@ -186,10 +186,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
+        'jsonMap video Apsara : $jsonMap'.logger();
         _betterPlayerRollUri = jsonMap['PlayUrl'];
         // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
-        print('get Ads Video');
+        'get Ads Video'.logger();
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -206,7 +206,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
+        'jsonMap video Apsara : $jsonMap'.logger();
         widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -249,7 +249,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       }
     }
 
-    print('post metadata : ${widget.videoData?.metadata?.toJson().toString()}');
+    'post metadata : ${widget.videoData?.metadata?.toJson().toString()}'.logger();
     // if (countAds < 0) {
     //
     //   await _newInitAds();
@@ -260,7 +260,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     //   _eventType = (_newClipData != null) ? BetterPlayerEventType.showingAds : null;
     //   print('get Ads Video1');
     // }
-    print('ready to play');
+    'ready to play'.logger();
     _userVideo(true);
     _awaitInitial.value = true;
   }

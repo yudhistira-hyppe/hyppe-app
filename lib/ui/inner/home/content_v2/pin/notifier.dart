@@ -268,8 +268,6 @@ class PinAccountNotifier extends ChangeNotifier {
       } else {
         param = {"otp": otpController.text, "type": type, "event": "VERIFY_OTP", "status": "REPLY"};
       }
-      print('param');
-      print(param);
       final notifier = TransactionBloc();
       await notifier.sendVerificationPin(context, params: param);
       final fetch = notifier.transactionFetch;

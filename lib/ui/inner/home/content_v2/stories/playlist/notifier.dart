@@ -20,6 +20,7 @@ import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/music/music.dart';
 
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
@@ -75,7 +76,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _linkCopied = false;
   bool _forceStop = false;
   bool _isLoadMusic = true;
-  String? _urlMusic;
+  MusicUrl? _urlMusic;
   double? _currentPage = 0;
   Timer? _searchOnStoppedTyping;
   Color? _sendButtonColor;
@@ -95,7 +96,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool get linkCopied => _linkCopied;
   bool get forceStop => _forceStop;
   bool get isLoadMusic => _isLoadMusic;
-  String? get urlMusic => _urlMusic;
+  MusicUrl? get urlMusic => _urlMusic;
   double? get currentPage => _currentPage;
   Color? get buttonColor => _sendButtonColor;
   PageController? get pageController => _pageController;
@@ -136,7 +137,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _isLoadMusic = state;
   }
 
-  set urlMusic(String? val){
+  set urlMusic(MusicUrl? val){
     _urlMusic = val;
     notifyListeners();
   }
@@ -214,21 +215,29 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     animationController.forward();
   }
 
-  void initMusic(BuildContext context, String apsaraId) async{
+  void initMusic(BuildContext context, Music music) async{
     try {
       isLoadMusic = true;
       notifyListeners();
-      if(apsaraId.isNotEmpty){
-        final url = await _getAdsVideoApsara(context, apsaraId);
-        if(url != null){
-          _urlMusic = url;
-          notifyListeners();
-        }else{
-          throw 'url music is null';
-        }
+      final urlMusic = music.apsaraMusicUrl?.playUrl;
+      if(urlMusic != null){
+        _urlMusic?.playUrl = urlMusic;
+        notifyListeners();
+
       }else{
-        throw 'apsaramusic is empty';
+        if((music.apsaraMusic ?? '').isNotEmpty){
+          final url = await getMusicApsara(context, music.apsaraMusic!);
+          if(url != null){
+            _urlMusic = url;
+            notifyListeners();
+          }else{
+            throw 'url music is null';
+          }
+        }else{
+          throw 'apsaramusic is empty';
+        }
       }
+
       isLoadMusic = false;
       notifyListeners();
     }catch(e){
@@ -238,7 +247,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
+  Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
     try {
       final notifier = PostsBloc();
       await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
@@ -248,7 +257,9 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
         print('jsonMap video Apsara : $jsonMap');
-        return jsonMap['PlayUrl'];
+        final String dur = jsonMap['Duration'];
+        final duration = double.parse(dur);
+        return MusicUrl(playUrl: jsonMap['PlayUrl'], duration: duration);
       }
     } catch (e) {
       'Failed to fetch ads data ${e}'.logger();
@@ -262,24 +273,21 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
     _result = [];
     if (data.mediaType?.translateType() == ContentType.image) {
-      if(data.music?.id != null){
-        String urlApsara = '';
-        if (data.isApsara ?? false) {
-          await getVideoApsara(context, data.apsaraId ?? '').then((value) {
-            urlApsara = value;
-          });
-        }
-        print('StoryItem.pageVideo ${data.postID} : ${data.fullContentPath}, ${data.metadata?.duration}');
+      if(data.music?.apsaraMusic != null){
+        data.music?.apsaraMusicUrl = await getMusicApsara(context, data.music!.apsaraMusic!);
+        final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
         _result.add(
-          StoryItem.pageVideo(
-            urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
+          StoryItem.pageImage(
+            url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
             controller: storyController,
+            imageFit: BoxFit.contain,
+            isImages: true,
+            duration: Duration(seconds: duration ?? 3),
             requestHeaders: {
               'post-id': data.postID ?? '',
               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
               'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
             },
-            duration: Duration(seconds: data.metadata?.duration ?? 15),
           ),
         );
       }else{
@@ -306,7 +314,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           urlApsara = value;
         });
       }
-      print('StoryItem.pageVideo ${data.postID} : ${data.fullContentPath}, ${data.metadata?.duration}');
+      print('StoryItem.pageVideo ${data.postID} : $urlApsara, ${data.fullContentPath}, ${data.metadata?.duration}');
       _result.add(
         StoryItem.pageVideo(
           urlApsara != '' ? urlApsara : data.fullContentPath ?? '',

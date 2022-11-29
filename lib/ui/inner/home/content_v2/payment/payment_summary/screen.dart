@@ -206,7 +206,6 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                 data: body,
                 style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
                 onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
-                  print(url);
                   if (await canLaunchUrl(Uri.parse(url ?? ''))) {
                     await launchUrl(
                       Uri.parse(url ?? ''),

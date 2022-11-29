@@ -538,7 +538,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     _locationName = '';
     _userTagData = [];
     _privacyTitle = '';
-    musicSelected = null;
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
@@ -557,6 +556,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     editData = null;
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
+      try{
+        notifier.audioPreviewPlayer.stop();
+        notifier.audioPreviewPlayer.dispose();
+      }catch(e){
+        'Error dispose AudioPreviewPlayer : $e'.logger();
+      }
+
+      musicSelected = null;
       notifier.defaultPath = null;
       if (notifier.betterPlayerController != null) {
         notifier.betterPlayerController!.dispose();

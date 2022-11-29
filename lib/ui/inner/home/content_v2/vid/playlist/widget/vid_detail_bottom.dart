@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
@@ -113,8 +114,8 @@ class VidDetailBottom extends StatelessWidget {
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
-            if (data?.music != null) MusicStatusDetail(music: data!.music!),
-            if (data?.music != null) eightPx,
+            if (data?.music?.musicTitle != null) MusicStatusDetail(music: data!.music!),
+            if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? GestureDetector(
                     onTap: () => Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID ?? '', 'VIEW', 'Viewer', data?.email),
@@ -219,7 +220,7 @@ class VidDetailBottom extends StatelessWidget {
                               try {
                                 await value.followUser(context);
                               } catch (e) {
-                                print(e);
+                                'follow error $e'.logger();
                               }
                             },
                             isFollowing: value.statusFollowing,

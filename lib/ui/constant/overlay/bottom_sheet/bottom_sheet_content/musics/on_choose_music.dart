@@ -75,7 +75,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               children: [
                 CustomIconButtonWidget(
                     onPressed: (){
-                      notifier.seletedType = null;
+                      notifier.selectedType = null;
                       notifier.selectedMusicEnum = null;
                     },
                     color: Colors.black,
@@ -113,6 +113,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 notifier.fixSelectedMusic = notifier.selectedMusic;
                 uploadNotifier.musicSelected = notifier.selectedMusic;
                 notifier.selectedMusic = null;
+                notifier.selectedType = null;
                 notifier.forceResetPlayer();
                 notifier.searchController.text = '';
                 Navigator.pop(context);

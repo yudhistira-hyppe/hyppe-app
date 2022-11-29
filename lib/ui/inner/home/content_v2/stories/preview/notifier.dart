@@ -99,6 +99,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
     try {
       if (list != null) {
+        for(var data in list){
+          print('data stories: ${data.toJson().toString()}');
+        }
         if (reload) {
           peopleContentsQuery.page = 1;
           peopleContentsQuery.hasNext = true;

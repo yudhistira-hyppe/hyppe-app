@@ -137,7 +137,7 @@ class SelfProfileNotifier with ChangeNotifier {
               if (_res.isNotEmpty) {
                 user.vids = [...(user.vids ?? []), ..._res];
               } else {
-                print("Post Vid Dah Mentok");
+                "Post Vid Dah Mentok".logger();
               }
               notifyListeners();
             }

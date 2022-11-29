@@ -46,7 +46,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
 
   @override
   void dispose() {
-    final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
+    final notifier = context.read<PreviewVidNotifier>();
     // notifier.initialVid(context, reload: true);
     notifier.pageController.dispose();
     super.dispose();

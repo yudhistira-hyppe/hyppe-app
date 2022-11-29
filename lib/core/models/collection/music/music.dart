@@ -1,4 +1,10 @@
+import 'dart:convert';
+
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+
+import '../../../bloc/posts_v2/bloc.dart';
+import '../../../bloc/posts_v2/state.dart';
 
 class Music{
   String? id;
@@ -24,7 +30,7 @@ class Music{
     this.genre, this.theme, this.mood, this.createdAt, this.updatedAt, this.isDelete,
     this.isActive, this.apsaraMusic, this.apsaraMusicUrl, this.apsaraThumnail, this.apsaraThumnailUrl});
 
-  Music.fromJson(Map<String, dynamic> map){
+  Music.fromJson(Map<String, dynamic> map) {
     id = map['_id'];
     musicTitle = map['musicTitle'];
     artistName = map['artistName'];
@@ -50,6 +56,8 @@ class Music{
     isLoad = false;
     isSelected = false;
   }
+
+
 
   Map<String, dynamic> toJson(){
     var result = <String, dynamic>{};
@@ -83,7 +91,12 @@ class MusicUrl{
   MusicUrl({this.playUrl, this.duration});
 
   MusicUrl.fromJson(Map<String, dynamic> map){
-    playUrl = map['PlayURL'];
+    if(map['PlayURL'] != null){
+      playUrl = map['PlayURL'];
+    }else{
+      playUrl = map['PlayUrl'];
+    }
+
     try{
       final String dur = map['Duration'];
       duration = double.parse(dur);

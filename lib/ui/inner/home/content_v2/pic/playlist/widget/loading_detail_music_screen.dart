@@ -28,16 +28,14 @@ class _LoadingDetailMusicScreenState extends State<LoadingDetailMusicScreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 500), (){
-      final notifier = context.read<PicDetailNotifier>();
-      notifier.urlMusic = '';
-      if(globalAudioPlayer != null){
-        globalAudioPlayer!.stop();
-        globalAudioPlayer!.dispose();
-      }
-
-      notifier.initMusic(context, widget.apsaraMusic);
-    });
     super.initState();
+    final notifier = context.read<PicDetailNotifier>();
+    // notifier.urlMusic = '';
+    if(globalAudioPlayer != null){
+      globalAudioPlayer!.stop();
+      globalAudioPlayer!.dispose();
+    }
+
+    notifier.initMusic(context, widget.apsaraMusic);
   }
 }

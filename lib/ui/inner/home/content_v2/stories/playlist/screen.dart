@@ -47,6 +47,9 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return ChangeNotifierProvider<StoriesPlaylistNotifier>(
       create: (context) => notifier,
       child: WillPopScope(
@@ -69,6 +72,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                             if(values.isNotEmpty){
                               notifier.dataUserStories = [...(notifier.dataUserStories)] + values;
                             }
+
                             final prev = context.read<PreviewStoriesNotifier>();
                             prev.initialPeopleStories(context, list: values);
                           }

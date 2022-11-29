@@ -298,6 +298,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> {
     super.initState();
     final notifier = context.read<PreviewContentNotifier>();
     notifier.selectedMusic = null;
+    notifier.selectedType = null;
     notifier.fixSelectedMusic = null;
   }
 }

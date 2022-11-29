@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
@@ -68,7 +69,7 @@ class SelfProfilePics extends StatelessWidget {
                           ),
                         );
                       } catch (e) {
-                        print('[DevError] => ${e.toString()}');
+                        '[DevError] => ${e.toString()}'.logger();
                         return Container(
                           width: double.infinity,
                           height: double.infinity,

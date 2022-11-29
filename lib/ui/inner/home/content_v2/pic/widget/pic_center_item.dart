@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
@@ -29,7 +30,7 @@ class PicCenterItem extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
-    print('mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}');
+    'mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}'.logger();
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Stack(
@@ -53,7 +54,7 @@ class PicCenterItem extends StatelessWidget {
               child: _buildBody(context),
             ),
             errorWidget: (context, url, error) {
-              print('errorWidget :  $error');
+              'errorWidget :  $error'.logger();
               return Container(
                 margin: margin,
                 // const EdgeInsets.symmetric(horizontal: 4.5),

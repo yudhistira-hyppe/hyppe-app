@@ -2,10 +2,11 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_run_text.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../../app.dart';
 import '../../../core/constants/asset_path.dart';
@@ -28,23 +29,32 @@ class _MusicStatusPageState extends State<MusicStatusPage> {
 
   @override
   void initState() {
-    if(widget.music.apsaraMusic != null){
-      if((widget.urlMusic ?? '').isNotEmpty){
-        initMusic(context, widget.urlMusic!);
-      }
+    print('MusicStatusPage : ${widget.urlMusic}');
+    if((widget.urlMusic ?? '').isNotEmpty){
+      initMusic(context, widget.urlMusic!);
+    }else if((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty){
+      print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
+      initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
     }
     super.initState();
   }
 
   @override
   void deactivate() {
-    print('deactivate MusicStatusDetail false');
+    print('deactivate MusicStatusPage');
+    try{
+      audioPlayer.stop();
+      audioPlayer.dispose();
+    }catch(e){
+      'Error MusicStatusPage : $e'.logger();
+    }
     globalAudioPlayer = null;
     super.deactivate();
   }
 
   @override
   void dispose() {
+    print('dispose MusicStatusPage false');
     audioPlayer.stop();
     audioPlayer.dispose();
     super.dispose();
@@ -62,13 +72,19 @@ class _MusicStatusPageState extends State<MusicStatusPage> {
         children: [
           Expanded(
             child: Row(
+              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomIconWidget(iconData: '${AssetPath.vectorPath}music_stroke_white.svg', color: Colors.white,),
                 fourPx,
-                musicTitle.length >= 30 ? CustomRunText(child: CustomTextWidget(textToDisplay: musicTitle,
-                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),), direction: Axis.horizontal,) : CustomTextWidget(textToDisplay: musicTitle,
+                musicTitle.length > 30 ? Container(
+                  height: 30,
+                  child: Container(
+                    height: 30,
+                    width: context.getWidth() * 0.7,
+                      child: Marquee(text: '$musicTitle  ', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)),
+                ) : CustomTextWidget(textToDisplay: musicTitle,
                   textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)
               ],
             ),
@@ -128,7 +144,6 @@ class _MusicStatusPageState extends State<MusicStatusPage> {
   void initMusic(BuildContext context, String urlMusic) async{
     audioPlayer = AudioPlayer();
     try {
-
       await audioPlayer.setReleaseMode(ReleaseMode.loop);
       if(urlMusic.isNotEmpty){
         globalAudioPlayer = audioPlayer;

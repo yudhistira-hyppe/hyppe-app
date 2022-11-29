@@ -1,7 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/ui/constant/widget/custom_run_text.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
+import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/asset_path.dart';
@@ -26,6 +28,8 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
 
   @override
   Widget build(BuildContext context) {
+    final titleMusic = '${widget.music.musicTitle} - ${widget.music.artistName}';
+    final lengthTitle = titleMusic.length;
     return Container(
       margin: const EdgeInsets.only(left: 70, right: 70),
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
@@ -55,9 +59,11 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
           ),
           sixPx,
           Expanded(
-            child: CustomTextWidget(
+            child: lengthTitle > 20 ? SizedBox(
+              height: 25,
+                child: Marquee(text: '$titleMusic  ', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),)) : CustomTextWidget(
               textOverflow: TextOverflow.ellipsis,
-              maxLines: 3,
+              maxLines: 1,
               textToDisplay: '${widget.music.musicTitle} - ${widget.music.artistName}',
               textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
             ),

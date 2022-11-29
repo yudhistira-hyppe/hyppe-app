@@ -60,6 +60,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   bool get isLoadMusic => _isLoadMusic;
   String _urlMusic = '';
   String get urlMusic => _urlMusic;
+  int _currentIndex = -1;
+  int get currentIndex => _currentIndex;
 
   SlidedPicDetailScreenArgument? _routeArgument;
 
@@ -76,6 +78,11 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   set urlMusic(String val){
     _urlMusic = val;
+    notifyListeners();
+  }
+
+  set currentIndex(int index){
+    _currentIndex = index;
     notifyListeners();
   }
 
@@ -123,44 +130,9 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void onUpdate() => notifyListeners();
 
-  void initMusic(BuildContext context, String apsaraId) async{
-    try {
-      isLoadMusic = true;
-      if(apsaraId.isNotEmpty){
-        final url = await _getAdsVideoApsara(context, apsaraId);
-        if(url != null){
-          _urlMusic = url;
-          notifyListeners();
-        }else{
-          throw 'url music is null';
-        }
-      }else{
-        throw 'apsaramusic is empty';
-      }
-      isLoadMusic = false;
-    }catch(e){
-      "Error Init Video $e".logger();
-      isLoadMusic = false;
-    }
-  }
 
-  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
-    try {
-      final notifier = PostsBloc();
-      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
 
-      final fetch = notifier.postsFetch;
 
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
-        return jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      'Failed to fetch ads data ${e}'.logger();
-    }
-    return null;
-  }
 
   Future initAdsVideo(BuildContext context) async {
     _adsUrl = '';

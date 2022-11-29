@@ -124,8 +124,8 @@ class PicDetailBottom extends StatelessWidget {
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
-            if (data?.music != null) notifier.isLoadMusic ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '') : MusicStatusDetail(music: data!.music!, urlMusic: notifier.urlMusic,),
-            if (data?.music != null) eightPx,
+            if (data?.music?.musicTitle != null) notifier.isLoadMusic ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '') : MusicStatusDetail(music: data!.music!, urlMusic: notifier.urlMusic,),
+            if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? GestureDetector(
                     onTap: () {

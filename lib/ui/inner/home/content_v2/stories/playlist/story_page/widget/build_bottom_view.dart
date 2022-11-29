@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/loading_music_story.dart';
 import 'package:provider/provider.dart';
@@ -54,12 +55,17 @@ class _BuildBottomViewState extends State<BuildBottomView> {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
+
         ViewerStoriesButton(
           data: widget.data,
           currentStory: widget.currentStory,
           storyController: widget.storyController,
         ),
-
+        if(widget.data?.music != null)
+          Container(
+            margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
+            child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
+          ),
       ],
     )
         : Column(
@@ -67,10 +73,11 @@ class _BuildBottomViewState extends State<BuildBottomView> {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
           children: [
-            if(widget.data?.music?.apsaraMusic != null)
-              notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!.apsaraMusic!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic,),
-            if(widget.data?.music?.apsaraMusic != null)
-              eightPx,
+            if(widget.data?.music != null)
+              Container(
+                margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+                child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
+              ),
             AnimatedPositioned(
       duration: const Duration(milliseconds: 300),
       bottom: MediaQuery.of(context).viewInsets.bottom,

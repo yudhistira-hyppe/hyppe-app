@@ -44,7 +44,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> initialPic(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
-    print('initialPic page : ${contentsQuery.page}');
+    'initialPic page : ${contentsQuery.page}'.logger();
     try {
       if (list != null) {
         if (reload) {
@@ -56,14 +56,14 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
         if (list.isNotEmpty) contentsQuery.page++;
       } else {
         if (reload) {
-          print('reload contentsQuery : satu');
+          'reload contentsQuery : satu'.logger();
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context, isLandingPage: true);
         }
       }
 
-      print('ini pict initial 3');
+      'ini pict initial 3'.logger();
       if (reload) {
         pic = res;
 
@@ -112,7 +112,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
-      print('initialPic : 2');
+      'initialPic : 2'.logger();
       initialPic(context);
     }
   }
@@ -129,7 +129,6 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   void navigateToSlidedDetailPic(BuildContext context, int index) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      print(pic);
       Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble()));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);

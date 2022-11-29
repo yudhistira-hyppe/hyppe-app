@@ -27,7 +27,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    notifier.initialStories(context);
+    // notifier.initialStories(context);
     notifier.scrollController.addListener(() => notifier.scrollListener(context));
     super.initState();
   }

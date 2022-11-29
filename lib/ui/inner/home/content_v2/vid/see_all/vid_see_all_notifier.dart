@@ -55,7 +55,7 @@ class VidSeeAllNotifier with ChangeNotifier {
 
     try {
       if (reload) {
-        print('reload contentsQuery : 18');
+        'reload contentsQuery : 18'.logger();
         _resFuture = contentsQuery.reload(context);
       } else {
         _resFuture = contentsQuery.loadNext(context);
@@ -66,7 +66,7 @@ class VidSeeAllNotifier with ChangeNotifier {
         vidData = res;
       } else {
         for (var data in res) {
-          print('data vidData : ${data.toJson().toString()}');
+          'data vidData : ${data.toJson().toString()}'.logger();
         }
 
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;

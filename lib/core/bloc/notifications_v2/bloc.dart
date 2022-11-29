@@ -56,6 +56,7 @@ class NotificationBloc {
         }
       },
       (errorData) {
+        print('error get Notification : ${errorData.message}');
         setNotificationsFetch(NotificationFetch(NotificationState.getUsersNotificationBlocError));
       },
       data: formData,
