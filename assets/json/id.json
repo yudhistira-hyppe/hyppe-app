@@ -772,6 +772,8 @@
   "sensitiveContent" : "Konten Sensitif",
   "ContentContainsSensitiveMaterial" : "konten berisi materi sensitif yang mungkin dianggap menyinggung atau mengganggu oleh sebagian orang",
   "hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails" : "telah berhasil didaftarkan ownership & di boost, selengkapnya cek di profilmu",
-  "hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails" : "telah berhasil didaftarkan di boost, selengkapnya cek di profilmu"
+  "hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails" : "telah berhasil didaftarkan di boost, selengkapnya cek di profilmu",
+  "appealThisWarning" : "Banding Peringatan Ini"
+
 
 }

@@ -766,6 +766,7 @@ class LocalizationModelV2 {
   String? ContentContainsSensitiveMaterial;
   String? hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails;
   String? hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails;
+  String? appealThisWarning;
   String? sensitiveContent;
   String? minutes;
   String? appeal;
@@ -1541,6 +1542,7 @@ class LocalizationModelV2 {
     this.ContentContainsSensitiveMaterial,
     this.hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails,
     this.hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails,
+    this.appealThisWarning,
     this.sensitiveContent,
     this.minutes,
     this.appeal,
@@ -2341,6 +2343,7 @@ class LocalizationModelV2 {
     ContentContainsSensitiveMaterial = json["ContentContainsSensitiveMaterial"];
     hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails"];
     hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails"];
+    appealThisWarning = json["appealThisWarning"];
     sensitiveContent = json["sensitiveContent"];
   }
 }

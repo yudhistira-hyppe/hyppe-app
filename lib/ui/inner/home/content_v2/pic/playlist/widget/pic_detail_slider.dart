@@ -52,7 +52,7 @@ class PicDetailSlider extends StatelessWidget {
               onPageChanged: print,
               itemBuilder: (context, index) => InkWell(
                 child: Center(
-                  child: picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
+                  child: (picData?.reportedStatus == "BLURRED")
                       ? PichTumbnailReport(pictData: picData)
                       : CustomThumbImage(
                           boxFit: BoxFit.cover,

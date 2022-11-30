@@ -58,7 +58,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
           thumbnail: (widget.data.isApsara ?? false) ? widget.data.mediaThumbUri : widget.data.fullThumbPath,
         ),
         // Content
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+        (widget.data.reportedStatus == "BLURRED")
             ? Container()
             : PicPlaylishScreen(
                 data: notifier.adsData,
@@ -67,7 +67,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                 transformationController: widget.transformationController,
               ),
         // Top action
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+        (widget.data.reportedStatus == "BLURRED")
             ? SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -183,7 +183,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                   ),
                 ),
               ),
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+        widget.data.reportedStatus == "BLURRED"
             ? SafeArea(
                 child: SizedBox(
                 width: SizeConfig.screenWidth,
@@ -199,10 +199,18 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                       ),
                       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                       Text("HyppePic ${transnot.translate.ContentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 13,
                           )),
+                      widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                              child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)))
+                          : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
@@ -234,7 +242,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
               ))
             : Container(),
         // Bottom action
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+        (widget.data.reportedStatus == "BLURRED")
             ? Container()
             : Align(
                 alignment: Alignment.bottomCenter,
@@ -350,9 +358,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             ),
                           )
                         : Container(),
-                    widget.data.email == SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == 'OWNED' || widget.data.reportedStatus == "BLURRED")
-                        ? ContentViolationWidget(data: widget.data)
-                        : Container(),
+                    widget.data.email == SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == 'OWNED') ? ContentViolationWidget(data: widget.data) : Container(),
                   ],
                 ),
               ),

@@ -130,6 +130,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           twelvePx,
           widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     marginBool: true,

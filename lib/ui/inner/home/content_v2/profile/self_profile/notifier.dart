@@ -23,6 +23,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
@@ -343,6 +344,38 @@ class SelfProfileNotifier with ChangeNotifier {
       default:
         break;
     }
+    notifyListeners();
+  }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    ContentData? _updatedData;
+    ContentData? _updatedData2;
+
+    switch (content) {
+      case hyppeVid:
+        _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    print('show my profil');
+    print(_updatedData);
+
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = '';
+    }
+    if (_updatedData2 != null) {
+      _updatedData2.reportedStatus = '';
+    }
+
     notifyListeners();
   }
 }

@@ -475,10 +475,10 @@ class HomeNotifier with ChangeNotifier {
     }
 
     if (_updatedData != null) {
-      _updatedData.reportedStatus = '';
+      _updatedData.reportedStatus = 'ALL';
     }
     if (_updatedData2 != null) {
-      _updatedData2.reportedStatus = '';
+      _updatedData2.reportedStatus = 'ALL';
     }
 
     notifyListeners();

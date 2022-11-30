@@ -6,6 +6,7 @@ import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -37,33 +38,35 @@ class OtherProfileVids extends StatelessWidget {
                       onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index),
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: CustomContentModeratedWidget(
-                                width: double.infinity,
-                                height: double.infinity,
-                                featureType: FeatureType.vid,
-                                isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                thumbnail: notifier.item1?.vids?[index].isApsara ?? false
-                                    ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
-                                    : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? '',
+                        child: notifier.item1?.vids?[index].reportedStatus == 'BLURRED'
+                            ? SensitiveContentProfile(data: notifier.item1?.vids?[index])
+                            : Stack(
+                                children: [
+                                  Center(
+                                    child: CustomContentModeratedWidget(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      featureType: FeatureType.vid,
+                                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                      thumbnail: notifier.item1?.vids?[index].isApsara ?? false
+                                          ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
+                                          : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? '',
+                                    ),
+                                  ),
+                                  (notifier.item1?.vids?[index].saleAmount ?? 0) > 0
+                                      ? const Align(
+                                          alignment: Alignment.topRight,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(2.0),
+                                            child: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}sale.svg",
+                                              height: 15,
+                                              defaultColor: false,
+                                            ),
+                                          ))
+                                      : Container()
+                                ],
                               ),
-                            ),
-                            (notifier.item1?.vids?[index].saleAmount ?? 0) > 0
-                                ? const Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(2.0),
-                                      child: CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}sale.svg",
-                                        height: 15,
-                                        defaultColor: false,
-                                      ),
-                                    ))
-                                : Container()
-                          ],
-                        ),
                       ),
                     );
                   } catch (e) {

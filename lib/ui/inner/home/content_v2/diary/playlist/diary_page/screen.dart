@@ -207,11 +207,13 @@ class _DiaryPageState extends State<DiaryPage> {
                         thumbnail: (widget.data?.isApsara ?? false) ? widget.data?.mediaThumbEndPoint ?? '' : widget.data?.fullThumbPath ?? '',
                       )
                     : Container(),
-                widget.data?.email != SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == "BLURRED") ? DiarySensitive(data: widget.data) : Container(),
-                TitlePlaylistDiaries(
-                  data: widget.data,
-                  storyController: _storyController,
-                ),
+                (widget.data?.reportedStatus == "BLURRED") ? DiarySensitive(data: widget.data) : Container(),
+                (widget.data?.reportedStatus == "BLURRED")
+                    ? Container()
+                    : TitlePlaylistDiaries(
+                        data: widget.data,
+                        storyController: _storyController,
+                      ),
                 widget.data?.reportedStatus == "BLURRED"
                     ? Container()
                     : RightItems(
