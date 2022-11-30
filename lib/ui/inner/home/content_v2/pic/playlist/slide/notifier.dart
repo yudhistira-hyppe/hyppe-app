@@ -27,6 +27,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
+import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
@@ -35,12 +36,13 @@ import '../../../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
+import '../../notifier.dart';
 
 class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   // final _system = System();
   final _sharedPrefs = SharedPreference();
   ScrollController scrollController = ScrollController();
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit = 5..featureType = FeatureType.pic;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()..page = 2..limit = 5..featureType = FeatureType.pic;
 
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
@@ -58,6 +60,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   String get adsUrl => _adsUrl;
   bool _isLoadMusic = true;
   bool get isLoadMusic => _isLoadMusic;
+  bool _hitApiMusic = false;
+  bool get hitApiMusic => _hitApiMusic;
   String _urlMusic = '';
   String get urlMusic => _urlMusic;
   int _currentIndex = -1;
@@ -73,6 +77,11 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   set isLoadMusic(bool state){
     _isLoadMusic = state;
+    notifyListeners();
+  }
+
+  set hitApiMusic(bool state){
+    _hitApiMusic = state;
     notifyListeners();
   }
 
@@ -110,6 +119,32 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   set data(ContentData? value) {
     _data = value;
     notifyListeners();
+  }
+
+  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async {
+    _hitApiMusic = true;
+    notifyListeners();
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        _hitApiMusic = false;
+        notifyListeners();
+        return jsonMap['PlayUrl'];
+      }else{
+        throw 'error get file apsara';
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+      _hitApiMusic = false;
+      notifyListeners();
+    }
+    return null;
   }
 
   // void pauseAudioPlayer(){
@@ -151,6 +186,16 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     if (urlAds != null) {
       _adsUrl = urlAds;
     }
+  }
+
+  Future<void> nextPlaylistPic(BuildContext context) async{
+    print('onPageChanged Image : masuk');
+    final values = await contentsQuery.loadNext(context, isLandingPage: true);
+    if (values.isNotEmpty) {
+      listData = [...(listData ?? []) as List<ContentData>] + values;
+    }
+    final prev = context.read<PreviewPicNotifier>();
+    prev.initialPic(context, list: values);
   }
 
   void initState(BuildContext context, SlidedPicDetailScreenArgument routeArgument) async {
@@ -222,26 +267,26 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     return null;
   }
 
-  Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async {
-    try {
-      final notifier = PostsBloc();
-      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
-
-      final fetch = notifier.postsFetch;
-
-      if (fetch.postsState == PostsState.videoApsaraSuccess) {
-        Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
-        return jsonMap['PlayUrl'];
-        // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
-        print('get Ads Video');
-        // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
-      }
-    } catch (e) {
-      'Failed to fetch ads data ${e}'.logger();
-    }
-    return null;
-  }
+  // Future<String?> getAdsVideoApsara(BuildContext context, String apsaraId) async {
+  //   try {
+  //     final notifier = PostsBloc();
+  //     await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+  //
+  //     final fetch = notifier.postsFetch;
+  //
+  //     if (fetch.postsState == PostsState.videoApsaraSuccess) {
+  //       Map jsonMap = json.decode(fetch.data.toString());
+  //       print('jsonMap video Apsara : $jsonMap');
+  //       return jsonMap['PlayUrl'];
+  //       // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+  //       print('get Ads Video');
+  //       // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+  //     }
+  //   } catch (e) {
+  //     'Failed to fetch ads data ${e}'.logger();
+  //   }
+  //   return null;
+  // }
 
   Future followUser(BuildContext context, {bool checkIdCard = true}) async {
     if (_sharedPrefs.readStorage(SpKeys.email) != _listData?.single.email) {

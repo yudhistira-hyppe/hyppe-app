@@ -246,7 +246,6 @@ class HomeNotifier with ChangeNotifier {
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
     'ambil semua data ${notifierMain.visibilty}'.logger();
-    const page = 0;
     // final notifier = PostsBloc();
     //
     // await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
@@ -257,7 +256,7 @@ class HomeNotifier with ChangeNotifier {
     try {
       final notifier = PostsBloc();
 
-      await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+      await notifier.getAllContentsBlocV2(context, pageNumber: 1, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
       final fetch = notifier.postsFetch;
       '${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);

@@ -7,6 +7,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -43,6 +44,15 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 AudioPlayer? globalAudioPlayer;
+
+void disposeGlobalAudio()async{
+  try{
+    await globalAudioPlayer!.stop();
+    await globalAudioPlayer!.dispose();
+  }catch(e){
+    'globalAudioPlayer error : $e'.logger();
+  }
+}
 
 void mainApp(EnvType env) async {
   // HttpOverrides.global = MyHttpOverrides();

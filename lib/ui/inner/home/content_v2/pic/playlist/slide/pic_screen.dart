@@ -56,11 +56,8 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   void dispose() {
-    try{
-      globalAudioPlayer!.stop();
-      globalAudioPlayer!.dispose();
-    }catch(e){
-      print('error globalAudioPlayer dispose');
+    if(globalAudioPlayer != null){
+      disposeGlobalAudio();
     }
 
     super.dispose();
