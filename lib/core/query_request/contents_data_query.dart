@@ -87,6 +87,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
         }
         hasNext = res?.length == limit;
         if (res?.length != null) page++;
+        print('pageNumber check 1 : $page');
       } catch (e) {
         'error loadNext : $e'.logger();
         rethrow;

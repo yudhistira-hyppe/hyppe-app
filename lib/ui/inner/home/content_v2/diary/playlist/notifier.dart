@@ -28,7 +28,7 @@ import '../../../../../../core/models/collection/advertising/ads_video_data.dart
 
 class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   final _sharedPrefs = SharedPreference();
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit = 5..featureType = FeatureType.diary;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()..page = 2..limit = 5..featureType = FeatureType.diary;
 
   DiaryDetailScreenArgument? _routeArgument;
   List<ContentData>? _listData;

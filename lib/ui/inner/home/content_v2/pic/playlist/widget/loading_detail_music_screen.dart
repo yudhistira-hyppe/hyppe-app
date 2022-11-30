@@ -32,8 +32,7 @@ class _LoadingDetailMusicScreenState extends State<LoadingDetailMusicScreen> {
     final notifier = context.read<PicDetailNotifier>();
     // notifier.urlMusic = '';
     if(globalAudioPlayer != null){
-      globalAudioPlayer!.stop();
-      globalAudioPlayer!.dispose();
+      disposeGlobalAudio();
     }
 
     notifier.initMusic(context, widget.apsaraMusic);

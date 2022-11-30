@@ -32,8 +32,7 @@ class _LoadingMusicStoryState extends State<LoadingMusicStory> {
       final notifier = context.read<StoriesPlaylistNotifier>();
       notifier.urlMusic?.playUrl = '';
       if(globalAudioPlayer != null){
-        globalAudioPlayer!.stop();
-        globalAudioPlayer!.dispose();
+        disposeGlobalAudio();
       }
 
       notifier.initMusic(context, widget.apsaraMusic);

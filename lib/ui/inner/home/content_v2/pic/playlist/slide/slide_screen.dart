@@ -77,14 +77,14 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     onPageChanged: (value) async {
                       if (value == ((notifier.listData?.length ?? 0) - 1)) {
                         print('onPageChanged Image : masuk');
-                        final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
-                        if (values.isNotEmpty) {
-                          notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;
-                        }
-                        final prev = context.read<PreviewPicNotifier>();
-                        prev.initialPic(context, list: values);
+                        await notifier.nextPlaylistPic(context);
+                        // final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
+                        // if (values.isNotEmpty) {
+                        //   notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;
+                        // }
+
                       }
-                      await notifier.initAdsVideo(context);
+                      notifier.initAdsVideo(context);
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
                       print('check index hit : my index $value');
                       notifier.currentIndex = value;
@@ -101,10 +101,14 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                           scrollDirection: Axis.vertical,
                           onPageChanged: (verticalIndex) {
                             // notifier.urlMusic = '';
-                            notifier.isLoadMusic = true;
-                            final detailNotifier = context.read<PicDetailNotifier>();
-                            detailNotifier.isLoadMusic = true;
-                            detailNotifier.urlMusic = '';
+                            if(verticalIndex == 0){
+                              notifier.isLoadMusic = true;
+                            }else{
+                              final detailNotifier = context.read<PicDetailNotifier>();
+                              detailNotifier.isLoadMusic = true;
+                              detailNotifier.urlMusic = '';
+                            }
+
                           },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];

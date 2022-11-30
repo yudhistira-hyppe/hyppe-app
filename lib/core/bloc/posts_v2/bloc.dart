@@ -149,7 +149,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('pageRow', '$pageRows'));
     formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
 
-    print(formData.fields.map((e) => e).join(','));
+    print('getAllContentsBlocV2 paging : ${formData.fields.map((e) => e).join(',')}');
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,

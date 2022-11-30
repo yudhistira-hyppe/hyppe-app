@@ -48,12 +48,13 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     try {
       if (list != null) {
         if (reload) {
-          contentsQuery.page = 1;
           contentsQuery.hasNext = true;
+          contentsQuery.page = 2;
         }
         res.addAll(list);
         contentsQuery.hasNext = list.length == contentsQuery.limit;
         if (list.isNotEmpty) contentsQuery.page++;
+        'initialPic nextpage : ${contentsQuery.page}'.logger();
       } else {
         if (reload) {
           'reload contentsQuery : satu'.logger();
