@@ -242,7 +242,7 @@ class _DiaryPageState extends State<DiaryPage> {
                   alignment: Alignment.bottomCenter,
                   child: widget.data?.reportedStatus == "BLURRED"
                       ? Container()
-                      : widget.data?.music != null
+                      : widget.data?.music?.musicTitle != null
                           ? Padding(
                               padding: const EdgeInsets.all(15.0),
                               child: MusicStatusPage(music: widget.data!.music!),

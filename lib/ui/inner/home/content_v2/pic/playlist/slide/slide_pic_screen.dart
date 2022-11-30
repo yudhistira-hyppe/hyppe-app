@@ -332,7 +332,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                               lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
                             ),
-                            if (widget.data.music != null && (widget.data.apsaraId ?? '').isNotEmpty)
+                            if (widget.data.music?.musicTitle != null && (widget.data.apsaraId ?? '').isNotEmpty)
                               notifier.isLoadMusic
                                   ? LoadingMusicScreen(
                                       music: widget.data.music!,

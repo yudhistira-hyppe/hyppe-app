@@ -61,7 +61,7 @@ class _BuildBottomViewState extends State<BuildBottomView> {
           currentStory: widget.currentStory,
           storyController: widget.storyController,
         ),
-        if(widget.data?.music != null)
+        if(widget.data?.music?.musicTitle != null)
           Container(
             margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
             child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
@@ -73,7 +73,7 @@ class _BuildBottomViewState extends State<BuildBottomView> {
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
           children: [
-            if(widget.data?.music != null)
+            if(widget.data?.music?.musicTitle != null)
               Container(
                 margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
                 child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
