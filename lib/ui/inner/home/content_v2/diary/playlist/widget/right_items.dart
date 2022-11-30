@@ -39,74 +39,79 @@ class RightItems extends StatelessWidget {
       builder: (_, value, value2, __) => Stack(
         children: [
           Align(
-            alignment: const Alignment(1.0, 0.10),
-            child: SizedBox(
-              height: 400 * SizeConfig.scaleDiagonal,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  // Consumer<PlaylistNotifier>(
-                  //   builder: (_, notifier, __) => _customIcon2(
-                  //     context,
-                  //     "${AssetPath.vectorPath}bookmark.svg",
-                  //     value2.translate.save,
-                  //     onTap: () {
-                  //       context.read<DiariesPlaylistNotifier>().forcePause = true;
-                  //       notifier.showMyPlaylistBottomSheet(context, index: value.currentDiary, data: data, featureType: FeatureType.diary);
-                  //     },
-                  //   ),
-                  // ),
+            // alignment: const Alignment(1.0, 0.10),
+            alignment: Alignment.bottomRight,
 
-                  Consumer<LikeNotifier>(
-                    builder: (context, notifier, child) => _customIcon2(
-                      context,
-                      '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
-                      (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like ?? '',
-                      colorIcon: data.isLiked == true ? kHyppePrimary : kHyppeLightButtonText,
-                      onTap: () {
-                        context.read<DiariesPlaylistNotifier>().forcePause = false;
-                        notifier.likePost(context, data);
-                      },
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 80.0),
+              child: SizedBox(
+                height: 400 * SizeConfig.scaleDiagonal,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    // Consumer<PlaylistNotifier>(
+                    //   builder: (_, notifier, __) => _customIcon2(
+                    //     context,
+                    //     "${AssetPath.vectorPath}bookmark.svg",
+                    //     value2.translate.save,
+                    //     onTap: () {
+                    //       context.read<DiariesPlaylistNotifier>().forcePause = true;
+                    //       notifier.showMyPlaylistBottomSheet(context, index: value.currentDiary, data: data, featureType: FeatureType.diary);
+                    //     },
+                    //   ),
+                    // ),
+
+                    Consumer<LikeNotifier>(
+                      builder: (context, notifier, child) => _customIcon2(
+                        context,
+                        '${AssetPath.vectorPath}${data.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
+                        (data.insight?.likes ?? 0) > 0 ? _system.formatterNumber((data.insight?.likes ?? 0)) : value2.translate.like ?? '',
+                        colorIcon: data.isLiked == true ? kHyppePrimary : kHyppeLightButtonText,
+                        onTap: () {
+                          context.read<DiariesPlaylistNotifier>().forcePause = false;
+                          notifier.likePost(context, data);
+                        },
+                      ),
                     ),
-                  ),
-                  (data.allowComments ?? false)
-                      ? _customIcon2(
-                          context,
-                          "${AssetPath.vectorPath}comment.svg",
-                          value2.translate.comment ?? 'comment',
-                          onTap: () async {
-                            // if (context.read<ProfileNotifier>().myProfile != null) {
-                            //   if (context.read<ProfileNotifier>().myProfile.profileOverviewData.userOverviewData.isComplete) {
-                            //     context.read<DiariesPlaylistNotifier>().forcePause = true;
-                            //     await ShowBottomSheet.onShowComment(context, comment: data);
-                            //   } else {
-                            //     ShowBottomSheet().onShowColouredSheet(context, 'Please complete your profile to comment another hyppers',
-                            //         maxLines: 2, color: Theme.of(context).colorScheme.error);
-                            //   }
-                            // } else {
-                            //   ShowBottomSheet.onShowSomethingWhenWrong(context);
-                            // }
-                            context.read<DiariesPlaylistNotifier>().forcePause = true;
-                            ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
-                          },
-                        )
-                      : const SizedBox.shrink(),
-                  _customIcon2(
-                    context,
-                    "${AssetPath.vectorPath}share.svg",
-                    value2.translate.share ?? 'share',
-                    colorIcon: kHyppeLightButtonText,
-                    onTap: () => value.createdDynamicLink(context, data: data),
-                  ),
-                  if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
+                    (data.allowComments ?? false)
+                        ? _customIcon2(
+                            context,
+                            "${AssetPath.vectorPath}comment.svg",
+                            value2.translate.comment ?? 'comment',
+                            onTap: () async {
+                              // if (context.read<ProfileNotifier>().myProfile != null) {
+                              //   if (context.read<ProfileNotifier>().myProfile.profileOverviewData.userOverviewData.isComplete) {
+                              //     context.read<DiariesPlaylistNotifier>().forcePause = true;
+                              //     await ShowBottomSheet.onShowComment(context, comment: data);
+                              //   } else {
+                              //     ShowBottomSheet().onShowColouredSheet(context, 'Please complete your profile to comment another hyppers',
+                              //         maxLines: 2, color: Theme.of(context).colorScheme.error);
+                              //   }
+                              // } else {
+                              //   ShowBottomSheet.onShowSomethingWhenWrong(context);
+                              // }
+                              context.read<DiariesPlaylistNotifier>().forcePause = true;
+                              ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
+                            },
+                          )
+                        : const SizedBox.shrink(),
                     _customIcon2(
                       context,
-                      "${AssetPath.vectorPath}cart.svg",
-                      value2.translate.buy ?? 'buy',
+                      "${AssetPath.vectorPath}share.svg",
+                      value2.translate.share ?? 'share',
                       colorIcon: kHyppeLightButtonText,
-                      onTap: () => ShowBottomSheet.onBuyContent(context, data: data),
+                      onTap: () => value.createdDynamicLink(context, data: data),
                     ),
-                ],
+                    if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
+                      _customIcon2(
+                        context,
+                        "${AssetPath.vectorPath}cart.svg",
+                        value2.translate.buy ?? 'buy',
+                        colorIcon: kHyppeLightButtonText,
+                        onTap: () => ShowBottomSheet.onBuyContent(context, data: data),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

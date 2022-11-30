@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/music_status_page_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
 import 'package:provider/provider.dart';
@@ -236,6 +237,17 @@ class _DiaryPageState extends State<DiaryPage> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: widget.data!) : Container(),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: widget.data?.reportedStatus == "BLURRED"
+                      ? Container()
+                      : widget.data?.music != null
+                          ? Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: MusicStatusPage(music: widget.data!.music!),
+                            )
+                          : Container(),
                 )
               ],
             );
