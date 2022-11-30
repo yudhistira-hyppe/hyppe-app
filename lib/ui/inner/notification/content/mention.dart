@@ -22,7 +22,8 @@ class MentionNotification extends StatelessWidget {
               data: notifier.mentionData()?[index],
               rightWidget: ImageComponent(
                 borderRadiusGeometry: BorderRadius.circular(4.0),
-                data: notifier.mentionData()?[index].content.firstOrNull() ?? Content(),
+                // data: notifier.mentionData()?[index].content.firstOrNull() ?? Content(),
+                data: notifier.mentionData()?[index].content ?? Content(),
               ),
             );
           },

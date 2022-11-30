@@ -225,8 +225,7 @@ class _DiaryPageState extends State<DiaryPage> {
                       ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) &&
-                          (widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED" || (widget.data?.reportedUserCount ?? 0) > 200)
+                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED")
                       ? ContentViolationWidget(data: widget.data!)
                       : Container(),
                 )

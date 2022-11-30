@@ -28,7 +28,8 @@ class AllNotification extends StatelessWidget {
                   // ? AcceptButton(data: notifier.data?[index])
                   : ImageComponent(
                       borderRadiusGeometry: BorderRadius.circular(4.0),
-                      data: notifier.data?[index].content.firstOrNull,
+                      // data: notifier.data?[index].content.firstOrNull,
+                      data: notifier.data?[index].content,
                     ),
             );
           },

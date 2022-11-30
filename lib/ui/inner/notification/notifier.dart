@@ -58,13 +58,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     NotificationCategory? eventType,
   }) async {
     Future<List<NotificationModel>> _resFuture;
-
-    print('getnotification');
-    print(eventType);
     notificationsQuery = notificationsQuery..eventType = eventType;
-    print('getnotification');
-    print(eventType);
-
     try {
       if (reload) {
         print('reload contentsQuery : 22');
@@ -180,7 +174,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
 
   Future markAsRead(BuildContext context, NotificationModel data) async {
     final indexP = _data?.indexOf(data);
-    if(indexP != null){
+    if (indexP != null) {
       if (!(_data?[indexP].isRead ?? false)) {
         _data?[indexP].isRead = true;
         notifyListeners();

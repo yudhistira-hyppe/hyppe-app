@@ -435,8 +435,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                                             ),
                                                           )
                                                         : Container(),
-                                                    data.email == SharedPreference().readStorage(SpKeys.email) &&
-                                                            (data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED" || (data.reportedUserCount ?? 0) > 200)
+                                                    data.email == SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == 'OWNED' || data.reportedStatus == "BLURRED")
                                                         ? ContentViolationWidget(data: data)
                                                         : Container(),
                                                   ],

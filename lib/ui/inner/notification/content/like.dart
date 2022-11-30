@@ -21,7 +21,8 @@ class LikeNotification extends StatelessWidget {
               data: notifier.likeData()?[index],
               rightWidget: ImageComponent(
                 borderRadiusGeometry: BorderRadius.circular(4.0),
-                data: notifier.likeData()?[index].content.firstOrNull(),
+                // data: notifier.likeData()?[index].content.firstOrNull(),
+                data: notifier.likeData()?[index].content,
               ),
             );
           },

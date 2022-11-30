@@ -11,7 +11,8 @@ class NotificationModel {
   String? title;
   String? body;
   String? bodyId;
-  List<Content> content = [];
+  // List<Content> content = [];
+  Content? content;
   String? createdAt;
   NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo;
   String? mate;
@@ -29,7 +30,8 @@ class NotificationModel {
     this.title,
     this.body,
     this.bodyId,
-    this.content = const [],
+    // this.content = const [],
+    this.content,
     this.createdAt,
     this.senderOrReceiverInfo,
     this.mate,
@@ -49,9 +51,10 @@ class NotificationModel {
     body = json['body'];
     bodyId = json['bodyId'];
     if (json['content'] != null) {
-      json['content'].forEach((v) {
-        content.add(Content.fromJson(v));
-      });
+      Content.fromJson(json['content']);
+      // json['content'].forEach((v) {
+      //   content.add(Content.fromJson(v));
+      // });
     }
     createdAt = json['createdAt'];
     senderOrReceiverInfo = json['senderOrReceiverInfo'] != null ? NotificationSenderOrReceiverInfoModel.fromJson(json['senderOrReceiverInfo']) : null;
@@ -72,7 +75,7 @@ class NotificationModel {
     data['title'] = title;
     data['body'] = body;
     data['bodyId'] = bodyId;
-    data['content'] = content.map((v) => v.toJson()).toList();
+    data['content'] = content?.toJson();
     data['createdAt'] = createdAt;
     if (senderOrReceiverInfo != null) {
       data['senderOrReceiverInfo'] = senderOrReceiverInfo?.toJson();
@@ -94,7 +97,8 @@ class NotificationModel {
     String? title,
     String? body,
     String? bodyId,
-    List<Content>? content,
+    // List<Content>? content,
+    Content? content,
     String? createdAt,
     NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo,
     String? mate,
