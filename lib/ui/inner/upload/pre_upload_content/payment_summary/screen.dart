@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -181,7 +182,9 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 16),
                                 child: GestureDetector(
-                                  onTap: () => Routing().move(Routes.transaction),
+                                  onTap: () {
+                                    context.read<PreUploadContentNotifier>().navigateToTransAndLoby(context);
+                                  },
                                   child: Text(
                                     translate.checkPaymentStatus ?? '',
                                     style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),

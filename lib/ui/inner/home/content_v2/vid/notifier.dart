@@ -96,7 +96,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         if (list != null) contentsQuery.page++;
       } else {
         if (reload) {
-          print('reload contentsQuery : 15');
+          'reload contentsQuery : 15'.logger();
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context);
@@ -140,7 +140,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
         // }
 
       } else {
-        print('initial video');
+        'initial video'.logger();
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;
       }
       // final _searchData = context.read<SearchNotifier>();

@@ -62,6 +62,19 @@ class CenterItemView extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
+        emptyWidget: Container(
+          width: _scaling,
+          height: 181,
+          child: _buildBody(context),
+          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
       ),
     );
   }

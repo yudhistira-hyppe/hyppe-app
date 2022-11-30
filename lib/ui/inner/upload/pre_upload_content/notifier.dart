@@ -87,8 +87,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool get isLoadingLoadMore => _isLoadingLoadMore;
   bool _isShowAutoComplete = false;
   bool get isShowAutoComplete => _isShowAutoComplete;
-  bool _isLoadMerge = false;
-  bool get isLoadMerge => _isLoadMerge;
 
   String _temporarySearch = '';
   String get temporarySearch => _temporarySearch;
@@ -347,11 +345,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set isLoadMerge(bool val) {
-    _isLoadMerge = val;
-    notifyListeners();
-  }
-
   set selectedLocation(String val) {
     _selectedLocation = val;
     notifyListeners();
@@ -494,152 +487,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  void imageMerger(BuildContext context, String urlAudio, int duration) async {
-    try {
-      if (urlAudio.isNotEmpty) {
-        _isLoadMerge = true;
-        notifyListeners();
-        String tempVideoPath = await System().getSystemPath(params: 'tempVid');
-        tempVideoPath = '${tempVideoPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-        String outputPath = await System().getSystemPath(params: 'postPic');
-        File image = File(_fileContent?[0] ?? ''); // Or any other way to get a File instance.
-        final decodedImage = await decodeImageFromList(image.readAsBytesSync());
-        print('real image : ${decodedImage.height}:${decodedImage.width}');
-        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-        double heightImage = decodedImage.height.toDouble();
-        double widthImage = decodedImage.width.toDouble();
-        const maxScale = 1080;
-        var multiValue = 1.0;
-        if (heightImage > maxScale || widthImage > maxScale) {
-          if (heightImage > maxScale && widthImage > maxScale) {
-            if (heightImage > widthImage) {
-              multiValue = maxScale / heightImage;
-            } else {
-              multiValue = maxScale / widthImage;
-            }
-          } else if (heightImage > maxScale) {
-            multiValue = maxScale / heightImage;
-          } else if (widthImage > maxScale) {
-            multiValue = maxScale / widthImage;
-          }
-        }
-        String command = '-framerate 1 -i ${_fileContent?[0]} -r 30 -pix_fmt yuv420p -vf scale=${decodedImage.width / multiValue}:${decodedImage.height / multiValue} -c:v mpeg4 $tempVideoPath';
-        await FFmpegKit.executeAsync(
-          command,
-          (session) async {
-            final codeSession = await session.getReturnCode();
-            if (ReturnCode.isSuccess(codeSession)) {
-              print('ReturnCode = Success');
-              command = '-stream_loop -1 -i $tempVideoPath -i $urlAudio -shortest -c:v mpeg4 $outputPath';
-              await FFmpegKit.executeAsync(
-                command,
-                (session) async {
-                  final codeSession = await session.getReturnCode();
-                  if (ReturnCode.isSuccess(codeSession)) {
-                    final path = _fileContent?[0] ?? '';
-                    print('URL now : $path');
-                    final notifier = context.read<PreviewContentNotifier>();
-                    print('URL default 2 : ${notifier.defaultPath}');
-                    _fileContent?[0] = outputPath;
-                    notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
-                    _isLoadMerge = false;
-                    notifyListeners();
-                  } else if (ReturnCode.isCancel(codeSession)) {
-                    print('ReturnCode = Cancel');
-                    _isLoadMerge = false;
-                    notifyListeners();
-                    throw 'Merge picture is canceled';
-                    // Cancel
-                  } else {
-                    print('ReturnCode = Error');
-                    _isLoadMerge = false;
-                    notifyListeners();
-                    throw 'Merge picture is error';
-                    // Error
-                  }
-                },
-                (log) {
-                  print('FFmpegKit Image ${log.getMessage()}');
-                },
-              );
-            } else if (ReturnCode.isCancel(codeSession)) {
-              print('ReturnCode = Cancel');
-              _isLoadMerge = false;
-              notifyListeners();
-              throw 'Merge picture is canceled';
-              // Cancel
-            } else {
-              print('ReturnCode = Error');
-              _isLoadMerge = false;
-              notifyListeners();
-              throw 'Merge picture is error';
-              // Error
-            }
-          },
-          (log) {
-            print('FFmpegKit Image ${log.getMessage()}');
-          },
-        );
-      }
-    } catch (e) {
-      'imageMerger Error : $e'.logger();
-      _isLoadMerge = false;
-      notifyListeners();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }
-  }
-
-  Future<void> videoMerger(BuildContext context, String urlAudio) async {
-    try {
-      if (urlAudio.isNotEmpty) {
-        _isLoadMerge = true;
-        notifyListeners();
-        String outputPath = await System().getSystemPath(params: 'postVideo');
-        outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
-
-        String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[0]} -shortest -c copy $outputPath';
-        await FFmpegKit.executeAsync(
-          command,
-          (session) async {
-            final codeSession = await session.getReturnCode();
-            if (ReturnCode.isSuccess(codeSession)) {
-              print('ReturnCode = Success');
-              final path = _fileContent?[0] ?? '';
-              final notifier = context.read<PreviewContentNotifier>();
-              print('URL now : $path');
-              print('URL default 2 : ${notifier.defaultPath}');
-              _fileContent?[0] = outputPath;
-              notifier.url = fileContent?[0] ?? '${notifier.defaultPath}';
-            } else if (ReturnCode.isCancel(codeSession)) {
-              print('ReturnCode = Cancel');
-              _isLoadMerge = false;
-              notifyListeners();
-              throw 'Merge video is canceled';
-              // Cancel
-            } else {
-              print('ReturnCode = Error');
-              _isLoadMerge = false;
-              notifyListeners();
-              throw 'Merge video is Error';
-              // Error
-            }
-          },
-          (log) {
-            print('FFmpegKit ${log.getMessage()}');
-          },
-        );
-      } else {
-        throw 'UrlAudio is empty';
-      }
-    } catch (e) {
-      'videoMerger Error : $e'.logger();
-      ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    } finally {
-      _isLoadMerge = false;
-      notifyListeners();
-    }
-  }
-
   void _connectAndListenToSocket(BuildContext context) async {
     final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
     String? token = SharedPreference().readStorage(SpKeys.userToken);
@@ -687,7 +534,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     _locationName = '';
     _userTagData = [];
     _privacyTitle = '';
-    musicSelected = null;
     privacyValue = 'PUBLIC';
     interestData = [];
     userTagDataReal = [];
@@ -706,6 +552,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     editData = null;
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
+      try {
+        notifier.audioPreviewPlayer.stop();
+        notifier.audioPreviewPlayer.dispose();
+      } catch (e) {
+        'Error dispose AudioPreviewPlayer : $e'.logger();
+      }
+
+      musicSelected = null;
       notifier.defaultPath = null;
       if (notifier.betterPlayerController != null) {
         notifier.betterPlayerController!.dispose();
@@ -1600,6 +1454,23 @@ class PreUploadContentNotifier with ChangeNotifier {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {
           Routing().moveAndPop(Routes.boostPaymentSummary);
+          String message = '';
+          if (certified) {
+            message = "${System().convertTypeContent(
+              System().validatePostTypeV2(featureType),
+            )} ${language.hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails}";
+          } else {
+            message = "${System().convertTypeContent(
+              System().validatePostTypeV2(featureType),
+            )} ${language.hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails}";
+          }
+          ShowBottomSheet().onShowColouredSheet(
+            context,
+            message,
+            subCaption: '',
+            maxLines: 3,
+            color: kHyppeLightSuccess,
+          );
           // context.read<MainNotifier>().startTimer();
         });
         _isLoading = false;
@@ -1609,6 +1480,12 @@ class PreUploadContentNotifier with ChangeNotifier {
       ShowBottomSheet().onShowColouredSheet(context, 'Somethink Wrong', color: kHyppeDanger);
     }
     notifyListeners();
+  }
+
+  navigateToTransAndLoby(BuildContext context) {
+    Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+    Routing().move(Routes.transaction);
+    _onExit();
   }
 
   exitBoostPage() {

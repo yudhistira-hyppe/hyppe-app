@@ -67,6 +67,18 @@ class OnjectContentWidget extends StatelessWidget {
                   ),
                 );
               },
+              emptyWidget: Container(
+                width: 48 * SizeConfig.scaleDiagonal,
+                height: 48 * SizeConfig.scaleDiagonal,
+                alignment: Alignment.topRight,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  image: const DecorationImage(
+                    fit: BoxFit.contain,
+                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

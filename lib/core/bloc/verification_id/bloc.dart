@@ -16,8 +16,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 class VerificationIDBloc {
   final _repos = Repos();
 
-  VerificationIDFetch _verificationIdFetch =
-      VerificationIDFetch(VerificationIDState.init);
+  VerificationIDFetch _verificationIdFetch = VerificationIDFetch(VerificationIDState.init);
   VerificationIDFetch get postsFetch => _verificationIdFetch;
   setVerificationIDFetch(VerificationIDFetch val) => _verificationIdFetch = val;
 
@@ -64,19 +63,13 @@ class VerificationIDBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setVerificationIDFetch(VerificationIDFetch(
-              VerificationIDState.postVerificationIDError,
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setVerificationIDFetch(VerificationIDFetch(
-              VerificationIDState.postVerificationIDSuccess,
-              data: onResult));
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDSuccess, data: onResult));
         }
       },
       (errorData) {
-        setVerificationIDFetch(VerificationIDFetch(
-            VerificationIDState.postVerificationIDError,
-            data: errorData));
+        setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError, data: errorData));
       },
       data: formData,
       headers: {
@@ -109,10 +102,8 @@ class VerificationIDBloc {
             await MultipartFile.fromFile(docFile.path,
                 filename: System().basenameFiles(docFile.path),
                 contentType: MediaType(
-                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ??
-                      '',
-                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ??
-                      "",
+                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ?? '',
+                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ?? "",
                 ))));
       }
     }
@@ -122,17 +113,13 @@ class VerificationIDBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setVerificationIDFetch(
-              VerificationIDFetch(VerificationIDState.postVerificationIDError));
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError));
         } else {
-          setVerificationIDFetch(VerificationIDFetch(
-              VerificationIDState.postVerificationIDSuccess,
-              data: onResult));
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDSuccess, data: onResult));
         }
       },
       (errorData) {
-        setVerificationIDFetch(
-            VerificationIDFetch(VerificationIDState.postVerificationIDError));
+        setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError));
       },
       data: formData,
       headers: {
@@ -191,15 +178,15 @@ class VerificationIDBloc {
     if (docFiles != null) {
       for (File docFile in docFiles) {
         debugPrint('supportFile => ' + docFile.path);
+        debugPrint('supportFile => ' + File(docFile.path).path.split('/').last);
         formData.files.add(MapEntry(
             "supportFile",
             await MultipartFile.fromFile(docFile.path,
-                filename: System().basenameFiles(docFile.path),
+                // filename: System().basenameFiles(docFile.path),
+                filename: File(docFile.path).path.split('/').last,
                 contentType: MediaType(
-                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ??
-                      '',
-                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ??
-                      "",
+                  System().lookupContentMimeType(docFile.path)?.split('/')[0] ?? '',
+                  System().extensionFiles(docFile.path)?.replaceAll(".", "") ?? "",
                 ))));
       }
     }
@@ -209,19 +196,13 @@ class VerificationIDBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setVerificationIDFetch(VerificationIDFetch(
-              VerificationIDState.postVerificationIDError,
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError, data: GenericResponse.fromJson(onResult.data).responseData));
         } else {
-          setVerificationIDFetch(VerificationIDFetch(
-              VerificationIDState.postVerificationIDSuccess,
-              data: onResult));
+          setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDSuccess, data: onResult));
         }
       },
       (errorData) {
-        setVerificationIDFetch(VerificationIDFetch(
-            VerificationIDState.postVerificationIDError,
-            data: errorData));
+        setVerificationIDFetch(VerificationIDFetch(VerificationIDState.postVerificationIDError, data: errorData));
       },
       data: formData,
       headers: {

@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/services/stream_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -40,8 +41,7 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   String? appPackage = "";
 
   Future logOut(BuildContext context) async {
-    print('asdasdasdasd');
-    print('${isLoading}');
+    'asdasdasdasd ${isLoading}'.logger();
     // if (!isLoading) {
     setLoading(true);
     final notifier = UserBloc();

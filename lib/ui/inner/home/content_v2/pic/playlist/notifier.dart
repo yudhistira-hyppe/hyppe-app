@@ -60,7 +60,6 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   set urlMusic(String val){
     _urlMusic = val;
-    notifyListeners();
   }
 
   set checkIsLoading(bool val) {
@@ -84,7 +83,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
     if (_routeArgument?.postID != null) {
-      print('pic playlist');
+      'pic playlist'.logger();
       await _initialPic(context);
     } else {
       _data = _routeArgument?.picData;
@@ -97,7 +96,6 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void initMusic(BuildContext context, String apsaraId) async{
     try {
-      isLoadMusic = true;
       if(apsaraId.isNotEmpty){
         final url = await _getAdsVideoApsara(context, apsaraId);
         if(url != null){
@@ -109,10 +107,14 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       }else{
         throw 'apsaramusic is empty';
       }
-      isLoadMusic = false;
     }catch(e){
       "Error Init Video $e".logger();
-      isLoadMusic = false;
+
+
+    }finally{
+      Future.delayed(const Duration(milliseconds: 400), (){
+        isLoadMusic = false;
+      });
     }
   }
 
@@ -125,7 +127,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
+        'jsonMap video Apsara : $jsonMap'.logger();
         return jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -142,7 +144,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
-      print('reload contentsQuery : 6');
+      'reload contentsQuery : 6'.logger();
       _resFuture = contentsQuery.reload(context);
 
       final res = await _resFuture;
@@ -220,7 +222,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       try {
         checkIsLoading = true;
         _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
-        print('reload contentsQuery : dua');
+        'reload contentsQuery : dua'.logger();
         final _resFuture = _usersFollowingQuery.reload(context);
         final _resRequest = await _resFuture;
         if (_resRequest.isNotEmpty) {

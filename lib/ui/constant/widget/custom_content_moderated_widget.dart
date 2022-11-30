@@ -70,6 +70,16 @@ class CustomContentModeratedWidget extends StatelessWidget {
                 ),
               );
             },
+            emptyWidget: Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: boxFitError,
+                  image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                ),
+              ),
+            ),
           ),
           if (featureType != FeatureType.pic)
             CustomIconWidget(

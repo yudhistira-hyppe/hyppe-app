@@ -80,6 +80,10 @@ class ImageComponent extends StatelessWidget {
                 height: height * SizeConfig.scaleDiagonal,
                 decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: BoxFit.cover), borderRadius: borderRadiusGeometry));
           },
+          emptyWidget: Container(
+              width: width * SizeConfig.scaleDiagonal,
+              height: height * SizeConfig.scaleDiagonal,
+              decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: borderRadiusGeometry)),
         ),
       );
     }

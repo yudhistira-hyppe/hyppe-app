@@ -50,6 +50,17 @@ class CustomThumbImage extends StatelessWidget {
             ),
           ),
         ),
+        emptyWidget: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

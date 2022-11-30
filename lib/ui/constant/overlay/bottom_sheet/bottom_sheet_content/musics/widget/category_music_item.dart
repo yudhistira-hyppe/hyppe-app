@@ -26,7 +26,7 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
     final notifier = Provider.of<PreviewContentNotifier>(context);
     return InkWell(
       onTap: (){
-        notifier.seletedType = widget.type;
+        notifier.selectedType = widget.type;
         notifier.selectedMusicEnum = widget.myEnum;
         notifier.selectedMusic = null;
         final myId = widget.type.id;

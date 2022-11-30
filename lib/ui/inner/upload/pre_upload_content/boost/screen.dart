@@ -103,6 +103,20 @@ class BoostUploadScreen extends StatelessWidget {
                                             ),
                                           );
                                         },
+                                        emptyWidget: Container(
+                                          // margin: margin,
+                                          // // const EdgeInsets.symmetric(horizontal: 4.5),
+                                          // width: _scaling,
+                                          height: 186,
+                                          // child: _buildBody(context),
+                                          decoration: BoxDecoration(
+                                            image: const DecorationImage(
+                                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                        ),
                                       ),
                                     )
                                   : Container(
@@ -154,10 +168,12 @@ class BoostUploadScreen extends StatelessWidget {
                         tenPx,
                         GestureDetector(
                           onTap: () async {
+                            final date = DateTime.now();
+                            final startDate = DateTime(date.year, date.month, date.day + 1);
                             final DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: notifier.tmpstartDate == DateTime(1000) ? DateTime.now() : notifier.tmpstartDate,
-                                firstDate: DateTime.now(),
+                                initialDate: notifier.tmpstartDate == DateTime(1000) ? startDate : notifier.tmpstartDate,
+                                firstDate: startDate,
                                 lastDate: DateTime(3000),
                                 builder: (context, child) {
                                   return Theme(

@@ -275,7 +275,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set seletedType(MusicType? type){
+  set selectedType(MusicType? type){
     _selectedType = type;
     notifyListeners();
   }
@@ -426,6 +426,12 @@ class PreviewContentNotifier with ChangeNotifier {
         if(music.isSelected){
           final index = _listMusics.indexOf(music);
           _listMusics[index].isSelected = false;
+        }
+      }
+      for(var music in _listExpMusics){
+        if(music.isSelected){
+          final index = _listExpMusics.indexOf(music);
+          _listExpMusics[index].isSelected = false;
         }
       }
       _currentMusic = null;
@@ -652,6 +658,7 @@ class PreviewContentNotifier with ChangeNotifier {
       if(_isImage){
         _selectedMusic = null;
         _fixSelectedMusic = null;
+        _selectedType = null;
         audioPreviewPlayer.stop();
         audioPreviewPlayer.dispose();
         notifyListeners();
@@ -660,6 +667,7 @@ class PreviewContentNotifier with ChangeNotifier {
           await restartVideoPlayer(_defaultPath!, context);
           _selectedMusic = null;
           _fixSelectedMusic = null;
+          _selectedType = null;
           notifyListeners();
         }else{
           throw 'defaultPath is null';

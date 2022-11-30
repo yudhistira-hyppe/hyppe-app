@@ -105,7 +105,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   }
 
   TextStyle label(BuildContext context) => Theme.of(context).textTheme.headline6?.copyWith(color: kHyppePrimary) ?? const TextStyle();
-  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle() ;
+  TextStyle text(BuildContext context) => Theme.of(context).textTheme.bodyText1 ?? const TextStyle();
   TextStyle hint(BuildContext context) => Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).tabBarTheme.unselectedLabelColor) ?? const TextStyle();
 
   void onInitial(BuildContext context, AccountPreferenceScreenArgument argument) {
@@ -226,87 +226,87 @@ class AccountPreferencesNotifier extends ChangeNotifier {
   Future onClickChangeImageProfile(BuildContext context) async {
     bool connect = await System().checkConnections();
     if (connect) {
-      bool _isPermissionGranted = await System().requestPermission(context, permissions: [
-        Permission.storage,
-        Permission.mediaLibrary,
-        Permission.photos,
-      ]);
-      if (_isPermissionGranted) {
-        try {
-          final _file = await System().getLocalMedia(context: context);
-          uploadProgress = System().createPopupDialog(ShowOverlayLoading());
-          _assignDioCancelToken();
+      // bool _isPermissionGranted = await System().requestPermission(context, permissions: [
+      //   Permission.storage,
+      //   Permission.mediaLibrary,
+      //   Permission.photos,
+      // ]);
+      // if (_isPermissionGranted) {
+      try {
+        final _file = await System().getLocalMedia(context: context);
+        uploadProgress = System().createPopupDialog(ShowOverlayLoading());
+        _assignDioCancelToken();
 
-          if (_file.values.single != null) {
-            progress = "0%";
+        if (_file.values.single != null) {
+          progress = "0%";
 
-            Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
-            final notifier = UserBloc();
+          final notifier = UserBloc();
 
-            await notifier.uploadProfilePictureBlocV2(
-              context,
-              verifyID: false,
-              cancelToken: _dioCancelToken,
-              file: _file.values.single?.single.path ?? '',
-              email: SharedPreference().readStorage(SpKeys.email),
-              onSendProgress: (received, total) {
-                _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
-              },
-            );
-
-            final fetch = notifier.userFetch;
-            if (fetch.userState == UserState.uploadProfilePictureSuccess) {
-              hold = true;
-              progress = "${language.finishingUp}...";
-
-              context.read<MainNotifier>().initMain(context, onUpdateProfile: true).then((_) {
-                hold = false;
-                ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
-                notifyListeners();
-              }).whenComplete(() {
-                print('data gambar');
-
-                _eventService.notifyUploadSuccess(fetch.data);
-              });
-            } else {
-              ShowBottomSheet().onShowColouredSheet(context, language.failedUpdatedYourProfilePicture ?? '', color: Theme.of(context).colorScheme.error);
-              _eventService.notifyUploadFailed(
-                DioError(
-                  requestOptions: RequestOptions(
-                    path: UrlConstants.uploadProfilePictureV2,
-                  ),
-                  error: language.failedUpdatedYourProfilePicture ?? '',
-                ),
-              );
-            }
-          }
-        } catch (e) {
-          _eventService.notifyUploadFailed(
-            DioError(
-              requestOptions: RequestOptions(
-                path: UrlConstants.uploadProfilePictureV2,
-              ),
-              error: e,
-            ),
+          await notifier.uploadProfilePictureBlocV2(
+            context,
+            verifyID: false,
+            cancelToken: _dioCancelToken,
+            file: _file.values.single?.single.path ?? '',
+            email: SharedPreference().readStorage(SpKeys.email),
+            onSendProgress: (received, total) {
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+            },
           );
-          'e'.logger();
-        } finally {
-          _resetDioCancelToken();
 
-          if (uploadProgress != null) {
-            uploadProgress?.remove();
+          final fetch = notifier.userFetch;
+          if (fetch.userState == UserState.uploadProfilePictureSuccess) {
+            hold = true;
+            progress = "${language.finishingUp}...";
+
+            context.read<MainNotifier>().initMain(context, onUpdateProfile: true).then((_) {
+              hold = false;
+              ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
+              notifyListeners();
+            }).whenComplete(() {
+              print('data gambar');
+
+              _eventService.notifyUploadSuccess(fetch.data);
+            });
+          } else {
+            ShowBottomSheet().onShowColouredSheet(context, language.failedUpdatedYourProfilePicture ?? '', color: Theme.of(context).colorScheme.error);
+            _eventService.notifyUploadFailed(
+              DioError(
+                requestOptions: RequestOptions(
+                  path: UrlConstants.uploadProfilePictureV2,
+                ),
+                error: language.failedUpdatedYourProfilePicture ?? '',
+              ),
+            );
           }
         }
-      } else {
-        ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage ?? '');
+      } catch (e) {
+        _eventService.notifyUploadFailed(
+          DioError(
+            requestOptions: RequestOptions(
+              path: UrlConstants.uploadProfilePictureV2,
+            ),
+            error: e,
+          ),
+        );
+        'e'.logger();
+      } finally {
+        _resetDioCancelToken();
+
+        if (uploadProgress != null) {
+          uploadProgress?.remove();
+        }
       }
     } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-        Routing().moveBack();
-        onClickChangeImageProfile(context);
-      });
+      ShowGeneralDialog.permanentlyDeniedPermission(context, permissions: language.permissionStorage ?? '');
     }
+    // } else {
+    //   ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+    //     Routing().moveBack();
+    //     onClickChangeImageProfile(context);
+    //   });
+    // }
   }
 
   Future onClickSaveProfile(BuildContext context) async {
@@ -315,12 +315,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
       if (somethingChanged(context)) {
         try {
           if (!System().canOnlyContainLettersNumbersPeriodsAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
-            await ShowBottomSheet().onShowColouredSheet(
-                context,
-                'Username only contain letters, numbers, periods, and underscore',
-                color: Colors.red,
-                iconSvg: "${AssetPath.vectorPath}remove.svg",
-                maxLines: 2);
+            await ShowBottomSheet()
+                .onShowColouredSheet(context, 'Username only contain letters, numbers, periods, and underscore', color: Colors.red, iconSvg: "${AssetPath.vectorPath}remove.svg", maxLines: 2);
             return;
           }
 

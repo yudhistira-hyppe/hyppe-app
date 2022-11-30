@@ -91,6 +91,14 @@ class _PicDetailState extends State<PicDetail> {
                         ),
                       );
                     },
+                    emptyWidget: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.contain,
+                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),

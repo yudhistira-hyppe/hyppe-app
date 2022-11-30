@@ -90,7 +90,7 @@ class PreviewDiaryNotifier with ChangeNotifier {
         if (list.isNotEmpty) contentsQuery.page++;
       } else {
         if (reload) {
-          print('reload contentsQuery : 4');
+          'reload contentsQuery : 4'.logger();
           res = await contentsQuery.reload(context);
         } else {
           res = await contentsQuery.loadNext(context, isLandingPage: true);

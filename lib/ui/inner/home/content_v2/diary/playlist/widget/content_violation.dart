@@ -21,7 +21,7 @@ class ContentViolationWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => Routing().move(Routes.appeal, argument: data),
       child: Container(
-        // color: Colors.red,
+        color: Colors.red,
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         child: Row(
           children: [

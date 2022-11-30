@@ -120,7 +120,7 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context) async {
-    print('init Home');
+    'init Home'.logger();
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       _isLoadingVid = true;
@@ -135,7 +135,7 @@ class HomeNotifier with ChangeNotifier {
       try {
         await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
       } catch (e) {
-        print(e);
+        'profile.initMain error $e'.logger();
       }
 
       final allContents = await allReload(context);
@@ -143,28 +143,28 @@ class HomeNotifier with ChangeNotifier {
       try {
         await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Story : $e");
+        "Error Load Story : $e".logger();
       }
       try {
         await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Video : $e");
+        "Error Load Video : $e".logger();
       }
       try {
         await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Diary : $e");
+        "Error Load Diary : $e".logger();
       }
       try {
-        print('initialPic : 1');
+        'initialPic : 1'.logger();
         await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Pic : $e");
+        "Error Load Pic : $e".logger();
       }
 
-      print('totLoading $totLoading');
+      'totLoading $totLoading'.logger();
       if (totLoading >= 3) {
-        print("is finish shimmer");
+        "is finish shimmer".logger();
         _isLoadingVid = false;
         _isLoadingDiary = false;
         _isLoadingPict = false;
@@ -180,7 +180,7 @@ class HomeNotifier with ChangeNotifier {
   }
 
   Future onRefresh(BuildContext context, String visibility) async {
-    print('home notifier');
+    'home notifier'.logger();
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       _isLoadingVid = true;
@@ -198,7 +198,7 @@ class HomeNotifier with ChangeNotifier {
       try {
         await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
       } catch (e) {
-        print(e);
+        'profile.initMain error $e'.logger();
       }
 
       final allContents = await allReload(context);
@@ -206,28 +206,27 @@ class HomeNotifier with ChangeNotifier {
       try {
         await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Story : $e");
+        "Error Load Story : $e".logger();
       }
       try {
         await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Video : $e");
+        "Error Load Video : $e".logger();
       }
       try {
         await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Diary : $e");
+        "Error Load Diary : $e".logger();
       }
       try {
-        print('initialPic : 1');
+        'initialPic : 1'.logger();
         await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
       } catch (e) {
-        print("Error Load Pic : $e");
+        "Error Load Pic : $e".logger();
       }
-
-      print('totLoading $totLoading');
+      'totLoading $totLoading'.logger();
       if (totLoading >= 3) {
-        print("is finish shimmer");
+        "is finish shimmer".logger();
         _isLoadingVid = false;
         _isLoadingDiary = false;
         _isLoadingPict = false;
@@ -246,7 +245,7 @@ class HomeNotifier with ChangeNotifier {
   Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     AllContents? res;
     final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
-    print('ambil semua data ${notifierMain.visibilty}');
+    'ambil semua data ${notifierMain.visibilty}'.logger();
     const page = 0;
     // final notifier = PostsBloc();
     //
@@ -392,7 +391,7 @@ class HomeNotifier with ChangeNotifier {
         }
       }
 
-      print('${_updatedData.cats?.length}');
+      '${_updatedData.cats?.length}'.logger();
     }
 
     notifyListeners();

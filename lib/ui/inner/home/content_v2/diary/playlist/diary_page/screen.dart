@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -21,6 +22,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 
+import '../../../../../../../app.dart';
 import '../../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../../core/services/shared_preference.dart';
@@ -79,7 +81,7 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   void dispose() {
-    print('_storyController dispose');
+    '_storyController dispose'.logger();
     if (!_storyController.playbackNotifier.isClosed) {
       _storyController.dispose();
     }
@@ -181,7 +183,13 @@ class _DiaryPageState extends State<DiaryPage> {
 
                               if (!isShowAds) {
                                 _storyController.pause();
+                                if (globalAudioPlayer != null) {
+                                  globalAudioPlayer!.pause();
+                                }
                                 await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
+                                if (globalAudioPlayer != null) {
+                                  globalAudioPlayer!.resume();
+                                }
                                 _storyController.play();
                               }
                             }
@@ -225,9 +233,7 @@ class _DiaryPageState extends State<DiaryPage> {
                       ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == 'OWNED' || widget.data?.reportedStatus == "BLURRED")
-                      ? ContentViolationWidget(data: widget.data!)
-                      : Container(),
+                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: widget.data!) : Container(),
                 )
               ],
             );

@@ -17,6 +17,7 @@ class CustomBaseCacheImage extends StatelessWidget {
   final double widthPlaceHolder;
   final double heightPlaceHolder;
   final Widget? placeHolderWidget;
+  final Widget emptyWidget;
   final Map<String, String>? headers;
   final Widget Function(BuildContext context, String url, dynamic error)? errorWidget;
   final Widget Function(BuildContext context, ImageProvider imageProvider)? imageBuilder;
@@ -30,6 +31,7 @@ class CustomBaseCacheImage extends StatelessWidget {
     this.memCacheWidth,
     this.memCacheHeight,
     this.placeHolderWidget,
+    required this.emptyWidget,
     this.widthPlaceHolder = 35,
     this.heightPlaceHolder = 35,
   }) : super(key: key);
@@ -37,7 +39,7 @@ class CustomBaseCacheImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return CachedNetworkImage(
+    return (imageUrl ?? '').isNotEmpty ? CachedNetworkImage(
       imageUrl: "$imageUrl",
       httpHeaders: headers,
       errorWidget: errorWidget,
@@ -56,6 +58,6 @@ class CustomBaseCacheImage extends StatelessWidget {
               height: heightPlaceHolder * SizeConfig.scaleDiagonal,
             ),
           ),
-    );
+    ) : emptyWidget;
   }
 }

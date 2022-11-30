@@ -108,6 +108,16 @@ class ContentItem extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8.0),
                                 ),
                               ),
+                              emptyWidget: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
                             ),
                             (data?.saleAmount ?? 0)  > 0
                                 ? const Align(

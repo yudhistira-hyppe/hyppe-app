@@ -99,7 +99,10 @@ class SelfProfileNotifier with ChangeNotifier {
 
   String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
 
-  String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+  String? displayPhotoProfile() {
+    print('ini gambar profil ${_system.showUserPicture(user.profile?.avatar?.mediaEndpoint)}');
+    return _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+  }
 
   String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.posts?.toInt()) : "0";
 
@@ -137,7 +140,7 @@ class SelfProfileNotifier with ChangeNotifier {
               if (_res.isNotEmpty) {
                 user.vids = [...(user.vids ?? []), ..._res];
               } else {
-                print("Post Vid Dah Mentok");
+                "Post Vid Dah Mentok".logger();
               }
               notifyListeners();
             }

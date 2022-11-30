@@ -66,6 +66,16 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                     ),
                   );
                 },
+                emptyWidget: Container(
+                  height: 90,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    image: const DecorationImage(
+                      fit: BoxFit.contain,
+                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                    ),
+                  ),
+                ),
               ),
             ),
             twelvePx,

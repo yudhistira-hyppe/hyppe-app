@@ -57,7 +57,8 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     isLoading = true;
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
+
       notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       setState(() {
         _storyItems = notifier.result;
@@ -346,7 +347,8 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 ),
                 widget.data?.isReport ?? false
                     ? Container()
-                    : Form(
+                    : Align(
+                  alignment: Alignment.bottomCenter,
                         child: BuildBottomView(
                           data: widget.data,
                           storyController: _storyController,

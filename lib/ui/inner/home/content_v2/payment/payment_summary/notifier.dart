@@ -5,6 +5,7 @@ import 'package:hyppe/core/bloc/buy/bloc.dart';
 import 'package:hyppe/core/bloc/buy/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
@@ -63,7 +64,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
 
   void initState(BuildContext context) {
     paymentMethodNotifier = Provider.of<PaymentMethodNotifier>(context, listen: false);
-    print("Selected Bank" + paymentMethodNotifier.bankSelected);
+    "Selected Bank ${paymentMethodNotifier.bankSelected}".logger();
     _getBankDetail(context);
 
     DateTime dt1 = DateTime.now();
@@ -86,7 +87,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
       Future.delayed(const Duration(seconds: 2), () {});
     } else if (fetch.postsState == BuyState.getContentsSuccess) {
       BankData? res = BankData.fromJson(fetch.data);
-      print("Bank response ${res.bankname}");
+      "Bank response ${res.bankname}".logger();
       bankData = res;
       notifyListeners();
     }
@@ -117,7 +118,7 @@ class PaymentSummaryNotifier extends ChangeNotifier {
   }
 
   void endCountdownTimer() {
-    print("timer countdown end");
+    "timer countdown end".logger();
     stopTimer();
 
     durationString = '($language.expired)';

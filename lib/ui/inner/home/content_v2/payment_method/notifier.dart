@@ -46,14 +46,12 @@ class PaymentMethodNotifier extends ChangeNotifier {
   List<BankData>? get data => _data;
   set data(List<BankData>? value) {
     _data = value;
-    print(value);
     notifyListeners();
   }
 
   BuyResponse? get postResponse => _postResponse;
   set postResponse(BuyResponse? value) {
     _postResponse = value;
-    print(value);
     notifyListeners();
   }
 

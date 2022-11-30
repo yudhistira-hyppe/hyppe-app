@@ -52,7 +52,7 @@ class DiarySeeAllNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
-        print('reload contentsQuery : 5');
+        'reload contentsQuery : 5'.logger();
         _resFuture = contentsQuery.reload(context);
       } else {
         _resFuture = contentsQuery.loadNext(context);

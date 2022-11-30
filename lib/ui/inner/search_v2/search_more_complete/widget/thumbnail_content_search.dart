@@ -71,6 +71,20 @@ class ThumbnailContentSearch extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8.0),
               ),
             ),
+            emptyWidget: Container(
+              margin: margin,
+              // const EdgeInsets.symmetric(horizontal: 4.5),
+              width: _scaling,
+              height: 186,
+              child: _buildBody(context),
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
           ),
           data?.postType != 'pict'
               ? Center(

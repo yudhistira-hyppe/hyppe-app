@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
@@ -63,7 +64,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                   ? CustomErrorWidget(
                       errorType: ErrorType.pic,
                       function: () {
-                        print('initialPic : 4');
+                        'initialPic : 4'.logger();
                         notifier.initialPic(context, reload: true);
                       },
                     )
@@ -73,7 +74,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                           onNotification: (ScrollNotification scrollInfo) {
                             if (scrollInfo is ScrollStartNotification) {
                               Future.delayed(const Duration(milliseconds: 100), () {
-                                print('initialPic : 5');
+                                'initialPic : 5'.logger();
                                 notifier.initialPic(context);
                               });
                             }

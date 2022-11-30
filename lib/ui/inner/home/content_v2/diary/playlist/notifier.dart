@@ -171,7 +171,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         Map jsonMap = json.decode(fetch.data.toString());
-        print('jsonMap video Apsara : $jsonMap');
+        'jsonMap video Apsara : $jsonMap'.logger();
         return jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -185,10 +185,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void onWillPop(bool mounted) {
     if (mounted) {
       if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
-        print('ada postid');
+        'ada postid'.logger();
         Routing().moveAndPop(Routes.lobby);
       } else {
-        print('tanpa postid');
+        'tanpa postid'.logger();
         Routing().moveBack();
       }
     }
@@ -225,7 +225,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
-      print('reload contentsQuery : 3');
+      'reload contentsQuery : 3'.logger();
       _resFuture = contentsQuery.reload(context);
       final res = await _resFuture;
       _listData = res;

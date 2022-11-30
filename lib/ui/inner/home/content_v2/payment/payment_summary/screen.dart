@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -117,7 +118,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                               GestureDetector(
                                 onTap: () {
                                   Clipboard.setData(ClipboardData(text: notifier.paymentMethodNotifier.postResponse?.nova ?? ''));
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notifier.language.vaCopyToClipboard ?? '')));
+                                  ShowBottomSheet().onShowColouredSheet(_, notifier.language.vaCopyToClipboard ?? '', maxLines: 2, color: kHyppeTextLightPrimary);
+                                  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(notifier.language.vaCopyToClipboard ?? '')));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
@@ -206,7 +208,6 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                 data: body,
                 style: {"a": Style(color: kHyppePrimary, textDecoration: TextDecoration.underline, textDecorationThickness: 0)},
                 onLinkTap: (String? url, RenderContext context, Map<String, String> attributes, element) async {
-                  print(url);
                   if (await canLaunchUrl(Uri.parse(url ?? ''))) {
                     await launchUrl(
                       Uri.parse(url ?? ''),

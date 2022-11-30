@@ -169,9 +169,9 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            if(data?.music != null)
+                            if(data?.music?.musicTitle != null)
                               fourPx,
-                            if(data?.music != null)
+                            if(data?.music?.musicTitle != null)
                               MusicStatusDetail(music: data!.music!)
                           ],
                         ),
