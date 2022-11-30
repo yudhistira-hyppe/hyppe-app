@@ -457,7 +457,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       await System().getLocalMedia(featureType: FeatureType.other, context: context).then((value) async {
         debugPrint('Pick => ' + value.toString());
         debugPrint('Pick =>  ${value.values.length}');
-        if(pickedSupportingDocs != null){
+        if (pickedSupportingDocs != null) {
           if (pickedSupportingDocs!.length < 3) {
             if (value.values.single != null) {
               // pickedSupportingDocs = value.values.single;
@@ -484,7 +484,6 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
             isLoading = false;
           }
         }
-
       });
     } catch (e) {
       isLoading = false;
@@ -498,7 +497,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       debugPrint('idCardFile => ' + imagePath);
       debugPrint('selfieFile => ' + selfiePath);
       final bloc = VerificationIDBloc();
-      await bloc.postVerificationIDWithSupportDocsBloc(
+      await bloc
+          .postVerificationIDWithSupportDocsBloc(
         context,
         idcardnumber: idCardNumber,
         nama: realName,
@@ -512,18 +512,22 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         kewarganegaraan: '',
         jenisKelamin: genderController.text,
         docFiles: pickedSupportingDocs,
-        onReceiveProgress: (count, total) async {
-          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
-        },
-        onSendProgress: (received, total) async {
-          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
-        },
-      );
+        // onReceiveProgress: (count, total) async {
+        //   await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+        // },
+        // onSendProgress: (received, total) async {
+        //   await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+        // },
+      )
+          .then((value) {
+        // _eventService.notifyUploadSuccess(value);
+      });
       final fetch = bloc.postsFetch;
       if (fetch.verificationIDState == VerificationIDState.postVerificationIDSuccess) {
         'verification ID Docs success'.logger();
+        'verification ID Docs success ${fetch.data}'.logger();
         isLoading = false;
-        _eventService.notifyUploadSuccess(fetch.data);
+        // _eventService.notifyUploadSuccess(fetch.data);
 
         SharedPreference().writeStorage(SpKeys.statusVerificationId, REVIEW);
 

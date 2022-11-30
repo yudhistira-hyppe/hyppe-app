@@ -11,6 +11,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -24,13 +26,49 @@ class Component extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return InkWell(
-      onTap: () => context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel()),
+      onTap: () {
+        context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel());
+        final event = System().getNotificationCategory(data?.event ?? '');
+        print(event);
+        print(data?.eventType);
+        print(data?.event);
+        switch (event) {
+          case NotificationCategory.transactions:
+            Routing().move(Routes.transaction);
+            break;
+          case NotificationCategory.all:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.like:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.comment:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.follower:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.following:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.mention:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.general:
+            // TODO: Handle this case.
+            break;
+          case NotificationCategory.verificationid:
+            // TODO: Handle this case.
+            break;
+        }
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // profile picture
+
             StoryColorValidator(
               featureType: FeatureType.other,
               haveStory: false,

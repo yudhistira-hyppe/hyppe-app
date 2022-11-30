@@ -95,9 +95,9 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                 controller: vidNotifier.pageController,
                                 scrollDirection: Axis.horizontal,
                                 onPageChanged: (index) async {
-                                  if(index == (vidNotifier.itemCount - 1)){
+                                  if (index == (vidNotifier.itemCount - 1)) {
                                     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
-                                    if(values.isNotEmpty){
+                                    if (values.isNotEmpty) {
                                       vidNotifier.vidData = [...(vidNotifier.vidData ?? [] as List<ContentData>)] + values;
                                     }
                                   }
@@ -123,6 +123,11 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         // SelectableText("${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}"),
+                                        // Text("${vidData?.createdAt}"),
+                                        // Text("${DateTime.parse(vidData?.createdAt ?? DateTime.now().toString())}"),
+                                        // Text("${DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch}"),
+                                        // Text("${(DateTime.now().millisecondsSinceEpoch - DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch) ~/ 1000}"),
+                                        // Text("${((DateTime.now().millisecondsSinceEpoch - DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch) ~/ 1000) ~/ 60}"),
                                         Padding(
                                           padding: const EdgeInsets.symmetric(horizontal: 16),
                                           child: Row(

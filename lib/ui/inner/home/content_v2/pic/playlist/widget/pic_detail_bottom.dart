@@ -52,9 +52,7 @@ class PicDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED' || data?.reportedStatus == "BLURRED" || (data?.reportedUserCount ?? 0) > 200)
-              ? ContentViolationWidget(data: data ?? ContentData())
-              : Container(),
+          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: data ?? ContentData()) : Container(),
           twelvePx,
           _buildDescription(context),
           data?.isBoost == null && data?.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: data) : Container(),
@@ -124,7 +122,13 @@ class PicDetailBottom extends StatelessWidget {
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
-            if (data?.music?.musicTitle != null) notifier.isLoadMusic ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '') : MusicStatusDetail(music: data!.music!, urlMusic: notifier.urlMusic,),
+            if (data?.music?.musicTitle != null)
+              notifier.isLoadMusic
+                  ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
+                  : MusicStatusDetail(
+                      music: data!.music!,
+                      urlMusic: notifier.urlMusic,
+                    ),
             if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? GestureDetector(

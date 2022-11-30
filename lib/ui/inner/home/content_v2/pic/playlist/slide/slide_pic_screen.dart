@@ -45,9 +45,6 @@ class SlidePicScreen extends StatefulWidget {
 }
 
 class _SlidePicScreenState extends State<SlidePicScreen> {
-
-
-
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
@@ -61,299 +58,310 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
           thumbnail: (widget.data.isApsara ?? false) ? widget.data.mediaThumbUri : widget.data.fullThumbPath,
         ),
         // Content
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+        (widget.data.reportedStatus == "BLURRED")
             ? Container()
             : PicPlaylishScreen(
-          data: notifier.adsData,
-          url: notifier.adsUrl,
-          contentData: widget.data,
-          transformationController: widget.transformationController,
-        ),
-        // Top action
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
-            ? SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: CustomTextButton(
-                onPressed: () {
-                  widget.resetZooming();
-                  Routing().moveBack();
-                },
-                style: ButtonStyle(
-                  alignment: Alignment.topCenter,
-                  padding: MaterialStateProperty.all(EdgeInsets.zero),
-                ),
-                child: const DecoratedIconWidget(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
-                ),
+                data: notifier.adsData,
+                url: notifier.adsUrl,
+                contentData: widget.data,
+                transformationController: widget.transformationController,
               ),
-            ),
-          ),
-        )
+        // Top action
+        (widget.data.reportedStatus == "BLURRED")
+            ? SafeArea(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: CustomTextButton(
+                      onPressed: () {
+                        widget.resetZooming();
+                        Routing().moveBack();
+                      },
+                      style: ButtonStyle(
+                        alignment: Alignment.topCenter,
+                        padding: MaterialStateProperty.all(EdgeInsets.zero),
+                      ),
+                      child: const DecoratedIconWidget(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              )
             : SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomTextButton(
-                        onPressed: () {
-                          widget.resetZooming();
-                          Routing().moveBack();
-                        },
-                        style: ButtonStyle(
-                          alignment: Alignment.topCenter,
-                          padding: MaterialStateProperty.all(EdgeInsets.zero),
-                        ),
-                        child: const DecoratedIconWidget(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
+                      Expanded(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextButton(
+                              onPressed: () {
+                                widget.resetZooming();
+                                Routing().moveBack();
+                              },
+                              style: ButtonStyle(
+                                alignment: Alignment.topCenter,
+                                padding: MaterialStateProperty.all(EdgeInsets.zero),
+                              ),
+                              child: const DecoratedIconWidget(
+                                Icons.arrow_back_ios,
+                                color: Colors.white,
+                              ),
+                            ),
+                            ProfileComponent(
+                              isDetail: true,
+                              show: true,
+                              following: true,
+                              onFollow: () {},
+                              haveStory: false,
+                              onTapOnProfileImage: () => System().navigateToProfile(context, widget.data.email ?? ''),
+                              spaceProfileAndId: eightPx,
+                              featureType: FeatureType.pic,
+                              username: widget.data.username,
+                              isCelebrity: widget.data.privacy?.isCelebrity,
+                              imageUrl: '${System().showUserPicture(widget.data.avatar?.mediaEndpoint)}',
+                              createdAt: '${System().readTimestamp(
+                                DateTime.parse(widget.data.createdAt ?? '').millisecondsSinceEpoch,
+                                context,
+                                fullCaption: true,
+                              )}',
+                            ),
+                          ],
                         ),
                       ),
-                      ProfileComponent(
-                        isDetail: true,
-                        show: true,
-                        following: true,
-                        onFollow: () {},
-                        haveStory: false,
-                        onTapOnProfileImage: () => System().navigateToProfile(context, widget.data.email ?? ''),
-                        spaceProfileAndId: eightPx,
-                        featureType: FeatureType.pic,
-                        username: widget.data.username,
-                        isCelebrity: widget.data.privacy?.isCelebrity,
-                        imageUrl: '${System().showUserPicture(widget.data.avatar?.mediaEndpoint)}',
-                        createdAt: '${System().readTimestamp(
-                          DateTime.parse(widget.data.createdAt ?? '').millisecondsSinceEpoch,
-                          context,
-                          fullCaption: true,
-                        )}',
+                      (widget.data.saleAmount ?? 0) > 0
+                          ? const Padding(
+                              padding: EdgeInsets.only(top: 10.0),
+                              child: CustomIconWidget(
+                                iconData: "${AssetPath.vectorPath}sale.svg",
+                                defaultColor: false,
+                              ),
+                            )
+                          : const SizedBox(),
+                      widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? _buildButtonV2(
+                              context: context,
+                              iconData: '${AssetPath.vectorPath}more.svg',
+                              function: () => ShowBottomSheet.onShowOptionContent(
+                                context,
+                                contentData: widget.data,
+                                captionTitle: hyppePic,
+                                // storyController: widget.storyController,
+                                onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                              ),
+                            )
+                          : const SizedBox(),
+                      widget.data.email != SharedPreference().readStorage(SpKeys.email)
+                          ? _buildButtonV2(
+                              context: context,
+                              iconData: '${AssetPath.vectorPath}more.svg',
+                              function: () => ShowBottomSheet.onReportContent(
+                                context,
+                                postData: widget.data,
+                                adsData: null,
+                                type: hyppePic,
+                                onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                              ),
+                            )
+                          : const SizedBox(),
+                      Visibility(
+                        visible: (widget.data.saleAmount == 0 && (widget.data.certified ?? false)),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: IconOwnership(correct: true),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                (widget.data.saleAmount ?? 0) > 0
-                    ? const Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: CustomIconWidget(
-                    iconData: "${AssetPath.vectorPath}sale.svg",
-                    defaultColor: false,
-                  ),
-                )
-                    : const SizedBox(),
-                widget.data.email == SharedPreference().readStorage(SpKeys.email)
-                    ? _buildButtonV2(
-                  context: context,
-                  iconData: '${AssetPath.vectorPath}more.svg',
-                  function: () => ShowBottomSheet.onShowOptionContent(
-                    context,
-                    contentData: widget.data,
-                    captionTitle: hyppePic,
-                    // storyController: widget.storyController,
-                    onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
-                  ),
-                )
-                    : const SizedBox(),
-                widget.data.email != SharedPreference().readStorage(SpKeys.email)
-                    ? _buildButtonV2(
-                  context: context,
-                  iconData: '${AssetPath.vectorPath}more.svg',
-                  function: () => ShowBottomSheet.onReportContent(
-                    context,
-                    postData: widget.data,
-                    adsData: null,
-                    type: hyppePic,
-                    onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
-                  ),
-                )
-                    : const SizedBox(),
-                Visibility(
-                  visible: (widget.data.saleAmount == 0 && (widget.data.certified ?? false)),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: IconOwnership(correct: true),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+              ),
+        widget.data.reportedStatus == "BLURRED"
             ? SafeArea(
-            child: SizedBox(
-              width: SizeConfig.screenWidth,
-              child: Consumer<TranslateNotifierV2>(
-                builder: (context, transnot, child) => Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Spacer(),
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}eye-off.svg",
-                      defaultColor: false,
-                      height: 30,
-                    ),
-                    Text(transnot.translate.sensitiveContent ?? 'Sensitive Content',
-                        style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                    Text("HyppePic ${transnot.translate.ContentContainsSensitiveMaterial}",
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                        )),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        context.read<ReportNotifier>().seeContent(context, widget.data, hyppePic);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 8),
-                        margin: const EdgeInsets.all(8),
-                        width: SizeConfig.screenWidth,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              color: Colors.white,
-                              width: 1,
+                child: SizedBox(
+                width: SizeConfig.screenWidth,
+                child: Consumer<TranslateNotifierV2>(
+                  builder: (context, transnot, child) => Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}eye-off.svg",
+                        defaultColor: false,
+                        height: 30,
+                      ),
+                      Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text("HyppePic ${transnot.translate.ContentContainsSensitiveMaterial}",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                      widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                          ? Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                              child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)))
+                          : const SizedBox(),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          context.read<ReportNotifier>().seeContent(context, widget.data, hyppePic);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.all(8),
+                          width: SizeConfig.screenWidth,
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.white,
+                                width: 1,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Text(
-                          "${transnot.translate.see} HyppePic",
-                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
+                          child: Text(
+                            "${transnot.translate.see} HyppePic",
+                            style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
-                    thirtyTwoPx,
-                  ],
+                      thirtyTwoPx,
+                    ],
+                  ),
                 ),
-              ),
-            ))
+              ))
             : Container(),
         // Bottom action
-        widget.data.email != SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == "BLURRED")
+        (widget.data.reportedStatus == "BLURRED")
             ? Container()
             : Align(
-          alignment: Alignment.bottomCenter,
-          // alignment: const Alignment(0.0, 0.9),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  sixteenPx,
-                  Consumer<LikeNotifier>(
-                    builder: (context, notifier, child) => _buildButtonV2(
-                      context: context,
-                      colorIcon: (widget.data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                      iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                      function: () => notifier.likePost(context, widget.data),
-                    ),
-                  ),
-                  _buildButtonV2(
-                    context: context,
-                    iconData: '${AssetPath.vectorPath}comment.svg',
-                    function: (){
-                      ShowBottomSheet.onShowCommentV2(context, postID: widget.data.postID);
-                    },
-                  ),
-                  _buildButtonV2(
-                    context: context,
-                    iconData: '${AssetPath.vectorPath}share.svg',
-                    function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
-                  ),
-                  if ((widget.data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.data.email)
-                    _buildButtonV2(
-                      context: context,
-                      iconData: '${AssetPath.vectorPath}cart.svg',
-                      function: () => ShowBottomSheet.onBuyContent(context, data: widget.data),
-                    ),
-                ],
-              ),
-              widget.data.tagPeople?.isNotEmpty ?? false || widget.data.location != ''
-                  ? Padding(
-                padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
-                child: Row(
+                alignment: Alignment.bottomCenter,
+                // alignment: const Alignment(0.0, 0.9),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    widget.data.tagPeople?.isNotEmpty ?? false
-                        ? PicTagLabel(
-                      icon: 'user',
-                      label: '${widget.data.tagPeople?.length} people',
-                      function: () {
-                        context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID);
-                      },
-                      width: 18,
-                    )
-                        : const SizedBox(),
-                    widget.data.location == '' || widget.data.location == null
-                        ? const SizedBox()
-                        : PicTagLabel(
-                      icon: 'maptag-white',
-                      label: "${widget.data.location}",
-                      function: () {},
-                      width: 13,
+                    Row(
+                      children: [
+                        sixteenPx,
+                        Consumer<LikeNotifier>(
+                          builder: (context, notifier, child) => _buildButtonV2(
+                            context: context,
+                            colorIcon: (widget.data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                            iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                            function: () => notifier.likePost(context, widget.data),
+                          ),
+                        ),
+                        _buildButtonV2(
+                          context: context,
+                          iconData: '${AssetPath.vectorPath}comment.svg',
+                          function: () {
+                            ShowBottomSheet.onShowCommentV2(context, postID: widget.data.postID);
+                          },
+                        ),
+                        _buildButtonV2(
+                          context: context,
+                          iconData: '${AssetPath.vectorPath}share.svg',
+                          function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
+                        ),
+                        if ((widget.data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.data.email)
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}cart.svg',
+                            function: () => ShowBottomSheet.onBuyContent(context, data: widget.data),
+                          ),
+                      ],
                     ),
+                    widget.data.tagPeople?.isNotEmpty ?? false || widget.data.location != ''
+                        ? Padding(
+                            padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                            child: Row(
+                              children: [
+                                widget.data.tagPeople?.isNotEmpty ?? false
+                                    ? PicTagLabel(
+                                        icon: 'user',
+                                        label: '${widget.data.tagPeople?.length} people',
+                                        function: () {
+                                          context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID);
+                                        },
+                                        width: 18,
+                                      )
+                                    : const SizedBox(),
+                                widget.data.location == '' || widget.data.location == null
+                                    ? const SizedBox()
+                                    : PicTagLabel(
+                                        icon: 'maptag-white',
+                                        label: "${widget.data.location}",
+                                        function: () {},
+                                        width: 13,
+                                      ),
+                              ],
+                            ),
+                          )
+                        : const SizedBox(),
+                    Padding(
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+                        // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+
+                        child: SingleChildScrollView(
+                            child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ReadMoreText(
+                              "${widget.data.description}",
+                              // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                              trimLines: 5,
+                              trimMode: TrimMode.Line,
+                              textAlign: TextAlign.left,
+                              trimExpandedText: 'Show less',
+                              trimCollapsedText: 'Show more',
+                              colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                              style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                              moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                              lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                            ),
+                            if (widget.data.music != null && (widget.data.apsaraId ?? '').isNotEmpty)
+                              notifier.isLoadMusic
+                                  ? LoadingMusicScreen(
+                                      music: widget.data.music!,
+                                      index: widget.rootIndex,
+                                    )
+                                  : MusicStatusPage(
+                                      music: widget.data.music!,
+                                      urlMusic: notifier.urlMusic,
+                                    )
+                          ],
+                        )),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    ),
+                    twentyPx,
+                    widget.data.isBoost == null && widget.data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: widget.data) : Container(),
+                    widget.data.isBoost != null && widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                        ? Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: JangkaunStatus(
+                              jangkauan: widget.data.boostJangkauan ?? 0,
+                              isDiary: true,
+                            ),
+                          )
+                        : Container(),
+                    widget.data.email == SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == 'OWNED') ? ContentViolationWidget(data: widget.data) : Container(),
                   ],
                 ),
-              )
-                  : const SizedBox(),
-              Padding(
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
-                  // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-
-                  child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ReadMoreText(
-                            "${widget.data.description}",
-                            // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                            trimLines: 5,
-                            trimMode: TrimMode.Line,
-                            textAlign: TextAlign.left,
-                            trimExpandedText: 'Show less',
-                            trimCollapsedText: 'Show more',
-                            colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                            style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                            moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
-                            lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
-                          ),
-                          if (widget.data.music != null && (widget.data.apsaraId ?? '').isNotEmpty)
-                            notifier.isLoadMusic
-                                ? LoadingMusicScreen(music: widget.data.music!, index: widget.rootIndex,) : MusicStatusPage(music: widget.data.music!, urlMusic: notifier.urlMusic,)
-                        ],
-                      )),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
               ),
-              twentyPx,
-              widget.data.isBoost == null && widget.data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: widget.data) : Container(),
-              widget.data.isBoost != null && widget.data.email == SharedPreference().readStorage(SpKeys.email)
-                  ? Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: JangkaunStatus(
-                  jangkauan: widget.data.boostJangkauan ?? 0,
-                  isDiary: true,
-                ),
-              )
-                  : Container(),
-              widget.data.email == SharedPreference().readStorage(SpKeys.email) &&
-                  (widget.data.reportedStatus == 'OWNED' || widget.data.reportedStatus == "BLURRED" || (widget.data.reportedUserCount ?? 0) > 200)
-                  ? ContentViolationWidget(data: widget.data)
-                  : Container(),
-            ],
-          ),
-        ),
       ],
     );
   }

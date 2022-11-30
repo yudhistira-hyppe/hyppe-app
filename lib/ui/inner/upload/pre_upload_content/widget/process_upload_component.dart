@@ -18,7 +18,8 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 
 class ProcessUploadComponent extends StatefulWidget {
   final double topMargin;
-  const ProcessUploadComponent({Key? key, this.topMargin = 10.0}) : super(key: key);
+  final bool showAlert;
+  const ProcessUploadComponent({Key? key, this.topMargin = 10.0, this.showAlert = true}) : super(key: key);
 
   @override
   State<ProcessUploadComponent> createState() => _ProcessUploadComponentState();
@@ -68,17 +69,19 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Success with message ${response.statusMessage}'.logger();
     _uploadNotifier.message = "${_language.translate.contentCreatedSuccessfully}";
-    _uploadNotifier.reset();
+    if (widget.showAlert) {
+      _uploadNotifier.reset();
 
-    //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
-    bool isCheckedOwnership = _preUploadContentNotifier.certifiedTmp; // get certified status
+      //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
+      bool isCheckedOwnership = _preUploadContentNotifier.certifiedTmp; // get certified status
 
-    'Upload Success with certified checked $isCheckedOwnership'.logger();
+      'Upload Success with certified checked $isCheckedOwnership'.logger();
 
-    if (isCheckedOwnership) {
-      ShowBottomSheet.onShowSuccessPostContentOwnership(context);
-    } else {
-      ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
+      if (isCheckedOwnership) {
+        ShowBottomSheet.onShowSuccessPostContentOwnership(context);
+      } else {
+        ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
+      }
     }
   }
 

@@ -770,6 +770,9 @@
   "appealsReceived" : "Appeals received",
   "weWillSendYouaNotificationasSoonasweHaveanUpdate" : "We will send you a notification as soon as we have an update",
   "sensitiveContent" : "Sensitive Content",
-  "ContentContainsSensitiveMaterial" : "content contains sensitive material which some people may find offensive or disturbing"
+  "ContentContainsSensitiveMaterial" : "content contains sensitive material which some people may find offensive or disturbing",
+  "hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails" : "has been successfully registered for ownership & boosted, check your profile for details",
+  "hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails" : "has been successfully registered for boosted, check your profile for details",
+  "appealThisWarning" : "Appeal This Warning"
   
 }

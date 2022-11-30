@@ -5,6 +5,7 @@ import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_content_shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,31 +37,34 @@ class OtherProfilePics extends StatelessWidget {
                       onTap: () => context.read<OtherProfileNotifier>().navigateToSeeAllScreen(context, index),
                       child: Padding(
                         padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: CustomContentModeratedWidget(
-                                width: double.infinity,
-                                height: double.infinity,
-                                isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                thumbnail:
-                                    notifier.item1?.pics?[index].isApsara ?? false ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '') : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? '',
+                        child: notifier.item1?.pics?[index].reportedStatus == 'BLURRED'
+                            ? SensitiveContentProfile(data: notifier.item1?.pics?[index])
+                            : Stack(
+                                children: [
+                                  Center(
+                                    child: CustomContentModeratedWidget(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      isSafe: true, //notifier.postData.data.listPic[index].isSafe,
+                                      thumbnail: notifier.item1?.pics?[index].isApsara ?? false
+                                          ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
+                                          : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? '',
+                                    ),
+                                  ),
+                                  (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
+                                      ? const Align(
+                                          alignment: Alignment.topRight,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(2.0),
+                                            child: CustomIconWidget(
+                                              iconData: "${AssetPath.vectorPath}sale.svg",
+                                              height: 15,
+                                              defaultColor: false,
+                                            ),
+                                          ))
+                                      : Container()
+                                ],
                               ),
-                            ),
-                            (notifier.item1?.pics?[index].saleAmount ?? 0) > 0
-                                ? const Align(
-                                    alignment: Alignment.topRight,
-                                    child: Padding(
-                                      padding: EdgeInsets.all(2.0),
-                                      child: CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}sale.svg",
-                                        height: 15,
-                                        defaultColor: false,
-                                      ),
-                                    ))
-                                : Container()
-                          ],
-                        ),
                       ),
                     );
                   } catch (e) {

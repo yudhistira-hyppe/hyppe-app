@@ -487,10 +487,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-
-
-
-
   void _connectAndListenToSocket(BuildContext context) async {
     final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
     String? token = SharedPreference().readStorage(SpKeys.userToken);
@@ -556,10 +552,10 @@ class PreUploadContentNotifier with ChangeNotifier {
     editData = null;
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
-      try{
+      try {
         notifier.audioPreviewPlayer.stop();
         notifier.audioPreviewPlayer.dispose();
-      }catch(e){
+      } catch (e) {
         'Error dispose AudioPreviewPlayer : $e'.logger();
       }
 
@@ -1458,6 +1454,23 @@ class PreUploadContentNotifier with ChangeNotifier {
         boostPaymentResponse = BoostResponse.fromJson(fetch.data);
         Future.delayed(const Duration(seconds: 0), () {
           Routing().moveAndPop(Routes.boostPaymentSummary);
+          String message = '';
+          if (certified) {
+            message = "${System().convertTypeContent(
+              System().validatePostTypeV2(featureType),
+            )} ${language.hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails}";
+          } else {
+            message = "${System().convertTypeContent(
+              System().validatePostTypeV2(featureType),
+            )} ${language.hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails}";
+          }
+          ShowBottomSheet().onShowColouredSheet(
+            context,
+            message,
+            subCaption: '',
+            maxLines: 3,
+            color: kHyppeLightSuccess,
+          );
           // context.read<MainNotifier>().startTimer();
         });
         _isLoading = false;
@@ -1467,6 +1480,12 @@ class PreUploadContentNotifier with ChangeNotifier {
       ShowBottomSheet().onShowColouredSheet(context, 'Somethink Wrong', color: kHyppeDanger);
     }
     notifyListeners();
+  }
+
+  navigateToTransAndLoby(BuildContext context) {
+    Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+    Routing().move(Routes.transaction);
+    _onExit();
   }
 
   exitBoostPage() {

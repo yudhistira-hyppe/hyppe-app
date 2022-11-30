@@ -168,10 +168,12 @@ class BoostUploadScreen extends StatelessWidget {
                         tenPx,
                         GestureDetector(
                           onTap: () async {
+                            final date = DateTime.now();
+                            final startDate = DateTime(date.year, date.month, date.day + 1);
                             final DateTime? pickedDate = await showDatePicker(
                                 context: context,
-                                initialDate: notifier.tmpstartDate == DateTime(1000) ? DateTime.now() : notifier.tmpstartDate,
-                                firstDate: DateTime.now(),
+                                initialDate: notifier.tmpstartDate == DateTime(1000) ? startDate : notifier.tmpstartDate,
+                                firstDate: startDate,
                                 lastDate: DateTime(3000),
                                 builder: (context, child) {
                                   return Theme(

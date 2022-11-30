@@ -18,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -202,6 +203,13 @@ class ReportNotifier with ChangeNotifier {
           content: typeContent,
           isReport: false,
         );
+    context.read<SelfProfileNotifier>().showContentSensitive(
+          context,
+          postID: data.postID ?? '',
+          content: typeContent,
+          isReport: false,
+        );
+
     context.read<OtherProfileNotifier>().onUpdate();
     switch (typeContent) {
       case hyppeVid:

@@ -19,7 +19,7 @@ class LoadingDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          !uploadProses ? const CustomLoading() : const ProcessUploadComponent(),
+          !uploadProses ? const CustomLoading() : const ProcessUploadComponent(showAlert: false),
           GestureDetector(
             // onTap: () => Routing().moveBack(),
             child: CustomTextWidget(

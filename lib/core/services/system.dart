@@ -768,6 +768,8 @@ class System {
         return NotificationCategory.mention;
       case 'GENERAL':
         return NotificationCategory.general;
+      case 'TRANSACTION':
+        return NotificationCategory.transactions;
       default:
         return NotificationCategory.all;
     }

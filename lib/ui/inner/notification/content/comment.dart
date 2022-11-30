@@ -24,7 +24,8 @@ class CommentNotification extends StatelessWidget {
               data: notifier.commentData()?[index],
               rightWidget: ImageComponent(
                 borderRadiusGeometry: BorderRadius.circular(4.0),
-                data: notifier.commentData()?[index].content.firstOrNull(),
+                // data: notifier.commentData()?[index].content.firstOrNull(),
+                data: notifier.commentData()?[index].content,
               ),
             );
           },

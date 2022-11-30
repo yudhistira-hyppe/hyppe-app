@@ -23,6 +23,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
@@ -99,7 +100,10 @@ class SelfProfileNotifier with ChangeNotifier {
 
   String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
 
-  String? displayPhotoProfile() => _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+  String? displayPhotoProfile() {
+    print('ini gambar profil ${_system.showUserPicture(user.profile?.avatar?.mediaEndpoint)}');
+    return _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+  }
 
   String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.posts?.toInt()) : "0";
 
@@ -340,6 +344,38 @@ class SelfProfileNotifier with ChangeNotifier {
       default:
         break;
     }
+    notifyListeners();
+  }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    ContentData? _updatedData;
+    ContentData? _updatedData2;
+
+    switch (content) {
+      case hyppeVid:
+        _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    print('show my profil');
+    print(_updatedData);
+
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = '';
+    }
+    if (_updatedData2 != null) {
+      _updatedData2.reportedStatus = '';
+    }
+
     notifyListeners();
   }
 }

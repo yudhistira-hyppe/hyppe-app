@@ -75,8 +75,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
     SizeConfig().init(context);
     return Container(
       width: widget.music != null ? double.infinity : SizeConfig.screenWidth! / 1.3,
-      alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
-      padding: const EdgeInsets.only(left: 15.0, right: 20),
+      // alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
+      alignment: Alignment.bottomRight,
+      padding: const EdgeInsets.only(left: 15.0, right: 20, bottom: 80.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -130,6 +131,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           twelvePx,
           widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
                   margin: const EdgeInsets.only(bottom: 16),
                   child: ButtonBoost(
                     marginBool: true,
@@ -138,7 +140,6 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                 )
               : Container(),
           widget.data?.isBoost != null && widget.data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: widget.data?.boostJangkauan ?? 0) : Container(),
-          if (widget.music != null) MusicStatusPage(music: widget.music!)
 
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
           // _musicInfo(),

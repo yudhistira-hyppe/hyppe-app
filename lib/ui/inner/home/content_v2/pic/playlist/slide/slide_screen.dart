@@ -115,7 +115,12 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                             if (data != null) {
                               print('apsaraMusic Slides : ${data.music?.apsaraMusic}');
                               return indexPage == 0
-                                  ? SlidePicScreen(data: data, transformationController: transformationController, resetZooming: resetZooming, rootIndex: indexRoot,)
+                                  ? SlidePicScreen(
+                                      data: data,
+                                      transformationController: transformationController,
+                                      resetZooming: resetZooming,
+                                      rootIndex: indexRoot,
+                                    )
                                   : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data));
                             } else {
                               return Stack(
@@ -138,6 +143,4 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       ),
     );
   }
-
-
 }
