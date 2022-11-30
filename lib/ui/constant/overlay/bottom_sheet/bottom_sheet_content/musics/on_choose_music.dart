@@ -122,7 +122,6 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 notifier.fixSelectedMusic = notifier.selectedMusic;
                 uploadNotifier.musicSelected = notifier.selectedMusic;
                 notifier.selectedMusic = null;
-                notifier.currentMusic = null;
                 notifier.selectedType = null;
                 notifier.forceResetPlayer();
                 notifier.searchController.text = '';

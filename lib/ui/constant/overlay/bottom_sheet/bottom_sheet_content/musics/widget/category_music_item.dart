@@ -29,7 +29,6 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
         notifier.selectedType = widget.type;
         notifier.selectedMusicEnum = widget.myEnum;
         notifier.selectedMusic = null;
-        notifier.currentMusic = null;
         final myId = widget.type.id;
         if(myId != null){
           if(widget.myEnum == MusicEnum.mood){
