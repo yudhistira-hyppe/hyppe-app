@@ -283,7 +283,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
-            duration: Duration(seconds: duration ?? 3),
+            duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
             requestHeaders: {
               'post-id': data.postID ?? '',
               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),

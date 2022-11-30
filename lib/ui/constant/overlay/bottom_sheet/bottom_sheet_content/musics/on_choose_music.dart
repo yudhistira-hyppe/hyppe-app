@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/explored_music_tab.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/explorer_musics_screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_tabs.dart';
@@ -37,6 +38,14 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
       await notifier.initListMusics(context);
     });
     super.initState();
+  }
+
+  @override
+  void deactivate() {
+    'deactivate OnChooseMusicBottomSheet'.logger();
+    final notifier = context.read<PreviewContentNotifier>();
+    notifier.dialogDisposesMusic();
+    super.deactivate();
   }
 
   @override
@@ -113,6 +122,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 notifier.fixSelectedMusic = notifier.selectedMusic;
                 uploadNotifier.musicSelected = notifier.selectedMusic;
                 notifier.selectedMusic = null;
+                notifier.currentMusic = null;
                 notifier.selectedType = null;
                 notifier.forceResetPlayer();
                 notifier.searchController.text = '';
@@ -128,7 +138,6 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
       );
     });
   }
-
 
 }
 
