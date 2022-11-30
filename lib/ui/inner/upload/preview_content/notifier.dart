@@ -467,6 +467,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void forceResetPlayer(){
     print('forceResetPlayer');
+    currentMusic = null;
     audioPlayer.stop();
     for(var data in _listMusics){
       if(data.isPlay){
@@ -685,8 +686,22 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void disposeMusic() async{
     forceResetPlayer();
-    await audioPlayer.dispose();
+    try{
+      await audioPlayer.dispose();
+    }catch(e){
+      'disposeMusic error : $e'.logger();
+    }
   }
+
+  void dialogDisposesMusic()async{
+    try{
+      await audioPlayer.stop();
+      await audioPlayer.dispose();
+    }catch(e){
+      'disposeMusic error : $e'.logger();
+    }
+  }
+
 
   void playExpMusic(BuildContext context, Music music, int index) async{
     try{
@@ -753,7 +768,7 @@ class PreviewContentNotifier with ChangeNotifier {
       notifyListeners();
       var url = music.apsaraMusicUrl?.playUrl ?? '';
       if(_currentMusic != null){
-
+        print('playMusic : up');
         final currentIndex = _listMusics.indexOf(_currentMusic!);
         if(music.isPlay){
           await audioPlayer.stop();
@@ -778,6 +793,7 @@ class PreviewContentNotifier with ChangeNotifier {
           notifyListeners();
         }
       }else{
+        print('playMusic : down');
         await audioPlayer.stop();
         if(url != null){
           await audioPlayer.play(UrlSource(url));

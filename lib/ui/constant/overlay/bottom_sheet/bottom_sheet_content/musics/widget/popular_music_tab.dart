@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +29,6 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
     });
     super.initState();
   }
-
 
   @override
   void dispose() {
