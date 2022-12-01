@@ -681,11 +681,12 @@ class ShowBottomSheet {
       context: _,
       enableDrag: true,
       isDismissible: true,
-      isScrollControlled: true,
+      // isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-          height: MediaQuery.of(_).size.height * 0.4,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // height: MediaQuery.of(_).size.height * 0.4,
           decoration: BoxDecoration(
             color: Theme.of(_).colorScheme.surface,
             borderRadius: const BorderRadius.only(

@@ -194,4 +194,9 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   void showUserTag(BuildContext context, data, postId) {
     ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId);
   }
+
+  void showContentSensitive() {
+    _data?.reportedStatus = '';
+    notifyListeners();
+  }
 }

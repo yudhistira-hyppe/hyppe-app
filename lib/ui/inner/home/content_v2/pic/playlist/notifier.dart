@@ -53,12 +53,12 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   bool _checkIsLoading = false;
   bool get checkIsLoading => _checkIsLoading;
 
-  set isLoadMusic(bool state){
+  set isLoadMusic(bool state) {
     _isLoadMusic = state;
     notifyListeners();
   }
 
-  set urlMusic(String val){
+  set urlMusic(String val) {
     _urlMusic = val;
   }
 
@@ -94,25 +94,23 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void initMusic(BuildContext context, String apsaraId) async{
+  void initMusic(BuildContext context, String apsaraId) async {
     try {
-      if(apsaraId.isNotEmpty){
+      if (apsaraId.isNotEmpty) {
         final url = await _getAdsVideoApsara(context, apsaraId);
-        if(url != null){
+        if (url != null) {
           _urlMusic = url;
           notifyListeners();
-        }else{
+        } else {
           throw 'url music is null';
         }
-      }else{
+      } else {
         throw 'apsaramusic is empty';
       }
-    }catch(e){
+    } catch (e) {
       "Error Init Video $e".logger();
-
-
-    }finally{
-      Future.delayed(const Duration(milliseconds: 400), (){
+    } finally {
+      Future.delayed(const Duration(milliseconds: 400), () {
         isLoadMusic = false;
       });
     }
@@ -277,5 +275,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void showUserTag(BuildContext context, data, postId, {final StoryController? storyController}) {
     ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId, storyController: storyController);
+  }
+
+  void showContentSensitive() {
+    _data?.reportedStatus = '';
+    notifyListeners();
   }
 }

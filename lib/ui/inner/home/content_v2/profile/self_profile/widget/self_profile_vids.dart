@@ -45,7 +45,7 @@ class SelfProfileVids extends StatelessWidget {
                               onTap: () => context.read<SelfProfileNotifier>().navigateToSeeAllScreen(context, index),
                               child: Padding(
                                 padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
-                                child: notifier.item1?.vids?[index].reportedStatus == 'BLURRED' || notifier.item1?.diaries?[index].reportedStatus == 'OWNED'
+                                child: notifier.item1?.vids?[index].reportedStatus == 'BLURRED' || notifier.item1?.vids?[index].reportedStatus == 'OWNED'
                                     ? SensitiveContentProfile(data: notifier.item1?.vids?[index])
                                     : Stack(
                                         children: [

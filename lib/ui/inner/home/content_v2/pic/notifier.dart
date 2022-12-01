@@ -27,7 +27,9 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..limit=5..featureType = FeatureType.pic;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..limit = 5
+    ..featureType = FeatureType.pic;
 
   List<ContentData>? _pic;
 
@@ -130,7 +132,8 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   void navigateToSlidedDetailPic(BuildContext context, int index) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble(), page: contentsQuery.page, limit: contentsQuery.limit, type: TypePlaylist.landingpage));
+      Routing().move(Routes.picSlideDetailPreview,
+          argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble(), page: contentsQuery.page, limit: contentsQuery.limit, type: TypePlaylist.landingpage));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

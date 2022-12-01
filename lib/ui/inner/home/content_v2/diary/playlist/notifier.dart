@@ -32,7 +32,10 @@ import '../../profile/self_profile/notifier.dart';
 
 class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   final _sharedPrefs = SharedPreference();
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..page = 2..limit = 5..featureType = FeatureType.diary;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..page = 2
+    ..limit = 5
+    ..featureType = FeatureType.diary;
 
   DiaryDetailScreenArgument? _routeArgument;
   List<ContentData>? _listData;
@@ -246,38 +249,38 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<void> nextPlaylistDiary(BuildContext context, int value) async{
+  Future<void> nextPlaylistDiary(BuildContext context, int value) async {
     print('onPageChanged Image : masuk');
-    if(_routeArgument?.type == TypePlaylist.landingpage && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
+    if (_routeArgument?.type == TypePlaylist.landingpage && (listData?.length ?? 0) % (contentsQuery.limit) == 0) {
       if (value == ((listData?.length ?? 0) - 1)) {
         print('onPageChanged Image : masuk');
-        try{
+        try {
           final values = await contentsQuery.loadNext(context, isLandingPage: true);
           if (values.isNotEmpty) {
             listData = [...(listData ?? []) as List<ContentData>] + values;
             final prev = context.read<PreviewDiaryNotifier>();
             prev.initialDiary(context, list: values);
           }
-        }catch(e){
+        } catch (e) {
           'TypePlaylist.landingpage nextload error : $e'.logger();
         }
       }
-    }else if(_routeArgument?.type == TypePlaylist.search){
-      if(!_isLoadSearch){
+    } else if (_routeArgument?.type == TypePlaylist.search) {
+      if (!_isLoadSearch) {
         if (value >= ((listData?.length ?? 0) - 6)) {
-          try{
+          try {
             _isLoadSearch = true;
-          }catch(e){
+          } catch (e) {
             'TypePlaylist.search nextload error : $e'.logger();
-          }finally{
+          } finally {
             _isLoadSearch = false;
           }
         }
       }
-    }else if(_routeArgument?.type == TypePlaylist.mine && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
-      if(!_isLoadMine){
+    } else if (_routeArgument?.type == TypePlaylist.mine && (listData?.length ?? 0) % (contentsQuery.limit) == 0) {
+      if (!_isLoadMine) {
         if (value >= ((listData?.length ?? 0) - 6)) {
-          try{
+          try {
             _isLoadMine = true;
             final values = await contentsQuery.loadNext(context, myContent: true);
             if (values.isNotEmpty) {
@@ -285,17 +288,17 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
               final prev = context.read<SelfProfileNotifier>();
               prev.user.diaries = [...(prev.user.diaries ?? []), ...values];
             }
-          }catch(e){
+          } catch (e) {
             'TypePlaylist.mine nextload error : $e'.logger();
-          }finally{
+          } finally {
             _isLoadMine = false;
           }
         }
       }
-    }else if(_routeArgument?.type == TypePlaylist.other && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
-      if(!_isLoadOther){
-        if (value >= ((listData?.length ?? 0) - 6)){
-          try{
+    } else if (_routeArgument?.type == TypePlaylist.other && (listData?.length ?? 0) % (contentsQuery.limit) == 0) {
+      if (!_isLoadOther) {
+        if (value >= ((listData?.length ?? 0) - 6)) {
+          try {
             _isLoadOther = true;
             final values = await contentsQuery.loadNext(context, otherContent: true);
             if (values.isNotEmpty) {
@@ -303,9 +306,9 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
               final prev = context.read<OtherProfileNotifier>();
               prev.user.diaries = [...(prev.user.diaries ?? []), ...values];
             }
-          }catch(e){
+          } catch (e) {
             'TypePlaylist.other nextload error : $e'.logger();
-          }finally{
+          } finally {
             _isLoadOther = false;
           }
         }
@@ -352,5 +355,15 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         'follow user: ERROR: $e'.logger();
       }
     }
+  }
+
+  void showContentSensitive(postID) {
+    ContentData? _updatedData;
+    _updatedData = _listData?.firstWhere((element) => element.postID == postID);
+
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = '';
+    }
+    notifyListeners();
   }
 }

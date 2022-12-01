@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/env.dart';
@@ -32,9 +33,17 @@ class ThumbnailContentSearch extends StatelessWidget {
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
     String gambar;
     if (data?.postType == 'pict') {
-      gambar = Env.data.baseUrl + "/pict/" + (data?.postID ?? '') + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      if (data?.isApsara ?? false) {
+        gambar = data?.media?.imageInfo?[0].url ?? '';
+      } else {
+        gambar = System().showUserPicture(data?.mediaEndpoint ?? '') ?? '';
+      }
     } else {
-      gambar = Env.data.baseUrl + "/thumb/" + (data?.postID ?? '')+ "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      if (data?.isApsara ?? false) {
+        gambar = data?.media?.videoList?[0].coverURL ?? '';
+      } else {
+        gambar = System().showUserPicture(data?.mediaThumbEndPoint ?? '') ?? '';
+      }
     }
 
     return GestureDetector(
@@ -45,7 +54,7 @@ class ThumbnailContentSearch extends StatelessWidget {
           CustomBaseCacheImage(
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
-            imageUrl: gambar ,
+            imageUrl: gambar,
             imageBuilder: (context, imageProvider) => Container(
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),
@@ -86,7 +95,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               ),
             ),
           ),
-          data?.postType != 'pict'
+          data?.reportedStatus != 'BLURRED' && data?.postType != 'pict'
               ? Center(
                   child: CustomIconWidget(
                     width: 30,
@@ -106,25 +115,50 @@ class ThumbnailContentSearch extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // PicTopItem(data: data),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CustomIconWidget(
-                iconData: '${AssetPath.vectorPath}like.svg',
-                defaultColor: false,
-                color: kHyppeLightButtonText,
-              ),
-              fourPx,
-              CustomTextWidget(
-                textToDisplay: System().formatterNumber(data?.likes ?? 0),
-                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+        data?.reportedStatus == 'BLURRED'
+            ? ClipRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 30.0,
+                    sigmaY: 30.0,
+                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
+                    height: 167,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}eye-off.svg",
+                          defaultColor: false,
+                          height: 40,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               )
-            ],
-          ),
-        ),
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CustomIconWidget(
+                      iconData: '${AssetPath.vectorPath}like.svg',
+                      defaultColor: false,
+                      color: kHyppeLightButtonText,
+                    ),
+                    fourPx,
+                    CustomTextWidget(
+                      textToDisplay: System().formatterNumber(data?.likes ?? 0),
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                    )
+                  ],
+                ),
+              ),
       ],
     );
   }

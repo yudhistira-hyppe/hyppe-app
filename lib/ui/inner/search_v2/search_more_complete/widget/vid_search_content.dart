@@ -4,6 +4,7 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/thumbnail_content_search.dart';
@@ -105,6 +106,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
                           return ThumbnailContentSearch(
                             data: widget.content?[index] ?? ContentData(),
                             onTap: () {
+                              context.read<ReportNotifier>().inPosition = contentPosition.search;
                               final _routing = Routing();
                               switch (widget.featureType) {
                                 case FeatureType.vid:

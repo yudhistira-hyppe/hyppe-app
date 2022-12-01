@@ -21,6 +21,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
+import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +57,14 @@ class ReportNotifier with ChangeNotifier {
 
   contentPosition? _inPosition;
   contentPosition? get inPosition => _inPosition;
+
+  String _type = '';
+  String get type => _type;
+
+  set type(String val) {
+    _type = val;
+    notifyListeners();
+  }
 
   set inPosition(contentPosition? val) {
     _inPosition = val;
@@ -199,6 +208,7 @@ class ReportNotifier with ChangeNotifier {
   }
 
   void seeContent(BuildContext context, ContentData data, String typeContent) {
+    print('ini posisi mana ${inPosition}');
     switch (_inPosition) {
       case contentPosition.otherprofile:
         context.read<OtherProfileNotifier>().showContentSensitive(
@@ -215,6 +225,24 @@ class ReportNotifier with ChangeNotifier {
               content: typeContent,
               isReport: false,
             );
+        break;
+      case contentPosition.search:
+        switch (_type) {
+          case 'vid':
+            context.read<VidDetailNotifier>().showContentSensitive();
+            break;
+          case 'pict':
+            context.read<PicDetailNotifier>().showContentSensitive();
+            break;
+          default:
+            context.read<DiariesPlaylistNotifier>().showContentSensitive(data.postID);
+        }
+        // context.read<SearchNotifier>().showContentSensitive(
+        //       context,
+        //       postID: data.postID ?? '',
+        //       content: typeContent,
+        //       isReport: false,
+        //     );
         break;
       default:
         context.read<HomeNotifier>().showContentSensitive(
@@ -240,6 +268,8 @@ class ReportNotifier with ChangeNotifier {
         '';
         break;
     }
+    _inPosition = contentPosition.home;
+    _type = '';
 
     notifyListeners();
   }

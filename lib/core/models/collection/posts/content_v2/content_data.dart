@@ -2,6 +2,7 @@ import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/boosted.dart';
+import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_avatar_model.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insight.dart';
@@ -145,54 +146,55 @@ class ContentData {
   String? statusBoost;
   String? reportedStatus;
   int? reportedUserCount;
+  MediaModel? media;
 
-  ContentData({
-    this.metadata,
-    this.mediaBasePath,
-    this.postType,
-    this.mediaUri,
-    this.isLiked,
-    this.description,
-    this.active,
-    this.privacy,
-    this.mediaType,
-    this.mediaThumbEndPoint,
-    this.postID,
-    this.title,
-    this.isViewed,
-    this.tags = const [],
-    this.allowComments,
-    this.certified,
-    this.createdAt,
-    this.insight,
-    this.mediaThumbUri,
-    this.mediaEndpoint,
-    this.email,
-    this.updatedAt,
-    this.username,
-    this.fullThumbPath,
-    this.fullContentPath,
-    this.avatar,
-    this.location,
-    this.visibility,
-    this.cats,
-    this.tagPeople,
-    this.likes,
-    this.saleAmount,
-    this.saleView,
-    this.saleLike,
-    this.isApsara,
-    this.apsaraId,
-    this.isReport,
-    this.boosted,
-    this.boostCount,
-    this.isBoost,
-    this.boostJangkauan,
-    this.statusBoost,
-    this.reportedStatus,
-    this.music,
-    this.reportedUserCount,
-  });
+  ContentData(
+      {this.metadata,
+      this.mediaBasePath,
+      this.postType,
+      this.mediaUri,
+      this.isLiked,
+      this.description,
+      this.active,
+      this.privacy,
+      this.mediaType,
+      this.mediaThumbEndPoint,
+      this.postID,
+      this.title,
+      this.isViewed,
+      this.tags = const [],
+      this.allowComments,
+      this.certified,
+      this.createdAt,
+      this.insight,
+      this.mediaThumbUri,
+      this.mediaEndpoint,
+      this.email,
+      this.updatedAt,
+      this.username,
+      this.fullThumbPath,
+      this.fullContentPath,
+      this.avatar,
+      this.location,
+      this.visibility,
+      this.cats,
+      this.tagPeople,
+      this.likes,
+      this.saleAmount,
+      this.saleView,
+      this.saleLike,
+      this.isApsara,
+      this.apsaraId,
+      this.isReport,
+      this.boosted,
+      this.boostCount,
+      this.isBoost,
+      this.boostJangkauan,
+      this.statusBoost,
+      this.reportedStatus,
+      this.music,
+      this.reportedUserCount,
+      this.media});
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -256,6 +258,11 @@ class ContentData {
     statusBoost = json['statusBoost'] ?? '';
     reportedStatus = json['reportedStatus'] ?? 'ALL';
     reportedUserCount = json['reportedUserCount'] ?? 0;
+    media = json['media'] == null
+        ? null
+        : json['media'] is List
+            ? null
+            : MediaModel.fromJSON(json['media']);
   }
 
   Map<String, dynamic> toJson() {

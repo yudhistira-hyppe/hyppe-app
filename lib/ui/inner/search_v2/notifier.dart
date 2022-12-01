@@ -7,6 +7,7 @@ import 'package:hyppe/core/bloc/search_content/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -15,6 +16,7 @@ import 'package:hyppe/core/models/collection/utils/search_people/search_people.d
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -86,8 +88,8 @@ class SearchNotifier with ChangeNotifier {
   int get vidCount => _searchContent?.vid?.data == null
       ? 18
       : _vidHasNext
-      ? (_searchContent?.vid?.data?.length ?? 0) + 2
-      : (_searchContent?.vid?.data?.length ?? 0);
+          ? (_searchContent?.vid?.data?.length ?? 0) + 2
+          : (_searchContent?.vid?.data?.length ?? 0);
 
   bool _vidHasNext = false;
   // bool get vidHasNext => vidContentsQuery.hasNext;
@@ -96,8 +98,8 @@ class SearchNotifier with ChangeNotifier {
   int get diaryCount => _searchContent?.diary?.data == null
       ? 18
       : _diaryHasNext
-      ? (_searchContent?.diary?.data?.length ?? 0) + 2
-      : (_searchContent?.diary?.data?.length ?? 0);
+          ? (_searchContent?.diary?.data?.length ?? 0) + 2
+          : (_searchContent?.diary?.data?.length ?? 0);
 
   bool _diaryHasNext = false;
   bool get diaryHasNext => _diaryHasNext;
@@ -105,8 +107,8 @@ class SearchNotifier with ChangeNotifier {
   int get picCount => _searchContent?.pict?.data == null
       ? 18
       : _picHasNext
-      ? (_searchContent?.pict?.data?.length ?? 0) + 2
-      : (_searchContent?.pict?.data?.length ?? 0);
+          ? (_searchContent?.pict?.data?.length ?? 0) + 2
+          : (_searchContent?.pict?.data?.length ?? 0);
 
   bool _picHasNext = false;
   // bool get picHasNext => picContentsQuery.hasNext;
@@ -137,10 +139,9 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void onUpdate() => notifyListeners();
+
   onInitialSearch(BuildContext context) async {
-    print('initial search');
-    print(allContents.diaries);
-    print(allContents.diaries?[0].isApsara);
     if (allContents.vids == null && allContents.diaries == null && allContents.pics == null) {
       vidContentsQuery.featureType = FeatureType.vid;
       diaryContentsQuery.featureType = FeatureType.diary;
@@ -159,7 +160,7 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  onInitialSearchNew(BuildContext context) async{
+  onInitialSearchNew(BuildContext context) async {
     focusNode.unfocus();
     isLoading = true;
     _searchContent = SearchContentModel();
@@ -173,18 +174,17 @@ class SearchNotifier with ChangeNotifier {
     _diaryHasNext = true;
     _picHasNext = true;
     _skip += 18;
-    try{
+    try {
       _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
       _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
       _searchContent?.pict?.data = await getListPosts(context, FeatureType.pic);
-    }catch(e){
+    } catch (e) {
       'onInitialSearchNew : $e'.logger();
-    }finally{
+    } finally {
       isLoading = false;
 
       notifyListeners();
     }
-
   }
 
   Future<List<ContentData>> getListPosts(BuildContext context, FeatureType type, {bool myContent = false, bool otherContent = false}) async {
@@ -194,24 +194,14 @@ class SearchNotifier with ChangeNotifier {
     try {
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context,
-          postID: null,
-          pageRows: 18,
-          pageNumber: 0,
-          type: type,
-          searchText: searchController.text,
-          onlyMyData: false,
-          visibility: 'PUBLIC',
-          myContent: myContent,
-          otherContent: otherContent);
+          postID: null, pageRows: 18, pageNumber: 0, type: type, searchText: searchController.text, onlyMyData: false, visibility: 'PUBLIC', myContent: myContent, otherContent: otherContent);
       final fetch = notifier.postsFetch;
 
       res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
-
     } catch (e) {
       '$e'.logger();
       rethrow;
-    } finally {
-    }
+    } finally {}
 
     return res ?? [];
   }
@@ -219,8 +209,6 @@ class SearchNotifier with ChangeNotifier {
   onScrollListener(BuildContext context, ScrollController scrollController) async {
     print("scroll");
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-
-
       String search = searchController.text;
       focusNode.unfocus();
 
@@ -230,47 +218,47 @@ class SearchNotifier with ChangeNotifier {
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-        if(_res.vid?.data?.isEmpty ?? true){
+        if (_res.vid?.data?.isEmpty ?? true) {
           _vidHasNext = false;
-        }else if(_res.vid?.skip == 0){
+        } else if (_res.vid?.skip == 0) {
           _vidHasNext = false;
-        }else if((_res.vid?.data?.length ?? 0)%18 == 0 ){
-          if((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)){
+        } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
+          if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
             _vidHasNext = false;
-          }else{
+          } else {
             _vidHasNext = true;
           }
-        }else{
+        } else {
           _vidHasNext = false;
         }
-        if(_res.diary?.data?.isEmpty ?? true){
+        if (_res.diary?.data?.isEmpty ?? true) {
           _diaryHasNext = false;
-        }else if(_res.diary?.skip == 0){
+        } else if (_res.diary?.skip == 0) {
           _diaryHasNext = false;
-        }else if((_res.diary?.data?.length ?? 0)%18 == 0 ){
-          if((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)){
+        } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
+          if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
             _diaryHasNext = false;
-          }else{
+          } else {
             _diaryHasNext = true;
           }
-        }else{
+        } else {
           _diaryHasNext = false;
         }
-        if(_res.pict?.data?.isEmpty ?? true){
+        if (_res.pict?.data?.isEmpty ?? true) {
           _picHasNext = false;
-        }else if(_res.pict?.skip == 0){
+        } else if (_res.pict?.skip == 0) {
           _picHasNext = false;
-        }else if((_res.pict?.data?.length ?? 0)%18 == 0 ){
-          if((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)){
+        } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
+          if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
             _picHasNext = false;
-          }else{
+          } else {
             _picHasNext = true;
           }
-        }else{
+        } else {
           _picHasNext = false;
         }
 
-        if(_picHasNext || _diaryHasNext || _vidHasNext){
+        if (_picHasNext || _diaryHasNext || _vidHasNext) {
           _skip += 18;
         }
 
@@ -297,49 +285,49 @@ class SearchNotifier with ChangeNotifier {
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       final _res = SearchContentModel.fromJson(fetch.data);
-      if(_res.vid?.data?.isEmpty ?? true){
+      if (_res.vid?.data?.isEmpty ?? true) {
         _vidHasNext = false;
-      }else if(_res.vid?.skip == 0){
+      } else if (_res.vid?.skip == 0) {
         _vidHasNext = false;
-      }else if((_res.vid?.data?.length ?? 0)%18 == 0 ){
-        if((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)){
+      } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
+        if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
           _vidHasNext = false;
-        }else{
+        } else {
           _vidHasNext = true;
         }
-      }else{
+      } else {
         _vidHasNext = false;
       }
-      if(_res.diary?.data?.isEmpty ?? true){
+      if (_res.diary?.data?.isEmpty ?? true) {
         _diaryHasNext = false;
-      }else if(_res.diary?.skip == 0){
+      } else if (_res.diary?.skip == 0) {
         _diaryHasNext = false;
-      }else if((_res.diary?.data?.length ?? 0)%18 == 0 ){
-        if((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)){
+      } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
+        if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
           _diaryHasNext = false;
-        }else{
+        } else {
           _diaryHasNext = true;
         }
-      }else{
+      } else {
         _diaryHasNext = false;
       }
-      if(_res.pict?.data?.isEmpty ?? true){
+      if (_res.pict?.data?.isEmpty ?? true) {
         _picHasNext = false;
-      }else if(_res.pict?.skip == 0){
+      } else if (_res.pict?.skip == 0) {
         _picHasNext = false;
-      }else if((_res.pict?.data?.length ?? 0)%18 == 0 ){
-        if((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)){
+      } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
+        if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
           _picHasNext = false;
-        }else{
+        } else {
           _picHasNext = true;
         }
-      }else{
+      } else {
         _picHasNext = false;
       }
       _searchContent = _res;
     }
     // else {
-      // _searchContent = null;
+    // _searchContent = null;
     // }
     isLoading = false;
     notifyListeners();
@@ -350,8 +338,12 @@ class SearchNotifier with ChangeNotifier {
     bool connect = await System().checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data[index]));
-      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
-      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
+      if (pageIndex == 1)
+        _routing.move(Routes.diaryDetail,
+            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+      if (pageIndex == 2)
+        _routing.move(Routes.picSlideDetailPreview,
+            argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         _routing.moveBack();
@@ -361,23 +353,27 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future navigateToSeeAllScreen2(BuildContext context, List<ContentData> data, int index, int selectIndex) async {
+    context.read<ReportNotifier>().inPosition = contentPosition.search;
     focusNode.unfocus();
     bool connect = await System().checkConnections();
     if (connect) {
       // VidDetailScreenArgument()..postID = deepLink.queryParameters['postID']
       if (selectIndex == 2) {
+        context.read<ReportNotifier>().type = 'vid';
         _routing.move(Routes.vidDetail,
             argument: VidDetailScreenArgument(vidData: data[index])
               ..postID = data[index].postID
               ..backPage = true);
       }
       if (selectIndex == 3) {
+        context.read<ReportNotifier>().type = 'diary';
         _routing.move(Routes.diaryDetail,
             argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search)
               ..postID = data[index].postID
               ..backPage = true);
       }
       if (selectIndex == 4) {
+        context.read<ReportNotifier>().type = 'pict';
         _routing.move(Routes.picSlideDetailPreview,
             argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search)
               ..postID = data[index].postID
@@ -438,5 +434,34 @@ class SearchNotifier with ChangeNotifier {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
     storyController.pause();
     _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
+  }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    ContentData? _updatedData;
+    ContentData? _updatedData2;
+
+    switch (content) {
+      case hyppeVid:
+        _updatedData = _searchContent?.vid?.data?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppeDiary:
+        _updatedData = _searchContent?.diary?.data?.firstWhere((element) => element.postID == postID);
+        break;
+      case hyppePic:
+        _updatedData = _searchContent?.pict?.data?.firstWhere((element) => element.postID == postID);
+        break;
+      default:
+        "$content It's Not a content of $postID".logger();
+        break;
+    }
+
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = '';
+    }
+    if (_updatedData2 != null) {
+      _updatedData2.reportedStatus = '';
+    }
+
+    notifyListeners();
   }
 }
