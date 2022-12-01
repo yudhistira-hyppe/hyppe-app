@@ -26,16 +26,14 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
 
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/core/services/system.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
-// import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:readmore/readmore.dart';
 
-import '../../../../../../../core/models/collection/music/music.dart';
 
 class VidDetailBottom extends StatelessWidget {
   final ContentData? data;
@@ -108,7 +106,18 @@ class VidDetailBottom extends StatelessWidget {
             SizedBox(
               width: SizeConfig.screenWidth,
               child: data != null
-                  ? CustomTextWidget(maxLines: 2, textAlign: TextAlign.left, textStyle: Theme.of(context).textTheme.bodyText2, textToDisplay: "${data?.description}")
+                  ? ReadMoreText(
+                "${data?.description}",
+                trimLines: 2,
+                trimMode: TrimMode.Line,
+                textAlign: TextAlign.left,
+                trimExpandedText: 'Show less',
+                trimCollapsedText: 'Show more',
+                colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                style: Theme.of(context).textTheme.subtitle2,
+                moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+              )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,

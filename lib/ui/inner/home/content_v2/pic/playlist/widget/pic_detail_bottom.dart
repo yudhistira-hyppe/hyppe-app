@@ -31,6 +31,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 // import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:readmore/readmore.dart';
 
 class PicDetailBottom extends StatelessWidget {
   final ContentData? data;
@@ -111,14 +112,18 @@ class PicDetailBottom extends StatelessWidget {
             SizedBox(
               width: SizeConfig.screenWidth,
               child: data != null
-                  ? CustomTextWidget(
-                      maxLines: 2,
-                      textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.subtitle2,
-
-                      // textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e}").join(" ")}",
-                      textToDisplay: "${data?.description}",
-                    )
+                  ? ReadMoreText(
+                "${data?.description}",
+                trimLines: 2,
+                trimMode: TrimMode.Line,
+                textAlign: TextAlign.left,
+                trimExpandedText: 'Show less',
+                trimCollapsedText: 'Show more',
+                colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                style: Theme.of(context).textTheme.subtitle2,
+                moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+              )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
