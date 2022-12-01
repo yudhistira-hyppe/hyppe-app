@@ -5,6 +5,9 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 class DiaryDetailScreenArgument extends ContentScreenArgument {
   final double index;
   final List<ContentData>? diaryData;
+  final int? page;
+  final int? limit;
+  final TypePlaylist type;
 
   @override
   FeatureType get featureType => FeatureType.diary;
@@ -12,5 +15,8 @@ class DiaryDetailScreenArgument extends ContentScreenArgument {
   DiaryDetailScreenArgument({
     this.index = 0,
     this.diaryData,
+    this.page,
+    this.limit,
+    required this.type
   });
 }

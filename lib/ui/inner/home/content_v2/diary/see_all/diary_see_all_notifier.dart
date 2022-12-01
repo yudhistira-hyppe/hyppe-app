@@ -84,8 +84,11 @@ class DiarySeeAllNotifier extends ChangeNotifier {
       _routing.move(
         Routes.diaryDetail,
         argument: DiaryDetailScreenArgument(
-          diaryData: diaryData,
-          index: index.toDouble(),
+            diaryData: diaryData,
+            index: index.toDouble(),
+            page: contentsQuery.page,
+            limit: contentsQuery.limit,
+            type: TypePlaylist.landingpage
         ),
       );
     } else {

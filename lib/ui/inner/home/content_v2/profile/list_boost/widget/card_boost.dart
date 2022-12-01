@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -200,7 +201,7 @@ class CardBoost extends StatelessWidget {
                           case 'diary':
                             Routing().move(
                               Routes.diaryDetail,
-                              argument: DiaryDetailScreenArgument()
+                              argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
                                 ..postID = data?.postID
                                 ..backPage = true,
                             );

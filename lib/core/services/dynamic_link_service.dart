@@ -110,7 +110,7 @@ class DynamicLinkService {
           case Routes.diaryDetail:
             _routing.moveReplacement(
               _path,
-              argument: DiaryDetailScreenArgument()
+              argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );
@@ -126,7 +126,7 @@ class DynamicLinkService {
           case Routes.picSlideDetailPreview:
             _routing.moveReplacement(
               _path,
-              argument: SlidedPicDetailScreenArgument()
+              argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );

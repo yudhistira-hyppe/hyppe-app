@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/slide_pic_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_ar
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
 import '../../../diary/playlist/widget/right_items_shimmer.dart';
-import '../../notifier.dart';
 import '../screen.dart';
 import 'notifier.dart';
 
@@ -75,15 +73,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     controller: _pageController,
                     itemCount: notifier.listData?.length ?? 0,
                     onPageChanged: (value) async {
-                      if (value == ((notifier.listData?.length ?? 0) - 1)) {
-                        print('onPageChanged Image : masuk');
-                        await notifier.nextPlaylistPic(context);
-                        // final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
-                        // if (values.isNotEmpty) {
-                        //   notifier.listData = [...(notifier.listData ?? []) as List<ContentData>] + values;
-                        // }
-
-                      }
+                      notifier.nextPlaylistPic(context, value);
                       notifier.initAdsVideo(context);
                       print('onPageChanged Image : $value : ${notifier.listData?.length}');
                       print('check index hit : my index $value');

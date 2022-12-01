@@ -156,6 +156,9 @@ class PreviewDiaryNotifier with ChangeNotifier {
         argument: DiaryDetailScreenArgument(
           diaryData: diaryData,
           index: index.toDouble(),
+          page: contentsQuery.page,
+          limit: contentsQuery.limit,
+          type: TypePlaylist.landingpage,
         ),
       );
     } else {

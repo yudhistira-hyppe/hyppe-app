@@ -13,18 +13,22 @@ import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dar
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:provider/provider.dart';
 
 import 'package:story_view/story_view.dart';
 
 import '../../../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
+import '../../profile/other_profile/notifier.dart';
+import '../../profile/self_profile/notifier.dart';
 
 class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   final _sharedPrefs = SharedPreference();
@@ -51,6 +55,10 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   List<StoryItem> _result = [];
   List<StoryItem> get result => _result;
+
+  bool _isLoadMine = false;
+  bool _isLoadOther = false;
+  bool _isLoadSearch = false;
 
   setCurrentDiary(int val) => _currentDiary = val;
 
@@ -212,6 +220,8 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       _initialDiary(context);
     } else {
       _listData = _routeArgument?.diaryData;
+      contentsQuery.limit = _routeArgument?.limit ?? 5;
+      contentsQuery.page = _routeArgument?.page ?? 2;
       _listData.logger();
       notifyListeners();
     }
@@ -233,6 +243,73 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       _followUser(context);
     } catch (e) {
       'load diary: ERROR: $e'.logger();
+    }
+  }
+
+  Future<void> nextPlaylistDiary(BuildContext context, int value) async{
+    print('onPageChanged Image : masuk');
+    if(_routeArgument?.type == TypePlaylist.landingpage && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
+      if (value == ((listData?.length ?? 0) - 1)) {
+        print('onPageChanged Image : masuk');
+        try{
+          final values = await contentsQuery.loadNext(context, isLandingPage: true);
+          if (values.isNotEmpty) {
+            listData = [...(listData ?? []) as List<ContentData>] + values;
+            final prev = context.read<PreviewDiaryNotifier>();
+            prev.initialDiary(context, list: values);
+          }
+        }catch(e){
+          'TypePlaylist.landingpage nextload error : $e'.logger();
+        }
+      }
+    }else if(_routeArgument?.type == TypePlaylist.search){
+      if(!_isLoadSearch){
+        if (value >= ((listData?.length ?? 0) - 6)) {
+          try{
+            _isLoadSearch = true;
+          }catch(e){
+            'TypePlaylist.search nextload error : $e'.logger();
+          }finally{
+            _isLoadSearch = false;
+          }
+        }
+      }
+    }else if(_routeArgument?.type == TypePlaylist.mine && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
+      if(!_isLoadMine){
+        if (value >= ((listData?.length ?? 0) - 6)) {
+          try{
+            _isLoadMine = true;
+            final values = await contentsQuery.loadNext(context, myContent: true);
+            if (values.isNotEmpty) {
+              listData = [...(listData ?? []) as List<ContentData>] + values;
+              final prev = context.read<SelfProfileNotifier>();
+              prev.user.diaries = [...(prev.user.diaries ?? []), ...values];
+            }
+          }catch(e){
+            'TypePlaylist.mine nextload error : $e'.logger();
+          }finally{
+            _isLoadMine = false;
+          }
+        }
+      }
+    }else if(_routeArgument?.type == TypePlaylist.other && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
+      if(!_isLoadOther){
+        if (value >= ((listData?.length ?? 0) - 6)){
+          try{
+            _isLoadOther = true;
+            final values = await contentsQuery.loadNext(context, otherContent: true);
+            if (values.isNotEmpty) {
+              listData = [...(listData ?? []) as List<ContentData>] + values;
+              final prev = context.read<OtherProfileNotifier>();
+              prev.user.diaries = [...(prev.user.diaries ?? []), ...values];
+            }
+          }catch(e){
+            'TypePlaylist.other nextload error : $e'.logger();
+          }finally{
+            _isLoadOther = false;
+          }
+        }
+      }
     }
   }
 
