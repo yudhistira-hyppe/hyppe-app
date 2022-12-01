@@ -468,7 +468,6 @@ class PreviewContentNotifier with ChangeNotifier {
   void forceResetPlayer(){
     print('forceResetPlayer');
     currentMusic = null;
-    audioPlayer.stop();
     for(var data in _listMusics){
       if(data.isPlay){
         data.isPlay = false;
@@ -481,6 +480,12 @@ class PreviewContentNotifier with ChangeNotifier {
         break;
       }
     }
+    try{
+      audioPlayer.stop();
+    }catch(e){
+      'forceResetPlayer error: $e'.logger();
+    }
+
   }
 
   Future initListMusics(BuildContext context) async{
@@ -685,8 +690,8 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void disposeMusic() async{
-    forceResetPlayer();
     try{
+      forceResetPlayer();
       await audioPlayer.dispose();
     }catch(e){
       'disposeMusic error : $e'.logger();

@@ -550,6 +550,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoostTime = '';
     tmpBoostInterval = '';
     editData = null;
+
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
       try {
@@ -564,6 +565,8 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (notifier.betterPlayerController != null) {
         notifier.betterPlayerController!.dispose();
       }
+    }else{
+      notifier.fixSelectedMusic = _musicSelected;
     }
   }
 

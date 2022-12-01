@@ -23,6 +23,8 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.d
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:provider/provider.dart';
 
+import '../preview_content/notifier.dart';
+
 class PreUploadContentScreen extends StatefulWidget {
   final UpdateContentsArgument arguments;
 
@@ -434,13 +436,15 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
     }else{
       return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           notifier.musicSelected != null
               ? InkWell(
-            onTap: () {
-              ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
+            onTap: () async {
+              await ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
+              final notif = context.read<PreviewContentNotifier>();
+              await notif.audioPreviewPlayer.pause();
             },
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -475,8 +479,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             ),
           )
               : InkWell(
-            onTap: () {
-              ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat(), isInit: false);
+            onTap: () async {
+              final isPic = notifier.fileContent?[0]?.isImageFormat();
+              await ShowBottomSheet.onChooseMusic(context, isPic: isPic, isInit: isPic);
+              final notif = context.read<PreviewContentNotifier>();
+              await notif.audioPreviewPlayer.pause();
             },
             child: SizedBox(
               width: double.infinity,

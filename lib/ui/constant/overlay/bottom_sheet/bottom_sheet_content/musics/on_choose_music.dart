@@ -114,17 +114,27 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                 await notifier.audioPlayer.stop();
                 if(widget.isPic){
                   // notifier.isLoadVideo = true;
+                  if(!widget.isInit){
+                    notifier.fixSelectedMusic = notifier.selectedMusic;
+                  }
                   print('isLoadVideo : ${notifier.isLoadVideo}');
+                  uploadNotifier.musicSelected = notifier.selectedMusic;
+                  notifier.selectedMusic = null;
+                  notifier.selectedType = null;
+                  notifier.forceResetPlayer();
+                  notifier.searchController.text = '';
+
 
                 }else{
                   await notifier.videoMerger(context, notifier.selectedMusic!.apsaraMusicUrl?.playUrl ?? '', isInit: widget.isInit);
+                  notifier.fixSelectedMusic = notifier.selectedMusic;
+                  uploadNotifier.musicSelected = notifier.selectedMusic;
+                  notifier.selectedMusic = null;
+                  notifier.selectedType = null;
+                  notifier.forceResetPlayer();
+                  notifier.searchController.text = '';
                 }
-                notifier.fixSelectedMusic = notifier.selectedMusic;
-                uploadNotifier.musicSelected = notifier.selectedMusic;
-                notifier.selectedMusic = null;
-                notifier.selectedType = null;
-                notifier.forceResetPlayer();
-                notifier.searchController.text = '';
+
                 Navigator.pop(context);
 
               },

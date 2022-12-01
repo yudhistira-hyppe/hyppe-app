@@ -33,8 +33,8 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
   @override
   void dispose() {
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    notifier.disposeMusic();
     notifier.scrollController.dispose();
+    notifier.disposeMusic();
     super.dispose();
   }
 
