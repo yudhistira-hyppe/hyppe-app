@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +85,6 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           itemBuilder: (context, index) {
                             if (notifier.diaryData == null || (homeNot.isLoadingDiary)) {
-
                               return CustomShimmer(
                                 width: (MediaQuery.of(context).size.width - 16.0 - 16.0 - 8) / 3,
                                 height: 181,

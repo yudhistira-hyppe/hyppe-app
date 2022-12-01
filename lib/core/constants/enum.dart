@@ -55,3 +55,4 @@ enum InteractiveEvent { initial, accept, request, done, revoke, none }
 enum DiscussEventType { directMsg, comment }
 enum IdProofStatus { initial, inProgress, complete, revoke }
 enum EnvType { development, production }
+enum contentPosition { home, myprofile, otherprofile }

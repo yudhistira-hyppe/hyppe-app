@@ -24,6 +24,7 @@ import 'package:hyppe/core/query_request/users_data_query.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 // import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/widget/other_profile_pics.dart';
@@ -299,7 +300,8 @@ class OtherProfileNotifier with ChangeNotifier {
     return pages[pageIndex];
   }
 
-  navigateToSeeAllScreen(BuildContext context, int index) async {
+  navigateToSeeAllScreen(BuildContext context, int index, {contentPosition? inPosition}) async {
+    context.read<ReportNotifier>().inPosition = contentPosition.otherprofile;
     final connect = await _system.checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
@@ -405,13 +407,13 @@ class OtherProfileNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
+        if (user.vids!.isNotEmpty) _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
+        if (user.diaries!.isNotEmpty) _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
+        if (user.pics!.isNotEmpty) _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();

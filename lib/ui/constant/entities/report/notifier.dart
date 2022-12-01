@@ -54,6 +54,14 @@ class ReportNotifier with ChangeNotifier {
   AdsData? adsData;
   String typeContent = '';
 
+  contentPosition? _inPosition;
+  contentPosition? get inPosition => _inPosition;
+
+  set inPosition(contentPosition? val) {
+    _inPosition = val;
+    notifyListeners();
+  }
+
   set currentReport(String val) {
     _currentReport = val;
     notifyListeners();
@@ -191,25 +199,31 @@ class ReportNotifier with ChangeNotifier {
   }
 
   void seeContent(BuildContext context, ContentData data, String typeContent) {
-    context.read<HomeNotifier>().showContentSensitive(
-          context,
-          postID: data.postID ?? '',
-          content: typeContent,
-          isReport: false,
-        );
-    context.read<OtherProfileNotifier>().showContentSensitive(
-          context,
-          postID: data.postID ?? '',
-          content: typeContent,
-          isReport: false,
-        );
-    context.read<SelfProfileNotifier>().showContentSensitive(
-          context,
-          postID: data.postID ?? '',
-          content: typeContent,
-          isReport: false,
-        );
-
+    switch (_inPosition) {
+      case contentPosition.otherprofile:
+        context.read<OtherProfileNotifier>().showContentSensitive(
+              context,
+              postID: data.postID ?? '',
+              content: typeContent,
+              isReport: false,
+            );
+        break;
+      case contentPosition.myprofile:
+        context.read<SelfProfileNotifier>().showContentSensitive(
+              context,
+              postID: data.postID ?? '',
+              content: typeContent,
+              isReport: false,
+            );
+        break;
+      default:
+        context.read<HomeNotifier>().showContentSensitive(
+              context,
+              postID: data.postID ?? '',
+              content: typeContent,
+              isReport: false,
+            );
+    }
     context.read<OtherProfileNotifier>().onUpdate();
     switch (typeContent) {
       case hyppeVid:

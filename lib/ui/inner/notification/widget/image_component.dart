@@ -43,6 +43,7 @@ class ImageComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    print('notifikasi data ${data}');
     if (data != null) {
       return InkWell(
         onTap: () async {

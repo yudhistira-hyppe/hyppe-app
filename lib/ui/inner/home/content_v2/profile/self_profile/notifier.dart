@@ -13,6 +13,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_profile_pics.dart';
@@ -217,6 +218,7 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   navigateToSeeAllScreen(BuildContext context, int index) async {
+    context.read<ReportNotifier>().inPosition = contentPosition.myprofile;
     final connect = await _system.checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
@@ -353,13 +355,13 @@ class SelfProfileNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
+        if (user.vids!.isNotEmpty) _updatedData = user.vids?.firstWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
+        if (user.diaries!.isNotEmpty) _updatedData = user.diaries?.firstWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
+        if (user.pics!.isNotEmpty) _updatedData = user.pics?.firstWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();

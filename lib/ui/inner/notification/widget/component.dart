@@ -28,11 +28,9 @@ class Component extends StatelessWidget {
     return InkWell(
       onTap: () {
         context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel());
-        final event = System().getNotificationCategory(data?.event ?? '');
-        print(event);
-        print(data?.eventType);
-        print(data?.event);
-        switch (event) {
+        final eventType = System().getNotificationCategory(data?.eventType ?? '');
+
+        switch (eventType) {
           case NotificationCategory.transactions:
             Routing().move(Routes.transaction);
             break;
@@ -40,10 +38,10 @@ class Component extends StatelessWidget {
             // TODO: Handle this case.
             break;
           case NotificationCategory.like:
-            // TODO: Handle this case.
+            context.read<NotificationNotifier>().navigateToContent(context, data?.content?.postType, data?.postID);
             break;
           case NotificationCategory.comment:
-            // TODO: Handle this case.
+            context.read<NotificationNotifier>().navigateToContent(context, data?.content?.postType, data?.postID);
             break;
           case NotificationCategory.follower:
             // TODO: Handle this case.
@@ -52,7 +50,7 @@ class Component extends StatelessWidget {
             // TODO: Handle this case.
             break;
           case NotificationCategory.mention:
-            // TODO: Handle this case.
+            context.read<NotificationNotifier>().navigateToContent(context, data?.content?.postType, data?.postID);
             break;
           case NotificationCategory.general:
             // TODO: Handle this case.

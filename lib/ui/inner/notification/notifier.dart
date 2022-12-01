@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
+import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/buy_request.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/query_request/notifications_data_query.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -190,5 +198,44 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   void setLoading(bool val, {bool setState = true, Object? loadingObject}) {
     super.setLoading(val, loadingObject: loadingObject);
     if (setState) notifyListeners();
+  }
+
+  void navigateToContent(BuildContext context, postType, postID) {
+    final featureType = System().getFeatureTypeV2(postType ?? '');
+    switch (featureType) {
+      case FeatureType.vid:
+        onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
+        break;
+      case FeatureType.diary:
+        onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v)), postID);
+        break;
+      case FeatureType.pic:
+        onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)), postID);
+        break;
+      case FeatureType.story:
+        onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
+        break;
+      case FeatureType.txtMsg:
+        return;
+      case FeatureType.other:
+        return;
+    }
+  }
+
+  Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback, postID) async {
+    print('ini imagecomponen');
+    final getStory = PostsBloc();
+    final List<ContentData> _listContentData = [];
+    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: postID ?? '');
+    final fetch = getStory.postsFetch;
+    if (fetch.postsState == PostsState.getContentsSuccess) {
+      if (fetch.data.isNotEmpty) {
+        fetch.data.forEach((v) => _listContentData.add(ContentData.fromJson(v)));
+        if (featureType == FeatureType.pic || featureType == FeatureType.vid) {
+          callback(_listContentData[0]);
+        }
+        callback(_listContentData);
+      }
+    }
   }
 }

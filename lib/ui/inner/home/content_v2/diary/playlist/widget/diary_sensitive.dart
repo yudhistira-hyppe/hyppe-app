@@ -9,6 +9,8 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class DiarySensitive extends StatelessWidget {
@@ -24,7 +26,7 @@ class DiarySensitive extends StatelessWidget {
         builder: (context, transnot, child) => Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Spacer(),
+            const Spacer(),
             const CustomIconWidget(
               iconData: "${AssetPath.vectorPath}eye-off.svg",
               defaultColor: false,
@@ -39,11 +41,14 @@ class DiarySensitive extends StatelessWidget {
                   fontSize: 13,
                 )),
             data?.email == SharedPreference().readStorage(SpKeys.email)
-                ? Container(
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.all(18),
-                    decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                    child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)))
+                ? GestureDetector(
+                    onTap: () => Routing().move(Routes.appeal, argument: data),
+                    child: Container(
+                        padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(18),
+                        decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                        child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                  )
                 : const SizedBox(),
             const Spacer(),
             GestureDetector(

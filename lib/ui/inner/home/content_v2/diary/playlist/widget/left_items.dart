@@ -129,7 +129,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           ),
 
           twelvePx,
-          widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED') && widget.data?.isBoost == null && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   margin: const EdgeInsets.only(bottom: 16),
@@ -139,7 +139,15 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                   ),
                 )
               : Container(),
-          widget.data?.isBoost != null && widget.data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: widget.data?.boostJangkauan ?? 0) : Container(),
+          widget.data?.isBoost != null && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: JangkaunStatus(
+                    jangkauan: widget.data?.boostJangkauan ?? 0,
+                    isDiary: true,
+                  ),
+                )
+              : Container(),
 
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
           // _musicInfo(),

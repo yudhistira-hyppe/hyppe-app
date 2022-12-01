@@ -21,6 +21,7 @@ class NotificationModel {
   String? email;
   String? updatedAt;
   bool? isRead;
+  String? postID;
 
   NotificationModel({
     this.active,
@@ -40,6 +41,7 @@ class NotificationModel {
     this.email,
     this.updatedAt,
     this.isRead,
+    this.postID,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -51,7 +53,7 @@ class NotificationModel {
     body = json['body'];
     bodyId = json['bodyId'];
     if (json['content'] != null) {
-      Content.fromJson(json['content']);
+      content = Content.fromJson(json['content']);
       // json['content'].forEach((v) {
       //   content.add(Content.fromJson(v));
       // });
@@ -63,6 +65,7 @@ class NotificationModel {
     event = json['event'];
     email = json['email'];
     updatedAt = json['updatedAt'];
+    postID = json['postID'];
     isRead = json['isRead'] ?? false;
   }
 

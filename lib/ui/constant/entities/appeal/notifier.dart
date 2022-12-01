@@ -78,14 +78,14 @@ class AppealNotifier with ChangeNotifier {
     if (fetch.reportState == ReportState.appealSuccess) {
       _loadingAppel = false;
       noteAppealController.clear();
+      notifyListeners();
       Routing().moveAndPop(Routes.appealSuccess, argument: datacontent);
       // ShowBottomSheet().onShowColouredSheet(context, 'Appeal Success', color: kHyppeTextSuccess);
     } else {
       _loadingAppel = false;
+      notifyListeners();
       ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Colors.red);
     }
-
-    notifyListeners();
   }
 
   String getCategory(List<Cats>? cats) {

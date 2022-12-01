@@ -23,7 +23,9 @@ class AllNotification extends StatelessWidget {
             return Component(
               data: notifier.data?[index],
               rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
-                      System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
+                      System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following ||
+                      notifier.data?[index].event == 'REQUEST_APPEAL' ||
+                      notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
                   ? Container()
                   // ? AcceptButton(data: notifier.data?[index])
                   : ImageComponent(

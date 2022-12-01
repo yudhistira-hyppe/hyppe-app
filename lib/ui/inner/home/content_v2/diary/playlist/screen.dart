@@ -63,10 +63,10 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                   ? PageView.builder(
                       controller: _pageController,
                       itemCount: notifier.listData?.length ?? 0,
-                      onPageChanged: (index) async{
-                        if(index == ((notifier.listData?.length ?? 0) - 1)){
+                      onPageChanged: (index) async {
+                        if (index == ((notifier.listData?.length ?? 0) - 1)) {
                           final values = await notifier.contentsQuery.loadNext(context, isLandingPage: true);
-                          if(values.isNotEmpty){
+                          if (values.isNotEmpty) {
                             notifier.listData = [...(notifier.listData ?? [] as List<ContentData>)] + values;
                             final prev = context.read<PreviewDiaryNotifier>();
                             prev.initialDiary(context, list: values);

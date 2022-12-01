@@ -37,8 +37,7 @@ class SuccessAppeal extends StatelessWidget {
               const Center(
                 child: CustomIconWidget(
                   height: 40,
-                  iconData: "${AssetPath.vectorPath}report.svg",
-                  color: Colors.red,
+                  iconData: "${AssetPath.vectorPath}valid-thin.svg",
                   defaultColor: false,
                 ),
               ),
@@ -52,6 +51,7 @@ class SuccessAppeal extends StatelessWidget {
               OnjectContentWidget(
                 data: data,
                 cat: notifier.getCategory(data.cats),
+                reason: notifier.reason,
               ),
               const Spacer(),
               SizedBox(

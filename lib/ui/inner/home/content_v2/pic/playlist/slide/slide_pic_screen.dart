@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
+import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
@@ -205,11 +206,14 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             fontSize: 13,
                           )),
                       widget.data.email == SharedPreference().readStorage(SpKeys.email)
-                          ? Container(
-                              padding: const EdgeInsets.all(8),
-                              margin: const EdgeInsets.all(18),
-                              decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
-                              child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)))
+                          ? GestureDetector(
+                              onTap: () => Routing().move(Routes.appeal, argument: widget.data),
+                              child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  margin: const EdgeInsets.all(18),
+                                  decoration: BoxDecoration(border: Border.all(color: Colors.white), borderRadius: BorderRadius.circular(10)),
+                                  child: Text(transnot.translate.appealThisWarning ?? 'Appeal This Warning', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600))),
+                            )
                           : const SizedBox(),
                       const Spacer(),
                       GestureDetector(
@@ -348,7 +352,11 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     ),
                     twentyPx,
-                    widget.data.isBoost == null && widget.data.email == SharedPreference().readStorage(SpKeys.email) ? ButtonBoost(contentData: widget.data) : Container(),
+                    (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED') &&
+                            widget.data.isBoost == null &&
+                            widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                        ? ButtonBoost(contentData: widget.data)
+                        : Container(),
                     widget.data.isBoost != null && widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? Padding(
                             padding: const EdgeInsets.all(16.0),
