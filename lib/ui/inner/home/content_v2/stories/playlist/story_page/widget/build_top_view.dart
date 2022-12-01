@@ -84,7 +84,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                     ? GestureDetector(
                         onTap: () {
                           widget.storyController.pause();
-                          ShowBottomSheet.onShowOptionContent(
+                          ShowBottomSheet().onShowOptionContent(
                             context,
                             contentData: widget.data!,
                             captionTitle: hyppeStory,

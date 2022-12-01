@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
@@ -112,13 +113,22 @@ class PicDetailSlider extends StatelessWidget {
                                   ? SizedBox(
                                       width: 50,
                                       child: CustomTextButton(
-                                        onPressed: () => ShowBottomSheet.onShowOptionContent(
-                                          context,
-                                          onDetail: onDetail,
-                                          contentData: picData ?? ContentData(),
-                                          captionTitle: hyppePic,
-                                          onUpdate: () => notifier.onUpdate(),
-                                        ),
+                                        onPressed: ()async{
+                                          if(globalAudioPlayer != null){
+                                            globalAudioPlayer!.pause();
+                                          }
+                                          await ShowBottomSheet().onShowOptionContent(
+                                            context,
+                                            onDetail: onDetail,
+                                            contentData: picData ?? ContentData(),
+                                            captionTitle: hyppePic,
+                                            onUpdate: () => notifier.onUpdate(),
+                                          );
+                                          if(globalAudioPlayer != null){
+                                            globalAudioPlayer!.seek(Duration.zero);
+                                            globalAudioPlayer!.resume();
+                                          }
+                                        },
                                         child: const CustomIconWidget(
                                           defaultColor: false,
                                           iconData: '${AssetPath.vectorPath}more.svg',

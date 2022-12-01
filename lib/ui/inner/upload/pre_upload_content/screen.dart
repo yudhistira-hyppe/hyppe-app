@@ -23,6 +23,8 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/build_category.d
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/validate_type.dart';
 import 'package:provider/provider.dart';
 
+import '../preview_content/notifier.dart';
+
 class PreUploadContentScreen extends StatefulWidget {
   final UpdateContentsArgument arguments;
 
@@ -103,7 +105,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         categoryWidget(textTheme, notifier),
                         _buildDivider(context),
                         eightPx,
-                        layoutMusic(context, notifier),
+                        musicTitle(context, notifier),
                         tagPeopleWidget(textTheme, notifier),
                         _buildDivider(context),
                         tagLocationWidget(textTheme, notifier),
@@ -224,18 +226,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget layoutMusic(BuildContext context, PreUploadContentNotifier notifier) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        musicTitle(context, notifier),
-        eightPx,
-        _buildDivider(context),
-      ],
     );
   }
 
@@ -409,78 +399,104 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget musicTitle(BuildContext context, PreUploadContentNotifier notifier) {
     if(notifier.isEdit){
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomTextWidget(
-                textToDisplay: notifier.musicSelected?.musicTitle ?? '',
-                textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
-              ),
-              fourPx,
-              CustomTextWidget(
-                textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
-                textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
-              )
-            ],
-          )
-        ],
-      );
-    }else{
-      return notifier.musicSelected != null
-          ? InkWell(
-        onTap: () {
-          ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
-        },
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+      if(widget.arguments.contentData?.music?.musicTitle != null){
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomTextWidget(
-                  textToDisplay: notifier.musicSelected?.musicTitle ?? '',
-                  textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
-                ),
-                fourPx,
-                CustomTextWidget(
-                  textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
-                  textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: widget.arguments.contentData?.music?.musicTitle ?? '',
+                      textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
+                    fourPx,
+                    CustomTextWidget(
+                      textToDisplay: '${widget.arguments.contentData?.music?.artistName} • ${widget.arguments.contentData?.music?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
+                      textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                    )
+                  ],
                 )
               ],
             ),
-            InkWell(
-                onTap: () {
-                  notifier.setDefaultFileContent(context);
-                },
-                child: const CustomIconWidget(
-                  iconData: '${AssetPath.vectorPath}close_ads.svg',
-                  width: 25,
-                  height: 25,
-                ))
+            eightPx,
+            _buildDivider(context),
           ],
-        ),
-      )
-          : InkWell(
-        onTap: () {
-          ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat(), isInit: false);
-        },
-        child: SizedBox(
-          width: double.infinity,
-          child: CustomTextWidget(
-            textToDisplay: notifier.language.addMusic ?? 'Add music',
-            textAlign: TextAlign.start,
-            textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+        );
+      }else{
+        return const SizedBox();
+      }
+
+    }else{
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          notifier.musicSelected != null
+              ? InkWell(
+            onTap: () async {
+              await ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
+              final notif = context.read<PreviewContentNotifier>();
+              await notif.audioPreviewPlayer.pause();
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextWidget(
+                      textToDisplay: notifier.musicSelected?.musicTitle ?? '',
+                      textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                    ),
+                    fourPx,
+                    CustomTextWidget(
+                      textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
+                      textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                    )
+                  ],
+                ),
+                InkWell(
+                    onTap: () {
+                      notifier.setDefaultFileContent(context);
+                    },
+                    child: const CustomIconWidget(
+                      iconData: '${AssetPath.vectorPath}close_ads.svg',
+                      width: 25,
+                      height: 25,
+                    ))
+              ],
+            ),
+          )
+              : InkWell(
+            onTap: () async {
+              final isPic = notifier.fileContent?[0]?.isImageFormat();
+              await ShowBottomSheet.onChooseMusic(context, isPic: isPic, isInit: isPic);
+              final notif = context.read<PreviewContentNotifier>();
+              await notif.audioPreviewPlayer.pause();
+            },
+            child: SizedBox(
+              width: double.infinity,
+              child: CustomTextWidget(
+                textToDisplay: notifier.language.addMusic ?? 'Add music',
+                textAlign: TextAlign.start,
+                textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+              ),
+            ),
           ),
-        ),
+          eightPx,
+          _buildDivider(context),
+        ],
       );
     }
 

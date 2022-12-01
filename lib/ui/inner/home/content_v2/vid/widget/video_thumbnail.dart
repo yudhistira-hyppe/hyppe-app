@@ -88,7 +88,7 @@ class VideoThumbnail extends StatelessWidget {
                       style: ButtonStyle(
                         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(right: 10)),
                       ),
-                      onPressed: () => ShowBottomSheet.onShowOptionContent(
+                      onPressed: () => ShowBottomSheet().onShowOptionContent(
                         context,
                         contentData: videoData ?? ContentData(),
                         captionTitle: hyppeVid,

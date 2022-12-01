@@ -120,7 +120,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                               child: GestureDetector(
                                 onTap: () {
                                   widget.storyController.pause();
-                                  ShowBottomSheet.onShowOptionContent(
+                                  ShowBottomSheet().onShowOptionContent(
                                     context,
                                     contentData: widget.data!,
                                     captionTitle: hyppeDiary,

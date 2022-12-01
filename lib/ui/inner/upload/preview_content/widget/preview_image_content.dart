@@ -131,7 +131,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> {
                       twentyFourPx,
                       InkWell(
                         onTap: (){
-                          ShowBottomSheet.onChooseMusic(context, isPic: true);
+                          ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,7 +255,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> {
                       twentyFourPx,
                       InkWell(
                         onTap: (){
-                          ShowBottomSheet.onChooseMusic(context, isPic: true);
+                          ShowBottomSheet.onChooseMusic(context, isPic: true, isInit: false);
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

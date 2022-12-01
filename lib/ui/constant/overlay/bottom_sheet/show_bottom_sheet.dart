@@ -669,15 +669,15 @@ class ShowBottomSheet {
     );
   }
 
-  static onShowOptionContent(
+  Future onShowOptionContent(
     BuildContext _, {
     required ContentData contentData,
     required String captionTitle,
     bool onDetail = true,
     StoryController? storyController,
     Function? onUpdate,
-  }) {
-    showModalBottomSheet(
+  }) async{
+    await showModalBottomSheet(
       context: _,
       enableDrag: true,
       isDismissible: true,
