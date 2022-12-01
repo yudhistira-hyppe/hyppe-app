@@ -24,9 +24,9 @@ class SensitiveContentProfile extends StatelessWidget {
             ),
           ),
         ),
-        const Center(
+        Center(
           child: CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}eye-off.svg",
+            iconData: data?.reportedStatus == 'OWNED' ? "${AssetPath.vectorPath}takedown.svg" : "${AssetPath.vectorPath}eye-off.svg",
             defaultColor: false,
             height: 30,
             color: Colors.white,

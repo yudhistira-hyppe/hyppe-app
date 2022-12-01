@@ -9,6 +9,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
@@ -98,7 +99,7 @@ class PicCenterItem extends StatelessWidget {
       children: [
         if (isSale) PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
-        data?.isReport ?? false
+        data?.reportedStatus == 'BLURRED'
             ? ClipRect(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(
@@ -110,17 +111,14 @@ class PicCenterItem extends StatelessWidget {
                     width: 200.0,
                     height: 200.0,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "${translate.translate.see} HyppePic",
-                          style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                          textAlign: TextAlign.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}eye-off.svg",
+                          defaultColor: false,
+                          height: 50,
+                          color: Colors.white,
                         ),
-                        sixPx,
-                        sixPx,
-                        sixPx,
-                        sixPx,
                       ],
                     ),
                   ),

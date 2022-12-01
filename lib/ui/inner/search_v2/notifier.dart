@@ -350,8 +350,8 @@ class SearchNotifier with ChangeNotifier {
     bool connect = await System().checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: data[index]));
-      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble()));
-      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble()));
+      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         _routing.moveBack();
@@ -373,13 +373,13 @@ class SearchNotifier with ChangeNotifier {
       }
       if (selectIndex == 3) {
         _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble())
+            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search)
               ..postID = data[index].postID
               ..backPage = true);
       }
       if (selectIndex == 4) {
-        _routing.move(Routes.picDetail,
-            argument: PicDetailScreenArgument(picData: data[index])
+        _routing.move(Routes.picSlideDetailPreview,
+            argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search)
               ..postID = data[index].postID
               ..backPage = true);
       }

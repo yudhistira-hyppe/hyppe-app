@@ -115,7 +115,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
                                   break;
                                 case FeatureType.diary:
                                   _routing.move(Routes.diaryDetail,
-                                      argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble())
+                                      argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble(), type: TypePlaylist.none)
                                         ..postID = widget.content?[index].postID
                                         ..backPage = true);
                                   break;

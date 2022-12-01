@@ -10,6 +10,7 @@ enum PostView { viewed, notViewed }
 enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid }
 enum UserType { verified, notVerified }
 enum MethodType { get, post, download, postUploadProfile, postUploadContent, delete }
+enum TypePlaylist{landingpage, mine, other, search, none}
 enum ErrorType {
   myStory,
   peopleStory,

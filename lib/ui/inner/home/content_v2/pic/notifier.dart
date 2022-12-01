@@ -130,7 +130,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
   void navigateToSlidedDetailPic(BuildContext context, int index) async {
     final connect = await _system.checkConnections();
     if (connect) {
-      Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble()));
+      Routing().move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: pic, index: index.toDouble(), page: contentsQuery.page, limit: contentsQuery.limit, type: TypePlaylist.landingpage));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

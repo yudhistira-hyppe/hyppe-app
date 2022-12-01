@@ -138,18 +138,20 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
         Expanded(
           child: ListView(
             children: [
-              _tileComponent(
-                moveBack: true,
-                caption: '${TranslateNotifierV2().translate.copyLink}',
-                icon: 'copy-link.svg',
-                onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
-              ),
-              _tileComponent(
-                moveBack: false,
-                caption: '${TranslateNotifierV2().translate.share}',
-                icon: 'share.svg',
-                onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
-              ),
+              if (widget.contentData.reportedStatus != 'OWNED')
+                _tileComponent(
+                  moveBack: true,
+                  caption: '${TranslateNotifierV2().translate.copyLink}',
+                  icon: 'copy-link.svg',
+                  onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
+                ),
+              if (widget.contentData.reportedStatus != 'OWNED')
+                _tileComponent(
+                  moveBack: false,
+                  caption: '${TranslateNotifierV2().translate.share}',
+                  icon: 'share.svg',
+                  onTap: () => _handleLink(context, copiedToClipboard: false, description: widget.captionTitle, data: widget.contentData),
+                ),
               if (_system.getFeatureTypeV2(widget.contentData.postType ?? '') != FeatureType.story) ...[
                 _tileComponent(
                   moveBack: false,

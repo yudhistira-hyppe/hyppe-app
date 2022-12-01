@@ -36,13 +36,15 @@ import '../../../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../../../core/bloc/posts_v2/bloc.dart';
 import '../../../../../../../core/bloc/posts_v2/state.dart';
 import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
+import '../../../profile/other_profile/notifier.dart';
+import '../../../profile/self_profile/notifier.dart';
 import '../../notifier.dart';
 
 class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   // final _system = System();
   final _sharedPrefs = SharedPreference();
   ScrollController scrollController = ScrollController();
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..page = 2..limit = 5..featureType = FeatureType.pic;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.pic;
 
   final UsersDataQuery _usersFollowingQuery = UsersDataQuery()
     ..eventType = InteractiveEventType.following
@@ -74,6 +76,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   bool _checkIsLoading = false;
   double? get currentPage => _currentPage;
   bool get checkIsLoading => _checkIsLoading;
+
+  bool _isLoadMine = false;
+  bool _isLoadOther = false;
+  bool _isLoadSearch = false;
 
   set isLoadMusic(bool state){
     _isLoadMusic = state;
@@ -188,14 +194,71 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<void> nextPlaylistPic(BuildContext context) async{
+  Future<void> nextPlaylistPic(BuildContext context, int value) async{
     print('onPageChanged Image : masuk');
-    final values = await contentsQuery.loadNext(context, isLandingPage: true);
-    if (values.isNotEmpty) {
-      listData = [...(listData ?? []) as List<ContentData>] + values;
+    if(_routeArgument?.type == TypePlaylist.landingpage){
+      if (value == ((listData?.length ?? 0) - 1) && (listData?.length ?? 0)%(contentsQuery.limit) == 0) {
+        print('onPageChanged Image : masuk');
+        try{
+          final values = await contentsQuery.loadNext(context, isLandingPage: true);
+          if (values.isNotEmpty) {
+            listData = [...(listData ?? []) as List<ContentData>] + values;
+            final prev = context.read<PreviewPicNotifier>();
+            prev.initialPic(context, list: values);
+          }
+        }catch(e){
+          'TypePlaylist.landingpage nextload error : $e'.logger();
+        }
+      }
+    }else if(_routeArgument?.type == TypePlaylist.search){
+      if(!_isLoadSearch){
+        if (value >= ((listData?.length ?? 0) - 6)) {
+          try{
+            _isLoadSearch = true;
+          }catch(e){
+            'TypePlaylist.search nextload error : $e'.logger();
+          }finally{
+            _isLoadSearch = false;
+          }
+        }
+      }
+    }else if(_routeArgument?.type == TypePlaylist.mine && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
+      if(!_isLoadMine){
+        if (value >= ((listData?.length ?? 0) - 6)) {
+          try{
+            _isLoadMine = true;
+            final values = await contentsQuery.loadNext(context, myContent: true);
+            if (values.isNotEmpty) {
+              listData = [...(listData ?? []) as List<ContentData>] + values;
+              final prev = context.read<SelfProfileNotifier>();
+              prev.user.pics = [...(prev.user.pics ?? []), ...values];
+            }
+          }catch(e){
+            'TypePlaylist.mine nextload error : $e'.logger();
+          }finally{
+            _isLoadMine = false;
+          }
+        }
+      }
+    }else if(_routeArgument?.type == TypePlaylist.other){
+      if(!_isLoadOther){
+        if (value >= ((listData?.length ?? 0) - 6) && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
+          try{
+            _isLoadOther = true;
+            final values = await contentsQuery.loadNext(context, otherContent: true);
+            if (values.isNotEmpty) {
+              listData = [...(listData ?? []) as List<ContentData>] + values;
+              final prev = context.read<OtherProfileNotifier>();
+              prev.user.pics = [...(prev.user.pics ?? []), ...values];
+            }
+          }catch(e){
+            'TypePlaylist.other nextload error : $e'.logger();
+          }finally{
+            _isLoadOther = false;
+          }
+        }
+      }
     }
-    final prev = context.read<PreviewPicNotifier>();
-    prev.initialPic(context, list: values);
   }
 
   void initState(BuildContext context, SlidedPicDetailScreenArgument routeArgument) async {
@@ -208,7 +271,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     } else {
       print("postNoSent");
       _listData = _routeArgument?.picData;
-      _listData.logger();
+      contentsQuery.limit = _routeArgument?.limit ?? 5;
+      contentsQuery.page = _routeArgument?.page ?? 1;
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
