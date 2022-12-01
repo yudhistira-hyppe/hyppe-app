@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:provider/provider.dart';
@@ -150,13 +151,23 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet.onShowOptionContent(
-                                context,
-                                contentData: widget.data,
-                                captionTitle: hyppePic,
-                                // storyController: widget.storyController,
-                                onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
-                              ),
+                              function: ()async{
+                                if(globalAudioPlayer != null){
+                                  globalAudioPlayer!.pause();
+                                }
+                                await ShowBottomSheet().onShowOptionContent(
+                                  context,
+                                  contentData: widget.data,
+                                  captionTitle: hyppePic,
+                                  // storyController: widget.storyController,
+                                  onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
+                                );
+
+                                if(globalAudioPlayer != null){
+                                  globalAudioPlayer!.seek(Duration.zero);
+                                  globalAudioPlayer!.resume();
+                                }
+                              },
                             )
                           : const SizedBox(),
                       widget.data.email != SharedPreference().readStorage(SpKeys.email)

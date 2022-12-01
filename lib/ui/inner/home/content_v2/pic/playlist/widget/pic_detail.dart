@@ -152,13 +152,15 @@ class _PicDetailState extends State<PicDetail> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: () => ShowBottomSheet.onShowOptionContent(
-                                context,
-                                contentData: widget.arguments ?? ContentData(),
-                                captionTitle: hyppePic,
-                                // storyController: widget.storyController,
-                                onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
-                              ),
+                              function: ()async{
+                                await ShowBottomSheet().onShowOptionContent(
+                                  context,
+                                  contentData: widget.arguments ?? ContentData(),
+                                  captionTitle: hyppePic,
+                                  // storyController: widget.storyController,
+                                  onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                                );
+                              },
                             )
                           : SizedBox(),
                       widget.arguments?.email != SharedPreference().readStorage(SpKeys.email)

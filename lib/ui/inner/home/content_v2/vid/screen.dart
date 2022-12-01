@@ -94,6 +94,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                 controller: vidNotifier.pageController,
                                 scrollDirection: Axis.horizontal,
                                 onPageChanged: (index) async {
+                                  print('HyppePreviewVid index : $index');
                                   if (index == (vidNotifier.itemCount - 1)) {
                                     final values = await vidNotifier.contentsQuery.loadNext(context, isLandingPage: true);
                                     if (values.isNotEmpty) {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';

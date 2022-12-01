@@ -48,7 +48,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  int get itemCount => _vidData == null ? 1 : (_vidData?.length ?? 0);
+  int get itemCount => _vidData?.length ?? 0;
 
   bool get hasNext => contentsQuery.hasNext;
 
@@ -92,7 +92,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
           contentsQuery.hasNext = true;
         }
         res.addAll(list);
-        contentsQuery.hasNext = list.length == 18;
+        contentsQuery.hasNext = list.length == contentsQuery.limit;
         if (list != null) contentsQuery.page++;
       } else {
         if (reload) {

@@ -96,7 +96,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                     child: CustomTextWidget(
                       textAlign: TextAlign.left,
                       textToDisplay: notifier.selectedType?.name ?? '',
-                      textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),))
+                      textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),))
               ],
             ),
           ),
