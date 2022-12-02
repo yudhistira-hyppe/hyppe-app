@@ -5,7 +5,6 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:better_player/better_player.dart';
@@ -156,8 +155,8 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                                 notifier.setDefaultVideo(context);
                               },
                               child: const CustomIconWidget(
-                                height: 12,
-                                width: 12,
+                                height: 20,
+                                width: 20,
                                 iconData: "${AssetPath.vectorPath}close_ads.svg",
                               ),
                             ),
