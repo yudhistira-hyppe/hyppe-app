@@ -168,7 +168,7 @@ class _CameraViewState extends State<CameraView> {
                           child: Transform(
                             alignment: Alignment.center,
                             transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
-                            child: DeepArPreview(notifier.deepArController!),
+                            child: DeepArPreview(notifier.deepArController!, onViewCreated: (){},),
                           ),
                         )
                   : const Center(
