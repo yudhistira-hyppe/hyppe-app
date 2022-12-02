@@ -34,30 +34,8 @@ class Component extends StatelessWidget {
           case NotificationCategory.transactions:
             Routing().move(Routes.transaction);
             break;
-          case NotificationCategory.all:
-            // TODO: Handle this case.
-            break;
-          case NotificationCategory.like:
-            context.read<NotificationNotifier>().navigateToContent(context, data?.content?.postType, data?.postID);
-            break;
-          case NotificationCategory.comment:
-            context.read<NotificationNotifier>().navigateToContent(context, data?.content?.postType, data?.postID);
-            break;
-          case NotificationCategory.follower:
-            // TODO: Handle this case.
-            break;
-          case NotificationCategory.following:
-            // TODO: Handle this case.
-            break;
-          case NotificationCategory.mention:
-            context.read<NotificationNotifier>().navigateToContent(context, data?.content?.postType, data?.postID);
-            break;
-          case NotificationCategory.general:
-            // TODO: Handle this case.
-            break;
-          case NotificationCategory.verificationid:
-            // TODO: Handle this case.
-            break;
+          default:
+            context.read<NotificationNotifier>().navigateToContent(context, data?.postType, data?.postID);
         }
       },
       child: Container(

@@ -162,6 +162,7 @@ class MainNotifier with ChangeNotifier {
         _socketService.events(
           SocketService.eventDiscuss,
           (message) {
+            print('ini message dari socket');
             message.logger();
             try {
               final msgData = MessageDataV2.fromJson(json.decode('$message'));
@@ -190,6 +191,7 @@ class MainNotifier with ChangeNotifier {
           .setTransports(
             ['websocket'],
           )
+          .setPath('/v4/socket.io')
           .disableAutoConnect()
           .build(),
     );

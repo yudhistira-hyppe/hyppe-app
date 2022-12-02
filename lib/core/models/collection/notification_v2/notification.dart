@@ -22,6 +22,7 @@ class NotificationModel {
   String? updatedAt;
   bool? isRead;
   String? postID;
+  String? postType;
 
   NotificationModel({
     this.active,
@@ -42,6 +43,7 @@ class NotificationModel {
     this.updatedAt,
     this.isRead,
     this.postID,
+    this.postType,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -67,6 +69,7 @@ class NotificationModel {
     updatedAt = json['updatedAt'];
     postID = json['postID'];
     isRead = json['isRead'] ?? false;
+    postType = json['postType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +148,7 @@ class Content {
   String? postID;
   String? mediaEndpoint;
   String? fullThumbPath;
+  bool? isApsara;
 
   Content({
     this.createdAt,
@@ -158,6 +162,7 @@ class Content {
     this.mediaThumbEndpoint,
     this.postID,
     this.mediaEndpoint,
+    this.isApsara,
   });
 
   Content.fromJson(Map<String, dynamic> json) {
@@ -172,6 +177,7 @@ class Content {
     mediaThumbEndpoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     mediaEndpoint = json['mediaEndpoint'];
+    isApsara = json['isApsara'] ?? false;
     fullThumbPath = concatThumbUri();
   }
 
