@@ -41,7 +41,7 @@ class TopDetailWidget extends StatelessWidget {
       children: [
         TwoColumnWidget(
           data?.noinvoice ?? '',
-          text2: 'See Invoice',
+          // text2: 'See Invoice',
           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         data?.jenis == 'BOOST_CONTENT'
@@ -76,7 +76,7 @@ class TopDetailWidget extends StatelessWidget {
       children: [
         TwoColumnWidget(
           data?.noinvoice,
-          text2: 'See Invoice',
+          // text2: 'See Invoice',
           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget(
