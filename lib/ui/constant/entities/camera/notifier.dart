@@ -73,7 +73,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
         resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
       )
           .then((value) {
-        print('DeepAR: DeepAR done initialized');
+        print('DeepAR: DeepAR done initialized $value');
       });
 
       // cameraController = CameraController(
@@ -89,7 +89,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       // }
       // await cameraController?.setFlashMode(flashMode);
     } on CameraException catch (e) {
-      e.description.logger();
+      'CameraException : ${e.description}'.logger();
+    }catch(e){
+      'Error DeepAr : $e'.logger();
     }
     if (!mounted) {
       return;

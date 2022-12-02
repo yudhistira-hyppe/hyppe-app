@@ -419,7 +419,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     ),
                     fourPx,
                     CustomTextWidget(
-                      textToDisplay: '${widget.arguments.contentData?.music?.artistName} • ${widget.arguments.contentData?.music?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
+                      textToDisplay: '${widget.arguments.contentData?.music?.artistName}}',
                       textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
                     )
                   ],
@@ -485,8 +485,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               final notif = context.read<PreviewContentNotifier>();
               await notif.audioPreviewPlayer.pause();
             },
-            child: SizedBox(
+            child: Container(
               width: double.infinity,
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: CustomTextWidget(
                 textToDisplay: notifier.language.addMusic ?? 'Add music',
                 textAlign: TextAlign.start,
