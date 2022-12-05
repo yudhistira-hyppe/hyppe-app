@@ -25,6 +25,7 @@ class AllNotification extends StatelessWidget {
               rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
                       System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following ||
                       notifier.data?[index].event == 'REQUEST_APPEAL' ||
+                      notifier.data?[index].event == 'ADMIN_FLAGING' ||
                       notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
                   ? Container()
                   // ? AcceptButton(data: notifier.data?[index])
@@ -32,6 +33,8 @@ class AllNotification extends StatelessWidget {
                       borderRadiusGeometry: BorderRadius.circular(4.0),
                       // data: notifier.data?[index].content.firstOrNull,
                       data: notifier.data?[index].content,
+                      postType: notifier.data?[index].postType,
+                      postID: notifier.data?[index].postID,
                     ),
             );
           },

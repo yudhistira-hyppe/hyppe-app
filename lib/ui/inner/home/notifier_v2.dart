@@ -461,10 +461,9 @@ class HomeNotifier with ChangeNotifier {
         _updatedData = diary.diaryData?.firstWhereOrNull((element) => element.postID == postID);
         break;
       case hyppePic:
-        pic.pic?.removeWhere((element) => element.postID == postID);
+        // pic.pic?.removeWhere((element) => element.postID == postID);
         _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
-        _updatedData = pic.pic?.firstWhereOrNull((element) => element.postID == postID);
-        _updatedData2 = pic2.data;
+        // _updatedData = pic2.data;
         break;
       case hyppeStory:
         _updatedData = stories.peopleStoriesData?.firstWhereOrNull((element) => element.postID == postID);
@@ -475,11 +474,15 @@ class HomeNotifier with ChangeNotifier {
     }
 
     if (_updatedData != null) {
+      print('buka dong ${_updatedData.description}');
+      print('${_updatedData.description}');
       _updatedData.reportedStatus = 'ALL';
     }
-    if (_updatedData2 != null) {
-      _updatedData2.reportedStatus = 'ALL';
-    }
+    // if (_updatedData2 != null) {
+    //   print('buka dong2 ${_updatedData2.description}');
+    //   print('${_updatedData2.description}');
+    //   _updatedData2.reportedStatus = 'ALL';
+    // }
 
     notifyListeners();
   }

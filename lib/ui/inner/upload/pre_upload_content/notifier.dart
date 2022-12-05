@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -565,7 +563,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (notifier.betterPlayerController != null) {
         notifier.betterPlayerController!.dispose();
       }
-    }else{
+    } else {
       notifier.fixSelectedMusic = _musicSelected;
     }
   }
