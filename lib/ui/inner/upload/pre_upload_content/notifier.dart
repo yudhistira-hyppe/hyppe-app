@@ -1424,13 +1424,20 @@ class PreUploadContentNotifier with ChangeNotifier {
   Future<void> _boostContentBuy(BuildContext context) async {
     final bankCode = context.read<PaymentMethodNotifier>().bankSelected;
     isLoading = true;
+    bool ownership = false;
+    if (isEdit && certified && ownershipEULA) {
+      ownership = false;
+    } else if (certified) {
+      ownership = true;
+    }
     Map data = {
       "dateStart": _boostContent?.dateBoostStart,
       "dateEnd": _boostContent?.dateBoostEnd,
       "type": _boostContent?.typeBoost,
       "bankcode": bankCode,
       "paymentmethod": "VA",
-      "postID": postIdPanding
+      "postID": postIdPanding,
+      "ownership": ownership,
     };
     if (_boostContent?.typeBoost == 'manual') {
       data['interval'] = _boostContent?.intervalBoost?.sId;
