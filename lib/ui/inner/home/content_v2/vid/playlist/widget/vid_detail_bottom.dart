@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -105,10 +106,15 @@ class VidDetailBottom extends StatelessWidget {
                     ),
                   )
                 : const SizedBox(),
-            SizedBox(
-              width: SizeConfig.screenWidth,
+            Container(
+              padding: const EdgeInsets.all(2),
+              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
               child: data != null
-                  ? ReadMoreText(
+                  ? SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ReadMoreText(
                 "${data?.description}",
                 trimLines: 2,
                 trimMode: TrimMode.Line,
@@ -119,7 +125,10 @@ class VidDetailBottom extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle2,
                 moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                 lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-              )
+              ),
+                      ],
+                    ),
+                  )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,

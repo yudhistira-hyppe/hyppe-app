@@ -11,6 +11,7 @@ import 'package:marquee/marquee.dart';
 import '../../../app.dart';
 import '../../../core/constants/asset_path.dart';
 import '../../../core/models/collection/music/music.dart';
+import 'after_first_layout_mixin.dart';
 import 'custom_base_cache_image.dart';
 
 
@@ -23,19 +24,13 @@ class MusicStatusPage extends StatefulWidget {
   State<MusicStatusPage> createState() => _MusicStatusPageState();
 }
 
-class _MusicStatusPageState extends State<MusicStatusPage> {
+class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayoutMixin {
 
   var audioPlayer = AudioPlayer();
 
   @override
   void initState() {
-    print('MusicStatusPage : ${widget.urlMusic}');
-    if((widget.urlMusic ?? '').isNotEmpty){
-      initMusic(context, widget.urlMusic!);
-    }else if((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty){
-      print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
-      initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
-    }
+
     super.initState();
   }
 
@@ -153,6 +148,17 @@ class _MusicStatusPageState extends State<MusicStatusPage> {
       }
     }catch(e){
       "Error Init Video $e".logger();
+    }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    print('MusicStatusPage : ${widget.urlMusic}');
+    if((widget.urlMusic ?? '').isNotEmpty){
+      initMusic(context, widget.urlMusic!);
+    }else if((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty){
+      print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
+      initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
     }
   }
 }

@@ -14,6 +14,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_button.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_viewer_stories_button.dart';
 
+import '../../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../../constant/widget/music_status_page_widget.dart';
 
@@ -35,13 +36,12 @@ class BuildBottomView extends StatefulWidget {
   State<BuildBottomView> createState() => _BuildBottomViewState();
 }
 
-class _BuildBottomViewState extends State<BuildBottomView> {
+class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayoutMixin {
 
   @override
   void initState() {
     super.initState();
-    final notifier = context.read<StoriesPlaylistNotifier>();
-    notifier.isLoadMusic = true;
+
   }
 
   @override
@@ -50,102 +50,110 @@ class _BuildBottomViewState extends State<BuildBottomView> {
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);
 
     return notifier.isUserLoggedIn(widget.data?.email)
-        ? Column(
+        ? Align(
+      alignment: Alignment.bottomCenter,
+          child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
 
-        ViewerStoriesButton(
-          data: widget.data,
-          currentStory: widget.currentStory,
-          storyController: widget.storyController,
-        ),
-        if(widget.data?.music?.musicTitle != null)
-          Container(
-            margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
-            child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
+          ViewerStoriesButton(
+            data: widget.data,
+            currentStory: widget.currentStory,
+            storyController: widget.storyController,
           ),
+          if(widget.data?.music?.musicTitle != null)
+            Container(
+              margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
+              child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
+            ),
       ],
-    )
-        : Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-          children: [
-            if(widget.data?.music?.musicTitle != null)
+    ),
+        )
+        : Align(
+      alignment: Alignment.bottomCenter,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
               Container(
                 margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
                 child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
               ),
-            AnimatedPositioned(
-      duration: const Duration(milliseconds: 300),
-      bottom: MediaQuery.of(context).viewInsets.bottom,
-      height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-      child: Container(
-            alignment: Alignment.center,
-            width: SizeConfig.screenWidth,
-            height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
-                  margin: const EdgeInsets.only(left: 10),
-                  child: TextFormField(
-                    maxLines: null,
-                    validator: (String? input) {
-                      if (input?.isEmpty ?? true) {
-                        return "Please enter message";
-                      } else {
-                        return null;
-                      }
-                    },
-                    controller: notifier.textEditingController,
-                    keyboardAppearance: Brightness.dark,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: "Balas ke ${widget.data?.username}...",
-                      fillColor: Theme.of(context).colorScheme.background,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                        borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                      ),
-                    ),
-                    onTap: () => notifier.forceStop = true,
-                    onChanged: (value) => notifier.onChangeHandler(context, value),
-                    onFieldSubmitted: (value) => notifier.textEditingController.text = value,
-                  ),
+              Form(
+                child: Container(
+                        alignment: Alignment.center,
+                        width: SizeConfig.screenWidth,
+                        height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                              margin: const EdgeInsets.only(left: 10),
+                              child: TextFormField(
+                                maxLines: null,
+                                validator: (String? input) {
+                                  if (input?.isEmpty ?? true) {
+                                    return "Please enter message";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: notifier.textEditingController,
+                                keyboardAppearance: Brightness.dark,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  hintText: "Balas ke ${widget.data?.username}...",
+                                  fillColor: Theme.of(context).colorScheme.background,
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                  ),
+                                ),
+                                onTap: () => notifier.forceStop = true,
+                                onChanged: (value) => notifier.onChangeHandler(context, value),
+                                onFieldSubmitted: (value) => notifier.textEditingController.text = value,
+                              ),
+                            ),
+                            Expanded(
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                transitionBuilder: (child, animation) {
+                                  return FadeTransition(opacity: animation, child: child);
+                                },
+                                child: BuildButton(
+                                  storyController: widget.storyController,
+                                  animationController: widget.animationController,
+                                  data: widget.data,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                 ),
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 200),
-                    transitionBuilder: (child, animation) {
-                      return FadeTransition(opacity: animation, child: child);
-                    },
-                    child: BuildButton(
-                      storyController: widget.storyController,
-                      animationController: widget.animationController,
-                      data: widget.data,
-                    ),
-                  ),
-                )
-              ],
-            ),
-      ),
-    ),
-          ],
+              ),
+            ],
+          ),
         );
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = context.read<StoriesPlaylistNotifier>();
+    notifier.isLoadMusic = true;
   }
 }
 
