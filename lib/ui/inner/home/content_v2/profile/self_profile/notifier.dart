@@ -68,6 +68,8 @@ class SelfProfileNotifier with ChangeNotifier {
 
   int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
+  String _statusKyc = '';
+  String get statusKyc => _statusKyc;
 
   set user(UserInfoModel val) {
     _user = val;
@@ -179,6 +181,7 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   initialSelfProfile(BuildContext context) async {
+    _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     vidContentsQuery.featureType = FeatureType.vid;
     diaryContentsQuery.featureType = FeatureType.diary;
@@ -222,8 +225,12 @@ class SelfProfileNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
-      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+      if (pageIndex == 1)
+        _routing.move(Routes.diaryDetail,
+            argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
+      if (pageIndex == 2)
+        _routing.move(Routes.picSlideDetailPreview,
+            argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

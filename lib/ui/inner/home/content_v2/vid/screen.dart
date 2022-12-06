@@ -91,7 +91,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                 return true;
                               },
                               child: PageView.builder(
-                                controller: vidNotifier.pageController,
+                                // controller: vidNotifier.pageController,
                                 scrollDirection: Axis.horizontal,
                                 onPageChanged: (index) async {
                                   print('HyppePreviewVid index : $index');

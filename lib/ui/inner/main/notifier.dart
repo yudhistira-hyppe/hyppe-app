@@ -82,8 +82,6 @@ class MainNotifier with ChangeNotifier {
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-      print('ambil profile');
-      print(usersFetch.data);
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
@@ -161,21 +159,25 @@ class MainNotifier with ChangeNotifier {
       () {
         _socketService.events(
           SocketService.eventDiscuss,
+          // '2b595aa7-f3d2-0a76-dd91-9bcec1d10098',
           (message) {
             print('ini message dari socket');
             message.logger();
             try {
               final msgData = MessageDataV2.fromJson(json.decode('$message'));
-              NotificationService().showNotification(
-                RemoteMessage(
-                  notification: RemoteNotification(
-                    title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
-                    body: msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+              if (msgData.disqusLogs[0].receiver == email) {
+                NotificationService().showNotification(
+                  RemoteMessage(
+                    notification: RemoteNotification(
+                      // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
+                      title: "@${msgData.disqusLogs[0].sender}",
+                      body: msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+                    ),
+                    data: msgData.toJson(),
                   ),
-                  data: msgData.toJson(),
-                ),
-              );
-              _eventService.notifyMessageReceived(msgData);
+                );
+                _eventService.notifyMessageReceived(msgData);
+              }
             } catch (e) {
               e.toString().logger();
             }

@@ -80,7 +80,7 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
                             return true;
                           },
                           child: ListView.builder(
-                            controller: notifier.scrollController,
+                            // controller: notifier.scrollController,
                             scrollDirection: Axis.horizontal,
                             itemCount: notifier.itemCount,
                             padding: const EdgeInsets.symmetric(horizontal: 11.5),

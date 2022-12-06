@@ -1,6 +1,7 @@
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileTop extends StatelessWidget {
+  const SelfProfileTop({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Consumer<SelfProfileNotifier>(
@@ -273,16 +276,18 @@ class SelfProfileTop extends StatelessWidget {
                       ),
                     ),
                     sixPx,
-                    CustomElevatedButton(
-                      child: CustomTextWidget(
-                        textToDisplay: notifier.language.boostedPostList ?? 'Boosted List',
-                        textStyle: Theme.of(context).textTheme.button,
-                      ),
-                      width: 167 * SizeConfig.scaleDiagonal,
-                      height: 42 * SizeConfig.scaleDiagonal,
-                      buttonStyle: Theme.of(context).elevatedButtonTheme.style,
-                      function: () => Routing().move(Routes.boostList),
-                    )
+                    notifier.statusKyc == VERIFIED
+                        ? CustomElevatedButton(
+                            child: CustomTextWidget(
+                              textToDisplay: notifier.language.boostedPostList ?? 'Boosted List',
+                              textStyle: Theme.of(context).textTheme.button,
+                            ),
+                            width: 167 * SizeConfig.scaleDiagonal,
+                            height: 42 * SizeConfig.scaleDiagonal,
+                            buttonStyle: Theme.of(context).elevatedButtonTheme.style,
+                            function: () => Routing().move(Routes.boostList),
+                          )
+                        : Container()
                   ],
                 )),
           ],

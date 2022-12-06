@@ -68,6 +68,22 @@ class SelfProfileDiaries extends StatelessWidget {
                                                 ),
                                               ))
                                           : Container(),
+                                      (notifier.item1?.diaries?[index].certified ?? false) && (notifier.item1?.diaries?[index].saleAmount ?? 0) == 0
+                                          ? Align(
+                                              alignment: Alignment.topRight,
+                                              child: Padding(
+                                                  padding: const EdgeInsets.all(2.0),
+                                                  child: Container(
+                                                      padding: const EdgeInsets.all(4),
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(4),
+                                                        color: Colors.black.withOpacity(0.3),
+                                                      ),
+                                                      child: const CustomIconWidget(
+                                                        iconData: '${AssetPath.vectorPath}ownership.svg',
+                                                        defaultColor: false,
+                                                      ))))
+                                          : Container(),
                                     ],
                                   ),
                           ),

@@ -12,8 +12,9 @@ import 'package:hyppe/ui/inner/message_v2/message_detail/widget/content_message_
 
 class ReceiverLayout extends StatelessWidget {
   final DisqusLogs? chatData;
+  final String? created;
 
-  const ReceiverLayout({Key? key, this.chatData}) : super(key: key);
+  const ReceiverLayout({Key? key, this.chatData, this.created}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +53,7 @@ class ReceiverLayout extends StatelessWidget {
               textAlign: TextAlign.end,
               textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
               textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
+              // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
             ),
           ],
         ),

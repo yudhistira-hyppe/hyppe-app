@@ -79,7 +79,7 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                           return true;
                         },
                         child: ListView.builder(
-                          controller: notifier.scrollController,
+                          // controller: notifier.scrollController,
                           scrollDirection: Axis.horizontal,
                           itemCount: notifier.itemCount,
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -121,7 +121,22 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                                           height: 20,
                                           defaultColor: false,
                                         ))
-                                    : Container()
+                                    : Container(),
+                                if ((notifier.diaryData?[index].certified ?? false) && (notifier.diaryData?[index].saleAmount ?? 0) == 0)
+                                  Positioned(
+                                    top: 3,
+                                    right: 8,
+                                    child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(4),
+                                          color: Colors.black.withOpacity(0.3),
+                                        ),
+                                        child: const CustomIconWidget(
+                                          iconData: '${AssetPath.vectorPath}ownership.svg',
+                                          defaultColor: false,
+                                        )),
+                                  )
                               ],
                             );
                           },

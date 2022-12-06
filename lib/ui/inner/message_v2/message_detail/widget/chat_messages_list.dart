@@ -65,6 +65,8 @@ class _ChatMessageListState extends State<ChatMessageList> {
                 ),
                 itemBuilder: (context, index) {
                   final discussLogs = notifier.discussData?.first.disqusLogs[index];
+                  print('direct message');
+                  print('direct message :  ${discussLogs?.txtMessages} ${notifier.discussData?.first.createdAt}');
 
                   return Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -83,8 +85,14 @@ class _ChatMessageListState extends State<ChatMessageList> {
                                           onLongPress: () {
                                             notifier.selectData = index;
                                           },
-                                          child: SenderLayout(chatData: discussLogs)))
-                                  : Flexible(child: ReceiverLayout(chatData: discussLogs))
+                                          child: SenderLayout(
+                                            chatData: discussLogs,
+                                          )))
+                                  : Flexible(
+                                      child: ReceiverLayout(
+                                      chatData: discussLogs,
+                                      // created: notifier.discussData?[index].createdAt,
+                                    ))
                             ],
                           ),
                         ),

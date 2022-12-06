@@ -46,7 +46,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   @override
   void initState() {
-    final _notifier = context.read<PreUploadContentNotifier>();
+    // final _notifier = context.read<PreUploadContentNotifier>();
     // Provider.of<PreUploadContentNotifier>(context, listen: false);
     super.initState();
   }
@@ -57,6 +57,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
     SizeConfig().init(context);
     final textTheme = Theme.of(context).textTheme;
     bool keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom != 0;
+
+    final statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
 
     return Consumer<PreUploadContentNotifier>(
       builder: (context, notifier, child) => GestureDetector(
@@ -117,7 +119,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                         notifier.certified ? detailTotalPrice(notifier) : Container(),
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                        notifier.featureType != FeatureType.story ? boostWidget(textTheme, notifier) : Container(),
+                        statusKyc == VERIFIED && notifier.featureType != FeatureType.story ? boostWidget(textTheme, notifier) : Container(),
                         notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
                         twentyFourPx,
 
@@ -208,10 +210,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                           },
                           child: (widget.arguments.onEdit && notifier.updateContent)
                               ? const CustomLoading()
-                                  : CustomTextWidget(
-                                      textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
-                                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                                    ),
+                              : CustomTextWidget(
+                                  textToDisplay: widget.arguments.onEdit ? notifier.language.save ?? 'save' : notifier.language.confirm ?? 'confirm',
+                                  textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                                ),
                           buttonStyle: ButtonStyle(
                             foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                             shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
@@ -398,8 +400,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   }
 
   Widget musicTitle(BuildContext context, PreUploadContentNotifier notifier) {
-    if(notifier.isEdit){
-      if(widget.arguments.contentData?.music?.musicTitle != null){
+    if (notifier.isEdit) {
+      if (widget.arguments.contentData?.music?.musicTitle != null) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -430,77 +432,75 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             _buildDivider(context),
           ],
         );
-      }else{
+      } else {
         return const SizedBox();
       }
-
-    }else{
+    } else {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           notifier.musicSelected != null
               ? InkWell(
-            onTap: () async {
-              await ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
-              final notif = context.read<PreviewContentNotifier>();
-              await notif.audioPreviewPlayer.pause();
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay: notifier.musicSelected?.musicTitle ?? '',
-                      textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
-                    ),
-                    fourPx,
-                    CustomTextWidget(
-                      textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
-                      textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
-                    )
-                  ],
-                ),
-                InkWell(
-                    onTap: () {
-                      notifier.setDefaultFileContent(context);
-                    },
-                    child: const CustomIconWidget(
-                      iconData: '${AssetPath.vectorPath}close_ads.svg',
-                      width: 25,
-                      height: 25,
-                    ))
-              ],
-            ),
-          )
+                  onTap: () async {
+                    await ShowBottomSheet.onChooseMusic(context, isPic: notifier.fileContent?[0]?.isImageFormat());
+                    final notif = context.read<PreviewContentNotifier>();
+                    await notif.audioPreviewPlayer.pause();
+                  },
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextWidget(
+                            textToDisplay: notifier.musicSelected?.musicTitle ?? '',
+                            textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),
+                          ),
+                          fourPx,
+                          CustomTextWidget(
+                            textToDisplay: '${notifier.musicSelected?.artistName} • ${notifier.musicSelected?.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00:00'}',
+                            textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),
+                          )
+                        ],
+                      ),
+                      InkWell(
+                          onTap: () {
+                            notifier.setDefaultFileContent(context);
+                          },
+                          child: const CustomIconWidget(
+                            iconData: '${AssetPath.vectorPath}close_ads.svg',
+                            width: 25,
+                            height: 25,
+                          ))
+                    ],
+                  ),
+                )
               : InkWell(
-            onTap: () async {
-              final isPic = notifier.fileContent?[0]?.isImageFormat();
-              await ShowBottomSheet.onChooseMusic(context, isPic: isPic, isInit: isPic);
-              final notif = context.read<PreviewContentNotifier>();
-              await notif.audioPreviewPlayer.pause();
-            },
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              child: CustomTextWidget(
-                textToDisplay: notifier.language.addMusic ?? 'Add music',
-                textAlign: TextAlign.start,
-                textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
-              ),
-            ),
-          ),
+                  onTap: () async {
+                    final isPic = notifier.fileContent?[0]?.isImageFormat();
+                    await ShowBottomSheet.onChooseMusic(context, isPic: isPic, isInit: isPic);
+                    final notif = context.read<PreviewContentNotifier>();
+                    await notif.audioPreviewPlayer.pause();
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.language.addMusic ?? 'Add music',
+                      textAlign: TextAlign.start,
+                      textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
           eightPx,
           _buildDivider(context),
         ],
       );
     }
-
   }
 
   Widget tagPeopleWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
