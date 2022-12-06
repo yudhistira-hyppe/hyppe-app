@@ -67,7 +67,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     if (state == AppLifecycleState.inactive) {
 
       if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){
-        notifier.forceResetPlayer();
+        notifier.forceResetPlayer(true);
       }
       notifier.pauseAudioPreview();
       // picNotifier.pauseAudioPlayer();

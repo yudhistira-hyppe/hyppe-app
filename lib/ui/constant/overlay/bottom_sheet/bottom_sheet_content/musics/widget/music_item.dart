@@ -46,27 +46,39 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CustomBaseCacheImage(
-                  imageUrl: widget.music.apsaraThumnailUrl,
-                  imageBuilder: (_, imageProvider) {
-                    return Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(24)),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: imageProvider,
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomBaseCacheImage(
+                    imageUrl: widget.music.apsaraThumnailUrl,
+                    imageBuilder: (_, imageProvider) {
+                      return Container(
+                        width: 48,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(24)),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: imageProvider,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  errorWidget: (_, __, ___) {
-                    return Container(
+                      );
+                    },
+                    errorWidget: (_, __, ___) {
+                      return Container(
+                        width: 48,
+                        height: 48,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.contain,
+                            image: AssetImage('${AssetPath.vectorPath}ic_music.svg'),
+                          ),
+                        ),
+                      );
+                    },
+                    emptyWidget: Container(
                       width: 48,
                       height: 48,
                       decoration: const BoxDecoration(
@@ -75,43 +87,39 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                           image: AssetImage('${AssetPath.vectorPath}ic_music.svg'),
                         ),
                       ),
-                    );
-                  },
-                  emptyWidget: Container(
-                    width: 48,
-                    height: 48,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.contain,
-                        image: AssetImage('${AssetPath.vectorPath}ic_music.svg'),
-                      ),
                     ),
                   ),
-                ),
-                twelvePx,
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(textToDisplay: widget.music.musicTitle ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),),
-                    fourPx,
-                    CustomTextWidget(textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
-                  ],
-                )
-              ],
+                  twelvePx,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(textToDisplay: widget.music.musicTitle ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),),
+                        fourPx,
+                        CustomTextWidget(maxLines: 2, textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
             !widget.music.isLoad ?
-            IconButton(
-              focusColor: Colors.grey,
-              icon: CustomIconWidget(iconData: widget.music.isPlay ? "${AssetPath.vectorPath}stop_circle.svg" : "${AssetPath.vectorPath}play_circle.svg"),
-              splashRadius: 1,
-              onPressed: () {
-                if(!widget.isExplored){
-                  notifier.playMusic(context, widget.music, widget.index);
-                }else{
-                  notifier.playExpMusic(context, widget.music, widget.index);
-                }
-              },
+            Container(
+              width: 50,
+              height: 50,
+              child: IconButton(
+                focusColor: Colors.grey,
+                icon: CustomIconWidget(iconData: widget.music.isPlay ? "${AssetPath.vectorPath}stop_circle.svg" : "${AssetPath.vectorPath}play_circle.svg"),
+                splashRadius: 1,
+                onPressed: () {
+                  if(!widget.isExplored){
+                    notifier.playMusic(context, widget.music, widget.index);
+                  }else{
+                    notifier.playExpMusic(context, widget.music, widget.index);
+                  }
+                },
+              ),
             ) :
             UnconstrainedBox(
               child: Container(

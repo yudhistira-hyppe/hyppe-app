@@ -45,7 +45,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
   void deactivate() {
     'deactivate OnChooseMusicBottomSheet'.logger();
     final notifier = context.read<PreviewContentNotifier>();
-    notifier.dialogDisposesMusic();
+    notifier.disposeMusic();
     super.deactivate();
   }
 
@@ -97,7 +97,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                     child: CustomTextWidget(
                       textAlign: TextAlign.left,
                       textToDisplay: notifier.selectedType?.name ?? '',
-                      textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),))
+                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 16),))
               ],
             ),
           ),
@@ -122,7 +122,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                   uploadNotifier.musicSelected = notifier.selectedMusic;
                   notifier.selectedMusic = null;
                   notifier.selectedType = null;
-                  notifier.forceResetPlayer();
+                  notifier.forceResetPlayer(true);
                   notifier.searchController.text = '';
 
 
@@ -132,7 +132,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
                   uploadNotifier.musicSelected = notifier.selectedMusic;
                   notifier.selectedMusic = null;
                   notifier.selectedType = null;
-                  notifier.forceResetPlayer();
+                  notifier.forceResetPlayer(true);
                   notifier.searchController.text = '';
                 }
 

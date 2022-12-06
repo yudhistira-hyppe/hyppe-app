@@ -41,7 +41,7 @@ class BuildTopWidget extends StatelessWidget {
                             if(notifier.addTextItemMode){
                               notifier.applyTextItem(globalKey);
                             }else{
-                              notifier.forceResetPlayer();
+                              notifier.forceResetPlayer(true);
                               notifier.navigateToPreUploaded(context);
                             }
                           },)
