@@ -14,6 +14,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 
 class OtherProfileTop extends StatelessWidget {
   const OtherProfileTop({Key? key}) : super(key: key);
@@ -100,14 +101,29 @@ class OtherProfileTop extends StatelessWidget {
               ),
             ),
             notifier.displayBio().length > 2
-                ? Padding(
-                    padding: EdgeInsets.only(top: 8 * SizeConfig.scaleDiagonal),
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.displayBio(),
-                      textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  )
+                ? Container(
+              padding: const EdgeInsets.all(2),
+              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
+                  child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ReadMoreText(
+                        notifier.displayBio(),
+                        // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                        trimLines: 5,
+                        trimMode: TrimMode.Line,
+                        textAlign: TextAlign.start,
+                        trimExpandedText: 'Show less',
+                        trimCollapsedText: 'Show more',
+                        colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                        moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                        lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                      ),
+                    ],
+                  )),
+                )
                 : const SizedBox.shrink(),
             notifier.displayPlace() != null
                 ? Padding(

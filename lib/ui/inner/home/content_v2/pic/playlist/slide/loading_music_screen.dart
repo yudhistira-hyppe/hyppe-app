@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:marquee/marquee.dart';
@@ -23,17 +24,20 @@ class LoadingMusicScreen extends StatefulWidget {
   State<LoadingMusicScreen> createState() => _LoadingMusicScreenState();
 }
 
-class _LoadingMusicScreenState extends State<LoadingMusicScreen> {
+class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirstLayoutMixin {
 
   @override
   void initState() {
     print('initState LoadingMusicScreen');
     super.initState();
-    final notifier = context.read<SlidedPicDetailNotifier>();
     if(globalAudioPlayer != null){
       disposeGlobalAudio();
     }
+  }
 
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = context.read<SlidedPicDetailNotifier>();
     initMusic(context, widget.music, notifier);
   }
 
@@ -194,6 +198,8 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> {
       ),
     );
   }
+
+
 
 
 }

@@ -113,17 +113,22 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
             // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
             child: SingleChildScrollView(
-              child: ReadMoreText(
-                "${widget.description}",
-                trimLines: 5,
-                trimMode: TrimMode.Line,
-                textAlign: TextAlign.left,
-                trimExpandedText: 'Show less',
-                trimCollapsedText: 'Show more',
-                colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ReadMoreText(
+                    "${widget.description}",
+                    trimLines: 5,
+                    trimMode: TrimMode.Line,
+                    textAlign: TextAlign.left,
+                    trimExpandedText: 'Show less',
+                    trimCollapsedText: 'Show more',
+                    colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                    moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                    lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                  ),
+                ],
               ),
             ),
           ),

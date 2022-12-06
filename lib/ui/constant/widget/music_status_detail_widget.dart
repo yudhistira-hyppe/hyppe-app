@@ -52,6 +52,7 @@ class _MusicStatusDetailState extends State<MusicStatusDetail>{
 
   @override
   Widget build(BuildContext context) {
+    final titleMusic = '${widget.music.artistName} - ${widget.music.musicTitle}';
     return Container(
       padding: const EdgeInsets.only(top: 8, bottom: 8, right: 13, left: 8),
       decoration: const BoxDecoration(
@@ -65,7 +66,12 @@ class _MusicStatusDetailState extends State<MusicStatusDetail>{
         children: [
           const CustomIconWidget(iconData: '${AssetPath.vectorPath}music_stroke_white.svg'),
           sixPx,
-          CustomTextWidget(textToDisplay: '${widget.music.artistName} - ${widget.music.musicTitle}',
+          titleMusic.length > 30 ?
+          Expanded(
+            child: CustomTextWidget(textToDisplay: '${widget.music.artistName} - ${widget.music.musicTitle}',
+              textAlign: TextAlign.start,
+              textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: kHyppeTextLightPrimary),),
+          ): CustomTextWidget(textToDisplay: '${widget.music.artistName} - ${widget.music.musicTitle}',
             textAlign: TextAlign.start,
             textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: kHyppeTextLightPrimary),)
         ],

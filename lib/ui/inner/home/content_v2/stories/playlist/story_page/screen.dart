@@ -347,15 +347,12 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 ),
                 widget.data?.isReport ?? false
                     ? Container()
-                    : Align(
-                  alignment: Alignment.bottomCenter,
-                        child: BuildBottomView(
-                          data: widget.data,
-                          storyController: _storyController,
-                          currentStory: notifier.currentStory,
-                          animationController: _animationController,
-                        ),
-                      ),
+                    : BuildBottomView(
+                      data: widget.data,
+                      storyController: _storyController,
+                      currentStory: notifier.currentStory,
+                      animationController: _animationController,
+                    ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 800),
                   transitionBuilder: (child, animation) {

@@ -45,7 +45,7 @@ class _MusicTypeItemState extends State<MusicTypeItem> {
               children: [
                 CustomTextWidget(
                   textToDisplay: widget.group.group,
-                  textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 16),),
+                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 16)),
                 if(list.length > 3)
                 CustomTextButton(
                     onPressed: (){
@@ -53,7 +53,7 @@ class _MusicTypeItemState extends State<MusicTypeItem> {
                     },
                     child: CustomTextWidget(
                       textToDisplay: !widget.group.isSeeAll ? notifier.language.seeAll ?? 'See all' : notifier.language.seeSome ?? 'See some',
-                      textStyle: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontSize: 14),))
+                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w700, fontSize: 14)))
               ],
             ),
           ),

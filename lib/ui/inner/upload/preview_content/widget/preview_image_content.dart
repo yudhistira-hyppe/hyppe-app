@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class PreviewImageContent extends StatefulWidget {
   State<PreviewImageContent> createState() => _PreviewImageContentState();
 }
 
-class _PreviewImageContentState extends State<PreviewImageContent> {
+class _PreviewImageContentState extends State<PreviewImageContent> with AfterFirstLayoutMixin{
 
 
 
@@ -296,10 +297,15 @@ class _PreviewImageContentState extends State<PreviewImageContent> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
     final notifier = context.read<PreviewContentNotifier>();
     notifier.currentMusic = null;
     notifier.selectedMusic = null;
     notifier.selectedType = null;
     notifier.fixSelectedMusic = null;
   }
+
 }

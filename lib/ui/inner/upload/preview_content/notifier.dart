@@ -465,23 +465,31 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  void forceResetPlayer(){
+  void forceResetPlayer(bool isChanged){
     print('forceResetPlayer');
-    currentMusic = null;
+    _currentMusic = null;
+    _selectedMusic = null;
     for(var data in _listMusics){
       if(data.isPlay){
         data.isPlay = false;
-        break;
+      }
+      if(data.isSelected){
+        data.isSelected = false;
       }
     }
     for(var data in _listExpMusics){
       if(data.isPlay){
         data.isPlay = false;
-        break;
+      }
+      if(data.isSelected){
+        data.isSelected = false;
       }
     }
     try{
       audioPlayer.stop();
+      if(isChanged){
+        notifyListeners();
+      }
     }catch(e){
       'forceResetPlayer error: $e'.logger();
     }
@@ -501,14 +509,14 @@ class PreviewContentNotifier with ChangeNotifier {
               if(expIndex != -1){
                 _listExpMusics[_indexView].isPlay = false;
               }else{
-                forceResetPlayer();
+                forceResetPlayer(false);
               }
             }
           }else{
-            forceResetPlayer();
+            forceResetPlayer(false);
           }
         }catch(e){
-          forceResetPlayer();
+          forceResetPlayer(false);
           e.logger();
         }finally{
           notifyListeners();
@@ -691,7 +699,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void disposeMusic() async{
     try{
-      forceResetPlayer();
+      forceResetPlayer(false);
       await audioPlayer.dispose();
     }catch(e){
       'disposeMusic error : $e'.logger();

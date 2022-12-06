@@ -5,6 +5,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
@@ -239,12 +240,22 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 },
                                                 child: SizedBox(
                                                   width: 240,
-                                                  child: CustomTextWidget(
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.left,
-                                                    // textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                                    textToDisplay: "${vidData?.description}",
-                                                    textStyle: Theme.of(context).textTheme.caption,
+                                                  child: Column(
+                                                    children: [
+                                                      CustomTextWidget(
+                                                        maxLines: 2,
+                                                        textAlign: TextAlign.left,
+                                                        // textToDisplay: "${vidData?.description} ${vidData?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                                        textToDisplay: "${vidData?.description}",
+                                                        textStyle: Theme.of(context).textTheme.caption,
+                                                      ),
+                                                      // if(vidData?.music?.musicTitle != null)
+                                                      //   eightPx,
+                                                      // if(vidData?.music?.musicTitle != null)
+                                                      // MusicStatusDetail(music: vidData!.music!,)
+                                                    ],
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                   ),
                                                 ),
                                               ),
