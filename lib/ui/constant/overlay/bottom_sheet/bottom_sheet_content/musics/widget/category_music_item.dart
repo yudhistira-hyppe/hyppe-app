@@ -60,7 +60,9 @@ class _CategoryMusicItemState extends State<CategoryMusicItem> {
                   ),
                 ),
                 twelvePx,
-                CustomTextWidget(textToDisplay: widget.type.name ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),),
+                CustomTextWidget(textToDisplay: widget.type.name ?? '', textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1?.copyWith(fontSize: 14, fontWeight: FontWeight.w700),),
               ],
             ),
             const CustomIconWidget(
