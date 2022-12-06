@@ -95,9 +95,11 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextWidget(textToDisplay: widget.music.musicTitle ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.w700),),
+                        CustomTextWidget(textToDisplay: widget.music.musicTitle ?? '', textStyle: Theme.of(context)
+                            .textTheme
+                            .bodyText1?.copyWith( fontSize: 14, fontWeight: FontWeight.w700),),
                         fourPx,
-                        CustomTextWidget(maxLines: 2, textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
+                        CustomTextWidget( textAlign: TextAlign.start, maxLines: 2, textToDisplay: '${widget.music.artistName} • ${widget.music.apsaraMusicUrl?.duration?.toInt().getMinutes() ?? '00'}', textStyle: const TextStyle(color: kHyppeLightSecondary, fontSize: 12, fontWeight: FontWeight.w400),)
                       ],
                     ),
                   )
