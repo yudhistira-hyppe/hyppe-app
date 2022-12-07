@@ -16,7 +16,6 @@ import 'package:hyppe/ux/routing.dart';
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
 
 class CommentNotifierV2 with ChangeNotifier {
-
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -192,6 +191,7 @@ class CommentNotifierV2 with ChangeNotifier {
         // delete text controller
         commentController.clear();
         onChangeHandler('', context);
+        notifyListeners();
       }
     } catch (e) {
       'add comments: ERROR: $e'.logger();
@@ -328,7 +328,7 @@ class CommentNotifierV2 with ChangeNotifier {
 
     final newText = text.replaceRange(selection.start - searchLength, selection.end, '${_searchPeolpleData[index].username} ');
     final length = _searchPeolpleData[index].username?.length;
-    if(length != null){
+    if (length != null) {
       _commentController.value = TextEditingValue(
         text: "${newText}",
         selection: TextSelection.collapsed(offset: selection.baseOffset + length - searchLength + 1),

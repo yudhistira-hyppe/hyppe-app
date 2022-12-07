@@ -231,33 +231,32 @@ class SelfProfileTop extends StatelessWidget {
                 textStyle: Theme.of(context).textTheme.subtitle1,
               ),
             ),
+
             notifier.displayBio().length > 2
                 ? Container(
-              padding: const EdgeInsets.all(2),
-              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
-              // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
-
-              child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ReadMoreText(
-                        notifier.displayBio(),
-                        // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                        trimLines: 5,
-                        trimMode: TrimMode.Line,
-                        textAlign: TextAlign.left,
-                        trimExpandedText: 'Show less',
-                        trimCollapsedText: 'Show more',
-                        colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
-                        moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                      ),
-                    ],
-                  )),
-            )
-
+                    padding: const EdgeInsets.all(2),
+                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
+                    // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
+                    child: SingleChildScrollView(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ReadMoreText(
+                          notifier.displayBio(),
+                          // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                          trimLines: 5,
+                          trimMode: TrimMode.Line,
+                          textAlign: TextAlign.left,
+                          trimExpandedText: 'Show less',
+                          trimCollapsedText: 'Show more',
+                          colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                          style: Theme.of(context).textTheme.bodyText2!.copyWith(),
+                          moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                        ),
+                      ],
+                    )),
+                  )
                 : const SizedBox.shrink(),
             notifier.displayPlace() != null
                 ? Padding(

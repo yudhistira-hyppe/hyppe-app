@@ -56,9 +56,9 @@ class VidSeeAllNotifier with ChangeNotifier {
     try {
       if (reload) {
         'reload contentsQuery : 18'.logger();
-        _resFuture = contentsQuery.reload(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       } else {
-        _resFuture = contentsQuery.loadNext(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       }
 
       final res = await _resFuture;

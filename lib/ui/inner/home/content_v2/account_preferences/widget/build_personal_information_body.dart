@@ -45,6 +45,8 @@ class BuildPersonalInformationBody extends StatelessWidget {
                   labelText: notifier.language.phoneNumber,
                   controller: notifier.mobileController,
                   inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+                  maxLength: 15,
+                  counterText: false,
                 ),
               ],
             ),

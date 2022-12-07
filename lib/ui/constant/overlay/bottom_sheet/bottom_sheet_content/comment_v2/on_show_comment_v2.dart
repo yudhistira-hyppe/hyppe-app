@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -62,67 +60,70 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
             return const Center(child: CustomLoading());
           }
 
-          return Column(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    if (widget.fromFront)
-                      eightPx
-                    else
-                      CommentSlider(
-                        length: notifier.commentData?.length,
-                      ),
-                    Expanded(
-                      child: !notifier.isCommentEmpty
-                          ? ListView.builder(
-                              itemCount: notifier.itemCount,
-                              controller: _scrollController,
-                              scrollDirection: Axis.vertical,
-                              physics: const BouncingScrollPhysics(),
-                              padding: const EdgeInsets.only(bottom: 10),
-                              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                              // separatorBuilder: (context, index) =>
-                              //     const Divider(
-                              //   thickness: 0.95,
-                              //   color: Color(0xfffffffff),
-                              // ),
-                              itemBuilder: (context, index) {
-                                if (index == notifier.commentData?.length && notifier.hasNext) {
-                                  return const CustomLoading();
-                                }
+          return RefreshIndicator(
+            strokeWidth: 2.0,
+            color: Colors.purple,
+            onRefresh: () async {
+              notifier.initState(context, widget.postID, widget.fromFront, widget.parentComment);
+            },
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      if (widget.fromFront)
+                        eightPx
+                      else
+                        CommentSlider(
+                          length: notifier.commentData?.length,
+                        ),
+                      !notifier.isCommentEmpty
+                          ? Expanded(
+                              child: ListView.builder(
+                                itemCount: notifier.itemCount,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _scrollController,
+                                scrollDirection: Axis.vertical,
+                                padding: const EdgeInsets.only(bottom: 10),
+                                keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                                // separatorBuilder: (context, index) =>
+                                //     const Divider(
+                                //   thickness: 0.95,
+                                //   color: Color(0xfffffffff),
+                                // ),
+                                itemBuilder: (context, index) {
+                                  if (index == notifier.commentData?.length && notifier.hasNext) {
+                                    return const CustomLoading();
+                                  }
 
-                                final comments = notifier.commentData?[index];
+                                  final comments = notifier.commentData?[index];
 
-                                return Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
-                                  child: CommentListTile(
-                                    data: comments,
-                                    fromFront: widget.fromFront,
-                                  ),
-                                );
-                              },
+                                  return Padding(
+                                    padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 8.0),
+                                    child: CommentListTile(
+                                      data: comments,
+                                      fromFront: widget.fromFront,
+                                    ),
+                                  );
+                                },
+                              ),
                             )
-                          : UnconstrainedBox(
-                              child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
-                              // child: CustomTextButton(
-                              //   onPressed: () {
-                              //     if (widget.fromFront) {
-                              //       ShowBottomSheet.onShowCommentV2(context, postID: notifier.postID);
-                              //     } else {
-                              //       notifier.showTextInput = true;
-                              //     }
-                              //   },
-                              //   child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment),
-                              //   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
-                              // ),
-                            ),
-                    ),
-                  ],
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: 1,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 130.0),
+                                  child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
+                                );
+                              }),
+                    ],
+                  ),
                 ),
-              ),
-              CommentTextField(fromFront: widget.fromFront)
-            ],
+                CommentTextField(fromFront: widget.fromFront)
+              ],
+            ),
           );
         },
       ),

@@ -52,11 +52,11 @@ class PicSeeAllNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
-
         'reload contentsQuery : 10'.logger();
-        _resFuture = contentsQuery.reload(context);
+        // _resFuture = contentsQuery.reload(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       } else {
-        _resFuture = contentsQuery.loadNext(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       }
 
       final res = await _resFuture;
@@ -71,10 +71,7 @@ class PicSeeAllNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialPic(context);
     }
   }
