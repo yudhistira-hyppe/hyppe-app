@@ -61,6 +61,8 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart' as cpV2;
 import 'package:hyppe/ui/inner/search_v2/notifier.dart' as sV2;
 
+import '../../ui/constant/entities/comment_v2/notifier.dart';
+
 class AppDependencies {
   static List<SingleChildWidget> inject({required HyppeNotifier rootNotifier}) => [
         /// All Dependency Injection
@@ -225,5 +227,6 @@ class AppDependencies {
         ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
         ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),
         ChangeNotifierProvider<ListBoostNotifier>(create: (context) => ListBoostNotifier()),
+        ChangeNotifierProvider<CommentNotifierV2>(create: (context) => CommentNotifierV2())
       ];
 }

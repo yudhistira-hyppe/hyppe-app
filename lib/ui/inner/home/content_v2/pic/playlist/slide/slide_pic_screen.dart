@@ -277,6 +277,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             function: () => notifier.likePost(context, widget.data),
                           ),
                         ),
+                        eightPx,
                         _buildButtonV2(
                           context: context,
                           iconData: '${AssetPath.vectorPath}comment.svg',
@@ -284,11 +285,13 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             ShowBottomSheet.onShowCommentV2(context, postID: widget.data.postID);
                           },
                         ),
+                        eightPx,
                         _buildButtonV2(
                           context: context,
                           iconData: '${AssetPath.vectorPath}share.svg',
                           function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
                         ),
+                        eightPx,
                         if ((widget.data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.data.email)
                           _buildButtonV2(
                             context: context,

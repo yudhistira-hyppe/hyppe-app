@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -44,7 +45,7 @@ class StoryPage extends StatefulWidget {
   _StoryPageState createState() => _StoryPageState();
 }
 
-class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMixin {
+class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   String _when = "";
   int currentStory = 0;
   List<StoryItem> _storyItems = [];
@@ -54,17 +55,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
 
   @override
   void initState() {
-    isLoading = true;
-    final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
-
-      notifier.initializeData(context, _storyController, widget.data ?? ContentData());
-      setState(() {
-        _storyItems = notifier.result;
-        isLoading = false;
-      });
-    });
     if (widget.data != null) {
       _when = '${System().readTimestamp(
         DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
@@ -375,5 +366,22 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
               ],
             );
     }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    isLoading = true;
+    final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
+
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
+      Future.delayed(Duration.zero, (){
+        notifier.initializeData(context, _storyController, widget.data ?? ContentData());
+        setState(() {
+          _storyItems = notifier.result;
+          isLoading = false;
+        });
+      });
+
+    });
   }
 }

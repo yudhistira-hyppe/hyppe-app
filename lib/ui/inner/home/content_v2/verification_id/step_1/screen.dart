@@ -15,6 +15,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 
+import '../../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../../core/services/shared_preference.dart';
+
 class VerificationIDStep1 extends StatefulWidget {
   const VerificationIDStep1({Key? key}) : super(key: key);
 
@@ -53,7 +56,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
         body: SingleChildScrollView(
           child: Column(children: <Widget>[
             Html(
-              data: eulaHtml,
+              data: eulaHtml(context, (SharedPreference().readStorage(SpKeys.themeData) ?? false)),
             ),
             twentyFourPx,
             twentyFourPx,

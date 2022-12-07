@@ -645,27 +645,27 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void continueSelfie(BuildContext context) {
     var error = 0;
     if (idCardName == "") {
-      errorName = "Nama tidak sesuai KTP";
+      errorName = language.itDoesntMatchIdentity ?? "Nama tidak sesuai KTP";
       error++;
     }
 
     if (idCardNumber == "") {
-      errorKtp = "Nomor KTP tidak terbaca";
+      errorKtp = language.noKTPCantBeRead ?? "Nomor KTP tidak terbaca";
       error++;
     }
 
     if (genderController.text == "") {
-      errorGender = "Jenis kelamin harus diisi";
+      errorGender = language.genderMustBeFilled ?? "Jenis kelamin harus diisi";
       error++;
     }
 
     if (birtPlaceController.text == "") {
-      errorPlaceBirth = "Tempat lahir harus diisi";
+      errorPlaceBirth = language.placeOfBirthMustBeFilled ?? "Tempat lahir harus diisi";
       error++;
     }
 
     if (birtDateController.text == "") {
-      errorDateBirth = "Tanggal lahir harus diisi";
+      errorDateBirth = language.dateOfBirthMustBeFilled ?? "Tanggal lahir harus diisi";
       error++;
     }
 

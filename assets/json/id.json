@@ -773,7 +773,11 @@
   "ContentContainsSensitiveMaterial" : "konten berisi materi sensitif yang mungkin dianggap menyinggung atau mengganggu oleh sebagian orang",
   "hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails" : "telah berhasil didaftarkan ownership & di boost, selengkapnya cek di profilmu",
   "hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails" : "telah berhasil didaftarkan di boost, selengkapnya cek di profilmu",
-  "appealThisWarning" : "Banding Peringatan Ini"
-
-
+  "appealThisWarning" : "Banding Peringatan Ini",
+  "itDoesntMatchIdentity" : "Nama tidak sesuai KTP",
+  "noKTPCantBeRead" : "Nomor KTP tidak terbaca",
+  "genderMustBeFilled" : "Jenis kelamin harus diisi",
+  "placeOfBirthMustBeFilled" : "Tempat lahir harus diisi",
+  "dateOfBirthMustBeFilled" : "Tanggal lahir harus diisi",
+  "userIsNotFound" : "Pengguna tidak ditemukan"
 }

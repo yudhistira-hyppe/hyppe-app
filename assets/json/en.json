@@ -773,6 +773,12 @@
   "ContentContainsSensitiveMaterial" : "content contains sensitive material which some people may find offensive or disturbing",
   "hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails" : "has been successfully registered for ownership & boosted, check your profile for details",
   "hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails" : "has been successfully registered for boosted, check your profile for details",
-  "appealThisWarning" : "Appeal This Warning"
-  
+  "appealThisWarning" : "Appeal This Warning",
+  "itDoesntMatchIdentity" : "Your name doesn't match KTP",
+  "noKTPCantBeRead" : "Your KTP Number can't be read",
+  "genderMustBeFilled" : "Gender must be filled",
+  "placeOfBirthMustBeFilled" : "The place of birth must be filled",
+  "dateOfBirthMustBeFilled" : "The date of birth must be filled",,
+  "userIsNotFound" : "User is not found"
+
 }

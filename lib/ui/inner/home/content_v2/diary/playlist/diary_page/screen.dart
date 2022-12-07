@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/music_status_page_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';

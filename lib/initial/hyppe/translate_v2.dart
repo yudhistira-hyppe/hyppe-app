@@ -46,6 +46,8 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
+import '../../ui/constant/entities/comment_v2/notifier.dart';
+
 class TranslateNotifierV2 with ChangeNotifier {
   TranslateNotifierV2._private();
   static final TranslateNotifierV2 _instance = TranslateNotifierV2._private();
@@ -157,6 +159,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<PaymentMethodNotifier>().translate(translate);
     context.read<PaymentNotifier>().translate(translate);
     context.read<PaymentSummaryNotifier>().translate(translate);
+    context.read<CommentNotifierV2>().translate(translate);
     // await context.read<TransactionNotifier>().translate(translate);
     // await context.read<PinAccountNotifier>().translate(translate);
 

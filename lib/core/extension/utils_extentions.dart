@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../ui/inner/home/notifier_v2.dart';
+import '../../initial/hyppe/translate_v2.dart';
 import '../constants/shared_preference_keys.dart';
-import '../models/collection/posts/content_v2/content_data.dart';
+import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
 
@@ -21,6 +21,10 @@ extension contextScreen on BuildContext{
 
   TextTheme getTextTheme(){
     return Theme.of(this).textTheme;
+  }
+
+  bool isLightMode(){
+    return SharedPreference().readStorage(SpKeys.themeData) ?? false;
   }
 
   int getAdsCount(){
@@ -98,6 +102,15 @@ extension StringDefine on String{
 
   bool isImageFormat(){
     return System().lookupContentMimeType(this)?.contains('image') ?? false;
+  }
+
+  String getGenderByLanguage(){
+    LocalizationModelV2 language = Provider.of<TranslateNotifierV2>(materialAppKey.currentContext!, listen: false).translate;
+    if(this == 'MALE'){
+      return language.male ?? 'Male';
+    }else{
+      return language.female ?? 'Female';
+    }
   }
 }
 

@@ -35,7 +35,7 @@ class AutoCompleteUserTag extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Expanded(child: Center(child: Text('User tidak ditemukan'))),
+                              Expanded(child: Center(child: Text('${notifier.language.userIsNotFound}'))),
                             ],
                           )
                         : ListView.builder(
