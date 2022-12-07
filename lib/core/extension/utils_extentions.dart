@@ -23,7 +23,7 @@ extension contextScreen on BuildContext{
     return Theme.of(this).textTheme;
   }
 
-  bool isLightMode(){
+  bool isDarkMode(){
     return SharedPreference().readStorage(SpKeys.themeData) ?? false;
   }
 

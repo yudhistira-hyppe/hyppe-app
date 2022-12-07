@@ -57,7 +57,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                     decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: context.isLightMode() ? Colors.black12 : Colors.white,
+                          color: context.isDarkMode() ? Colors.white : Colors.black12,
                           width: 0.5,
                         ),
                       ),
@@ -65,7 +65,8 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                     child: TextFormField(
                       controller: notifier.realNameController,
                       maxLines: 1,
-                      keyboardAppearance: Brightness.dark,
+
+                      keyboardAppearance: Brightness.light,
                       cursorColor: const Color(0xff8A3181),
                       style: textTheme.bodyText2
                           ?.copyWith(fontWeight: FontWeight.bold),
@@ -85,7 +86,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
                       textStyle:
-                          textTheme.caption?.copyWith(color: Colors.black26),
+                          textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black26),
                       textToDisplay: notifier.language.reaNameNotice ?? '')
                 ],
               ),

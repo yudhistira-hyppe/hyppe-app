@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -46,9 +47,13 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
 
   @override
   void dispose() {
-    final notifier = context.read<PreviewVidNotifier>();
-    // notifier.initialVid(context, reload: true);
-    notifier.pageController.dispose();
+    try{
+      final notifier = context.read<PreviewVidNotifier>();
+      notifier.pageController.dispose();
+    }catch(e){
+      e.logger();
+    }
+
     super.dispose();
   }
 
