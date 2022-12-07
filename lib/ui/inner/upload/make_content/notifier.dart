@@ -266,7 +266,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
   }
 
-  void onTapOnFrameLocalMedia(BuildContext context, mounted) async {
+  void onTapOnFrameLocalMedia(BuildContext context) async {
     setLoading(true);
     try {
       await System().getLocalMedia(featureType: featureType, context: context).then((value) async {

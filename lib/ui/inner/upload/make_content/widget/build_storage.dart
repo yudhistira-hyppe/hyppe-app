@@ -17,7 +17,7 @@ class BuildStorage extends StatelessWidget {
         child: Center(
           child: GestureDetector(
             onTap: () {
-              if (!notifier.isRecordingVideo) notifier.onTapOnFrameLocalMedia(context, mounted);
+              if (!notifier.isRecordingVideo) notifier.onTapOnFrameLocalMedia(context);
             },
             child: Container(
               decoration: BoxDecoration(
