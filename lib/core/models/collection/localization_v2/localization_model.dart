@@ -773,6 +773,12 @@ class LocalizationModelV2 {
   String? communityGuidelines;
   String? description;
   String? report;
+  String? itDoesntMatchIdentity;
+  String? noKTPCantBeRead;
+  String? genderMustBeFilled;
+  String? placeOfBirthMustBeFilled;
+  String? dateOfBirthMustBeFilled;
+  String? userIsNotFound;
 
   LocalizationModelV2({
     this.login,
@@ -1549,6 +1555,12 @@ class LocalizationModelV2 {
     this.communityGuidelines,
     this.description,
     this.report,
+    this.itDoesntMatchIdentity,
+    this.noKTPCantBeRead,
+    this.genderMustBeFilled,
+    this.placeOfBirthMustBeFilled,
+    this.dateOfBirthMustBeFilled,
+    this.userIsNotFound
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2345,5 +2357,11 @@ class LocalizationModelV2 {
     hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails"];
     appealThisWarning = json["appealThisWarning"];
     sensitiveContent = json["sensitiveContent"];
+    itDoesntMatchIdentity = json["itDoesntMatchIdentity"];
+    noKTPCantBeRead = json["noKTPCantBeRead"];
+    genderMustBeFilled = json["genderMustBeFilled"];
+    placeOfBirthMustBeFilled = json["placeOfBirthMustBeFilled"];
+    dateOfBirthMustBeFilled = json["dateOfBirthMustBeFilled"];
+    userIsNotFound = json["userIsNotFound"];
   }
 }

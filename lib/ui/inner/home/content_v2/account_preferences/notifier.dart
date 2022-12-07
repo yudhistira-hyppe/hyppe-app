@@ -8,6 +8,7 @@ import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
@@ -120,7 +121,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     countryController.text = notifierData.user.profile?.country ?? "";
     areaController.text = notifierData.user.profile?.area ?? "";
     cityController.text = notifierData.user.profile?.city ?? "";
-    genderController.text = notifierData.user.profile?.gender ?? "";
+    genderController.text = (notifierData.user.profile?.gender ?? "").getGenderByLanguage();
     dobController.text = notifierData.user.profile?.dob ?? "";
     mobileController.text = notifierData.user.profile?.mobileNumber ?? "";
   }

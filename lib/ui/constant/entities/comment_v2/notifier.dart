@@ -13,7 +13,16 @@ import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ux/routing.dart';
 
+import '../../../../core/models/collection/localization_v2/localization_model.dart';
+
 class CommentNotifierV2 with ChangeNotifier {
+
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
+
   String? postID;
   String? parentID;
   bool fromFront = true;

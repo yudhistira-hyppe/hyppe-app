@@ -80,7 +80,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
             children: [
               Container(
                 margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                child: widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',),
+                child: widget.data?.music?.musicTitle != null ? widget.data?.mediaType == 'video' ? MusicStatusPage(music: widget.data!.music!) : notifier.isLoadMusic ? LoadingMusicStory(apsaraMusic: widget.data!.music!): MusicStatusPage(music: widget.data!.music!, urlMusic: notifier.urlMusic?.playUrl ?? '',) : const SizedBox.shrink(),
               ),
               Form(
                 child: Container(

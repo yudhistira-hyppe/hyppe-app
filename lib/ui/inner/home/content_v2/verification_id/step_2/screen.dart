@@ -54,10 +54,10 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                     textStyle: textTheme.titleMedium,
                   ),
                   Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: Colors.black12,
+                          color: context.isLightMode() ? Colors.black12 : Colors.white,
                           width: 0.5,
                         ),
                       ),
