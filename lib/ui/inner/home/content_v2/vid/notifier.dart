@@ -99,6 +99,7 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
           'reload contentsQuery : 15'.logger();
           res = await contentsQuery.reload(context);
         } else {
+          print('load next video');
           res = await contentsQuery.loadNext(context);
         }
       }

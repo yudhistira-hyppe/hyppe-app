@@ -86,7 +86,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                               onNotification: (ScrollNotification scrollInfo) {
                                 if (scrollInfo is ScrollStartNotification) {
                                   Future.delayed(const Duration(milliseconds: 100), () {
-                                    vidNotifier.initialVid(context);
+                                    // vidNotifier.initialVid(context);
                                   });
                                 }
                                 return true;
