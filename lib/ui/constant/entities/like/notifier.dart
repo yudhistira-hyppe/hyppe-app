@@ -47,6 +47,9 @@ class LikeNotifier with ChangeNotifier {
   String _visibilitySelect = 'PUBLIC';
   String get visibilitySelect => _visibilitySelect;
 
+  bool _isScrollLoading = false;
+  bool get isScrollLoading => _isScrollLoading;
+
   set visibilty(String val) {
     _visibilty = val;
     notifyListeners();
@@ -219,18 +222,31 @@ class LikeNotifier with ChangeNotifier {
     if (email == emailData) ShowBottomSheet.onShowUserViewContent(context, postId: postId, eventType: eventType, title: title, storyController: storyController);
   }
 
-  Future getLikeView(BuildContext context, postId, eventType, limit) async {
-    isLoading = true;
+  Future getLikeView(BuildContext context, postId, eventType, limit, {bool isScroll = false}) async {
+    if (!isScroll) isLoading = true;
     final notifier = PostViewerBloc();
     await notifier.likeViewContentBloc(context, postID: postId, eventType: eventType, limit: limit, skip: _skip);
 
     final fetch = notifier.postViewerFetch;
     if (fetch.postViewerState == PostViewerState.likeViewSuccess) {
-      _listLikeView = [];
+      if (!isScroll) {
+        _listLikeView = [];
+      }
       fetch.data.forEach((v) {
         _listLikeView?.add(ViewContent.fromJson(v));
       });
       isLoading = false;
+    }
+  }
+
+  void scrollListLikeView(BuildContext context, ScrollController scrollController, postId, eventType, int limit) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      print('kebawah');
+      _skip += limit;
+      _isScrollLoading = true;
+      notifyListeners();
+      await getLikeView(context, postId, eventType, limit, isScroll: true).whenComplete(() => _isScrollLoading = false);
+      notifyListeners();
     }
   }
 }

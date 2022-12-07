@@ -152,8 +152,8 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: ()async{
-                                if(globalAudioPlayer != null){
+                              function: () async {
+                                if (globalAudioPlayer != null) {
                                   globalAudioPlayer!.pause();
                                 }
                                 await ShowBottomSheet().onShowOptionContent(
@@ -164,7 +164,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                   onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
                                 );
 
-                                if(globalAudioPlayer != null){
+                                if (globalAudioPlayer != null) {
                                   globalAudioPlayer!.seek(Duration.zero);
                                   globalAudioPlayer!.resume();
                                 }

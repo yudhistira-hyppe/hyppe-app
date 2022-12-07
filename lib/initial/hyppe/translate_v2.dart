@@ -72,17 +72,19 @@ class TranslateNotifierV2 with ChangeNotifier {
   }
 
   Future getListOfLanguage(BuildContext context) async {
-    final notifier = UtilsBlocV2();
-    await notifier.getLanguages(context, pageNumber: _listIndex);
-    final fetch = notifier.utilsFetch;
-    if (fetch.utilsState == UtilsState.languagesSuccess) {
-      if (fetch.data.isNotEmpty) {
-        if (_listIndex == 0) _listLanguage.clear();
-        fetch.data.forEach((v) => _listLanguage.add(LanguageData.fromJson(v)));
-        _listIndex++;
-        loadMore = false;
-      } else {
-        print("Language has reach max value");
+    if (_listLanguage.isEmpty) {
+      final notifier = UtilsBlocV2();
+      await notifier.getLanguages(context, pageNumber: _listIndex);
+      final fetch = notifier.utilsFetch;
+      if (fetch.utilsState == UtilsState.languagesSuccess) {
+        if (fetch.data.isNotEmpty) {
+          if (_listIndex == 0) _listLanguage.clear();
+          fetch.data.forEach((v) => _listLanguage.add(LanguageData.fromJson(v)));
+          _listIndex++;
+          loadMore = false;
+        } else {
+          print("Language has reach max value");
+        }
       }
     }
   }

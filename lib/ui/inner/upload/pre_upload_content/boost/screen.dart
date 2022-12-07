@@ -133,17 +133,20 @@ class BoostUploadScreen extends StatelessWidget {
                                 children: [
                                   Container(
                                     decoration: BoxDecoration(
-                                      color: kHyppeGreyLight,
+                                      color: Theme.of(context).colorScheme.surface,
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     padding: const EdgeInsets.symmetric(
                                       horizontal: 15,
                                       vertical: 6,
                                     ),
-                                    child: Text(
-                                      System().convertTypeContent(
+                                    child: CustomTextWidget(
+                                      textToDisplay: System().convertTypeContent(
                                         System().validatePostTypeV2(notifier.featureType),
                                       ),
+                                      textStyle: Theme.of(context).textTheme.caption?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     ),
                                   ),
                                   SizedBox(
@@ -342,7 +345,7 @@ class BoostUploadScreen extends StatelessWidget {
                               color: kHyppeLightInactive1,
                             ),
                             borderRadius: BorderRadius.circular(16),
-                            color: kHyppeLightSurface,
+                            color: Theme.of(context).colorScheme.surface,
                           ),
                           child: Text(
                             notifier.language.contentWillbeBoostedfor30days ?? '',

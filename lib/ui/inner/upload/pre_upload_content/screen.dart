@@ -7,6 +7,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -138,7 +139,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               visible: !keyboardIsOpen,
               child: notifier.boostContent != null
                   ? Container(
-                      color: kHyppeLightSurface,
+                      color: Theme.of(context).colorScheme.background,
                       padding: EdgeInsets.all(16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -287,7 +288,64 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 },
               ),
             ),
-            ValidateType(editContent: widget.arguments.onEdit)
+            notifier.isEdit
+                ? Container(
+                    height: 90,
+                    width: 90,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: CustomBaseCacheImage(
+                      widthPlaceHolder: 80,
+                      heightPlaceHolder: 80,
+                      imageUrl: notifier.editData?.isApsara ?? false ? (notifier.editData?.mediaThumbEndPoint ?? '') : '${notifier.editData?.fullThumbPath}',
+                      imageBuilder: (context, imageProvider) => Container(
+                        // margin: margin,
+                        // // const EdgeInsets.symmetric(horizontal: 4.5),
+                        // width: _scaling,
+                        height: 168,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) {
+                        print('errorWidget :  $error');
+                        return Container(
+                          // margin: margin,
+                          // // const EdgeInsets.symmetric(horizontal: 4.5),
+                          // width: _scaling,
+                          height: 186,
+                          // child: _buildBody(context),
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        );
+                      },
+                      emptyWidget: Container(
+                        // margin: margin,
+                        // // const EdgeInsets.symmetric(horizontal: 4.5),
+                        // width: _scaling,
+                        height: 186,
+                        // child: _buildBody(context),
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                    ),
+                  )
+                : ValidateType(editContent: widget.arguments.onEdit)
           ],
         ),
         Row(

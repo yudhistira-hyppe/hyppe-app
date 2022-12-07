@@ -14,7 +14,6 @@ import '../../../core/models/collection/music/music.dart';
 import 'after_first_layout_mixin.dart';
 import 'custom_base_cache_image.dart';
 
-
 class MusicStatusPage extends StatefulWidget {
   final Music music;
   String? urlMusic;
@@ -25,22 +24,20 @@ class MusicStatusPage extends StatefulWidget {
 }
 
 class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayoutMixin {
-
   var audioPlayer = AudioPlayer();
 
   @override
   void initState() {
-
     super.initState();
   }
 
   @override
   void deactivate() {
     print('deactivate MusicStatusPage');
-    try{
+    try {
       audioPlayer.stop();
       audioPlayer.dispose();
-    }catch(e){
+    } catch (e) {
       'Error MusicStatusPage : $e'.logger();
     }
     globalAudioPlayer = null;
@@ -59,7 +56,7 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
   Widget build(BuildContext context) {
     final musicTitle = '${widget.music.artistName} - ${widget.music.musicTitle}';
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 1),
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,16 +68,26 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const CustomIconWidget(iconData: '${AssetPath.vectorPath}music_stroke_white.svg', color: Colors.white,),
+                const CustomIconWidget(
+                  iconData: '${AssetPath.vectorPath}music_stroke_white.svg',
+                  color: Colors.white,
+                ),
                 fourPx,
-                musicTitle.length > 30 ? Container(
-                  height: 30,
-                  child: Container(
-                    height: 30,
-                    width: context.getWidth() * 0.7,
-                      child: Marquee(text: '$musicTitle  ', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)),
-                ) : CustomTextWidget(textToDisplay: musicTitle,
-                  textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),)
+                musicTitle.length > 30
+                    ? Container(
+                        height: 30,
+                        child: Container(
+                            height: 30,
+                            width: context.getWidth() * 0.7,
+                            child: Marquee(
+                              text: '$musicTitle  ',
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                            )),
+                      )
+                    : CustomTextWidget(
+                        textToDisplay: musicTitle,
+                        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.white),
+                      )
               ],
             ),
           ),
@@ -101,14 +108,11 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
               );
             },
             errorWidget: (_, __, ___) {
-
               print('MusicStatusPage error');
               return Container(
                 width: 36,
                 height: 36,
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(18))
-                ),
+                decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(18))),
                 child: const CustomIconWidget(
                   width: 36,
                   height: 36,
@@ -120,9 +124,7 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
             emptyWidget: Container(
               width: 36,
               height: 36,
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(18))
-              ),
+              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(18))),
               child: const CustomIconWidget(
                 width: 36,
                 height: 36,
@@ -136,17 +138,17 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
     );
   }
 
-  void initMusic(BuildContext context, String urlMusic) async{
+  void initMusic(BuildContext context, String urlMusic) async {
     audioPlayer = AudioPlayer();
     try {
       await audioPlayer.setReleaseMode(ReleaseMode.loop);
-      if(urlMusic.isNotEmpty){
+      if (urlMusic.isNotEmpty) {
         globalAudioPlayer = audioPlayer;
         audioPlayer.play(UrlSource(urlMusic));
-      }else{
+      } else {
         throw 'URL Music is empty';
       }
-    }catch(e){
+    } catch (e) {
       "Error Init Video $e".logger();
     }
   }
@@ -154,9 +156,9 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
   @override
   void afterFirstLayout(BuildContext context) {
     print('MusicStatusPage : ${widget.urlMusic}');
-    if((widget.urlMusic ?? '').isNotEmpty){
+    if ((widget.urlMusic ?? '').isNotEmpty) {
       initMusic(context, widget.urlMusic!);
-    }else if((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty){
+    } else if ((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty) {
       print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
       initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
     }

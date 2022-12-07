@@ -22,7 +22,7 @@ class OnShowUserTagBottomSheet extends StatefulWidget {
   final List<TagPeople> value;
   final Function() function;
   final String postId;
-  OnShowUserTagBottomSheet({
+  const OnShowUserTagBottomSheet({
     Key? key,
     required this.value,
     required this.function,

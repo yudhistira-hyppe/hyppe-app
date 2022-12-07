@@ -676,7 +676,7 @@ class ShowBottomSheet {
     bool onDetail = true,
     StoryController? storyController,
     Function? onUpdate,
-  }) async{
+  }) async {
     await showModalBottomSheet(
       context: _,
       enableDrag: true,
@@ -1121,35 +1121,23 @@ class ShowBottomSheet {
         isScrollControlled: true,
         context: _,
         builder: (BuildContext bc) {
-          return Wrap(children: <Widget>[
-            WillPopScope(
-              onWillPop: () async {
-                Routing().moveBack();
-                if (storyController != null) {
-                  storyController.play();
-                }
-                return false;
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  // color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25.0),
-                    topRight: Radius.circular(25.0),
-                  ),
-                ),
-                child: OnShowUserViewContentBottomSheet(
-                  postId: postId,
-                  eventType: eventType,
-                  title: title,
-
-                  // value: value,
-                  // function: function,
-                  // postId: postId,
-                ),
+          return Container(
+            constraints: BoxConstraints(
+              maxHeight: SizeConfig.screenHeight! / 2,
+              minHeight: 20,
+            ),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
               ),
-            )
-          ]);
+            ),
+            child: OnShowUserViewContentBottomSheet(
+              postId: postId,
+              eventType: eventType,
+              title: title,
+            ),
+          );
         });
   }
 

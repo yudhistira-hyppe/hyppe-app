@@ -237,7 +237,9 @@ class _DiaryPageState extends State<DiaryPage> {
                       ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: widget.data!) : Container(),
+                  child: widget.data?.email == SharedPreference().readStorage(SpKeys.email) && (widget.data?.reportedStatus == 'OWNED')
+                      ? SizedBox(height: 58, child: ContentViolationWidget(data: widget.data!))
+                      : Container(),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
