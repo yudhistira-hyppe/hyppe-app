@@ -17,8 +17,9 @@ import 'custom_base_cache_image.dart';
 
 class MusicStatusPage extends StatefulWidget {
   final Music music;
+  double vertical;
   String? urlMusic;
-  MusicStatusPage({Key? key, required this.music, this.urlMusic}) : super(key: key);
+  MusicStatusPage({Key? key, required this.music, this.urlMusic, this.vertical = 10}) : super(key: key);
 
   @override
   State<MusicStatusPage> createState() => _MusicStatusPageState();
@@ -59,7 +60,7 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
   Widget build(BuildContext context) {
     final musicTitle = '${widget.music.artistName} - ${widget.music.musicTitle}';
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+      margin: EdgeInsets.symmetric(horizontal: 0, vertical: widget.vertical),
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
