@@ -301,7 +301,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           ),
                       ],
                     ),
-                    widget.data.tagPeople?.isNotEmpty ?? false || widget.data.location != ''
+                    (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                             child: Row(

@@ -60,7 +60,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
-                      textToDisplay: data?.saleView ?? false ? notifier.translate.yes ?? '' : notifier.translate.no ?? '',
+                      textToDisplay: (data?.saleView ?? false) ? notifier.translate.yes ?? '' : notifier.translate.no ?? '',
                       textStyle: Theme.of(context).textTheme.subtitle1,
                     ),
                   ],

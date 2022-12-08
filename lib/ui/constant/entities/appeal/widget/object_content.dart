@@ -41,7 +41,7 @@ class OnjectContentWidget extends StatelessWidget {
             )),
             const SizedBox(width: 10),
             CustomCacheImage(
-              imageUrl: data.isApsara ?? false ? data.mediaThumbEndPoint : data.fullThumbPath,
+              imageUrl: (data.isApsara ?? false) ? data.mediaThumbEndPoint : data.fullThumbPath,
               imageBuilder: (_, imageProvider) {
                 return Container(
                   width: 48 * SizeConfig.scaleDiagonal,

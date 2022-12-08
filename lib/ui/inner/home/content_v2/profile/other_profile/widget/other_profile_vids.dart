@@ -48,7 +48,7 @@ class OtherProfileVids extends StatelessWidget {
                                       height: double.infinity,
                                       featureType: FeatureType.vid,
                                       isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                      thumbnail: notifier.item1?.vids?[index].isApsara ?? false
+                                      thumbnail: (notifier.item1?.vids?[index].isApsara ?? false)
                                           ? (notifier.item1?.vids?[index].mediaThumbEndPoint ?? '')
                                           : System().showUserPicture(notifier.item1?.vids?[index].mediaThumbEndPoint) ?? '',
                                     ),

@@ -46,7 +46,7 @@ class OtherProfilePics extends StatelessWidget {
                                       width: double.infinity,
                                       height: double.infinity,
                                       isSafe: true, //notifier.postData.data.listPic[index].isSafe,
-                                      thumbnail: notifier.item1?.pics?[index].isApsara ?? false
+                                      thumbnail: (notifier.item1?.pics?[index].isApsara ?? false)
                                           ? (notifier.item1?.pics?[index].mediaThumbEndPoint ?? '')
                                           : System().showUserPicture(notifier.item1?.pics?[index].mediaEndpoint) ?? '',
                                     ),

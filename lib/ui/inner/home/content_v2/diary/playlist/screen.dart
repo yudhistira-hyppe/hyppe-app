@@ -10,7 +10,6 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/diary_page/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items_shimmer.dart';
 
-import '../preview/notifier.dart';
 
 class HyppePlaylistDiaries extends StatefulWidget {
   final DiaryDetailScreenArgument argument;

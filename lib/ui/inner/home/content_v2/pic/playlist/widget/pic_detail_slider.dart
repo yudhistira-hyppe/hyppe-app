@@ -57,7 +57,7 @@ class PicDetailSlider extends StatelessWidget {
                       ? PichTumbnailReport(pictData: picData)
                       : CustomThumbImage(
                           boxFit: BoxFit.cover,
-                          imageUrl: picData?.isApsara ?? false ? picData?.mediaThumbUri : picData?.fullThumbPath,
+                          imageUrl: (picData?.isApsara ?? false) ? picData?.mediaThumbUri : picData?.fullThumbPath,
                         ),
                 ),
                 onTap: () => notifier.navigateToDetailPic(picData),
