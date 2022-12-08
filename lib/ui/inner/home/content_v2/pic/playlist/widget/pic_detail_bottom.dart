@@ -85,7 +85,7 @@ class PicDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            data?.tagPeople?.isNotEmpty ?? false || data?.location != ''
+            (data?.tagPeople?.isNotEmpty ?? false) || data?.location != ''
                 ? Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(

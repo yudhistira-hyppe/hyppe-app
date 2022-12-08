@@ -17,56 +17,65 @@ class ConfirmPin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer2<PinAccountNotifier, TranslateNotifierV2>(
-      builder: (_, notifier, notifier2, __) => Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
-            splashRadius: 1,
-            onPressed: () {
-              Routing().moveBack();
-              notifier.pin2Controller.clear();
-            },
+      builder: (_, notifier, notifier2, __) => WillPopScope(
+        onWillPop: () async {
+          Routing().moveBack();
+          notifier.pin2Controller.clear();
+          notifier.matchingPin = true;
+          return false;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+              splashRadius: 1,
+              onPressed: () {
+                Routing().moveBack();
+                notifier.pin2Controller.clear();
+                notifier.matchingPin = true;
+              },
+            ),
+            titleSpacing: 0,
+            title: CustomTextWidget(
+              textToDisplay: notifier2.translate.confirmPin ?? '',
+              textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
+            ),
+            centerTitle: false,
           ),
-          titleSpacing: 0,
-          title: CustomTextWidget(
-            textToDisplay: notifier2.translate.confirmPin ?? '',
-            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 18 * SizeConfig.scaleDiagonal),
-          ),
-          centerTitle: false,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const Center(
-                child: CustomIconWidget(
-                  height: 40,
-                  iconData: "${AssetPath.vectorPath}lock-pin.svg",
-                  defaultColor: false,
-                  color: kHyppePrimary,
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const Center(
+                  child: CustomIconWidget(
+                    height: 40,
+                    iconData: "${AssetPath.vectorPath}lock-pin.svg",
+                    defaultColor: false,
+                    color: kHyppePrimary,
+                  ),
                 ),
-              ),
-              CustomTextWidget(
-                textToDisplay: notifier2.translate.confirmNewPin ?? '',
-                textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
-              sixPx,
-              CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
-              twelvePx,
-              CustomRectangleInput(
-                notifier.pin2Controller,
-                onChanged: (value) => notifier.pinConfirmChecking(context, value),
-              ),
-              !notifier.matchingPin
-                  ? CustomTextWidget(
-                      textToDisplay: notifier2.translate.enterThePinThatMatchesThePinYouFilledInEarlier ?? '',
-                      maxLines: 3,
-                      textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeRed),
-                    )
-                  : Container(),
-            ],
+                CustomTextWidget(
+                  textToDisplay: notifier2.translate.confirmNewPin ?? '',
+                  textStyle: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
+                ),
+                sixPx,
+                CustomTextWidget(textToDisplay: notifier2.translate.enterYour6DigitHyppePin ?? ''),
+                twelvePx,
+                CustomRectangleInput(
+                  notifier.pin2Controller,
+                  onChanged: (value) => notifier.pinConfirmChecking(context, value),
+                ),
+                !notifier.matchingPin
+                    ? CustomTextWidget(
+                        textToDisplay: notifier2.translate.enterThePinThatMatchesThePinYouFilledInEarlier ?? '',
+                        maxLines: 3,
+                        textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeRed),
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ),

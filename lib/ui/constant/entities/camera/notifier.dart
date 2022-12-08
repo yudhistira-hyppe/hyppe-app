@@ -48,22 +48,19 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (setState) notifyListeners();
   }
 
-  Future<void> initCamera(BuildContext context, bool mounted) async {
+  Future<void> initCamera(BuildContext context, bool mounted, {bool backCamera = false}) async {
     // print('DeepAR: initCamera, mounted: ');print(mounted);
     try {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
       flashMode = FlashMode.off;
       deepArController = DeepArController();
       if (Platform.isAndroid) {
-        if(deepArController != null){
-          final isGranted = await System().requestPermission(context, permissions: [
-            Permission.camera
-          ]);
-          if(isGranted){
+        if (deepArController != null) {
+          final isGranted = await System().requestPermission(context, permissions: [Permission.camera]);
+          if (isGranted) {
             print('destroy deepArController 1');
             deepArController!.destroy();
           }
-
         }
       }
       await deepArController!
@@ -75,6 +72,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
           .then((value) {
         print('DeepAR: DeepAR done initialized $value');
       });
+      if (backCamera) {
+        deepArController?.flipCamera();
+      }
 
       // cameraController = CameraController(
       //   camera[0],
@@ -90,7 +90,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       // await cameraController?.setFlashMode(flashMode);
     } on CameraException catch (e) {
       'CameraException : ${e.description}'.logger();
-    }catch(e){
+    } catch (e) {
       'Error DeepAr : $e'.logger();
     }
     if (!mounted) {
@@ -153,11 +153,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
         deepArController = DeepArController();
         deepArController = null;
       }
-      if(deepArController != null){
-        final isGranted = await System().requestPermission(context, permissions: [
-          Permission.camera
-        ]);
-        if(isGranted){
+      if (deepArController != null) {
+        final isGranted = await System().requestPermission(context, permissions: [Permission.camera]);
+        if (isGranted) {
           print('destroy deepArController 2');
           deepArController!.destroy();
         }
@@ -259,6 +257,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     try {
+      _showEffected = false;
       await deepArController!.startVideoRecording();
       notifyListeners();
     } on CameraException catch (e) {
@@ -312,7 +311,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   void showEffect() {
-    print('DeepAR: Show Effect');
     _showEffected = !_showEffected;
     notifyListeners();
   }

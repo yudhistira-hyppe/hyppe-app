@@ -100,7 +100,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     switch (status) {
       case VERIFIED:
         statusText = "Verified";
-        statusColor = !isLight ? Colors.white : Colors.black87;
+        statusColor = !isLight ? Colors.black87 : Colors.white;
         bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
         break;
       case UNVERIFIED:

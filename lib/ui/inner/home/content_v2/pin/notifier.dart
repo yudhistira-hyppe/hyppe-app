@@ -132,6 +132,15 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   void cekUserPin(BuildContext context) {
+    pin1Controller = TextEditingController();
+
+    pin3Controller = TextEditingController();
+    pin4Controller = TextEditingController();
+    pin1Controller.clear();
+
+    pin3Controller.clear();
+    pin4Controller.clear();
+    // _matchingPin = true;
     pinCreate = SharedPreference().readStorage(SpKeys.setPin) == "true";
   }
 
@@ -139,6 +148,8 @@ class PinAccountNotifier extends ChangeNotifier {
     _pin1 = val;
     if (_pin1.length == 6) {
       Routing().move(Routes.confirmPinScreen);
+      pin2Controller = TextEditingController();
+      pin2Controller.clear();
     }
   }
 

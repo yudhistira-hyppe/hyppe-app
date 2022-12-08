@@ -34,24 +34,24 @@ class UploadContent extends StatelessWidget {
         // Camera / Video
         Align(alignment: Alignment.bottomCenter, child: BuildSwitchButton()),
         // Flash button
-        if(Platform.isAndroid)
-        SafeArea(
-          child: Visibility(
-            visible: !(notifier?.isRecordingVideo ?? true),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Column(
-                children: [
-                  const CameraFlashButton(),
-                  CustomTextWidget(
-                    textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                  ),
-                ],
+        if (Platform.isAndroid)
+          SafeArea(
+            child: Visibility(
+              visible: !(notifier?.isRecordingVideo ?? true),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: [
+                    const CameraFlashButton(),
+                    CustomTextWidget(
+                      textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
         // Close button
         SafeArea(
           top: Platform.isIOS,
@@ -83,19 +83,23 @@ class UploadContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
-              BuildEffect(mounted: mounted),
+              if (!(notifier?.isRecordingVideo ?? true)) BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false),
               Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
-              if(Platform.isIOS && !(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1,child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const CameraFlashButton(),
-                  CustomTextWidget(
-                    textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
-                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+              if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CameraFlashButton(),
+                      CustomTextWidget(
+                        textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
+                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                      ),
+                    ],
                   ),
-                ],
-              ),),
-              if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 4, child: CameraSwitchButton())
+                ),
+              if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 4, child: const CameraSwitchButton())
             ],
           ),
         ),
