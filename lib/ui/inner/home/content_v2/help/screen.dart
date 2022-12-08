@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
@@ -91,7 +92,7 @@ class _HelpScreenState extends State<HelpScreen> {
                     color: Colors.black.withOpacity(0.12),
                   ),
                   borderRadius: BorderRadius.circular(16),
-                  color: kHyppeLightSurface,
+                  color: context.isDarkMode() ? Colors.black12 : kHyppeLightSurface,
                 ),
                 child: Row(
                   children: [

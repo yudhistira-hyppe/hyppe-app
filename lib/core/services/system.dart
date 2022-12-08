@@ -12,9 +12,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
-import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
-
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
@@ -53,7 +51,6 @@ import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
-import '../../app.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 
 class System {
@@ -1011,9 +1008,9 @@ class System {
         context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
         if (storyController != null) {
           storyController.pause();
-          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
+          Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
         } else {
-          Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+          Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
         }
       } else {
         storyController != null
@@ -1094,10 +1091,12 @@ class System {
         }
       }
     } on TimeoutException catch (e) {
+      'getLocation Error : $e'.logger();
       notifier.latitude = 0.0;
       notifier.longitude = 0.0;
       return true;
     } on Error catch (e) {
+      'getLocation Error : $e'.logger();
       return false;
     }
   }

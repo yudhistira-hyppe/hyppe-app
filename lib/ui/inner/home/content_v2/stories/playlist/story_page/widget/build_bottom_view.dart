@@ -75,31 +75,43 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
               ],
             ),
           )
-        : Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-                  child: widget.data?.music?.musicTitle != null
-                      ? widget.data?.mediaType == 'video'
-                          ? MusicStatusPage(music: widget.data!.music!)
-                          : notifier.isLoadMusic
-                              ? LoadingMusicStory(apsaraMusic: widget.data!.music!)
-                              : MusicStatusPage(
-                                  music: widget.data!.music!,
-                                  urlMusic: notifier.urlMusic?.playUrl ?? '',
-                                )
-                      : const SizedBox.shrink(),
-                ),
-                Form(
-                  child: Container(
+        : AnimatedPositioned(
+            duration: const Duration(milliseconds: 300),
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            height: SizeWidget().calculateSize(150, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+            child: Container(
+              alignment: Alignment.center,
+              width: SizeConfig.screenWidth,
+              height: SizeWidget().calculateSize(150, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
                     alignment: Alignment.center,
                     width: SizeConfig.screenWidth,
-                    height: SizeWidget().calculateSize(83, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                    height: SizeWidget().calculateSize(40, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
+                    margin: const EdgeInsets.only(left: 16, right: 16),
+                    child: widget.data?.music?.musicTitle != null
+                        ? widget.data?.mediaType == 'video'
+                            ? MusicStatusPage(
+                                music: widget.data!.music!,
+                                vertical: 0,
+                              )
+                            : notifier.isLoadMusic
+                                ? LoadingMusicStory(apsaraMusic: widget.data!.music!)
+                                : MusicStatusPage(
+                                    music: widget.data!.music!,
+                                    urlMusic: notifier.urlMusic?.playUrl ?? '',
+                                    vertical: 0,
+                                  )
+                        : const SizedBox.shrink(),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    width: SizeConfig.screenWidth,
+                    height: SizeWidget().calculateSize(65, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -157,8 +169,8 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                       ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
   }

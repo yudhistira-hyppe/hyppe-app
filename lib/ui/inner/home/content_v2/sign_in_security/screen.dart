@@ -96,16 +96,16 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
     String statusText;
     Color? statusColor;
     Color? bgColor;
-    final isLight = SharedPreference().readStorage(SpKeys.themeData) ?? false;
+    final isDark = context.isDarkMode();
     switch (status) {
       case VERIFIED:
         statusText = "Verified";
-        statusColor = !isLight ? Colors.black87 : Colors.white;
+        statusColor = isDark ? Colors.white : Colors.black87;
         bgColor = const Color.fromRGBO(171, 34, 175, 0.08);
         break;
       case UNVERIFIED:
         statusText = "Unverified";
-        statusColor = !isLight ? Colors.black87 : Colors.white;
+        statusColor = isDark ? Colors.black87 : Colors.white;
         bgColor = kHyppePrimary;
         break;
       case REVIEW:
@@ -115,7 +115,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
         break;
       default:
         statusText = "Unverified";
-        statusColor = !isLight ? Colors.black87 : Colors.white;
+        statusColor = isDark ? Colors.black87 : Colors.white;
     }
 
     return Container(
