@@ -67,7 +67,7 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                       children: [
                         TextSpan(
                           text: System().readTimestamp(
-                            DateTime.parse(widget.data?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                            DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                             context,
                             fullCaption: true,
                           ),

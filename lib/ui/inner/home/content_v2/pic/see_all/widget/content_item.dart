@@ -85,8 +85,7 @@ class ContentItem extends StatelessWidget {
                               isCelebrity: data?.privacy?.isCelebrity,
                               imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
                               onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
-                              createdAt: '${System().readTimestamp(DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)}',
-
+                              createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
                             ),
                             twelvePx,
                             Stack(
@@ -126,7 +125,6 @@ class ContentItem extends StatelessWidget {
                                                   // vidNotifier.showUserTag(context, index, data.postID);
                                                 },
                                               )
-
                                             : const SizedBox(),
                                         data?.location == '' || data?.location == null
                                             ? const SizedBox()
@@ -169,10 +167,8 @@ class ContentItem extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            if(data?.music?.musicTitle != null)
-                              fourPx,
-                            if(data?.music?.musicTitle != null)
-                              MusicStatusDetail(music: data!.music!)
+                            if (data?.music?.musicTitle != null) fourPx,
+                            if (data?.music?.musicTitle != null) MusicStatusDetail(music: data!.music!)
                           ],
                         ),
                       );

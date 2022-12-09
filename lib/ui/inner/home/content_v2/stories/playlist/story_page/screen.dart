@@ -55,7 +55,6 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
 
   @override
   void initState() {
-
     if (widget.data != null) {
       _when = '${System().readTimestamp(
         DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
@@ -219,7 +218,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                             // setState(() => _when = System().readTimestamp(int.parse(widget.data.story[pos].timestamp), context, fullCaption: true));
                             setState(() {
                               _when = '${System().readTimestamp(
-                                DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
+                                DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
                                 context,
                                 fullCaption: true,
                               )}';
@@ -339,13 +338,13 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 widget.data?.isReport ?? false
                     ? Container()
                     : Form(
-                      child: BuildBottomView(
-                        data: widget.data,
-                        storyController: _storyController,
-                        currentStory: notifier.currentStory,
-                        animationController: _animationController,
+                        child: BuildBottomView(
+                          data: widget.data,
+                          storyController: _storyController,
+                          currentStory: notifier.currentStory,
+                          animationController: _animationController,
+                        ),
                       ),
-                    ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 800),
                   transitionBuilder: (child, animation) {
@@ -375,15 +374,14 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     isLoading = true;
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp){
-      Future.delayed(Duration.zero, (){
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      Future.delayed(Duration.zero, () {
         notifier.initializeData(context, _storyController, widget.data ?? ContentData());
         setState(() {
           _storyItems = notifier.result;
           isLoading = false;
         });
       });
-
     });
   }
 }

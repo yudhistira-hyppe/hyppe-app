@@ -132,7 +132,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               isCelebrity: widget.data.privacy?.isCelebrity,
                               imageUrl: '${System().showUserPicture(widget.data.avatar?.mediaEndpoint)}',
                               createdAt: '${System().readTimestamp(
-                                DateTime.parse(widget.data.createdAt ?? '').millisecondsSinceEpoch,
+                                DateTime.parse(System().dateTimeRemoveT(widget.data.createdAt ?? '')).millisecondsSinceEpoch,
                                 context,
                                 fullCaption: true,
                               )}',

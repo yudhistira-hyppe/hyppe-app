@@ -71,7 +71,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                         imageUrl: '${System().showUserPicture(widget.data?.avatar?.mediaEndpoint)}',
                         isCelebrity: widget.data?.privacy?.isCelebrity,
                         createdAt: '${System().readTimestamp(
-                          DateTime.parse(widget.data?.createdAt ?? '').millisecondsSinceEpoch,
+                          DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
                           context,
                           fullCaption: true,
                         )}',

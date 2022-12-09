@@ -23,7 +23,8 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   FlashMode flashMode = FlashMode.off;
   NativeDeviceOrientation? orientation;
 
-  bool get isInitialized => deepArController?.isInitialized ?? false;
+  bool isInitializedIos = false;
+  bool get isInitialized => (Platform.isIOS ? isInitializedIos : (deepArController?.isInitialized ?? false));
   bool get isRecordingVideo => deepArController?.isRecording ?? false;
   bool get isRecordingPaused => deepArController?.isRecording ?? false;
   bool get isTakingPicture => cameraController?.value.isTakingPicture ?? false;
@@ -63,6 +64,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
           }
         }
       }
+      print('Initializing DeepAR');
       await deepArController!
           .initialize(
         androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
@@ -71,7 +73,9 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       )
           .then((value) {
         print('DeepAR: DeepAR done initialized $value');
-        notifyListeners();
+        isInitializedIos = true;
+        print(deepArController!.isInitialized);
+        print(isInitialized);
       });
       if (backCamera) {
         deepArController?.flipCamera();
@@ -97,6 +101,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (!mounted) {
       return;
     }
+    print('notifyListeners()');
     notifyListeners();
   }
 
@@ -191,11 +196,17 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Resolution _configureResolutionDeepArPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
-      return Resolution.high;
-    } else {
-      return onStoryIsPhoto != null && onStoryIsPhoto == true ? Resolution.veryHigh : Resolution.high;
-    }
+    print('DeepAR: onStoryIsPhoto: ${onStoryIsPhoto}');
+    print('DeepAR: Platform.isIOS: ${Platform.isIOS}, _iOSVersion: ${_iOSVersion}, minIphoneVersionForResolutionCamera: ${minIphoneVersionForResolutionCamera}');
+    // if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
+    //   print('DeepAR: Resolution.high');
+    //   return Resolution.high;
+    // } else {
+    //   print('DeepAR: Resolution.veryHigh');
+    //   // return onStoryIsPhoto != null && onStoryIsPhoto == true ? Resolution.veryHigh : Resolution.high;
+    //   return Resolution.veryHigh;
+    // }
+    return Resolution.veryHigh;
   }
 
   // ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {

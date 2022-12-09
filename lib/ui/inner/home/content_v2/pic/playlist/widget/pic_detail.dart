@@ -141,7 +141,7 @@ class _PicDetailState extends State<PicDetail> {
                             isCelebrity: widget.arguments?.privacy?.isCelebrity,
                             imageUrl: '${System().showUserPicture(widget.arguments?.avatar?.mediaEndpoint)}',
                             createdAt: '${System().readTimestamp(
-                              DateTime.parse(widget.arguments?.createdAt ?? '').millisecondsSinceEpoch,
+                              DateTime.parse(System().dateTimeRemoveT(widget.arguments?.createdAt ?? '')).millisecondsSinceEpoch,
                               context,
                               fullCaption: true,
                             )}',
@@ -152,7 +152,7 @@ class _PicDetailState extends State<PicDetail> {
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
-                              function: ()async{
+                              function: () async {
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
                                   contentData: widget.arguments ?? ContentData(),

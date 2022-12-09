@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"main",
+				"mainAxisAlignment"
+			],
+			[
+				"chil",
+				"children"
+			],
+			[
 				"_p",
 				"_PURCHASING"
 			],
@@ -13,6 +21,9 @@
 			]
 		]
 	},
+	"buffers":
+	[
+	],
 	"build_system": "",
 	"build_system_choices":
 	[
@@ -51,11 +62,27 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib"
+	],
 	"file_history":
 	[
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/url_constants.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/verification_id/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/verification_id/step_1/screen.dart",
+		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/example/lib/main.dart",
+		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/lib/src/deep_ar_preview.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/screen.dart",
+		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/lib/src/deep_ar_controller.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/widgets/camera_view.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/utils.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload/pre_upload_content/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/asset_path.dart",
+		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/lib/deepar_flutter.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/account_preferences/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/hyppe_version.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/url_constants.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/sign_up/contents/user_agreement/user_agreement_demo_screen.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/locations.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/login/notifier.dart",
@@ -64,7 +91,6 @@
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/pubspec.yaml",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/initial/hyppe/screen.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/initial/hyppe/multi_provider.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload/pre_upload_content/notifier.dart",
 		"/Applications/XAMPP/xamppfiles/htdocs/hoxsod/hoxsod.sublime-project",
 		"/Applications/XAMPP/xamppfiles/htdocs/hoxsod/hx_user_matrix_family.sql",
 		"/Applications/XAMPP/xamppfiles/htdocs/erp/apl!k4$i/controllers/accounting/Cashbank.php",
@@ -92,7 +118,7 @@
 	],
 	"find":
 	{
-		"height": 38.0
+		"height": 24.0
 	},
 	"find_in_files":
 	{
@@ -107,50 +133,144 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"> ",
+			"_configureResolutionDeepArPreset",
+			"Resolution",
+			"ResolutionPreset",
+			"resolution",
+			"Resolution",
+			"_configureResolutionDeepArPreset",
+			"deepAr",
+			"mediaRecorder",
+			"Endpoint",
+			"\\",
+			"Endpoint",
+			"testhyppe",
+			"testinghyppe",
+			"prod",
+			"EnvData",
+			"stagingBaseApi",
+			"productionBaseApi",
+			"isapsara",
+			"([^\\n]*)\\n",
+			"Form",
+			"destroy",
+			"destroyIos",
+			"destroy",
+			"isInitialized",
+			"initialize",
+			"destroy",
+			"_textureId",
+			"textureId",
+			"dispose",
+			"disposeCamera",
+			"dispose",
+			"deepArController",
+			"deep",
+			"disposeCamera",
+			"initCamera",
+			"dest",
+			"destroy",
+			"notifier",
+			"Ios",
+			"isIos",
+			"DeepAR",
+			"cameraAspectRatio",
+			"dime",
+			"cameraAsp",
+			"yScale",
+			"dimension",
+			"_configureResolutionDeepArPreset",
+			"minIphoneVersionForResolutionCamera",
+			"minIphone",
+			"_controller",
+			"deepArController",
+			"deep",
+			"notifier",
+			"_controller",
+			"Deeparpreview",
+			"Deepar",
+			"DeepArPreview(",
+			"DeepArPreview",
+			"take",
+			"dispose",
+			"deepArController",
+			"deepArController.dispos",
+			"cameraController",
+			"istakingpicture",
+			"onNewCameraSele",
+			"additional",
+			"additionalViews",
+			"widget",
+			"showEffe",
+			"camera_view",
+			"showEffected",
+			"showEffect",
+			"showEffected",
+			"deepArController",
+			"deeparpreview",
+			"D",
+			"DeepArPrevi",
+			"DeepArPreview",
+			"initialized",
+			"isInit",
+			"isInitialized",
+			"initialize",
+			"isInitialized",
+			"example",
+			"switchFaceMask",
+			"camera open",
+			"camera",
+			"print",
+			"camera open",
+			"initCamera",
+			"mounted",
+			"initCamera",
+			"afterFirstLayout",
+			"initCamera",
+			"androidLicensekey",
+			"ini exit",
+			"effectsList2",
+			"effectsList",
+			"assetEffectsPath",
+			"maskList",
+			"switchFaceMask",
+			"maskList",
+			"switchFaceMask",
+			"switchFaceMsk",
+			"_initEffects",
+			"DefaultAsset",
+			"_getEffe",
+			"_topMediaOptions",
+			"switchFace",
+			"effectsList",
+			"masklist",
+			"maskList",
+			"initEffects",
+			"lower_face",
+			"initEffect",
+			"effectslist",
+			"effectslist2",
+			"assetEffectspat",
+			"assets",
+			"effect",
+			"asset",
+			"_configureResolutionDee",
+			"androidLicense",
+			"androidLcens",
 			"terms_of",
 			"Lisensi",
-			"Android",
-			"Google Play",
-			"Google",
-			"photo",
-			"media",
-			"Media",
-			"getting location",
-			"isBackgroundMode",
-			"isBackgroundMode]",
-			"serviceEnabled",
-			"requestPermission",
-			"serviceEnabled",
-			"55",
-			"version",
-			"HEAD",
-			"print",
-			"checkPermission",
-			"permission",
-			"checkPermission",
-			"requestPrimaryPermission",
-			" actionReqiredIdCard",
-			"actionReqiredIdCard",
-			"certified",
-			"actionReqired",
-			"notifier",
-			"confirm",
-			"notifier",
-			"confirm",
-			"hyppeppic",
-			"hyppe_pic",
-			"untuk mengaktifk",
-			"PhotoLib",
-			"DKPhoto",
-			"productionBaseApi",
-			"sensors"
+			"Android"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
+			"",
+			"$1,",
+			"SELECT * from customer where id=$1;\\n"
 		],
 		"reverse": false,
 		"scrollbar_highlights": true,
@@ -160,6 +280,14 @@
 		"whole_word": false,
 		"wrap": true
 	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
 	"incremental_find":
 	{
 		"height": 24.0
@@ -168,15 +296,38 @@
 	{
 		"height": 36.0
 	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
 	"menu_visible": true,
 	"output.find_results":
 	{
 		"height": 0.0
 	},
 	"pinned_build_system": "",
+	"project": "hyppeapp.sublime-project",
 	"replace":
 	{
-		"height": 68.0
+		"height": 44.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -186,8 +337,68 @@
 		"selected_items":
 		[
 			[
+				"url_",
+				"core/config/url_constants.dart"
+			],
+			[
 				"url",
 				"core/config/url_constants.dart"
+			],
+			[
+				"camernotifier",
+				"ui/constant/entities/camera/notifier.dart"
+			],
+			[
+				"camera",
+				"ui/constant/entities/camera/notifier.dart"
+			],
+			[
+				"stor",
+				"core/constants/thumb/hyppe_story.dart"
+			],
+			[
+				"version",
+				"core/constants/hyppe_version.dart"
+			],
+			[
+				"versio",
+				"core/constants/hyppe_version.dart"
+			],
+			[
+				"url_co",
+				"core/config/url_constants.dart"
+			],
+			[
+				"verifinotifi",
+				"ui/inner/home/content_v2/verification_id/notifier.dart"
+			],
+			[
+				"main.d",
+				"ui/inner/main/notifier.dart"
+			],
+			[
+				"signinfo",
+				"ui/outer/login/widget/sign_in_form.dart"
+			],
+			[
+				"login/scr",
+				"ui/outer/login/screen.dart"
+			],
+			[
+				"url_cons",
+				"core/config/url_constants.dart"
+			],
+			[
+				"constn",
+				"core/config/url_constants.dart"
+			],
+			[
+				"cameranoti",
+				"ui/constant/entities/camera/notifier.dart"
+			],
+			[
+				"assetpat",
+				"core/constants/asset_path.dart"
 			],
 			[
 				"urlco",
@@ -202,16 +413,8 @@
 				"core/config/url_constants.dart"
 			],
 			[
-				"version",
-				"core/constants/hyppe_version.dart"
-			],
-			[
 				"locatio",
 				"core/services/locations.dart"
-			],
-			[
-				"url_co",
-				"core/config/url_constants.dart"
 			],
 			[
 				"hyppe_ver",
@@ -376,7 +579,7 @@
 		[
 			[
 				"",
-				"/Applications/XAMPP/xamppfiles/htdocs/erp/erp.sublime-project"
+				"/Applications/XAMPP/xamppfiles/htdocs/zuttelo/zuttelo.sublime-project"
 			]
 		],
 		"width": 380.0
@@ -390,6 +593,7 @@
 		],
 		"width": 0.0
 	},
+	"selected_group": 0,
 	"settings":
 	{
 	},

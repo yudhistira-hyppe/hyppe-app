@@ -75,7 +75,7 @@ class _CommentListTileState extends State<CommentListTile> {
                       children: [
                         TextSpan(
                           text: System().readTimestamp(
-                            DateTime.parse(widget.data?.comment?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                            DateTime.parse(System().dateTimeRemoveT(widget.data?.comment?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                             context,
                             fullCaption: true,
                           ),

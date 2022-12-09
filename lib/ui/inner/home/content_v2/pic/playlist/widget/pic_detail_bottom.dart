@@ -316,7 +316,7 @@ class PicDetailBottom extends StatelessWidget {
           featureType: FeatureType.pic,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(
-            DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch,
+            DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
             context,
             fullCaption: true,
           )}',
