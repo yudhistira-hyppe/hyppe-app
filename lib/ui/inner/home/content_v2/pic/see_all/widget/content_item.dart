@@ -84,14 +84,8 @@ class ContentItem extends StatelessWidget {
                               featureType: FeatureType.pic,
                               isCelebrity: data?.privacy?.isCelebrity,
                               imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-<<<<<<< HEAD
-                              onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
-                              createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
-=======
                               onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', isReplaced: false),
-                              createdAt: '${System().readTimestamp(DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)}',
-
->>>>>>> 48444be7b340c9cc899274dbe8edee731aa48248
+                              createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
                             ),
                             twelvePx,
                             Stack(
