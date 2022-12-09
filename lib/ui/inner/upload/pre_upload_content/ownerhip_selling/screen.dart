@@ -161,7 +161,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                               children: [
                                 Container(
                                   padding: const EdgeInsets.only(left: 35, right: 10),
-                                  decoration: const BoxDecoration(color: Color.fromRGBO(245, 245, 245, 1), borderRadius: BorderRadius.all(Radius.circular(8))
+                                  decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.all(Radius.circular(8))
                                       // border: Border(
                                       //   bottom: BorderSide(
                                       //     color:

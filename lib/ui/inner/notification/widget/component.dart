@@ -52,7 +52,7 @@ class Component extends StatelessWidget {
                 following: true,
                 width: 50 * SizeConfig.scaleDiagonal,
                 height: 50 * SizeConfig.scaleDiagonal,
-                onTap: () => System().navigateToProfile(context, data?.mate ?? ''),
+                onTap: () => System().navigateToProfile(context, data?.mate ?? '', isReplaced: false),
                 imageUrl: '${System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
               ),
             ),

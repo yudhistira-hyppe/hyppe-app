@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/widget/no_result_found.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/empty_page.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -90,134 +88,132 @@ class _MessageScreenState extends State<MessageScreen> {
                       Expanded(
                         flex: 13,
                         child: notifier.discussData != null
-                            ? notifier.itemCount == 0
-                                ? NoResultFound()
-                                : NotificationListener(
-                                    onNotification: (ScrollNotification scrollInfo) {
-                                      if (scrollInfo is ScrollStartNotification) {
-                                        Future.delayed(const Duration(milliseconds: 100), () {
-                                          notifier.getDiscussion(context);
-                                        });
+                            ? NotificationListener(
+                                onNotification: (ScrollNotification scrollInfo) {
+                                  if (scrollInfo is ScrollStartNotification) {
+                                    Future.delayed(const Duration(milliseconds: 100), () {
+                                      notifier.getDiscussion(context);
+                                    });
+                                  }
+
+                                  return true;
+                                },
+                                child: RefreshIndicator(
+                                  key: _globalKey,
+                                  strokeWidth: 2.0,
+                                  color: Colors.purple,
+                                  onRefresh: () => notifier.getDiscussion(context, reload: true),
+                                  child: ListView.builder(
+                                    controller: _scrollController,
+                                    itemCount: notifier.itemCount,
+                                    scrollDirection: Axis.vertical,
+                                    physics: const AlwaysScrollableScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      if (index == notifier.discussData?.length && notifier.hasNext) {
+                                        return const CustomLoading();
                                       }
 
-                                      return true;
-                                    },
-                                    child: RefreshIndicator(
-                                      key: _globalKey,
-                                      strokeWidth: 2.0,
-                                      color: Colors.purple,
-                                      onRefresh: () => notifier.getDiscussion(context, reload: true),
-                                      child: ListView.builder(
-                                        controller: _scrollController,
-                                        itemCount: notifier.itemCount,
-                                        scrollDirection: Axis.vertical,
-                                        physics: const AlwaysScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          if (index == notifier.discussData?.length && notifier.hasNext) {
-                                            return const CustomLoading();
-                                          }
+                                      final discussData = notifier.discussData?[index];
 
-                                          final discussData = notifier.discussData?[index];
-
-                                          return InkWell(
-                                            onTap: () => notifier.onClickUser(context, discussData),
-                                            onLongPress: () {
-                                              // ShowBottomSheet.onLongPressTileUserMessage(context);
-                                              ShowBottomSheet.onLongPressDeleteMessage(context, data: discussData, function: () {
-                                                // print('masuk mas eko');
-                                                // print(discussData.senderOrReceiverInfo.email);
-                                                // print(discussData.disqusID);
-                                                notifier.deletetConversation(context, discussData?.senderOrReceiverInfo?.email ?? '', discussData?.disqusID ?? '');
-                                              });
-                                            },
-                                            child: ListTile(
-                                              leading: StoryColorValidator(
-                                                featureType: FeatureType.other,
-                                                // haveStory: notifier.chatData[index].isHaveStory ?? false,
-                                                haveStory: false,
-                                                child: CustomProfileImage(
-                                                  following: true,
-                                                  onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
-                                                  // imageUrl: notifier.userID == notifier.chatData[index].senderID
-                                                  //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
-                                                  //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
-                                                  imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
-                                                  height: 60 * SizeConfig.scaleDiagonal,
-                                                  width: 60 * SizeConfig.scaleDiagonal,
-                                                ),
-                                              ),
-                                              title: CustomTextWidget(
-                                                // "Demo user",
-                                                // textToDisplay: notifier.userID == notifier.chatData[index].senderID
-                                                //     ? notifier.chatData[index].receiverUserName
-                                                //     : notifier.chatData[index].senderName,
-                                                textToDisplay: discussData?.senderOrReceiverInfo?.fullName ?? '',
-                                                textAlign: TextAlign.start,
-                                                textStyle: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                              subtitle: CustomTextWidget(
-                                                textToDisplay: discussData?.lastestMessage ?? '',
-                                                textAlign: TextAlign.start,
-                                                textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
-                                              ),
-                                              trailing: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  CustomTextWidget(
-                                                    textToDisplay: System().readTimestamp(
-                                                      DateTime.parse(System().dateTimeRemoveT(discussData?.updatedAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
-                                                      context,
-                                                      fullCaption: true,
-                                                    ),
-                                                    textStyle: Theme.of(context).textTheme.caption,
-                                                  ),
-                                                  const SizedBox(height: 8),
-                                                  CustomIconWidget(
-                                                    iconData: "${AssetPath.vectorPath}unread.svg",
-                                                    defaultColor: false,
-                                                    color: DateTime.now().millisecondsSinceEpoch >
-                                                            DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).add(const Duration(minutes: 10)).millisecondsSinceEpoch
-                                                        ? kHyppeLightIcon
-                                                        : null,
-                                                  ),
-                                                ],
-                                              ),
-                                              // trailing: notifier.chatData[index].isRead == true
-                                              //     ? CustomTextWidget(
-                                              //         textToDisplay: System().readTimestamp(
-                                              //           int.parse(notifier.chatData[index].timestamp),
-                                              //           context,
-                                              //           fullCaption: false,
-                                              //         ),
-                                              //         textStyle: Theme.of(context).textTheme.caption,
-                                              //       )
-                                              //     : Column(
-                                              //         mainAxisAlignment: MainAxisAlignment.center,
-                                              //         children: [
-                                              //           CustomTextWidget(
-                                              //             textToDisplay: System().readTimestamp(
-                                              //               int.parse(notifier.chatData[index].timestamp),
-                                              //               context,
-                                              //               fullCaption: false,
-                                              //             ),
-                                              //             textStyle: Theme.of(context).textTheme.caption,
-                                              //           ),
-                                              //           SizedBox(height: 8),
-                                              //           CustomIconWidget(
-                                              //             iconData: "${AssetPath.vectorPath}unread.svg",
-                                              //             defaultColor: false,
-                                              //           ),
-                                              //         ],
-                                              //       ),
-                                            ),
-                                          );
+                                      return InkWell(
+                                        onTap: () => notifier.onClickUser(context, discussData),
+                                        onLongPress: () {
+                                          // ShowBottomSheet.onLongPressTileUserMessage(context);
+                                          ShowBottomSheet.onLongPressDeleteMessage(context, data: discussData, function: () {
+                                            // print('masuk mas eko');
+                                            // print(discussData.senderOrReceiverInfo.email);
+                                            // print(discussData.disqusID);
+                                            notifier.deletetConversation(context, discussData?.senderOrReceiverInfo?.email ?? '', discussData?.disqusID ?? '');
+                                          });
                                         },
-                                      ),
-                                    ),
-                                  )
+                                        child: ListTile(
+                                          leading: StoryColorValidator(
+                                            featureType: FeatureType.other,
+                                            // haveStory: notifier.chatData[index].isHaveStory ?? false,
+                                            haveStory: false,
+                                            child: CustomProfileImage(
+                                              following: true,
+                                              onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? '', isReplaced: false),
+                                              // imageUrl: notifier.userID == notifier.chatData[index].senderID
+                                              //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
+                                              //     : '${notifier.chatData[index].picSenderUrl + SMALL}',
+                                              imageUrl: System().showUserPicture(discussData?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
+                                              height: 60 * SizeConfig.scaleDiagonal,
+                                              width: 60 * SizeConfig.scaleDiagonal,
+                                            ),
+                                          ),
+                                          title: CustomTextWidget(
+                                            // "Demo user",
+                                            // textToDisplay: notifier.userID == notifier.chatData[index].senderID
+                                            //     ? notifier.chatData[index].receiverUserName
+                                            //     : notifier.chatData[index].senderName,
+                                            textToDisplay: discussData?.senderOrReceiverInfo?.fullName ?? '',
+                                            textAlign: TextAlign.start,
+                                            textStyle: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          subtitle: CustomTextWidget(
+                                            textToDisplay: discussData?.lastestMessage ?? '',
+                                            textAlign: TextAlign.start,
+                                            textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
+                                          ),
+                                          trailing: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              CustomTextWidget(
+                                                textToDisplay: System().readTimestamp(
+                                                  DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                                                  context,
+                                                  fullCaption: true,
+                                                ),
+                                                textStyle: Theme.of(context).textTheme.caption,
+                                              ),
+                                              const SizedBox(height: 8),
+                                              CustomIconWidget(
+                                                iconData: "${AssetPath.vectorPath}unread.svg",
+                                                defaultColor: false,
+                                                color: DateTime.now().millisecondsSinceEpoch >
+                                                        DateTime.parse(discussData?.updatedAt ?? DateTime.now().toString()).add(const Duration(minutes: 10)).millisecondsSinceEpoch
+                                                    ? kHyppeLightIcon
+                                                    : null,
+                                              ),
+                                            ],
+                                          ),
+                                          // trailing: notifier.chatData[index].isRead == true
+                                          //     ? CustomTextWidget(
+                                          //         textToDisplay: System().readTimestamp(
+                                          //           int.parse(notifier.chatData[index].timestamp),
+                                          //           context,
+                                          //           fullCaption: false,
+                                          //         ),
+                                          //         textStyle: Theme.of(context).textTheme.caption,
+                                          //       )
+                                          //     : Column(
+                                          //         mainAxisAlignment: MainAxisAlignment.center,
+                                          //         children: [
+                                          //           CustomTextWidget(
+                                          //             textToDisplay: System().readTimestamp(
+                                          //               int.parse(notifier.chatData[index].timestamp),
+                                          //               context,
+                                          //               fullCaption: false,
+                                          //             ),
+                                          //             textStyle: Theme.of(context).textTheme.caption,
+                                          //           ),
+                                          //           SizedBox(height: 8),
+                                          //           CustomIconWidget(
+                                          //             iconData: "${AssetPath.vectorPath}unread.svg",
+                                          //             defaultColor: false,
+                                          //           ),
+                                          //         ],
+                                          //       ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              )
                             : ListView.builder(
                                 itemCount: 10,
                                 shrinkWrap: true,
