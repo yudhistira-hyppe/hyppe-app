@@ -77,6 +77,7 @@ class _SearchContentState extends State<SearchContent> {
                     height: double.infinity,
                     featureType: widget.featureType ?? FeatureType.other,
                     isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      isSale : (contents[index].saleAmount ?? 0) > 0,
                     thumbnail: contents[index].isApsara ?? false
                         ? contents[index].mediaThumbEndPoint ?? ""
                         : System().showUserPicture(widget.featureType != FeatureType.pic ? contents[index].mediaThumbEndPoint : contents[index].mediaEndpoint) ?? '',

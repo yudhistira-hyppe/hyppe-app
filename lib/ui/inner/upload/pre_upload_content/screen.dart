@@ -741,6 +741,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
   }
 
   Widget detailTotalPrice(PreUploadContentNotifier notifier) {
+    final ya = notifier.language.yes;
+    final tidak = notifier.language.no;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -749,11 +751,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       ),
       child: Column(
         children: [
-          detailText('Certificate Ownership Fee', 'Rp 15.000'),
+          detailText(notifier.language.certificateOwnershipFee, 'Rp 15.000'),
           sixteenPx,
-          detailText('Discount', 'Rp 15.000'),
+          detailText(notifier.language.discount, 'Rp 15.000'),
           sixteenPx,
-          detailText('Total Price', 'Rp 0'),
+          detailText(notifier.language.totalPrice, 'Rp 0'),
           notifier.toSell
               ? const Divider(
                   height: 30,
@@ -763,13 +765,13 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           notifier.toSell
               ? Column(
                   children: [
-                    detailText('Sell Content', notifier.toSell ? 'Yes' : 'No'),
+                    detailText(notifier.language.sellContent, notifier.toSell ? ya : tidak),
                     sixteenPx,
-                    detailText('Include Total Views', notifier.includeTotalViews ? 'Yes' : 'No'),
+                    detailText(notifier.language.includeTotalViews, notifier.includeTotalViews ? ya : tidak),
                     sixteenPx,
-                    detailText('Include Total Likes', notifier.includeTotalLikes ? 'Yes' : 'No'),
+                    detailText(notifier.language.includeTotalLikes, notifier.includeTotalLikes ? ya : tidak),
                     sixteenPx,
-                    detailText('Sell Price', 'Rp ' + notifier.priceController.text),
+                    detailText(notifier.language.sellingPrice, 'Rp ' + notifier.priceController.text),
                   ],
                 )
               : Container()

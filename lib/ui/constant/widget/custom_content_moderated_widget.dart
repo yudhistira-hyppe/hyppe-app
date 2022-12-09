@@ -10,6 +10,7 @@ import 'custom_text_widget.dart';
 
 class CustomContentModeratedWidget extends StatelessWidget {
   final bool isSafe;
+  final bool isSale;
   final double? width;
   final double? height;
   final String thumbnail;
@@ -24,6 +25,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
       this.width,
       this.height,
       required this.isSafe,
+        required this.isSale,
       this.blurIfNotSafe = 5,
       required this.thumbnail,
       this.padding = EdgeInsets.zero,
@@ -51,6 +53,7 @@ class CustomContentModeratedWidget extends StatelessWidget {
                 width: width,
                 height: height,
                 decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                   image: DecorationImage(
                     fit: boxFitContent,
                     image: imageProvider,
@@ -118,7 +121,17 @@ class CustomContentModeratedWidget extends StatelessWidget {
                   )
                 ],
               ),
-            )
+            ),
+          Align(
+            alignment: Alignment.topRight,
+            child: Visibility(
+              visible: isSale,
+              child: const CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}sale.svg",
+                defaultColor: false,
+              ),
+            ),
+          )
         ],
       ),
     );

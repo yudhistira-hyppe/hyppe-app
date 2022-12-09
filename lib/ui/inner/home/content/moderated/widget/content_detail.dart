@@ -34,6 +34,7 @@ class ContentDetail extends StatelessWidget {
             child: Stack(
               children: [
                 CustomContentModeratedWidget(
+                  isSale: (data.saleAmount ?? 0) > 0,
                     isSafe: true,
                     boxFitError: BoxFit.fill,
                     boxFitContent: BoxFit.contain,

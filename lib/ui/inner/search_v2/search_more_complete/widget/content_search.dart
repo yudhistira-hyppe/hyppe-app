@@ -77,6 +77,7 @@ class ContentSearchState extends State<ContentSearch> {
                           child: CustomContentModeratedWidget(
                             width: double.infinity,
                             height: double.infinity,
+                            isSale : (widget.content?[index].saleAmount ?? 0) > 0,
                             featureType: widget.featureType ?? FeatureType.other,
                             isSafe: true, //notifier.postData.data.listVid[index].isSafe,
                             thumbnail: gambar,

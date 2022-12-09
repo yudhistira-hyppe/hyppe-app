@@ -42,7 +42,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: "Original Content",
+                      textToDisplay: notifier.translate.originalContent ?? "Original Content",
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
@@ -56,7 +56,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: "Total Views",
+                      textToDisplay: notifier.translate.totalViews ?? "Total Views",
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(
@@ -70,7 +70,7 @@ class OnBuyContentBottomSheet extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: "Total Likes",
+                      textToDisplay: notifier.translate.totalLikes ?? "Total Likes",
                       textStyle: Theme.of(context).textTheme.bodyMedium,
                     ),
                     CustomTextWidget(

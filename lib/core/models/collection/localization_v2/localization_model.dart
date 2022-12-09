@@ -525,6 +525,8 @@ class LocalizationModelV2 {
   String? marketContent1;
   String? includeTotalViews;
   String? includeTotalLikes;
+  String? totalViews;
+  String? totalLikes;
   String? setPrice;
   String? rp;
   String? change;
@@ -590,6 +592,7 @@ class LocalizationModelV2 {
   String? ballanceAmount;
   String? contentDetail;
   String? contentPrice;
+  String? originalContent;
   String? serviceFee;
   String? totalPrice;
   String? youDontHaveAnyTransactionsYet;
@@ -612,6 +615,8 @@ class LocalizationModelV2 {
   String? byRegisteringYourContent;
   String? yesIUnderstand;
   String? ownershipSelling;
+  String? certificateOwnershipFee;
+  String? discount;
   String? sellContent;
   String? certificateNumber;
   String? choosePaymentMethods;
@@ -1307,6 +1312,8 @@ class LocalizationModelV2 {
     this.marketContent1,
     this.includeTotalViews,
     this.includeTotalLikes,
+    this.totalViews,
+    this.totalLikes,
     this.setPrice,
     this.rp,
     this.change,
@@ -1372,6 +1379,7 @@ class LocalizationModelV2 {
     this.ballanceAmount,
     this.contentDetail,
     this.contentPrice,
+    this.originalContent,
     this.serviceFee,
     this.totalPrice,
     this.youDontHaveAnyTransactionsYet,
@@ -1394,6 +1402,8 @@ class LocalizationModelV2 {
     this.byRegisteringYourContent,
     this.yesIUnderstand,
     this.ownershipSelling,
+    this.certificateOwnershipFee,
+    this.discount,
     this.sellContent,
     this.certificateNumber,
     this.choosePaymentMethods,
@@ -2107,6 +2117,8 @@ class LocalizationModelV2 {
     marketContent1 = json['marketContent1'];
     includeTotalViews = json['includeTotalViews'];
     includeTotalLikes = json['includeTotalLikes'];
+    totalViews = json['totalViews'];
+    totalLikes = json['totalLikes'];
     setPrice = json['setPrice'];
     rp = json['rp'];
     change = json['change'];
@@ -2172,6 +2184,7 @@ class LocalizationModelV2 {
     ballanceAmount = json['ballanceAmount'];
     contentDetail = json['contentDetail'];
     contentPrice = json['contentPrice'];
+    originalContent = json['originalContent'];
     serviceFee = json['serviceFee'];
     totalPrice = json['totalPrice'];
     youDontHaveAnyTransactionsYet = json['youDontHaveAnyTransactionsYet'];
@@ -2195,6 +2208,8 @@ class LocalizationModelV2 {
     yesIUnderstand = json['yesIUnderstand'];
     ownershipSelling = json['ownershipSelling'];
     sellContent = json['sellContent'];
+    certificateOwnershipFee = json['certificateOwnershipFee'];
+    discount = json['discount'];
     certificateNumber = json['certificateNumber'];
     choosePaymentMethods = json['choosePaymentMethods'];
     retakeIdPicture = json["retakeIdPicture"];

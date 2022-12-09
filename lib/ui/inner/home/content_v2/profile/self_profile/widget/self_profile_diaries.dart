@@ -50,6 +50,7 @@ class SelfProfileDiaries extends StatelessWidget {
                                           width: double.infinity,
                                           height: double.infinity,
                                           featureType: FeatureType.diary,
+                                          isSale: false,
                                           isSafe: true, //notifier.postData.data.listDiary[index].isSafe,
                                           thumbnail: (notifier.item1?.diaries?[index].isApsara ?? false)
                                               ? (notifier.item1?.diaries?[index].mediaThumbEndPoint ?? '')
