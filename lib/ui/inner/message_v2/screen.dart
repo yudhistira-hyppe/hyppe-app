@@ -133,7 +133,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                             haveStory: false,
                                             child: CustomProfileImage(
                                               following: true,
-                                              onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? ''),
+                                              onTap: () => System().navigateToProfile(context, discussData?.senderOrReceiverInfo?.email ?? '', isReplaced: false),
                                               // imageUrl: notifier.userID == notifier.chatData[index].senderID
                                               //     ? '${notifier.chatData[index].picReceiverUrl + SMALL}'
                                               //     : '${notifier.chatData[index].picSenderUrl + SMALL}',

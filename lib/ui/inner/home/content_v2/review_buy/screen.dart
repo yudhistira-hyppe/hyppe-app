@@ -97,7 +97,7 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
                       decoration: BoxDecoration(color: Theme.of(context).appBarTheme.backgroundColor, borderRadius: const BorderRadius.all(Radius.circular(8))),
                       child: Column(
                         children: [
-                          contentInfo(textTheme, title: notifier.language.certificateNumber ?? '', value: notifier.data?.postId ?? ''),
+                          contentInfo(textTheme, title: notifier.language.certificateNumber ?? ' ', value: notifier.data?.postId ?? ''),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: SizedBox(
@@ -175,16 +175,23 @@ class _ReviewBuyContentScreenState extends State<ReviewBuyContentScreen> {
       padding: const EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextWidget(
-            textAlign: TextAlign.left,
-            textToDisplay: title,
-            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            child: CustomTextWidget(
+              textAlign: TextAlign.left,
+              textToDisplay: title,
+              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
+            ),
           ),
-          CustomTextWidget(
-            textAlign: TextAlign.right,
-            textToDisplay: value,
-            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
+          Expanded(
+            child: CustomTextWidget(
+              textAlign: TextAlign.right,
+              maxLines: 3,
+              textToDisplay: value,
+              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).hintColor),
+            ),
           ),
         ],
       ),

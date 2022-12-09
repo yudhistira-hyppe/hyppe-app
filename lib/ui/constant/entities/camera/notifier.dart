@@ -71,7 +71,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       )
           .then((value) {
         print('DeepAR: DeepAR done initialized $value');
-        notifyListeners();
       });
       if (backCamera) {
         deepArController?.flipCamera();

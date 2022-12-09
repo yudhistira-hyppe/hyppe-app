@@ -151,7 +151,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                     featureType: FeatureType.vid,
                                                     isCelebrity: vidData?.privacy?.isCelebrity,
                                                     imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
-                                                    onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
+                                                    onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? '', isReplaced: false),
                                                     createdAt: '${System().readTimestamp(
                                                       DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
                                                       context,
