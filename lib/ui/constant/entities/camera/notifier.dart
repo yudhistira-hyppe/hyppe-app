@@ -66,13 +66,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
         }
       }
-      await deepArController!
-          .initialize(
+      print('Initializing DeepAR');
+      await deepArController!.initialize(
         androidLicenseKey: "2a5a8cfda693ae38f2e20925295b950b13f0a7c186dcd167b5997655932d82ceb0cbc27be4c0b513",
         iosLicenseKey: "6389e21310378b39591d7a24897a1f59456ce3c5cf0fbf89033d535438d2f1cf10ea4829b25cf117",
         resolution: _configureResolutionDeepArPreset(onStoryIsPhoto: notifier.featureType == FeatureType.story ? !notifier.isVideo : null),
       )
-          .then((value) {
+      .then((value) {
         print('DeepAR: DeepAR done initialized $value');
       });
 
@@ -192,11 +192,17 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Resolution _configureResolutionDeepArPreset({bool? onStoryIsPhoto}) {
-    if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
-      return Resolution.high;
-    } else {
-      return onStoryIsPhoto != null && onStoryIsPhoto == true ? Resolution.veryHigh : Resolution.high;
-    }
+    print('DeepAR: onStoryIsPhoto: ${onStoryIsPhoto}');
+    print('DeepAR: Platform.isIOS: ${Platform.isIOS}, _iOSVersion: ${_iOSVersion}, minIphoneVersionForResolutionCamera: ${minIphoneVersionForResolutionCamera}');
+    // if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
+    //   print('DeepAR: Resolution.high');
+    //   return Resolution.high;
+    // } else {
+    //   print('DeepAR: Resolution.veryHigh');
+    //   // return onStoryIsPhoto != null && onStoryIsPhoto == true ? Resolution.veryHigh : Resolution.high;
+    //   return Resolution.veryHigh;
+    // }
+    return Resolution.veryHigh;
   }
 
   // ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
