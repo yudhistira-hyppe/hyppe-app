@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
@@ -337,6 +338,32 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Row(
+                                      children: [
+                                        widget.data.tagPeople?.isNotEmpty ?? false
+                                            ? TagLabel(
+                                                icon: 'user',
+                                                label: '${widget.data.tagPeople?.length ?? 0} people',
+                                                function: () {
+                                                  notifier.showUserTag(context, widget.data.tagPeople, widget.data.postID);
+                                                  // vidNotifier.showUserTag(context, index, data.postID);
+                                                },
+                                              )
+                                            : const SizedBox(),
+                                        widget.data.location == '' || widget.data.location == null
+                                            ? const SizedBox()
+                                            : TagLabel(
+                                                icon: 'maptag',
+                                                label: "${widget.data.location}",
+                                                function: () {},
+                                              ),
+                                      ],
+                                    ),
+                                  )
+                                : const SizedBox(),
                             ReadMoreText(
                               "${widget.data.description}",
                               // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",

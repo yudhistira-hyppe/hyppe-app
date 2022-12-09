@@ -2,7 +2,6 @@ import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_view.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -11,12 +10,14 @@ class CameraPage extends StatefulWidget {
   final Function(CameraNotifier cameraNotifier) onCameraNotifierUpdate;
   final Function? onChangeAppLifecycleState;
   final List<Widget> additionalViews;
+  final bool backCamera;
 
   const CameraPage({
     Key? key,
     required this.additionalViews,
     this.onChangeAppLifecycleState,
     required this.onCameraNotifierUpdate,
+    this.backCamera = false,
   }) : super(key: key);
 
   @override
@@ -29,14 +30,12 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
   @override
   void initState() {
     notifier = Provider.of<CameraNotifier>(context, listen: false);
-    notifier.initCamera(context, mounted);
+    notifier.initCamera(context, mounted, backCamera: widget.backCamera);
     super.initState();
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
-
-  }
+  void afterFirstLayout(BuildContext context) {}
 
   @override
   void dispose() {

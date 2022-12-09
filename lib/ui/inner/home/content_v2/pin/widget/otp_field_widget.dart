@@ -44,8 +44,8 @@ class OtpFieldWidget extends StatelessWidget {
           animationDuration: const Duration(milliseconds: 200),
           controller: controller,
           onCompleted: onCompleted,
-          onChanged: onChanged,
-          autoDisposeControllers: false,
+          onChanged: (e) {},
+          autoDisposeControllers: true,
           beforeTextPaste: (text) {
             print("Allowing to paste $text");
             return true;

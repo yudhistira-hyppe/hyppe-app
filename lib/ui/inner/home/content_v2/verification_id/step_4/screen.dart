@@ -56,6 +56,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
         child: Scaffold(
           body: CameraPage(
             onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraNotifier = cameraNotifier,
+            backCamera: true,
             additionalViews: <Widget>[
               Align(
                 alignment: Alignment.topCenter,
@@ -94,10 +95,10 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                   ),
                 ),
               ),
-              Align(
-                alignment: const Alignment(-0.8, 0.8),
-                child: CameraSwitchButton(),
-              ),
+              // Align(
+              //   alignment: const Alignment(-0.8, 0.8),
+              //   child: CameraSwitchButton(),
+              // ),
               Align(
                 alignment: const Alignment(0.0, 0.9),
                 child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}shutter.svg", onPressed: () => notifier.onTakePicture(context)),
