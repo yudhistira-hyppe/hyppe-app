@@ -10,6 +10,8 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_shimmer.dart';
 import 'package:provider/provider.dart';
@@ -72,15 +74,21 @@ class ContentSearchState extends State<ContentSearch> {
                   padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
                   child: widget.content?[index].reportedStatus == 'BLURRED'
                       ? blur(gambar)
-                      : ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: CustomContentModeratedWidget(
-                            width: double.infinity,
-                            height: double.infinity,
-                            featureType: widget.featureType ?? FeatureType.other,
-                            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                            thumbnail: gambar,
-                          ),
+                      : Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: CustomContentModeratedWidget(
+                                width: double.infinity,
+                                height: double.infinity,
+                                featureType: widget.featureType ?? FeatureType.other,
+                                isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                thumbnail: gambar,
+                              ),
+                            ),
+                            PicTopItem(data: widget.content?[index]),
+                            Positioned(bottom: 0, left: 0, child: PicBottomItem(data: widget.content?[index])),
+                          ],
                         ),
                 ),
               );

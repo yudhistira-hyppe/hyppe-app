@@ -207,7 +207,6 @@ class SearchNotifier with ChangeNotifier {
   }
 
   onScrollListener(BuildContext context, ScrollController scrollController) async {
-    print("scroll");
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       String search = searchController.text;
       focusNode.unfocus();
@@ -395,21 +394,21 @@ class SearchNotifier with ChangeNotifier {
   }
 
   void backPage() {
-    searchController1.text = '';
+    searchController1.clear();
     _routing.moveBack();
   }
 
   void backFromSearchMore() {
     searchController1.text = '';
-    searchController.text = '';
+    searchController.clear();
+    _routing.moveBack();
+    notifyListeners();
   }
 
   Future searchPeople(BuildContext context, {input}) async {
-    print(input);
     final notifier = UtilsBlocV2();
     if (input.length > 2) {
       isLoading = true;
-      print('getSearchPeopleBloc 2');
       await notifier.getSearchPeopleBloc(context, input, 0, 20);
       final fetch = notifier.utilsFetch;
       if (fetch.utilsState == UtilsState.searchPeopleSuccess) {
@@ -418,7 +417,6 @@ class SearchNotifier with ChangeNotifier {
         fetch.data.forEach((v) {
           _searchPeolpleData?.add(SearchPeolpleData.fromJson(v));
         });
-        print('length _searchPeolpleData ${_searchPeolpleData?.length}');
         isLoading = false;
         notifyListeners();
       }

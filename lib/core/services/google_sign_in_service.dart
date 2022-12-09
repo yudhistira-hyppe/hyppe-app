@@ -36,12 +36,12 @@ class GoogleSignInService {
     }
   }
 
-  void onCurrentUserChanged({required Function(GoogleSignInAccount? account) onChange}) =>
-      _gAuthInstance.onCurrentUserChanged.listen((GoogleSignInAccount? account) => onChange(account));
+  void onCurrentUserChanged({required Function(GoogleSignInAccount? account) onChange}) => _gAuthInstance.onCurrentUserChanged.listen((GoogleSignInAccount? account) => onChange(account));
 
   Future<void> handleSignOut() async {
     await _gAuthInstance.isSignedIn().then((value) {
       if (value) _gAuthInstance.disconnect();
+      _gAuthInstance.signOut();
     });
   }
 

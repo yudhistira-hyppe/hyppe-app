@@ -27,14 +27,12 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
 
-
 import 'package:hyppe/core/services/system.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:readmore/readmore.dart';
-
 
 class VidDetailBottom extends StatelessWidget {
   final ContentData? data;
@@ -111,24 +109,24 @@ class VidDetailBottom extends StatelessWidget {
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
               child: data != null
                   ? SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ReadMoreText(
-                "${data?.description}",
-                trimLines: 2,
-                trimMode: TrimMode.Line,
-                textAlign: TextAlign.left,
-                trimExpandedText: 'Show less',
-                trimCollapsedText: 'Show more',
-                colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                style: Theme.of(context).textTheme.subtitle2,
-                moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-              ),
-                      ],
-                    ),
-                  )
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ReadMoreText(
+                            "${data?.description}",
+                            trimLines: 2,
+                            trimMode: TrimMode.Line,
+                            textAlign: TextAlign.left,
+                            trimExpandedText: 'Show less',
+                            trimCollapsedText: 'Show more',
+                            colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                            style: Theme.of(context).textTheme.subtitle2,
+                            moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          ),
+                        ],
+                      ),
+                    )
                   : const CustomShimmer(height: 16, radius: 4),
             ),
             eightPx,
@@ -267,7 +265,7 @@ class VidDetailBottom extends StatelessWidget {
           featureType: FeatureType.vid,
           imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
           createdAt: '${_system.readTimestamp(
-            DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch,
+            DateTime.parse(_system.dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
             context,
             fullCaption: true,
           )}',

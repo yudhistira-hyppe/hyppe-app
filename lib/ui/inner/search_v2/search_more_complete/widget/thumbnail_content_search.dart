@@ -17,6 +17,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 
 // import 'package:hyppe/ui/inner/home/content/pic/widget/pic_top_item.dart';
 
@@ -111,10 +112,10 @@ class ThumbnailContentSearch extends StatelessWidget {
   }
 
   Widget _buildBody(context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
+    return Stack(
       children: [
-        // PicTopItem(data: data),
+        PicTopItem(data: data),
+        Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
         data?.reportedStatus == 'BLURRED'
             ? ClipRect(
                 child: BackdropFilter(
@@ -140,25 +141,7 @@ class ThumbnailContentSearch extends StatelessWidget {
                   ),
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const CustomIconWidget(
-                      iconData: '${AssetPath.vectorPath}like.svg',
-                      defaultColor: false,
-                      color: kHyppeLightButtonText,
-                    ),
-                    fourPx,
-                    CustomTextWidget(
-                      textToDisplay: System().formatterNumber(data?.likes ?? 0),
-                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                    )
-                  ],
-                ),
-              ),
+            : Container(),
       ],
     );
   }

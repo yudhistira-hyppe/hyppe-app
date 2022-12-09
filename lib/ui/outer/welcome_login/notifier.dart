@@ -230,7 +230,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
-      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'true');
+      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'socmed');
       // SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       DeviceBloc().activityAwake(context);
 
@@ -248,7 +248,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
-      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'false');
+      SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'manual');
       SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       print('iduser');

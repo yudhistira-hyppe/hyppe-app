@@ -45,11 +45,11 @@ final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 AudioPlayer? globalAudioPlayer;
 
-void disposeGlobalAudio()async{
-  try{
+void disposeGlobalAudio() async {
+  try {
     await globalAudioPlayer!.stop();
     await globalAudioPlayer!.dispose();
-  }catch(e){
+  } catch (e) {
     'globalAudioPlayer error : $e'.logger();
   }
 }

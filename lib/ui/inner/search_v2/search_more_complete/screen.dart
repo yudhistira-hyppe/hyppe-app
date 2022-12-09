@@ -80,13 +80,14 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16),
                               child: CustomSearchBar(
+                                readOnly: false,
                                 hintText: notifier.language.whatAreYouFindOut,
                                 contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                                 focusNode: notifier.focusNode,
                                 controller: notifier.searchController,
                                 onSubmitted: (v) => notifier.onSearchPost(context, value: v),
                                 onPressedIcon: () => notifier.onSearchPost(context),
-                                onTap: () => notifier.moveSearchMore(),
+                                // onTap: () => notifier.moveSearchMore(),
                                 autoFocus: false,
                               ),
                             ),

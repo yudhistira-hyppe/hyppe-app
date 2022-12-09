@@ -826,6 +826,14 @@ class System {
     return time;
   }
 
+  dateTimeRemoveT(String? date) {
+    if (date?.contains('T') ?? false) {
+      return date?.replaceAll('T', ' ').substring(0, 19);
+    } else {
+      return date;
+    }
+  }
+
   Future<Uri> createdDynamicLink(
     BuildContext context, {
     bool shareImmediately = true,
@@ -1110,7 +1118,6 @@ class System {
   }
 
   Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
-
     return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
   }
 

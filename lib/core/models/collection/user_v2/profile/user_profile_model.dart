@@ -33,6 +33,7 @@ class UserProfileModel {
   bool? pinVerified;
   String? statusKyc;
   String? idUser;
+  String? loginSource;
 
   UserProfileModel({
     this.country,
@@ -63,6 +64,7 @@ class UserProfileModel {
     this.pinVerified,
     this.statusKyc,
     this.idUser,
+    this.loginSource,
   });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
@@ -109,6 +111,7 @@ class UserProfileModel {
     pinCreate = json['pin_create'] ?? false;
     statusKyc = json['statusKyc'] ?? '';
     idUser = json['iduser'] ?? '';
+    loginSource = json['loginSource'] ?? 'manual';
   }
 
   Map<String, dynamic> toJson() {

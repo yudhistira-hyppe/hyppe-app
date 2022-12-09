@@ -47,10 +47,10 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
 
   @override
   void dispose() {
-    try{
+    try {
       final notifier = context.read<PreviewVidNotifier>();
       notifier.pageController.dispose();
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
 
@@ -153,7 +153,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                     imageUrl: '${System().showUserPicture(vidData?.avatar?.mediaEndpoint)}',
                                                     onTapOnProfileImage: () => System().navigateToProfile(context, vidData?.email ?? ''),
                                                     createdAt: '${System().readTimestamp(
-                                                      DateTime.parse(vidData?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                                                      DateTime.parse(System().dateTimeRemoveT(vidData?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                                                       context,
                                                       fullCaption: true,
                                                     )}',

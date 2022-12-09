@@ -273,7 +273,7 @@ class ContentData {
     data['mediaBasePath'] = mediaBasePath;
     data['postType'] = postType;
     data['mediaUri'] = mediaUri;
-    data['isLiked'] = isLiked;
+    data['isLiked'] = isLiked ?? false;
     data['description'] = description;
     data['active'] = active;
     if (privacy != null) {
@@ -286,7 +286,7 @@ class ContentData {
     data['isViewed'] = isViewed;
     data['tags'] = tags;
     data['allowComments'] = allowComments;
-    data['certified'] = certified;
+    data['certified'] = certified ?? false;
     data['createdAt'] = createdAt;
     if (insight != null) {
       data['insight'] = insight?.toJson();

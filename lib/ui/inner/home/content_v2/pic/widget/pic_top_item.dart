@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
-
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/size_config.dart';
 import '../../../../../../core/models/collection/posts/content_v2/content_data.dart';

@@ -122,15 +122,23 @@ class HomeNotifier with ChangeNotifier {
     'init Home'.logger();
     bool isConnected = await System().checkConnections();
     if (isConnected) {
-      _isLoadingVid = true;
-      _isLoadingDiary = true;
-      _isLoadingPict = true;
       int totLoading = 0;
       final profile = Provider.of<MainNotifier>(context, listen: false);
       final vid = Provider.of<PreviewVidNotifier>(context, listen: false);
       final diary = Provider.of<PreviewDiaryNotifier>(context, listen: false);
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
+
+      if (vid.vidData == null) {
+        _isLoadingVid = true;
+      }
+      if (diary.diaryData == null) {
+        _isLoadingDiary = true;
+      }
+      if (pic.pic == null) {
+        _isLoadingPict = true;
+      }
+
       try {
         await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
       } catch (e) {
@@ -182,9 +190,6 @@ class HomeNotifier with ChangeNotifier {
     'home notifier'.logger();
     bool isConnected = await System().checkConnections();
     if (isConnected) {
-      _isLoadingVid = true;
-      _isLoadingDiary = true;
-      _isLoadingPict = true;
       int totLoading = 0;
 
       final profile = Provider.of<MainNotifier>(context, listen: false);
@@ -193,6 +198,15 @@ class HomeNotifier with ChangeNotifier {
       final pic = Provider.of<PreviewPicNotifier>(context, listen: false);
       final stories = Provider.of<PreviewStoriesNotifier>(context, listen: false);
 
+      if (vid.vidData == null) {
+        _isLoadingVid = true;
+      }
+      if (diary.diaryData == null) {
+        _isLoadingDiary = true;
+      }
+      if (pic.pic == null) {
+        _isLoadingPict = true;
+      }
       // Refresh profile
       try {
         await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);

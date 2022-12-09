@@ -29,7 +29,7 @@ class AutoCompleteSearch extends StatelessWidget {
                           Expanded(child: SizedBox(height: 50, child: CustomLoading())),
                         ],
                       )
-                    : notifier.searchPeolpleData?.isEmpty ?? false
+                    : (notifier.searchPeolpleData?.isEmpty ?? false) && notifier.searchController.text != ''
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,

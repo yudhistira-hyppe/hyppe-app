@@ -93,7 +93,7 @@ class ContentItem extends StatelessWidget {
                                   isCelebrity: data?.privacy?.isCelebrity,
                                   imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
                                   onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? ''),
-                                  createdAt: '${System().readTimestamp(DateTime.parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true)}',
+                                  createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
                                   // onFollow: () async => await context.read<FollowRequestUnfollowNotifier>().followRequestUnfollowUser(
                                   //       context,
                                   //       currentValue: vidData,
@@ -209,9 +209,7 @@ class ContentItem extends StatelessWidget {
                               ),
                             ),
                             if (data?.music?.musicTitle != null) fourPx,
-                            if (data?.music?.musicTitle != null) Container(
-                              alignment: Alignment.centerLeft,
-                                child: MusicStatusDetail(music: data!.music!))
+                            if (data?.music?.musicTitle != null) Container(alignment: Alignment.centerLeft, child: MusicStatusDetail(music: data!.music!))
                           ],
                         ),
                       );

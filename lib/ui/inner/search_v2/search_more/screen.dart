@@ -42,10 +42,10 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
     final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(builder: (context, notifier, child) {
       return WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           notifier.backFromSearchMore();
 
-          return Future.value(true);
+          return false;
         },
         child: Scaffold(
           key: _scaffoldKey,
@@ -65,7 +65,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                         Row(
                           children: [
                             CustomIconButtonWidget(
-                              onPressed: () => notifier.backPage(),
+                              onPressed: () => notifier.backFromSearchMore(),
                               defaultColor: false,
                               iconData: "${AssetPath.vectorPath}back-arrow.svg",
                               color: Theme.of(context).colorScheme.onSurface,
@@ -82,9 +82,11 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                     onPressedIcon: () => notifier.onSearchPost(context),
                                     autoFocus: true,
                                     onChanged: (e) {
-                                      if (lastInputValue != e) {
-                                        lastInputValue = e;
-                                        notifier.searchPeople(context, input: e);
+                                      if (e.length > 2) {
+                                        if (lastInputValue != e) {
+                                          lastInputValue = e;
+                                          notifier.searchPeople(context, input: e);
+                                        }
                                       }
                                     }),
                               ),

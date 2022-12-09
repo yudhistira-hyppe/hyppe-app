@@ -15,6 +15,7 @@ import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 // import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+ 
 
 class VerificationPin extends StatefulWidget {
   const VerificationPin({Key? key}) : super(key: key);
@@ -28,6 +29,7 @@ class _VerificationPinState extends State<VerificationPin> with AfterFirstLayout
 
   @override
   void initState() {
+    _notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
     super.initState();
   }
 

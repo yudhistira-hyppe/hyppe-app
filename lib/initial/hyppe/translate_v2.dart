@@ -102,6 +102,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     }
 
     SharedPreference().writeStorage(SpKeys.isoCode, langIso);
+    print('langiso adalah $langIso');
 
     // final localeDir = await getApplicationDocumentsDirectory();
     // File txt = File('${localeDir.path}/primaryLanguage.txt');

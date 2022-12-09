@@ -44,7 +44,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SharedPreference().readStorage(SpKeys.isLoginSosmed) == 'true'
+              SharedPreference().readStorage(SpKeys.isLoginSosmed) == 'socmed'
                   ? Container()
                   : SettingTile(
                       icon: 'lock.svg',
