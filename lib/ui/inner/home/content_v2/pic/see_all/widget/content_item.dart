@@ -119,7 +119,7 @@ class ContentItem extends StatelessWidget {
                                         (data?.tagPeople?.length ?? 0) != 0
                                             ? TagLabel(
                                                 icon: 'user',
-                                                label: '${data?.tagPeople?.length} people',
+                                                label: '${data?.tagPeople?.length} people ',
                                                 function: () {
                                                   context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
                                                   // vidNotifier.showUserTag(context, index, data.postID);
