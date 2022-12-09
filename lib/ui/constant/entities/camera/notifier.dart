@@ -23,7 +23,8 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   FlashMode flashMode = FlashMode.off;
   NativeDeviceOrientation? orientation;
 
-  bool get isInitialized => deepArController?.isInitialized ?? false;
+  bool isInitializedIos=false;
+  bool get isInitialized => (Platform.isIOS ? isInitializedIos : (deepArController?.isInitialized ?? false));
   bool get isRecordingVideo => deepArController?.isRecording ?? false;
   bool get isRecordingPaused => deepArController?.isRecording ?? false;
   bool get isTakingPicture => cameraController?.value.isTakingPicture ?? false;
@@ -71,6 +72,10 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       )
       .then((value) {
         print('DeepAR: DeepAR done initialized $value');
+        isInitializedIos=true;
+        print(deepArController!.isInitialized);
+        print(isInitialized);
+
       });
       if (backCamera) {
         deepArController?.flipCamera();
@@ -96,6 +101,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     if (!mounted) {
       return;
     }
+    print('notifyListeners()');
     notifyListeners();
   }
 
