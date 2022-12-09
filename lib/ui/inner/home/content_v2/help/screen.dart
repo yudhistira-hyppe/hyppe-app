@@ -83,6 +83,30 @@ class _HelpScreenState extends State<HelpScreen> {
                 textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(),
               ),
               GestureDetector(onTap: () => Routing().move(Routes.faqDetail), child: Text('List FAQ')),
+              // ...List.generate(
+              //   supportNotifier.levelData.length,
+              //   (index) => Padding(
+              //       padding: const EdgeInsets.all(2.0),
+              //       child: RadioListTile<String>(
+              //         contentPadding: EdgeInsets.zero,
+              //         groupValue: supportNotifier.nameLevel,
+              //         value: supportNotifier.levelData[index].descLevel ?? '',
+              //         onChanged: (val) {
+              //           supportNotifier.nameLevel = val ?? '';
+              //           supportNotifier.idLevelTicket = supportNotifier.levelData[index].sId ?? '';
+              //         },
+              //         toggleable: true,
+              //         title: CustomTextWidget(
+              //           textAlign: TextAlign.left,
+              //           textToDisplay: supportNotifier.levelData[index].descLevel ?? '',
+              //           textStyle: Theme.of(context).primaryTextTheme.bodyText2,
+              //         ),
+              //         subtitle: Text('The condition will appear if the users problem need technical   that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
+              //         controlAffinity: ListTileControlAffinity.leading,
+              //         activeColor: Theme.of(context).colorScheme.primaryVariant,
+              //         isThreeLine: true,
+              //       )),
+              // ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.all(11),

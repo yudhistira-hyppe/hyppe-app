@@ -60,7 +60,7 @@ class UploadContent extends StatelessWidget {
             child: Align(
               alignment: Alignment.topLeft,
               child: CustomTextButton(
-                onPressed: notifier?.conditionalOnClose() ?? false ? () async => await notifier?.onClose(context) : null,
+                onPressed: (notifier?.conditionalOnClose() ?? false) ? () async => await notifier?.onClose(context) : null,
                 child: const UnconstrainedBox(
                   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false),
                 ),

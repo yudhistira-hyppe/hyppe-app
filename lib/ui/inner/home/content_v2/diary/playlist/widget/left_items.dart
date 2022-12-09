@@ -73,6 +73,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    print('lokasi is ${widget.location}');
     return Container(
       width: widget.music != null ? double.infinity : SizeConfig.screenWidth! / 1.3,
       // alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
@@ -82,12 +83,12 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          widget.tagPeople?.isNotEmpty ?? false || widget.location != ''
+          (widget.tagPeople?.isNotEmpty ?? false) || widget.location != ''
               ? Padding(
                   padding: const EdgeInsets.only(bottom: 5),
                   child: Row(
                     children: [
-                      widget.tagPeople?.isNotEmpty ?? false
+                      (widget.tagPeople?.isNotEmpty ?? false)
                           ? PicTagLabel(
                               icon: 'user',
                               label: '${widget.tagPeople?.length} people',

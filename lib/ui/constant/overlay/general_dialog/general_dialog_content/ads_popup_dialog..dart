@@ -224,7 +224,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: widget.data.isReport ?? false ? Container() : bottomAdsLayout(widget.data),
+                child: (widget.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.data),
               )
             ],
           )),

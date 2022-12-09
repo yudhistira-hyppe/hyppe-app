@@ -153,7 +153,7 @@ class ContentItem extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            data?.tagPeople?.isNotEmpty ?? false || data?.location != ''
+                            (data?.tagPeople?.isNotEmpty ?? false) || data?.location != ''
                                 ? Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(top: 10.0),
                                     child: Row(

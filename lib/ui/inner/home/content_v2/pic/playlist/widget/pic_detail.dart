@@ -62,7 +62,7 @@ class _PicDetailState extends State<PicDetail> {
                 sigmaX: 30,
                 sigmaY: 30,
                 // thumbnail: picData.content[arguments].contentUrl,
-                thumbnail: widget.arguments?.isApsara ?? false ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                thumbnail: (widget.arguments?.isApsara ?? false) ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
               ),
               // Content
               InteractiveViewer(
@@ -73,7 +73,7 @@ class _PicDetailState extends State<PicDetail> {
                   },
                   child: CustomCacheImage(
                     // imageUrl: picData.content[arguments].contentUrl,
-                    imageUrl: widget.arguments?.isApsara ?? false ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
+                    imageUrl: (widget.arguments?.isApsara ?? false) ? widget.arguments?.mediaThumbUri : widget.arguments?.fullThumbPath,
                     imageBuilder: (_, imageProvider) {
                       return Container(
                         decoration: BoxDecoration(
@@ -231,7 +231,7 @@ class _PicDetailState extends State<PicDetail> {
                         // )
                       ],
                     ),
-                    widget.arguments?.tagPeople?.isNotEmpty ?? false || widget.arguments?.location != ''
+                    (widget.arguments?.tagPeople?.isNotEmpty ?? false) || widget.arguments?.location != ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
                             child: Row(

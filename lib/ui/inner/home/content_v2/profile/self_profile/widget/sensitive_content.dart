@@ -20,7 +20,7 @@ class SensitiveContentProfile extends StatelessWidget {
               sigmaX: 30,
               sigmaY: 30,
               // thumbnail: picData!.content[arguments].contentUrl,
-              thumbnail: data?.isApsara ?? false ? (data?.mediaThumbEndPoint ?? '') : System().showUserPicture(data?.mediaEndpoint) ?? '',
+              thumbnail: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : System().showUserPicture(data?.mediaEndpoint) ?? '',
             ),
           ),
         ),

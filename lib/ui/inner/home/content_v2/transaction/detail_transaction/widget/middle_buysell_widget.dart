@@ -93,7 +93,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                   sixPx,
                   CustomTextWidget(
                     textToDisplay:
-                        '${data?.like ?? false ? data?.totallike ?? '' : ''}${data?.like ?? false ? ' ${language?.like}' : ''} ${(data?.like ?? false) && (data?.view ?? false) ? ' | ' : ''}${data?.view ?? false ? data?.totalview : ''}${data?.view ?? false ? ' ${language?.views}' : ''}',
+                        '${(data?.like ?? false) ? data?.totallike ?? '' : ''}${(data?.like ?? false) ? ' ${language?.like}' : ''} ${(data?.like ?? false) && (data?.view ?? false) ? ' | ' : ''}${(data?.view ?? false) ? data?.totalview : ''}${(data?.view ?? false) ? ' ${language?.views}' : ''}',
                     textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
                   ),
                   twelvePx,
@@ -114,8 +114,8 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                               ),
                             )
                           : Container(),
-                      data?.like ?? false ? twelvePx : Container(),
-                      data?.view ?? false
+                     (data?.like ?? false) ? twelvePx : Container(),
+                      (data?.view ?? false)
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(

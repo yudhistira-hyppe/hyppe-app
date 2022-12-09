@@ -54,7 +54,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget.data?.isReport ?? false
+            (widget.data?.isReport ?? false)
                 ? Container()
                 : Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(
                     builder: (context, value, value2, child) {
@@ -87,7 +87,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                       );
                     },
                   ),
-            widget.data?.isReport ?? false
+            (widget.data?.isReport ?? false)
                 ? SizedBox(
                     width: 40,
                     height: 40,

@@ -90,7 +90,7 @@ class PicDetailBottom extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Row(
                       children: [
-                        data?.tagPeople?.isNotEmpty ?? false
+                        (data?.tagPeople?.isNotEmpty ?? false)
                             ? TagLabel(
                                 icon: 'user',
                                 label: '${data?.tagPeople?.length ?? 0} people',

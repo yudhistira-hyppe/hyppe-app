@@ -69,7 +69,7 @@ class ContentItem extends StatelessWidget {
                         child: Stack(
                           children: [
                             CustomBaseCacheImage(
-                              imageUrl: data?.isApsara ?? false ? (data?.mediaThumbEndPoint ?? '') : "${data?.fullThumbPath}",
+                              imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : "${data?.fullThumbPath}",
                               imageBuilder: (context, imageProvider) => Container(
                                 alignment: Alignment.bottomLeft,
                                 child: CustomBalloonWidget(
