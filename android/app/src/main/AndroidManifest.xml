@@ -39,13 +39,22 @@
 
 
     <uses-permission tools:node="remove" android:name="android.permission.READ_PHONE_STATE"/>
-    <application android:name="${applicationName}" android:label="Hyppe" android:requestLegacyExternalStorage="true" android:usesCleartextTraffic="true" android:icon="@mipmap/ic_launcher">
+    <application
+        android:name="${applicationName}"
+        android:label="Hyppe"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true" android:usesCleartextTraffic="true" android:icon="@mipmap/ic_launcher">
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
-            android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                              the Android process has started. This theme is visible to the user
                              while the Flutter UI initializes. After that, this theme continues

@@ -638,7 +638,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _postIdPanding = decode['data']['postID'];
         if (_boostContent != null) _boostContentBuy(context);
       });
-      if (_boostContent == null) clearUpAndBackToHome(context);
+      if (_boostContent == null) clearUpAndBackToHome(context, isDefault: false);
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
@@ -767,14 +767,20 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void clearUpAndBackToHome(BuildContext context) {
+  void clearUpAndBackToHome(BuildContext context, {isDefault = true}) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
 
     context.read<CameraNotifier>().disposeCamera(context);
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
     if (_boostContent != null) _onExit();
-    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+    if(isDefault){
+      Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+    }else{
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+
   }
 
   Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {

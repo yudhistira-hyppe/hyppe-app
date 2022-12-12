@@ -182,7 +182,7 @@ class _DiaryPageState extends State<DiaryPage> {
                                 if (globalAudioPlayer != null) {
                                   globalAudioPlayer!.pause();
                                 }
-                                await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored);
+                                await System().adsPopUp(context, notifier.adsData, notifier.adsUrl, isSponsored: notifier.isSponsored, isPopUp: false);
                                 if (globalAudioPlayer != null) {
                                   globalAudioPlayer!.resume();
                                 }

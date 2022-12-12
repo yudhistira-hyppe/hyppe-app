@@ -1,4 +1,5 @@
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
@@ -78,6 +79,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
+import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
 import 'package:hyppe/ui/outer/login/screen.dart';
@@ -220,6 +222,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => ListReferralUser(arguments: settings.arguments as ReferralListUserArgument));
       case Routes.insertReferral:
         return MaterialPageRoute(builder: (_) => InsertReferral());
+      case Routes.showAds:
+        return MaterialPageRoute(builder: (_) => AdsScreen(argument: settings.arguments as AdsArgument,));
 
       case Routes.searcMore:
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());

@@ -38,7 +38,8 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
           if(globalAudioPlayer != null){
             globalAudioPlayer!.pause();
           }
-          await System().adsPopUp(materialAppKey.currentContext!, widget.data, widget.url);
+          final count = context.getAdsCount();
+          await System().adsPopUp(materialAppKey.currentContext!, widget.data, widget.url, isPopUp: false);
           if(globalAudioPlayer != null){
             globalAudioPlayer!.resume();
           }

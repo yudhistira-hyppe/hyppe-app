@@ -51,6 +51,7 @@ import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../arguments/ads_argument.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 
 class System {
@@ -1119,9 +1120,13 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
+  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true}) async {
+    if(isPopUp){
+      return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
+    }else{
+      return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
+    }
 
-    return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
   }
 
   Future userVerified(status) async {
@@ -1158,25 +1163,4 @@ class System {
     }
   }
 
-  void getSchedule() {
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-  }
 }
