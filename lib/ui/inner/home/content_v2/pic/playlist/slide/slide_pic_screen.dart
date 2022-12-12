@@ -396,7 +396,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                     (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED') &&
                             widget.data.isBoost == null &&
                             widget.data.email == SharedPreference().readStorage(SpKeys.email)
-                        ? ButtonBoost(contentData: widget.data)
+                        ? ButtonBoost(contentData: widget.data,)
                         : Container(),
                     widget.data.isBoost != null && widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? Padding(
