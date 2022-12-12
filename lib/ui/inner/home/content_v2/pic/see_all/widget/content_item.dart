@@ -172,7 +172,10 @@ class ContentItem extends StatelessWidget {
                             if(data?.music?.musicTitle != null)
                               fourPx,
                             if(data?.music?.musicTitle != null)
-                              MusicStatusDetail(music: data!.music!)
+                              Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: MusicStatusDetail(music: data!.music!)
+                              )
                           ],
                         ),
                       );

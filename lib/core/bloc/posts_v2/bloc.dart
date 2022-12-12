@@ -137,12 +137,14 @@ class PostsBloc {
     final email = SharedPreference().readStorage(SpKeys.email);
     // final currentDate = context.getCurrentDate();
 
-    formData.fields.add(const MapEntry('withExp', 'true'));
     formData.fields.add(const MapEntry('withActive', 'true'));
     formData.fields.add(const MapEntry('withDetail', 'true'));
     formData.fields.add(const MapEntry('withInsight', 'true'));
     if(postType != null){
       formData.fields.add(MapEntry('postType', postType));
+      if(postType == 'story'){
+        formData.fields.add(const MapEntry('withExp', 'true'));
+      }
     }
     formData.fields.add(MapEntry('visibility', visibility));
     // formData.fields.add(MapEntry('endDate', currentDate));
