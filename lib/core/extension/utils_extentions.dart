@@ -58,7 +58,7 @@ extension contextScreen on BuildContext{
   void incrementAdsCount(){
     final current = getAdsCount();
     print('ads second : $current');
-    if(current < 4){
+    if(current < 5){
       setAdsCount(getAdsCount() + 1);
     }else{
       setAdsCount(0);

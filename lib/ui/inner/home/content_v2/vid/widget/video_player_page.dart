@@ -242,7 +242,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     if (context.getAdsCount() == null) {
       context.setAdsCount(0);
     } else {
-      if (context.getAdsCount() == 4) {
+      if (context.getAdsCount() == 5) {
         await _newInitAds(true);
       } else if (context.getAdsCount() == 2) {
         await _newInitAds(false);
