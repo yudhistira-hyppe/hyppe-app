@@ -68,7 +68,7 @@ class _AdsScreenState extends State<AdsScreen> {
         adsId: data.adsId,
         useradsId: data.useradsId,
       );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
+      // await notifier.viewAdsBloc(context, request, isClick: isClick);
 
       // final fetch = notifier.adsVideoFetch;
 

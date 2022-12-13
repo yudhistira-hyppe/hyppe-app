@@ -218,7 +218,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     try {
       final notifier = AdsDataBloc();
       final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
+      // await notifier.viewAdsBloc(context, request);
 
       // final fetch = notifier.adsVideoFetch;
 

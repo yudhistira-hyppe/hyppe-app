@@ -1,3 +1,6 @@
+import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+
 import '../../../config/env.dart';
 import '../../../constants/shared_preference_keys.dart';
 import '../../../response/generic_response.dart';
@@ -125,6 +128,7 @@ class AdsAvatar {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl + (mediaEndpoint ?? mediaEndpoint ?? '') + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    'fullLinkURL : ${Env.data.baseUrl}/${UrlConstants.apiV4}$mediaEndpoint?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}'.logger();
+    return '${Env.data.baseUrl}/${UrlConstants.apiV4}$mediaEndpoint?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 }
