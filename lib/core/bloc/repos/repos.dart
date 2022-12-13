@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
@@ -22,9 +21,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
 
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
-
-import '../../services/event_service.dart';
 
 class Repos {
   Repos._private();
@@ -35,7 +31,7 @@ class Repos {
     return _instance;
   }
 
-  static final _routing = Routing();
+  // static final _routing = Routing();
   static final _apiAction = ApiAction();
 
   static Future<Response> _communicate(
@@ -272,7 +268,7 @@ class Repos {
   }
 
   Future postLogError(context, data, headers, onReceiveProgress) async {
-    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    // String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? realDeviceId = await System().getDeviceIdentifier();
     data['imei'] = realDeviceId;
     return reposPost(
@@ -297,7 +293,7 @@ class Repos {
     // );
   }
 
-  void _showSnackBar(BuildContext context, Color color, String message, String desc, {Function? function}) {
+  void _showSnackBar(BuildContext context, Color color, String message, String desc) {
     ShowBottomSheet().onShowColouredSheet(
       context,
       message,

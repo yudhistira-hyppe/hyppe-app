@@ -24,6 +24,7 @@ class Routes {
   static const String referralScreen = '/referral-screen';
   static const String listReferral = '/list-referral';
   static const String insertReferral = '/insert-referral';
+  static const String showAds = '/show-ads';
 
 // Sign up
   static const String signUpPin = '/sign-up-pin';

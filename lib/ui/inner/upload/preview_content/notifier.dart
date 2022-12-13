@@ -1076,7 +1076,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.musicSelected = _fixSelectedMusic;
     // notifier.compressVideo();
 
-    Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
+    Routing().moveReplacement(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }
 
   Future makeThumbnail(BuildContext context, int index) async {

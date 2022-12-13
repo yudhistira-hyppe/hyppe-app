@@ -233,7 +233,7 @@ class MainNotifier with ChangeNotifier {
     final seconds = myDuration.inSeconds - reduceSecondsBy;
     if (seconds < 0) {
       resetTimer();
-      System().getSchedule();
+      'seconds of the timer : $seconds'.logger();
     } else {
       myDuration = Duration(seconds: seconds);
     }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -33,7 +34,7 @@ class ButtonBoost extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           child: InkWell(
             onTap: _isKyc == VERIFIED
-                ? () {
+                ? () async{
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
                     notifier.editData = contentData;
                     notifier.isEdit = true;
@@ -95,12 +96,21 @@ class ButtonBoost extends StatelessWidget {
                     notifier.certified = contentData?.certified ?? false;
                     notifier.priceController.text = contentData?.saleAmount?.toInt().toString() ?? '';
 
+                    if(globalAudioPlayer != null){
+                      globalAudioPlayer!.pause();
+                    }
+
                     Routing()
                         .move(
                           Routes.preUploadContent,
                           argument: UpdateContentsArgument(onEdit: true, contentData: contentData, content: ''),
                         )
-                        .whenComplete(() => Routing().moveBack());
+                        .whenComplete((){
+                      if(globalAudioPlayer != null){
+                        globalAudioPlayer!.resume();
+                      }
+                          Routing().moveBack();
+                        });
                   }
                 : null,
             child: Container(

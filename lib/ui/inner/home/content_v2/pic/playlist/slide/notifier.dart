@@ -183,7 +183,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     if (count == null) {
       context.setAdsCount(0);
     } else {
-      if (count == 4) {
+      if (count == 5) {
         urlAds = await getAdsVideo(context, true);
       } else if (count == 2) {
         urlAds = await getAdsVideo(context, false);

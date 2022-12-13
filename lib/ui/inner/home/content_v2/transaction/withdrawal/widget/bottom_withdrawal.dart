@@ -47,7 +47,7 @@ class BottomWithdrawalWidget extends StatelessWidget {
                         ],
                       ),
                     )
-                  : notifier.dataAcccount?.isEmpty ?? true
+                  : (notifier.dataAcccount?.isEmpty ?? true)
                       ? Padding(
                           padding: const EdgeInsets.only(top: 16.0),
                           child: Row(

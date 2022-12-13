@@ -6,7 +6,6 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/models/collection/utils/eula/eula.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
-import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/welcome/welcome.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';

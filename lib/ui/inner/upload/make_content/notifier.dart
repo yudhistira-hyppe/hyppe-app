@@ -278,7 +278,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
             notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
             notifier.featureType = featureType;
             notifier.showNext = false;
-            await _routing.move(Routes.previewContent);
+            await _routing.moveReplacement(Routes.previewContent);
           } else {
             setLoading(false);
             if (value.keys.single.isNotEmpty) ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
@@ -319,7 +319,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       notifier.fileContent = [file?.path ?? ''];
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
-      await _routing.move(Routes.previewContent);
+      await _routing.moveReplacement(Routes.previewContent);
     });
   }
 
@@ -355,7 +355,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         notifier.fileContent = [filePath.path];
         notifier.aspectRation = cameraNotifier.cameraAspectRatio;
         notifier.featureType = featureType;
-        await _routing.move(Routes.previewContent);
+        await _routing.moveReplacement(Routes.previewContent);
+
       }
     });
   }

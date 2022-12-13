@@ -51,6 +51,7 @@ import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
 import 'package:intl/intl.dart' as intl;
 
+import '../arguments/ads_argument.dart';
 import '../models/collection/advertising/ads_video_data.dart';
 
 class System {
@@ -1016,19 +1017,17 @@ class System {
         context.read<OtherProfileNotifier>().checkFollowingToUser(context, email);
         if (storyController != null) {
           storyController.pause();
-          if(isReplaced){
+          if (isReplaced) {
             Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
-          }else{
+          } else {
             Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email)).whenComplete(() => storyController.play());
           }
-
         } else {
-          if(isReplaced){
+          if (isReplaced) {
             Routing().moveReplacement(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
-          }else{
+          } else {
             Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
           }
-
         }
       } else {
         storyController != null
@@ -1127,8 +1126,12 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
-    return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
+  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true}) async {
+    if (isPopUp) {
+      return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
+    } else {
+      return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
+    }
   }
 
   Future userVerified(status) async {
@@ -1163,27 +1166,5 @@ class System {
       default:
         return notifier.waitingtoTransfer ?? '';
     }
-  }
-
-  void getSchedule() {
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
-    print('hahahaha');
   }
 }

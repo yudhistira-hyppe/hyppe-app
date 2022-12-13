@@ -218,7 +218,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     try {
       final notifier = AdsDataBloc();
       final request = ViewAdsRequest(watchingTime: time, adsId: data.adsId, useradsId: data.useradsId);
-      await notifier.viewAdsBloc(context, request);
+      // await notifier.viewAdsBloc(context, request);
 
       // final fetch = notifier.adsVideoFetch;
 
@@ -242,7 +242,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     if (context.getAdsCount() == null) {
       context.setAdsCount(0);
     } else {
-      if (context.getAdsCount() == 4) {
+      if (context.getAdsCount() == 5) {
         await _newInitAds(true);
       } else if (context.getAdsCount() == 2) {
         await _newInitAds(false);

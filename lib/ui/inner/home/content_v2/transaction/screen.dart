@@ -142,7 +142,7 @@ class _TransactionState extends State<Transaction> {
                               )
                             ],
                           ),
-                          notifier.dataTransaction?.isEmpty ?? true
+                          (notifier.dataTransaction?.isEmpty ?? true)
                               ? EmptyBankAccount(
                                   textWidget: Column(
                                   children: [

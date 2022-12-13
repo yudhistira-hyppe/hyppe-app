@@ -71,7 +71,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
         adsId: data.adsId,
         useradsId: data.useradsId,
       );
-      await notifier.viewAdsBloc(context, request, isClick: isClick);
+      // await notifier.viewAdsBloc(context, request, isClick: isClick);
 
       // final fetch = notifier.adsVideoFetch;
 
