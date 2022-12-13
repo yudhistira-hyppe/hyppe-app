@@ -55,7 +55,7 @@ class ReportNotifier with ChangeNotifier {
   AdsData? adsData;
   String typeContent = '';
 
-  contentPosition? _inPosition;
+  contentPosition? _inPosition = contentPosition.home;
   contentPosition? get inPosition => _inPosition;
 
   String _type = '';

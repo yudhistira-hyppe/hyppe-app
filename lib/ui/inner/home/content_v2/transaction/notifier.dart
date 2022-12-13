@@ -78,6 +78,9 @@ class TransactionNotifier extends ChangeNotifier {
   String _accountOwner = "";
   String get accountOwner => _accountOwner;
 
+  String _accountNumber = "";
+  String get accountNumber => _accountNumber;
+
   BankData? _bankDataSelected;
   BankData? get bankDataSelected => _bankDataSelected;
 
@@ -520,7 +523,8 @@ class TransactionNotifier extends ChangeNotifier {
 
   Future bankChecked(int index) async {
     _isChecking = true;
-    bankSelected = dataAcccount?[index].noRek ?? '';
+    bankSelected = dataAcccount?[index].id ?? '';
+    _accountNumber = dataAcccount?[index].noRek ?? '';
     _accountOwner = dataAcccount?[index].nama ?? '';
     bankcode = dataAcccount?[index].bankCode ?? '';
     notifyListeners();
@@ -578,7 +582,7 @@ class TransactionNotifier extends ChangeNotifier {
     final Map params = {
       "email": email,
       "bankcode": bankcode,
-      "norek": bankSelected,
+      "norek": _accountNumber,
       "amount": int.parse(amountWithDrawal ?? '0'),
     };
 

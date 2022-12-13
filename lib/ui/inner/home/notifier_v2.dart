@@ -139,45 +139,48 @@ class HomeNotifier with ChangeNotifier {
         _isLoadingPict = true;
       }
 
-      try {
-        await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
-      } catch (e) {
-        'profile.initMain error $e'.logger();
+      if (profileImage == '') {
+        try {
+          await profile.initMain(context, onUpdateProfile: true).then((value) => totLoading += 1);
+        } catch (e) {
+          'profile.initMain error $e'.logger();
+        }
       }
 
-      final allContents = await allReload(context);
-      // Refresh content
-      try {
-        await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
-      } catch (e) {
-        "Error Load Story : $e".logger();
-      }
-      try {
-        await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
-      } catch (e) {
-        "Error Load Video : $e".logger();
-      }
-      try {
-        await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
-      } catch (e) {
-        "Error Load Diary : $e".logger();
-      }
-      try {
-        'initialPic : 1'.logger();
-        await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
-      } catch (e) {
-        "Error Load Pic : $e".logger();
-      }
+      if (pic.pic == null || diary.diaryData == null || vid.vidData == null) {
+        final allContents = await allReload(context);
+        // Refresh content
+        try {
+          await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+        } catch (e) {
+          "Error Load Story : $e".logger();
+        }
+        try {
+          await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
+        } catch (e) {
+          "Error Load Video : $e".logger();
+        }
+        try {
+          await diary.initialDiary(context, reload: true, list: allContents.diary).then((value) => totLoading += 1);
+        } catch (e) {
+          "Error Load Diary : $e".logger();
+        }
+        try {
+          'initialPic : 1'.logger();
+          await pic.initialPic(context, reload: true, list: allContents.pict).then((value) => totLoading += 1);
+        } catch (e) {
+          "Error Load Pic : $e".logger();
+        }
+        'totLoading $totLoading'.logger();
+        if (totLoading >= 3) {
+          "is finish shimmer".logger();
+          _isLoadingVid = false;
+          _isLoadingDiary = false;
+          _isLoadingPict = false;
+        }
 
-      'totLoading $totLoading'.logger();
-      if (totLoading >= 3) {
-        "is finish shimmer".logger();
-        _isLoadingVid = false;
-        _isLoadingDiary = false;
-        _isLoadingPict = false;
+        notifyListeners();
       }
-
-      notifyListeners();
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         Routing().moveBack();

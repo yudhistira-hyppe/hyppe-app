@@ -26,7 +26,7 @@ class MyFrameStory extends StatelessWidget {
     final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
     final error = context.select((ErrorService value) => value.getError(ErrorType.peopleStory));
     final notifier = Provider.of<HomeNotifier>(context);
-    print('showUserPicture 2 : ${notifier.profileImage}');
+    // print('showUserPicture 2 : ${notifier.profileImage}');
     return Row(
       children: [
         sixteenPx,

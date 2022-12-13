@@ -66,16 +66,19 @@ class Component extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: data?.senderOrReceiverInfo?.fullName ?? '',
+                        textToDisplay: data?.senderOrReceiverInfo?.username ?? '',
                         textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
                       SizedBox(
-                        width: data?.body != null
-                            ? data!.body!.length < 30
-                                ? null
-                                : SizeConfig.screenWidth! / 1.5
-                            : null,
+                        width: (SizeConfig.screenWidth ?? 0) / 1.8,
+                        // data?.content != null
+                        //     ? (SizeConfig.screenWidth ?? 0) / 1.8
+                        //     : data?.body != null
+                        //         ? (data?.body?.length ?? 0) < 34
+                        //             ? null
+                        //             : (SizeConfig.screenWidth ?? 0) / 1.5
+                        //         : null,
                         child: CustomTextWidget(
                           //textToDisplay: data?.body ?? '',
                           textToDisplay: System().bodyMultiLang(bodyEn: data?.body ?? data?.bodyId, bodyId: data?.bodyId) ?? '',

@@ -1,6 +1,5 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/inner/notification/widget/accept_button.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/notification/widget/component.dart';
 import 'package:hyppe/ui/inner/notification/widget/component_shimmer.dart';
@@ -23,10 +22,10 @@ class AllNotification extends StatelessWidget {
             return Component(
               data: notifier.data?[index],
               rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
-                      System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following ||
-                      notifier.data?[index].event == 'REQUEST_APPEAL' ||
-                      notifier.data?[index].event == 'ADMIN_FLAGING' ||
-                      notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
+                      System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
+                  // notifier.data?[index].event == 'REQUEST_APPEAL'
+                  // notifier.data?[index].event == 'ADMIN_FLAGING' ||
+                  // notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
                   ? Container()
                   // ? AcceptButton(data: notifier.data?[index])
                   : ImageComponent(

@@ -124,7 +124,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
     return _color;
   }
 
-  Future<void> _postSubmitBuy(BuildContext context) async {
+  Future _postSubmitBuy(BuildContext context) async {
     isLoading = true;
     List<PostId> postId = [
       PostId(
@@ -149,16 +149,19 @@ class PaymentMethodNotifier extends ChangeNotifier {
       if (fetch.postsState == BuyState.postContentsError) {
         isLoading = false;
         var errorData = ErrorModel.fromJson(fetch.data);
-        print('error');
-        print(errorData);
-        print(errorData.message);
-        // _showSnackBar(kHyppeDanger, 'Error', '${errorData.message}');
+      
         ShowBottomSheet().onShowColouredSheet(
           context,
           errorData.message ?? '',
           maxLines: 2,
           iconSvg: "${AssetPath.vectorPath}remove.svg",
           color: kHyppeDanger,
+          function: () {
+            if (errorData.message == "Tidak dapat melanjutkan. Selesaikan pembayaran transaksi anda dahulu !") {
+              Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
+              return Routing().move(Routes.transaction);
+            }
+          },
         );
       } else if (fetch.postsState == BuyState.postContentsSuccess) {
         BuyResponse? res = BuyResponse.fromJson(fetch.data);

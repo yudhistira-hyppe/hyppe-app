@@ -16,7 +16,7 @@ class Profile extends StatelessWidget {
     // var notifier = context.select((SelfProfileNotifier value) => Tuple2(value.user, value.user.profile?.avatar?.mediaEndpoint));
     // final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
     final notifier = Provider.of<HomeNotifier>(context);
-    'showUserPicture 1 : ${notifier.profileImage}'.logger();
+    // 'showUserPicture 1 : ${notifier.profileImage}'.logger();
     return SizedBox(
       width: 50,
       child: CustomTextButton(

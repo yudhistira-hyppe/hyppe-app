@@ -507,7 +507,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   void playTimer() {
     timerAds = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (timerAds?.isActive ?? false) {
-        print('status periodic $durationAds');
+        // print('status periodic $durationAds');
       }
 
       setState(() {
@@ -690,7 +690,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     });
 
     if (widget.onStoryShow != null) {
-      if(storyItem != null){
+      if (storyItem != null) {
         widget.onStoryShow!(storyItem);
       }
     }
@@ -731,16 +731,15 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
 
     _animationController?.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        if(storyItem != null){
+        if (storyItem != null) {
           storyItem.shown = true;
         }
-
 
         if (widget.storyItems.last != storyItem) {
           _beginPlay();
         } else {
           // done playing
-          if(widget.repeat){
+          if (widget.repeat) {
             widget.controller.replay();
           }
           _onComplete();

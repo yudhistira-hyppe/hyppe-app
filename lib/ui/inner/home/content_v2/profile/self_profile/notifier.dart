@@ -71,6 +71,9 @@ class SelfProfileNotifier with ChangeNotifier {
   String _statusKyc = '';
   String get statusKyc => _statusKyc;
 
+  bool _scollLoading = false;
+  bool get scollLoading => _scollLoading;
+
   set user(UserInfoModel val) {
     _user = val;
     notifyListeners();
@@ -100,6 +103,8 @@ class SelfProfileNotifier with ChangeNotifier {
     _maxLine = val;
     notifyListeners();
   }
+
+  void onUpdate() => notifyListeners();
 
   String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
 
@@ -140,12 +145,16 @@ class SelfProfileNotifier with ChangeNotifier {
         case 0:
           {
             if (!vidContentsQuery.loading && vidHasNext) {
+              _scollLoading = true;
+              notifyListeners();
               List<ContentData> _res = await vidContentsQuery.loadNext(context, myContent: true);
+              // _scollLoading = false;
               if (_res.isNotEmpty) {
                 user.vids = [...(user.vids ?? []), ..._res];
               } else {
                 "Post Vid Dah Mentok".logger();
               }
+              _scollLoading = false;
               notifyListeners();
             }
           }
@@ -153,12 +162,15 @@ class SelfProfileNotifier with ChangeNotifier {
         case 1:
           {
             if (!diaryContentsQuery.loading && diaryHasNext) {
+              _scollLoading = true;
+              notifyListeners();
               List<ContentData> _res = await diaryContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
                 user.diaries = [...(user.diaries ?? []), ..._res];
               } else {
                 print("Post Diary Dah Mentok");
               }
+              _scollLoading = false;
               notifyListeners();
             }
           }
@@ -166,12 +178,15 @@ class SelfProfileNotifier with ChangeNotifier {
         case 2:
           {
             if (!picContentsQuery.loading && picHasNext) {
+              _scollLoading = true;
+              notifyListeners();
               List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
                 user.pics = [...(user.pics ?? []), ..._res];
               } else {
                 print("Post Pic Dah Mentok");
               }
+              _scollLoading = false;
               notifyListeners();
             }
           }

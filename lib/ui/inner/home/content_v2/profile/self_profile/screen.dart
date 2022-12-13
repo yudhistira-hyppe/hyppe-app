@@ -107,17 +107,25 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
                 //           : BothProfileTopShimmer()),
                 // ),
                 SliverToBoxAdapter(
-                  child: Container(child: notifier.user.profile != null ? SelfProfileTop() : BothProfileTopShimmer()),
+                  child: Container(child: notifier.user.profile != null ? const SelfProfileTop() : BothProfileTopShimmer()),
                 ),
 
                 SliverAppBar(
                   pinned: true,
-                  flexibleSpace: SelfProfileBottom(),
+                  flexibleSpace: const SelfProfileBottom(),
                   automaticallyImplyLeading: false,
                   backgroundColor: Theme.of(context).colorScheme.background,
                 ),
 
-                notifier.optionButton()
+                notifier.optionButton(),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return notifier.scollLoading ? const CustomLoading(size: 4) : Container();
+                    },
+                    childCount: 1,
+                  ),
+                )
               ],
             ),
           ),

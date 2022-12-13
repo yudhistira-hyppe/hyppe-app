@@ -53,19 +53,21 @@ class TopDetailWidget extends StatelessWidget {
               ),
         TwoColumnWidget('Status', text2: data?.status),
         TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
-        TwoColumnWidget(
-          'No Virtual Account',
-          text2: data?.nova,
-          widget: const CustomIconWidget(
-            iconData: "${AssetPath.vectorPath}copy-link.svg",
-            defaultColor: false,
-            height: 15,
-          ),
-          function: () {
-            System().copyToClipboard(data?.nova ?? '');
-            ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
-          },
-        ),
+        data?.status == 'WAITING_PAYMENT'
+            ? TwoColumnWidget(
+                'No Virtual Account',
+                text2: data?.nova,
+                widget: const CustomIconWidget(
+                  iconData: "${AssetPath.vectorPath}copy-link.svg",
+                  defaultColor: false,
+                  height: 15,
+                ),
+                function: () {
+                  System().copyToClipboard(data?.nova ?? '');
+                  ShowBottomSheet().onShowColouredSheet(context, 'Copy to clipboard', color: kHyppeLightSuccess);
+                },
+              )
+            : Container(),
         TwoColumnWidget('Order ID', text2: data?.id),
       ],
     );

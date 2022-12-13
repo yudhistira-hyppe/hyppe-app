@@ -537,7 +537,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     userTagDataReal = [];
     priceController.clear();
     toSell = false;
-    includeTotalLikes = false;
+    includeTotalViews = false;
     includeTotalLikes = false;
     isUpdate = false;
     _postIdPanding = '';
@@ -711,6 +711,8 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
           );
+
+      context.read<SelfProfileNotifier>().onUpdate();
 
       context.read<HomeNotifier>().onUpdateSelfPostContent(
             context,
@@ -1447,10 +1449,10 @@ class PreUploadContentNotifier with ChangeNotifier {
       final notifier = UtilsBlocV2();
       await notifier.postBostContentPre(context, data: data);
       final fetch = notifier.utilsFetch;
-
       if (fetch.utilsState == UtilsState.getMasterBoostError) {
         isLoading = false;
         var errorData = ErrorModel.fromJson(fetch.data);
+        Routing().moveBack();
         ShowBottomSheet().onShowColouredSheet(
           context,
           errorData.message ?? '',

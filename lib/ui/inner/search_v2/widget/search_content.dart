@@ -5,6 +5,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_content_moderated_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_shimmer.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,7 @@ class _SearchContentState extends State<SearchContent> {
   @override
   void initState() {
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    _scrollController.addListener(() => notifier.onScrollListenerFirstPage(context, _scrollController, widget.featureType ?? FeatureType.vid));
     super.initState();
   }
 
@@ -60,54 +61,65 @@ class _SearchContentState extends State<SearchContent> {
                       ? notifier.picHasNext
                       : false;
           return !notifier.isLoading
-              ? GridView.builder(
-                  controller: _scrollController,
-                  scrollDirection: Axis.vertical,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                  itemCount: lenght,
-                  itemBuilder: (context, index) {
-                    try {
-                      if (index == contents.length) {
-                        return Container();
-                      } else if (index == contents.length + 1) {
-                        return const Padding(
-                          padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
-                          child: CustomLoading(size: 4),
-                        );
-                      }
-
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<SearchNotifier>().navigateToSeeAllScreen(context, contents, index);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(4),
-                            child: CustomContentModeratedWidget(
-                              width: double.infinity,
-                              height: double.infinity,
-                              featureType: widget.featureType ?? FeatureType.other,
-                              isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                              thumbnail: contents[index].isApsara ?? false
-                                  ? contents[index].mediaThumbEndPoint ?? ""
-                                  : System().showUserPicture(widget.featureType != FeatureType.pic ? contents[index].mediaThumbEndPoint : contents[index].mediaEndpoint) ?? '',
+              ? RefreshIndicator(
+                  strokeWidth: 2.0,
+                  color: Colors.purple,
+                  onRefresh: () async {
+                    await notifier.onInitialSearchNew(context);
+                  },
+                  child: GridView.builder(
+                    controller: _scrollController,
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                    itemCount: lenght,
+                    itemBuilder: (context, index) {
+                      try {
+                        if (index == contents.length) {
+                          return Container();
+                        } else if (index == contents.length + 1) {
+                          return const Padding(
+                            padding: EdgeInsets.only(left: 40.0, right: 30.0, bottom: 40.0),
+                            child: CustomLoading(size: 4),
+                          );
+                        }
+                        return GestureDetector(
+                          onTap: () {
+                            context.read<SearchNotifier>().navigateToSeeAllScreen(context, contents, index);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(3 * SizeConfig.scaleDiagonal),
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(4),
+                                  child: CustomContentModeratedWidget(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    featureType: widget.featureType ?? FeatureType.other,
+                                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                    thumbnail: contents[index].isApsara ?? false
+                                        ? contents[index].mediaThumbEndPoint ?? ""
+                                        : System().showUserPicture(widget.featureType != FeatureType.pic ? contents[index].mediaThumbEndPoint : contents[index].mediaEndpoint) ?? '',
+                                  ),
+                                ),
+                                PicTopItem(data: contents[index]),
+                              ],
                             ),
                           ),
-                        ),
-                      );
-                    } catch (e) {
-                      print('[DevError] => ${e.toString()}');
-                      return Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(image: AssetImage('${AssetPath.pngPath}filter_search-error.png'), fit: BoxFit.fill),
-                        ),
-                      );
-                    }
-                  },
+                        );
+                      } catch (e) {
+                        print('[DevError] => ${e.toString()}');
+                        return Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(image: AssetImage('${AssetPath.pngPath}filter_search-error.png'), fit: BoxFit.fill),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 )
               : SearchShimmer();
         },

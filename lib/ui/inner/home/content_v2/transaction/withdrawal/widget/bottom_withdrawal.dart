@@ -105,9 +105,10 @@ class BottomWithdrawalWidget extends StatelessWidget {
                                       textAlign: TextAlign.start,
                                     ),
                                     trailing: Radio<String>(
-                                      value: notifier.dataAcccount?[index].noRek ?? '',
+                                      value: notifier.dataAcccount?[index].id ?? '',
                                       groupValue: notifier.bankSelected,
-                                      onChanged: notifier.dataAcccount?[index].statusInquiry == null || (notifier.dataAcccount?[index].statusInquiry ?? false) ? (val) => notifier.bankChecked(index) : null,
+                                      onChanged:
+                                          notifier.dataAcccount?[index].statusInquiry == null || (notifier.dataAcccount?[index].statusInquiry ?? false) ? (val) => notifier.bankChecked(index) : null,
                                       activeColor: kHyppePrimary,
                                     ),
                                   ),

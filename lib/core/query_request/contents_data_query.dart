@@ -25,7 +25,9 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
   @override
   Future<List<ContentData>> loadNext(BuildContext context, {bool myContent = false, bool otherContent = false, bool isLandingPage = false}) async {
-    print('loadnext : $hasNext');
+    print('loadnext : $page');
+    print('loadnext : $limit');
+    print('skip limit : $hasNext');
     if (featureType == null) throw Exception('Feature Type must be provided');
     if (loading) throw Exception('Query operation is in progress');
     if (!hasNext) return [];
@@ -36,7 +38,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
 
     List<ContentData>? res;
 
-    if(!isLandingPage){
+    if (!isLandingPage) {
       try {
         final notifier = PostsBloc();
         await notifier.getContentsBlocV2(
@@ -62,27 +64,27 @@ class ContentsDataQuery extends PaginationQueryInterface {
       } finally {
         loading = false;
       }
-    }else{
+    } else {
       try {
         final notifier = PostsBloc();
         await notifier.getAllContentsBlocV2(
-            context,
-            pageRows: limit,
-            pageNumber: page,
-            visibility: notifierMain.visibilty,
-            myContent: myContent,
-            otherContent: otherContent,
-            postType: System().validatePostTypeV2(featureType),
+          context,
+          pageRows: limit,
+          pageNumber: page,
+          visibility: notifierMain.visibilty,
+          myContent: myContent,
+          otherContent: otherContent,
+          postType: System().validatePostTypeV2(featureType),
         );
         final fetch = notifier.postsFetch;
         final resAll = AllContents.fromJson(fetch.data);
-        if(featureType == FeatureType.story){
+        if (featureType == FeatureType.story) {
           res = resAll.story;
-        }else if(featureType == FeatureType.vid){
+        } else if (featureType == FeatureType.vid) {
           res = resAll.video;
-        }else if(featureType == FeatureType.diary){
+        } else if (featureType == FeatureType.diary) {
           res = resAll.diary;
-        }else if(featureType == FeatureType.pic){
+        } else if (featureType == FeatureType.pic) {
           res = resAll.pict;
         }
         hasNext = res?.length == limit;
@@ -95,7 +97,6 @@ class ContentsDataQuery extends PaginationQueryInterface {
         loading = false;
       }
     }
-
 
     return res ?? [];
   }

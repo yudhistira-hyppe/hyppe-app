@@ -57,6 +57,9 @@ class SearchNotifier with ChangeNotifier {
   final searchController1 = TextEditingController();
   int _pageIndex = 0;
   int _skip = 0;
+  int _skipVid = 1;
+  int _skipDiary = 1;
+  int _skipPict = 1;
 
   UserInfoModel get allContents => _allContents;
   List<ContentData>? get listContentData => _listContentData;
@@ -173,17 +176,54 @@ class SearchNotifier with ChangeNotifier {
     _vidHasNext = true;
     _diaryHasNext = true;
     _picHasNext = true;
-    _skip += 18;
+    _skip = 1;
+    _skipVid = 1;
+    _skipDiary = 1;
+    _skipPict = 1;
+    notifyListeners();
+
     try {
-      _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
-      _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
-      _searchContent?.pict?.data = await getListPosts(context, FeatureType.pic);
+      final allContents = await allReload(context);
+      vidContentsQuery.featureType = FeatureType.vid;
+      diaryContentsQuery.featureType = FeatureType.diary;
+      picContentsQuery.featureType = FeatureType.pic;
+      _searchContent?.vid?.data = allContents.video;
+      _searchContent?.diary?.data = allContents.diary;
+      _searchContent?.pict?.data = allContents.pict;
+      print('skipnya $_skipVid');
+      // _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
+      // _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
+      // _searchContent?.pict?.data = await getListPosts(context, FeatureType.pic);
     } catch (e) {
       'onInitialSearchNew : $e'.logger();
     } finally {
       isLoading = false;
 
       notifyListeners();
+    }
+  }
+
+  Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
+    AllContents? res;
+    // final notifier = PostsBloc();
+    //
+    // await notifier.getAllContentsBlocV2(context, pageNumber: page, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
+    // final fetch = notifier.postsFetch;
+    // '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+    // res = AllContents.fromJson(fetch.data);
+    // return res;
+    try {
+      final notifier = PostsBloc();
+
+      await notifier.getAllContentsBlocV2(context, pageNumber: 1, pageRows: 18, visibility: 'PUBLIC', myContent: myContent, otherContent: otherContent);
+      final fetch = notifier.postsFetch;
+      '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+      res = AllContents.fromJson(fetch.data);
+      print('res haha ${res.diary?.length}');
+      return res;
+    } catch (e) {
+      'landing page error : $e'.logger();
+      return AllContents(story: [], video: [], diary: [], pict: []);
     }
   }
 
@@ -206,13 +246,55 @@ class SearchNotifier with ChangeNotifier {
     return res ?? [];
   }
 
+  onScrollListenerFirstPage(BuildContext context, ScrollController scrollController, FeatureType type) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      List<ContentData>? res = [];
+      focusNode.unfocus();
+      switch (type) {
+        case FeatureType.vid:
+          print('skipnya $_skipVid');
+          print('skipnya2 $_skip');
+          _skipVid = _skip + _skipVid;
+          vidContentsQuery.page = _skipVid;
+          print('skipnya $_skipVid');
+          vidContentsQuery.featureType = FeatureType.vid;
+          vidContentsQuery.limit = 18;
+          res = await vidContentsQuery.loadNext(context, isLandingPage: true);
+          _searchContent?.vid?.data = [...(_searchContent?.vid?.data ?? []), ...(res)];
+          break;
+        case FeatureType.diary:
+          _skipDiary = _skip + _skipDiary;
+          diaryContentsQuery.page = _skipDiary;
+          diaryContentsQuery.featureType = FeatureType.diary;
+          diaryContentsQuery.limit = 18;
+          res = await diaryContentsQuery.loadNext(context, isLandingPage: true);
+          _searchContent?.diary?.data = [...(_searchContent?.diary?.data ?? []), ...(res)];
+          break;
+        default:
+          _skipPict = _skip + _skipPict;
+          picContentsQuery.page = _skipPict;
+          picContentsQuery.limit = 18;
+          picContentsQuery.featureType = FeatureType.pic;
+          res = await picContentsQuery.loadNext(context, isLandingPage: true);
+          _searchContent?.pict?.data = [...(_searchContent?.pict?.data ?? []), ...(res)];
+      }
+
+      notifyListeners();
+      try {
+        return res;
+      } catch (e) {
+        'landing page error : $e'.logger();
+        return AllContents(story: [], video: [], diary: [], pict: []);
+      }
+    }
+  }
+
   onScrollListener(BuildContext context, ScrollController scrollController) async {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       String search = searchController.text;
       focusNode.unfocus();
 
       final notifier = SearchContentBloc();
-
       await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 18);
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {

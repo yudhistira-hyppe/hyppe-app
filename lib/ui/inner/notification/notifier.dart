@@ -190,7 +190,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
 
     if (data.eventType == 'TRANSACTION') {
-      Routing().move(Routes.transaction);
+      // Routing().move(Routes.transaction);
     }
   }
 

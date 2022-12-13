@@ -31,7 +31,7 @@ class PicCenterItem extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
-    'mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}'.logger();
+    // 'mediaThumbEndPoint : ${data?.mediaThumbEndPoint} , ${data?.mediaEndpoint}. ${data?.postID}'.logger();
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: Stack(
@@ -92,12 +92,10 @@ class PicCenterItem extends StatelessWidget {
   }
 
   Widget _buildBody(context) {
-    final email = SharedPreference().readStorage(SpKeys.email);
-    final isSale = data?.email != email;
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     return Stack(
       children: [
-        if (isSale) PicTopItem(data: data),
+        PicTopItem(data: data),
         Positioned(bottom: 0, left: 0, child: PicBottomItem(data: data)),
         data?.reportedStatus == 'BLURRED'
             ? ClipRect(
