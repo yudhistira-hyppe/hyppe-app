@@ -749,6 +749,10 @@ class System {
         return 'VERIFICATIONID';
       case NotificationCategory.transactions:
         return 'TRANSACTIONS';
+      case NotificationCategory.adsClick:
+        return 'ADS CLICK';
+      case NotificationCategory.adsView:
+        return 'ADS VIEW';
     }
   }
 
@@ -768,6 +772,10 @@ class System {
         return NotificationCategory.general;
       case 'TRANSACTION':
         return NotificationCategory.transactions;
+      case 'ADS CLICK':
+        return NotificationCategory.adsClick;
+      case 'ADS VIEW':
+        return NotificationCategory.adsView;
       default:
         return NotificationCategory.all;
     }

@@ -7,10 +7,10 @@ enum ReportAction { report, hide, block }
 enum SourceFile { internet, local }
 enum SearchCategory { vid, diary, pic, account, htags }
 enum PostView { viewed, notViewed }
-enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid }
+enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid, adsClick, adsView }
 enum UserType { verified, notVerified }
 enum MethodType { get, post, download, postUploadProfile, postUploadContent, delete }
-enum TypePlaylist{landingpage, mine, other, search, none}
+enum TypePlaylist { landingpage, mine, other, search, none }
 enum ErrorType {
   myStory,
   peopleStory,
