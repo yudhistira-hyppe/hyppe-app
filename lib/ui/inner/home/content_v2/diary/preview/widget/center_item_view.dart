@@ -6,7 +6,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_view.dart';
 // import 'package:hyppe/ui/inner/home/content/diary/preview/widget/top_item_view.dart';
 import 'package:flutter/material.dart';

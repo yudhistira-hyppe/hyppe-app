@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 
 class VideoThumbnailReport extends StatelessWidget {
   final ContentData? videoData;
-  const VideoThumbnailReport({Key? key, this.videoData}) : super(key: key);
+  final bool seeContent;
+  const VideoThumbnailReport({Key? key, this.videoData, this.seeContent = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,34 +66,36 @@ class VideoThumbnailReport extends StatelessWidget {
             ],
           )),
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
-              },
-              child: Container(
-                padding: const EdgeInsets.only(top: 8),
-                margin: const EdgeInsets.all(8),
-                width: SizeConfig.screenWidth,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.white,
-                      width: 1,
+        seeContent
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<ReportNotifier>().seeContent(context, videoData!, hyppeVid);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 8),
+                      margin: const EdgeInsets.all(8),
+                      width: SizeConfig.screenWidth,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        "${translate.see} HyppeVid",
+                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                child: Text(
-                  "${translate.see} HyppeVid",
-                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
-        )
+                ],
+              )
+            : Container()
       ],
     );
   }

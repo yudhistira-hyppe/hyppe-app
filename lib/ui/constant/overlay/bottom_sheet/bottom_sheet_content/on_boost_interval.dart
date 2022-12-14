@@ -17,72 +17,66 @@ class OnBoostIntervalContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<PreUploadContentNotifier>(
-      builder: (context, notifier, child) => WillPopScope(
-        onWillPop: () async {
-          return false;
-        },
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
-                  sixteenPx,
-                  CustomTextWidget(
-                    textToDisplay: notifier.language.interval ?? 'Interval',
-                    // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
-                    textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(),
-                  ),
-                  thirtySixPx,
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: notifier.boostMasterData?.interval?.length ?? 0,
-                      itemBuilder: (context, index) {
-                        return RadioListTile<String>(
-                          contentPadding: EdgeInsets.zero,
-                          dense: true,
-                          groupValue: notifier.tmpBoostIntervalId,
-                          value: "${notifier.boostMasterData?.interval?[index].sId}",
-                          onChanged: (val) {
-                            notifier.tmpBoostInterval =
-                                "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}";
-                            notifier.tmpBoostIntervalId = val ?? '';
-                          },
-                          title: CustomTextWidget(
-                            textAlign: TextAlign.left,
-                            textToDisplay: "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}",
-                            textStyle: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                          activeColor: Theme.of(context).colorScheme.primaryVariant,
-                        );
-                      }),
-                  twentyFourPx,
-                  CustomTextButton(
-                    onPressed: notifier.tmpBoostIntervalId != ''
-                        ? () {
-                            Routing().moveBack();
-                          }
-                        : null,
-                    style: ButtonStyle(backgroundColor: notifier.tmpBoostIntervalId != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
-                    child: Container(
-                      width: SizeConfig.screenWidth,
-                      padding: const EdgeInsets.all(10),
-                      child: CustomTextWidget(
-                        textToDisplay: notifier.language.save ?? 'confirm',
-                        textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                      ),
+      builder: (context, notifier, child) => Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
+                sixteenPx,
+                CustomTextWidget(
+                  textToDisplay: notifier.language.interval ?? 'Interval',
+                  // '$captionTitle ${contentData?.content.length == 1 ? contentData?.content.length : contentIndex} of ${contentData?.content.length}',
+                  textStyle: Theme.of(context).primaryTextTheme.headline6?.copyWith(),
+                ),
+                thirtySixPx,
+                ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: notifier.boostMasterData?.interval?.length ?? 0,
+                    itemBuilder: (context, index) {
+                      return RadioListTile<String>(
+                        contentPadding: EdgeInsets.zero,
+                        dense: true,
+                        groupValue: notifier.tmpBoostIntervalId,
+                        value: "${notifier.boostMasterData?.interval?[index].sId}",
+                        onChanged: (val) {
+                          notifier.tmpBoostInterval = "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}";
+                          notifier.tmpBoostIntervalId = val ?? '';
+                        },
+                        title: CustomTextWidget(
+                          textAlign: TextAlign.left,
+                          textToDisplay: "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}",
+                          textStyle: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      );
+                    }),
+                twentyFourPx,
+                CustomTextButton(
+                  onPressed: notifier.tmpBoostIntervalId != ''
+                      ? () {
+                          Routing().moveBack();
+                        }
+                      : null,
+                  style: ButtonStyle(backgroundColor: notifier.tmpBoostIntervalId != '' ? MaterialStateProperty.all(kHyppePrimary) : MaterialStateProperty.all(kHyppeDisabled)),
+                  child: Container(
+                    width: SizeConfig.screenWidth,
+                    padding: const EdgeInsets.all(10),
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.language.save ?? 'confirm',
+                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

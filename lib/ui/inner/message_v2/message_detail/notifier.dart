@@ -64,6 +64,8 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
   void initState(BuildContext context, MessageDetailArgument argument) {
     _argument = argument;
+    print('_argument ini');
+
     // _connectAndListenToSocket(context);
     _selectData = -1;
 

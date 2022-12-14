@@ -3,6 +3,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/widget/content_thumbnail.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:provider/provider.dart';
@@ -92,10 +93,18 @@ class ContentItem extends StatelessWidget {
                               children: [
                                 AspectRatio(
                                   aspectRatio: 16 / 9,
-                                  child: ContentThumbnail(
-                                    picData: data,
-                                    fn: () => notifier.navigateToHyppePicDetail(context, data),
-                                  ),
+                                  child: (data?.reportedStatus == "BLURRED")
+                                      ? GestureDetector(
+                                          onTap: () => notifier.navigateToHyppePicDetail(context, data),
+                                          child: PichTumbnailReport(
+                                            pictData: data,
+                                            seeContent: false,
+                                          ),
+                                        )
+                                      : ContentThumbnail(
+                                          picData: data,
+                                          fn: () => notifier.navigateToHyppePicDetail(context, data),
+                                        ),
                                 ),
                                 (data?.saleAmount ?? 0) > 0
                                     ? const Align(

@@ -114,7 +114,7 @@ class _OnShowCommentBottomSheetV2State extends State<OnShowCommentBottomSheetV2>
                               itemCount: 1,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 130.0),
+                                  padding: const EdgeInsets.symmetric(vertical: 100.0),
                                   child: CustomTextWidget(textToDisplay: context.read<TranslateNotifierV2>().translate.beTheFirstToComment ?? ''),
                                 );
                               }),

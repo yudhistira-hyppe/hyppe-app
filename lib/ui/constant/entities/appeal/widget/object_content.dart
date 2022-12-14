@@ -85,16 +85,23 @@ class OnjectContentWidget extends StatelessWidget {
         thirtySixPx,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              translate.categories ?? '',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-              textAlign: TextAlign.start,
+            Expanded(
+              flex: 1,
+              child: Text(
+                translate.categories ?? '',
+                style: Theme.of(context).primaryTextTheme.bodyText2,
+                textAlign: TextAlign.start,
+              ),
             ),
-            Text(
-              cat,
-              style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.start,
+            Expanded(
+              flex: 2,
+              child: Text(
+                cat,
+                style: Theme.of(context).textTheme.bodyText2,
+                textAlign: TextAlign.end,
+              ),
             ),
           ],
         ),
@@ -102,16 +109,22 @@ class OnjectContentWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              translate.violationType ?? '',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-              textAlign: TextAlign.start,
+            Expanded(
+              flex: 1,
+              child: Text(
+                translate.violationType ?? '',
+                style: Theme.of(context).primaryTextTheme.bodyText2,
+                textAlign: TextAlign.start,
+              ),
             ),
-            Text(
-              reason,
-              style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.start,
-              maxLines: 3,
+            Expanded(
+              flex: 2,
+              child: Text(
+                reason,
+                style: Theme.of(context).textTheme.bodyText2,
+                textAlign: TextAlign.end,
+                maxLines: 3,
+              ),
             ),
           ],
         ),

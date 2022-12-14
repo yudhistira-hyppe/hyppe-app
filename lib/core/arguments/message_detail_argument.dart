@@ -6,6 +6,7 @@ class MessageDetailArgument {
   final String emailReceiver;
   final String usernameReceiver;
   final String fullnameReceiver;
+  final String disqusID;
 
   MessageDetailArgument({
     required this.mate,
@@ -13,5 +14,6 @@ class MessageDetailArgument {
     required this.emailReceiver,
     required this.usernameReceiver,
     required this.fullnameReceiver,
+    required this.disqusID,
   });
 }

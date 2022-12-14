@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail_report.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/error_service.dart';
@@ -122,10 +123,18 @@ class ContentItem extends StatelessWidget {
                                   child: Center(
                                     child: AspectRatio(
                                       aspectRatio: 16 / 9,
-                                      child: ContentThumbnail(
-                                        vidData: data,
-                                        fn: () => notifier.navigateToHyppeVidDetail(context, data),
-                                      ),
+                                      child: (data?.reportedStatus == "BLURRED")
+                                          ? GestureDetector(
+                                              onTap: () => notifier.navigateToHyppeVidDetail(context, data),
+                                              child: VideoThumbnailReport(
+                                                videoData: data,
+                                                seeContent: false,
+                                              ),
+                                            )
+                                          : ContentThumbnail(
+                                              vidData: data,
+                                              fn: () => notifier.navigateToHyppeVidDetail(context, data),
+                                            ),
                                     ),
                                   ),
                                 ),

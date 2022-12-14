@@ -181,7 +181,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                         child: CustomElevatedButton(
-                          width: 375.0 * SizeConfig.scaleDiagonal,
+                          width: SizeConfig.screenWidth,
                           height: 44.0 * SizeConfig.scaleDiagonal,
                           function: () {
                             if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {

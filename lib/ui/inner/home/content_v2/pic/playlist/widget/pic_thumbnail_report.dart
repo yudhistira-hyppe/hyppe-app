@@ -16,7 +16,8 @@ import 'package:provider/provider.dart';
 
 class PichTumbnailReport extends StatelessWidget {
   final ContentData? pictData;
-  const PichTumbnailReport({Key? key, this.pictData}) : super(key: key);
+  final bool seeContent;
+  const PichTumbnailReport({Key? key, this.pictData, this.seeContent = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -65,34 +66,36 @@ class PichTumbnailReport extends StatelessWidget {
             ],
           )),
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () {
-                context.read<ReportNotifier>().seeContent(context, pictData!, hyppePic);
-              },
-              child: Container(
-                padding: const EdgeInsets.only(top: 14, bottom: 14),
-                margin: const EdgeInsets.only(bottom: 8),
-                width: SizeConfig.screenWidth,
-                decoration: const BoxDecoration(
-                  border: Border(
-                    top: BorderSide(
-                      color: Colors.white,
-                      width: 1,
+        seeContent
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      context.read<ReportNotifier>().seeContent(context, pictData!, hyppePic);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 14, bottom: 14),
+                      margin: const EdgeInsets.only(bottom: 8),
+                      width: SizeConfig.screenWidth,
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: Colors.white,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: Text(
+                        "${translate.see} HyppePic",
+                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                child: Text(
-                  "${translate.see} HyppePic",
-                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ],
-        ),
+                ],
+              )
+            : Container(),
         sixPx,
       ],
     );

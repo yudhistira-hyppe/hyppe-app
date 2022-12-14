@@ -41,6 +41,9 @@ class SearchNotifier with ChangeNotifier {
   SearchContentModel? _searchContent;
   SearchContentModel? get searchContent => _searchContent;
 
+  SearchContentModel? _searchContentFirstPage;
+  SearchContentModel? get searchContentFirstPage => _searchContentFirstPage;
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -88,30 +91,30 @@ class SearchNotifier with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  int get vidCount => _searchContent?.vid?.data == null
+  int get vidCount => _searchContentFirstPage?.vid?.data == null
       ? 18
       : _vidHasNext
-          ? (_searchContent?.vid?.data?.length ?? 0) + 2
-          : (_searchContent?.vid?.data?.length ?? 0);
+          ? (_searchContentFirstPage?.vid?.data?.length ?? 0) + 2
+          : (_searchContentFirstPage?.vid?.data?.length ?? 0);
 
   bool _vidHasNext = false;
   // bool get vidHasNext => vidContentsQuery.hasNext;
   bool get vidHasNext => _vidHasNext;
 
-  int get diaryCount => _searchContent?.diary?.data == null
+  int get diaryCount => _searchContentFirstPage?.diary?.data == null
       ? 18
       : _diaryHasNext
-          ? (_searchContent?.diary?.data?.length ?? 0) + 2
-          : (_searchContent?.diary?.data?.length ?? 0);
+          ? (_searchContentFirstPage?.diary?.data?.length ?? 0) + 2
+          : (_searchContentFirstPage?.diary?.data?.length ?? 0);
 
   bool _diaryHasNext = false;
   bool get diaryHasNext => _diaryHasNext;
 
-  int get picCount => _searchContent?.pict?.data == null
+  int get picCount => _searchContentFirstPage?.pict?.data == null
       ? 18
       : _picHasNext
-          ? (_searchContent?.pict?.data?.length ?? 0) + 2
-          : (_searchContent?.pict?.data?.length ?? 0);
+          ? (_searchContentFirstPage?.pict?.data?.length ?? 0) + 2
+          : (_searchContentFirstPage?.pict?.data?.length ?? 0);
 
   bool _picHasNext = false;
   // bool get picHasNext => picContentsQuery.hasNext;
@@ -166,13 +169,13 @@ class SearchNotifier with ChangeNotifier {
   onInitialSearchNew(BuildContext context) async {
     focusNode.unfocus();
     isLoading = true;
-    _searchContent = SearchContentModel();
-    _searchContent?.diary = Diary();
-    _searchContent?.diary?.data = [];
-    _searchContent?.vid = Diary();
-    _searchContent?.vid?.data = [];
-    _searchContent?.pict = Diary();
-    _searchContent?.pict?.data = [];
+    _searchContentFirstPage = SearchContentModel();
+    _searchContentFirstPage?.diary = Diary();
+    _searchContentFirstPage?.diary?.data = [];
+    _searchContentFirstPage?.vid = Diary();
+    _searchContentFirstPage?.vid?.data = [];
+    _searchContentFirstPage?.pict = Diary();
+    _searchContentFirstPage?.pict?.data = [];
     _vidHasNext = true;
     _diaryHasNext = true;
     _picHasNext = true;
@@ -187,9 +190,9 @@ class SearchNotifier with ChangeNotifier {
       vidContentsQuery.featureType = FeatureType.vid;
       diaryContentsQuery.featureType = FeatureType.diary;
       picContentsQuery.featureType = FeatureType.pic;
-      _searchContent?.vid?.data = allContents.video;
-      _searchContent?.diary?.data = allContents.diary;
-      _searchContent?.pict?.data = allContents.pict;
+      _searchContentFirstPage?.vid?.data = allContents.video;
+      _searchContentFirstPage?.diary?.data = allContents.diary;
+      _searchContentFirstPage?.pict?.data = allContents.pict;
       print('skipnya $_skipVid');
       // _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
       // _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
@@ -260,7 +263,7 @@ class SearchNotifier with ChangeNotifier {
           vidContentsQuery.featureType = FeatureType.vid;
           vidContentsQuery.limit = 18;
           res = await vidContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContent?.vid?.data = [...(_searchContent?.vid?.data ?? []), ...(res)];
+          _searchContentFirstPage?.vid?.data = [...(_searchContentFirstPage?.vid?.data ?? []), ...(res)];
           break;
         case FeatureType.diary:
           _skipDiary = _skip + _skipDiary;
@@ -268,7 +271,7 @@ class SearchNotifier with ChangeNotifier {
           diaryContentsQuery.featureType = FeatureType.diary;
           diaryContentsQuery.limit = 18;
           res = await diaryContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContent?.diary?.data = [...(_searchContent?.diary?.data ?? []), ...(res)];
+          _searchContentFirstPage?.diary?.data = [...(_searchContentFirstPage?.diary?.data ?? []), ...(res)];
           break;
         default:
           _skipPict = _skip + _skipPict;
@@ -276,7 +279,7 @@ class SearchNotifier with ChangeNotifier {
           picContentsQuery.limit = 18;
           picContentsQuery.featureType = FeatureType.pic;
           res = await picContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContent?.pict?.data = [...(_searchContent?.pict?.data ?? []), ...(res)];
+          _searchContentFirstPage?.pict?.data = [...(_searchContentFirstPage?.pict?.data ?? []), ...(res)];
       }
 
       notifyListeners();
@@ -293,55 +296,55 @@ class SearchNotifier with ChangeNotifier {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
       String search = searchController.text;
       focusNode.unfocus();
-
+      _skip += 18;
       final notifier = SearchContentBloc();
       await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 18);
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-        if (_res.vid?.data?.isEmpty ?? true) {
-          _vidHasNext = false;
-        } else if (_res.vid?.skip == 0) {
-          _vidHasNext = false;
-        } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
-          if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
-            _vidHasNext = false;
-          } else {
-            _vidHasNext = true;
-          }
-        } else {
-          _vidHasNext = false;
-        }
-        if (_res.diary?.data?.isEmpty ?? true) {
-          _diaryHasNext = false;
-        } else if (_res.diary?.skip == 0) {
-          _diaryHasNext = false;
-        } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
-          if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
-            _diaryHasNext = false;
-          } else {
-            _diaryHasNext = true;
-          }
-        } else {
-          _diaryHasNext = false;
-        }
-        if (_res.pict?.data?.isEmpty ?? true) {
-          _picHasNext = false;
-        } else if (_res.pict?.skip == 0) {
-          _picHasNext = false;
-        } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
-          if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
-            _picHasNext = false;
-          } else {
-            _picHasNext = true;
-          }
-        } else {
-          _picHasNext = false;
-        }
+        // if (_res.vid?.data?.isEmpty ?? true) {
+        //   _vidHasNext = false;
+        // } else if (_res.vid?.skip == 0) {
+        //   _vidHasNext = false;
+        // } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
+        //   if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
+        //     _vidHasNext = false;
+        //   } else {
+        //     _vidHasNext = true;
+        //   }
+        // } else {
+        //   _vidHasNext = false;
+        // }
+        // if (_res.diary?.data?.isEmpty ?? true) {
+        //   _diaryHasNext = false;
+        // } else if (_res.diary?.skip == 0) {
+        //   _diaryHasNext = false;
+        // } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
+        //   if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
+        //     _diaryHasNext = false;
+        //   } else {
+        //     _diaryHasNext = true;
+        //   }
+        // } else {
+        //   _diaryHasNext = false;
+        // }
+        // if (_res.pict?.data?.isEmpty ?? true) {
+        //   _picHasNext = false;
+        // } else if (_res.pict?.skip == 0) {
+        //   _picHasNext = false;
+        // } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
+        //   if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
+        //     _picHasNext = false;
+        //   } else {
+        //     _picHasNext = true;
+        //   }
+        // } else {
+        //   _picHasNext = false;
+        // }
 
-        if (_picHasNext || _diaryHasNext || _vidHasNext) {
-          _skip += 18;
-        }
+        // if (_picHasNext || _diaryHasNext || _vidHasNext) {
+        // _skip += 18;
+        // }
 
         _searchContent?.users?.data?.addAll(_res.users?.data ?? []);
         _searchContent?.diary?.data = [...(_searchContent?.diary?.data ?? []), ...(_res.diary?.data ?? [])];
@@ -366,45 +369,45 @@ class SearchNotifier with ChangeNotifier {
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       final _res = SearchContentModel.fromJson(fetch.data);
-      if (_res.vid?.data?.isEmpty ?? true) {
-        _vidHasNext = false;
-      } else if (_res.vid?.skip == 0) {
-        _vidHasNext = false;
-      } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
-        if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
-          _vidHasNext = false;
-        } else {
-          _vidHasNext = true;
-        }
-      } else {
-        _vidHasNext = false;
-      }
-      if (_res.diary?.data?.isEmpty ?? true) {
-        _diaryHasNext = false;
-      } else if (_res.diary?.skip == 0) {
-        _diaryHasNext = false;
-      } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
-        if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
-          _diaryHasNext = false;
-        } else {
-          _diaryHasNext = true;
-        }
-      } else {
-        _diaryHasNext = false;
-      }
-      if (_res.pict?.data?.isEmpty ?? true) {
-        _picHasNext = false;
-      } else if (_res.pict?.skip == 0) {
-        _picHasNext = false;
-      } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
-        if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
-          _picHasNext = false;
-        } else {
-          _picHasNext = true;
-        }
-      } else {
-        _picHasNext = false;
-      }
+      // if (_res.vid?.data?.isEmpty ?? true) {
+      //   _vidHasNext = false;
+      // } else if (_res.vid?.skip == 0) {
+      //   _vidHasNext = false;
+      // } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
+      //   if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
+      //     _vidHasNext = false;
+      //   } else {
+      //     _vidHasNext = true;
+      //   }
+      // } else {
+      //   _vidHasNext = false;
+      // }
+      // if (_res.diary?.data?.isEmpty ?? true) {
+      //   _diaryHasNext = false;
+      // } else if (_res.diary?.skip == 0) {
+      //   _diaryHasNext = false;
+      // } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
+      //   if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
+      //     _diaryHasNext = false;
+      //   } else {
+      //     _diaryHasNext = true;
+      //   }
+      // } else {
+      //   _diaryHasNext = false;
+      // }
+      // if (_res.pict?.data?.isEmpty ?? true) {
+      //   _picHasNext = false;
+      // } else if (_res.pict?.skip == 0) {
+      //   _picHasNext = false;
+      // } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
+      //   if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
+      //     _picHasNext = false;
+      //   } else {
+      //     _picHasNext = true;
+      //   }
+      // } else {
+      //   _picHasNext = false;
+      // }
       _searchContent = _res;
     }
     // else {

@@ -305,8 +305,12 @@ class OtherProfileNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      if (pageIndex == 1) _routing.move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
-      if (pageIndex == 2) _routing.move(Routes.picSlideDetailPreview, argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
+      if (pageIndex == 1)
+        _routing.move(Routes.diaryDetail,
+            argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.other));
+      if (pageIndex == 2)
+        _routing.move(Routes.picSlideDetailPreview,
+            argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.other));
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
@@ -365,6 +369,7 @@ class OtherProfileNotifier with ChangeNotifier {
                 usernameReceiver: displayUserName(),
                 fullnameReceiver: displayFullName() ?? '',
                 photoReceiver: displayPhotoProfile() ?? '',
+                disqusID: '',
               ))
           .then((value) {});
       //   },

@@ -1404,8 +1404,8 @@ class ShowBottomSheet {
   static onShowBoostTime(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isDismissible: false,
-      enableDrag: false,
+      isDismissible: true,
+      enableDrag: true,
       builder: (builder) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
@@ -1425,8 +1425,8 @@ class ShowBottomSheet {
   static onShowBoostInterval(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isDismissible: false,
-      enableDrag: false,
+      isDismissible: true,
+      enableDrag: true,
       builder: (builder) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
