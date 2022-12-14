@@ -101,16 +101,40 @@ class NotificationService {
 
   Future showNotification(RemoteMessage message) async {
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
+    final data = NotificationBody.fromJson(json.decode(message.notification?.body ?? "{}"));
     if (deviceID != null) {
       if (message.notification != null) {
         await flutterLocalNotificationsPlugin.show(
           message.hashCode,
           message.notification?.title ?? '',
-          message.notification?.body ?? '',
+          data.message ?? '',
           platformChannelSpecifics,
           payload: jsonEncode(message.data),
         );
       }
     }
+  }
+}
+
+
+class NotificationBody{
+  String? postId;
+  String? postType;
+  String? message;
+
+  NotificationBody({this.postId, this.postType, this.message});
+
+  NotificationBody.fromJson(Map<String, dynamic> json){
+    postId = json['postID'];
+    postType = json['postType'];
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson(){
+    final Map<String, dynamic> result = <String, dynamic>{};
+    result['postID'] = postId;
+    result['postType'] = postType;
+    result['message'] = message;
+    return result;
   }
 }

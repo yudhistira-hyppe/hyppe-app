@@ -781,6 +781,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     }else{
       Navigator.pop(context);
       Navigator.pop(context);
+      Navigator.pop(context);
     }
 
   }
