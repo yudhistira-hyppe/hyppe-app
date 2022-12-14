@@ -783,7 +783,6 @@ class PreUploadContentNotifier with ChangeNotifier {
       Navigator.pop(context);
       Navigator.pop(context);
     }
-
   }
 
   Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {

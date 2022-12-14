@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:provider/provider.dart';
+
+import '../../ui/inner/notification/notifier.dart';
 // import 'package:hyppe/core/arguments/message_detail_argument.dart';
 // import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 // import 'package:hyppe/core/services/system.dart';
@@ -80,6 +84,8 @@ class NotificationService {
         print('notification payload: $payload');
         if (payload != null) {
           try {
+            final data = NotificationBody.fromJson(json.decode(payload));
+            materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
             // final Map<String, dynamic> mapData = jsonDecode(payload);
             // final msgData = MessageDataV2.fromJson(mapData);
             // Routing().move(messageDetail, argument: MessageDetailArgument(
@@ -100,6 +106,7 @@ class NotificationService {
   // show notification
 
   Future showNotification(RemoteMessage message) async {
+    print('notif message ${message.notification?.body}');
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     final data = NotificationBody.fromJson(json.decode(message.notification?.body ?? "{}"));
     if (deviceID != null) {
@@ -109,7 +116,7 @@ class NotificationService {
           message.notification?.title ?? '',
           data.message ?? '',
           platformChannelSpecifics,
-          payload: jsonEncode(message.data),
+          payload: message.notification?.body ?? "{}",
         );
       }
     }
