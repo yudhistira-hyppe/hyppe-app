@@ -150,8 +150,10 @@ class _AdsScreenState extends State<AdsScreen> {
                       });
                     },
                     nextDebouncer: false,
-                    onComplete: () {
+                    onComplete: () async {
                       _storyController.pause();
+                      await adsView(widget.argument.data, secondsVideo);
+                      Navigator.pop(context);
                     },
                   ),
                   widget.argument.data.isReport ?? false

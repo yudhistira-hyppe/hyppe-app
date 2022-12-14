@@ -153,8 +153,10 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                             });
                           },
                           nextDebouncer: false,
-                          onComplete: () {
+                          onComplete: () async {
                             _storyController.pause();
+                            await adsView(widget.data, secondsVideo);
+                            Navigator.pop(context);
                           },
                         ),
                         widget.data.isReport ?? false
