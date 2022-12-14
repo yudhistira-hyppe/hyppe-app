@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/widget/music_progress.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -107,12 +108,21 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
               ),
             ),
             !widget.music.isLoad ?
+            widget.music.isPlay ? MusicProgress(
+              totalSeconds: widget.music.apsaraMusicUrl?.duration?.toInt() ?? 0,
+              onClick: (){
+                if(!widget.isExplored){
+                  notifier.playMusic(context, widget.music, widget.index);
+                }else{
+                  notifier.playExpMusic(context, widget.music, widget.index);
+                }
+              },):
             Container(
               width: 50,
               height: 50,
               child: IconButton(
                 focusColor: Colors.grey,
-                icon: CustomIconWidget(iconData: widget.music.isPlay ? "${AssetPath.vectorPath}stop_circle.svg" : "${AssetPath.vectorPath}play_circle.svg"),
+                icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}play_circle.svg"),
                 splashRadius: 1,
                 onPressed: () {
                   if(!widget.isExplored){
@@ -143,3 +153,4 @@ class _MusicItemScreenState extends State<MusicItemScreen> with WidgetsBindingOb
   }
 
 }
+

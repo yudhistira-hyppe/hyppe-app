@@ -105,7 +105,7 @@ class _OnChooseMusicBottomSheetState extends State<OnChooseMusicBottomSheet> {
               : const ExplorerMusicsScreen() : const MusicPlaceholder()),
           if(notifier.selectedMusic != null)
             Container(
-              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePurple),
+              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: kHyppePrimary),
               width: double.infinity,
               margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10, top: 8),
               child: CustomTextButton(onPressed: () async{

@@ -150,13 +150,10 @@ class _DiaryPageState extends State<DiaryPage> {
                         onInit: () {
                           context.incrementAdsCount();
                         },
-                        onRepeat: () {
-                          context.incrementAdsCount();
-                        },
                         nextDebouncer: false,
                         onComplete: () async {
                           await notifier.initAdsData(context);
-                          // widget.controller.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
 
                           // _storyController.next();
                           // widget.controller.

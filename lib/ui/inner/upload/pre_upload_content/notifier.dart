@@ -781,6 +781,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     }else{
       Navigator.pop(context);
       Navigator.pop(context);
+      Navigator.pop(context);
     }
 
   }
@@ -1181,7 +1182,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     String _text = value.toString().substring(0, selection.baseOffset);
     final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9]+\w*", caseSensitive: false);
     final sentences = _text.split('\n');
-    notifyListeners();
 
     for (var sentence in sentences) {
       final words = sentence.split(' ');
@@ -1193,13 +1193,20 @@ class PreUploadContentNotifier with ChangeNotifier {
         if (withoutat.length > 2) {
           _isShowAutoComplete = true;
           searchPeople(context, input: withoutat);
-          _temporarySearch = withoutat;
+          temporarySearch = withoutat;
+          break;
         }
       } else {
-        _isShowAutoComplete = false;
+        if(_isShowAutoComplete){
+          _isShowAutoComplete = false;
+          Future.delayed(const Duration(milliseconds: 500), (){
+            notifyListeners();
+          });
+        }
       }
     }
-    notifyListeners();
+
+
   }
 
   void insertAutoComplete(index) {
