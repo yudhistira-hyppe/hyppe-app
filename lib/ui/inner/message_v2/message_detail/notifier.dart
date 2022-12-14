@@ -64,13 +64,13 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
   void initState(BuildContext context, MessageDetailArgument argument) {
     _argument = argument;
-    print('_argument ini');
 
     // _connectAndListenToSocket(context);
     _selectData = -1;
 
     _eventService.addDiscussHandler(EventKey.messageReceivedKey, this);
-    getMessageDiscussion(context, reload: true);
+    _discussData = argument.discussData;
+    // getMessageDiscussion(context, reload: true);
   }
 
   void disposeNotifier() {

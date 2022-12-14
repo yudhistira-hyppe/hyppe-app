@@ -100,27 +100,29 @@ class MessageNotifier extends ChangeNotifier {
 
     // get self profile data
     final _selfProfile = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final List<MessageDataV2> messageData = [];
+    messageData.add(data ?? MessageDataV2());
 
     Routing().move(
       Routes.messageDetail,
       argument: MessageDetailArgument(
-        mate: Mate(
-          email: emailSender,
-          fullName: _selfProfile.user.profile?.fullName,
-          username: _selfProfile.user.profile?.username,
-          avatar: Avatar(
-            mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
-            mediaType: _selfProfile.user.profile?.avatar?.mediaType,
-            mediaEndpoint: _selfProfile.user.profile?.avatar?.mediaEndpoint,
-            mediaBasePath: _selfProfile.user.profile?.avatar?.mediaBasePath,
+          mate: Mate(
+            email: emailSender,
+            fullName: _selfProfile.user.profile?.fullName,
+            username: _selfProfile.user.profile?.username,
+            avatar: Avatar(
+              mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
+              mediaType: _selfProfile.user.profile?.avatar?.mediaType,
+              mediaEndpoint: _selfProfile.user.profile?.avatar?.mediaEndpoint,
+              mediaBasePath: _selfProfile.user.profile?.avatar?.mediaBasePath,
+            ),
           ),
-        ),
-        emailReceiver: data?.senderOrReceiverInfo?.email ?? '',
-        usernameReceiver: data?.senderOrReceiverInfo?.username ?? '',
-        fullnameReceiver: data?.senderOrReceiverInfo?.fullName ?? '',
-        photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
-        disqusID: data?.disqusID ?? '',
-      ),
+          emailReceiver: data?.senderOrReceiverInfo?.email ?? '',
+          usernameReceiver: data?.senderOrReceiverInfo?.username ?? '',
+          fullnameReceiver: data?.senderOrReceiverInfo?.fullName ?? '',
+          photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
+          disqusID: data?.disqusID ?? '',
+          discussData: messageData),
     );
   }
 
