@@ -668,7 +668,7 @@
   "successIdCard2":"Sell and Buying Content",
   "successIdCard3":"Put Ads in Hyppe Apps",
   "successIdCard4":"Send balance to your Bank Account",
-  "help":"Help",
+  "help":"Bantuan",
   "retry":"Retry",
   "retakeSelfie": "Re-take Selfie",
   "dataDidntShow":"The data shown did not match with your ID?",
@@ -784,5 +784,6 @@
   "genderMustBeFilled" : "Jenis kelamin harus diisi",
   "placeOfBirthMustBeFilled" : "Tempat lahir harus diisi",
   "dateOfBirthMustBeFilled" : "Tanggal lahir harus diisi",
-  "userIsNotFound" : "Pengguna tidak ditemukan"
+  "userIsNotFound" : "Pengguna tidak ditemukan",
+  "usernameOnlyContainLetters" : "Nama pengguna hanya berisi huruf, angka, titik, dan garis bawah"
 }

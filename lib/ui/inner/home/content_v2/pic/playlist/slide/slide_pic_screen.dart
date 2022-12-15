@@ -338,32 +338,32 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Row(
-                                      children: [
-                                        widget.data.tagPeople?.isNotEmpty ?? false
-                                            ? TagLabel(
-                                                icon: 'user',
-                                                label: '${widget.data.tagPeople?.length ?? 0} people',
-                                                function: () {
-                                                  notifier.showUserTag(context, widget.data.tagPeople, widget.data.postID);
-                                                  // vidNotifier.showUserTag(context, index, data.postID);
-                                                },
-                                              )
-                                            : const SizedBox(),
-                                        widget.data.location == '' || widget.data.location == null
-                                            ? const SizedBox()
-                                            : TagLabel(
-                                                icon: 'maptag',
-                                                label: "${widget.data.location}",
-                                                function: () {},
-                                              ),
-                                      ],
-                                    ),
-                                  )
-                                : const SizedBox(),
+                            // (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
+                            //     ? Padding(
+                            //         padding: const EdgeInsets.only(bottom: 10),
+                            //         child: Row(
+                            //           children: [
+                            //             widget.data.tagPeople?.isNotEmpty ?? false
+                            //                 ? TagLabel(
+                            //                     icon: 'user',
+                            //                     label: '${widget.data.tagPeople?.length ?? 0} people',
+                            //                     function: () {
+                            //                       notifier.showUserTag(context, widget.data.tagPeople, widget.data.postID);
+                            //                       // vidNotifier.showUserTag(context, index, data.postID);
+                            //                     },
+                            //                   )
+                            //                 : const SizedBox(),
+                            //             widget.data.location == '' || widget.data.location == null
+                            //                 ? const SizedBox()
+                            //                 : TagLabel(
+                            //                     icon: 'maptag',
+                            //                     label: "${widget.data.location}",
+                            //                     function: () {},
+                            //                   ),
+                            //           ],
+                            //         ),
+                            //       )
+                            //     : const SizedBox(),
                             ReadMoreText(
                               "${widget.data.description}",
                               // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
@@ -394,9 +394,11 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                     ),
                     twentyPx,
                     (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED') &&
-                            widget.data.isBoost == null &&
+                            (widget.data.boosted.isEmpty) &&
                             widget.data.email == SharedPreference().readStorage(SpKeys.email)
-                        ? ButtonBoost(contentData: widget.data,)
+                        ? ButtonBoost(
+                            contentData: widget.data,
+                          )
                         : Container(),
                     widget.data.isBoost != null && widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? Padding(

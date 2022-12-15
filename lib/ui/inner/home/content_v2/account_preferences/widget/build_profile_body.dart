@@ -37,7 +37,7 @@ class BuildProfileBody extends StatelessWidget {
               labelText: "${notifier.language.fullName}*",
               hintText: notifier.language.fullName,
               inputAreaHeight: 50 * SizeConfig.scaleDiagonal,
-              maxLength: 50,
+              maxLength: 30,
               minLines: 2,
               counterText: false,
             ),

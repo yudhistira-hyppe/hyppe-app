@@ -54,7 +54,7 @@ class VidDetailBottom extends StatelessWidget {
           data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: data!) : Container(),
           twelvePx,
           _buildDescription(context),
-          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED') && data?.isBoost == null && data?.email == SharedPreference().readStorage(SpKeys.email)
+          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED') && (data?.boosted != null || data!.boosted.isEmpty) && data?.email == SharedPreference().readStorage(SpKeys.email)
               ? ButtonBoost(contentData: data)
               : Container(),
           data?.isBoost != null && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),

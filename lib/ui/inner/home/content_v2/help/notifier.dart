@@ -11,33 +11,30 @@ class HelpNotifier with ChangeNotifier {
   bool get isLoading => _isLoading;
   List<FaqModel> faqListData = [];
 
-  // Future getInitSupportTicket(BuildContext context) async {
-  //   if (categoryData.isEmpty) _getCategoryTickets(context);
-  //   if (levelData.isEmpty) _getLevelTickets(context);
-  // }
+  Future getFaq(BuildContext context) async {
+    if (faqListData.isEmpty) _getFaq(context);
+  }
 
-  // Future _getCategoryTickets(BuildContext context) async {
-  //   _isLoading = true;
-  //   bool connect = await System().checkConnections();
-  //   if (connect) {
-  //     final notifier = SupportTicketBloc();
-  //     await notifier.getCategory(context);
-  //     final fetch = notifier.supportTicketFetch;
+  Future _getFaq(BuildContext context) async {
+    _isLoading = true;
+    bool connect = await System().checkConnections();
+    if (connect) {
+      final notifier = SupportTicketBloc();
+      await notifier.getListFaq(context);
+      final fetch = notifier.supportTicketFetch;
 
-  //     if (fetch.postsState == SupportTicketState.getCategoryIssueSuccess) {
-  //       fetch.data.forEach((v) => faqListData.add(FaqModel.fromJson(v)));
-  //     }
+      if (fetch.postsState == SupportTicketState.faqSuccess) {
+        fetch.data.forEach((v) => faqListData.add(FaqModel.fromJson(v)));
+      }
 
-  //     if (fetch.postsState == SupportTicketState.getCategoryIssueError) {
-  //       categoryData = [];
-  //     }
-  //     _isLoading = false;
-  //     notifyListeners();
-  //   } else {
-  //     ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-  //       Routing().moveBack();
-  //       getInitSupportTicket(context);
-  //     });
-  //   }
-  // }
+      if (fetch.postsState == SupportTicketState.faqError) {}
+      _isLoading = false;
+      notifyListeners();
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        _getFaq(context);
+      });
+    }
+  }
 }

@@ -110,9 +110,10 @@ class LikeNotifier with ChangeNotifier {
 
       if (postData.isLiked == true) {
         //unlike
+
         postData.isLiked = false;
         postData.insight?.isPostLiked = false;
-        postData.insight?.likes = postData.insight?.likes ?? 1 - 1;
+        postData.insight?.likes = (postData.insight?.likes ?? 1) - 1;
 
         notifyListeners();
 
@@ -132,7 +133,7 @@ class LikeNotifier with ChangeNotifier {
         //like
         postData.isLiked = true;
         postData.insight?.isPostLiked = true;
-        postData.insight?.likes = postData.insight?.likes ?? 0 + 1;
+        postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
 
         notifyListeners();
 

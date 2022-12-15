@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
@@ -223,6 +224,7 @@ class AppDependencies {
         ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
 
         ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
+        ChangeNotifierProvider<HelpNotifier>(create: (context) => HelpNotifier()),
         ChangeNotifierProvider<SlidedPicDetailNotifier>(create: (context) => SlidedPicDetailNotifier()),
         ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
         ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),

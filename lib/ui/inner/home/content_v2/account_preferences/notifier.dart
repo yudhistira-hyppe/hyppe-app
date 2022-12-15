@@ -315,17 +315,19 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     if (connect) {
       if (somethingChanged(context)) {
         try {
-          // if (!System().canOnlyContainLettersNumbersPeriodsAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
-          //   await ShowBottomSheet()
-          //       .onShowColouredSheet(context, 'Username only contain letters, numbers, periods, and underscore', color: Colors.red, iconSvg: "${AssetPath.vectorPath}remove.svg", maxLines: 2);
-          //   return;
-          // }
-
+          if (!System().canOnlyContainLettersNumbersDotAndUnderscores(userNameController.text) || !System().atLeastThreeThreetyCharacter(userNameController.text)) {
+            await ShowBottomSheet().onShowColouredSheet(
+              context,
+              "${language.usernameOnlyContainLetters}",
+              color: Colors.red,
+              iconSvg: "${AssetPath.vectorPath}remove.svg",
+              maxLines: 2,
+            );
+            return;
+          }
           progress = "0%";
           FocusScopeNode currentFocus = FocusScope.of(context);
-
           uploadProgress = System().createPopupDialog(ShowOverlayLoading());
-
           Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
           if (!currentFocus.hasPrimaryFocus) {

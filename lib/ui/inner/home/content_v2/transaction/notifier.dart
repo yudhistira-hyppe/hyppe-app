@@ -246,7 +246,7 @@ class TransactionNotifier extends ChangeNotifier {
             context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
           }
 
-          countTransactionProgress = fetch.data['datacount'];
+          // countTransactionProgress = fetch.data['datacount'];
         }
         if (fetch.postsState == TransactionState.getHistoryError) {
           if (fetch.data != null) {

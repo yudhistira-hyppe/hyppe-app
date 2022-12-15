@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-
 import 'package:hyppe/core/services/system.dart';
-
 import 'package:hyppe/core/constants/size_config.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/content_message_layout.dart';
 

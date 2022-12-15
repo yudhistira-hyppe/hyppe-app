@@ -108,9 +108,9 @@ class SelfProfileNotifier with ChangeNotifier {
 
   String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
 
-  String? displayPhotoProfile() {
+  String? displayPhotoProfile(String image) {
     print('ini gambar profil ${_system.showUserPicture(user.profile?.avatar?.mediaEndpoint)}');
-    return _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+    return _system.showUserPicture(image);
   }
 
   String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.posts?.toInt()) : "0";

@@ -985,7 +985,7 @@ class System {
     return text.length >= 3 && text.length <= 30;
   }
 
-  bool canOnlyContainLettersNumbersPeriodsAndUnderscores(String text) {
+  bool canOnlyContainLettersNumbersDotAndUnderscores(String text) {
     return text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
   }
 

@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
@@ -22,135 +23,134 @@ class HelpScreen extends StatefulWidget {
 
 class _HelpScreenState extends State<HelpScreen> {
   @override
+  void initState() {
+    final notifier = context.read<HelpNotifier>();
+    notifier.getFaq(context);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<TranslateNotifierV2>(
-      builder: (context, notifier, child) => Scaffold(
+    return Consumer2<HelpNotifier, TranslateNotifierV2>(
+      builder: (context, notifier, translate, child) => Scaffold(
         appBar: AppBar(
           leading: const BackButton(),
           title: CustomTextWidget(
             textStyle: Theme.of(context).textTheme.subtitle1,
-            textToDisplay: '${notifier.translate.help}',
+            textToDisplay: '${translate.translate.help}',
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
+        bottomSheet: Container(
+          color: Colors.white,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              CustomTextWidget(
-                textToDisplay: notifier.translate.helloCanIhelpyou ?? '',
-                textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              CustomSearchBar(
-                hintText: notifier.translate.searchtopic,
-                contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                // controller: notifier.searchController1,
-                // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-                // onPressedIcon: () => notifier.onSearchPost(context),
-                // onTap: () => notifier.moveSearchMore(),
-                // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
-              ),
-              Container(
-                padding: const EdgeInsets.all(11),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black.withOpacity(0.12),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  padding: const EdgeInsets.all(11),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.black.withOpacity(0.12),
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    color: context.isDarkMode() ? Colors.black12 : kHyppeLightSurface,
                   ),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  children: [
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}ticket.svg",
-                    ),
-                    tenPx,
-                    CustomTextWidget(
-                      textToDisplay: notifier.translate.yourTicketIssue ?? '',
-                      textStyle: Theme.of(context).primaryTextTheme.caption,
-                      textAlign: TextAlign.start,
-                    ),
-                    const Spacer(),
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}chevron_right.svg",
-                    ),
-                  ],
-                ),
-              ),
-              twentyFourPx,
-              CustomTextWidget(
-                textToDisplay: notifier.translate.frequentlyAskedQuestions ?? '',
-                textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(),
-              ),
-              GestureDetector(onTap: () => Routing().move(Routes.faqDetail), child: Text('List FAQ')),
-              // ...List.generate(
-              //   supportNotifier.levelData.length,
-              //   (index) => Padding(
-              //       padding: const EdgeInsets.all(2.0),
-              //       child: RadioListTile<String>(
-              //         contentPadding: EdgeInsets.zero,
-              //         groupValue: supportNotifier.nameLevel,
-              //         value: supportNotifier.levelData[index].descLevel ?? '',
-              //         onChanged: (val) {
-              //           supportNotifier.nameLevel = val ?? '';
-              //           supportNotifier.idLevelTicket = supportNotifier.levelData[index].sId ?? '';
-              //         },
-              //         toggleable: true,
-              //         title: CustomTextWidget(
-              //           textAlign: TextAlign.left,
-              //           textToDisplay: supportNotifier.levelData[index].descLevel ?? '',
-              //           textStyle: Theme.of(context).primaryTextTheme.bodyText2,
-              //         ),
-              //         subtitle: Text('The condition will appear if the users problem need technical   that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
-              //         controlAffinity: ListTileControlAffinity.leading,
-              //         activeColor: Theme.of(context).colorScheme.primaryVariant,
-              //         isThreeLine: true,
-              //       )),
-              // ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(11),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black.withOpacity(0.12),
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  color: context.isDarkMode() ? Colors.black12 : kHyppeLightSurface,
-                ),
-                child: Row(
-                  children: [
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}customer-support.svg",
-                      defaultColor: false,
-                    ),
-                    fortyPx,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomTextWidget(
-                            textToDisplay: notifier.translate.stillNeedsHelp ?? '',
-                            maxLines: 2,
-                            textAlign: TextAlign.start,
-                          ),
-                          CustomTextButton(
-                            onPressed: () {
-                              // notifier.navigateToBankAccount();
-                            },
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
-                            child: CustomTextWidget(
-                              textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
-                            ),
-                          ),
-                        ],
+                  child: Row(
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}customer-support.svg",
+                        defaultColor: false,
                       ),
-                    )
-                  ],
+                      fortyPx,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomTextWidget(
+                              textToDisplay: translate.translate.stillNeedsHelp ?? '',
+                              maxLines: 2,
+                              textAlign: TextAlign.start,
+                            ),
+                            CustomTextButton(
+                              onPressed: () {
+                                // notifier.navigateToBankAccount();
+                              },
+                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                              child: CustomTextWidget(
+                                textToDisplay: translate.translate.submitTicketIssue ?? '',
+                                textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              )
+              ),
             ],
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomTextWidget(
+                  textToDisplay: translate.translate.helloCanIhelpyou ?? '',
+                  textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                CustomSearchBar(
+                  hintText: translate.translate.searchtopic,
+                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                  // controller: notifier.searchController1,
+                  // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
+                  // onPressedIcon: () => notifier.onSearchPost(context),
+                  // onTap: () => notifier.moveSearchMore(),
+                  // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(11),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.black.withOpacity(0.12),
+                    ),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}ticket.svg",
+                      ),
+                      tenPx,
+                      CustomTextWidget(
+                        textToDisplay: translate.translate.yourTicketIssue ?? '',
+                        textStyle: Theme.of(context).primaryTextTheme.caption,
+                        textAlign: TextAlign.start,
+                      ),
+                      const Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}chevron_right.svg",
+                      ),
+                    ],
+                  ),
+                ),
+                twentyFourPx,
+                CustomTextWidget(
+                  textToDisplay: translate.translate.frequentlyAskedQuestions ?? '',
+                  textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(),
+                ),
+                twentyFourPx,
+                ...List.generate(
+                  notifier.faqListData.length,
+                  (index) => Padding(padding: const EdgeInsets.only(bottom: 20.0), child: Text("${notifier.faqListData[index].kategori}")),
+                ),
+              ],
+            ),
           ),
         ),
       ),

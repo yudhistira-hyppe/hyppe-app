@@ -139,7 +139,7 @@ class ContentData {
 
   bool? isReport;
 
-  List<Boosted>? boosted;
+  List<Boosted> boosted = [];
   int? boostCount;
   int? isBoost;
   int? boostJangkauan;
@@ -186,7 +186,7 @@ class ContentData {
       this.isApsara,
       this.apsaraId,
       this.isReport,
-      this.boosted,
+      this.boosted = const [],
       this.boostCount,
       this.isBoost,
       this.boostJangkauan,
@@ -250,7 +250,7 @@ class ContentData {
     isReport = json['isReport'] ?? false;
     if (json['boosted'] != null) {
       boosted = [];
-      json['boosted'].forEach((v) => boosted?.add(Boosted.fromJson(v)));
+      json['boosted'].forEach((v) => boosted.add(Boosted.fromJson(v)));
     }
     boostCount = json['boostCount'] ?? 0;
     isBoost = json['isBoost'];

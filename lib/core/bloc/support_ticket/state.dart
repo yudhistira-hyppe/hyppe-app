@@ -7,6 +7,8 @@ enum SupportTicketState {
   getLevelError,
   postTicketSuccess,
   postTicketError,
+  faqError,
+  faqSuccess,
 }
 
 class SupportTicketFetch {
