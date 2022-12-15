@@ -28,7 +28,13 @@ class PreviewImageContent extends StatefulWidget {
 
 class _PreviewImageContentState extends State<PreviewImageContent> with AfterFirstLayoutMixin{
 
+  double _x = 0;
+  double _y = 0;
 
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,12 +156,27 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   ),
                 ),
                 if (notifier.fixSelectedMusic != null)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
+                  Positioned(
+                    top: _y == 0 ? (context.getHeight() / 2) : _y,
+                    left: _x == 0 ? (context.getWidth() * 0.1) : _x,
+                    child: Draggable(
+                      childWhenDragging: const SizedBox.shrink(),
+                      feedback: MusicStatusSelected(music: notifier.fixSelectedMusic!, onClose: (){
+                        notifier.setDefaultVideo(context);
+                      }, isDrag: true, isPlay: false,),
                       child: MusicStatusSelected(music: notifier.fixSelectedMusic!, onClose: (){
                         notifier.setDefaultVideo(context);
                       },),
+                      onDragEnd: (dragDetail){
+                        notifier.audioPreviewPlayer.resume();
+                        setState(() {
+                          _x = dragDetail.offset.dx;
+                          _y = dragDetail.offset.dy;
+                        });
+                      },
+                      onDragStarted: (){
+                        notifier.audioPreviewPlayer.pause();
+                      },
                     ),
                   ),
               ],
@@ -274,12 +295,23 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
                   ),
                 ),
                 if (notifier.fixSelectedMusic != null)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
+                  Positioned(
+                    top: _y == 0 ? (context.getHeight() / 2) : _y,
+                    left: _x == 0 ? (context.getWidth() * 0.1) : _x,
+                    child: Draggable(
+                      childWhenDragging: const SizedBox.shrink(),
+                      feedback: MusicStatusSelected(music: notifier.fixSelectedMusic!, onClose: (){
+                        notifier.setDefaultVideo(context);
+                      }, isDrag: true, isPlay: false,),
                       child: MusicStatusSelected(music: notifier.fixSelectedMusic!, onClose: (){
                         notifier.setDefaultVideo(context);
                       },),
+                      onDragEnd: (dragDetail){
+                        setState(() {
+                          _x = dragDetail.offset.dx;
+                          _y = dragDetail.offset.dy;
+                        });
+                      },
                     ),
                   ),
               ],
@@ -294,10 +326,7 @@ class _PreviewImageContentState extends State<PreviewImageContent> with AfterFir
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
+
 
   @override
   void afterFirstLayout(BuildContext context) {

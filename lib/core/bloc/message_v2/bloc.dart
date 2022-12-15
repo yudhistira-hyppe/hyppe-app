@@ -26,7 +26,7 @@ class MessageBlocV2 {
 
   Future getDiscussionBloc(
     BuildContext context, {
-    required DiscussArgument disqusArgument,
+    required DiscussArgument disqusArgument, String? disqusID
   }) async {
     setMessageFetch(MessageFetch(MessageState.loading));
     final formData = FormData();
@@ -44,6 +44,10 @@ class MessageBlocV2 {
     formData.fields.add(MapEntry('pageNumber', disqusArgument.pageNumber.toString()));
     formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(disqusArgument.postType)));
     formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(disqusArgument.discussEventType)));
+
+    if(disqusID != null){
+      formData.fields.add(MapEntry('disqusID', disqusID));
+    }
 
     print('formData.fields');
     print(formData.fields);

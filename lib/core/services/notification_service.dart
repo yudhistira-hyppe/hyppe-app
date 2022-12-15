@@ -82,21 +82,16 @@ class NotificationService {
       initializationSettings,
       onSelectNotification: (String? payload) async {
         print('notification payload: $payload');
+        final Map<String, dynamic> map = json.decode(payload ?? '{}');
         if (payload != null) {
-          try {
-            final data = NotificationBody.fromJson(json.decode(payload));
+          if(map['postID'] != null){
+            final data = NotificationBody.fromJson(map);
             materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
-            // final Map<String, dynamic> mapData = jsonDecode(payload);
-            // final msgData = MessageDataV2.fromJson(mapData);
-            // Routing().move(messageDetail, argument: MessageDetailArgument(
-            //   mate: msgData.mate,
-            //   emailReceiver: msgData.email ?? '',
-            //   usernameReceiver: msgData.username ?? '',
-            //   fullnameReceiver: msgData.fullName ?? '',
-            //   photoReceiver: System().showUserPicture(msgData.avatar?.mediaEndpoint) ?? '',
-            // ));
-          } catch (e) {
-            "[ERROR-TAP-NOTIFICATION] = $e".logger();
+          }else if (map['disqusID'] != null){
+            final data = NotificationBody.fromJson(map);
+            materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, '', data.disqusID);
+          }else{
+            throw 'Not recognize the type of the object of the notification ';
           }
         }
       },
@@ -108,7 +103,8 @@ class NotificationService {
   Future showNotification(RemoteMessage message) async {
     print('notif message ${message.notification?.body}');
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    final data = NotificationBody.fromJson(json.decode(message.notification?.body ?? "{}"));
+    final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
+    final data = NotificationBody.fromJson(jsonNotif);
     if (deviceID != null) {
       if (message.notification != null) {
         await flutterLocalNotificationsPlugin.show(
@@ -120,6 +116,40 @@ class NotificationService {
         );
       }
     }
+    // try{
+    //   if(jsonNotif['postID'] != null){
+    //     final data = NotificationBody.fromJson(jsonNotif);
+    //     if (deviceID != null) {
+    //       if (message.notification != null) {
+    //         await flutterLocalNotificationsPlugin.show(
+    //           message.hashCode,
+    //           message.notification?.title ?? '',
+    //           data.message ?? '',
+    //           platformChannelSpecifics,
+    //           payload: message.notification?.body ?? "{}",
+    //         );
+    //       }
+    //     }
+    //   }else if(jsonNotif['']){
+    //
+    //   }else{
+    //     throw 'Not recognize the type of the object of the notification ';
+    //   }
+    //
+    // }catch(e){
+    //   if (deviceID != null) {
+    //     if (message.notification != null) {
+    //       await flutterLocalNotificationsPlugin.show(
+    //         message.hashCode,
+    //         message.notification?.title ?? '',
+    //         message.notification?.body ?? '',
+    //         platformChannelSpecifics,
+    //         payload: message.notification?.body ?? "{}",
+    //       );
+    //     }
+    //   }
+    // }
+
   }
 }
 
@@ -128,13 +158,15 @@ class NotificationBody{
   String? postId;
   String? postType;
   String? message;
+  String? disqusID;
 
-  NotificationBody({this.postId, this.postType, this.message});
+  NotificationBody({this.postId, this.postType, this.message, this.disqusID});
 
   NotificationBody.fromJson(Map<String, dynamic> json){
     postId = json['postID'];
     postType = json['postType'];
     message = json['message'];
+    disqusID = json['disqusID'];
   }
 
   Map<String, dynamic> toJson(){
@@ -142,6 +174,7 @@ class NotificationBody{
     result['postID'] = postId;
     result['postType'] = postType;
     result['message'] = message;
+    result['disqusID'] = disqusID;
     return result;
   }
 }
