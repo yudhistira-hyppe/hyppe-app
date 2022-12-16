@@ -221,6 +221,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     deepArController!.toggleFlash();
   }
 
+  void flashOff() {
+    if (deepArController!.flashState) {
+      deepArController!.toggleFlash();
+    }
+  }
+
   String flashIcon() {
     if (deepArController != null && deepArController!.flashState) {
       return "${AssetPath.vectorPath}flash-off.svg";

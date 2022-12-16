@@ -110,6 +110,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                 )
               : const SizedBox(),
           Container(
+            width: SizeConfig.screenWidth! / 1.3,
             padding: const EdgeInsets.all(2),
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
             // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),

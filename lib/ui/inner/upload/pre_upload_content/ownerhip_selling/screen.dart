@@ -80,12 +80,9 @@ class OwnershipSellingScreen extends StatelessWidget {
                                   value: notifier.toSell,
                                   onChanged: (value) {
                                     notifier.toSell = value;
-                                    if (!notifier.toSell) {
-                                      notifier.includeTotalViews = false;
-                                      notifier.toSell = false;
-                                      notifier.includeTotalLikes = false;
-                                      notifier.priceController.clear();
-                                    }
+                                    notifier.includeTotalViews = false;
+                                    notifier.includeTotalLikes = false;
+                                    notifier.priceController.clear();
                                   },
                                 ),
                               ],

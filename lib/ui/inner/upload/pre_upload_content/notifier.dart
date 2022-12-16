@@ -637,7 +637,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         _postIdPanding = decode['data']['postID'];
         if (_boostContent != null) _boostContentBuy(context);
       });
-      if (_boostContent == null) clearUpAndBackToHome(context, isDefault: false);
+      if (_boostContent == null) clearUpAndBackToHome(context);
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
@@ -780,20 +780,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
   }
 
-  void clearUpAndBackToHome(BuildContext context, {isDefault = true}) {
+  void clearUpAndBackToHome(BuildContext context) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
 
     context.read<CameraNotifier>().disposeCamera(context);
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
     if (_boostContent != null) _onExit();
-    if (isDefault) {
-      Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-    } else {
-      Navigator.pop(context);
-      Navigator.pop(context);
-      Navigator.pop(context);
-    }
+    Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
   }
 
   Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {
@@ -1275,6 +1269,9 @@ class PreUploadContentNotifier with ChangeNotifier {
   // }
 
   void navigateToOwnership(BuildContext context) {
+    if (priceController.text == '0') {
+      toSell = false;
+    }
     Routing().move(Routes.ownershipSelling);
     _getSettingApps(context);
   }

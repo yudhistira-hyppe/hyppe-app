@@ -7,7 +7,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 
+import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
+import '../../ux/path.dart';
+import '../../ux/routing.dart';
+import '../models/collection/message_v2/message_data_v2.dart';
 // import 'package:hyppe/core/arguments/message_detail_argument.dart';
 // import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 // import 'package:hyppe/core/services/system.dart';
@@ -82,22 +86,26 @@ class NotificationService {
       initializationSettings,
       onSelectNotification: (String? payload) async {
         print('notification payload: $payload');
-        if (payload != null) {
-          try {
-            final data = NotificationBody.fromJson(json.decode(payload));
-            materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
-            // final Map<String, dynamic> mapData = jsonDecode(payload);
-            // final msgData = MessageDataV2.fromJson(mapData);
-            // Routing().move(messageDetail, argument: MessageDetailArgument(
-            //   mate: msgData.mate,
-            //   emailReceiver: msgData.email ?? '',
-            //   usernameReceiver: msgData.username ?? '',
-            //   fullnameReceiver: msgData.fullName ?? '',
-            //   photoReceiver: System().showUserPicture(msgData.avatar?.mediaEndpoint) ?? '',
-            // ));
-          } catch (e) {
-            "[ERROR-TAP-NOTIFICATION] = $e".logger();
+        try{
+          final Map<String, dynamic> map = json.decode(payload ?? '{}');
+          if (payload != null) {
+            if(map['postID'] != null){
+              final data = NotificationBody.fromJson(map);
+              if(data.postType == 'TRANSACTION'){
+                Routing().move(Routes.transaction);
+              }else{
+                materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
+              }
+            }else if (map['createdAt'] != null){
+              final data = MessageDataV2.fromJson(map);
+              final notifier = MessageNotifier();
+              notifier.onClickUser(materialAppKey.currentContext!, data);
+            }else{
+              throw 'Not recognize the type of the object of the notification ';
+            }
           }
+        }catch(e){
+          e.logger();
         }
       },
     );
@@ -105,20 +113,63 @@ class NotificationService {
 
   // show notification
 
-  Future showNotification(RemoteMessage message) async {
+  Future showNotification(RemoteMessage message, {MessageDataV2? data}) async {
     print('notif message ${message.notification?.body}');
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    final data = NotificationBody.fromJson(json.decode(message.notification?.body ?? "{}"));
-    if (deviceID != null) {
-      if (message.notification != null) {
-        await flutterLocalNotificationsPlugin.show(
-          message.hashCode,
-          message.notification?.title ?? '',
-          data.message ?? '',
-          platformChannelSpecifics,
-          payload: message.notification?.body ?? "{}",
-        );
+
+    try{
+      if(data != null){
+        if (message.notification != null) {
+          await flutterLocalNotificationsPlugin.show(
+            message.hashCode,
+            message.notification?.title ?? '',
+            message.notification?.body,
+            platformChannelSpecifics,
+            payload: json.encode(data.toJson()),
+          );
+        }
+      }else{
+        final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
+        if(jsonNotif['postID'] != null){
+          final data = NotificationBody.fromJson(jsonNotif);
+          if (deviceID != null) {
+            if (message.notification != null) {
+              await flutterLocalNotificationsPlugin.show(
+                message.hashCode,
+                message.notification?.title ?? '',
+                data.message ?? message.notification?.body,
+                platformChannelSpecifics,
+                payload: message.notification?.body ?? "{}",
+              );
+            }
+          }
+        }else{
+          if (deviceID != null) {
+            if (message.notification != null) {
+              await flutterLocalNotificationsPlugin.show(
+                message.hashCode,
+                message.notification?.title ?? '',
+                message.notification?.body,
+                platformChannelSpecifics,
+                payload: message.notification?.body ?? "{}",
+              );
+            }
+          }
+        }
       }
+    }catch(e){
+      if (deviceID != null) {
+        if (message.notification != null) {
+          await flutterLocalNotificationsPlugin.show(
+            message.hashCode,
+            message.notification?.title ?? '',
+            message.notification?.body,
+            platformChannelSpecifics,
+            payload: message.notification?.body ?? "{}",
+          );
+        }
+      }
+      e.logger();
     }
   }
 }

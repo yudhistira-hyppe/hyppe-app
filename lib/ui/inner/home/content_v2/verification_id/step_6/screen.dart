@@ -77,7 +77,8 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                     const Expanded(flex: 4, child: CameraFlashButton()),
                     Expanded(
                       flex: 4,
-                      child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}shutter.svg", onPressed: () => notifier.onTakeSelfie(context)),
+                      child: SizedBox(
+                          height: 105 * SizeConfig.scaleDiagonal, child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}photo.svg", onPressed: () => notifier.onTakeSelfie(context))),
                     ),
                     const Expanded(flex: 4, child: CameraSwitchButton())
                   ],

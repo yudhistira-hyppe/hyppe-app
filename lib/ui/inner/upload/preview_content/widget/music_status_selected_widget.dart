@@ -1,7 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/ui/constant/widget/custom_run_text.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
@@ -17,8 +18,10 @@ import '../../../../constant/widget/custom_text_widget.dart';
 
 class MusicStatusSelected extends StatefulWidget {
   final Music music;
+  final bool isDrag;
+  final bool isPlay;
   Function? onClose;
-  MusicStatusSelected({Key? key, required this.music, this.onClose}) : super(key: key);
+  MusicStatusSelected({Key? key, required this.music, this.onClose, this.isPlay = true, this.isDrag = false}) : super(key: key);
 
   @override
   State<MusicStatusSelected> createState() => _MusicStatusSelectedState();
@@ -31,14 +34,19 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
     final titleMusic = '${widget.music.musicTitle} - ${widget.music.artistName}';
     final lengthTitle = titleMusic.length;
     return Container(
-      margin: const EdgeInsets.only(left: 70, right: 70),
+      height: 40,
+      width: context.getWidth() * 0.7,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          InkWell(
+          widget.isDrag ? const CustomIconWidget(
+            height: 20,
+            width: 20,
+            iconData: "${AssetPath.vectorPath}close_ads.svg",
+          ): InkWell(
             onTap: () {
               if(widget.onClose != null){
                 widget.onClose!();
@@ -59,9 +67,12 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
           ),
           sixPx,
           Expanded(
-            child: lengthTitle > 20 ? SizedBox(
-              height: 25,
-                child: Marquee(text: '$titleMusic  ', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),)) : CustomTextWidget(
+            child: lengthTitle > 20 ? Material(
+              color: Colors.transparent,
+              child: SizedBox(
+                height: 25,
+                  child: Marquee(text: '$titleMusic  ', style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),)),
+            ) : CustomTextWidget(
               textOverflow: TextOverflow.ellipsis,
               maxLines: 1,
               textToDisplay: '${widget.music.musicTitle} - ${widget.music.artistName}',
@@ -85,7 +96,9 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
 
   @override
   void initState() {
-    settingAudio();
+    if(widget.isPlay){
+      settingAudio();
+    }
     super.initState();
   }
 
@@ -143,12 +156,22 @@ class _MusicStatusSelectedState extends State<MusicStatusSelected> with RouteAwa
 
   @override
   void afterFirstLayout(BuildContext context) {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+    try{
+      CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+    }catch(e){
+      e.logger();
+    }
+
   }
 
   @override
   void didChangeDependencies() {
-    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    try{
+      CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    }catch(e){
+      e.logger();
+    }
+
     super.didChangeDependencies();
   }
 }

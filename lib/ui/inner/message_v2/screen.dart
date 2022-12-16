@@ -77,7 +77,7 @@ class _MessageScreenState extends State<MessageScreen> {
               : Container(
                   child: Column(
                     children: [
-                      const ProcessUploadComponent(),
+                      // const ProcessUploadComponent(),
                       // Padding(
                       //   padding: EdgeInsets.symmetric(horizontal: 15 * SizeConfig.scaleDiagonal),
                       //   child: CustomSearchBar(

@@ -54,7 +54,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
           body: SafeArea(
             child: Column(
               children: [
-                const ProcessUploadComponent(topMargin: 0.0),
+                // const ProcessUploadComponent(topMargin: 0.0),
                 Flexible(
                   child: DefaultTabController(
                     length: 4,

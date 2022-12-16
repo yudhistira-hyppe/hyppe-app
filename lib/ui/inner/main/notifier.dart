@@ -165,6 +165,7 @@ class MainNotifier with ChangeNotifier {
             message.logger();
             try {
               final msgData = MessageDataV2.fromJson(json.decode('$message'));
+              print('ini message dari socket ${msgData.disqusID}');
               if (msgData.disqusLogs[0].receiver == email) {
                 NotificationService().showNotification(
                   RemoteMessage(
@@ -175,6 +176,7 @@ class MainNotifier with ChangeNotifier {
                     ),
                     data: msgData.toJson(),
                   ),
+                  data: msgData
                 );
                 _eventService.notifyMessageReceived(msgData);
               }

@@ -52,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
         // endDrawer: FilterSearchScreen(),
         body: Column(
           children: [
-            const ProcessUploadComponent(topMargin: 0.0),
+            // const ProcessUploadComponent(topMargin: 0.0),
             Flexible(
               child: DefaultTabController(
                 length: 3,

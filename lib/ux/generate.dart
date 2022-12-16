@@ -59,6 +59,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_3/screen.dar
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_7/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
@@ -223,7 +224,10 @@ class Generate {
       case Routes.insertReferral:
         return MaterialPageRoute(builder: (_) => InsertReferral());
       case Routes.showAds:
-        return MaterialPageRoute(builder: (_) => AdsScreen(argument: settings.arguments as AdsArgument,));
+        return MaterialPageRoute(
+            builder: (_) => AdsScreen(
+                  argument: settings.arguments as AdsArgument,
+                ));
 
       case Routes.searcMore:
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
@@ -241,6 +245,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const VerificationIDStep5());
       case Routes.verificationIDStep6:
         return MaterialPageRoute(builder: (_) => const VerificationIDStep6());
+      case Routes.verificationIDStep7:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep7());
       case Routes.verificationIDFailed:
         return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
       case Routes.verificationIDSuccess:

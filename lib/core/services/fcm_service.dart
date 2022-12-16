@@ -17,6 +17,8 @@ import 'package:hyppe/core/services/notification_service.dart';
 
 // handling background message
 Future<void> onBackgroundMessage(RemoteMessage message) async {
+  final _notificationService = NotificationService();
+
   await Firebase.initializeApp();
   """ 
             Background incoming message data => ${message.data},
@@ -39,7 +41,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
   //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
 
-  // NotificationService().showNotification(message);
+  _notificationService.showNotification(message);
 }
 
 // listenable value

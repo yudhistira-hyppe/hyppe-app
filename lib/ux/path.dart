@@ -71,6 +71,7 @@ class Routes {
   static const String verificationIDStep4 = '/verification-id-step-4';
   static const String verificationIDStep5 = '/verification-id-step-5';
   static const String verificationIDStep6 = '/verification-id-step-6';
+  static const String verificationIDStep7 = '/verification-id-step-7';
   static const String verificationIDFailed = '/verification-id-failed';
   static const String verificationIDSuccess = '/verification-id-success';
   static const String verificationIDLoading = '/verification-id-loading';

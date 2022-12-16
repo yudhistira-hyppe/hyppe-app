@@ -336,6 +336,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       aspectRatio = cameraNotifier.cameraAspectRatio;
       await validateIDCard();
       Routing().moveAndPop(Routes.verificationIDStep5);
+      context.read<CameraNotifier>().flashOff();
     }
   }
 
@@ -353,10 +354,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         }
 
         if (selfieOnSupportDocs) {
-          onPickSupportedDocument(context, true);
+          // onPickSupportedDocument(context, true);
+          pickedSupportingDocs!.add(filePath);
+          Routing().moveAndPop(Routes.verificationIDStep7);
         } else {
           await postVerificationData(context);
         }
+        context.read<CameraNotifier>().flashOff();
       }
     });
   }

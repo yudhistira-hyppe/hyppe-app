@@ -766,7 +766,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   color: kHyppeLightIcon,
                 )
               : Container(),
-          notifier.toSell
+          notifier.toSell && notifier.priceController.text != '0'
               ? Column(
                   children: [
                     detailText(notifier.language.sellContent, notifier.toSell ? ya : tidak),

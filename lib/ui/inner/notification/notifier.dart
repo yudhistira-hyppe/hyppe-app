@@ -3,18 +3,21 @@ import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart'
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/buy_request.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/query_request/notifications_data_query.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/inner/notification/content/all.dart';
@@ -26,6 +29,9 @@ import 'package:hyppe/ui/inner/notification/content/mention.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+
+import '../../../core/bloc/message_v2/bloc.dart';
+import '../../../core/constants/shared_preference_keys.dart';
 
 class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -202,6 +208,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
 
   void navigateToContent(BuildContext context, postType, postID) {
     final featureType = System().getFeatureTypeV2(postType ?? '');
+    print('navigateToContent $postType, $postID, $featureType');
     switch (featureType) {
       case FeatureType.vid:
         onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
@@ -216,6 +223,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
         break;
       case FeatureType.txtMsg:
+
         return;
       case FeatureType.other:
         return;
@@ -235,6 +243,22 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
           callback(_listContentData[0]);
         }
         callback(_listContentData);
+      }
+    }
+  }
+
+  Future onGetMessageDetail(BuildContext context, Function(MessageDataV2) callback, String disqusID) async{
+    final bloc = MessageBlocV2();
+    final List<MessageDataV2> data = [];
+    final disqusArgument = DiscussArgument(email: SharedPreference().readStorage(SpKeys.email), receiverParty: '');
+    await bloc.getDiscussionBloc(context, disqusArgument: disqusArgument, disqusID: disqusID);
+    final fetch = bloc.messageFetch;
+    if(fetch.chatState == MessageState.createDiscussionBlocSuccess){
+      if(fetch.data.isNotEmpty){
+        fetch.data.forEach((v) => data.add(MessageDataV2.fromJson(v)));
+        if(data.isNotEmpty){
+          callback(data[0]);
+        }
       }
     }
   }

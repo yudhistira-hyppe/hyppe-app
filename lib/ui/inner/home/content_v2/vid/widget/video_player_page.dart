@@ -339,6 +339,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
         'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
+      drmConfiguration: BetterPlayerDrmConfiguration(drmType: BetterPlayerDrmType.clearKey),
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
         maxBufferMs: BetterPlayerBufferingConfiguration.defaultMaxBufferMs,

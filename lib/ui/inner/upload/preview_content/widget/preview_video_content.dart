@@ -21,6 +21,7 @@ import '../../../../../core/services/route_observer_service.dart';
 import '../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
+import 'music_status_selected_widget.dart';
 
 class PreviewVideoContent extends StatefulWidget {
   PreviewVideoContent({Key? key});
@@ -30,6 +31,8 @@ class PreviewVideoContent extends StatefulWidget {
 
 class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAware, AfterFirstLayoutMixin {
   BetterPlayerController? _videoPlayerController;
+  double _x = 0;
+  double _y = 0;
   @override
   void initState() {
     print('initState PreviewVideoContent');
@@ -139,47 +142,70 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
                         ),
                 ),
                 if (notifier.fixSelectedMusic != null)
-                  Positioned.fill(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 70, right: 70),
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                        decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                notifier.setDefaultVideo(context);
-                              },
-                              child: const CustomIconWidget(
-                                height: 20,
-                                width: 20,
-                                iconData: "${AssetPath.vectorPath}close_ads.svg",
-                              ),
-                            ),
-                            fourPx,
-                            Container(
-                              width: 1,
-                              height: 13,
-                              color: kHyppeGrey,
-                            ),
-                            sixPx,
-                            Expanded(
-                              child: CustomTextWidget(
-                                textOverflow: TextOverflow.ellipsis,
-                                maxLines: 3,
-                                textToDisplay: '${notifier.fixSelectedMusic?.musicTitle} - ${notifier.fixSelectedMusic?.artistName}',
-                                textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                  Positioned(
+                    top: _y == 0 ? (context.getHeight() / 2) : _y,
+                    left: _x == 0 ? (context.getWidth() * 0.1) : _x,
+                    child: Draggable(
+                      childWhenDragging: const SizedBox.shrink(),
+                      feedback: MusicStatusSelected(music: notifier.fixSelectedMusic!, onClose: (){
+                        notifier.setDefaultVideo(context);
+                      }, isDrag: true, isPlay: false,),
+                      child: MusicStatusSelected(music: notifier.fixSelectedMusic!, onClose: (){
+                        notifier.setDefaultVideo(context);
+                      }, isPlay: false,),
+                      onDragEnd: (dragDetail){
+                        notifier.audioPreviewPlayer.resume();
+                        setState(() {
+                          _x = dragDetail.offset.dx;
+                          _y = dragDetail.offset.dy;
+                        });
+                      },
+                      onDragStarted: (){
+                        notifier.audioPreviewPlayer.pause();
+                      },
                     ),
                   ),
+                  // Positioned.fill(
+                  //   child: Align(
+                  //     alignment: Alignment.center,
+                  //     child: Container(
+                  //       margin: const EdgeInsets.only(left: 70, right: 70),
+                  //       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                  //       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
+                  //       child: Row(
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         children: [
+                  //           InkWell(
+                  //             onTap: () {
+                  //               notifier.setDefaultVideo(context);
+                  //             },
+                  //             child: const CustomIconWidget(
+                  //               height: 20,
+                  //               width: 20,
+                  //               iconData: "${AssetPath.vectorPath}close_ads.svg",
+                  //             ),
+                  //           ),
+                  //           fourPx,
+                  //           Container(
+                  //             width: 1,
+                  //             height: 13,
+                  //             color: kHyppeGrey,
+                  //           ),
+                  //           sixPx,
+                  //           Expanded(
+                  //             child: CustomTextWidget(
+                  //               textOverflow: TextOverflow.ellipsis,
+                  //               maxLines: 3,
+                  //               textToDisplay: '${notifier.fixSelectedMusic?.musicTitle} - ${notifier.fixSelectedMusic?.artistName}',
+                  //               textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                  //             ),
+                  //           )
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 Positioned(
                   right: 16,
                   bottom: context.getHeight() * 0.4,
