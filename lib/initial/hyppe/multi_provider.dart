@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
@@ -95,6 +96,7 @@ class AppDependencies {
         ChangeNotifierProvider(create: (context) => sV2.SearchNotifier()),
         ChangeNotifierProvider(create: (context) => MakeContentNotifier()),
         ChangeNotifierProvider(create: (context) => PreviewContentNotifier()),
+        ChangeNotifierProvider(create: (context) => DiariesPlaylistNotifier()),
         ChangeNotifierProvider(create: (context) => PreUploadContentNotifier()),
         ChangeNotifierProvider(create: (context) => HashtagNotifier()),
         ChangeNotifierProvider(create: (context) => InterestNotifier()),

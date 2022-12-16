@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
@@ -19,7 +20,7 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () {
       for (var i = 0; i < (notifier.fileContent?.length ?? 0); i++) {
-        notifier.makeThumbnail(context, i);
+        notifier.makeThumbnail(materialAppKey.currentContext!, i);
       }
     });
     super.initState();

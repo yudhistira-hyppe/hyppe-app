@@ -6,6 +6,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
+import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
@@ -108,7 +109,9 @@ class VidDetailBottom extends StatelessWidget {
               padding: const EdgeInsets.all(2),
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
               child: data != null
-                  ? SingleChildScrollView(
+                  ?
+              // CustomDescContent(desc: "${data?.description}")
+              SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

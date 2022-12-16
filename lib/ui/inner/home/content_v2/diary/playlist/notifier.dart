@@ -27,6 +27,7 @@ import 'package:story_view/story_view.dart';
 import '../../../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../../../core/bloc/ads_video/state.dart';
 import '../../../../../../core/models/collection/advertising/ads_video_data.dart';
+import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
 import '../../profile/other_profile/notifier.dart';
 import '../../profile/self_profile/notifier.dart';
 
@@ -36,6 +37,12 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ..page = 2
     ..limit = 5
     ..featureType = FeatureType.diary;
+
+  LocalizationModelV2 language = LocalizationModelV2();
+  translate(LocalizationModelV2 translate) {
+    language = translate;
+    notifyListeners();
+  }
 
   DiaryDetailScreenArgument? _routeArgument;
   List<ContentData>? _listData;
