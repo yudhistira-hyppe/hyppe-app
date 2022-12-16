@@ -58,7 +58,7 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
         body: SafeArea(
           child: Column(
             children: [
-              const ProcessUploadComponent(topMargin: 0.0),
+              // const ProcessUploadComponent(topMargin: 0.0),
               Flexible(
                 child: DefaultTabController(
                   length: _list.length,

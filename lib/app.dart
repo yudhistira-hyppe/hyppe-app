@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+import 'core/services/api_action.dart';
+
 // void mainApp(EnvType env) async {
 //   WidgetsFlutterBinding.ensureInitialized();
 //   Env.init(env);
@@ -60,6 +62,7 @@ void mainApp(EnvType env) async {
   Env.init(env);
   NotificationService().initializeLocalNotification();
   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+  HttpOverrides.global = MyHttpOverrides();
   // await Hive.initFlutter();
   // Hive.registerAdapter(AllContentsAdapter());
   // Hive.registerAdapter(ContentDataAdapter());

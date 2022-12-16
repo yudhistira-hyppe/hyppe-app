@@ -29,11 +29,9 @@ import 'package:hyppe/ui/inner/notification/content/mention.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:provider/provider.dart';
 
 import '../../../core/bloc/message_v2/bloc.dart';
 import '../../../core/constants/shared_preference_keys.dart';
-import '../message_v2/notifier.dart';
 
 class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -225,9 +223,8 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
         break;
       case FeatureType.txtMsg:
-        final notifier = MessageNotifier();
-        onGetMessageDetail(context, (v) => notifier.onClickUser(context, v), postID);
-        break;
+
+        return;
       case FeatureType.other:
         return;
     }

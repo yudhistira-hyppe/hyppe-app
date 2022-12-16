@@ -7,7 +7,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:provider/provider.dart';
 
+import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
+import '../../ux/path.dart';
+import '../../ux/routing.dart';
+import '../models/collection/message_v2/message_data_v2.dart';
 // import 'package:hyppe/core/arguments/message_detail_argument.dart';
 // import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 // import 'package:hyppe/core/services/system.dart';
@@ -82,17 +86,26 @@ class NotificationService {
       initializationSettings,
       onSelectNotification: (String? payload) async {
         print('notification payload: $payload');
-        final Map<String, dynamic> map = json.decode(payload ?? '{}');
-        if (payload != null) {
-          if(map['postID'] != null){
-            final data = NotificationBody.fromJson(map);
-            materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
-          }else if (map['disqusID'] != null){
-            final data = NotificationBody.fromJson(map);
-            materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, '', data.disqusID);
-          }else{
-            throw 'Not recognize the type of the object of the notification ';
+        try{
+          final Map<String, dynamic> map = json.decode(payload ?? '{}');
+          if (payload != null) {
+            if(map['postID'] != null){
+              final data = NotificationBody.fromJson(map);
+              if(data.postType == 'TRANSACTION'){
+                Routing().move(Routes.transaction);
+              }else{
+                materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
+              }
+            }else if (map['createdAt'] != null){
+              final data = MessageDataV2.fromJson(map);
+              final notifier = MessageNotifier();
+              notifier.onClickUser(materialAppKey.currentContext!, data);
+            }else{
+              throw 'Not recognize the type of the object of the notification ';
+            }
           }
+        }catch(e){
+          e.logger();
         }
       },
     );
@@ -100,56 +113,64 @@ class NotificationService {
 
   // show notification
 
-  Future showNotification(RemoteMessage message) async {
+  Future showNotification(RemoteMessage message, {MessageDataV2? data}) async {
     print('notif message ${message.notification?.body}');
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
-    final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
-    final data = NotificationBody.fromJson(jsonNotif);
-    if (deviceID != null) {
-      if (message.notification != null) {
-        await flutterLocalNotificationsPlugin.show(
-          message.hashCode,
-          message.notification?.title ?? '',
-          data.message ?? '',
-          platformChannelSpecifics,
-          payload: message.notification?.body ?? "{}",
-        );
-      }
-    }
-    // try{
-    //   if(jsonNotif['postID'] != null){
-    //     final data = NotificationBody.fromJson(jsonNotif);
-    //     if (deviceID != null) {
-    //       if (message.notification != null) {
-    //         await flutterLocalNotificationsPlugin.show(
-    //           message.hashCode,
-    //           message.notification?.title ?? '',
-    //           data.message ?? '',
-    //           platformChannelSpecifics,
-    //           payload: message.notification?.body ?? "{}",
-    //         );
-    //       }
-    //     }
-    //   }else if(jsonNotif['']){
-    //
-    //   }else{
-    //     throw 'Not recognize the type of the object of the notification ';
-    //   }
-    //
-    // }catch(e){
-    //   if (deviceID != null) {
-    //     if (message.notification != null) {
-    //       await flutterLocalNotificationsPlugin.show(
-    //         message.hashCode,
-    //         message.notification?.title ?? '',
-    //         message.notification?.body ?? '',
-    //         platformChannelSpecifics,
-    //         payload: message.notification?.body ?? "{}",
-    //       );
-    //     }
-    //   }
-    // }
 
+    try{
+      if(data != null){
+        if (message.notification != null) {
+          await flutterLocalNotificationsPlugin.show(
+            message.hashCode,
+            message.notification?.title ?? '',
+            message.notification?.body,
+            platformChannelSpecifics,
+            payload: json.encode(data.toJson()),
+          );
+        }
+      }else{
+        final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
+        if(jsonNotif['postID'] != null){
+          final data = NotificationBody.fromJson(jsonNotif);
+          if (deviceID != null) {
+            if (message.notification != null) {
+              await flutterLocalNotificationsPlugin.show(
+                message.hashCode,
+                message.notification?.title ?? '',
+                data.message ?? message.notification?.body,
+                platformChannelSpecifics,
+                payload: message.notification?.body ?? "{}",
+              );
+            }
+          }
+        }else{
+          if (deviceID != null) {
+            if (message.notification != null) {
+              await flutterLocalNotificationsPlugin.show(
+                message.hashCode,
+                message.notification?.title ?? '',
+                message.notification?.body,
+                platformChannelSpecifics,
+                payload: message.notification?.body ?? "{}",
+              );
+            }
+          }
+        }
+      }
+    }catch(e){
+      if (deviceID != null) {
+        if (message.notification != null) {
+          await flutterLocalNotificationsPlugin.show(
+            message.hashCode,
+            message.notification?.title ?? '',
+            message.notification?.body,
+            platformChannelSpecifics,
+            payload: message.notification?.body ?? "{}",
+          );
+        }
+      }
+      e.logger();
+    }
   }
 }
 
@@ -158,15 +179,13 @@ class NotificationBody{
   String? postId;
   String? postType;
   String? message;
-  String? disqusID;
 
-  NotificationBody({this.postId, this.postType, this.message, this.disqusID});
+  NotificationBody({this.postId, this.postType, this.message});
 
   NotificationBody.fromJson(Map<String, dynamic> json){
     postId = json['postID'];
     postType = json['postType'];
     message = json['message'];
-    disqusID = json['disqusID'];
   }
 
   Map<String, dynamic> toJson(){
@@ -174,7 +193,6 @@ class NotificationBody{
     result['postID'] = postId;
     result['postType'] = postType;
     result['message'] = message;
-    result['disqusID'] = disqusID;
     return result;
   }
 }

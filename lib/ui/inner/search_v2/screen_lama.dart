@@ -51,7 +51,7 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
         // endDrawer: FilterSearchScreenLama(),
         body: Column(
           children: [
-            const ProcessUploadComponent(topMargin: 0.0),
+            // const ProcessUploadComponent(topMargin: 0.0),
             Flexible(
               child: DefaultTabController(
                 length: 3,

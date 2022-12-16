@@ -46,7 +46,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const ProcessUploadComponent(),
+            // const ProcessUploadComponent(),
             SizedBox(
               height: 50.05,
               child: ListView.builder(
