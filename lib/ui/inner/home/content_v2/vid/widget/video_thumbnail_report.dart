@@ -46,7 +46,7 @@ class VideoThumbnailReport extends StatelessWidget {
                 color: Colors.white,
               ),
               Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text("HyppeVid ${translate.ContentContainsSensitiveMaterial}",
+              Text("HyppeVid ${translate.contentContainsSensitiveMaterial}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,

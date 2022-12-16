@@ -349,7 +349,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             mobileNumber: mobileController.text,
             gender: genderController.text,
             dateOfBirth: dobController.text,
-            username: userNameController.text,
+            // username: userNameController.text,
             langIso: SharedPreference().readStorage(SpKeys.isoCode) ?? 'en',
           );
 
@@ -365,7 +365,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           if (fetch.userState == UserState.postBioSuccess) {}
           if (fetch.userState == UserState.postBioError) {}
 
-          if (fetch2.userState == UserState.completeProfileSuccess) {
+          if (fetch.userState == UserState.completeProfileSuccess) {
             hold = true;
             progress = "${language.finishingUp}...";
 
@@ -381,6 +381,16 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               ShowBottomSheet().onShowColouredSheet(context, language.successUpdatePersonalInformation ?? '');
               notifyListeners();
             }
+          } else {
+            if (fetch.data['messages']['info'][0] == 'Unabled to proceed, username is already in use') {
+              return ShowBottomSheet().onShowColouredSheet(
+                context,
+                language.usernameisAlreadyinUse ?? '',
+                color: Colors.red,
+                iconSvg: "${AssetPath.vectorPath}remove.svg",
+              );
+            }
+            ShowBottomSheet().onShowColouredSheet(context, language.somethingsWrong ?? '', color: Colors.red);
           }
         } catch (e) {
           e.logger();

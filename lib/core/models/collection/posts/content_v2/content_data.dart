@@ -145,6 +145,7 @@ class ContentData {
   int? boostJangkauan;
   String? statusBoost;
   String? reportedStatus;
+  String? reportedStatus2;
   int? reportedUserCount;
   MediaModel? media;
 
@@ -192,6 +193,7 @@ class ContentData {
       this.boostJangkauan,
       this.statusBoost,
       this.reportedStatus,
+      this.reportedStatus2,
       this.music,
       this.reportedUserCount,
       this.media});
@@ -257,6 +259,7 @@ class ContentData {
     boostJangkauan = json['boostJangkauan'] ?? 0;
     statusBoost = json['statusBoost'] ?? '';
     reportedStatus = json['reportedStatus'] ?? 'ALL';
+    reportedStatus2 = json['reportedStatus'] ?? 'ALL';
     reportedUserCount = json['reportedUserCount'] ?? 0;
     media = json['media'] == null
         ? null

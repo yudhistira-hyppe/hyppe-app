@@ -22,7 +22,7 @@ class ContentViolationWidget extends StatelessWidget {
       onTap: () => Routing().move(Routes.appeal, argument: data),
       child: Container(
         color: Colors.red,
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         child: Row(
           children: [
             const CustomIconWidget(
@@ -34,7 +34,7 @@ class ContentViolationWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: translate.thisHyppeVidisSubjectToModeration ?? '',
+                  textToDisplay: translate.thisHyppeDiaryisSubjectToModeration ?? '',
                   textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white),
                 ),
                 CustomTextWidget(

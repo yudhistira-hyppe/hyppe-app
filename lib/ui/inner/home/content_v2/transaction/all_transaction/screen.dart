@@ -10,6 +10,7 @@ import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filte
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/widget/shimmer_all_transaction_history.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/buysell_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/empty_bank_account.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/reward_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/widget/witdhdrawal_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -173,6 +174,13 @@ class _AllTransactionState extends State<AllTransaction> {
                                   case TransactionType.withdrawal:
                                     title = notifier2.translate.withdrawal ?? '';
                                     return WithdrawalWidget(
+                                      title: title,
+                                      language: notifier2.translate,
+                                      data: notifier.dataAllTransaction?[index],
+                                    );
+                                  case TransactionType.reward:
+                                    title = notifier2.translate.reward ?? '';
+                                    return RewardWidget(
                                       title: title,
                                       language: notifier2.translate,
                                       data: notifier.dataAllTransaction?[index],

@@ -785,6 +785,9 @@
   "placeOfBirthMustBeFilled" : "The place of birth must be filled",
   "dateOfBirthMustBeFilled" : "The date of birth must be filled",
   "userIsNotFound" : "User is not found",
-  "usernameOnlyContainLetters" : "Username only contain letters, numbers, dot, and underscore"
-
+  "usernameOnlyContainLetters" : "Username only contain letters, numbers, dot, and underscore",
+  "reward" : "Reward",
+  "amountEarned" : "Amount Earned",
+  "usernameisAlreadyinUse" : "Username is already in use!",
+  "priceChangesSavedSuccessfully" : "Price changes saved successfully"
 }

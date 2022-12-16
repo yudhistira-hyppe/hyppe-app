@@ -211,7 +211,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                         height: 30,
                       ),
                       Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                      Text("HyppePic ${transnot.translate.ContentContainsSensitiveMaterial}",
+                      Text("HyppePic ${transnot.translate.contentContainsSensitiveMaterial}",
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Colors.white,
@@ -393,14 +393,14 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     ),
                     twentyPx,
-                    (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED') &&
+                    (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED' && widget.data.reportedStatus2 != 'BLURRED') &&
                             (widget.data.boosted.isEmpty) &&
                             widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? ButtonBoost(
                             contentData: widget.data,
                           )
                         : Container(),
-                    widget.data.isBoost != null && widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                    (widget.data.boosted.isNotEmpty) && widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: JangkaunStatus(

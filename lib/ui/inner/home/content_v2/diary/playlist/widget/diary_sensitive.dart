@@ -34,7 +34,7 @@ class DiarySensitive extends StatelessWidget {
               color: Colors.white,
             ),
             Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-            Text("HyppeDiary ${transnot.translate.ContentContainsSensitiveMaterial}",
+            Text("HyppeDiary ${transnot.translate.contentContainsSensitiveMaterial}",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,

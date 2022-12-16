@@ -62,6 +62,7 @@ class TransactionHistoryModel {
   int? totallike;
   bool? apsara;
   MediaModel? media;
+  String? debetKredit;
 
   TransactionHistoryModel.fromJSON(dynamic json) {
     id = json['_id'];
@@ -109,6 +110,7 @@ class TransactionHistoryModel {
     serviceFee = json['serviceFee'] ?? 0;
     totallike = json['totallike'] ?? 0;
     totalview = json['totalview'] ?? 0;
+    debetKredit = json['debetKredit'] ?? '';
     apsara = json['apsara'] == null
         ? false
         : json['apsara'] != ''

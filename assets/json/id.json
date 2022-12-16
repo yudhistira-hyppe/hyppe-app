@@ -785,5 +785,9 @@
   "placeOfBirthMustBeFilled" : "Tempat lahir harus diisi",
   "dateOfBirthMustBeFilled" : "Tanggal lahir harus diisi",
   "userIsNotFound" : "Pengguna tidak ditemukan",
-  "usernameOnlyContainLetters" : "Nama pengguna hanya berisi huruf, angka, titik, dan garis bawah"
+  "usernameOnlyContainLetters" : "Nama pengguna hanya berisi huruf, angka, titik, dan garis bawah",
+  "reward" : "Hadiah",
+  "amountEarned" : "Jumlah yang Didapatkan",
+  "usernameisAlreadyinUse" : "Nama pengguna sudah ada!",
+  "priceChangesSavedSuccessfully" : "Perubahan harga berhasil disimpan"
 }

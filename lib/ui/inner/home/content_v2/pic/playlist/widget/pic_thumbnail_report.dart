@@ -46,7 +46,7 @@ class PichTumbnailReport extends StatelessWidget {
                 height: 30,
               ),
               Text(translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-              Text("HyppePic ${translate.ContentContainsSensitiveMaterial}",
+              Text("HyppePic ${translate.contentContainsSensitiveMaterial}",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,

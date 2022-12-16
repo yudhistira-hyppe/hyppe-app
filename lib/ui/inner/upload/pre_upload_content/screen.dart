@@ -120,16 +120,20 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                         notifier.certified ? detailTotalPrice(notifier) : Container(),
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                        statusKyc == VERIFIED && notifier.featureType != FeatureType.story ? boostWidget(textTheme, notifier) : Container(),
+                        widget.arguments.contentData?.reportedStatus != "OWNED" &&
+                                widget.arguments.contentData?.reportedStatus2 != "BLURRED" &&
+                                statusKyc == VERIFIED &&
+                                notifier.featureType != FeatureType.story
+                            ? boostWidget(textTheme, notifier)
+                            : Container(),
                         notifier.boostContent != null ? detailBoostContent(notifier) : Container(),
                         twentyFourPx,
-
                         twentyFourPx,
                         twentyFourPx,
                         twentyFourPx,
                       ],
                     ),
-                    AutoCompleteUserTag(),
+                    const AutoCompleteUserTag(),
                   ],
                 ),
               ),
@@ -140,7 +144,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               child: notifier.boostContent != null
                   ? Container(
                       color: Theme.of(context).colorScheme.background,
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -372,7 +376,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   shadowColor: MaterialStateProperty.all(Colors.white),
                   elevation: MaterialStateProperty.all(0),
                   side: MaterialStateProperty.all(
-                    BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
+                    const BorderSide(color: kHyppeLightInactive1, width: 1.0, style: BorderStyle.solid),
                   ),
                 )),
             eightPx,
@@ -645,7 +649,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget privacyWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: notifier.boostContent != null
+      onTap: notifier.boostContent != null || notifier.toSell
           ? null
           : () {
               FocusScope.of(context).unfocus();
@@ -673,7 +677,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
 
   Widget boostWidget(TextTheme textTheme, PreUploadContentNotifier notifier) {
     return ListTile(
-      onTap: notifier.editData?.isBoost != null
+      onTap: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
           ? null
           : () {
               FocusScope.of(context).unfocus();
@@ -695,7 +699,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextWidget(
-            textToDisplay: notifier.editData?.isBoost != null
+            textToDisplay: (notifier.editData?.boosted.isNotEmpty ?? [].isNotEmpty)
                 ? notifier.language.yes ?? ''
                 : notifier.boostContent != null
                     ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')

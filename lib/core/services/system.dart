@@ -404,10 +404,12 @@ class System {
         return TransactionType.sell;
       case "Buy":
         return TransactionType.buy;
-      case "Withdrawal":
+      case "Withdraws":
         return TransactionType.withdrawal;
       case "BOOST_CONTENT":
         return TransactionType.boost;
+      case "Rewards":
+        return TransactionType.reward;
       default:
         return TransactionType.none;
     }
@@ -420,7 +422,9 @@ class System {
       case TransactionType.buy:
         return "Buy";
       case TransactionType.withdrawal:
-        return "Withdrawal";
+        return "Withdraws";
+      case TransactionType.reward:
+        return "Rewards";
       case TransactionType.none:
         return "";
       default:

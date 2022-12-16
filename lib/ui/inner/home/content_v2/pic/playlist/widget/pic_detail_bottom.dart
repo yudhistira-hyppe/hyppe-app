@@ -56,10 +56,12 @@ class PicDetailBottom extends StatelessWidget {
           data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: data ?? ContentData()) : Container(),
           twelvePx,
           _buildDescription(context),
-          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED') && (data?.boosted != null || data!.boosted.isEmpty) && data?.email == SharedPreference().readStorage(SpKeys.email)
+          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+                  (data?.boosted.isEmpty ?? [].isEmpty) &&
+                  data?.email == SharedPreference().readStorage(SpKeys.email)
               ? ButtonBoost(contentData: data)
               : Container(),
-          data?.isBoost != null && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
+          (data?.boosted.isNotEmpty ?? [].isEmpty) && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
           _buildDivider(context),
           _buildTopRightControl(context),
           fourPx,

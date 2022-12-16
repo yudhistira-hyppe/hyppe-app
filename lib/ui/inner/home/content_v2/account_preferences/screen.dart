@@ -19,26 +19,28 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/widget/build_
 class HyppeAccountPreferences extends StatefulWidget {
   final AccountPreferenceScreenArgument argument;
 
-  const HyppeAccountPreferences({Key? key, required this.argument})
-      : super(key: key);
+  const HyppeAccountPreferences({Key? key, required this.argument}) : super(key: key);
 
   @override
-  _HyppeAccountPreferencesState createState() =>
-      _HyppeAccountPreferencesState();
+  _HyppeAccountPreferencesState createState() => _HyppeAccountPreferencesState();
 }
 
-class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
-    with TickerProviderStateMixin {
+class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with TickerProviderStateMixin {
   TabController? _tabController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
-    final notifier =
-        Provider.of<AccountPreferencesNotifier>(context, listen: false);
-    Future.delayed(
-        Duration.zero, () => notifier.onInitial(context, widget.argument));
-    _tabController = TabController(
-        initialIndex: notifier.initialIndex, length: 2, vsync: this);
+    final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
+    Future.delayed(Duration.zero, () => notifier.onInitial(context, widget.argument));
+    _tabController = TabController(initialIndex: notifier.initialIndex, length: 2, vsync: this);
+    _tabController?.addListener(
+      () {
+        setState(() {
+          _currentIndex = _tabController?.index ?? 0;
+        });
+      },
+    );
 
     super.initState();
   }
@@ -64,37 +66,24 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
               appBar: AppBar(
                 title: CustomTextWidget(
                   textToDisplay: notifier.language.accountPreferences ?? '',
-                  textStyle: Theme.of(context)
-                      .textTheme
-                      .headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                  textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 centerTitle: false,
                 bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(
-                      (kToolbarHeight - 10) * SizeConfig.scaleDiagonal),
+                  preferredSize: Size.fromHeight((kToolbarHeight - 10) * SizeConfig.scaleDiagonal),
                   child: Container(
                     padding: const EdgeInsets.only(top: 10),
                     color: Theme.of(context).backgroundColor,
                     child: TabBar(
                       controller: _tabController,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: UnderlineTabIndicator(
-                          borderSide: BorderSide(
-                              color: Theme.of(context).tabBarTheme.labelColor ?? Colors.black,
-                              width: 2.0)),
+                      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).tabBarTheme.labelColor ?? Colors.black, width: 2.0)),
                       labelColor: Theme.of(context).tabBarTheme.labelColor,
                       labelPadding: const EdgeInsets.only(bottom: 10.0),
-                      unselectedLabelColor:
-                          Theme.of(context).tabBarTheme.unselectedLabelColor,
-                      labelStyle: TextStyle(
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16 * SizeConfig.scaleDiagonal),
+                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                      labelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
                       physics: const BouncingScrollPhysics(),
-                      unselectedLabelStyle: TextStyle(
-                          fontFamily: "Roboto",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16 * SizeConfig.scaleDiagonal),
+                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
                       tabs: [
                         Text(notifier.language.profile ?? ''),
                         Text(notifier.language.personalInformation ?? ''),
@@ -104,8 +93,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
                 ),
                 titleSpacing: 0,
                 leading: IconButton(
-                  icon: const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+                  icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
                   splashRadius: 1,
                   onPressed: () {
                     notifier.initialIndex = 0;
@@ -116,11 +104,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
               body: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: SizedBox(
-                  height: SizeConfig.screenHeight! -
-                      ((kToolbarHeight +
-                              ((kToolbarHeight - 10) *
-                                  SizeConfig.scaleDiagonal)) *
-                          SizeConfig.scaleDiagonal),
+                  height: SizeConfig.screenHeight! - ((kToolbarHeight + ((kToolbarHeight - 10) * SizeConfig.scaleDiagonal)) * SizeConfig.scaleDiagonal),
                   child: TabBarView(
                     controller: _tabController,
                     physics: const BouncingScrollPhysics(),
@@ -132,9 +116,8 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences>
                 ),
               ),
               bottomNavigationBar: Padding(
-                padding:
-                    const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10),
-                child: ButtonAccountPreferences(),
+                padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10),
+                child: ButtonAccountPreferences(index: _currentIndex),
               ),
             ),
           ),

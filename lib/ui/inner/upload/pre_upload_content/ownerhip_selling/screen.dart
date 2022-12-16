@@ -216,12 +216,15 @@ class OwnershipSellingScreen extends StatelessWidget {
                                   Positioned(
                                     right: 4,
                                     top: 8,
-                                    child: Container(
-                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
-                                      padding: const EdgeInsets.all(8),
-                                      child: Text(
-                                        notifier.language.setPrice ?? '',
-                                        style: Theme.of(context).textTheme.caption?.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
+                                    child: GestureDetector(
+                                      onTap: () => FocusScope.of(context).unfocus(),
+                                      child: Container(
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: notifier.priceController.text != '' ? kHyppePrimary : kHyppeDisabled),
+                                        padding: const EdgeInsets.all(8),
+                                        child: Text(
+                                          notifier.language.setPrice ?? '',
+                                          style: Theme.of(context).textTheme.caption?.copyWith(color: notifier.priceController.text != '' ? kHyppeLightButtonText : kHyppeSecondary),
+                                        ),
                                       ),
                                     ),
                                   ),

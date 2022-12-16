@@ -292,7 +292,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                                     height: 30,
                                   ),
                                   Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                                  Text("HyppeStory ${transnot.translate.ContentContainsSensitiveMaterial}",
+                                  Text("HyppeStory ${transnot.translate.contentContainsSensitiveMaterial}",
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 13,

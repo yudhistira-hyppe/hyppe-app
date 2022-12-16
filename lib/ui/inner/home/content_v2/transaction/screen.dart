@@ -42,7 +42,7 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void dispose() {
-    context.read<TransactionNotifier>().isLoading = false;
+    Provider.of<TransactionNotifier>(context, listen: false).isLoading = false;
     super.dispose();
   }
 
@@ -66,8 +66,9 @@ class _TransactionState extends State<Transaction> {
               await notifier.initTransactionHistory(context);
             },
             child: notifier.isLoading
-                ? const SingleChildScrollView(child: const ShimmerTransactionHistory())
+                ? const SingleChildScrollView(child: ShimmerTransactionHistory())
                 : SingleChildScrollView(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.all(16),

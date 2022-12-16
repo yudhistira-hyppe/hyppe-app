@@ -135,8 +135,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           ),
 
           twelvePx,
-          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED') &&
-                  (widget.data?.boosted != null || widget.data!.boosted.isEmpty) &&
+          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+                  (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
                   widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(
                   width: MediaQuery.of(context).size.width * 0.8,
@@ -147,7 +147,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                   ),
                 )
               : Container(),
-          widget.data?.isBoost != null && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+          (widget.data?.boosted.isNotEmpty ?? [].isNotEmpty) && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: JangkaunStatus(

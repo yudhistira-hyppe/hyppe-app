@@ -206,7 +206,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
   set boostPaymentResponse(BoostResponse? value) {
     _boostPaymentResponse = value;
-    print(value);
     notifyListeners();
   }
 
@@ -602,7 +601,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     // }
 
     try {
-      _connectAndListenToSocket(context);
+      // _connectAndListenToSocket(context);
       final notifier = PostsBloc();
       print('featureType : $featureType');
       notifier.postContentsBlocV2(
@@ -672,6 +671,9 @@ class PreUploadContentNotifier with ChangeNotifier {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
+    final price = priceController.text.replaceAll(',', '').replaceAll('.', '');
+    final oldPrice = _editData?.saleAmount;
+
     final notifier = PostsBloc();
     await notifier.updateContentBlocV2(
       context,
@@ -684,7 +686,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       description: captionController.text,
       cats: _interestData,
       tagPeople: userTagData,
-      saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+      saleAmount: _toSell ? price : "0",
       saleLike: _includeTotalLikes,
       saleView: _includeTotalViews,
       location: locationName == language.addLocation ? '' : locationName,
@@ -707,7 +709,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             location: locationName == language.addLocation ? '' : locationName,
             tagPeople: userTagDataReal,
             cats: _interestData,
-            saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+            saleAmount: _toSell ? price : "0",
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
           );
@@ -726,7 +728,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             location: locationName == language.addLocation ? '' : locationName,
             tagPeople: userTagDataReal,
             cats: _interestData,
-            saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
+            saleAmount: _toSell ? price : "0",
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
           );
@@ -735,10 +737,19 @@ class PreUploadContentNotifier with ChangeNotifier {
       Routing().moveBack();
 
       var isoCode = SharedPreference().readStorage(SpKeys.isoCode);
-      showSnackBar(
-        color: kHyppeTextSuccess,
-        message: isoCode == 'id' ? "$content ${language.your} ${language.successfullySave}" : "${language.your} $content ${language.successfullySave}",
-      );
+
+      if (oldPrice != 0 && oldPrice != num.parse(price)) {
+        showSnackBar(
+          color: kHyppeTextSuccess,
+          message: "${language.priceChangesSavedSuccessfully}",
+        );
+      } else {
+        showSnackBar(
+          color: kHyppeTextSuccess,
+          message: isoCode == 'id' ? "$content ${language.your} ${language.successfullySave}" : "${language.your} $content ${language.successfullySave}",
+        );
+      }
+
       _onExit();
     }
   }
@@ -776,9 +787,9 @@ class PreUploadContentNotifier with ChangeNotifier {
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
     if (_boostContent != null) _onExit();
-    if(isDefault){
+    if (isDefault) {
       Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
-    }else{
+    } else {
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.pop(context);
@@ -1196,16 +1207,14 @@ class PreUploadContentNotifier with ChangeNotifier {
           break;
         }
       } else {
-        if(_isShowAutoComplete){
+        if (_isShowAutoComplete) {
           _isShowAutoComplete = false;
-          Future.delayed(const Duration(milliseconds: 500), (){
+          Future.delayed(const Duration(milliseconds: 500), () {
             notifyListeners();
           });
         }
       }
     }
-
-
   }
 
   void insertAutoComplete(index) {
@@ -1226,7 +1235,11 @@ class PreUploadContentNotifier with ChangeNotifier {
   void submitOwnership() {
     if (toSell && priceController.text == '') {
       toSell = false;
+    } else {
+      _privacyTitle = "${language.public}";
+      privacyValue = 'PUBLIC';
     }
+    notifyListeners();
     Routing().moveBack();
   }
 
