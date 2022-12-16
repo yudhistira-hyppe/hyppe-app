@@ -274,7 +274,7 @@ class _DiaryPageState extends State<DiaryPage> {
                     alignment: Alignment.center,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: Provider.of<TranslateNotifierV2>(context, listen: false).translate.noData ?? '',
+                      textToDisplay: notifier.language.noData ?? '',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                     margin: const EdgeInsets.symmetric(horizontal: 16),

@@ -12,3 +12,5 @@ const storyIndex = 0;
 const vidIndex = 1;
 const diaryIndex = 2;
 const pictIndex = 3;
+const seeMore = 'See More';
+const seeLess = 'See Less';

@@ -47,6 +47,7 @@ import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
 import '../../ui/constant/entities/comment_v2/notifier.dart';
+import '../../ui/inner/home/content_v2/diary/playlist/notifier.dart';
 
 class TranslateNotifierV2 with ChangeNotifier {
   TranslateNotifierV2._private();
@@ -148,6 +149,7 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<AccountPreferencesNotifier>().translate(translate);
     context.read<MakeContentNotifier>().translate(translate);
     context.read<PreviewContentNotifier>().translate(translate);
+    context.read<DiariesPlaylistNotifier>().translate(translate);
     context.read<PreUploadContentNotifier>().translate(translate);
     context.read<SelfProfileNotifier>().translate(translate);
     context.read<OtherProfileNotifier>().translate(translate);
