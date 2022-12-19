@@ -40,6 +40,7 @@ class TransactionHistoryModel {
   String? mediaUri;
   String? mediaType;
   String? mediaEndpoint;
+  String? mediaThumbEndpoint;
   String? partnerTrxid;
   String? fullThumbPath;
   String? paymentmethode;
@@ -90,6 +91,7 @@ class TransactionHistoryModel {
     mediaUri = json['mediaUri'];
     mediaType = json['mediaType'];
     mediaEndpoint = json['mediaEndpoint'];
+    mediaThumbEndpoint = json['mediaThumbEndpoint'];
     partnerTrxid = json['partnerTrxid'] ?? '';
     fullThumbPath = concatThumbUri();
     paymentmethode = json['paymentmethode'] ?? '';
@@ -124,7 +126,7 @@ class TransactionHistoryModel {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl + (mediaEndpoint ?? '') + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    return Env.data.baseUrl + (mediaThumbEndpoint ?? '') + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 }
 

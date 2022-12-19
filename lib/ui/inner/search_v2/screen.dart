@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
@@ -23,6 +24,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
+    context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     _tabController = TabController(length: 3, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     if (notifier.searchContentFirstPage?.vid == null) {

@@ -12,7 +12,8 @@ class OnjectContentWidget extends StatelessWidget {
   final ContentData data;
   final String cat;
   final String reason;
-  const OnjectContentWidget({Key? key, required this.data, this.cat = '', this.reason = ''}) : super(key: key);
+  final bool isCategory;
+  const OnjectContentWidget({Key? key, required this.data, this.cat = '', this.reason = '', this.isCategory = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,28 +84,30 @@ class OnjectContentWidget extends StatelessWidget {
           ],
         ),
         thirtySixPx,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                translate.categories ?? '',
-                style: Theme.of(context).primaryTextTheme.bodyText2,
-                textAlign: TextAlign.start,
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text(
-                cat,
-                style: Theme.of(context).textTheme.bodyText2,
-                textAlign: TextAlign.end,
-              ),
-            ),
-          ],
-        ),
+        isCategory
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      translate.categories ?? '',
+                      style: Theme.of(context).primaryTextTheme.bodyText2,
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      cat,
+                      style: Theme.of(context).textTheme.bodyText2,
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
         twentyPx,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

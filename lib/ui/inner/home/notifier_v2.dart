@@ -1,6 +1,8 @@
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
@@ -120,6 +122,7 @@ class HomeNotifier with ChangeNotifier {
 
   Future initHome(BuildContext context) async {
     'init Home'.logger();
+    context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     if (isConnected) {
       int totLoading = 0;

@@ -228,6 +228,14 @@ class ReportNotifier with ChangeNotifier {
               isReport: false,
             );
         break;
+      case contentPosition.searchFirst:
+        context.read<SearchNotifier>().showContentSensitive(
+              context,
+              postID: data.postID ?? '',
+              content: typeContent,
+              isReport: false,
+            );
+        break;
       case contentPosition.search:
         switch (_type) {
           case 'vid':

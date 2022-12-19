@@ -525,18 +525,22 @@ class SearchNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = _searchContent?.vid?.data?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.vid?.data?.firstWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = _searchContent?.diary?.data?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.diary?.data?.firstWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = _searchContent?.pict?.data?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.pict?.data?.firstWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();
         break;
     }
+
+    print('ini postid ${postID}');
+    print('ini postid ${content}');
+    print('ini postid ${_updatedData?.postID}');
 
     if (_updatedData != null) {
       _updatedData.reportedStatus = '';

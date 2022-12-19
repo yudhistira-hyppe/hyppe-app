@@ -232,7 +232,7 @@ class TransactionNotifier extends ChangeNotifier {
         String date = dateToday.toString().substring(0, 10);
         // String email = 'freeman27@getnada.com';
         String email = SharedPreference().readStorage(SpKeys.email);
-        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, 'boost': false, "skip": _skip, "limit": _limit};
+        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, 'boost': false, "rewards": false, "skip": _skip, "limit": _limit};
         final notifier = TransactionBloc();
         await notifier.getHistoryTransaction(context, params: param);
         final fetch = notifier.transactionFetch;
