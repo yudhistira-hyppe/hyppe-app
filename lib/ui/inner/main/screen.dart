@@ -27,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     _mainNotifier = Provider.of<MainNotifier>(context, listen: false);
-    _mainNotifier.initMain(context);
+    _mainNotifier.initMain(context, isInitSocket: true);
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     super.initState();
     getDevice();

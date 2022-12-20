@@ -59,10 +59,14 @@ class MainNotifier with ChangeNotifier {
 
   Future initMain(
     BuildContext context, {
-    bool onUpdateProfile = false,
+      bool onUpdateProfile = false,
+        bool isInitSocket = false
   }) async {
     // Connect to socket
-    _connectAndListenToSocket();
+    if(isInitSocket){
+      _connectAndListenToSocket();
+    }
+
 
     // Auto follow user if app is install from a dynamic link
     DynamicLinkService.followSender(context);
