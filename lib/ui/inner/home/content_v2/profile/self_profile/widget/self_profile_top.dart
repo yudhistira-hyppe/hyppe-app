@@ -42,7 +42,7 @@ class SelfProfileTop extends StatelessWidget {
                     following: true,
                     width: 80 * SizeConfig.scaleDiagonal,
                     height: 80 * SizeConfig.scaleDiagonal,
-                    imageUrl: notifier.displayPhotoProfile(),
+                    imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
                     onTap: () => notifier.viewStory(context),
                   ),
                 ),

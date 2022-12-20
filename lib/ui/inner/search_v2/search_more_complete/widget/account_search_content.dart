@@ -50,14 +50,14 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                 children: [
                   twelvePx,
                   ...List.generate(
-                    widget.content?.users?.data?.length ?? 0,
+                    widget.content?.users?.length ?? 0,
                     (index) => Padding(
                       padding: const EdgeInsets.all(2.0),
                       child: ListTile(
-                        onTap: () => _system.navigateToProfile(context, widget.content?.users?.data?[index].email ?? ''),
+                        onTap: () => _system.navigateToProfile(context, widget.content?.users?[index].email ?? ''),
                         contentPadding: EdgeInsets.zero,
-                        title: Text("${widget.content?.users?.data?[index].fullName}"),
-                        subtitle: Text("${widget.content?.users?.data?[index].username}"),
+                        title: Text("${widget.content?.users?[index].fullName}"),
+                        subtitle: Text("${widget.content?.users?[index].username}"),
                         leading: StoryColorValidator(
                           haveStory: false,
                           featureType: FeatureType.pic,
@@ -65,7 +65,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                             width: 50,
                             height: 50,
                             onTap: () {},
-                            imageUrl: System().showUserPicture(widget.content?.users?.data?[index].avatar?.mediaEndpoint),
+                            imageUrl: System().showUserPicture(widget.content?.users?[index].avatar?[0].mediaEndpoint?.replaceAll("_860.jpeg", "")),
                             following: true,
                             onFollow: () {},
                           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -23,6 +25,7 @@ class _DiarySeeAllScreenState extends State<DiarySeeAllScreen> with SingleTicker
   void initState() {
     _tabController = TabController(length: 1, vsync: this);
     notifier.initState(context);
+    context.read<ReportNotifier>().inPosition = contentPosition.seeAllDiary;
     super.initState();
   }
 

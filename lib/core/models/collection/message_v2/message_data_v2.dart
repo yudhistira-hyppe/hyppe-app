@@ -227,6 +227,7 @@ class Content {
   String? fullThumbPath;
   String? mediaThumbUri;
   String? mediaThumbEndpoint;
+  bool? apsara;
 
   Content({
     this.createdAt,
@@ -240,6 +241,7 @@ class Content {
     this.mediaThumbEndpoint,
     this.postID,
     this.mediaEndpoint,
+    this.apsara,
   });
 
   Content.fromJson(Map<String, dynamic> json) {
@@ -254,6 +256,7 @@ class Content {
     mediaThumbEndpoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     mediaEndpoint = json['mediaEndpoint'];
+    apsara = json['apsara'] ?? false;
     fullThumbPath = concatThumbUri();
   }
 

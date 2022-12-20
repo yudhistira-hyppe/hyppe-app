@@ -19,12 +19,14 @@ class BuildPersonalProfilePic extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                CustomProfileImage(
-                  following: true,
-                  width: 122 * SizeConfig.scaleDiagonal,
-                  height: 122 * SizeConfig.scaleDiagonal,
-                  imageUrl: context.read<SelfProfileNotifier>().displayPhotoProfile(),
-                  onTap: () {},
+                Consumer<SelfProfileNotifier>(
+                  builder: (_, notifier, __) => CustomProfileImage(
+                    following: true,
+                    width: 122 * SizeConfig.scaleDiagonal,
+                    height: 122 * SizeConfig.scaleDiagonal,
+                    imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
+                    onTap: () {},
+                  ),
                 ),
               ],
             ),

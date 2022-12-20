@@ -242,6 +242,8 @@ class System {
       value = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.parse(dateParams));
     } else if (displayOption == 5) {
       value = DateFormat('dd/MM/yyyy').format(DateTime.parse(dateParams));
+    } else if (displayOption == 6) {
+      value = DateFormat('HH:mm').format(DateTime.parse(dateParams));
     }
     return value;
   }
@@ -402,10 +404,12 @@ class System {
         return TransactionType.sell;
       case "Buy":
         return TransactionType.buy;
-      case "Withdrawal":
+      case "Withdraws":
         return TransactionType.withdrawal;
       case "BOOST_CONTENT":
         return TransactionType.boost;
+      case "Rewards":
+        return TransactionType.reward;
       default:
         return TransactionType.none;
     }
@@ -418,7 +422,9 @@ class System {
       case TransactionType.buy:
         return "Buy";
       case TransactionType.withdrawal:
-        return "Withdrawal";
+        return "Withdraws";
+      case TransactionType.reward:
+        return "Rewards";
       case TransactionType.none:
         return "";
       default:
@@ -749,6 +755,10 @@ class System {
         return 'VERIFICATIONID';
       case NotificationCategory.transactions:
         return 'TRANSACTIONS';
+      case NotificationCategory.adsClick:
+        return 'ADS CLICK';
+      case NotificationCategory.adsView:
+        return 'ADS VIEW';
     }
   }
 
@@ -768,6 +778,10 @@ class System {
         return NotificationCategory.general;
       case 'TRANSACTION':
         return NotificationCategory.transactions;
+      case 'ADS CLICK':
+        return NotificationCategory.adsClick;
+      case 'ADS VIEW':
+        return NotificationCategory.adsView;
       default:
         return NotificationCategory.all;
     }
@@ -975,7 +989,7 @@ class System {
     return text.length >= 3 && text.length <= 30;
   }
 
-  bool canOnlyContainLettersNumbersPeriodsAndUnderscores(String text) {
+  bool canOnlyContainLettersNumbersDotAndUnderscores(String text) {
     return text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
   }
 
@@ -1166,5 +1180,36 @@ class System {
       default:
         return notifier.waitingtoTransfer ?? '';
     }
+  }
+
+  Map<String, dynamic> readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'systemFeatures': build.systemFeatures,
+    };
   }
 }

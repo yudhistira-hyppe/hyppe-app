@@ -41,13 +41,18 @@ class HyppeNotifier with ChangeNotifier {
 
   Future handleStartUp(BuildContext context) async {
     _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-    // await context.read<CameraDevicesNotifier>().prepareCameraPage();
+    await context.read<CameraDevicesNotifier>().prepareCameraPage();
     await context.read<TranslateNotifierV2>().initTranslate(context);
 
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
     bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
     bool isUserRequestRecoverPassword = SharedPreference().readStorage(SpKeys.isUserRequestRecoverPassword) ?? false;
+
+    //set light theme
+    context.read<HyppeNotifier>().themeData = hyppeLightTheme();
+    SharedPreference().writeStorage(SpKeys.themeData, false); //set light theme
+    System().systemUIOverlayTheme();
 
     if (isUserRequestRecoverPassword) {
       _routing.moveReplacement(Routes.userOtpScreen, argument: UserOtpScreenArgument(email: email));

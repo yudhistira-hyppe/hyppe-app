@@ -42,7 +42,7 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void dispose() {
-    context.read<TransactionNotifier>().isLoading = false;
+    Provider.of<TransactionNotifier>(context, listen: false).isLoading = false;
     super.dispose();
   }
 
@@ -66,8 +66,9 @@ class _TransactionState extends State<Transaction> {
               await notifier.initTransactionHistory(context);
             },
             child: notifier.isLoading
-                ? const SingleChildScrollView(child: const ShimmerTransactionHistory())
+                ? const SingleChildScrollView(child: ShimmerTransactionHistory())
                 : SingleChildScrollView(
+                    controller: _scrollController,
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -76,54 +77,54 @@ class _TransactionState extends State<Transaction> {
                           TotalBalance(accountBalance: System().currencyFormat(amount: notifier.accountBalance?.totalsaldo ?? 0)),
                           const ButtonTransaction(),
                           sixPx,
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.background,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
-                            ),
-                            child: Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                onTap: () => Routing().move(Routes.transactionInProgress),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
-                                  child: Row(
-                                    children: [
-                                      const CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}hitory-inprogress.svg",
-                                        defaultColor: false,
-                                      ),
-                                      sixPx,
-                                      CustomTextWidget(
-                                        textToDisplay: notifier2.translate.transactionInProgress ?? '',
-                                        textStyle: Theme.of(context).textTheme.caption,
-                                      ),
-                                      Expanded(
-                                        child: Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(8),
-                                              color: (notifier.countTransactionProgress ?? 0) > 0 ? kHyppeDanger : kHyppeLightSecondary,
-                                            ),
-                                            child: CustomTextWidget(
-                                              textToDisplay: "${notifier.countTransactionProgress}",
-                                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightBackground),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   decoration: BoxDecoration(
+                          //     color: Theme.of(context).colorScheme.background,
+                          //     borderRadius: BorderRadius.circular(5),
+                          //     boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                          //   ),
+                          //   child: Material(
+                          //     color: Colors.transparent,
+                          //     child: InkWell(
+                          //       onTap: () => Routing().move(Routes.transactionInProgress),
+                          //       child: Container(
+                          //         decoration: BoxDecoration(
+                          //           borderRadius: BorderRadius.circular(8),
+                          //         ),
+                          //         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+                          //         child: Row(
+                          //           children: [
+                          //             const CustomIconWidget(
+                          //               iconData: "${AssetPath.vectorPath}hitory-inprogress.svg",
+                          //               defaultColor: false,
+                          //             ),
+                          //             sixPx,
+                          //             CustomTextWidget(
+                          //               textToDisplay: notifier2.translate.transactionInProgress ?? '',
+                          //               textStyle: Theme.of(context).textTheme.caption,
+                          //             ),
+                          //             Expanded(
+                          //               child: Align(
+                          //                 alignment: Alignment.centerRight,
+                          //                 child: Container(
+                          //                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                          //                   decoration: BoxDecoration(
+                          //                     borderRadius: BorderRadius.circular(8),
+                          //                     color: (notifier.countTransactionProgress ?? 0) > 0 ? kHyppeDanger : kHyppeLightSecondary,
+                          //                   ),
+                          //                   child: CustomTextWidget(
+                          //                     textToDisplay: "${notifier.countTransactionProgress}",
+                          //                     textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightBackground),
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

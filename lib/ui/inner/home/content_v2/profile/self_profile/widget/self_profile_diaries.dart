@@ -21,7 +21,7 @@ class SelfProfileDiaries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SelfProfileNotifier>(builder: (_, notifier, __) {
-      return notifier.user != null
+      return notifier.user.diaries != null
           ? notifier.user.diaries!.isEmpty
               ? const EmptyWidget()
               : SliverGrid(

@@ -26,9 +26,7 @@ class _QRBlockState extends State<QRBlock> {
                   child: Container(
                     height: 360,
                     width: 383,
-                    decoration: BoxDecoration(
-                        color: kHyppeLightSurface,
-                        borderRadius: BorderRadius.circular(8)),
+                    decoration: BoxDecoration(color: kHyppeLightSurface, borderRadius: BorderRadius.circular(8)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -46,11 +44,7 @@ class _QRBlockState extends State<QRBlock> {
                         Padding(
                           padding: const EdgeInsets.only(top: 20),
                           child: CustomTextWidget(
-                              textToDisplay: notifier.language.shareYourQR ?? '',
-                              textStyle: const TextStyle(
-                                  fontSize: 12,
-                                  color: kHyppeTextLightPrimary,
-                                  fontWeight: FontWeight.w400)),
+                              textToDisplay: notifier.language.shareYourQR ?? '', textStyle: const TextStyle(fontSize: 12, color: kHyppeTextLightPrimary, fontWeight: FontWeight.w400)),
                         ),
                       ],
                     ),
@@ -66,7 +60,7 @@ class _QRBlockState extends State<QRBlock> {
                             following: true,
                             width: 80 * SizeConfig.scaleDiagonal,
                             height: 80 * SizeConfig.scaleDiagonal,
-                            imageUrl: notifier.displayPhotoProfile(),
+                            imageUrl: notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}"),
                             onTap: () => notifier.viewStory(context),
                           ),
                           const SizedBox(
@@ -74,10 +68,7 @@ class _QRBlockState extends State<QRBlock> {
                           ),
                           Text(
                             notifier.displayUserName(),
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: kHyppeTextLightPrimary),
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
                           ),
                         ],
                       ),

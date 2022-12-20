@@ -726,7 +726,7 @@
   "chooseCategoryIssue" : "Choose Category Issue",
   "description" : "Description",
   "thisHyppeVidisSubjectToModeration" : "This HyppeVid is subject to moderation.",
-  "thisHyppePicisSubjectToModeration" : "This HyppeVPic is subject to moderation.", 
+  "thisHyppePicisSubjectToModeration" : "This HyppePic is subject to moderation.", 
   "thisHyppeDiaryisSubjectToModeration" : "This HyppeDiary is subject to moderation.", 
   "thisHyppeStoryisSubjectToModeration" : "This HyppeStory is subject to moderation.",
   "thisMessagecanOnlyBeSeenByYou" : "This message can only be seen by you",
@@ -735,7 +735,7 @@
   "communityGuidelines" : "Community Guidelines",
   "videoDetails" : "Video Details",
   "postedOn" : "Posted on",
-  "violationType" : "violation Type",
+  "violationType" : "Violation Type",
   "appeal" : "Appeal",
   "ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal" : "If you reviewed our community guidelines and believe your content was removed by mistake, let us know by submitting an appeal. when we complete the review, you’ll receive and update in your notification tab. \n\n Your content was removed for violating our community guidelines. To appeal this decision, include a description of the issue below.",
   "chooseanAppealReason" : "Choose an Appeal Reason",
@@ -784,6 +784,10 @@
   "genderMustBeFilled" : "Gender must be filled",
   "placeOfBirthMustBeFilled" : "The place of birth must be filled",
   "dateOfBirthMustBeFilled" : "The date of birth must be filled",
-  "userIsNotFound" : "User is not found"
-
+  "userIsNotFound" : "User is not found",
+  "usernameOnlyContainLetters" : "Username only contain letters, numbers, dot, and underscore",
+  "reward" : "Reward",
+  "amountEarned" : "Amount Earned",
+  "usernameisAlreadyinUse" : "Username is already in use!",
+  "priceChangesSavedSuccessfully" : "Price changes saved successfully"
 }

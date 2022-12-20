@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:hyppe/core/bloc/report/bloc.dart';
 import 'package:hyppe/core/bloc/report/state.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -84,7 +85,12 @@ class AppealNotifier with ChangeNotifier {
     } else {
       _loadingAppel = false;
       notifyListeners();
-      ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: Colors.red);
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        fetch.message,
+        color: Colors.red,
+        iconSvg: "${AssetPath.vectorPath}remove.svg",
+      );
     }
   }
 

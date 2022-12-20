@@ -91,7 +91,7 @@ class BottomDetailWidget extends StatelessWidget {
           ),
         ),
         TwoColumnWidget(language?.paymentMethods, text2: data?.paymentmethode),
-        TwoColumnWidget(language?.contentPrice, text2: System().currencyFormat(amount: data?.amount ?? 0)),
+        TwoColumnWidget(data?.jenis == 'BOOST_CONTENT' ? language?.boostPrice : language?.contentPrice, text2: System().currencyFormat(amount: data?.amount ?? 0)),
         data?.jenis == 'BOOST_CONTENT' ? const SizedBox() : TwoColumnWidget(language?.adminFee, text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
         TwoColumnWidget(language?.serviceFee, text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
         TwoColumnWidget(language?.totalPrice, text2: System().currencyFormat(amount: data?.totalamount ?? 0)),

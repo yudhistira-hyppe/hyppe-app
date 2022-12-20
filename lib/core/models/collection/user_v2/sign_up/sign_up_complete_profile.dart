@@ -42,9 +42,9 @@ class SignUpCompleteProfiles {
     data["dob"] = dateOfBirth;
     data["langIso"] = langIso;
     data["interest"] = interests;
-    if (username != null) {
-      data["username"] = username;
-    }
+    // if (username != null) {
+    //   data["username"] = username;
+    // }
     data["event"] = "UPDATE_PROFILE";
     data["status"] = "COMPLETE_BIO";
     return data;

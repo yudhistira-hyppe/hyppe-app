@@ -36,8 +36,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
           titleSpacing: 0,
           title: CustomTextWidget(
             textToDisplay: notifier.language.idVerification ?? '',
-            textStyle:
-                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+            textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
           centerTitle: false,
         ),
@@ -65,11 +64,9 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                     child: TextFormField(
                       controller: notifier.realNameController,
                       maxLines: 1,
-
                       keyboardAppearance: Brightness.light,
                       cursorColor: const Color(0xff8A3181),
-                      style: textTheme.bodyText2
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: textTheme.bodyText2?.copyWith(fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         hintStyle: textTheme.bodyText2,
                         errorBorder: InputBorder.none,
@@ -85,8 +82,7 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                   CustomTextWidget(
                       textOverflow: TextOverflow.visible,
                       textAlign: TextAlign.left,
-                      textStyle:
-                          textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black26),
+                      textStyle: textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black26),
                       textToDisplay: notifier.language.reaNameNotice ?? '')
                 ],
               ),
@@ -98,18 +94,13 @@ class _VerificationIDStep2State extends State<VerificationIDStep2> {
                   function: () => notifier.submitStep2(context),
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.continueStep ?? '',
-                    textStyle: textTheme.button
-                        ?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                   buttonStyle: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
-                    shadowColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
-                    overlayColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
+                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                   ),
                 ),
               ),

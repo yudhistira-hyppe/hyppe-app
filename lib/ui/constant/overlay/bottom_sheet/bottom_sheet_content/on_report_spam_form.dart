@@ -30,8 +30,11 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
 
   @override
   void initState() {
-    final translate = context.read<TranslateNotifierV2>().translate;
-    context.read<ReportNotifier>().initializeData(context);
+    final notifier = context.read<ReportNotifier>();
+    notifier.initializeData(context);
+    notifier.currentReport = '';
+    notifier.currentReportDesc = '';
+
     super.initState();
   }
 

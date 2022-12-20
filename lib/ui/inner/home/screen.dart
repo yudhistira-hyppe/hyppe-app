@@ -1,9 +1,11 @@
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/widget/filter.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -57,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     Future.delayed(Duration(milliseconds: 500), () {
       'didPopNext isOnHomeScreen true'.logger();
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+      context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
     super.didPopNext();

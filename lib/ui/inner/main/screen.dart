@@ -1,4 +1,6 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -28,9 +30,14 @@ class _MainScreenState extends State<MainScreen> {
     _mainNotifier.initMain(context);
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     super.initState();
+    getDevice();
   }
 
-
+  void getDevice() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    Map device = System().readAndroidBuildData(await deviceInfo.androidInfo);
+    SharedPreference().writeStorage(SpKeys.brand, device['brand']);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
               showSelectedLabels: false,
               showUnselectedLabels: false,
               elevation: 0.5,
-              onTap: (int index) async{
+              onTap: (int index) async {
                 if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
                 if (index != 2) {
                   setState(() {
@@ -58,7 +65,6 @@ class _MainScreenState extends State<MainScreen> {
                 } else {
                   await notifier.onShowPostContent(consumerContext);
                 }
-
               },
               currentIndex: notifier.pageIndex,
               type: BottomNavigationBarType.fixed,
@@ -110,6 +116,4 @@ class _MainScreenState extends State<MainScreen> {
       },
     );
   }
-
-
 }

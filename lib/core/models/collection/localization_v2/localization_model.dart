@@ -768,7 +768,7 @@ class LocalizationModelV2 {
   String? viewPaymentStatus;
   String? appealsReceived;
   String? weWillSendYouaNotificationasSoonasweHaveanUpdate;
-  String? ContentContainsSensitiveMaterial;
+  String? contentContainsSensitiveMaterial;
   String? hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails;
   String? hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails;
   String? appealThisWarning;
@@ -783,7 +783,12 @@ class LocalizationModelV2 {
   String? genderMustBeFilled;
   String? placeOfBirthMustBeFilled;
   String? dateOfBirthMustBeFilled;
+  String? usernameOnlyContainLetters;
   String? userIsNotFound;
+  String? reward;
+  String? amountEarned;
+  String? usernameisAlreadyinUse;
+  String? priceChangesSavedSuccessfully;
 
   LocalizationModelV2({
     this.login,
@@ -1555,7 +1560,7 @@ class LocalizationModelV2 {
     this.viewPaymentStatus,
     this.appealsReceived,
     this.weWillSendYouaNotificationasSoonasweHaveanUpdate,
-    this.ContentContainsSensitiveMaterial,
+    this.contentContainsSensitiveMaterial,
     this.hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails,
     this.hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails,
     this.appealThisWarning,
@@ -1570,7 +1575,12 @@ class LocalizationModelV2 {
     this.genderMustBeFilled,
     this.placeOfBirthMustBeFilled,
     this.dateOfBirthMustBeFilled,
-    this.userIsNotFound
+    this.usernameOnlyContainLetters,
+    this.userIsNotFound,
+    this.reward,
+    this.amountEarned,
+    this.usernameisAlreadyinUse,
+    this.priceChangesSavedSuccessfully,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2367,7 +2377,7 @@ class LocalizationModelV2 {
     viewPaymentStatus = json["viewPaymentStatus"];
     appealsReceived = json["appealsReceived"];
     weWillSendYouaNotificationasSoonasweHaveanUpdate = json["weWillSendYouaNotificationasSoonasweHaveanUpdate"];
-    ContentContainsSensitiveMaterial = json["ContentContainsSensitiveMaterial"];
+    contentContainsSensitiveMaterial = json["ContentContainsSensitiveMaterial"];
     hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails"];
     hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails"];
     appealThisWarning = json["appealThisWarning"];
@@ -2377,6 +2387,11 @@ class LocalizationModelV2 {
     genderMustBeFilled = json["genderMustBeFilled"];
     placeOfBirthMustBeFilled = json["placeOfBirthMustBeFilled"];
     dateOfBirthMustBeFilled = json["dateOfBirthMustBeFilled"];
+    usernameOnlyContainLetters = json["usernameOnlyContainLetters"];
     userIsNotFound = json["userIsNotFound"];
+    reward = json["reward"];
+    amountEarned = json["amountEarned"];
+    usernameisAlreadyinUse = json["usernameisAlreadyinUse"];
+    priceChangesSavedSuccessfully = json["priceChangesSavedSuccessfully"];
   }
 }

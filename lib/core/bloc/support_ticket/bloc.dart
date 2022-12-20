@@ -119,4 +119,31 @@ class SupportTicketBloc {
       errorServiceType: System().getErrorTypeV2(FeatureType.other),
     );
   }
+
+  Future getListFaq(BuildContext context) async {
+    setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setSupportTicket(SupportTicketFetch(SupportTicketState.faqError));
+        } else {
+          setSupportTicket(SupportTicketFetch(SupportTicketState.faqSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setSupportTicket(SupportTicketFetch(SupportTicketState.faqError));
+      },
+      data: {"tipe": "faq"},
+      headers: {
+        'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      withAlertMessage: false,
+      withCheckConnection: false,
+      host: UrlConstants.faqList,
+      methodType: MethodType.post,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
+  }
 }

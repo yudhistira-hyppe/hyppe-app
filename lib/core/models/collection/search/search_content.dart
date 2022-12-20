@@ -4,7 +4,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 
 SearchContentModel searchContentFromJson(String str) => SearchContentModel.fromJson(json.decode(str));
 
-String searchContentToJson(SearchContentModel data) => json.encode(data.toJson());
+// String searchContentToJson(SearchContentModel data) => json.encode(data.toJson());
 
 class SearchContentModel {
   SearchContentModel({
@@ -15,27 +15,18 @@ class SearchContentModel {
     this.pict,
   });
 
-  Users? users;
+  List<DataUser>? users;
   Tags? tags;
-  Diary? vid;
-  Diary? diary;
-  Diary? pict;
+  List<ContentData>? vid;
+  List<ContentData>? diary;
+  List<ContentData>? pict;
 
   factory SearchContentModel.fromJson(Map<String, dynamic> json) => SearchContentModel(
-        users: Users.fromJson(json["users"]),
-        // tags: Tags.fromJson(json["tags"]),
-        vid: Diary.fromJson(json["vid"]),
-        diary: Diary.fromJson(json["diary"]),
-        pict: Diary.fromJson(json["pict"]),
+        users: List<DataUser>.from(json["user"].map((x) => DataUser.fromJson(x))),
+        vid: List<ContentData>.from(json["vid"].map((x) => ContentData.fromJson(x))),
+        diary: List<ContentData>.from(json["diary"].map((x) => ContentData.fromJson(x))),
+        pict: List<ContentData>.from(json["picts"].map((x) => ContentData.fromJson(x))),
       );
-
-  Map<String, dynamic> toJson() => {
-        "users": users?.toJson(),
-        // "tags": tags?.toJson(),
-        "vid": vid?.toJson(),
-        "diary": diary?.toJson(),
-        "pict": pict?.toJson(),
-      };
 }
 
 class Diary {
@@ -109,7 +100,7 @@ class DataTags {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": List<dynamic>.from(id??[].map((x) => x)),
+        "_id": List<dynamic>.from(id ?? [].map((x) => x)),
         "total": total,
       };
 }
@@ -117,28 +108,16 @@ class DataTags {
 class Users {
   Users({
     this.data,
-    this.totalFilter,
-    this.skip,
-    this.limit,
   });
 
   List<DataUser>? data;
-  int? totalFilter;
-  int? skip;
-  int? limit;
 
   factory Users.fromJson(Map<String, dynamic> json) => Users(
         data: List<DataUser>.from(json["data"].map((x) => DataUser.fromJson(x))),
-        totalFilter: json["totalFilter"],
-        skip: json["skip"],
-        limit: json["limit"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data??[].map((x) => x.toJson())),
-        "totalFilter": totalFilter,
-        "skip": skip,
-        "limit": limit,
+        "data": List<dynamic>.from(data ?? [].map((x) => x.toJson())),
       };
 }
 
@@ -153,7 +132,7 @@ class DataUser {
   });
 
   String? id;
-  Avatar? avatar;
+  List<Avatar>? avatar;
   String? idUserAuth;
   String? username;
   String? fullName;
@@ -161,21 +140,21 @@ class DataUser {
 
   factory DataUser.fromJson(Map<String, dynamic> json) => DataUser(
         id: json["_id"],
-        avatar: json['avatar'] != null ? Avatar.fromJson(json['avatar']) : null,
+        avatar: json['avatar'] != null ? List<Avatar>.from(json["avatar"].map((x) => Avatar.fromJson(x))) : null,
         idUserAuth: json["idUserAuth"],
         username: json["username"],
         fullName: json["fullName"],
         email: json["email"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "avatar": avatar?.toJson(),
-        "idUserAuth": idUserAuth,
-        "username": username,
-        "fullName": fullName,
-        "email": email,
-      };
+  // Map<String, dynamic> toJson() => {
+  //       "_id": id,
+  //       "avatar": avatar?.toJson(),
+  //       "idUserAuth": idUserAuth,
+  //       "username": username,
+  //       "fullName": fullName,
+  //       "email": email,
+  //     };
 }
 
 class Avatar {

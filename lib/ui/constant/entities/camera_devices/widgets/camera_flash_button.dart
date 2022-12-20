@@ -5,8 +5,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/provider_widget.dart';
 import 'package:flutter/material.dart';
 
-class CameraFlashButton extends ProviderWidget<CameraDevicesNotifier> {
-  const CameraFlashButton({Key? key}) : super(key: key);
+class CameraDevicesFlashButton extends ProviderWidget<CameraDevicesNotifier> {
+  const CameraDevicesFlashButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, notifier) {

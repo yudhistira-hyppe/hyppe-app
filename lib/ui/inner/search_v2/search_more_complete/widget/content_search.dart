@@ -53,13 +53,13 @@ class ContentSearchState extends State<ContentSearch> {
           itemBuilder: (context, index) {
             var gambar = '';
             if (widget.content?[index].postType == 'pict') {
-              if (widget.content?[index].isApsara ?? false) {
+              if (widget.content?[index].apsara ?? false) {
                 gambar = widget.content?[index].media?.imageInfo?[0].url ?? '';
               } else {
                 gambar = System().showUserPicture(widget.featureType != FeatureType.pic ? (widget.content?[index].mediaThumbEndPoint ?? '') : widget.content?[index].mediaEndpoint) ?? '';
               }
             } else {
-              if (widget.content?[index].isApsara ?? false) {
+              if (widget.content?[index].apsara ?? false) {
                 gambar = widget.content?[index].media?.videoList?[0].coverURL ?? '';
               } else {
                 gambar = System().showUserPicture(widget.featureType != FeatureType.pic ? (widget.content?[index].mediaThumbEndPoint ?? '') : widget.content?[index].mediaEndpoint) ?? '';

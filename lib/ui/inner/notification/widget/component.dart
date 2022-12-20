@@ -29,13 +29,16 @@ class Component extends StatelessWidget {
       onTap: () {
         context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel());
         final eventType = System().getNotificationCategory(data?.eventType ?? '');
+        var listTransacation = [
+          NotificationCategory.transactions,
+          NotificationCategory.adsClick,
+          NotificationCategory.adsView,
+        ];
 
-        switch (eventType) {
-          case NotificationCategory.transactions:
-            Routing().move(Routes.transaction);
-            break;
-          default:
-            context.read<NotificationNotifier>().navigateToContent(context, data?.postType, data?.postID);
+        if (listTransacation.contains(eventType)) {
+          Routing().move(Routes.transaction);
+        } else {
+          context.read<NotificationNotifier>().navigateToContent(context, data?.postType, data?.postID);
         }
       },
       child: Container(

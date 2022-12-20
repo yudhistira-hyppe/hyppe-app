@@ -23,6 +23,8 @@ import 'package:hyppe/ui/inner/notification/widget/component_shimmer.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 
 class MessageScreen extends StatefulWidget {
+  const MessageScreen({Key? key}) : super(key: key);
+
   @override
   _MessageScreenState createState() => _MessageScreenState();
 }

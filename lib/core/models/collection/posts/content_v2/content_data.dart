@@ -139,62 +139,67 @@ class ContentData {
 
   bool? isReport;
 
-  List<Boosted>? boosted;
+  List<Boosted> boosted = [];
   int? boostCount;
   int? isBoost;
   int? boostJangkauan;
   String? statusBoost;
   String? reportedStatus;
+  String? reportedStatus2;
   int? reportedUserCount;
   MediaModel? media;
+  bool? apsara;
 
-  ContentData(
-      {this.metadata,
-      this.mediaBasePath,
-      this.postType,
-      this.mediaUri,
-      this.isLiked,
-      this.description,
-      this.active,
-      this.privacy,
-      this.mediaType,
-      this.mediaThumbEndPoint,
-      this.postID,
-      this.title,
-      this.isViewed,
-      this.tags = const [],
-      this.allowComments,
-      this.certified,
-      this.createdAt,
-      this.insight,
-      this.mediaThumbUri,
-      this.mediaEndpoint,
-      this.email,
-      this.updatedAt,
-      this.username,
-      this.fullThumbPath,
-      this.fullContentPath,
-      this.avatar,
-      this.location,
-      this.visibility,
-      this.cats,
-      this.tagPeople,
-      this.likes,
-      this.saleAmount,
-      this.saleView,
-      this.saleLike,
-      this.isApsara,
-      this.apsaraId,
-      this.isReport,
-      this.boosted,
-      this.boostCount,
-      this.isBoost,
-      this.boostJangkauan,
-      this.statusBoost,
-      this.reportedStatus,
-      this.music,
-      this.reportedUserCount,
-      this.media});
+  ContentData({
+    this.metadata,
+    this.mediaBasePath,
+    this.postType,
+    this.mediaUri,
+    this.isLiked,
+    this.description,
+    this.active,
+    this.privacy,
+    this.mediaType,
+    this.mediaThumbEndPoint,
+    this.postID,
+    this.title,
+    this.isViewed,
+    this.tags = const [],
+    this.allowComments,
+    this.certified,
+    this.createdAt,
+    this.insight,
+    this.mediaThumbUri,
+    this.mediaEndpoint,
+    this.email,
+    this.updatedAt,
+    this.username,
+    this.fullThumbPath,
+    this.fullContentPath,
+    this.avatar,
+    this.location,
+    this.visibility,
+    this.cats,
+    this.tagPeople,
+    this.likes,
+    this.saleAmount,
+    this.saleView,
+    this.saleLike,
+    this.isApsara,
+    this.apsaraId,
+    this.isReport,
+    this.boosted = const [],
+    this.boostCount,
+    this.isBoost,
+    this.boostJangkauan,
+    this.statusBoost,
+    this.reportedStatus,
+    this.reportedStatus2,
+    this.music,
+    this.reportedUserCount,
+    this.media,
+    this.apsara,
+  });
 
   ContentData.fromJson(Map<String, dynamic> json) {
     metadata = json['metadata'] != null ? Metadata.fromJson(json['metadata']) : null;
@@ -250,14 +255,16 @@ class ContentData {
     isReport = json['isReport'] ?? false;
     if (json['boosted'] != null) {
       boosted = [];
-      json['boosted'].forEach((v) => boosted?.add(Boosted.fromJson(v)));
+      json['boosted'].forEach((v) => boosted.add(Boosted.fromJson(v)));
     }
     boostCount = json['boostCount'] ?? 0;
     isBoost = json['isBoost'];
     boostJangkauan = json['boostJangkauan'] ?? 0;
     statusBoost = json['statusBoost'] ?? '';
     reportedStatus = json['reportedStatus'] ?? 'ALL';
+    reportedStatus2 = json['reportedStatus'] ?? 'ALL';
     reportedUserCount = json['reportedUserCount'] ?? 0;
+    apsara = json['apsara'] ?? false;
     media = json['media'] == null
         ? null
         : json['media'] is List

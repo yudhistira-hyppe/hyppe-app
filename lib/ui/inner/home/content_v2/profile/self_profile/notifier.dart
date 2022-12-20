@@ -108,9 +108,9 @@ class SelfProfileNotifier with ChangeNotifier {
 
   String displayUserName() => user.profile != null ? "@" + (user.profile?.username ?? '') : "";
 
-  String? displayPhotoProfile() {
+  String? displayPhotoProfile(String image) {
     print('ini gambar profil ${_system.showUserPicture(user.profile?.avatar?.mediaEndpoint)}');
-    return _system.showUserPicture(user.profile?.avatar?.mediaEndpoint);
+    return _system.showUserPicture(image);
   }
 
   String displayPostsCount() => user.profile?.insight != null ? _system.formatterNumber(user.profile?.insight?.posts?.toInt()) : "0";
@@ -217,7 +217,7 @@ class SelfProfileNotifier with ChangeNotifier {
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       user.profile = null;
       user.profile = usersFetch.data;
-      SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
+      // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
       notifyListeners();
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);

@@ -201,12 +201,10 @@ class _DiaryPageState extends State<DiaryPage> {
                       )
                     : Container(),
                 (widget.data?.reportedStatus == "BLURRED") ? DiarySensitive(data: widget.data) : Container(),
-                (widget.data?.reportedStatus == "BLURRED")
-                    ? Container()
-                    : TitlePlaylistDiaries(
-                        data: widget.data,
-                        storyController: _storyController,
-                      ),
+                TitlePlaylistDiaries(
+                  data: widget.data,
+                  storyController: _storyController,
+                ),
                 widget.data?.reportedStatus == "BLURRED"
                     ? Container()
                     : RightItems(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
@@ -72,23 +74,6 @@ class ContentItem extends StatelessWidget {
                               imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : "${data?.fullThumbPath}",
                               imageBuilder: (context, imageProvider) => Container(
                                 alignment: Alignment.bottomLeft,
-                                child: CustomBalloonWidget(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const CustomIconWidget(
-                                        defaultColor: false,
-                                        color: kHyppeLightButtonText,
-                                        iconData: '${AssetPath.vectorPath}like.svg',
-                                      ),
-                                      fourPx,
-                                      CustomTextWidget(
-                                        textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                                      )
-                                    ],
-                                  ),
-                                ),
                                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8.0),
@@ -97,6 +82,48 @@ class ContentItem extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
+                                child: data?.reportedStatus == 'BLURRED'
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                            sigmaX: 30.0,
+                                            sigmaY: 30.0,
+                                          ),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                                                  defaultColor: false,
+                                                  height: 40,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : CustomBalloonWidget(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const CustomIconWidget(
+                                              defaultColor: false,
+                                              color: kHyppeLightButtonText,
+                                              iconData: '${AssetPath.vectorPath}like.svg',
+                                            ),
+                                            fourPx,
+                                            CustomTextWidget(
+                                              textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
+                                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                               ),
                               errorWidget: (context, url, error) => Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -119,7 +146,7 @@ class ContentItem extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            (data?.saleAmount ?? 0)  > 0
+                            (data?.saleAmount ?? 0) > 0
                                 ? const Align(
                                     alignment: Alignment.topRight,
                                     child: Padding(

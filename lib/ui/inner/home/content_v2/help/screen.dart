@@ -22,11 +22,9 @@ class HelpScreen extends StatefulWidget {
   State<HelpScreen> createState() => _HelpScreenState();
 }
 
-class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin{
-
+class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -58,7 +56,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin{
               CustomSearchBar(
                 hintText: notifier.translate.searchtopic,
                 contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                onSubmitted: (value){
+                onSubmitted: (value) {
                   notifier.getListOfFAQ(context, category: value);
                 },
               ),
@@ -97,22 +95,23 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin{
               eightPx,
               Expanded(
                 child: Container(
-                  child: notifier.listFAQ.isNotEmpty ? ListView.builder(
-                    itemCount: notifier.listFAQ.length,
-                      itemBuilder: (context, index){
-                      for(var data in notifier.listFAQ[index].detail){
-                        print('data details : ${data.toJson()}');
-                      }
+                  child: notifier.listFAQ.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: notifier.listFAQ.length,
+                          itemBuilder: (context, index) {
+                            for (var data in notifier.listFAQ[index].detail) {
+                              print('data details : ${data.toJson()}');
+                            }
 
-                    return GestureDetector(onTap: (){
-                      Routing().move(Routes.faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
-                    }, child: Container(
-                      width: double.infinity,
-                        margin: const EdgeInsets.only( top: 10, bottom: 10, right: 10),
-                        child: Text(notifier.listFAQ[index].kategori ?? '')));
-                  }): Center(
-                    child: Text(notifier.translate.noData ?? 'No Data Found'),
-                  ),
+                            return GestureDetector(
+                                onTap: () {
+                                  Routing().move(Routes.faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
+                                },
+                                child: Container(width: double.infinity, margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10), child: Text(notifier.listFAQ[index].kategori ?? '')));
+                          })
+                      : Center(
+                          child: Text(notifier.translate.noData ?? 'No Data Found'),
+                        ),
                 ),
               ),
 
@@ -188,6 +187,4 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin{
       ),
     );
   }
-
-
 }

@@ -46,12 +46,17 @@ class SuccessAppeal extends StatelessWidget {
                 translate.congrats ?? '',
                 style: Theme.of(context).primaryTextTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
-              Text(translate.yourTransactionisBeingProcessedNow ?? ''),
+              Center(
+                  child: Text(
+                translate.weWillSendYouaNotificationasSoonasweHaveanUpdate ?? '',
+                textAlign: TextAlign.center,
+              )),
               twentyPx,
               OnjectContentWidget(
                 data: data,
                 cat: notifier.getCategory(data.cats),
                 reason: notifier.reason,
+                isCategory: false,
               ),
               const Spacer(),
               SizedBox(

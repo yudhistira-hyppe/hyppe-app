@@ -101,12 +101,27 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
               // ),
               Align(
                 alignment: const Alignment(0.0, 0.9),
-                child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}shutter.svg", onPressed: () => notifier.onTakePicture(context)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                      width: 90,
+                      // color: Colors.red,
+                    ),
+                    SizedBox(
+                        height: 105 * SizeConfig.scaleDiagonal,
+                        width: 105 * SizeConfig.scaleDiagonal,
+                        child: CustomIconButtonWidget(
+                          iconData: "${AssetPath.vectorPath}shutter.svg",
+                          onPressed: () => notifier.onTakePicture(context),
+                        )),
+                    const SizedBox(width: 90, child: CameraFlashButton()),
+                  ],
+                ),
               ),
-              const Align(
-                alignment: Alignment(0.8, 0.9),
-                child: CameraFlashButton(),
-              ),
+
               const Align(
                 alignment: Alignment.center,
                 child: CustomIconWidget(

@@ -7,7 +7,12 @@ import 'package:hyppe/core/models/collection/transaction/bank_account/transactio
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/widget/two_column_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
+import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 class TopDetailWidget extends StatelessWidget {
   final TransactionHistoryModel? data;
@@ -30,7 +35,12 @@ class TopDetailWidget extends StatelessWidget {
     return Column(
       children: [
         TwoColumnWidget('Status', text2: data?.status),
-        TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.timestamp ?? '', 4)),
+        data?.status == 'WAITING_PAYMENT'
+            ? countDown(context)
+            : TwoColumnWidget(
+                language?.time,
+                text2: System().dateFormatter(data?.time ?? '', 4),
+              ),
         TwoColumnWidget('Order ID', text2: data?.id),
       ],
     );
@@ -52,7 +62,13 @@ class TopDetailWidget extends StatelessWidget {
                 textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
               ),
         TwoColumnWidget('Status', text2: data?.status),
-        TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
+        // TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
+        data?.status == 'WAITING_PAYMENT'
+            ? countDown(context)
+            : TwoColumnWidget(
+                language?.time,
+                text2: System().dateFormatter(data?.time ?? '', 4),
+              ),
         data?.status == 'WAITING_PAYMENT'
             ? TwoColumnWidget(
                 'No Virtual Account',
@@ -87,9 +103,62 @@ class TopDetailWidget extends StatelessWidget {
           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
         ),
         TwoColumnWidget('Status', text2: data?.status),
-        TwoColumnWidget(language?.time, text2: System().dateFormatter(data?.time ?? '', 4)),
+        data?.status == 'WAITING_PAYMENT'
+            ? countDown(context)
+            : TwoColumnWidget(
+                language?.time,
+                text2: System().dateFormatter(data?.time ?? '', 4),
+              ),
         TwoColumnWidget('Order ID', text2: data?.id),
       ],
+    );
+  }
+
+  Widget countDown(context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CustomTextWidget(
+            textToDisplay: language?.time ?? '',
+            textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+            textAlign: TextAlign.start,
+          ),
+          Row(
+            children: [
+              CustomTextWidget(
+                textToDisplay: System().dateFormatter(data?.time ?? '', 5),
+                textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                textAlign: TextAlign.start,
+              ),
+              Consumer<TransactionNotifier>(
+                builder: (_, notifier, __) => notifier.minuteVa < 0 && notifier.secondVa < 0
+                    ? CustomTextWidget(
+                        textToDisplay: System().dateFormatter(data?.time ?? '', 6),
+                        textStyle: Theme.of(context).textTheme.caption ?? const TextStyle(),
+                        textAlign: TextAlign.start,
+                      )
+                    : TweenAnimationBuilder<Duration>(
+                        duration: Duration(minutes: notifier.minuteVa, seconds: notifier.secondVa),
+                        tween: Tween(begin: Duration(minutes: notifier.minuteVa, seconds: notifier.secondVa), end: Duration.zero),
+                        onEnd: () {
+                          Routing().moveBack();
+                          notifier.initTransactionHistory(context);
+                        },
+                        builder: (BuildContext context, Duration value, Widget? child) {
+                          final minutes = value.inMinutes;
+                          final seconds = value.inSeconds % 60;
+                          return CustomTextWidget(
+                            textToDisplay: ' 00 : ${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
+                            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeRed),
+                          );
+                        }),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -94,6 +95,14 @@ class TransactionNotifier extends ChangeNotifier {
   bool get isDetailLoading => _isDetailLoading;
   bool _isLoadingSummaryWithdraw = false;
   bool get isLoadingSummaryWithdraw => _isLoadingSummaryWithdraw;
+
+  DateTime _timeVA = DateTime.now();
+  DateTime get timeVA => _timeVA;
+
+  int _minuteVa = 0;
+  int get minuteVa => _minuteVa;
+  int _secondVa = 0;
+  int get secondVa => _secondVa;
 
   set amountWithDrawal(String? val) {
     _amountWithDrawal = val;
@@ -223,7 +232,7 @@ class TransactionNotifier extends ChangeNotifier {
         String date = dateToday.toString().substring(0, 10);
         // String email = 'freeman27@getnada.com';
         String email = SharedPreference().readStorage(SpKeys.email);
-        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, 'boost': false, "skip": _skip, "limit": _limit};
+        final param = {"email": email, "sell": false, "buy": false, "withdrawal": false, 'boost': false, "rewards": false, "skip": _skip, "limit": _limit};
         final notifier = TransactionBloc();
         await notifier.getHistoryTransaction(context, params: param);
         final fetch = notifier.transactionFetch;
@@ -237,7 +246,7 @@ class TransactionNotifier extends ChangeNotifier {
             context.read<FilterTransactionNotifier>().dataAllTransaction = dataAllTransaction;
           }
 
-          countTransactionProgress = fetch.data['datacount'];
+          // countTransactionProgress = fetch.data['datacount'];
         }
         if (fetch.postsState == TransactionState.getHistoryError) {
           if (fetch.data != null) {
@@ -369,7 +378,24 @@ class TransactionNotifier extends ChangeNotifier {
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.getDetailHistorySuccess) {
+        _timeVA = DateTime.now();
         dataTransactionDetail = TransactionHistoryModel.fromJSON(fetch.data);
+        var _hourVa = _timeVA.hour - DateTime.parse(dataTransactionDetail!.time!).hour;
+        _minuteVa = _timeVA.minute - DateTime.parse(dataTransactionDetail!.time!).minute;
+        _secondVa = _timeVA.second - DateTime.parse(dataTransactionDetail!.time!).second;
+        print(_minuteVa);
+        if (_hourVa > 0) {
+          _minuteVa = 14 - _minuteVa - 60;
+        } else {
+          _minuteVa = 14 - _minuteVa;
+        }
+
+        _secondVa = 60 - _secondVa;
+        print(_timeVA);
+        print(dataTransactionDetail!.time!);
+        print(_hourVa);
+        print(_minuteVa);
+        print(_secondVa);
       }
 
       if (fetch.postsState == TransactionState.getDetailHistoryError) {

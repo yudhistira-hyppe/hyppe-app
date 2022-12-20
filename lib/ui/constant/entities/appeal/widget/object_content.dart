@@ -12,7 +12,8 @@ class OnjectContentWidget extends StatelessWidget {
   final ContentData data;
   final String cat;
   final String reason;
-  const OnjectContentWidget({Key? key, required this.data, this.cat = '', this.reason = ''}) : super(key: key);
+  final bool isCategory;
+  const OnjectContentWidget({Key? key, required this.data, this.cat = '', this.reason = '', this.isCategory = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -83,35 +84,50 @@ class OnjectContentWidget extends StatelessWidget {
           ],
         ),
         thirtySixPx,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              translate.categories ?? '',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-              textAlign: TextAlign.start,
-            ),
-            Text(
-              cat,
-              style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.start,
-            ),
-          ],
-        ),
+        isCategory
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      translate.categories ?? '',
+                      style: Theme.of(context).primaryTextTheme.bodyText2,
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Text(
+                      cat,
+                      style: Theme.of(context).textTheme.bodyText2,
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
         twentyPx,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              translate.violationType ?? '',
-              style: Theme.of(context).primaryTextTheme.bodyText2,
-              textAlign: TextAlign.start,
+            Expanded(
+              flex: 1,
+              child: Text(
+                translate.violationType ?? '',
+                style: Theme.of(context).primaryTextTheme.bodyText2,
+                textAlign: TextAlign.start,
+              ),
             ),
-            Text(
-              reason,
-              style: Theme.of(context).textTheme.bodyText2,
-              textAlign: TextAlign.start,
-              maxLines: 3,
+            Expanded(
+              flex: 2,
+              child: Text(
+                reason,
+                style: Theme.of(context).textTheme.bodyText2,
+                textAlign: TextAlign.end,
+                maxLines: 3,
+              ),
             ),
           ],
         ),

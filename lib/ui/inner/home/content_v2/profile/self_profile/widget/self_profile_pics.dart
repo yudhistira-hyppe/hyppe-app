@@ -22,7 +22,7 @@ class SelfProfilePics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SelfProfileNotifier>(builder: (_, notifier, __) {
-      return notifier.user != null
+      return notifier.user.pics != null
           ? notifier.user.pics!.isEmpty
               ? const EmptyWidget()
               : SliverGrid(

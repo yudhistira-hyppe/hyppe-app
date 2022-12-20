@@ -5,15 +5,15 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/provider_widget.dart';
 import 'package:flutter/material.dart';
 
-class CameraSwitchButton extends ProviderWidget<CameraDevicesNotifier> {
-  const CameraSwitchButton({Key? key}) : super(key: key, reactive: false);
+class CameraDevicesSwitchButton extends ProviderWidget<CameraDevicesNotifier> {
+  const CameraDevicesSwitchButton({Key? key}) : super(key: key, reactive: false);
 
   @override
   Widget build(BuildContext context, notifier) {
     return GestureDetector(
       onDoubleTap: null,
       onTap: () {
-        // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
+        notifier.setLoading(true, loadingObject: CameraDevicesNotifier.loadingForSwitching);
         Future.delayed(const Duration(milliseconds: 250), () => notifier.onNewCameraSelected());
       },
       child: const CustomIconWidget(

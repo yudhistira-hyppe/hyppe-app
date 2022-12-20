@@ -45,19 +45,27 @@ class VidDetailBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _themes = Theme.of(context);
+    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Container(
       width: SizeConfig.screenWidth,
       color: _themes.colorScheme.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: data!) : Container(),
+          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')
+              ? ContentViolationWidget(
+                  data: data!,
+                  text: translate.thisHyppeVidisSubjectToModeration ?? '',
+                )
+              : Container(),
           twelvePx,
           _buildDescription(context),
-          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED') && data?.isBoost == null && data?.email == SharedPreference().readStorage(SpKeys.email)
+          (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
+                  (data?.boosted.isEmpty ?? [].isEmpty) &&
+                  data?.email == SharedPreference().readStorage(SpKeys.email)
               ? ButtonBoost(contentData: data)
               : Container(),
-          data?.isBoost != null && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
+          (data?.boosted.isNotEmpty ?? [].isEmpty) && data?.email == SharedPreference().readStorage(SpKeys.email) ? JangkaunStatus(jangkauan: data?.boostJangkauan ?? 0) : Container(),
           _buildDivider(context),
           _buildTopRightControl(context),
           fourPx,
@@ -109,8 +117,8 @@ class VidDetailBottom extends StatelessWidget {
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
               child: data != null
                   ?
-              // CustomDescContent(desc: "${data?.description}")
-              SingleChildScrollView(
+                  // CustomDescContent(desc: "${data?.description}")
+                  SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

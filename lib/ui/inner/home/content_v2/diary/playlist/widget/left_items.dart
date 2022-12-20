@@ -111,6 +111,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                 )
               : const SizedBox(),
           Container(
+            width: SizeConfig.screenWidth! / 1.3,
             padding: const EdgeInsets.all(2),
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
             // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
@@ -146,7 +147,9 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
           ),
 
           twelvePx,
-          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED') && widget.data?.isBoost == null && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+                  (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
+                  widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   margin: const EdgeInsets.only(bottom: 16),
@@ -156,7 +159,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                   ),
                 )
               : Container(),
-          widget.data?.isBoost != null && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+          (widget.data?.boosted.isNotEmpty ?? [].isNotEmpty) && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
               ? SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: JangkaunStatus(

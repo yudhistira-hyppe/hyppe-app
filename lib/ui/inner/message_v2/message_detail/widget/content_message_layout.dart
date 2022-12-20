@@ -44,16 +44,16 @@ class ContentMessageLayout extends StatelessWidget {
                 ),
               );
             },
-            imageUrl: message?.content.first.fullThumbPath,
+            imageUrl: (message?.content.first.apsara ?? false) ? message?.content.first.mediaThumbEndpoint ?? '' : message?.content.first.fullThumbPath,
             emptyWidget: Container(
-            height: 50,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.contain,
-                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+              height: 50,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.contain,
+                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                ),
               ),
             ),
-          ),
           ),
         ),
       ),

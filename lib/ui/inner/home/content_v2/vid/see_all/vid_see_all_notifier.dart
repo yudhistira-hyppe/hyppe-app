@@ -98,4 +98,18 @@ class VidSeeAllNotifier with ChangeNotifier {
   void showUserTag(BuildContext context, index) {
     ShowBottomSheet.onShowUserTag(context, value: _vidData?[index].tagPeople ?? [], function: () {}, postId: _vidData?[index].postID ?? '');
   }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    print('hahahaha');
+    print(postID);
+    print(_vidData);
+    ContentData? _updatedData;
+    _updatedData = vidData?.firstWhere((element) => element.postID == postID);
+    print(_updatedData?.postID);
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = 'ALL';
+    }
+
+    notifyListeners();
+  }
 }

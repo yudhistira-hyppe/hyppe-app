@@ -317,6 +317,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         controlsConfiguration: const BetterPlayerControlsConfiguration(
           enableFullscreen: true,
           controlBarColor: Color.fromARGB(10, 0, 0, 1),
+          enableOverflowMenu: false,
         ),
         eventListener: (event) {
           print('ini event betterPlayerEventType : ${event.betterPlayerEventType}');

@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
@@ -25,6 +26,7 @@ import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/notifier.dart';
@@ -49,7 +51,6 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/cache_service.dart';
-
 import 'package:hyppe/ui/inner/home/notifier_v2.dart' as homeV2;
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart' as vidV2;
 import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart' as picV2;
@@ -61,7 +62,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dar
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart' as cpV2;
 import 'package:hyppe/ui/inner/search_v2/notifier.dart' as sV2;
-
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 
 class AppDependencies {
@@ -110,6 +110,7 @@ class AppDependencies {
 
         // Vid
         ChangeNotifierProvider(create: (context) => vidV2.PreviewVidNotifier()),
+        ChangeNotifierProvider(create: (context) => VidSeeAllNotifier()),
 
         // Stories
         ChangeNotifierProvider(create: (context) => storyV2.PreviewStoriesNotifier()),
@@ -225,6 +226,7 @@ class AppDependencies {
         ChangeNotifierProvider<ReferralNotifier>(create: (context) => ReferralNotifier()),
 
         ChangeNotifierProvider<SupportTicketNotifier>(create: (context) => SupportTicketNotifier()),
+        ChangeNotifierProvider<HelpNotifier>(create: (context) => HelpNotifier()),
         ChangeNotifierProvider<SlidedPicDetailNotifier>(create: (context) => SlidedPicDetailNotifier()),
         ChangeNotifierProvider<AppealNotifier>(create: (context) => AppealNotifier()),
         ChangeNotifierProvider<PaymentBoostSummaryNotifier>(create: (context) => PaymentBoostSummaryNotifier()),

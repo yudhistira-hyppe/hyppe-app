@@ -58,36 +58,39 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                 ? Container()
                 : Consumer2<DiariesPlaylistNotifier, FollowRequestUnfollowNotifier>(
                     builder: (context, value, value2, child) {
-                      return ProfileComponent(
-                        isDetail: true,
-                        show: true,
-                        onFollow: () {},
-                        following: true,
-                        haveStory: false,
-                        onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
-                        username: "${widget.data?.username}",
-                        spaceProfileAndId: fourteenPx,
-                        featureType: FeatureType.diary,
-                        imageUrl: '${System().showUserPicture(widget.data?.avatar?.mediaEndpoint)}',
-                        isCelebrity: widget.data?.privacy?.isCelebrity,
-                        createdAt: '${System().readTimestamp(
-                          DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
-                          context,
-                          fullCaption: true,
-                        )}',
-                        // haveStory: data.isHaveStory ?? false,
-                        // onFollow: () async => await context
-                        //     .read<FollowRequestUnfollowNotifier>()
-                        //     .followRequestUnfollowUser(context, fUserId: data.userID, statusFollowing: StatusFollowing.rejected, currentValue: data),
-                        // username: "${data.fullName}",
-                        // isCelebrity: data.isCelebrity,
-                        // imageUrl: "${data.profilePic}$VERYBIG",
-                        // following: value.statusFollowing == StatusFollowing.following || value.statusFollowing == StatusFollowing.requested ? true : false,
-                        // onTapOnProfileImage: () => context.read<DiariesPlaylistNotifier>().followUser(context),
+                      return Visibility(
+                        visible: (widget.data?.reportedStatus != "BLURRED"),
+                        child: ProfileComponent(
+                          isDetail: true,
+                          show: true,
+                          onFollow: () {},
+                          following: true,
+                          haveStory: false,
+                          onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
+                          username: "${widget.data?.username}",
+                          spaceProfileAndId: fourteenPx,
+                          featureType: FeatureType.diary,
+                          imageUrl: '${System().showUserPicture(widget.data?.avatar?.mediaEndpoint)}',
+                          isCelebrity: widget.data?.privacy?.isCelebrity,
+                          createdAt: '${System().readTimestamp(
+                            DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? '')).millisecondsSinceEpoch,
+                            context,
+                            fullCaption: true,
+                          )}',
+                          // haveStory: data.isHaveStory ?? false,
+                          // onFollow: () async => await context
+                          //     .read<FollowRequestUnfollowNotifier>()
+                          //     .followRequestUnfollowUser(context, fUserId: data.userID, statusFollowing: StatusFollowing.rejected, currentValue: data),
+                          // username: "${data.fullName}",
+                          // isCelebrity: data.isCelebrity,
+                          // imageUrl: "${data.profilePic}$VERYBIG",
+                          // following: value.statusFollowing == StatusFollowing.following || value.statusFollowing == StatusFollowing.requested ? true : false,
+                          // onTapOnProfileImage: () => context.read<DiariesPlaylistNotifier>().followUser(context),
+                        ),
                       );
                     },
                   ),
-            (widget.data?.isReport ?? false)
+            (widget.data?.reportedStatus == "BLURRED")
                 ? SizedBox(
                     width: 40,
                     height: 40,

@@ -12,7 +12,8 @@ import 'package:provider/provider.dart';
 
 class ContentViolationWidget extends StatelessWidget {
   final ContentData data;
-  const ContentViolationWidget({Key? key, required this.data}) : super(key: key);
+  final String text;
+  const ContentViolationWidget({Key? key, required this.data, this.text = ''}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ContentViolationWidget extends StatelessWidget {
       onTap: () => Routing().move(Routes.appeal, argument: data),
       child: Container(
         color: Colors.red,
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         child: Row(
           children: [
             const CustomIconWidget(
@@ -34,7 +35,7 @@ class ContentViolationWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomTextWidget(
-                  textToDisplay: translate.thisHyppeVidisSubjectToModeration ?? '',
+                  textToDisplay: text != '' ? text : (translate.thisHyppeDiaryisSubjectToModeration ?? ''),
                   textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Colors.white),
                 ),
                 CustomTextWidget(

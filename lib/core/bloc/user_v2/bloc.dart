@@ -73,7 +73,7 @@ class UserBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.RecoverError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.RecoverError, data: onResult.data));
         } else {
           setUserFetch(UserFetch(UserState.RecoverSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
@@ -93,7 +93,7 @@ class UserBloc {
         "status": "REPLY",
         "deviceId": SharedPreference().readStorage(SpKeys.fcmToken),
       },
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.recoverPassword,
       methodType: MethodType.post,
@@ -267,7 +267,8 @@ class UserBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.completeProfileError));
+          print("ini print data ${onResult.data}");
+          setUserFetch(UserFetch(UserState.completeProfileError, data: onResult.data));
         } else {
           setUserFetch(UserFetch(UserState.completeProfileSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
@@ -283,7 +284,7 @@ class UserBloc {
       },
       host: UrlConstants.updateProfile,
       methodType: MethodType.post,
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: false,
     );
   }
