@@ -534,5 +534,5 @@ class UrlConstants {
   static const String getMusics = "/api/music";
 
   //FAQ
-  static const String faqList = "/faqs/allfaqs";
+  static const String faqList = "/api/faqs/allfaqs";
 }

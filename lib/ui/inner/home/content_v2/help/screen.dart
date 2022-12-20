@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -20,7 +22,19 @@ class HelpScreen extends StatefulWidget {
   State<HelpScreen> createState() => _HelpScreenState();
 }
 
-class _HelpScreenState extends State<HelpScreen> {
+class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin{
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    TranslateNotifierV2().getListOfFAQ(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<TranslateNotifierV2>(
@@ -44,11 +58,9 @@ class _HelpScreenState extends State<HelpScreen> {
               CustomSearchBar(
                 hintText: notifier.translate.searchtopic,
                 contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                // controller: notifier.searchController1,
-                // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-                // onPressedIcon: () => notifier.onSearchPost(context),
-                // onTap: () => notifier.moveSearchMore(),
-                // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
+                onSubmitted: (value){
+                  notifier.getListOfFAQ(context, category: value);
+                },
               ),
               Container(
                 padding: const EdgeInsets.all(11),
@@ -82,7 +94,28 @@ class _HelpScreenState extends State<HelpScreen> {
                 textToDisplay: notifier.translate.frequentlyAskedQuestions ?? '',
                 textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(),
               ),
-              GestureDetector(onTap: () => Routing().move(Routes.faqDetail), child: Text('List FAQ')),
+              eightPx,
+              Expanded(
+                child: Container(
+                  child: notifier.listFAQ.isNotEmpty ? ListView.builder(
+                    itemCount: notifier.listFAQ.length,
+                      itemBuilder: (context, index){
+                      for(var data in notifier.listFAQ[index].detail){
+                        print('data details : ${data.toJson()}');
+                      }
+
+                    return GestureDetector(onTap: (){
+                      Routing().move(Routes.faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
+                    }, child: Container(
+                      width: double.infinity,
+                        margin: const EdgeInsets.only( top: 10, bottom: 10, right: 10),
+                        child: Text(notifier.listFAQ[index].kategori ?? '')));
+                  }): Center(
+                    child: Text(notifier.translate.noData ?? 'No Data Found'),
+                  ),
+                ),
+              ),
+
               // ...List.generate(
               //   supportNotifier.levelData.length,
               //   (index) => Padding(
@@ -107,7 +140,6 @@ class _HelpScreenState extends State<HelpScreen> {
               //         isThreeLine: true,
               //       )),
               // ),
-              const Spacer(),
               Container(
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
@@ -156,4 +188,6 @@ class _HelpScreenState extends State<HelpScreen> {
       ),
     );
   }
+
+
 }

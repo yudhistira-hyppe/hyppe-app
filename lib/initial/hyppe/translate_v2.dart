@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'package:hyppe/core/bloc/faq/bloc.dart';
+import 'package:hyppe/core/bloc/faq/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/faq/faq_request.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/utils/language/language_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -46,6 +50,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
+import '../../core/models/collection/faq/faq_data.dart';
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/diary/playlist/notifier.dart';
 
@@ -69,9 +74,38 @@ class TranslateNotifierV2 with ChangeNotifier {
   bool get loadMore => _loadMore;
   List<LanguageData> get listLanguage => _listLanguage;
 
+  List<FAQData> _listFAQ = [];
+  List<FAQData> get listFAQ => _listFAQ;
+  set listFAQ(List<FAQData> values){
+    _listFAQ = values;
+    notifyListeners();
+  }
+
   set loadMore(bool val) {
     _loadMore = val;
     notifyListeners();
+  }
+
+  Future getListOfFAQ(BuildContext context, {String? category}) async{
+    try{
+      _listFAQ = [];
+      final bloc = FAQBloc();
+      await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: category));
+      final fetch = bloc.faqFetch;
+      if(fetch.state == FAQState.faqSuccess){
+        if(fetch.data != null){
+          fetch.data.forEach((v){
+            _listFAQ.add(FAQData.fromJson(v));
+          });
+        }
+        notifyListeners();
+      }else if (fetch.state == FAQState.faqError){
+        throw fetch.data;
+      }
+    }catch(e){
+      'Error getListOfFAQ: $e'.logger();
+    }
+
   }
 
   Future getListOfLanguage(BuildContext context) async {
