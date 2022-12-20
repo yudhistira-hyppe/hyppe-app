@@ -104,21 +104,22 @@ class ContentsDataQuery extends PaginationQueryInterface {
   @override
   Future<List<ContentData>> reload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
     print('reload');
-    if (featureType == null) throw Exception('Feature Type must be provided');
-    if (loading) throw Exception('Query operation is in progress');
-    // pending error 1
 
-    hasNext = true;
-
-    loading = true;
-
-    page = 1;
-
-    // final box = Boxes.boxDataContents;
-
-    // page = 0;
     List<ContentData>? res;
     try {
+      if (featureType == null) throw Exception('Feature Type must be provided');
+      if (loading) throw Exception('Query operation is in progress');
+      // pending error 1
+
+      hasNext = true;
+
+      loading = true;
+
+      page = 1;
+
+      // final box = Boxes.boxDataContents;
+
+      // page = 0;
       final notifierMain = Provider.of<HomeNotifier>(context, listen: false);
       final notifier = PostsBloc();
       await notifier.getContentsBlocV2(context,

@@ -23,6 +23,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
+
 class PicDetail extends StatefulWidget {
   final ContentData? arguments;
 
@@ -268,19 +270,29 @@ class _PicDetailState extends State<PicDetail> {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ReadMoreText(
-                              "${widget.arguments?.description}",
-                              // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                            CustomDescContent(
+                              desc: "${widget.arguments?.description}",
                               trimLines: 5,
-                              trimMode: TrimMode.Line,
-                              textAlign: TextAlign.left,
-                              trimExpandedText: 'Show less',
-                              trimCollapsedText: 'Show more',
-                              colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                              style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                              moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                              lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                              textAlign: TextAlign.start,
+                              seeLess: 'Show less',
+                              seeMore: 'Show More',
+                              normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                              hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             ),
+                            // ReadMoreText(
+                            //   "${widget.arguments?.description}",
+                            //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                            //   trimLines: 5,
+                            //   trimMode: TrimMode.Line,
+                            //   textAlign: TextAlign.left,
+                            //   trimExpandedText: 'Show less',
+                            //   trimCollapsedText: 'Show more',
+                            //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                            //   style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
+                            //   moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            //   lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            // ),
                           ],
                         )),
                       ),

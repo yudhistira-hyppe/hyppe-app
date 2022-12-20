@@ -15,6 +15,7 @@ import 'package:story_view/controller/story_controller.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/models/collection/music/music.dart';
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 import '../../../../../../constant/widget/music_status_page_widget.dart';
 
 class LeftItems extends StatefulWidget {
@@ -117,18 +118,28 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ReadMoreText(
-                    "${widget.description}",
+                  CustomDescContent(
+                    desc: "${widget.description}",
                     trimLines: 5,
-                    trimMode: TrimMode.Line,
-                    textAlign: TextAlign.left,
-                    trimExpandedText: 'Show less',
-                    trimCollapsedText: 'Show more',
-                    colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                    moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                    lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                    textAlign: TextAlign.start,
+                    seeLess: 'Show less',
+                    seeMore: 'Show More',
+                    normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                    hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                   ),
+                  // ReadMoreText(
+                  //   "${widget.description}",
+                  //   trimLines: 5,
+                  //   trimMode: TrimMode.Line,
+                  //   textAlign: TextAlign.left,
+                  //   trimExpandedText: 'Show less',
+                  //   trimCollapsedText: 'Show more',
+                  //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                  //   style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                  //   moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                  //   lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                  // ),
                 ],
               ),
             ),

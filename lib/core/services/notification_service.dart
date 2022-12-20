@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -11,6 +12,9 @@ import '../../ui/inner/message_v2/notifier.dart';
 import '../../ui/inner/notification/notifier.dart';
 import '../../ux/path.dart';
 import '../../ux/routing.dart';
+import '../arguments/discuss_argument.dart';
+import '../arguments/other_profile_argument.dart';
+import '../bloc/message_v2/bloc.dart';
 import '../models/collection/message_v2/message_data_v2.dart';
 
 // Notification instance
@@ -97,14 +101,15 @@ class NotificationService {
               if(data.postType == 'TRANSACTION'){
                 Routing().move(Routes.transaction);
               }else if(data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING'){
-
+                materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
               }else{
                 throw 'Not recognize the type of the object of the notification ';
               }
             }else if (map['createdAt'] != null){
               final data = MessageDataV2.fromJson(map);
               final notifier = MessageNotifier();
-              notifier.onClickUser(materialAppKey.currentContext!, data);
+              final result = await getChatRoomByDisqusID(materialAppKey.currentContext!, data.disqusID ?? '');
+              notifier.onClickUser(materialAppKey.currentContext!, result[0]);
             }else{
               throw 'Not recognize the type of the object of the notification ';
             }
@@ -138,6 +143,35 @@ class NotificationService {
       //   }
       // },
     );
+  }
+
+  Future<List<MessageDataV2>> getChatRoomByDisqusID(BuildContext context, String disqusID) async {
+
+    List<MessageDataV2>? res;
+
+    try {
+      final param = DiscussArgument(
+        receiverParty: '',
+        email: SharedPreference().readStorage(SpKeys.email),
+      )
+        ..isQuery = true
+        ..pageRow = 1
+        ..pageNumber = 0
+        ..withDetail = true;
+
+      final notifier = MessageBlocV2();
+      await notifier.getDiscussionBloc(context, disqusArgument: param, disqusID: disqusID);
+
+      final fetch = notifier.messageFetch;
+
+      res = (fetch.data as List<dynamic>?)?.map((e) => MessageDataV2.fromJson(e as Map<String, dynamic>)).toList();
+
+    } catch (e) {
+      '$e'.logger();
+      rethrow;
+    }
+
+    return res ?? [];
   }
 
   // show notification

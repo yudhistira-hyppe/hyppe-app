@@ -32,6 +32,8 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
+
 class VidDetailBottom extends StatelessWidget {
   final ContentData? data;
 
@@ -112,18 +114,28 @@ class VidDetailBottom extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ReadMoreText(
-                            "${data?.description}",
+                          CustomDescContent(
+                            desc: "${data?.description}",
                             trimLines: 2,
-                            trimMode: TrimMode.Line,
-                            textAlign: TextAlign.left,
-                            trimExpandedText: 'Show less',
-                            trimCollapsedText: 'Show more',
-                            colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                            style: Theme.of(context).textTheme.subtitle2,
-                            moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                            lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            textAlign: TextAlign.start,
+                            seeLess: 'Show less',
+                            seeMore: 'Show More',
+                            normStyle: Theme.of(context).textTheme.subtitle2,
+                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),
+                          // ReadMoreText(
+                          //   "${data?.description}",
+                          //   trimLines: 2,
+                          //   trimMode: TrimMode.Line,
+                          //   textAlign: TextAlign.left,
+                          //   trimExpandedText: 'Show less',
+                          //   trimCollapsedText: 'Show more',
+                          //   colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                          //   style: Theme.of(context).textTheme.subtitle2,
+                          //   moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          //   lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          // ),
                         ],
                       ),
                     )

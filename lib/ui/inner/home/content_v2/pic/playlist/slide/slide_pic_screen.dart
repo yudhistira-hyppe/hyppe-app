@@ -22,6 +22,7 @@ import '../../../../../../constant/entities/report/notifier.dart';
 import '../../../../../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../../../../../constant/widget/button_boost.dart';
 import '../../../../../../constant/widget/custom_background_layer.dart';
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 import '../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../constant/widget/custom_text_button.dart';
@@ -364,18 +365,15 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                     ),
                                   )
                                 : const SizedBox(),
-                            ReadMoreText(
-                              "${widget.data.description}",
-                              // "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                            CustomDescContent(
+                              desc: "${widget.data.description}",
                               trimLines: 5,
-                              trimMode: TrimMode.Line,
-                              textAlign: TextAlign.left,
-                              trimExpandedText: 'Show less',
-                              trimCollapsedText: 'Show more',
-                              colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                              style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                              moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
-                              lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryContainer),
+                              textAlign: TextAlign.start,
+                              seeLess: 'Show less',
+                              seeMore: 'Show More',
+                              normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                              hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
+                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             ),
                             if (widget.data.music?.musicTitle != null && (widget.data.apsaraId ?? '').isNotEmpty)
                               notifier.isLoadMusic

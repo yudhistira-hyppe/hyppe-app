@@ -237,14 +237,20 @@ class OtherProfileNotifier with ChangeNotifier {
     diaryContentsQuery.searchText = userEmail ?? '';
     picContentsQuery.searchText = userEmail ?? '';
 
-    final usersNotifier = UserBloc();
-    await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
-    final usersFetch = usersNotifier.userFetch;
-
-    if (usersFetch.userState == UserState.getUserProfilesSuccess) {
-      user.profile = usersFetch.data;
+    if(argument?.profile != null){
+      user.profile = argument?.profile;
       notifyListeners();
+    }else{
+      final usersNotifier = UserBloc();
+      await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
+      final usersFetch = usersNotifier.userFetch;
+
+      if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+        user.profile = usersFetch.data;
+        notifyListeners();
+      }
     }
+
 
     if (refresh) {
       checkFollowingToUser(context, userEmail ?? '');
