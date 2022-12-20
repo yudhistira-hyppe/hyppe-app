@@ -74,11 +74,11 @@ class SettingScreen extends StatelessWidget {
                     caption: '${notifier.translate.interest}',
                     icon: 'heart-icon.svg',
                   ),
-                  SettingTile(
-                    caption: '${notifier.translate.theme}',
-                    icon: 'theme-icon.svg',
-                    onTap: () => Routing().move(Routes.themeScreen),
-                  ),
+                  // SettingTile(
+                  //   caption: '${notifier.translate.theme}',
+                  //   icon: 'theme-icon.svg',
+                  //   onTap: () => Routing().move(Routes.themeScreen),
+                  // ),
                   SettingTile(
                     onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
                     icon: 'language-icon.svg',

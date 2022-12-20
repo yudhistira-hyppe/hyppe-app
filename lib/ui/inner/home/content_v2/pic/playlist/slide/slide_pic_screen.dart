@@ -51,6 +51,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
+    final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Stack(
       children: [
         // Background
@@ -409,7 +410,12 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             ),
                           )
                         : Container(),
-                    widget.data.email == SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == 'OWNED') ? ContentViolationWidget(data: widget.data) : Container(),
+                    widget.data.email == SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == 'OWNED')
+                        ? ContentViolationWidget(
+                            data: widget.data,
+                            text: translate.thisHyppePicisSubjectToModeration ?? '',
+                          )
+                        : Container(),
                   ],
                 ),
               ),

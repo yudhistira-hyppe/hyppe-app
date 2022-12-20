@@ -36,4 +36,5 @@ class SpKeys {
 
   static const String settingMarketPlace = 'settingMarketPlace';
   static const String referralFrom = 'referralFrom';
+  static const String brand = 'brand';
 }

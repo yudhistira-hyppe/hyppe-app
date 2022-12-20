@@ -41,9 +41,12 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     print('camera init');
     try {
       flashMode = FlashMode.off;
+
+      camera = await availableCameras();
+
       cameraController = CameraController(
         camera[0],
-        ResolutionPreset.high,
+        ResolutionPreset.veryHigh,
         enableAudio: true,
       );
 

@@ -355,7 +355,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
         if (selfieOnSupportDocs) {
           // onPickSupportedDocument(context, true);
-          pickedSupportingDocs!.add(filePath);
+          // pickedSupportingDocs!.add(filePath);
           Routing().moveAndPop(Routes.verificationIDStep7);
         } else {
           await postVerificationData(context);

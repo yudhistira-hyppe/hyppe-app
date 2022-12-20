@@ -159,17 +159,17 @@ class _CameraViewState extends State<CameraView> {
     //   builder: (_, notifier, __) => Scaffold(
     //       body: Stack(
     //     children: [
-        //   Transform.scale(
-        //   scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
-        //   child: DeepArPreview(
-        //     notifier.deepArController!,
-        //     onViewCreated: () {
-        //       // set any initial effect, filter etc
-        //       // _controller.switchEffect(
-        //       //     _assetEffectsPath + 'viking_helmet.deepar');
-        //     },
-        //   ),
-        // ),
+    //   Transform.scale(
+    //   scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
+    //   child: DeepArPreview(
+    //     notifier.deepArController!,
+    //     onViewCreated: () {
+    //       // set any initial effect, filter etc
+    //       // _controller.switchEffect(
+    //       //     _assetEffectsPath + 'viking_helmet.deepar');
+    //     },
+    //   ),
+    // ),
     //     // _topMediaOptions(),
     //     // _bottomMediaOptions(),
     //     ],
@@ -182,29 +182,32 @@ class _CameraViewState extends State<CameraView> {
           notifier.deepArController == null
               ? const CustomLoading()
               : notifier.isInitialized
-                ? Platform.isIOS
-                  ? Transform.scale(
-                    scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
-                    child: DeepArPreview(
-                      notifier.deepArController!,
-                      onViewCreated: () {
-                        // set any initial effect, filter etc
-                        // _controller.switchEffect(
-                        //     _assetEffectsPath + 'viking_helmet.deepar');
-                      },
+                  ? Platform.isIOS
+                      ? Transform.scale(
+                          scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
+                          child: DeepArPreview(
+                            notifier.deepArController!,
+                            onViewCreated: () {
+                              // set any initial effect, filter etc
+                              // _controller.switchEffect(
+                              //     _assetEffectsPath + 'viking_helmet.deepar');
+                            },
+                          ),
+                        )
+                      : AspectRatio(
+                          aspectRatio: deviceRatio,
+                          child: Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
+                            child: DeepArPreview(
+                              notifier.deepArController!,
+                              onViewCreated: () {},
+                            ),
+                          ),
+                        )
+                  : const Center(
+                      child: Text("Loading..."),
                     ),
-                  )
-                  : AspectRatio(
-                      aspectRatio: deviceRatio,
-                      child: Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
-                        child: DeepArPreview(notifier.deepArController!, onViewCreated: (){},),
-                      ),
-                  )
-                : const Center(
-                  child: Text("Loading..."),
-                ),
           notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox(),
           // _topMediaOptions(notifier.deepArController),
           // _bottomMediaOptions(notifier.deepArController),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:hyppe/core/bloc/device/bloc.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
@@ -32,7 +33,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   String _timer = "";
   bool _inCorrectCode = false;
   bool _isOTPCodeFullFilled = false;
-  final TextEditingController pinController = TextEditingController();
+  TextEditingController pinController = TextEditingController();
 
   late UserOtpScreenArgument argument;
 
@@ -84,6 +85,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   void initState(UserOtpScreenArgument argument) {
     WidgetsBinding.instance?.addObserver(this);
     this.argument = argument;
+    pinController = TextEditingController();
     // startTimer();
   }
 
@@ -162,6 +164,23 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
               message: language.yourResetCodeHasBeenVerified ?? '',
             );
           } else {
+            if (fetch.data['messages']['info'][0] != null) {
+              ShowBottomSheet().onShowColouredSheet(
+                context,
+                fetch.data['messages']['info'][0] ?? '',
+                maxLines: 3,
+                color: Colors.red,
+                iconSvg: "${AssetPath.vectorPath}remove.svg",
+              );
+            } else {
+              ShowBottomSheet().onShowColouredSheet(
+                context,
+                language.somethingsWrong ?? '',
+                color: Colors.red,
+                iconSvg: "${AssetPath.vectorPath}remove.svg",
+              );
+            }
+
             _inCorrectCode = true;
           }
         } finally {

@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/create_post_response.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -30,6 +33,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   CameraNotifier cameraNotifier = CameraNotifier();
+  CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
 
   FeatureType? _featureType;
   String? _thumbnailImageLocal;
@@ -102,7 +106,13 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onActionChange(BuildContext context, bool photo) {
     isVideo = !photo;
-    final notifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic notifier;
+    final brand = SharedPreference().readStorage(SpKeys.brand);
+    if (brand == 'OPPO') {
+      notifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      notifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
     Future.delayed(const Duration(milliseconds: 250), () => notifier.onStoryPhotoVideo(photo));
   }
@@ -183,10 +193,6 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
           timerIn.cancel();
           cancelTimer();
         }
-        print('type : $featureType');
-        print('_progressHuman : $_progressHuman');
-        print('_selectedDuration : $_selectedDuration');
-
         notifyListeners();
         if (_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
           Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), () {
@@ -275,7 +281,13 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
             final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
             notifier.fileContent = value.values.single?.map((e) => e.path).toList();
-            notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
+
+            final brand = SharedPreference().readStorage(SpKeys.brand);
+            if (brand == 'OPPO') {
+              notifier.aspectRation = context.read<CameraDevicesNotifier>().cameraAspectRatio;
+            } else {
+              notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
+            }
             notifier.featureType = featureType;
             notifier.showNext = false;
             await _routing.move(Routes.previewContent);
@@ -308,7 +320,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onStopRecordedVideo(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final brand = SharedPreference().readStorage(SpKeys.brand);
+    if (brand == 'OPPO') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
+
     cancelTimer();
     _progressDev = 0.0;
     _progressHuman = 0;
@@ -325,21 +344,40 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onRecordedVideo(BuildContext context) {
+    dynamic cameraNotifier;
+    final brand = SharedPreference().readStorage(SpKeys.brand);
+    if (brand == 'OPPO') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     _startTimer(context);
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     cameraNotifier.startVideoRecording();
   }
 
   @override
   void onPauseRecordedVideo(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final brand = SharedPreference().readStorage(SpKeys.brand);
+    if (brand == 'OPPO') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
+
     print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
 
   @override
   void onResumeRecordedVideo(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final brand = SharedPreference().readStorage(SpKeys.brand);
+    if (brand == 'OPPO') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     cameraNotifier.resumeVideoRecording().then((_) {
       cancelTimer();
       _startTimer(context);
@@ -348,7 +386,13 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onTakePicture(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final brand = SharedPreference().readStorage(SpKeys.brand);
+    if (brand == 'OPPO') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);

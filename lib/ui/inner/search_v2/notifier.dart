@@ -41,8 +41,8 @@ class SearchNotifier with ChangeNotifier {
   SearchContentModel? _searchContent;
   SearchContentModel? get searchContent => _searchContent;
 
-  SearchContentModel? _searchContentFirstPage;
-  SearchContentModel? get searchContentFirstPage => _searchContentFirstPage;
+  AllContents? _searchContentFirstPage;
+  AllContents? get searchContentFirstPage => _searchContentFirstPage;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -91,30 +91,30 @@ class SearchNotifier with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  int get vidCount => _searchContentFirstPage?.vid?.data == null
+  int get vidCount => _searchContentFirstPage?.video == null
       ? 18
       : _vidHasNext
-          ? (_searchContentFirstPage?.vid?.data?.length ?? 0) + 2
-          : (_searchContentFirstPage?.vid?.data?.length ?? 0);
+          ? (_searchContentFirstPage?.video?.length ?? 0) + 2
+          : (_searchContentFirstPage?.video?.length ?? 0);
 
   bool _vidHasNext = false;
   // bool get vidHasNext => vidContentsQuery.hasNext;
   bool get vidHasNext => _vidHasNext;
 
-  int get diaryCount => _searchContentFirstPage?.diary?.data == null
+  int get diaryCount => _searchContentFirstPage?.diary == null
       ? 18
       : _diaryHasNext
-          ? (_searchContentFirstPage?.diary?.data?.length ?? 0) + 2
-          : (_searchContentFirstPage?.diary?.data?.length ?? 0);
+          ? (_searchContentFirstPage?.diary?.length ?? 0) + 2
+          : (_searchContentFirstPage?.diary?.length ?? 0);
 
   bool _diaryHasNext = false;
   bool get diaryHasNext => _diaryHasNext;
 
-  int get picCount => _searchContentFirstPage?.pict?.data == null
+  int get picCount => _searchContentFirstPage?.pict == null
       ? 18
       : _picHasNext
-          ? (_searchContentFirstPage?.pict?.data?.length ?? 0) + 2
-          : (_searchContentFirstPage?.pict?.data?.length ?? 0);
+          ? (_searchContentFirstPage?.pict?.length ?? 0) + 2
+          : (_searchContentFirstPage?.pict?.length ?? 0);
 
   bool _picHasNext = false;
   // bool get picHasNext => picContentsQuery.hasNext;
@@ -169,13 +169,10 @@ class SearchNotifier with ChangeNotifier {
   onInitialSearchNew(BuildContext context) async {
     focusNode.unfocus();
     isLoading = true;
-    _searchContentFirstPage = SearchContentModel();
-    _searchContentFirstPage?.diary = Diary();
-    _searchContentFirstPage?.diary?.data = [];
-    _searchContentFirstPage?.vid = Diary();
-    _searchContentFirstPage?.vid?.data = [];
-    _searchContentFirstPage?.pict = Diary();
-    _searchContentFirstPage?.pict?.data = [];
+    _searchContentFirstPage = AllContents();
+    _searchContentFirstPage?.diary = [];
+    _searchContentFirstPage?.video = [];
+    _searchContentFirstPage?.pict = [];
     _vidHasNext = true;
     _diaryHasNext = true;
     _picHasNext = true;
@@ -190,9 +187,9 @@ class SearchNotifier with ChangeNotifier {
       vidContentsQuery.featureType = FeatureType.vid;
       diaryContentsQuery.featureType = FeatureType.diary;
       picContentsQuery.featureType = FeatureType.pic;
-      _searchContentFirstPage?.vid?.data = allContents.video;
-      _searchContentFirstPage?.diary?.data = allContents.diary;
-      _searchContentFirstPage?.pict?.data = allContents.pict;
+      _searchContentFirstPage?.video = allContents.video;
+      _searchContentFirstPage?.diary = allContents.diary;
+      _searchContentFirstPage?.pict = allContents.pict;
       print('skipnya $_skipVid');
       // _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
       // _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
@@ -263,7 +260,7 @@ class SearchNotifier with ChangeNotifier {
           vidContentsQuery.featureType = FeatureType.vid;
           vidContentsQuery.limit = 18;
           res = await vidContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContentFirstPage?.vid?.data = [...(_searchContentFirstPage?.vid?.data ?? []), ...(res)];
+          _searchContentFirstPage?.video = [...(_searchContentFirstPage?.video ?? []), ...(res)];
           break;
         case FeatureType.diary:
           _skipDiary = _skip + _skipDiary;
@@ -271,7 +268,7 @@ class SearchNotifier with ChangeNotifier {
           diaryContentsQuery.featureType = FeatureType.diary;
           diaryContentsQuery.limit = 18;
           res = await diaryContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContentFirstPage?.diary?.data = [...(_searchContentFirstPage?.diary?.data ?? []), ...(res)];
+          _searchContentFirstPage?.diary = [...(_searchContentFirstPage?.diary ?? []), ...(res)];
           break;
         default:
           _skipPict = _skip + _skipPict;
@@ -279,7 +276,7 @@ class SearchNotifier with ChangeNotifier {
           picContentsQuery.limit = 18;
           picContentsQuery.featureType = FeatureType.pic;
           res = await picContentsQuery.loadNext(context, isLandingPage: true);
-          _searchContentFirstPage?.pict?.data = [...(_searchContentFirstPage?.pict?.data ?? []), ...(res)];
+          _searchContentFirstPage?.pict = [...(_searchContentFirstPage?.pict ?? []), ...(res)];
       }
 
       notifyListeners();
@@ -346,10 +343,10 @@ class SearchNotifier with ChangeNotifier {
         // _skip += 18;
         // }
 
-        _searchContent?.users?.data?.addAll(_res.users?.data ?? []);
-        _searchContent?.diary?.data = [...(_searchContent?.diary?.data ?? []), ...(_res.diary?.data ?? [])];
-        _searchContent?.pict?.data = [...(_searchContent?.pict?.data ?? []), ...(_res.pict?.data ?? [])];
-        _searchContent?.vid?.data = [...(_searchContent?.vid?.data ?? []), ...(_res.vid?.data ?? [])];
+        _searchContent?.users?.addAll(_res.users ?? []);
+        _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
+        _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
+        _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
       }
 
       notifyListeners();
@@ -368,7 +365,7 @@ class SearchNotifier with ChangeNotifier {
     await notifier.getSearchContent(context, keys: search, skip: skip, limit: 18);
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
-      final _res = SearchContentModel.fromJson(fetch.data);
+      final _res = SearchContentModel.fromJson(fetch.data[0]);
       // if (_res.vid?.data?.isEmpty ?? true) {
       //   _vidHasNext = false;
       // } else if (_res.vid?.skip == 0) {
@@ -525,13 +522,13 @@ class SearchNotifier with ChangeNotifier {
 
     switch (content) {
       case hyppeVid:
-        _updatedData = _searchContentFirstPage?.vid?.data?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.video?.firstWhere((element) => element.postID == postID);
         break;
       case hyppeDiary:
-        _updatedData = _searchContentFirstPage?.diary?.data?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.diary?.firstWhere((element) => element.postID == postID);
         break;
       case hyppePic:
-        _updatedData = _searchContentFirstPage?.pict?.data?.firstWhere((element) => element.postID == postID);
+        _updatedData = _searchContentFirstPage?.pict?.firstWhere((element) => element.postID == postID);
         break;
       default:
         "$content It's Not a content of $postID".logger();

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -35,64 +37,46 @@ class _VerificationIDStep7State extends State<VerificationIDStep7> {
           return false;
         },
         child: Scaffold(
-          appBar: AppBar(
-            leadingWidth: 50 * (SizeConfig.screenWidth ?? context.getWidth()) / SizeWidget.baseWidthXD,
-            leading: CustomIconButtonWidget(
-              defaultColor: true,
-              iconData: "${AssetPath.vectorPath}back-arrow.svg",
-              onPressed: () => notifier.retrySelfie(context),
-            ),
-            titleSpacing: 0,
-            title: CustomTextWidget(
-              textToDisplay: 'Selfie',
-              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
-            ),
-            centerTitle: false,
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: Image.file(
-                  notifier.pickedSupportingDocs![0],
-                  height: SizeConfig.screenHeight! / 1.4,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                Image.file(
+                  File(notifier.selfiePath),
+                  // notifier.pickedSupportingDocs![0],
+                  fit: BoxFit.cover,
+                  height: double.infinity,
+                  width: double.infinity,
+                  alignment: Alignment.center,
                 ),
-              ),
-              sixtyFourPx,
-            ],
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: Container(
-            color: kHyppeLightBackground,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-            child: CustomElevatedButton(
-              width: SizeConfig.screenWidth,
-              height: 44.0 * SizeConfig.scaleDiagonal,
-              function: () => Routing().move(Routes.verificationIDStepSupportingDocsPreview),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (notifier.isLoading)
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      height: 30,
-                      width: 30,
-                      child: const CircularProgressIndicator(color: Colors.white),
-                    ),
-                  const SizedBox(width: 10),
-                  CustomTextWidget(
-                    textToDisplay: notifier.language.continueStep ?? '',
-                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomIconButtonWidget(
+                        defaultColor: true,
+                        iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                        onPressed: () => notifier.retrySelfie(context),
+                      ),
+                      CustomElevatedButton(
+                        width: 120,
+                        height: 44.0 * SizeConfig.scaleDiagonal,
+                        function: () => notifier.onPickSupportedDocument(context, true),
+                        child: CustomTextWidget(
+                          textToDisplay: notifier.language.continueStep ?? '',
+                          textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                        ),
+                        buttonStyle: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              buttonStyle: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-              ),
+                )
+              ],
             ),
           ),
         ),

@@ -53,7 +53,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     // print('DeepAR: initCamera, mounted: ');print(mounted);
     try {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
-      flashMode = FlashMode.off;
+      flashMode = FlashMode.torch;
       deepArController = DeepArController();
       if (Platform.isAndroid) {
         if (deepArController != null) {

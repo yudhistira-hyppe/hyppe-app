@@ -50,16 +50,16 @@ class _AllSearchContentState extends State<AllSearchContent> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  (widget.content?.users?.data?.isNotEmpty ?? false) ? widgetUserList(_themes) : const SizedBox(),
+                  (widget.content?.users?.isNotEmpty ?? false) ? widgetUserList(_themes) : const SizedBox(),
                   sixteenPx,
-                  //------video content search
-                  (widget.content?.vid?.data?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.vid?.data, featureType: FeatureType.vid, title: 'HyppeVid') : const SizedBox(),
+                  // ------video content search
+                  (widget.content?.vid?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.vid, featureType: FeatureType.vid, title: 'HyppeVid') : const SizedBox(),
                   sixteenPx,
                   //------diaries content search
-                  (widget.content?.diary?.data?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.diary?.data, featureType: FeatureType.diary, title: 'HyppeDiary') : const SizedBox(),
+                  (widget.content?.diary?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.diary, featureType: FeatureType.diary, title: 'HyppeDiary') : const SizedBox(),
                   sixteenPx,
                   //------pic  content search
-                  (widget.content?.pict?.data?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.pict?.data, featureType: FeatureType.pic, title: 'HyppePic') : const SizedBox(),
+                  (widget.content?.pict?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.pict, featureType: FeatureType.pic, title: 'HyppePic') : const SizedBox(),
                 ],
               ),
             ),
@@ -84,14 +84,14 @@ class _AllSearchContentState extends State<AllSearchContent> {
         Column(
           children: [
             ...List.generate(
-              (widget.content?.users?.data?.length ?? 0) >= 4 ? 4 : widget.content?.users?.data?.length ?? 0,
+              (widget.content?.users?.length ?? 0) >= 4 ? 4 : widget.content?.users?.length ?? 0,
               (index) => Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ListTile(
-                  onTap: () => _system.navigateToProfile(context, widget.content?.users?.data?[index].email ?? ''),
+                  onTap: () => _system.navigateToProfile(context, widget.content?.users?[index].email ?? ''),
                   contentPadding: EdgeInsets.zero,
-                  title: Text("${widget.content?.users?.data?[index].fullName}"),
-                  subtitle: Text("${widget.content?.users?.data?[index].username}"),
+                  title: Text("${widget.content?.users?[index].fullName}"),
+                  subtitle: Text("${widget.content?.users?[index].username}"),
                   leading: StoryColorValidator(
                     haveStory: false,
                     featureType: FeatureType.pic,
@@ -99,7 +99,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       width: 50,
                       height: 50,
                       onTap: () {},
-                      imageUrl: System().showUserPicture(widget.content?.users?.data?[index].avatar?.mediaEndpoint),
+                      imageUrl: System().showUserPicture(widget.content?.users?[index].avatar?[0].mediaEndpoint?.replaceAll("_860.jpeg", "")),
                       following: true,
                       onFollow: () {},
                     ),

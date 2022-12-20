@@ -27,7 +27,7 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
     context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     _tabController = TabController(length: 3, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    if (notifier.searchContentFirstPage?.vid == null) {
+    if (notifier.searchContentFirstPage?.video == null) {
       Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context));
     }
     super.initState();

@@ -120,7 +120,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         notifier.featureType != FeatureType.story ? ownershipSellingWidget(textTheme, notifier) : const SizedBox(),
                         notifier.certified ? detailTotalPrice(notifier) : Container(),
                         SizedBox(height: 20 * SizeConfig.scaleDiagonal),
-                        widget.arguments.contentData?.reportedStatus != "OWNED" &&
+                        widget.arguments.onEdit &&
+                                widget.arguments.contentData?.reportedStatus != "OWNED" &&
                                 widget.arguments.contentData?.reportedStatus2 != "BLURRED" &&
                                 statusKyc == VERIFIED &&
                                 notifier.featureType != FeatureType.story

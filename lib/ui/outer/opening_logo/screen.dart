@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -19,6 +20,7 @@ class _OpeningLogoState extends State<OpeningLogo> {
   void initState() {
     final _notifier = Provider.of<HyppeNotifier>(context, listen: false);
     Timer(const Duration(seconds: 0), () async => await _notifier.handleStartUp(context));
+
     super.initState();
   }
 

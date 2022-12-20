@@ -107,7 +107,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                   children: [
                     const SizedBox(
                       height: 10,
-                      width: 50,
+                      width: 90,
                       // color: Colors.red,
                     ),
                     SizedBox(
@@ -117,7 +117,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                           iconData: "${AssetPath.vectorPath}shutter.svg",
                           onPressed: () => notifier.onTakePicture(context),
                         )),
-                    const SizedBox(width: 50, child: CameraFlashButton()),
+                    const SizedBox(width: 90, child: CameraFlashButton()),
                   ],
                 ),
               ),

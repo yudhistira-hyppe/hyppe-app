@@ -44,11 +44,11 @@ class _SearchContentState extends State<SearchContent> {
   Widget build(BuildContext context) => Consumer<SearchNotifier>(
         builder: (_, notifier, __) {
           final List<ContentData> contents = widget.featureType == FeatureType.vid
-              ? (notifier.searchContentFirstPage?.vid?.data ?? [])
+              ? (notifier.searchContentFirstPage?.video ?? [])
               : widget.featureType == FeatureType.diary
-                  ? (notifier.searchContentFirstPage?.diary?.data ?? [])
+                  ? (notifier.searchContentFirstPage?.diary ?? [])
                   : widget.featureType == FeatureType.pic
-                      ? (notifier.searchContentFirstPage?.pict?.data ?? [])
+                      ? (notifier.searchContentFirstPage?.pict ?? [])
                       : [];
           final lenght = widget.featureType == FeatureType.vid
               ? notifier.vidCount

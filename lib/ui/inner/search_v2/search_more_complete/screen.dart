@@ -137,9 +137,9 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
                                   children: [
                                     AllSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
                                     AccountSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
-                                    ContentSearch(content: notifier.searchContent?.vid?.data, featureType: notifier.vidContentsQuery.featureType, selectIndex: _selectedIndex),
-                                    ContentSearch(content: notifier.searchContent?.diary?.data, featureType: notifier.diaryContentsQuery.featureType, selectIndex: _selectedIndex),
-                                    ContentSearch(content: notifier.searchContent?.pict?.data, featureType: notifier.picContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.vid, featureType: notifier.vidContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.diary, featureType: notifier.diaryContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.pict, featureType: notifier.picContentsQuery.featureType, selectIndex: _selectedIndex),
                                   ],
                                 ),
                               ),
