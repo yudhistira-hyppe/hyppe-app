@@ -13,7 +13,6 @@ import '../../ui/inner/notification/notifier.dart';
 import '../../ux/path.dart';
 import '../../ux/routing.dart';
 import '../arguments/discuss_argument.dart';
-import '../arguments/other_profile_argument.dart';
 import '../bloc/message_v2/bloc.dart';
 import '../models/collection/message_v2/message_data_v2.dart';
 
@@ -92,6 +91,8 @@ class NotificationService {
               final data = NotificationBody.fromJson(map);
               if(data.postType == 'TRANSACTION'){
                 Routing().move(Routes.allTransaction);
+              }else if(data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING'){
+                materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
               }else{
                 if(data.postType == '')
                 materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
@@ -100,8 +101,6 @@ class NotificationService {
               final data = NotificationBody.fromJson(map);
               if(data.postType == 'TRANSACTION'){
                 Routing().move(Routes.transaction);
-              }else if(data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING'){
-                materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
               }else{
                 throw 'Not recognize the type of the object of the notification ';
               }
