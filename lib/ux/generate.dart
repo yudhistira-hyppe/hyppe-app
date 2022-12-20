@@ -6,6 +6,7 @@ import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
@@ -321,7 +322,7 @@ class Generate {
       case Routes.help:
         return MaterialPageRoute(builder: (_) => const HelpScreen());
       case Routes.faqDetail:
-        return MaterialPageRoute(builder: (_) => const FAQdetailScreen());
+        return MaterialPageRoute(builder: (_) => FAQDetailScreen(data: settings.arguments as FAQArgument,));
       case Routes.supportTicket:
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:

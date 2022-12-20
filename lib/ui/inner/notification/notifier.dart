@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
@@ -20,6 +21,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/notification/content/all.dart';
 import 'package:hyppe/ui/inner/notification/content/like.dart';
 import 'package:hyppe/ui/inner/notification/content/general.dart';
@@ -30,8 +32,13 @@ import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 
+import '../../../core/arguments/other_profile_argument.dart';
 import '../../../core/bloc/message_v2/bloc.dart';
+import '../../../core/bloc/user_v2/bloc.dart';
+import '../../../core/bloc/user_v2/state.dart';
+import '../../../core/constants/asset_path.dart';
 import '../../../core/constants/shared_preference_keys.dart';
+import '../../../core/models/collection/user_v2/profile/user_profile_model.dart';
 
 class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -228,6 +235,40 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
       case FeatureType.other:
         return;
     }
+  }
+
+  void checkAndNavigateToProfile(BuildContext context, String? username) async{
+    UserProfileModel? result = null;
+    try{
+      if(username != null){
+        final fixUsername = username.replaceAll(' ', '');
+        final usersNotifier = UserBloc();
+        await usersNotifier.getUserProfilesBloc(context, search: fixUsername, withAlertMessage: true, isByUsername: true);
+        final usersFetch = usersNotifier.userFetch;
+        if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+          result = usersFetch.data;
+          if(result != null){
+            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
+          }else{
+            throw "Couldn't find the user ";
+          }
+        }else if (usersFetch.userState == UserState.getUserProfilesError){
+          throw "Couldn't find the user";
+        }
+      }else{
+        throw "Couldn't find the user";
+      }
+
+    }catch(e){
+      await ShowBottomSheet().onShowColouredSheet(
+        context,
+        language.userIsNotFound ?? '$e',
+        color: Theme.of(context).colorScheme.error,
+        iconSvg: "${AssetPath.vectorPath}close.svg",
+        sizeIcon: 15,
+      );
+    }
+
   }
 
   Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback, postID) async {

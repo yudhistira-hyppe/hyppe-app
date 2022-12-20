@@ -396,6 +396,9 @@ class UrlConstants {
   /// post => Get User Profiles
   static const String getuserprofile = "$userRoute/getuserprofile";
 
+  /// post => Get User Profiles by username
+  static const String getProfileByUser = "$getuserprofile/byusername";
+
   /// post => Log out
   static const String logout = "$userRoute/logout";
 

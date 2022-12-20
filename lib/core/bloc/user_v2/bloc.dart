@@ -446,9 +446,10 @@ class UserBloc {
   }
 
   Future getUserProfilesBloc(
-    BuildContext context, {
-    String? search,
-    required bool withAlertMessage,
+      BuildContext context, {
+        String? search,
+        required bool withAlertMessage,
+        bool isByUsername = false
   }) async {
     setUserFetch(UserFetch(UserState.loading));
     var formData = FormData();
@@ -473,7 +474,7 @@ class UserBloc {
       headers: {
         "x-auth-user": SharedPreference().readStorage(SpKeys.email),
       },
-      host: UrlConstants.getuserprofile,
+      host: isByUsername ? UrlConstants.getProfileByUser : UrlConstants.getuserprofile,
       withCheckConnection: false,
       methodType: MethodType.post,
       withAlertMessage: withAlertMessage,

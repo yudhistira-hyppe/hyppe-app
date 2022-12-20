@@ -6,7 +6,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
-import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/content_violation.dart';
@@ -17,10 +16,8 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-// import 'package:hyppe/core/constants/thumb/profile_image.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
-// import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
@@ -34,6 +31,8 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:readmore/readmore.dart';
+
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class VidDetailBottom extends StatelessWidget {
   final ContentData? data;
@@ -123,18 +122,28 @@ class VidDetailBottom extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ReadMoreText(
-                            "${data?.description}",
+                          CustomDescContent(
+                            desc: "${data?.description}",
                             trimLines: 2,
-                            trimMode: TrimMode.Line,
-                            textAlign: TextAlign.left,
-                            trimExpandedText: 'Show less',
-                            trimCollapsedText: 'Show more',
-                            colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                            style: Theme.of(context).textTheme.subtitle2,
-                            moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                            lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            textAlign: TextAlign.start,
+                            seeLess: 'Show less',
+                            seeMore: 'Show More',
+                            normStyle: Theme.of(context).textTheme.subtitle2,
+                            hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),
+                          // ReadMoreText(
+                          //   "${data?.description}",
+                          //   trimLines: 2,
+                          //   trimMode: TrimMode.Line,
+                          //   textAlign: TextAlign.left,
+                          //   trimExpandedText: 'Show less',
+                          //   trimCollapsedText: 'Show more',
+                          //   colorClickableText: Theme.of(context).colorScheme.primaryContainer,
+                          //   style: Theme.of(context).textTheme.subtitle2,
+                          //   moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          //   lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          // ),
                         ],
                       ),
                     )

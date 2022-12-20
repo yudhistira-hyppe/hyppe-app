@@ -90,7 +90,7 @@ class UploadContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
-                    Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
+                    // Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
                     if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
                       Expanded(
                         flex: 1,

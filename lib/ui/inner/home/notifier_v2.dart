@@ -277,7 +277,7 @@ class HomeNotifier with ChangeNotifier {
 
       await notifier.getAllContentsBlocV2(context, pageNumber: 1, visibility: notifierMain.visibilty, myContent: myContent, otherContent: otherContent);
       final fetch = notifier.postsFetch;
-      '${AllContents.fromJson(fetch.data).toJson()}'.logger();
+      'AllContents : ${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);
       return res;
     } catch (e) {

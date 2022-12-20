@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
+
 class OtherProfileTop extends StatelessWidget {
   const OtherProfileTop({Key? key}) : super(key: key);
 
@@ -108,19 +110,29 @@ class OtherProfileTop extends StatelessWidget {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ReadMoreText(
-                          notifier.displayBio(),
-                          // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                        CustomDescContent(
+                          desc: notifier.displayBio(),
                           trimLines: 5,
-                          trimMode: TrimMode.Line,
                           textAlign: TextAlign.start,
-                          trimExpandedText: 'Show less',
-                          trimCollapsedText: 'Show more',
-                          colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                          style: Theme.of(context).textTheme.bodyText2!.copyWith(),
-                          moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          seeLess: 'Show less',
+                          seeMore: 'Show More',
+                          normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
+                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                         ),
+                        // ReadMoreText(
+                        //   notifier.displayBio(),
+                        //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                        //   trimLines: 5,
+                        //   trimMode: TrimMode.Line,
+                        //   textAlign: TextAlign.start,
+                        //   trimExpandedText: 'Show less',
+                        //   trimCollapsedText: 'Show more',
+                        //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
+                        //   style: Theme.of(context).textTheme.bodyText2!.copyWith(),
+                        //   moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                        //   lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                        // ),
                       ],
                     )),
                   )
