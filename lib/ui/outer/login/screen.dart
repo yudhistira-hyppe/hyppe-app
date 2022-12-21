@@ -1,13 +1,17 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_in_form.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_in_text.dart';
 import 'package:hyppe/ui/outer/login/widget/sign_up_or_google.dart';
 import 'package:provider/provider.dart';
+
+import '../../../initial/hyppe/translate_v2.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -21,27 +25,44 @@ class LoginScreen extends StatelessWidget {
             width: SizeConfig.screenWidth,
             child: Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: Consumer<LoginNotifier>(
-                        builder: (_, notifier, __) => GestureDetector(
+              child: Consumer<LoginNotifier>(
+                builder: (_, notifier, __) => Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 40),
+                        child: GestureDetector(
                           onTap: () => notifier.tapBack(),
                           child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
                         ),
                       ),
                     ),
-                  ),
-                  thirtySixPx,
-                  Align(alignment: const Alignment(0.0, -0.85), child: SignInText()),
-                  sixtyFourPx,
-                  SignInForm(),
-                  sixtyFourPx,
-                  const SignUpOrGoogle(),
-                ],
+                    // Align(
+                    //   alignment: Alignment.topRight,
+                    //   child: Container(
+                    //     padding: const EdgeInsets.only(top: 28, left: 28),
+                    //     child: Container(
+                    //       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                    //       decoration: BoxDecoration(border: Border.all(color: kHyppeLightSecondary, width: 2.0)),
+                    //       child: GestureDetector(
+                    //         onTap: () async{
+                    //           final notif = context.read<TranslateNotifierV2>();
+                    //           final
+                    //         },
+                    //         child: CustomTextWidget(textToDisplay: notifier.language.help ?? 'Help', textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    thirtySixPx,
+                    Align(alignment: const Alignment(0.0, -0.85), child: SignInText()),
+                    sixtyFourPx,
+                    SignInForm(),
+                    sixtyFourPx,
+                    const SignUpOrGoogle(),
+                  ],
+                ),
               ),
             ),
           ),

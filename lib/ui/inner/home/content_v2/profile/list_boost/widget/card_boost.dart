@@ -152,7 +152,7 @@ class CardBoost extends StatelessWidget {
                           ),
                           sixPx,
                           CustomTextWidget(
-                            textToDisplay: "${System().dateFormatter(data?.boosted?[0].boostDate ?? '', 5)}",
+                            textToDisplay: "${System().dateFormatter(data?.boosted[0].boostDate ?? '', 5)}",
                             textStyle: Theme.of(context).textTheme.overline,
                           )
                         ],
