@@ -108,7 +108,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     isVideo = !photo;
     dynamic notifier;
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand != 'OPPO') {
+    if (brand == 'OPPO') {
       notifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       notifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -283,7 +283,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
             notifier.fileContent = value.values.single?.map((e) => e.path).toList();
 
             final brand = SharedPreference().readStorage(SpKeys.brand);
-            if (brand != 'OPPO') {
+            if (brand == 'OPPO') {
               notifier.aspectRation = context.read<CameraDevicesNotifier>().cameraAspectRatio;
             } else {
               notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
@@ -322,7 +322,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onStopRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand != 'OPPO') {
+    if (brand == 'OPPO') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -338,6 +338,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       notifier.fileContent = [file?.path ?? ''];
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
+      notifyListeners();
       await _routing.move(Routes.previewContent);
     });
   }
@@ -347,7 +348,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     print('start recors');
     dynamic cameraNotifier;
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand != 'OPPO') {
+    if (brand == 'OPPO') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -360,7 +361,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onPauseRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand != 'OPPO') {
+    if (brand == 'OPPO') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -374,7 +375,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onResumeRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand != 'OPPO') {
+    if (brand == 'OPPO') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -389,7 +390,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onTakePicture(BuildContext context) {
     dynamic cameraNotifier;
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand != 'OPPO') {
+    if (brand == 'OPPO') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -408,17 +409,17 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   final brand = SharedPreference().readStorage(SpKeys.brand);
 
   @override
-  bool get hasError => brand != 'OPPO' ? cameraDevicesNotifier.hasError : cameraNotifier.hasError;
+  bool get hasError => brand == 'OPPO' ? cameraDevicesNotifier.hasError : cameraNotifier.hasError;
 
   @override
-  bool get isInitialized => brand != 'OPPO' ? cameraDevicesNotifier.isInitialized : cameraNotifier.isInitialized;
+  bool get isInitialized => brand == 'OPPO' ? cameraDevicesNotifier.isInitialized : cameraNotifier.isInitialized;
 
   @override
-  bool get isRecordingPaused => brand != 'OPPO' ? cameraDevicesNotifier.isRecordingPaused : cameraNotifier.isRecordingPaused;
+  bool get isRecordingPaused => brand == 'OPPO' ? cameraDevicesNotifier.isRecordingPaused : cameraNotifier.isRecordingPaused;
 
   @override
-  bool get isRecordingVideo => brand != 'OPPO' ? cameraDevicesNotifier.isRecordingVideo : cameraNotifier.isRecordingVideo;
+  bool get isRecordingVideo => brand == 'OPPO' ? cameraDevicesNotifier.isRecordingVideo : cameraNotifier.isRecordingVideo;
 
   @override
-  bool get isTakingPicture => brand != 'OPPO' ? cameraDevicesNotifier.isTakingPicture : cameraNotifier.isTakingPicture;
+  bool get isTakingPicture => brand == 'OPPO' ? cameraDevicesNotifier.isTakingPicture : cameraNotifier.isTakingPicture;
 }

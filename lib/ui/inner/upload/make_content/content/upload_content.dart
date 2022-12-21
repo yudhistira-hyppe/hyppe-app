@@ -178,9 +178,9 @@ class UploadContent extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
-                    if (!(notifier?.isRecordingVideo ?? true)) BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false),
-                    Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
+                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildStorage(mounted: mounted)),
+                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 1, child: BuildEffect(mounted: mounted, isRecord: notifier?.isRecordingVideo ?? false)),
+                    Expanded(flex: 2, child: BuildCaptureIcon(mounted: mounted)),
                     if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
                       Expanded(
                         flex: 1,
@@ -195,7 +195,7 @@ class UploadContent extends StatelessWidget {
                           ],
                         ),
                       ),
-                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 4, child: const CameraSwitchButton())
+                    if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraSwitchButton())
                   ],
                 ),
               ),
