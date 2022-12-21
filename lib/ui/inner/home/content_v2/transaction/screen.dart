@@ -63,6 +63,7 @@ class _TransactionState extends State<Transaction> {
             color: Colors.purple,
             key: _refreshIndicatorKey,
             onRefresh: () async {
+              notifier.skip = 0;
               await notifier.initTransactionHistory(context);
             },
             child: notifier.isLoading

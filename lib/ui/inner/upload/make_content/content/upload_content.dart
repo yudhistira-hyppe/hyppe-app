@@ -90,21 +90,21 @@ class UploadContent extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: 2, child: BuildStorage(mounted: mounted)),
-                    // Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
-                    if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // const CameraFlashButton(),
-                            CustomTextWidget(
-                              textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
-                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
-                            ),
-                          ],
-                        ),
-                      ),
+                    Expanded(flex: 4, child: BuildCaptureIcon(mounted: mounted)),
+                    // if (Platform.isIOS && !(notifier?.isRecordingVideo ?? true))
+                    //   Expanded(
+                    //     flex: 1,
+                    //     child: Column(
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         // const CameraFlashButton(),
+                    //         CustomTextWidget(
+                    //           textToDisplay: context.watch<TranslateNotifierV2>().translate.flash!,
+                    //           textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
                     if (!(notifier?.isRecordingVideo ?? true)) Expanded(flex: Platform.isIOS ? 2 : 2, child: const CameraDevicesSwitchButton())
                   ],
                 ),
