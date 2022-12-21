@@ -117,30 +117,6 @@ class NotificationService {
           e.logger();
         }
       }
-      // onSelectNotification: (String? payload) async {
-      //   print('notification payload: $payload');
-      //   try{
-      //     final Map<String, dynamic> map = json.decode(payload ?? '{}');
-      //     if (payload != null) {
-      //       if(map['postID'] != null){
-      //         final data = NotificationBody.fromJson(map);
-      //         if(data.postType == 'TRANSACTION'){
-      //           Routing().move(Routes.transaction);
-      //         }else{
-      //           materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
-      //         }
-      //       }else if (map['createdAt'] != null){
-      //         final data = MessageDataV2.fromJson(map);
-      //         final notifier = MessageNotifier();
-      //         notifier.onClickUser(materialAppKey.currentContext!, data);
-      //       }else{
-      //         throw 'Not recognize the type of the object of the notification ';
-      //       }
-      //     }
-      //   }catch(e){
-      //     e.logger();
-      //   }
-      // },
     );
   }
 

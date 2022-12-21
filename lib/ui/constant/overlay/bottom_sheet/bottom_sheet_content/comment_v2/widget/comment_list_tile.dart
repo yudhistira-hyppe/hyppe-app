@@ -93,22 +93,6 @@ class _CommentListTileState extends State<CommentListTile> {
                   Row(
                     children: [
                       // TODO: show reactions count
-                      // widget.data.count > 0
-                      //     ? Row(
-                      //         children: [
-                      //           CustomIconWidget(
-                      //             iconData: "${AssetPath.vectorPath}unlike.svg",
-                      //             height: 15 * SizeConfig.scaleDiagonal,
-                      //             width: 15 * SizeConfig.scaleDiagonal,
-                      //           ),
-                      //           CustomTextWidget(
-                      //             textToDisplay: " ${System().formatterNumber(widget.data.count)}",
-                      //             textStyle: Theme.of(context).textTheme.button,
-                      //           ),
-                      //         ],
-                      //       )
-                      //     : SizedBox.shrink(),
-                      // widget.data.count > 0 ? SizedBox(width: 51.5 * SizeConfig.scaleDiagonal) : SizedBox.shrink(),
                       InkWell(
                         onTap: () {
                           if (widget.fromFront) {
@@ -150,10 +134,6 @@ class _CommentListTileState extends State<CommentListTile> {
                       ? InkWell(
                           onTap: () {
                             // TODO: show sub comments
-                            // notifier.commentController.clear();
-                            // notifier.forSubComment = widget.data;
-                            // notifier.subComments.clear();
-                            // notifier.subComment = true;
                             notifier.seeMoreReplies(widget.data);
                           },
                           child: Padding(
@@ -178,20 +158,6 @@ class _CommentListTileState extends State<CommentListTile> {
             ),
           ),
           // TODO: show comment reactions
-          // Align(
-          //   alignment: Alignment(1.0, 0.0),
-          //   child: CustomIconButtonWidget(
-          //     padding: EdgeInsets.all(0),
-          //     alignment: Alignment.topRight,
-          //     iconData: widget.data.isReacted ? "${AssetPath.vectorPath}liked.svg" : "${AssetPath.vectorPath}unlike.svg",
-          //     defaultColor: widget.data.isReacted ? false : true,
-          //     onPressed: widget.data.isReacted
-          //         ? () => print("Belom Bisa Unlike Comment") //=> notifier.onLikeComment(context, comment: widget.data)
-          //         : () async => ShowGeneralDialog().reactionComment(context, widget.data).whenComplete(() => setState(() {
-          //               context.read<CommentNotifierV2>().inputNode.unfocus();
-          //             })),
-          //   ),
-          // ),
           widget.data?.comment?.sender == email
               ? Consumer<CommentNotifierV2>(
                   builder: (_, notifier, __) => Align(
