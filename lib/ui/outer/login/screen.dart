@@ -29,32 +29,34 @@ class LoginScreen extends StatelessWidget {
                 builder: (_, notifier, __) => Column(
                   children: [
                     Align(
-                      alignment: Alignment.topLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 40),
-                        child: GestureDetector(
-                          onTap: () => notifier.tapBack(),
-                          child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
-                        ),
+                      alignment: Alignment.topCenter,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: GestureDetector(
+                              onTap: () => notifier.tapBack(),
+                              child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                              decoration: BoxDecoration(border: Border.all(color: kHyppeLightSecondary, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(5))),
+                              child: GestureDetector(
+                                onTap: () async{
+                                  await notifier.goToHelpLogin(context);
+                                },
+                                child: CustomTextWidget(textToDisplay: notifier.language.help ?? 'Help', textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    // Align(
-                    //   alignment: Alignment.topRight,
-                    //   child: Container(
-                    //     padding: const EdgeInsets.only(top: 28, left: 28),
-                    //     child: Container(
-                    //       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                    //       decoration: BoxDecoration(border: Border.all(color: kHyppeLightSecondary, width: 2.0)),
-                    //       child: GestureDetector(
-                    //         onTap: () async{
-                    //           final notif = context.read<TranslateNotifierV2>();
-                    //           final
-                    //         },
-                    //         child: CustomTextWidget(textToDisplay: notifier.language.help ?? 'Help', textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     thirtySixPx,
                     Align(alignment: const Alignment(0.0, -0.85), child: SignInText()),
                     sixtyFourPx,

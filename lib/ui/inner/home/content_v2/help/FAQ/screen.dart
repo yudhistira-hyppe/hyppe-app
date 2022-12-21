@@ -30,7 +30,11 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
     return Consumer<TranslateNotifierV2>(
       builder: (_, notifier, __) => Scaffold(
         appBar: AppBar(
-          leading: const BackButton(),
+          leading: BackButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
           title: CustomTextWidget(
             textStyle: Theme.of(context).textTheme.subtitle1,
             textToDisplay: ' ${notifier.translate.help}',
@@ -44,7 +48,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
             children: [
               CustomSearchBar(
                 hintText: notifier.translate.searchtopic,
-                contentPadding: EdgeInsets.symmetric(vertical: 16),
+                contentPadding: const EdgeInsets.symmetric(vertical: 16),
                 controller: controller,
                 onSubmitted: (value){
                   setState(() {
@@ -64,9 +68,12 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                   child: ListView.builder(
                       itemCount: widget.data.details.length,
                       itemBuilder: (context, index) {
-                        return GestureDetector(onTap: (){
+                        return GestureDetector(onTap: ()async{
                           if(widget.data.details[index].detail.isNotEmpty){
-                            Routing().move(Routes.faqDetail, argument: FAQArgument(details: widget.data.details[index].detail));
+                            await Routing().move(Routes.faqDetail, argument: FAQArgument(details: widget.data.details[index].detail));
+                            if(widget.data.isLogin){
+                              Routing().moveBack();
+                            }
                           }
                         }, child: Container(
                           width: double.infinity,
