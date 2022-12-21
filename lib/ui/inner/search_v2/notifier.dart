@@ -377,7 +377,6 @@ class SearchNotifier with ChangeNotifier {
         SearchContentModel _res = SearchContentModel.fromJson(fetch.data[0]);
         if (tabIndex == 1) {
           _skip1 += _limit;
-          print('_skip1 ${_skip1}');
           _searchContent?.users?.addAll(_res.users ?? []);
         }
         if (tabIndex == 2) {
