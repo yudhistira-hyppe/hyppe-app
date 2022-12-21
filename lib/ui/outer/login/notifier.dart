@@ -1,11 +1,20 @@
 // import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/arguments/faq_argument.dart';
+import '../../../core/bloc/faq/bloc.dart';
+import '../../../core/bloc/faq/state.dart';
+import '../../../core/constants/asset_path.dart';
+import '../../../core/models/collection/faq/faq_data.dart';
+import '../../../core/models/collection/faq/faq_request.dart';
+import '../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 // import 'package:twitter_login/twitter_login.dart';
 
@@ -108,5 +117,44 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
   unFocusController() {
     emailFocus.unfocus();
     passwordFocus.unfocus();
+  }
+
+  Future goToHelpLogin(BuildContext context) async{
+    try{
+      final listFAQ = [];
+      final bloc = FAQBloc();
+      await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: 'Login'));
+      final fetch = bloc.faqFetch;
+      if(fetch.state == FAQState.faqSuccess){
+        if(fetch.data != null){
+          fetch.data.forEach((v){
+            listFAQ.add(FAQData.fromJson(v));
+          });
+          if(listFAQ.isNotEmpty){
+            Routing().move(Routes.faqDetail, argument: FAQArgument(details: listFAQ[0].detail, isLogin: true));
+          }else{
+            throw 'Data is Empty';
+          }
+        }else{
+          throw 'Data is null';
+        }
+      }else if (fetch.state == FAQState.faqError){
+        throw fetch.data;
+      }
+    }catch(e){
+      'Error getListOfFAQ: $e'.logger();
+      try{
+        await ShowBottomSheet().onShowColouredSheet(
+          context,
+          '$e',
+          color: Theme.of(context).colorScheme.error,
+          iconSvg: "${AssetPath.vectorPath}close.svg",
+          sizeIcon: 15,
+        );
+      }catch(e){
+        e.logger();
+      }
+    }
+
   }
 }

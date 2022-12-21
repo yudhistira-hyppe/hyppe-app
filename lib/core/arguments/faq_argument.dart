@@ -2,8 +2,9 @@ import '../models/collection/faq/faq_detail.dart';
 
 class FAQArgument{
   List<FAQDetail> details = [];
+  bool isLogin = false;
 
-  FAQArgument({required this.details});
+  FAQArgument({required this.details, this.isLogin = false});
 
   FAQArgument.fromJson(Map<String, dynamic> map){
     if(map['details'] != null){
