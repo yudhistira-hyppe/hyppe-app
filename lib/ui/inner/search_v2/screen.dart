@@ -19,13 +19,23 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late TabController _tabController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(
+      () {
+        setState(() {
+          print('tab controller');
+          _currentIndex = _tabController.index;
+          print(_currentIndex);
+        });
+      },
+    );
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     if (notifier.searchContentFirstPage?.video == null) {
       Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context));

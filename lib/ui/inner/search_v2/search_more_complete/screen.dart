@@ -10,7 +10,6 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/account_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/content_search.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
 
 class SearchMoreCompleteScreen extends StatefulWidget {
