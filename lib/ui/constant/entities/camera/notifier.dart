@@ -55,15 +55,7 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
       final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
       flashMode = FlashMode.torch;
       deepArController = DeepArController();
-      if (Platform.isAndroid) {
-        if (deepArController != null) {
-          final isGranted = await System().requestPermission(context, permissions: [Permission.camera]);
-          if (isGranted) {
-            print('destroy deepArController 1');
-            deepArController!.destroy();
-          }
-        }
-      }
+
       print('Initializing DeepAR');
       await deepArController!
           .initialize(
@@ -157,6 +149,13 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     try {
       if (Platform.isAndroid) {
         deepArController = DeepArController();
+        if (deepArController != null) {
+          final isGranted = await System().requestPermission(context, permissions: [Permission.camera]);
+          if (isGranted) {
+            print('destroy deepArController 1 ');
+            deepArController!.destroy();
+          }
+        }
         deepArController = null;
       }
       if (deepArController != null) {
