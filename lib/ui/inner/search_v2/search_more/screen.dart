@@ -78,8 +78,16 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                     contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                                     focusNode: notifier.focusNode,
                                     controller: notifier.searchController,
-                                    onSubmitted: (v) => notifier.onSearchPost(context),
-                                    onPressedIcon: () => notifier.onSearchPost(context),
+                                    onSubmitted: (v) {
+                                      notifier.limit = 5;
+                                      notifier.tabIndex = 0;
+                                      notifier.onSearchPost(context, isMove: true);
+                                    },
+                                    onPressedIcon: () {
+                                      notifier.tabIndex = 0;
+                                      notifier.limit = 5;
+                                      notifier.onSearchPost(context, isMove: true);
+                                    },
                                     autoFocus: true,
                                     onChanged: (e) {
                                       if (e.length > 2) {

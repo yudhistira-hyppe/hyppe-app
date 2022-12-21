@@ -14,12 +14,9 @@ class SearchContentBloc {
   SearchContentFetch get searchContentFetch => _searchContentFetch;
   setSearchContentFetch(SearchContentFetch val) => _searchContentFetch = val;
 
-  Future getSearchContent(BuildContext context, {String? keys, int skip = 0, int limit = 10}) async {
+  Future getSearchContent(BuildContext context, param) async {
     String email = SharedPreference().readStorage(SpKeys.email);
-    var req = {"email": email, "keys": keys, "skip": skip, "limit": limit};
-    if (keys?.isEmpty ?? true) {
-      req = {"email": email, "skip": skip, "limit": limit};
-    }
+
     await Repos().reposPost(
       context,
       (onResult) {
@@ -35,7 +32,7 @@ class SearchContentBloc {
       (errorData) {
         setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
       },
-      data: req,
+      data: param,
       headers: {
         "x-auth-user": email,
       },

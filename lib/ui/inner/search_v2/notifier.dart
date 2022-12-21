@@ -7,6 +7,7 @@ import 'package:hyppe/core/bloc/search_content/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -15,6 +16,7 @@ import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/combination_v2/get_user_profile.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -34,6 +36,14 @@ class SearchNotifier with ChangeNotifier {
     language = translate;
     notifyListeners();
   }
+
+  List paramSearch = ['all', 'listuser', 'listvid', 'listdiary'];
+
+  int _tabIndex = 0;
+  int get tabIndex => _tabIndex;
+
+  int _limit = 0;
+  int get limit => _limit;
 
   List<SearchPeolpleData>? _searchPeolpleData = [];
   List<SearchPeolpleData>? get searchPeolpleData => _searchPeolpleData;
@@ -69,6 +79,26 @@ class SearchNotifier with ChangeNotifier {
   int get pageIndex => _pageIndex;
   FocusNode get focusNode => _focusNode;
   FocusNode get focusNode1 => _focusNode1;
+
+  int _tab1 = 0;
+  int _tab2 = 0;
+  int _tab3 = 0;
+  int _tab4 = 0;
+
+  int get tab1 => _tab1;
+  int get tab2 => _tab2;
+  int get tab3 => _tab3;
+  int get tab4 => _tab4;
+
+  int _skip1 = 0;
+  int _skip2 = 0;
+  int _skip3 = 0;
+  int _skip4 = 0;
+
+  int get skip1 => _skip1;
+  int get skip2 => _skip2;
+  int get skip3 => _skip3;
+  int get skip4 => _skip4;
 
   // List<ContentData>? _initDataVid = null;
   // List<ContentData>? get initDataVid => _initDataVid;
@@ -122,6 +152,28 @@ class SearchNotifier with ChangeNotifier {
 
   set searchPeolpleData(List<SearchPeolpleData>? val) {
     _searchPeolpleData = val;
+    notifyListeners();
+  }
+
+  set limit(int val) {
+    _limit = val;
+    notifyListeners();
+  }
+
+  set tabIndex(int val) {
+    _tabIndex = val;
+    if (_tabIndex == 1) {
+      _tab1++;
+    }
+    if (_tabIndex == 2) {
+      _tab2++;
+    }
+    if (_tabIndex == 3) {
+      _tab3++;
+    }
+    if (_tabIndex == 4) {
+      _tab4++;
+    }
     notifyListeners();
   }
 
@@ -291,121 +343,141 @@ class SearchNotifier with ChangeNotifier {
 
   onScrollListener(BuildContext context, ScrollController scrollController) async {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      String email = SharedPreference().readStorage(SpKeys.email);
       String search = searchController.text;
       focusNode.unfocus();
-      _skip += 18;
+      Map param = {};
+      if (tabIndex == 1) {
+        _skip = _skip1;
+      }
+      if (tabIndex == 2) {
+        _skip = _skip2;
+      }
+      if (tabIndex == 3) {
+        _skip = _skip3;
+      }
+      if (tabIndex == 4) {
+        _skip = _skip4;
+      }
+      param = {
+        "email": email,
+        "keys": search,
+        "listuser": tabIndex == 0 || tabIndex == 1 ? true : false,
+        "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
+        "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
+        "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
+        "skip": _skip,
+        "limit": _limit,
+      };
+
       final notifier = SearchContentBloc();
-      await notifier.getSearchContent(context, keys: search, skip: _skip, limit: 18);
+      await notifier.getSearchContent(context, param);
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
-        SearchContentModel _res = SearchContentModel.fromJson(fetch.data);
-        // if (_res.vid?.data?.isEmpty ?? true) {
-        //   _vidHasNext = false;
-        // } else if (_res.vid?.skip == 0) {
-        //   _vidHasNext = false;
-        // } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
-        //   if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
-        //     _vidHasNext = false;
-        //   } else {
-        //     _vidHasNext = true;
-        //   }
-        // } else {
-        //   _vidHasNext = false;
-        // }
-        // if (_res.diary?.data?.isEmpty ?? true) {
-        //   _diaryHasNext = false;
-        // } else if (_res.diary?.skip == 0) {
-        //   _diaryHasNext = false;
-        // } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
-        //   if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
-        //     _diaryHasNext = false;
-        //   } else {
-        //     _diaryHasNext = true;
-        //   }
-        // } else {
-        //   _diaryHasNext = false;
-        // }
-        // if (_res.pict?.data?.isEmpty ?? true) {
-        //   _picHasNext = false;
-        // } else if (_res.pict?.skip == 0) {
-        //   _picHasNext = false;
-        // } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
-        //   if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
-        //     _picHasNext = false;
-        //   } else {
-        //     _picHasNext = true;
-        //   }
-        // } else {
-        //   _picHasNext = false;
-        // }
-
-        // if (_picHasNext || _diaryHasNext || _vidHasNext) {
-        // _skip += 18;
-        // }
-
-        _searchContent?.users?.addAll(_res.users ?? []);
-        _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
-        _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
-        _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
+        SearchContentModel _res = SearchContentModel.fromJson(fetch.data[0]);
+        if (tabIndex == 1) {
+          _skip1 += _limit;
+          print('_skip1 ${_skip1}');
+          _searchContent?.users?.addAll(_res.users ?? []);
+        }
+        if (tabIndex == 2) {
+          _skip2 += _limit;
+          _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
+        }
+        if (tabIndex == 3) {
+          _skip3 += _limit;
+          _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
+        }
+        if (tabIndex == 4) {
+          _skip4 += _limit;
+          _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
+        }
       }
 
       notifyListeners();
     }
   }
 
-  void onSearchPost(BuildContext context, {String? value, int skip = 0}) async {
-    _routing.moveReplacement(Routes.searcMoreComplete);
+  void onSearchPost(
+    BuildContext context, {
+    String? value,
+    int skip = 0,
+    bool isMove = false,
+  }) async {
+    if (isMove) {
+      _routing.moveReplacement(Routes.searcMoreComplete);
+      _tab1 = 0;
+      _tab2 = 0;
+      _tab3 = 0;
+      _tab4 = 0;
+      _skip1 = 0;
+      _skip2 = 0;
+      _skip3 = 0;
+      _skip4 = 0;
+    }
+    if (!isMove && tabIndex == 0 && _searchContent != null) {
+      return;
+    }
+    if (!isMove && tabIndex == 1 && _searchContent?.users != null && _tab1 > 1) {
+      return;
+    }
+    if (!isMove && tabIndex == 2 && _searchContent?.vid != null && _tab2 > 1) {
+      return;
+    }
+    if (!isMove && tabIndex == 3 && _searchContent?.diary != null && _tab3 > 1) {
+      return;
+    }
+    if (!isMove && tabIndex == 4 && _searchContent?.pict != null && _tab4 > 1) {
+      return;
+    }
+    final notifier = SearchContentBloc();
+    String email = SharedPreference().readStorage(SpKeys.email);
     String search = value ?? searchController.text;
+    Map param = {};
+
     focusNode.unfocus();
 
-    final notifier = SearchContentBloc();
-
     isLoading = true;
-    _searchContent = null;
-    await notifier.getSearchContent(context, keys: search, skip: skip, limit: 18);
+    // _searchContent = null;
+
+    param = {
+      "email": email,
+      "keys": search,
+      "listuser": tabIndex == 0 || tabIndex == 1 ? true : false,
+      "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
+      "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
+      "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
+      "skip": skip,
+      "limit": _limit,
+    };
+    await notifier.getSearchContent(context, param);
     final fetch = notifier.searchContentFetch;
     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
       final _res = SearchContentModel.fromJson(fetch.data[0]);
-      // if (_res.vid?.data?.isEmpty ?? true) {
-      //   _vidHasNext = false;
-      // } else if (_res.vid?.skip == 0) {
-      //   _vidHasNext = false;
-      // } else if ((_res.vid?.data?.length ?? 0) % 18 == 0) {
-      //   if ((_res.vid?.skip ?? 0) == (_res.vid?.totalFilter ?? 0)) {
-      //     _vidHasNext = false;
-      //   } else {
-      //     _vidHasNext = true;
-      //   }
-      // } else {
-      //   _vidHasNext = false;
-      // }
-      // if (_res.diary?.data?.isEmpty ?? true) {
-      //   _diaryHasNext = false;
-      // } else if (_res.diary?.skip == 0) {
-      //   _diaryHasNext = false;
-      // } else if ((_res.diary?.data?.length ?? 0) % 18 == 0) {
-      //   if ((_res.diary?.skip ?? 0) == (_res.diary?.totalFilter ?? 0)) {
-      //     _diaryHasNext = false;
-      //   } else {
-      //     _diaryHasNext = true;
-      //   }
-      // } else {
-      //   _diaryHasNext = false;
-      // }
-      // if (_res.pict?.data?.isEmpty ?? true) {
-      //   _picHasNext = false;
-      // } else if (_res.pict?.skip == 0) {
-      //   _picHasNext = false;
-      // } else if ((_res.pict?.data?.length ?? 0) % 18 == 0) {
-      //   if ((_res.pict?.skip ?? 0) == (_res.pict?.totalFilter ?? 0)) {
-      //     _picHasNext = false;
-      //   } else {
-      //     _picHasNext = true;
-      //   }
-      // } else {
-      //   _picHasNext = false;
-      // }
-      _searchContent = _res;
+
+      if (tabIndex == 0) {
+        _searchContent = _res;
+      }
+      if (tabIndex == 1) {
+        _searchContent?.users = [];
+        _searchContent?.users?.addAll(_res.users ?? []);
+        _skip1 += _limit;
+      }
+      if (tabIndex == 2) {
+        _searchContent?.vid = [];
+        _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
+        _skip2 += _limit;
+      }
+      if (tabIndex == 3) {
+        _searchContent?.diary = [];
+        _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
+        _skip3 += _limit;
+      }
+      if (tabIndex == 4) {
+        _searchContent?.pict = [];
+        _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
+        _skip4 += _limit;
+      }
     }
     // else {
     // _searchContent = null;

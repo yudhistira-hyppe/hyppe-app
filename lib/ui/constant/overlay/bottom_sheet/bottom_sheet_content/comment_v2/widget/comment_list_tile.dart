@@ -92,7 +92,6 @@ class _CommentListTileState extends State<CommentListTile> {
                   SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                   Row(
                     children: [
-                      // TODO: show reactions count
                       InkWell(
                         onTap: () {
                           if (widget.fromFront) {
@@ -118,7 +117,7 @@ class _CommentListTileState extends State<CommentListTile> {
                               iconData: "${AssetPath.vectorPath}comment.svg",
                             ),
                             CustomTextWidget(
-                              textToDisplay: " ${notifier.language.reply}",
+                              textToDisplay: " ${_language.reply}",
                               textStyle: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: kHyppeBottomNavBarIcon,
@@ -133,14 +132,13 @@ class _CommentListTileState extends State<CommentListTile> {
                   repliesCount > 0
                       ? InkWell(
                           onTap: () {
-                            // TODO: show sub comments
                             notifier.seeMoreReplies(widget.data);
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: CustomTextWidget(
                               textStyle: TextStyle(color: Theme.of(context).colorScheme.primaryVariant),
-                              textToDisplay: "${notifier.language.see} $repliesCount ${repliesCount > 1 ? notifier.language.replies : notifier.language.reply}...",
+                              textToDisplay: "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply}...",
                             ),
                           ),
                         )
@@ -157,7 +155,6 @@ class _CommentListTileState extends State<CommentListTile> {
               ),
             ),
           ),
-          // TODO: show comment reactions
           widget.data?.comment?.sender == email
               ? Consumer<CommentNotifierV2>(
                   builder: (_, notifier, __) => Align(

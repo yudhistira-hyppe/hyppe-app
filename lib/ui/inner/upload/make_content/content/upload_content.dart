@@ -33,7 +33,7 @@ class UploadContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final brand = SharedPreference().readStorage(SpKeys.brand);
-    return brand != 'OPPO'
+    return brand == 'OPPO'
         ? CameraDevicesPage(
             onCameraNotifierUpdate: (cameraNotifier) => notifier?.cameraDevicesNotifier = cameraNotifier,
             onChangeAppLifecycleState: () => notifier?.cancelVideoRecordingWhenAppIsPausedOrInactive(),

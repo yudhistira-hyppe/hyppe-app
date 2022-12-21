@@ -26,15 +26,18 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
 
   @override
   void initState() {
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    // Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
     _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {
+        notifier.tabIndex = _tabController.index;
         _selectedIndex = _tabController.index;
+        notifier.limit = 20;
+        notifier.onSearchPost(context);
       });
     });
 
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
     super.initState();
   }
 
@@ -84,8 +87,16 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
                                 contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                                 focusNode: notifier.focusNode,
                                 controller: notifier.searchController,
-                                onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-                                onPressedIcon: () => notifier.onSearchPost(context),
+                                onSubmitted: (v) {
+                                  notifier.limit = 5;
+                                  notifier.tabIndex = 0;
+                                  notifier.onSearchPost(context, value: v, isMove: true);
+                                },
+                                onPressedIcon: () {
+                                  notifier.limit = 5;
+                                  notifier.tabIndex = 0;
+                                  notifier.onSearchPost(context, isMove: true);
+                                },
                                 // onTap: () => notifier.moveSearchMore(),
                                 autoFocus: false,
                               ),
