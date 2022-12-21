@@ -260,13 +260,17 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
       }
 
     }catch(e){
-      await ShowBottomSheet().onShowColouredSheet(
-        context,
-        language.userIsNotFound ?? '$e',
-        color: Theme.of(context).colorScheme.error,
-        iconSvg: "${AssetPath.vectorPath}close.svg",
-        sizeIcon: 15,
-      );
+      try{
+        await ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.userIsNotFound ?? '$e',
+          color: Theme.of(context).colorScheme.error,
+          iconSvg: "${AssetPath.vectorPath}close.svg",
+          sizeIcon: 15,
+        );
+      }catch(e){
+        e.logger();
+      }
     }
 
   }

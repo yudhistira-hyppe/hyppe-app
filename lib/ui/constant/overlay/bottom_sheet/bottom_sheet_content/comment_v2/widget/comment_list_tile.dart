@@ -3,7 +3,6 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_content_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
@@ -15,11 +14,9 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
-// import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-// import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
 
@@ -136,9 +133,9 @@ class _CommentListTileState extends State<CommentListTile> {
                               height: 20 * SizeConfig.scaleDiagonal,
                               iconData: "${AssetPath.vectorPath}comment.svg",
                             ),
-                            const CustomTextWidget(
-                              textToDisplay: " Reply",
-                              textStyle: TextStyle(
+                            CustomTextWidget(
+                              textToDisplay: " ${notifier.language.reply}",
+                              textStyle: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: kHyppeBottomNavBarIcon,
                               ),
@@ -163,7 +160,7 @@ class _CommentListTileState extends State<CommentListTile> {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: CustomTextWidget(
                               textStyle: TextStyle(color: Theme.of(context).colorScheme.primaryVariant),
-                              textToDisplay: "See $repliesCount ${repliesCount > 1 ? "replies" : "reply"}...",
+                              textToDisplay: "${notifier.language.see} $repliesCount ${repliesCount > 1 ? notifier.language.replies : notifier.language.reply}...",
                             ),
                           ),
                         )
