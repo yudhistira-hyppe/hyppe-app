@@ -789,6 +789,11 @@ class LocalizationModelV2 {
   String? amountEarned;
   String? usernameisAlreadyinUse;
   String? priceChangesSavedSuccessfully;
+  String? maximumPrice;
+  String? minimumPrice;
+  String? noBankAccount2;
+  String? hideReplies;
+  String? reply2;
 
   LocalizationModelV2({
     this.login,
@@ -1581,6 +1586,11 @@ class LocalizationModelV2 {
     this.amountEarned,
     this.usernameisAlreadyinUse,
     this.priceChangesSavedSuccessfully,
+    this.maximumPrice,
+    this.minimumPrice,
+    this.noBankAccount2,
+    this.hideReplies,
+    this.reply2,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2393,5 +2403,9 @@ class LocalizationModelV2 {
     amountEarned = json["amountEarned"];
     usernameisAlreadyinUse = json["usernameisAlreadyinUse"];
     priceChangesSavedSuccessfully = json["priceChangesSavedSuccessfully"];
+    maximumPrice = json["maximumPrice"];
+    noBankAccount2 = json["noBankAccount2"];
+    hideReplies = json["hideReplies"];
+    reply2 = json["reply2"];
   }
 }

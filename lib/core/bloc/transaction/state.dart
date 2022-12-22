@@ -19,6 +19,8 @@ enum TransactionState {
   summaryWithdrawalError,
   createWithdrawalSuccess,
   createWithdrawalError,
+  checkPandingSuccess,
+  checkPandingError,
 }
 
 class TransactionFetch {

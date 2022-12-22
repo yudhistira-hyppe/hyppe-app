@@ -137,6 +137,7 @@
   "follow": "Follow",
   "comments": "Comments",
   "reply": "Reply",
+  "reply2": "Reply",
   "typeAComment": "Type a comment",
   "send": "Send",
   "see": "See",
@@ -172,7 +173,7 @@
   "registerContentOwnershipExplain1": "Register your content to be fully protected from piracy and duplication (this action cannot be undone)",
   "registerContentOwnershipExplain2": "By registering your content, you are fully responsible for the validity of the content, and are willing to follow any legal process that may occur",
   "protectYourContent": "Protect your content",
-  "processUpload": "Process upload",
+  "processUpload": "Uploading Process",
   "cancelPost": "Cancel Post",
   "createdSuccessfully": "Created Successfully",
   "successfullyAdded": "Successfully Added",
@@ -565,7 +566,7 @@
   "addYourBankAccountForAnEasierWithdraw":"Add your bank account for an easier withdraw",
   "selectBank" : "Select Bank",
   "bankName" : "Bank Name",
-  "noBankAccount" : "No Bank Account",
+  "noBankAccount" : "Bank Account Number",
   "accountOwnerName":"Account Owner Name",
   "keepThisAccount":"Keep This Account?",
   "youWillAdd":"you will add",
@@ -789,5 +790,9 @@
   "reward" : "Reward",
   "amountEarned" : "Amount Earned",
   "usernameisAlreadyinUse" : "Username is already in use!",
-  "priceChangesSavedSuccessfully" : "Price changes saved successfully"
+  "priceChangesSavedSuccessfully" : "Price changes were saved successfully.",
+  "maximumPrice" : "Maximum price is IDR 50,000,000.",
+  "minimumPrice" : "Minimum price is IDR 50,000.",
+  "noBankAccount2" : "No Bank account!",
+  "hideReplies" : "Hide Replies"
 }

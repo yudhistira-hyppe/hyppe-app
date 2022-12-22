@@ -250,10 +250,10 @@ class OwnershipSellingScreen extends StatelessWidget {
                     } else {
                       final harga = num.parse(notifier.priceController.text.replaceAll(',', '').replaceAll('.', ''));
                       if (harga < 50000) {
-                        return ShowBottomSheet().onShowColouredSheet(_, 'Harga minimal Rp. 50.000', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                        return ShowBottomSheet().onShowColouredSheet(_, notifier.language.minimumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
                       }
                       if (harga > 50000000) {
-                        return ShowBottomSheet().onShowColouredSheet(_, 'Harga maximal Rp. 50.000.000', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+                        return ShowBottomSheet().onShowColouredSheet(_, notifier.language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
                       }
                       notifier.submitOwnership();
                     }

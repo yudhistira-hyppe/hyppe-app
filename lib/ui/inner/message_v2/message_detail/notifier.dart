@@ -70,6 +70,11 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
     _eventService.addDiscussHandler(EventKey.messageReceivedKey, this);
     _discussData = argument.discussData;
+    try {
+      discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
+    } catch (e) {
+      '$e'.logger();
+    }
     // getMessageDiscussion(context, reload: true);
   }
 

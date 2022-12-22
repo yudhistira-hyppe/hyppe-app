@@ -39,25 +39,27 @@ class CustomBaseCacheImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return (imageUrl ?? '').isNotEmpty ? CachedNetworkImage(
-      imageUrl: "$imageUrl",
-      httpHeaders: headers,
-      errorWidget: errorWidget,
-      imageBuilder: imageBuilder,
-      memCacheWidth: memCacheWidth,
-      memCacheHeight: memCacheHeight,
-      filterQuality: FilterQuality.none,
-      cacheManager: CustomCacheManager.instance,
-      placeholder: (context, url) =>
-          placeHolderWidget ??
-          UnconstrainedBox(
-            child: Container(
-              alignment: Alignment.center,
-              child: const CustomLoading(),
-              width: widthPlaceHolder * SizeConfig.scaleDiagonal,
-              height: heightPlaceHolder * SizeConfig.scaleDiagonal,
-            ),
-          ),
-    ) : emptyWidget;
+    return (imageUrl ?? '').isNotEmpty
+        ? CachedNetworkImage(
+            imageUrl: "$imageUrl",
+            httpHeaders: headers,
+            errorWidget: errorWidget,
+            imageBuilder: imageBuilder,
+            memCacheWidth: memCacheWidth,
+            memCacheHeight: memCacheHeight,
+            filterQuality: FilterQuality.none,
+            cacheManager: CustomCacheManager.instance,
+            placeholder: (context, url) =>
+                placeHolderWidget ??
+                UnconstrainedBox(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: const CustomLoading(),
+                    width: widthPlaceHolder * SizeConfig.scaleDiagonal,
+                    height: heightPlaceHolder * SizeConfig.scaleDiagonal,
+                  ),
+                ),
+          )
+        : emptyWidget;
   }
 }

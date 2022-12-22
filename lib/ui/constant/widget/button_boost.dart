@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -8,21 +9,31 @@ import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
-class ButtonBoost extends StatelessWidget {
+class ButtonBoost extends StatefulWidget {
   final ContentData? contentData;
   final bool marginBool;
   const ButtonBoost({Key? key, this.contentData, this.marginBool = false}) : super(key: key);
+  @override
+  State<ButtonBoost> createState() => _ButtonBoostState();
+}
 
+class _ButtonBoostState extends State<ButtonBoost> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final _isKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
+    final language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
     return Container(
-      margin: EdgeInsets.all(marginBool ? 0.0 : 16),
+      margin: EdgeInsets.all(widget.marginBool ? 0.0 : 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: _isKyc == VERIFIED ? kHyppePrimary : kHyppeDisabled,
@@ -35,31 +46,58 @@ class ButtonBoost extends StatelessWidget {
           child: InkWell(
             onTap: _isKyc == VERIFIED
                 ? () async {
+                    bool isPanding = false;
+                    setState(() {
+                      isLoading = true;
+                    });
+                    await Provider.of<TransactionNotifier>(context, listen: false).checkTransPanding(context).then((value) {
+                      isPanding = value;
+
+                      setState(() {
+                        isLoading = false;
+                      });
+                    });
+                    if (isPanding) {
+                      await ShowBottomSheet().onShowColouredSheet(
+                        context,
+                        language.otherPostsInProcessOfPayment ?? '',
+                        subCaption: language.thePostisintheProcessofPayment,
+                        subCaptionButton: language.viewPaymentStatus,
+                        color: kHyppeRed,
+                        iconSvg: '${AssetPath.vectorPath}remove.svg',
+                        maxLines: 10,
+                        functionSubCaption: () {
+                          Routing().moveAndPop(Routes.transaction);
+                        },
+                      );
+                      return;
+                    }
+
                     final notifier = Provider.of<PreUploadContentNotifier>(context, listen: false);
-                    notifier.editData = contentData;
+                    notifier.editData = widget.contentData;
                     notifier.isEdit = true;
                     notifier.isUpdate = true;
-                    notifier.captionController.text = contentData?.description ?? "";
-                    notifier.tagsController.text = contentData?.tags?.join(",") ?? '';
-                    notifier.featureType = System().getFeatureTypeV2(contentData?.postType ?? '');
+                    notifier.captionController.text = widget.contentData?.description ?? "";
+                    notifier.tagsController.text = widget.contentData?.tags?.join(",") ?? '';
+                    notifier.featureType = System().getFeatureTypeV2(widget.contentData?.postType ?? '');
 
-                    notifier.thumbNail = contentData?.fullThumbPath;
-                    notifier.allowComment = contentData?.allowComments ?? false;
-                    notifier.certified = contentData?.certified ?? false;
-                    notifier.ownershipEULA = contentData?.certified ?? false;
+                    notifier.thumbNail = widget.contentData?.fullThumbPath;
+                    notifier.allowComment = widget.contentData?.allowComments ?? false;
+                    notifier.certified = widget.contentData?.certified ?? false;
+                    notifier.ownershipEULA = widget.contentData?.certified ?? false;
 
-                    if (contentData?.location != '') {
-                      notifier.locationName = contentData?.location ?? '';
+                    if (widget.contentData?.location != '') {
+                      notifier.locationName = widget.contentData?.location ?? '';
                     } else {
                       notifier.locationName = notifier.language.addLocation ?? '';
                     }
-                    notifier.privacyTitle = contentData?.visibility ?? '';
+                    notifier.privacyTitle = widget.contentData?.visibility ?? '';
 
-                    notifier.privacyValue = contentData?.visibility ?? '';
+                    notifier.privacyValue = widget.contentData?.visibility ?? '';
                     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
 
                     if (_isoCodeCache == 'id') {
-                      switch (contentData?.visibility ?? '') {
+                      switch (widget.contentData?.visibility ?? '') {
                         case 'PUBLIC':
                           notifier.privacyTitle = 'Umum';
                           break;
@@ -72,29 +110,29 @@ class ButtonBoost extends StatelessWidget {
                         default:
                       }
                     } else {
-                      notifier.privacyValue = contentData?.visibility ?? '';
+                      notifier.privacyValue = widget.contentData?.visibility ?? '';
                     }
 
                     notifier.interestData = [];
-                    if (contentData?.cats != null) {
-                      contentData?.cats!.map((val) {
+                    if (widget.contentData?.cats != null) {
+                      widget.contentData?.cats!.map((val) {
                         notifier.interestData.add(val.interestName ?? '');
                       }).toList();
                     }
                     notifier.userTagData = [];
-                    if (contentData?.tagPeople != null) {
-                      contentData?.tagPeople!.map((val) {
+                    if (widget.contentData?.tagPeople != null) {
+                      widget.contentData?.tagPeople!.map((val) {
                         notifier.userTagData.add(val.username ?? '');
                       }).toList();
                     }
                     notifier.userTagDataReal = [];
-                    notifier.userTagDataReal.addAll(contentData?.tagPeople ?? []);
+                    notifier.userTagDataReal.addAll(widget.contentData?.tagPeople ?? []);
 
-                    notifier.toSell = contentData?.saleAmount != null && (contentData?.saleAmount ?? 0) > 0 ? true : false;
-                    notifier.includeTotalViews = contentData?.saleView ?? false;
-                    notifier.includeTotalLikes = contentData?.saleLike ?? false;
-                    notifier.certified = contentData?.certified ?? false;
-                    notifier.priceController.text = contentData?.saleAmount?.toInt().toString() ?? '';
+                    notifier.toSell = widget.contentData?.saleAmount != null && (widget.contentData?.saleAmount ?? 0) > 0 ? true : false;
+                    notifier.includeTotalViews = widget.contentData?.saleView ?? false;
+                    notifier.includeTotalLikes = widget.contentData?.saleLike ?? false;
+                    notifier.certified = widget.contentData?.certified ?? false;
+                    notifier.priceController.text = widget.contentData?.saleAmount?.toInt().toString() ?? '';
 
                     if (globalAudioPlayer != null) {
                       globalAudioPlayer!.pause();
@@ -103,7 +141,7 @@ class ButtonBoost extends StatelessWidget {
                     Routing()
                         .move(
                       Routes.preUploadContent,
-                      argument: UpdateContentsArgument(onEdit: true, contentData: contentData, content: ''),
+                      argument: UpdateContentsArgument(onEdit: true, contentData: widget.contentData, content: ''),
                     )
                         .whenComplete(() {
                       if (globalAudioPlayer != null) {
@@ -114,16 +152,20 @@ class ButtonBoost extends StatelessWidget {
                   }
                 : null,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
               ),
               width: SizeConfig.screenWidth,
-              child: Text(
-                'Boost',
-                style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
-                textAlign: TextAlign.center,
-              ),
+              child: isLoading
+                  ? const CustomLoading(
+                      size: 3,
+                    )
+                  : Text(
+                      'Boost',
+                      style: Theme.of(context).primaryTextTheme.subtitle2?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
             ),
           ),
         ),

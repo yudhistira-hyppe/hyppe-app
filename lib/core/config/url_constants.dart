@@ -474,6 +474,9 @@ class UrlConstants {
   /// post => Get Withdraw Detail
   static const String boostContent = "$transactionRoute/boostcontent";
 
+  /// post => Check Panding
+  static const String pandingTransaction = "$transactionRoute/pending/";
+
   /// get => Get All Bank
   static const String getAllBank = "$bankRoute/all";
 
