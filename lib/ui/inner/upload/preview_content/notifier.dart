@@ -897,7 +897,7 @@ class PreviewContentNotifier with ChangeNotifier {
       _selectedMusic = null;
       _currentMusic = null;
       _selectedType = null;
-      notifyListeners();
+      // notifyListeners();
       final _isImage = (_defaultPath ?? '').isImageFormat();
       if(!_isImage){
         _defaultPath = _url;

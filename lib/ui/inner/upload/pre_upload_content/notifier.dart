@@ -783,7 +783,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void clearUpAndBackToHome(BuildContext context) {
     context.read<PreviewContentNotifier>().clearAdditionalItem();
 
-    context.read<CameraNotifier>().disposeCamera(context);
+    // context.read<CameraNotifier>().disposeCamera(context);
     context.read<PreviewContentNotifier>().isForcePaused = false;
     // Routing().move(Routes.lobby);
     if (_boostContent != null) _onExit();

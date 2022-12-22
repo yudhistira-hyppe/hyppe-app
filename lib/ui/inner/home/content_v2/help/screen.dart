@@ -168,6 +168,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                           CustomTextButton(
                             onPressed: () {
                               // notifier.navigateToBankAccount();
+                              Routing().moveAndPop(Routes.supportTicket);
                             },
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                             child: CustomTextWidget(
