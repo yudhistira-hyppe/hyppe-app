@@ -84,14 +84,6 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  GestureDetector(
-                    onTap: () => Routing().moveBack(),
-                    child: Text(
-                      notifier.language.cancel ?? 'cancel',
-                      style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   CustomElevatedButton(
                     width: SizeConfig.screenWidth,
                     height: 44.0 * SizeConfig.scaleDiagonal,
@@ -105,6 +97,14 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                       shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                       overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                       backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: () => Routing().moveBack(),
+                    child: Text(
+                      notifier.language.cancel ?? 'cancel',
+                      style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                     ),
                   ),
                   const SizedBox(height: 16),

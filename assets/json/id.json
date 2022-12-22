@@ -172,7 +172,7 @@
   "registerContentOwnershipExplain1": "Daftarkan konten Anda agar sepenuhnya terlindungi dari pembajakan dan duplikasi (tindakan ini tidak dapat dibatalkan)",
   "registerContentOwnershipExplain2": "Dengan mendaftarkan konten Anda, Anda bertanggung jawab penuh atas validitas konten, dan bersedia mengikuti segala proses hukum yang mungkin terjadi",
   "protectYourContent": "Lindungi konten Anda",
-  "processUpload": "Proses diunggah",
+  "processUpload": "Proses Mengunggah",
   "cancelPost": "Batalkan kirim",
   "createdSuccessfully": "Berhasil dibuat",
   "successfullyAdded": "Berhasil ditambah",
@@ -789,5 +789,6 @@
   "reward" : "Hadiah",
   "amountEarned" : "Jumlah yang Didapatkan",
   "usernameisAlreadyinUse" : "Nama pengguna sudah ada!",
-  "priceChangesSavedSuccessfully" : "Perubahan harga berhasil disimpan"
+  "priceChangesSavedSuccessfully" : "Perubahan harga berhasil disimpan",
+  "localeDatetime": "id"
 }

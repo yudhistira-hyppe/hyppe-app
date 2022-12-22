@@ -83,13 +83,6 @@ class _CommentListTileState extends State<CommentListTile> {
                     ),
                   ),
                   SizedBox(height: 6 * SizeConfig.scaleDiagonal),
-                  // CustomTextWidget(
-                  //   textToDisplay: comment?.txtMessages ?? '',
-                  //   textAlign: TextAlign.start,
-                  //   maxLines: null,
-                  //   textOverflow: TextOverflow.visible,
-                  //   textStyle: Theme.of(context).textTheme.bodyText2,
-                  // ),
                   CustomDescContent(
                       desc: comment?.txtMessages ?? '',
                       trimLines: 5,

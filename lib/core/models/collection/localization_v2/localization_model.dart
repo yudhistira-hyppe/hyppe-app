@@ -789,6 +789,7 @@ class LocalizationModelV2 {
   String? amountEarned;
   String? usernameisAlreadyinUse;
   String? priceChangesSavedSuccessfully;
+  String? localeDatetime;
 
   LocalizationModelV2({
     this.login,
@@ -1581,6 +1582,7 @@ class LocalizationModelV2 {
     this.amountEarned,
     this.usernameisAlreadyinUse,
     this.priceChangesSavedSuccessfully,
+    this.localeDatetime
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2393,5 +2395,6 @@ class LocalizationModelV2 {
     amountEarned = json["amountEarned"];
     usernameisAlreadyinUse = json["usernameisAlreadyinUse"];
     priceChangesSavedSuccessfully = json["priceChangesSavedSuccessfully"];
+    localeDatetime = json['localeDatetime'];
   }
 }

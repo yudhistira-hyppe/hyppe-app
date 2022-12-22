@@ -1,30 +1,52 @@
  ### Terms Of Use
 
 **Welcome to Hyppe!**
+
 This application is provided and controlled by PT. Hyppe Technology Indonesia with registered address at Sona Topas Tower, Jl. Jend. Sudirman No.Kav. 26, RT.4/RW.2, Kuningan, Karet Kuningan, Kecamatan Setiabudi, South Jakarta City, Special Capital Region Of Jakarta 1292
+
+
 
 We are committed to protect and respect your privacy. This policy describes our practice related to personal data that we collected from you, or that you provide to us. If you do not agree with this policy, you are not allowed to use the Application.
 
+
+
 If You have any questions about how we use your personal data, please contact us at **https://www.hyppe.id**
 
+
+
 **SUMMARY**
+
+
+
 **What information do we collect about You?**
 We collect and process the information you provide to us when you create an account and upload content to the Application. This includes technical and behavioral information about your use of the Application. We also collect information about you if you download the application and interact with the application without creating an account (guest user).
+
+
 
 **How will we use information about You?**
 We use your information to provide the Application to you and to improve and manage it. We use your information to, among other things, display suggestions in the 'For You' feed, improve and develop the Application, and ensure your security. Where appropriate, we will also use your personal information to serve targeted advertisements and to promote the Application.
 
+
+
 **To whom do we share your information?**
 We share your data with third-party service providers that help us provide the Application, such as data storage providers. We also share your information with business partners, other companies in the same group as Hyppe, content moderation services, measurement providers, advertisers and analytics providers. If and when required by law, we will share your information with law enforcement or regulatory agencies, and with third parties in accordance with legally binding court orders.
+
+
 
 **How long do we keep your information?**
 We retain your information for as long as necessary to provide you with services. Where we do not need your information to provide services to you, we only retain it for as long as we have a legitimate business purpose in storing the data or if we are subject to a legal obligation to retain the data. We will also retain your data if we believe it or will be necessary for the establishment, implementation or defense of a legal claim.
 
+
+
 **How will we notify you of any changes to this Privacy Policy?**
 We will generally notify all users of any important changes to this policy through a notification on our Application. However, you should check this policy regularly to check for any changes. We will also update the “Last Updated” date at the top of this policy, which is the effective date of the policy. By accessing or using the Application, you represent that you have read this policy and that you understand your rights with respect to your personal data and how we collect, use and process it.
 
+
+
 **How is the process of Monetization in the Application?**
 Monetization can be used by those of you who have registered and uploaded an ID Card, and are connected to a Premium Dana Account. All forms of transactions in the Application can be done by registering Content Ownership first. The content that is traded will change ownership of the content. This policy has been regulated in the provisions that have been regulated by PT. Hyppe Technology Indonesia. If you have questions about Monetization, please contact us at **https://www.hyppe.id**
+
+
 
 **What are features that You can access?**
 We explain that our application has several features that can be accessed when you have registered as a user by entering your personal data
@@ -50,117 +72,128 @@ To get a better experience you can register on the Registration page.
 
 ***********************************************************************************************
 
+
+
 **1.  Types of personal data we use**
 
+
+
 We collect and use the following information about you:
+
+
 
 - **Your Profile Information**
 You provide us with information when you register with Hyppe, including your username, password, date of birth (if applicable), email address and/or phone number, information you disclose in your user profile, and your profile photo or video.
 
+
+
 - **User Content and Behavioral Information**
 We process the content you generate and view on Hyppe, including the preferences you set (such as language choice) , the photos, audio and videos you upload or make, and the comments you make (“User Content”). If you add effects to your User Content, we may collect versions of your User Content that do not include the effects. We may collect information about images and audio that are part of your User Content, such as identifying the objects and sights that appear, their presence and location in images of facial and body features and attributes, the nature of the audio, and the text of the words spoken in your User Content. We may collect this information to enable special video effects, for content moderation, for demographic classification, for content and advertising recommendations, and for other non-identifying operations. We may access content, including text, images and videos, found on your device's clipboard, with your permission. For example, if you choose to start sharing content with a third party platform, or choose to paste content from the clipboard into the Application, we access the information stored on the clipboard to fulfill your request. We collect information through surveys, challenges and competitions that you enter. We also collect information about your use of the Application, for example, how you engage with the Application, including how you interact with the content we show you, the advertisements you see, the videos you watch and issues encountered, the content you like, content that you save to 'My Playlists', the users you follow, and how you engage with your followers. We also conclude your preferences, including your interests, gender and age for content customization purposes. We process information about your followers, the number of likes you receive, and responses to the content you upload, for the purpose of promoting your content to other users and finding out if your profile provides further opportunities for collaboration. When appropriate, we will also use this information for the purpose of serving customized advertisements and to inform you of new services and other opportunities.
+
+
 
 - **Technical information we collect about You**
 We collect certain information about the device you use to access the Application, such as your IP address, user agent, mobile operator, time zone setting, identifier for advertising purposes, your device model, device system, network type, device ID, screen resolution and system your operation, the name and type of applications and files, pattern or rhythm of keystrokes, battery status, audio settings, and connected audio devices. When you sign in from multiple devices, we will be able to use your profile information to identify your activity across multiple devices. We may also associate you with information collected from devices other than the one you use to log into the Application.
 
+
+
 - **Location**
 We collect information about your approximate location, including location information based on your SIM card and/or IP address. With your permission, we may also collect precise location data (such as GPS).
+
+
 
 - **In-App Transactions**
 Your transactions will be made through your Premium Dana Account and Hyppe Balance accounts. We will collect any financial or billing information from you in connection with the transaction. We will monitor all transactions in the application and we will collect related data. Balance withdrawals can be made using a third party, in this case Dana, where the limit and use is in accordance with the terms and conditions applicable by Dana. Provisions regarding Hyppe Balance are regulated for use in accordance with the terms of the application, where Hyppe Balance users can save and withdraw balances in the application and synchronize them to Premium Dana Account. In-app transactions include the use of vouchers used to promote your ads and also include your income when watching the ads. The revenue through the ads you watch will go into your Hyppe Balance, we will also monitor and store this data in our database.
 
+
+
 - **Proof of your identity or age**
 We ask you to provide proof of identity or proof of age to use certain features, such as a verified account, and when you want to make transactions within the application, to ensure that you are of legal age to use the Application, or in other cases when verification may be required.
+
+
 
 - **Premium User**
 We will use the data that you input as a premium user, including the name of the organization or company, address and other data. By using a premium account you can enjoy more features of Hyppe, such as being able to place ads to increase the impression of your account or goods or company. With this, the data from Ads that you have created and will create will enter our database and we can store and use it according to the needs and conditions of the Hyppe company.
 
+
+
 **2.  How we use your personal data**
 
 We will use the information we collect about you in the following ways:
-
 -   Notify you of changes to our services
-
--   ️ Provide user support for you
-    
--   ️ Customize the content you receive and provide specific content that will interest you
-    
--   ️ Allows you to share User Content and interact with other users
-    
--   ️ Allow our messaging service to function if you choose to use this functionality
-    
--    communicate with you
-
--   ️ To help us detect and fight abuse, malicious acts, fraud, spam and illegal activity on the App;
-    
--   ️Make it easy for you to make transactions within the Application;
-    
--   ️Allows you to earn and withdraw revenue within the Application;
-    
--   ️Ensuring you are protected for content ownership;
-    
--   ️Perform data analysis and test the Application to ensure its stability and security;
-    
--   ️Ensure your safety and security, including reviewing user content and related metadata for violations of our Community Guidelines and other inappropriate content;
-    
--   ️Ensure content is presented in the most effective way for you and your device;
-    
--   ️Improve, promote and develop the App and promote popular topics, hashtags and campaigns on the App;
-    
+-   Provide user support for you
+-   Customize the content you receive and provide specific content that will interest you
+-   Allows you to share User Content and interact with other users
+-   Allow our messaging service to function if you choose to use this functionality
+-   Communicate with you
+-   To help us detect and fight abuse, malicious acts, fraud, spam and illegal activity on the App;
+-   Make it easy for you to make transactions within the Application;
+-   Allows you to earn and withdraw revenue within the Application; 
+-   Ensuring you are protected for content ownership;
+-   Perform data analysis and test the Application to ensure its stability and security; 
+-   Ensure your safety and security, including reviewing user content and related metadata for violations of our Community Guidelines and other inappropriate content;
+-   Ensure content is presented in the most effective way for you and your device;
+-   Improve, promote and develop the App and promote popular topics, hashtags and campaigns on the App;
 -   Perform data analysis and test the Application to ensure its stability and security;
-    
--   ️Allows you to participate in interactive features on the Application;
-    
--   ️To allow you to socialize on the App;
-    
--   ️To ensure that you are of legal age to use our Applications (as required by law).
-    
--   ️Provide customized advertising for you;
-    
--   ️Provide location-based services to you (when such services are available in your jurisdiction);
-    
--   ️To tell our algorithm
-    
--   ️Enforce our terms, conditions and policies;
-    
--   ️Manage the Application, including troubleshooting; and
-    
+-   Allows you to participate in interactive features on the Application;
+-   To allow you to socialize on the App;
+-   To ensure that you are of legal age to use our Applications (as required by law).
+-   Provide customized advertising for you;
+-   Provide location-based services to you (when such services are available in your jurisdiction);
+-   To tell our algorithm
+-   Enforce our terms, conditions and policies;
+-   Manage the Application, including troubleshooting; and
 -   To facilitate the sale, promotion and purchase of goods and services and to provide user support.
-    
+
+
+   
 **3.  How we share your personal data**
 
+
+
 We share your data with the following third parties:
+
+
 
 **Business partner**
 When you choose to share content on a social media App, the video, username and accompanying text will be shared through that platform or, if shared via an instant messaging platform such as Whatsapp, a link of the content will be shared.
 
+
+
 **Payment Provider**
 If you choose to charge or make other payments related to a transaction using Premium Dana Account or Hyppe Balance, we will share data with the relevant payment provider to facilitate this transaction. For Hyppe Balance transactions, we share a transaction ID to allow us to identify you and provide the correct amount of Balance to your account after you make a transaction.
+
+
 
 **Service Provider**
 We provide information and content to service providers that support our business, the Application is a safe and fun place and service providers who help us market the Application.
 
+
+
 **Analytical provider**
 We use analytics providers to help us in the optimization and improvement of the Application. Our third-party analytics providers also help us serve targeted advertisements.
+
+
 
 **Advertisers and Advertising Networks**
 We share information with advertisers and third party companies to indicate the number and users of the App who have viewed or clicked on the ads. We share your device ID with the assessment company so that we can link your activity on the App with your activity on other websites; we then use this information to show you advertisements that may be of interest to you.
 
-**Our Company Group**
 
+
+**Our Company Group**
 We may also share your information with other members, subsidiaries or affiliates of our group of companies, to provide the Application, including improving and optimizing the Application, preventing unauthorized use, and supporting users.
+
+
 
 **Law enforcement**
 We will share your information with law enforcement agencies, public authorities or other organizations where legally required to do so, or if such use is reasonably necessary to:
+- comply with legal obligations, processes or requests; 
+- enforce our Terms of Service and other agreements, policies and standards, including investigating any potential violations therein; 
+- detect, prevent, or address security, fraud, or technical issues; or
+- protect the rights, property or safety of us, our users, third parties, or the public as required or permitted by law (including exchanging information with other companies and organizations for purposes of fraud protection and credit risk reduction).
 
--   comply with legal obligations, processes or requests;
-    
--   enforce our Terms of Service and other agreements, policies and standards, including investigating any potential violations therein;
-    
--   detect, prevent, or address security, fraud, or technical issues; or
-    
--   protect the rights, property or safety of us, our users, third parties, or the public as required or permitted by law (including exchanging information with other companies and organizations for purposes of fraud protection and credit risk reduction).
-- 
+
+
 **Public Profile**
 Keep in mind that if your profile is public, your content will be visible to anyone on the App and can also be accessed or shared by friends or followers as well as by third parties, such as search engines, content aggregators and news sites. You can change who can see content each time you upload content. In addition, you can change your profile to the default private profile by changing your setting to 'Personal Account' in the “Manage My Account” settings.
 
@@ -171,11 +204,17 @@ If we sell or buy any business or assets (whether as a result of liquidation, ba
 
 if we sell, buy, merge, acquire, or partner with another company or business, or sell some or all of our assets. In such transactions, user information may be included in the transferred assets.
 
+
+
 **4.  Where we store your personal data**
 The personal data we collect from you may be stored on servers located in India and Indonesia, outside the country in which you reside. We maintain main servers in several places in the world to bring our services to you globally and continuously.
 
+
+
 **5.  Your choice**
 You can access and edit most of your profile information by logging into Hyppe. You may delete content that you have uploaded. We also provide several tools in Settings that allow you to control, among other things, who can view your photos and videos, send you messages, or post comments on your photos or videos. If you choose to do so, you can delete the entire account in Settings. You will also get rights according to your country under applicable laws, such as the ability to access your data, delete your data, and possibly other things. If you have questions about how to use these tools, or want to know about any rights you have based on the country you live in and want to use them, please contact us at **https://www.hyppe.id**
+
+
 
 **6.  Security of your personal data**
 We take steps to ensure your information is handled securely and in accordance with this policy. Unfortunately, the transfer of information over the internet is not completely secure. Although we will protect your personal data, for example by encryption, we cannot guarantee the security of your information transmitted through the Application; so the risk of any transmission is borne by you alone.
@@ -190,33 +229,38 @@ We reserve the right to deactivate your account at any time, including if the Us
 
 If the User wants to stop using the Hyppe Service, and wants your account to be deleted, we can help you. Contact us via **https://www.hyppe.id** , and we will assist you further and guide you in the process of deleting a User account. If the User chooses to delete the account then the User will not be able to reactivate the account or get back the content and proceeds from the sale of any content or information that you have added.
 
+
+
 From time to time, we will include links to and from the websites of our network of partners, advertisers and affiliates. If you follow a link to this website, please note that these websites have their own privacy policies, and we are not responsible or liable for these policies. Please refer to this policy before providing any information to this website.
+
+
 
 **7.  How long do we keep your personal data**
 We retain your information for as long as necessary to provide you with services. If we do not need your information to provide services to you, we only retain it for as long as we have a legitimate business purpose in storing the data. However, there may be times when we may retain this data for longer in accordance with our legal obligations, or where necessary to file, enforce or defend a lawsuit.
 
 Once you stop using our Application, we store your information in an aggregated and anonymous form.
 
+
+
 **8.  Information regarding children**
 Hyppe is not intended for children under 15 years of age. In some cases, this age limit may be higher due to local regulatory requirements, see your local privacy policy for more information. If you believe we have or collect personal data belonging to a minor, please contact us at: [https://www.hyppe.id](https://translate.google.com/translate?hl=id&prev=_t&sl=id&tl=en&u=https://www.hyppe.id
 
-9.  Complaint
-    
 
+
+**9.  Complaint**
 If you have a complaint about how we process your personal data, please contact us immediately at: [https://www.hyppe.id](https://translate.google.com/translate?hl=id&prev=_t&sl=id&tl=en&u=https://www.hyppe.id) We will endeavor to address your request as soon as possible. This is done without prejudice to your right to file a claim with the relevant data protection authority.
 
-10.  Change
-    
 
+
+**10.  Change**
 We may update this Privacy Policy from time to time. When we update that Privacy Policy, we will notify you by updating the “Last Updated” date at the top of this policy and posting the new Privacy Policy and providing any other notices required by applicable law. By continuing to access or use the Application after the date of the updated policy, you represent your acceptance of the updated policy. If you do not agree to the updated policy, you must stop accessing or using the Application.
 
-11.  Contact
-    
 
+
+**11.  Contact**
 If you have any questions, comments or requests regarding this policy, please contact us at [https://www.hyppe.id](https://translate.google.com/translate?hl=id&prev=_t&sl=id&tl=en&u=https://www.hyppe.id)
 
-Additional Terms – Specific Jurisdictions
-
+**Additional Terms – Specific Jurisdictions**
 In the event of any discrepancy between the provisions of the Additional Terms – Specific Jurisdiction relating to the jurisdiction in which you are accessing or using the service, and any other part of this policy, the provisions of the relevant Additional Terms – Jurisdiction Specific will supersede and apply.
 
 Indonesia
@@ -227,15 +271,21 @@ You can ask Hyppe to disclose the history of the personal data we have collected
 
 To exercise all your rights, contact us at: **https://www.hyppe.id**
 
+
+
 **Announcement**
 In the event of a personal data breach, we will notify you and provide you with information regarding the personal data breach.
+
+
 
 **Data storage**
 We retain your information for as long as necessary to provide you with services. Where we do not need your information to provide services to you, we only retain it for as long as we have a legitimate business purpose in storing the data. However, there may be times when we may retain this data for five (5) years (or longer if necessary) pursuant to our legal obligations or where necessary to file, enforce or defend a lawsuit.
 
 After you discontinue use of our Application and the retention period of five (5) years has elapsed, we store your information in an aggregated and anonymous form. Non-identifying information may be stored indefinitely for analytical purposes.
 
-### HYPPE LAW ENFORCEMENT GUIDELINES
+**HYPPE LAW ENFORCEMENT GUIDELINES**
+
+
 
 Terms of Service
 Last updated: September 2021
@@ -272,7 +322,7 @@ You agree that you are solely responsible (to us and others) for the activities 
 
 We reserve the right to deactivate your user account at any time, including if you do not comply with any provision of these Terms, or if any activity is performed on your account which, in our sole discretion, will or may cause damage to or impair the Service or violate the rights of any third party, or violate any applicable laws and regulations.
 
-If you wish to stop using our Services, and wish to have your account deleted, we can assist you. Contact us via **https://www.hyppe.id** and we will assist you further and guide you in the process of deleting your account. If you choose to delete your account, you will not be able to reactivate the account or retrieve any content or information that you have added.
+If you wish to stop using our Services, and wish to have your account deleted, we can assist you. Contact us via **+6221 2506691** or **https://www.hyppe.id** and we will assist you further and guide you in the process of deleting your account. If you choose to delete your account, you will not be able to reactivate the account or retrieve any content or information that you have added.
 
 **5. Your Access to and Use of our Services**
 Your access to and use of our Services is subject to these Terms and all applicable laws and regulations. You may not:
@@ -443,11 +493,11 @@ If a court of law, having jurisdiction to issue an award on this matter, decides
 
 <b>I. Any questions?</b> Please contact us at **https://www.hyppe.id**
 
-### 12. App Store Additional Terms
+**12. App Store Additional Terms**
 
 To the extent permitted by applicable law, the following additional terms apply when accessing the platform via certain devices:
 
-#### _Notice regarding Apple._
+_**Notice regarding Apple.**_
 
 -   These terms are between you and Hyppe; Apple is not a party to these terms.
     
@@ -467,29 +517,29 @@ To the extent permitted by applicable law, the following additional terms apply 
     
 -   Hyppe expressly authorizes the use of the platform by some users through _family sharing_ or other similar functions provided by Apple.
     
-#### _Windows phone store._
+_**Windows phone store.**_
 
-By downloading the platform from the Windows Phone Store (or its successor) run by Microsoft, Inc. Or its affiliates, you specifically acknowledge and agree that:
+By downloading _the platform_ from _the Windows Phone Store_ (or its successor) run by Microsoft, Inc. Or its affiliates, you specifically acknowledge and agree that:
 
 -   You are entitled to install and use one copy of the platform for up to five (5) Windows Phone enabled devices , which are affiliated with the Microsoft account that you use to access the _Windows Phone Store_. Apart from that, we reserve the right to impose additional conditions or impose additional fees.
     
 -   You acknowledge that Microsoft Corporation, your telephone device manufacturer and your network operator have no obligation whatsoever to provide any maintenance and support services in connection with the _Platform_.
     
 
-#### _Amazon app store._
+_**Amazon app store.**_
 
-By downloading the platform from the amazon appstore (or its successors) run by amazon digital services , inc. or its affiliates (“ **amazon** ”), you specifically acknowledge and agree that:
+By downloading _the platform_ from _the amazon appstore_ (or its successors) run by amazon digital services , inc. or its affiliates (“ **amazon** ”), you specifically acknowledge and agree that:
 
--   In the event of any discrepancy between (a) the amazon appstore terms of use or any other terms designated by amazon as standard end user license terms for amazon appstore (“ **_amazon appstore eula terms_** ”), and (b) the terms and other provisions in these terms, then the amazon appstore eula terms will apply in relation to your use of the platform that you download from the amazon appstore , and
+-   In the event of any discrepancy between (a) _the amazon appstore terms of use_ or any other terms designated by amazon as standard end user license terms for amazon appstore (“ **_amazon appstore eula terms_** ”), and (b) the terms and other provisions in these terms, then the amazon appstore eula terms will apply in relation to your use of the platform that you download from the amazon appstore , and
     
 -   Amazon has no responsibility or liability whatsoever with respect to the compliance or non-compliance with Hyppe or you (or any other user) of these terms or the _amazon appstore eula terms._
     
 
-#### _Google play._
+_**Google play.**_
 
-By downloading the platform from Google Play (or its successors) run by Google, Inc. Or one of its affiliates (“ **google** ”), you specifically acknowledge and agree that:
+By downloading _the platform_ from _Google Play_ (or its successors) run by Google, Inc. Or one of its affiliates (“ **google** ”), you specifically acknowledge and agree that:
 
--   In the event of a discrepancy between (a) the google play terms of services and google play business and program policies or other provisions determined by google as standard end user license terms for google play (" collectively, the " **google play terms** " ”), and (b) other terms and conditions in these terms, the google play terms which will apply in relation to your use of the platform you download from google play , and
+-   In the event of a discrepancy between (a) _the google play terms of services_ and _google play business and program policies_ or other provisions determined by google as standard end user license terms for _google play_ (" collectively, the " **google play terms** " ”), and (b) other terms and conditions in these terms, the google play terms which will apply in relation to your use of the platform you download from _google play_ , and
     
 
-You hereby acknowledge that google has no responsibility or liability whatsoever with respect to the compliance or non-compliance with Hyppe or you (or any other user) of these terms or the terms of _google play_.
+-   You hereby acknowledge that google has no responsibility or liability whatsoever with respect to the compliance or non-compliance with Hyppe or you (or any other user) of these terms or the terms of _google play_.
