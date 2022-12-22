@@ -13,12 +13,14 @@ class CustomDescContent extends StatefulWidget {
   final int trimLines;
   final int trimLength;
   final TextAlign? textAlign;
-  TextStyle? hrefStyle;
-  TextStyle? normStyle;
-  TextStyle? expandStyle;
-  String? seeMore;
-  String? seeLess;
-  String? delimiter;
+  final TextOverflow? textOverflow;
+  final TextStyle? hrefStyle;
+  final TextStyle? normStyle;
+  final TextStyle? expandStyle;
+  final String? seeMore;
+  final String? seeLess;
+  final String? delimiter;
+
 
   final Function(bool val)? callback;
 
@@ -34,6 +36,7 @@ class CustomDescContent extends StatefulWidget {
     this.expandStyle,
     this.seeMore,
     this.seeLess,
+    this.textOverflow,
     this.delimiter = '\u2026 '}) : super(key: key);
 
   @override
@@ -158,7 +161,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
             textAlign: textAlign,
             textDirection: textDirection,
             softWrap: true,
-            overflow: TextOverflow.clip,
+            overflow: widget.textOverflow ?? TextOverflow.clip,
             textScaleFactor: textScaleFactor,
           );
         }else{
@@ -171,7 +174,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
             textAlign: textAlign,
             textDirection: textDirection,
             softWrap: true,
-            overflow: TextOverflow.clip,
+            overflow: widget.textOverflow ?? TextOverflow.clip,
             textScaleFactor: textScaleFactor,
           );
         }
@@ -229,7 +232,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
       }
     }
-    descItems.add(ItemDesc(desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''), type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
+    if(widget.seeMore != null && widget.seeLess != null){
+      descItems.add(ItemDesc(desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''), type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
+    }
+
     for(var check in descItems){
       print('check descItems ${check.desc}');
     }

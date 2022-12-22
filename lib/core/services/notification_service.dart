@@ -151,7 +151,15 @@ class NotificationService {
 
   // show notification
 
-  Future showNotification(RemoteMessage message, {MessageDataV2? data}) async {
+  Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif}) async {
+    if(idNotif != null){
+      try{
+        flutterLocalNotificationsPlugin.cancel(0, tag: idNotif);
+      }catch(e){
+        'Error Get rid the notification $e'.logger();
+      }
+
+    }
     print('notif message ${message.notification?.body}');
     String? deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
 
@@ -169,17 +177,13 @@ class NotificationService {
       }else{
         final Map<String, dynamic> jsonNotif = json.decode(message.notification?.body ?? "{}");
         final data = NotificationBody.fromJson(jsonNotif);
-        if (deviceID != null) {
-          if (message.notification != null) {
-            await flutterLocalNotificationsPlugin.show(
-              message.hashCode,
-              message.notification?.title ?? '',
-              data.message ?? message.notification?.body,
-              platformChannelSpecifics,
-              payload: message.notification?.body ?? "{}",
-            );
-          }
-        }
+        await flutterLocalNotificationsPlugin.show(
+          message.hashCode,
+          message.notification?.title ?? '',
+          data.message ?? message.notification?.body,
+          platformChannelSpecifics,
+          payload: message.notification?.body ?? "{}",
+        );
       }
     }catch(e){
       if (deviceID != null) {
