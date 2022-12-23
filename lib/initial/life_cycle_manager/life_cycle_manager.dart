@@ -101,16 +101,16 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         try {
           await activity.activityAwake(context);
           final fetch = activity.deviceFetch;
-          if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
-            print('ini device activity ${fetch.data}');
-            await getDevice();
-
-            if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
-              SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
-            } else {
-              SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
-            }
-          }
+          // if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
+          //   print('ini device activity ${fetch.data}');
+          //   await getDevice();
+          //
+          //   if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
+          //     SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+          //   } else {
+          //     SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+          //   }
+          // }
 
           final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
           if (isOnHomeScreen) {
