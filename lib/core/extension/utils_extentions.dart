@@ -10,7 +10,7 @@ import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
 
-extension contextScreen on BuildContext{
+extension ContextScreen on BuildContext{
   double getWidth(){
     return MediaQuery.of(this).size.width;
   }

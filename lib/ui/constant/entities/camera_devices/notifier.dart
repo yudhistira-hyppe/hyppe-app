@@ -5,11 +5,8 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:camera/camera.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
-import 'package:provider/provider.dart';
 
 class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
   static final _system = System();

@@ -7,10 +7,8 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
-import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/report/report.dart';
-import 'package:hyppe/core/models/collection/report/report_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -20,7 +18,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart'
 import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -281,7 +278,6 @@ class ReportNotifier with ChangeNotifier {
         '';
         break;
     }
-    // _inPosition = contentPosition.home;
     _type = '';
 
     notifyListeners();
@@ -295,65 +291,4 @@ class ReportNotifier with ChangeNotifier {
       return id;
     }
   }
-
-  // void onClickButton(context) async {
-  //   if (remarkID.isNotEmpty) {
-  //     isLoading = true;
-  //     final notifier = ReportBloc();
-  //     // final notifier2 = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-  //     // ignore: missing_enum_constant_in_switch
-  //     switch (reportType) {
-  //       case ReportType.post:
-  //         {
-  //           await notifier.reports(
-  //             context,
-  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID']),
-  //             reportType: ReportType.post,
-  //           );
-  //           print("REPORT POST");
-  //         }
-  //         break;
-  //       case ReportType.comment:
-  //         {
-  //           await notifier.reports(
-  //             context,
-  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], postID: data!['postID'], commentID: data!['commentID']),
-  //             reportType: ReportType.comment,
-  //           );
-  //           print("REPORT COMMENT");
-  //         }
-  //         break;
-  //       case ReportType.profile:
-  //         {
-  //           await notifier.reports(
-  //             context,
-  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], ruserID: data!['ruserID'], reportType: data!['reportType']),
-  //             reportType: ReportType.profile,
-  //           );
-  //           print("REPORT PROFILE");
-  //         }
-  //         break;
-  //       case ReportType.story:
-  //         {
-  //           await notifier.reports(
-  //             context,
-  //             data: ReportData(langID: 'en', remarkID: remarkID, userID: data!['userID'], storyID: data!['storyID']),
-  //             reportType: ReportType.story,
-  //           );
-  //           print("REPORT STORY");
-  //         }
-  //         break;
-  //     }
-  //     final fetch = notifier.reportFetch;
-  //     isLoading = false;
-  //     if (fetch.reportState == ReportState.reportsSuccess) {
-  //       print('Success Reporting');
-  //       // notifier2.forceStop = false;
-  //       Routing().moveBack();
-  //       Routing().moveBack();
-  //     }
-  //   } else {
-  //     print('No remark selected');
-  //   }
-  // }
 }

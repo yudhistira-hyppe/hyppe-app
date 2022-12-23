@@ -14,9 +14,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 

@@ -12,7 +12,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/view_content.dart'
 import 'package:hyppe/core/models/collection/utils/reaction/post_reaction.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-// import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -87,26 +86,9 @@ class LikeNotifier with ChangeNotifier {
     print(postData.isLiked);
 
     try {
-      // System().actionReqiredIdCard(
-      //   context,
-      //   uploadContentAction: false,
-      //   action: () async {
 
-      // if (postData.email == SharedPreference().readStorage(SpKeys.email)) {
-      //   // Prevent user from liking his own post
-      //   return;
-      // }
       print('rijal ${postData.isLiked}');
 
-      // if (!(postData.insight?.isPostLiked ?? false)) {
-      //   postData.insight?.isPostLiked =
-      //       !(postData.insight?.isPostLiked ?? false);
-      //       print(('rijals ${postData.insight?.isPostLiked}'));
-      //   if (postData.insight?.isPostLiked ?? false) {
-      //     postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-      //   }
-      //   notifyListeners();
-      // }
 
       if (postData.isLiked == true) {
         //unlike
@@ -118,17 +100,6 @@ class LikeNotifier with ChangeNotifier {
         notifyListeners();
 
         await notifier.likePostUserBloc(context, postId: postData.postID ?? '', emailOwner: postData.email ?? '', isLike: postData.isLiked ?? false);
-        // final fetch = notifier.likeFetch;
-        // notifyListeners();
-
-        // if (fetch.likeState == LikeState.likeUserPostSuccess) {
-        //   "Like post success".logger();
-
-        //   if (postData.isLiked == false) {
-        //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
-        //   }
-        //   notifyListeners();
-        // }
       } else if (postData.isLiked == false) {
         //like
         postData.isLiked = true;
@@ -137,41 +108,9 @@ class LikeNotifier with ChangeNotifier {
 
         notifyListeners();
 
-        // print('ini false ${postData.isLiked}');
         await notifier.likePostUserBloc(context, postId: postData.postID ?? '', emailOwner: postData.email ?? '', isLike: postData.isLiked ?? false);
-        // print('ini false');
-        // final fetch = notifier.likeFetch;
 
-        // notifyListeners();
-        // if (fetch.likeState == LikeState.likeUserPostSuccess) {
-        //   "Like post success".logger();
-
-        //   if (postData.isLiked == true) {
-        //     postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-        //   }
-        //   notifyListeners();
-        // }
       }
-
-      // TODO: Future implementation
-      // postData.insight?.isPostLiked = !(postData.insight?.isPostLiked ?? false);
-      // if (postData.insight?.isPostLiked ?? false) {
-      //   postData.insight?.likes = (postData.insight?.likes ?? 0) + 1;
-      // } else {
-      //   if ((postData.insight?.likes ?? 0) > 0) {
-      //     postData.insight?.likes = (postData.insight?.likes ?? 0) - 1;
-      //   }
-      // }
-
-      // await notifier.likePostUserBloc(context, postId: postData.postID, emailOwner: postData.email, isLike: postData.isLiked);
-      // final fetch = notifier.likeFetch;
-      // if (fetch.likeState == LikeState.likeUserPostSuccess) {
-      //   "Like post success".logger();
-      // }
-      // notifyListeners();
-
-      //   },
-      // );
     } catch (e) {
       e.logger();
     }

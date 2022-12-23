@@ -20,14 +20,6 @@ class PlaylistNotifier with ChangeNotifier {
   ContentData? _data;
   int? _index;
 
-  /// For Content Purposes
-  showMyPlaylistBottomSheet(BuildContext context, {FeatureType? featureType, ContentData? data, int? index}) async {
-    _featureType = System().validatePostTypeV2(featureType);
-    _data = data;
-    _index = index;
-    ShowBottomSheet.onShowPlaylist(context, data: _data, feature: _featureType, index: _index);
-  }
-
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;

@@ -382,4 +382,8 @@ class UrlConstants {
 
   //FAQ
   static const String faqList = "/api/faqs/allfaqs";
+
+
+  //Tiket Histories
+  static const String ticketHistories = "/api/usertickets/filter";
 }

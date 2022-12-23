@@ -96,7 +96,7 @@ class AppealNotifier with ChangeNotifier {
   String getCategory(List<Cats>? cats) {
     List interest = [];
     String category = '';
-    var a = cats?.map((e) {
+    cats?.map((e) {
       interest.add(e.interestName);
     }).toList();
     if (interest.isNotEmpty) category = interest.join(', ');

@@ -1,7 +1,6 @@
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
-// import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
@@ -9,7 +8,6 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 
 class CameraDevicesView extends StatelessWidget {
-  // DeepArController? controller;
   const CameraDevicesView({Key? key}) : super(key: key);
 
   @override
@@ -48,19 +46,5 @@ class CameraDevicesView extends StatelessWidget {
     );
   }
 }
-
-/**
- * // return Transform.scale(
-    //   scale: (notifier.cameraController!.value.previewSize!.height / notifier.cameraController!.value.previewSize!.width) /
-    //       (SizeConfig.screenWidth! / SizeConfig.screenHeight!),
-    //   child: Center(
-    //     child: AspectRatio(
-    //       aspectRatio: (notifier.cameraController!.value.previewSize!.height / notifier.cameraController!.value.previewSize!.width),
-    //       child: CameraPreview(notifier.cameraController!),
-    //     ),
-    //   ),
-    // );
-
- */
 
  

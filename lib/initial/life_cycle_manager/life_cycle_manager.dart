@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -63,7 +62,6 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     print("Status Lifecycle: $state");
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    final picNotifier = materialAppKey.currentContext!.read<SlidedPicDetailNotifier>();
     if (state == AppLifecycleState.inactive) {
 
       if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){

@@ -10,6 +10,7 @@ enum NotificationCategory { all, like, comment, follower, following, mention, ge
 enum UserType { verified, notVerified }
 enum MethodType { get, post, download, postUploadProfile, postUploadContent, delete }
 enum TypePlaylist { landingpage, mine, other, search, none }
+enum TicketType {accountVerification, content, transaction, owner, problemBugs, ads}
 enum ErrorType {
   myStory,
   peopleStory,

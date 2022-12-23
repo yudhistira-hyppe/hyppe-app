@@ -1,4 +1,3 @@
-// import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/widgets/camera_view.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';

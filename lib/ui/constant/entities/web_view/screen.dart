@@ -1,6 +1,5 @@
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-// import 'package:hyppe/ui/inner/home/content/wallet/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,6 @@ class WalletWebView extends StatefulWidget {
 }
 
 class _WalletWebViewState extends State<WalletWebView> {
-  // late WalletNotifier _walletNotifier;
 
   @override
   void initState() {

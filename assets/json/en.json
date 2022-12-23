@@ -790,5 +790,9 @@
   "amountEarned" : "Amount Earned",
   "usernameisAlreadyinUse" : "Username is already in use!",
   "priceChangesSavedSuccessfully" : "Price changes saved successfully",
-  "localeDatetime": "en_US"
+  "localeDatetime": "en_US",
+  "accountVerification" : "Account and Verification",
+  "content": "Content",
+  "problemBugs": "Technical Problems and Bugs",
+  "ads": "Ads"
 }

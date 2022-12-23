@@ -15,12 +15,10 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
-// import 'package:hyppe/ui/inner/home/content_v2/pin/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile_completion/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/notifier.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 

@@ -7,7 +7,6 @@ import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
-import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_interval.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_time.dart';
@@ -22,7 +21,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_i
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_location_search.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_content.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_story.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_ownership_EULA.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_people_search.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_privacy_post.dart';
@@ -44,11 +42,8 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_s
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_pin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_warning.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/reportProfile.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_content.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stories/screen.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
@@ -310,38 +305,7 @@ class ShowBottomSheet {
     // );
   }
 
-  static onShowPlaylist(BuildContext _, {String? feature, ContentData? data, int? index}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: _,
-      enableDrag: true,
-      isDismissible: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Selector<PlaylistNotifier, bool>(
-          selector: (_, select) => select.screen,
-          builder: (_, screen, __) => Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-            child: Container(
-              height: MediaQuery.of(_).size.height / 2,
-              decoration: BoxDecoration(
-                color: Theme.of(_).colorScheme.surface,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-              ),
-              padding: const EdgeInsets.all(0),
-              child: screen ? AddPlaylist() : ListMyPlaylist(featureType: feature, postID: data?.postID, contentID: data?.postID),
-            ),
-          ),
-        );
-      },
-    ).whenComplete(() {
-      // if (_.read<DiariesPlaylistNotifier>().forcePause) _.read<DiariesPlaylistNotifier>().forcePause = false;
-      // Provider.of<PlaylistNotifier>(_, listen: false).onExit();
-    });
-  }
+
 
   static onShowCompleteProfile(_) {
     showModalBottomSheet(
@@ -620,52 +584,6 @@ class ShowBottomSheet {
         ),
       ),
       backgroundColor: Colors.transparent,
-    );
-  }
-
-  static onShowViewers(BuildContext _, {required String? storyID}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: _,
-      enableDrag: true,
-      isDismissible: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Container(
-          height: MediaQuery.of(_).size.height * 0.9,
-          decoration: BoxDecoration(
-            color: Theme.of(_).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-          ),
-          child: ViewedStoriesScreen(storyID: storyID ?? ''),
-        );
-      },
-    );
-  }
-
-  static onShowOptionStory(BuildContext _, Map<String, dynamic>? arguments) {
-    showModalBottomSheet(
-      context: _,
-      enableDrag: true,
-      isDismissible: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Container(
-          height: MediaQuery.of(_).size.height * 0.4,
-          decoration: BoxDecoration(
-            color: Theme.of(_).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-          ),
-          child: OnShowOptionStory(arguments: arguments),
-        );
-      },
     );
   }
 
