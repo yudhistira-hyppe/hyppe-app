@@ -131,6 +131,8 @@ class PostsBloc {
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
+    final fcmToken = SharedPreference().readStorage(SpKeys.fcmToken);
+    print('my fcm token : $fcmToken');
     // final currentDate = context.getCurrentDate();
 
     formData.fields.add(const MapEntry('withActive', 'true'));

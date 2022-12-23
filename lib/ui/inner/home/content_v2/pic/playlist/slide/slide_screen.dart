@@ -41,13 +41,14 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
     super.initState();
-    final notif = context.read<SlidedPicDetailNotifier>();
-    notif.currentIndex = -1;
+
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
     _notifier.initState(context, widget.arguments);
+    final notif = context.read<SlidedPicDetailNotifier>();
+    notif.currentIndex = -1;
   }
 
   @override

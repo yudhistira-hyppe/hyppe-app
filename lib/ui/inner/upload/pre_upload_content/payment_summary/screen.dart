@@ -15,10 +15,14 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../../../core/constants/shared_preference_keys.dart';
+import '../../../../../core/services/shared_preference.dart';
 
 class PaymentBoostSummaryScreen extends StatefulWidget {
   const PaymentBoostSummaryScreen({Key? key}) : super(key: key);
@@ -44,6 +48,7 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
     final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
     final translate = context.read<TranslateNotifierV2>().translate;
 
+    initializeDateFormatting('id', null);
     return Consumer<PaymentBoostSummaryNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
@@ -85,7 +90,7 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                           children: [
                             CustomTextWidget(
                               // textToDisplay: "Saturday, 15 Jul 2022 01:50 WIB",
-                              textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', 'en_US').format(DateTime.parse(notifier.paymentMethodNotifier.boostPaymentResponse?.expiredtimeva ?? '')),
+                              textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', notifier.language.localeDatetime).format(DateTime.parse(notifier.paymentMethodNotifier.boostPaymentResponse?.expiredtimeva ?? '')),
                               textStyle: textTheme.bodyMedium,
                             ),
                             TweenAnimationBuilder<Duration>(

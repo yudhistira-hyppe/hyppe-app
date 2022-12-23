@@ -4,6 +4,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
 
@@ -82,12 +83,16 @@ class _CommentListTileState extends State<CommentListTile> {
                     ),
                   ),
                   SizedBox(height: 6 * SizeConfig.scaleDiagonal),
-                  CustomTextWidget(
-                    textToDisplay: comment?.txtMessages ?? '',
-                    textAlign: TextAlign.start,
-                    maxLines: null,
-                    textOverflow: TextOverflow.visible,
-                    textStyle: Theme.of(context).textTheme.bodyText2,
+                  CustomDescContent(
+                      desc: comment?.txtMessages ?? '',
+                      trimLines: 5,
+                      textAlign: TextAlign.start,
+                      seeLess: 'Show less',
+                      seeMore: 'Show More',
+                      textOverflow: TextOverflow.visible,
+                      normStyle: Theme.of(context).textTheme.bodyText2,
+                      hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                      expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant)
                   ),
                   SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                   Row(

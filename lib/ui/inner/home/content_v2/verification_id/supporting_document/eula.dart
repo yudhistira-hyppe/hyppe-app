@@ -75,14 +75,6 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onTap: () => notifier.backToVerificationID(),
-                  child: Text(
-                    notifier.language.cancel ?? '',
-                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                  ),
-                ),
-                const SizedBox(height: 16),
                 CustomElevatedButton(
                   width: SizeConfig.screenWidth,
                   height: 44.0 * SizeConfig.scaleDiagonal,
@@ -96,6 +88,14 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
                     shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                     overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                     backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                GestureDetector(
+                  onTap: () => notifier.backToVerificationID(),
+                  child: Text(
+                    notifier.language.cancel ?? '',
+                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                   ),
                 ),
                 const SizedBox(height: 16),

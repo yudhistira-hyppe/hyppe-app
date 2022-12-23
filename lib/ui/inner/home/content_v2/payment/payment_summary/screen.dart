@@ -13,6 +13,7 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -39,6 +40,7 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
     final textTheme = Theme.of(context).textTheme;
     final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
+    initializeDateFormatting('id', null);
     return Consumer<PaymentSummaryNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
@@ -78,7 +80,8 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                           children: [
                             CustomTextWidget(
                               // textToDisplay: "Saturday, 15 Jul 2022 01:50 WIB",
-                              textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', 'en_US').format(DateTime.parse(notifier.paymentMethodNotifier.postResponse?.expiredtimeva ?? '')),
+                              textToDisplay:
+                                  DateFormat('EEEE, dd MMM yyyy HH:mm', notifier.language.localeDatetime).format(DateTime.parse(notifier.paymentMethodNotifier.postResponse?.expiredtimeva ?? '')),
                               textStyle: textTheme.bodyMedium,
                             ),
                             TweenAnimationBuilder<Duration>(
@@ -100,6 +103,38 @@ class _PaymentSummaryScreenState extends State<PaymentSummaryScreen> {
                             //   textStyle: textTheme.bodyLarge.copyWith(color: const Color.fromRGBO(201, 29, 29, 1)),
                             // ),
                           ],
+                        ),
+                        const SizedBox(height: 32),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomTextWidget(
+                                // textToDisplay: "Saturday, 15 Jul 2022 01:50 WIB",
+                                textToDisplay: DateFormat('EEEE, dd MMM yyyy HH:mm', 'en_US').format(DateTime.parse(notifier.paymentMethodNotifier.postResponse?.expiredtimeva ?? '')),
+                                textStyle: textTheme.bodyMedium,
+                              ),
+                              TweenAnimationBuilder<Duration>(
+                                  duration: const Duration(minutes: 15),
+                                  tween: Tween(begin: const Duration(minutes: 15), end: Duration.zero),
+                                  onEnd: () {
+                                    // notifier.backHome();
+                                  },
+                                  builder: (BuildContext context, Duration value, Widget? child) {
+                                    final minutes = value.inMinutes;
+                                    final seconds = value.inSeconds % 60;
+                                    return CustomTextWidget(
+                                      textToDisplay: '( ${minutes < 10 ? '0' : ''}$minutes: ${seconds < 10 ? '0' : ''}$seconds )',
+                                      textStyle: textTheme.bodyLarge?.copyWith(color: const Color.fromRGBO(201, 29, 29, 1), fontWeight: FontWeight.bold),
+                                    );
+                                  }),
+                              // CustomTextWidget(
+                              //   textToDisplay: notifier.durationString,
+                              //   textStyle: textTheme.bodyLarge.copyWith(color: const Color.fromRGBO(201, 29, 29, 1)),
+                              // ),
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 32),
                         Padding(

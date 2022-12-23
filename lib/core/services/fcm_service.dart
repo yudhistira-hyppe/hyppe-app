@@ -19,6 +19,8 @@ import 'package:hyppe/core/services/notification_service.dart';
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   final _notificationService = NotificationService();
 
+
+
   await Firebase.initializeApp();
   """ 
             Background incoming message data => ${message.data},
@@ -30,7 +32,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
             Background incoming message sentTime => ${message.sentTime},
             Background incoming message threadId => ${message.threadId},
             Background incoming message ttl => ${message.ttl},
-            Background incoming message notification => ${message.notification?.title} ${message.notification?.body}
+            Background incoming message notification => ${message.notification?.title} ${message.notification?.body},\
             """
       .logger();
 
@@ -41,7 +43,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
   //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
 
-  _notificationService.showNotification(message);
+  _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
 }
 
 // listenable value
@@ -166,10 +168,12 @@ class FcmService {
 
   // request notification listener
   Future<void> requestNotificationPermission() async {
+
     await firebaseMessaging.requestPermission(sound: true, badge: true, alert: true).then(
       (value) {
         'Notification settings ${value.alert}, ${value.announcement}, ${value.authorizationStatus}, ${value.badge}, ${value.sound}, ${value.lockScreen}'
             .logger();
+
       },
     );
   }

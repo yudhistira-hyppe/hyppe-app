@@ -796,5 +796,6 @@
   "noBankAccount2" : "No Bank account!",
   "hideReplies" : "Hide Replies",
   "purchased" : "Purchased",
-  "soldOut" : "Sold out"
+  "soldOut" : "Sold out",
+  "localeDatetime": "en_US"
 }

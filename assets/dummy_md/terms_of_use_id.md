@@ -223,7 +223,7 @@ User setuju bahwa User semata-mata bertanggung jawab (kepada Hyppe dan pihak lai
 
 Kami berhak untuk menonaktifkan akun anda setiap saat, termasuk jika User tidak mematuhi suatu ketentuan baik dalam dalam ketentuan ini maupun ketentuan Undang undang yang berlaku lebih spesifik dijelaskan dalam pasal 1320 angka 4 Kuhperdata dan Undang Undang yang berlaku.
 
-Jika User ingin berhenti menggunakan Layanan Hyppe, dan ingin agar akun Anda dihapus, kami dapat membantu Anda. Hubungi kami melalui [-----------------------------](https://www.tiktok.com/legal/report/feedback), dan kami akan membantu Anda lebih lanjut dan memandu Anda dalam proses penghapusan akun User. Jika User memilih untuk menghapus akun maka User tidak akan dapat mengaktifkan kembali akun tersebut atau memperoleh kembali konten dan hasil penjualan konten atau informasi apa pun yang telah Anda tambahkan.
+Jika User ingin berhenti menggunakan Layanan Hyppe, dan ingin agar akun Anda dihapus, kami dapat membantu Anda. Hubungi kami melalui **+6221 2506691**, dan kami akan membantu Anda lebih lanjut dan memandu Anda dalam proses penghapusan akun User. Jika User memilih untuk menghapus akun maka User tidak akan dapat mengaktifkan kembali akun tersebut atau memperoleh kembali konten dan hasil penjualan konten atau informasi apa pun yang telah Anda tambahkan.
 
   
 
@@ -375,25 +375,15 @@ Kami mencadangkan hak, setiap saat dan tanpa pemberitahuan sebelumnya, untuk men
 **6. Hak atas Kekayaan Intelektual**
 Kami menghormati hak atas kekayaan intelektual dan meminta agar Anda melakukan hal yang sama sesuai dengan ketentuan <u>**UU Nomor 28 Tahun 2014 tentang Hak Kekayaan Intelektual.**</u> Sebagai syarat pengaksesan dan penggunaan Layanan oleh Anda, Anda setuju untuk tidak menggunakan Layanan untuk melanggar hak atas kekayaan intelektual apapun. Kami mencadangkan hak, dengan atau tanpa pemberitahuan, setiap saat dan semata-mata atas kebijakan kami, untuk memblokir akses ke dan/atau menutup akun-akun milik setiap pengguna yang melanggar atau diduga melanggar hak cipta atau hak atas kekayaan intelektual lainnya.
 
-  
-
 **7. Konten**
 A. Konten Hyppe
 Sebagaimana antara Anda dan Hyppe, seluruh konten, perangkat lunak, gambar, teks, karya grafis, ilustrasi, logo, hak paten, merek dagang, merek jasa, hak cipta, foto, audio, video, musik pada dan “look and feel” pada Layanan, dan seluruh hak atas kekayaan intelektual yang terkait dengan Layanan (“Konten Hyppe”), adalah dimiliki atau diberikan lisensi oleh Hyppe, karena perlu dipahami bahwa Anda atau pemberi lisensi Anda akan memiliki setiap Konten Pengguna (sebagaimana didefinisikan dalam “Kebijakan Virtual Items”) yang Anda unggah atau kirimkan melalui Layanan. Penggunaan Konten Hyppe atau materi-materi pada Layanan untuk tujuan apapun yang tidak secara tegas diperbolehkan oleh Ketentuan ini adalah dilarang keras. Konten tersebut tidak boleh diunduh, disalin, direproduksi, didistribusikan, dikirimkan, disiarkan, ditampilkan, dijual, diberikan lisensi, atau secara lain dieksploitasi untuk tujuan apapun tanpa persetujuan tertulis sebelumnya dari kami atau, sebagaimana berlaku, para pemberi lisensi kami. Kami dan para pemberi lisensi kami mencadangkan seluruh hak yang tidak secara tegas diberikan atas dan untuk konten para pengguna tersebut.
 
-  
-
 Anda mengakui dan setuju bahwa kami dapat memperoleh pendapatan, meningkatkan goodwill atau secara lain meningkatkan nilai kami dari penggunaan Layanan oleh Anda, termasuk, misalnya, dan tidak terbatas pada, melalui penjualan iklan, sponsor, promosi, penggunaan data dan Gifts, (sebagaimana didefinisikan dan dijelaskan lebih lanjut dalam “Kebijakan Virtual Items”) , dan kecuali sebagaimana secara khusus kami perbolehkan dalam Ketentuan ini atau dalam perjanjian lain yang dibuat dan ditandatangani oleh Anda dengan kami, Anda sama sekali tidak memiliki hak untuk memperoleh bagian dari pendapatan, muhibah atau nilai tersebut dengan cara bagaimanapun juga. Anda selanjutnya mengakui bahwa, kecuali secara khusus kami perbolehkan dalam Ketentuan ini atau dalam perjanjian lain dibuat dan ditandatangani oleh Anda dengan kami, Anda (i) tidak berhak untuk menerima pendapatan atau konsiderasi lainnya apapun dari setiap Konten Pengguna (didefinisikan di bawah ini) atau penggunaan oleh Anda atas setiap karya musik, rekaman suara, atau klip audio-visual yang tersedia bagi Anda pada atau melalui Layanan, termasuk dalam Konten Pengguna apapun yang dibuat oleh Anda, dan (ii) tidak boleh menggunakan hak apapun untuk melakukan monetisasi atau memperoleh konsiderasi dari Konten Pengguna apapun dalam Layanan atau pada layanan pihak ketiga manapun (misalnya, Anda tidak dapat mengklaim Konten Pengguna yang telah diunggah ke suatu platform media sosial, seperti YouTube, untuk dimonetisasi).
-
-  
 
 Dengan tunduk pada syarat-syarat dan ketentuan-ketentuan dari Ketentuan ini, Anda dengan ini diberikan lisensi non-eksklusif, terbatas, tidak dapat dialihkan, tidak dapat disublisensikan, dapat ditarik kembali dan berskala global untuk mengakses dan menggunakan Layanan, termasuk untuk mengunduh Platform pada perangkat yang diizinkan, dan untuk mengakses Konten Hyppe semata-mata untuk penggunaan Layanan oleh Anda secara pribadi dan non-komersial dan semata-mata berdasarkan kepatuhan pada Ketentuan ini. Hyppe mencadangkan semua hak yang tidak secara tegas diberikan dalam Ketentuan ini dan Konten Hyppe. Anda mengakui dan setuju bahwa Hyppe dapat mengakhiri lisensi ini setiap saat karena suatu alasan atau tanpa alasan apapun.
 
-  
-
 TIDAK ADA HAK YANG DIBERIKAN LISENSI SEHUBUNGAN DENGAN REKAMAN-REKAMAN SUARA DAN KARYA-KARYA MUSIK YANG TERDAPAT DALAM REKAMAN-REKAMAN SUARA TERSEBUT YANG DISEDIAKAN OLEH ATAU MELALUI LAYANAN.
-
-  
 
 Anda mengakui dan setuju bahwa jika Anda melihat konten yang disediakan oleh orang lain pada Layanan, maka Anda melakukan hal tersebut dengan risiko ditanggung oleh Anda sendiri. Konten pada Layanan kami hanya tersedia sebagai informasi umum. Hal ini tidak dimaksudkan sebagai saran yang harus Anda andalkan. Anda harus memperoleh saran dari kalangan profesional atau spesialis sebelum melakukan, atau tidak melakukan, tindakan apapun berdasarkan konten pada Layanan kami.
 

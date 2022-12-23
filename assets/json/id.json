@@ -796,5 +796,6 @@
   "noBankAccount2" : "Tidak ada rekening bank",
   "hideReplies" : "Sembunyikan Balasan",
   "purchased" : "Dibeli",
-  "soldOut" : "Terjual"
+  "soldOut" : "Terjual",
+  "localeDatetime": "id"
 }
