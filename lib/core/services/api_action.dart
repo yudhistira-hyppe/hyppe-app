@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:curl_logger_dio_interceptor/curl_logger_dio_interceptor.dart';
 import 'package:dio_http_formatter/dio_http_formatter.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';

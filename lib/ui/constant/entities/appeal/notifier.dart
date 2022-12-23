@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:hyppe/core/bloc/report/bloc.dart';
 import 'package:hyppe/core/bloc/report/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
