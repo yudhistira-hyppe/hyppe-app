@@ -12,7 +12,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -326,7 +325,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        _storyController.pause();
                         ShowBottomSheet.onReportContent(
                           context,
                           adsData: widget.data,

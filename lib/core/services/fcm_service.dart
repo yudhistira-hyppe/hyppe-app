@@ -13,8 +13,6 @@ import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 
-// import 'package:hyppe/core/models/collection/notifications/notifications_data.dart';
-
 // handling background message
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   final _notificationService = NotificationService();
@@ -30,7 +28,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
             Background incoming message sentTime => ${message.sentTime},
             Background incoming message threadId => ${message.threadId},
             Background incoming message ttl => ${message.ttl},
-            Background incoming message notification => ${message.notification?.title} ${message.notification?.body},
+            Background incoming message notification => ${message.notification?.title} ${message.notification?.body}
             """
       .logger();
 

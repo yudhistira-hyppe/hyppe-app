@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-import 'package:uuid/uuid.dart';
-import 'package:http/http.dart' as http;
 
 class OnInterestListBottomSheet extends StatefulWidget {
   final String value;
@@ -31,9 +27,6 @@ class OnInterestListBottomSheet extends StatefulWidget {
 
 class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
   var privacy = [];
-  final _language = TranslateNotifierV2();
-  String _currentPrivacy = "";
-  static final _routing = Routing();
   TextEditingController controller = TextEditingController();
   BuildContext? scaffoldContext;
   var _notifier;

@@ -83,18 +83,8 @@ class UrlConstants {
 
   static const String accountBalancesRoutes = "/api/accountbalances";
 
-  ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Wallet */
-  /// event.
-  static const String eventBus = "$walletRoute/eventbus";
-
-  ///---------------------------------------------------------------------------------------------------------///
-  /* APIs In App Notification */
-  /// get => Get Users notification.
-  static const String getUsersNotification = "$notificationRoute/getAllUsersnotification";
-
-  /// post => Read notification.
-  static const String readNotification = "$notificationRoute/readNotification";
+  /* Post route */
+  static const String contentRouteV3 = "/api/getusercontents";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
@@ -105,31 +95,9 @@ class UrlConstants {
   static const String addBookmark = "$postRoute/addBookmark";
 
   ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Chat */
-  /// all user chat
-  static const String allUserChat = "$chatRoute/getAllUserChats";
-
-  /// history chat
-  static const String historyChat = "$chatRoute/getChatHistoryByrecipientId";
-
-  ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Comment */
-  /// post => Add Post Comment.
-  static const String addPostComment = "$postRoute/comments/commentOnPost";
-
-  /// post => Add Post Comment On Comment.
-  static const String addPostCommentOnComment = "$postRoute/comments/commentOnComment";
-
-  /// get => Get More Comments.
-  static const String getMoreComments = "$postRoute/comments/viewMoreComments";
-
-  ///---------------------------------------------------------------------------------------------------------///
   /* APIs Follow */
   /// post Add Story View.
   static const String followUser = "$followRoute/follow";
-
-  /// get => Get Follow Count.
-  static const String followCounts = "$followRoute/counts";
 
   /// get Check Following to user.
   static const String isFollowing = "$followRoute/isFollowing";
@@ -148,15 +116,6 @@ class UrlConstants {
   /// post change_password => To change password.
   static const String changePassword = "$userRoute/changepassword";
 
-  /// get => Get User Profile Overview.
-  static const String userOverview = "$userRoute/overview";
-
-  /// get => Get User Profile Details.
-  static const String details = "$userRoute/userProfile";
-
-  /// post complete_profile
-  static const String completeProfile = "$userRoute/userProfile";
-
   /// post update_profile
   static const String updateProfile = "$userRoute/updateprofile";
 
@@ -164,38 +123,16 @@ class UrlConstants {
   static const String recoverPassword = "$userRoute/recoverpassword";
 
   /// post register interest => To register interests of user.
-  static const String registerInterest = "$userRoute/userInterest";
-
-  /// post register interest => To register interests of user.
   static const String updateInterest = "$userRoute/profileinterest";
-  // static const String updateInterest = "/api/profileinterest";
-
-  /// post and get => Id proof.
-  static const String idProof = "$userRoute/idProof";
-
-  /// post => Upload Profile picture.
-  static const String uploadProfilePicture = "$userRoute/uploadProfilePicture";
 
   /// post => Upload Profile picture V2.
   static const String uploadProfilePictureV2 = "$postsRoute/profilepicture";
-
-  /// User Bio.
-  static const String bio = "$userRoute/bio";
-
-  /// get => Add Profile Report.
-  static const String addProfileReport = "$userRoute/report/addProfileReport";
-
-  /// get => Log Out From Other Devices.
-  static const String logOutFromOtherDevices = "$userRoute/logout/otherDevices";
 
   /// post => Verify Account
   static const String verifyAccount = "$userRoute/verifyaccount";
 
   /// post => Resend OTP
   static const String resendOTP = "$userRoute/resendotp";
-
-  /// get => Get user profile picture
-  static const String profilePic = "$userRoute/profilePic";
 
   /// user => Referral
   static const String referral = "$userRoute/referral";
@@ -219,41 +156,9 @@ class UrlConstants {
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Posts */
-  /// post Content.
-  static const String createPost = "$postRoute/createPost";
-
-  /// get one post.
-  static const String getPost = "$postRoute/getPost";
-
-  /// get => Get Post Count.
-  static const String postCounts = "$postRoute/counts";
-
-  /// get list_pic.
-  static const String getPicPostsFeeds = "$postRoute/getPicPostsFeeds";
-
-  /// get list_diary.
-  static const String getDiaryPostsFeeds = "$postRoute/getDiaryPostsFeeds";
-
-  /// get list_vid.
-  static const String getVidPostsFeeds = "$postRoute/getVidPostsFeeds";
-
-  /// get => Get User Post.
-  static const String getUserPosts = "$postRoute/getUserPosts";
 
   /// get => Get User Post.
   static const String getUserPostsLandingPage = "$postsRoute/getuserposts/landing-page";
-
-  /// get => Add Post Report.
-  static const String reportOnPost = "$postRoute/report/reportOnPost";
-
-  /// get => Add Comment Report.
-  static const String reportOnComment = "$postRoute/report/reportOnComment";
-
-  /// post => Add View Post.
-  static const String addPostView = "$postRoute/view";
-
-  /// delete => Delete Post.
-  static const String deletePostByID = "$postRoute/deletePostByID";
 
   /// post => View Like and View.
   static const String viewLike = "$postRoute/viewlike";
@@ -265,9 +170,6 @@ class UrlConstants {
   /// post Add Reaction to content.
   static const String addPostReaction = "$postRoute/reactions/reactOnPost";
 
-  /// get => Get Post Reactions Count.
-  static const String getPostReactionsCount = "$postRoute/reactions/getPostReactionsCounts";
-
   /// post Add Reaction to comment.
   static const String addReactOnComment = "$postRoute/reactions/reactOnComment";
 
@@ -275,44 +177,10 @@ class UrlConstants {
   static const String getCommentReactions = "$postRoute/reactions/getCommentReactions";
 
   ///---------------------------------------------------------------------------------------------------------///
-  /* APIs Search */
-  /// post => Search.
-  static const String searchMedia = "$searchRoute/media/search";
-
-  /// post => Search General.
-  static const String searchGeneral = "$searchRoute/search";
-
-  /// post => Add to trending.
-  static const String addToTrending = "$searchRoute/search/trending";
-
-  ///---------------------------------------------------------------------------------------------------------///
   /* APIs Stories */
-  /// get list_story.
-  static const String myUserStories = "$storiesRoute/myUserStories";
-
-  /// post Add Story View.
-  static const String addStoryView = "$storiesRoute/viewStory";
-
-  /// post Add Reaction to story.
-  static const String addStoryReaction = "$storiesRoute/reaction";
-
-  /// get => Get My Stories.
-  static const String myStories = "$storiesRoute/myStories";
-
-  /// get Stories by user.
-  static const String stories = "$storiesRoute/stories";
-
-  /// post Story.
-  static const String createStory = "$storiesRoute/createStory";
-
-  /// get => Add Story Report.
-  static const String reportOnStory = "$storiesRoute/report/reportOnStory";
 
   /// get => Get viewer story.
   static const String views = "$storiesRoute/views";
-
-  /// delete => Delete Story.
-  static const String deleteStoryByID = "$storiesRoute/deleteStoryByID";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Utils */
@@ -331,14 +199,8 @@ class UrlConstants {
   /// get Welcome notes.
   static const String welcomeNotes = "$utilsRoute/welcomenotes";
 
-  /// get list of Document
-  static const String document = "$utilsRoute/document";
-
   /// get list of Gender
   static const String gender = "$utilsRoute/gender";
-
-  /// get list of Martial Status
-  static const String martialstatus = "$utilsRoute/martialstatus";
 
   /// get reactions.
   static const String reaction = "$utilsRoute/reaction";
@@ -348,9 +210,6 @@ class UrlConstants {
 
   /// get list of Country
   static const String country = "$utilsRoute/country";
-
-  /// get => Get Report Options.
-  static const String getReportOptions = "$utilsRoute/getReportOption";
 
   /// get => Get Report Options.
   static const String postLogDevice = "$utilsRoute/logdevice";
@@ -374,9 +233,6 @@ class UrlConstants {
 
   /// post => Get Apsara Video.
   static const String getVideoApsara = "$postRouteV2/getvideo";
-
-  /// post => Get Contents Qmatic
-  static const String qmatic = "$postRouteV2/qmatic";
 
   /// post => Post Contents
   static const String createuserposts = "$postRouteV2/createpost";
@@ -423,23 +279,11 @@ class UrlConstants {
   /// post => Get Notification
   static const String getBoostMaster = "$postRoute/boostmaster";
 
-  /// post => Get Ads Roster
-  static const String getAdsRoster = "$bizRoute/adsroster";
-
   //apis goole plcae
   static const String getGoogleMapApis = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
   //get search people
   static const String getSearchPeople = "$profileRoute/search";
-
-  static const String getSearch = "$profileRoute/search";
-
-  ///---------------------------------------------------------------------------------------------------------///
-  // V3
-
-  /// APIs end point
-  /* Post route */
-  static const String contentRouteV3 = "/api/getusercontents";
 
   ///---------------------------------------------------------------------------------------------------------///
   /* v3 search data content dan user */
@@ -541,4 +385,8 @@ class UrlConstants {
 
   //FAQ
   static const String faqList = "/api/faqs/allfaqs";
+
+
+  //Tiket Histories
+  static const String ticketHistories = "/api/usertickets/filter";
 }

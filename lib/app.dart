@@ -16,32 +16,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 import 'core/services/api_action.dart';
 
-// void mainApp(EnvType env) async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   Env.init(env);
-//   NotificationService().initializeLocalNotification();
-//   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
-//   await SharedPreference.onInitialSharedPreferences();
-//   await FcmService().firebaseCloudMessagingListeners();
-//   System().systemUIOverlayTheme();
-//   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-//   runApp(Hyppe());
-
-//   FirebaseCrashlytics.instance.crash();
-//   if (kDebugMode) {
-//   // Force disable Crashlytics collection while doing every day development.
-//   // Temporarily toggle this to true if you want to test crash reporting in your app.
-//   await FirebaseCrashlytics.instance
-//       .setCrashlyticsCollectionEnabled(true);
-// } else {
-//   // Handle Crashlytics enabled status when not in Debug,
-//   // e.g. allow your users to opt-in to crash reporting.
-// }
-// }
 
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
@@ -63,19 +40,6 @@ void mainApp(EnvType env) async {
   NotificationService().initializeLocalNotification();
   FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
   HttpOverrides.global = MyHttpOverrides();
-  // await Hive.initFlutter();
-  // Hive.registerAdapter(AllContentsAdapter());
-  // Hive.registerAdapter(ContentDataAdapter());
-  // Hive.registerAdapter(MetadataAdapter());
-  // Hive.registerAdapter(ContentDataInsightAdapter());
-  // Hive.registerAdapter(PrivacyAdapter());
-  // Hive.registerAdapter(InsightLogsAdapter());
-  // Hive.registerAdapter(UserProfileAvatarModelAdapter());
-  // Hive.registerAdapter(CatsAdapter());
-  // Hive.registerAdapter(TagPeopleAdapter());
-  // Hive.registerAdapter(AvatarAdapter());
-  //
-  // await Hive.openBox<AllContents>('data_contents');
   await SharedPreference.onInitialSharedPreferences();
   await FcmService().firebaseCloudMessagingListeners();
   System().systemUIOverlayTheme();

@@ -1,8 +1,3 @@
-// import 'dart:convert';
-
-// ModelGoogleMapPlace ModelGoogleMapPlaceFromJson(String str) => ModelGoogleMapPlace.fromJson(json.decode(str));
-
-// String ModelGoogleMapPlaceToJson(ModelGoogleMapPlace data) => json.encode(data.toJson());
 
 class ModelGoogleMapPlace {
   ModelGoogleMapPlace({

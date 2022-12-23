@@ -10,7 +10,7 @@ import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
 
-extension contextScreen on BuildContext{
+extension ContextScreen on BuildContext{
   double getWidth(){
     return MediaQuery.of(this).size.width;
   }
@@ -71,23 +71,6 @@ extension contextScreen on BuildContext{
     return formatter.format(now);
   }
 
-  // Future setAllContents(AllContents value) async{
-  //   final box = Boxes.boxDataContents;
-  //   await box.putAt(0, value);
-  // }
-  //
-  // AllContents? getAllContents(){
-  //   final box = Boxes.boxDataContents;
-  //   final value = box.getAt(0);
-  //   return value;
-  // }
-  //
-  // bool isLandPageNotEmpty(){
-  //   final notifierMain = Provider.of<HomeNotifier>(this, listen: false);
-  //   final box = Boxes.boxDataContents;
-  //   return box.get(notifierMain.visibilty) != null;
-  // }
-
 }
 
 extension StringDefine on String{
@@ -130,13 +113,3 @@ extension IntegerExtension on int{
     }
   }
 }
-
-// extension GetContentType on ContentType{
-//   String? getValue(){
-//     if(this == ContentType.video){
-//       return "video";
-//     }else if(this == ContentType.image){
-//       return ""
-//     }
-//   }
-// }

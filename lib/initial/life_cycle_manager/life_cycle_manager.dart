@@ -65,7 +65,6 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     print("Status Lifecycle: $state");
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    final picNotifier = materialAppKey.currentContext!.read<SlidedPicDetailNotifier>();
     if (state == AppLifecycleState.inactive) {
       if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
         notifier.forceResetPlayer(true);
@@ -101,18 +100,16 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         try {
           await activity.activityAwake(context);
           final fetch = activity.deviceFetch;
-          if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
-            print('ini device activity ${fetch.data}');
-            await getDevice();
-
-            if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
-              print('devices true');
-              SharedPreference().writeStorage(SpKeys.canDeppAr.toString(), true);
-            } else {
-              print('devices false');
-              SharedPreference().writeStorage(SpKeys.canDeppAr.toString(), false);
-            }
-          }
+          // if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
+          //   print('ini device activity ${fetch.data}');
+          //   await getDevice();
+          //
+          //   if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
+          //     SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+          //   } else {
+          //     SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+          //   }
+          // }
 
           final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
           if (isOnHomeScreen) {

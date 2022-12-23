@@ -16,7 +16,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/hyppe_version.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
-import 'package:hyppe/core/models/collection/user_v2/facebook_sign_in/facebook_sign_in.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
@@ -62,8 +61,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool _incorrect = false;
   GoogleSignInAccount? _userGoogleSignIn;
   String? googleSignInError;
-  // AccessToken? _accessToken;
-  FacebookSignIn? _currentUser;
 
   double get latitude => _latitude;
   double get longitude => _longitude;

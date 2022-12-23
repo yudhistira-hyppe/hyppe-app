@@ -283,14 +283,6 @@ class Repos {
       methodType: MethodType.post,
       postLogsError: true,
     );
-
-    // return _apiAction.post(
-    //   UrlConstants.postLogDevice,
-    //   data: data,
-    //   token: token,
-    //   headers: headers,
-    //   onReceiveProgress: onReceiveProgress,
-    // );
   }
 
   void _showSnackBar(BuildContext context, Color color, String message, String desc) {
@@ -302,26 +294,5 @@ class Repos {
       maxLines: 2,
       color: color,
     );
-    // _routing.showSnackBar(
-    //   snackBar: SnackBar(
-    //     margin: EdgeInsets.zero,
-    //     padding: EdgeInsets.zero,
-    //     behavior: SnackBarBehavior.floating,
-    //     content: SafeArea(
-    //       child: SizedBox(
-    //         height: 56,
-    //         child: OnColouredSheet(
-    //           maxLines: 2,
-    //           caption: message,
-    //           subCaption: desc,
-    //           fromSnackBar: true,
-    //           iconSvg: "${AssetPath.vectorPath}remove.svg",
-    //           function: function,
-    //         ),
-    //       ),
-    //     ),
-    //     backgroundColor: color,
-    //   ),
-    // );
   }
 }

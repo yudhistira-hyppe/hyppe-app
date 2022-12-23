@@ -4,16 +4,6 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 
-// class TransactionModel {
-//   List<TransactionHistoryModel> data = [];
-//   int? dataCount;
-
-//   TransactionModel.fromJSON(dynamic json) {
-//     data = List<TransactionHistoryModel>.from(json["data"].map((x) => TransactionHistoryModel.fromJSON(x)));
-//     dataCount = json['dataCount'];
-//   }
-// }
-
 class TransactionHistoryModel {
   String? id;
   String? iduser;

@@ -1,67 +1,3 @@
-// import 'package:hyppe/core/constants/size_config.dart';
-// import 'package:hyppe/core/extension/log_extension.dart';
-// import 'package:hyppe/core/services/system.dart';
-// import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
-// import 'package:camera/camera.dart';
-// import 'package:flutter/material.dart';
-// import 'package:native_device_orientation/native_device_orientation.dart';
-// import 'package:provider/provider.dart';
-
-// class CameraView extends StatelessWidget {
-//   // DeepArController? controller;
-//   const CameraView({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     SizeConfig().init(context);
-//     final notifier = context.watch<CameraNotifier>();
-//     final deviceRatio = SizeConfig.screenWidth / SizeConfig.screenHeight;
-
-//     return NativeDeviceOrientationReader(
-//       useSensor: true,
-//       builder: (context) {
-//         final orientation = NativeDeviceOrientationReader.orientation(context);
-//         'Received new orientation: $orientation'.logger();
-//         'Received new converted orientation: ${System().convertOrientation(orientation)}'.logger();
-
-//         'Current device orientation: ${notifier.orientation}'.logger();
-
-//         if (notifier.isRecordingVideo && notifier.orientation == null) {
-//           notifier.orientation = orientation;
-//           'Set orientation to $orientation'.logger();
-//           'Set orientation to ${System().convertOrientation(orientation)}'.logger();
-//         }
-
-//         return Container(
-//           child: AspectRatio(
-//             aspectRatio: deviceRatio,
-//             child: Transform(
-//               alignment: Alignment.center,
-//               child: CameraPreview(notifier.cameraController), //for camera
-
-//               transform: Matrix4.diagonal3Values(notifier.cameraAspectRatio / deviceRatio, notifier.yScale.toDouble(), 1),
-//             ),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-/**
- * // return Transform.scale(
-    //   scale: (notifier.cameraController.value.previewSize.height / notifier.cameraController.value.previewSize.width) /
-    //       (SizeConfig.screenWidth / SizeConfig.screenHeight),
-    //   child: Center(
-    //     child: AspectRatio(
-    //       aspectRatio: (notifier.cameraController.value.previewSize.height / notifier.cameraController.value.previewSize.width),
-    //       child: CameraPreview(notifier.cameraController),
-    //     ),
-    //   ),
-    // );
-
- */
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -71,7 +7,6 @@ import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'dart:convert';
 import 'package:provider/provider.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 
 class CameraView extends StatefulWidget {
   const CameraView({Key? key}) : super(key: key);
@@ -150,31 +85,7 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    // SizeConfig().init(context);
-    // final notifier = context.watch<CameraNotifier>();
     final deviceRatio = context.getWidth() / context.getHeight();
-    // print('calling build: ');
-    // print(notifier.deepArController!.isInitialized);
-    // return Consumer<CameraNotifier>(
-    //   builder: (_, notifier, __) => Scaffold(
-    //       body: Stack(
-    //     children: [
-    //   Transform.scale(
-    //   scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
-    //   child: DeepArPreview(
-    //     notifier.deepArController!,
-    //     onViewCreated: () {
-    //       // set any initial effect, filter etc
-    //       // _controller.switchEffect(
-    //       //     _assetEffectsPath + 'viking_helmet.deepar');
-    //     },
-    //   ),
-    // ),
-    //     // _topMediaOptions(),
-    //     // _bottomMediaOptions(),
-    //     ],
-    //   )),
-    // );
     return Consumer<CameraNotifier>(
       builder: (_, notifier, __) => Scaffold(
           body: Stack(
@@ -404,36 +315,6 @@ class _CameraViewState extends State<CameraView> {
     );
   }
 
-  /// Add effects which are rendered via DeepAR sdk
-  void _initEffects() {
-    // print('initEffects()');
-    // Either get all effects
-    // _getEffectsFromAssets(context).then((values) {
-    // _effectsList.clear();
-    // _effectsList.addAll(values);
-
-    // _maskList.clear();
-    // _maskList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
-    // _maskList.add(_assetEffectsPath + 'flower_face.deepar');
-
-    // _filterList.clear();
-    // _filterList.add(_assetEffectsPath + 'Emotions_Exaggerator.deepar');
-    // _filterList.add(_assetEffectsPath + 'flower_face.deepar');
-
-    // _effectsList.removeWhere((element) => _maskList.contains(element));
-
-    // _effectsList.removeWhere((element) => _filterList.contains(element));
-    // });
-    // print(_effectsList2);
-
-    // OR
-
-    // Only add specific effects
-    // _effectsList.add(_assetEffectsPath+'burning_effect.deepar');
-    // _effectsList.add(_assetEffectsPath+'Emotions_Exaggerator.deepar');
-    // _effectsList.add(_assetEffectsPath+'Hope.deepar');
-    // _effectsList.add(_assetEffectsPath+'viking_helmet.deepar');
-  }
 
   /// Get all deepar effects from assets
   ///

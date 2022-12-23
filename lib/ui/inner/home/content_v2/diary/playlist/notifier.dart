@@ -103,11 +103,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (count == null) {
       context.setAdsCount(0);
     } else {
-      if (count == 5) {
-        'type ads : Content Ads'.logger();
-        _isSponsored = false;
-        urlAds = await getAdsVideo(context, true);
-      } else if (count == 2) {
+      if (count == 2) {
         'type ads : Sponsored Ads'.logger();
         _isSponsored = true;
         urlAds = await getAdsVideo(context, false);

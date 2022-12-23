@@ -316,32 +316,6 @@ class UserBloc {
     );
   }
 
-  // Future postBioBlocV2(BuildContext context, {required UpdateBioArgument argument}) async {
-  //   setUserFetch(UserFetch(UserState.loading));
-  //   await Repos().reposPost(
-  //     context,
-  //     (onResult) {
-  //       if (onResult.statusCode != HTTP_OK) {
-  //         setUserFetch(UserFetch(UserState.postBioError));
-  //       } else {
-  //         setUserFetch(UserFetch(UserState.postBioSuccess));
-  //       }
-  //     },
-  //     (errorData) {
-  //       ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
-  //       setUserFetch(UserFetch(UserState.postBioError));
-  //     },
-  //     host: APIs.bio,
-  //     data: argument.toJson(),
-  //     headers: {
-  //       "x-auth-user": "${argument.email}",
-  //     },
-  //     withAlertMessage: false,
-  //     methodType: MethodType.post,
-  //     withCheckConnection: false,
-  //   );
-  // }
-
   Future uploadProfilePictureBlocV2(
     BuildContext context, {
     required String file,

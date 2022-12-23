@@ -26,49 +26,6 @@ extension MarkAllNotificationAsRead on List<NotificationModel> {
     });
   }
 
-  // void removeLoadMoreFlag() => this.removeWhere((element) => element.loadMore == true);
-
-  // void setLoadMoreFlag() {
-  //   if (this.isNotEmpty) this.add(NotificationsData.setLoadMore());
-  // }
-
-  // void determineCategoryData() {
-  //   int? _var1;
-  //   String? _var2;
-
-  //   bool _condition(int? value) => ((DateTime.now().millisecondsSinceEpoch - (value ?? DateTime.now().millisecondsSinceEpoch)) ~/ 1000) ~/ 3600 <= 24;
-
-  //   if (this.isNotEmpty) {
-  //     if (this[0].isNew == null) {
-  //       for (NotificationsData data in this) {
-  //         if (_var1 != null) break;
-  //         if (_condition(int.tryParse(data.timestamp!))) {
-  //           _var1 = int.tryParse(data.timestamp!);
-  //         }
-  //       }
-
-  //       if (_var1 != null) this.insert(0, NotificationsData.setNew(_var1.toString()));
-  //     }
-
-  //     if (this.any((element) => element.isEarlier == null)) {
-  //       for (NotificationsData data in this) {
-  //         if (_var2 != null) break;
-  //         if (!_condition(int.tryParse(data.timestamp!))) {
-  //           _var2 = data.timestamp!;
-  //         }
-  //       }
-
-  //       if (_var2 != null) this.insert(this.indexWhere((element) => element.timestamp == _var2), NotificationsData.setEarlier(_var2));
-  //     }
-  //   }
-  // }
-
-  // void filteredAddAll(List<NotificationsData> data) {
-  //   for (int index = 0; index < data.length; index++) {
-  //     if (this[index].notificationId != data[index].notificationId) this.add(data[index]);
-  //   }
-  // }
-
   List<NotificationModel> filterNotification(List<NotificationCategory> notificationCategory) {
     List<NotificationModel> _result = [];
     for (var element1 in this) {
@@ -78,8 +35,6 @@ extension MarkAllNotificationAsRead on List<NotificationModel> {
     }
     return _result;
   }
-
-  // bool get falsy => this.isEmpty || this.length == 1 && this.single.loadMore == true;
 }
 
 extension CustomIterableExtension<T> on Iterable<T> {

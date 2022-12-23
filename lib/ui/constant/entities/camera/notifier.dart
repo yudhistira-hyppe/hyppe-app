@@ -7,7 +7,6 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:camera/camera.dart';
-// import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
@@ -98,40 +97,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onStoryPhotoVideo(bool isPhoto) async {
-    // final _currentLensDirection = cameraController?.description.lensDirection;
-
-    // if (cameraController != null) {
-    //   await disposeCamera();
-    //   notifyListeners();
-    // }
-
-    // final CameraController _controller = CameraController(
-    //   _currentLensDirection == CameraLensDirection.back ? camera[0] : camera[1],
-    //   _configureResolutionPreset(onStoryIsPhoto: isPhoto),
-    //   enableAudio: true,
-    // );
-    // cameraController = _controller;
-
-    // // If the controller is updated then update the UI.
-    // cameraController?.addListener(() {
-    //   notifyListeners();
-
-    //   if (cameraController?.value.hasError ?? true) {
-    //     'Camera error ${cameraController?.value.errorDescription}'.logger();
-    //   }
-    // });
-
-    // try {
-    //   await cameraController?.initialize();
-
-    //   /// TODO: Resolved by backend
-    //   // if (Platform.isIOS) {
-    //   //   await cameraController?.lockCaptureOrientation();
-    //   // }
-    //   // flashMode = cameraController!.value.flashMode;
-    // } on CameraException catch (e) {
-    //   e.description.logger();
-    // }
 
     if (loadingForObject(loadingForSwitching)) {
       setLoading(false, loadingObject: loadingForSwitching);
@@ -169,20 +134,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     } catch (e) {
       e.logger();
     }
-    /////yg lama
-    // try {
-    //   'Disposing camera...'.logger();
-    //   if (isRecordingVideo) {
-    //     'Stop video recording...'.logger();
-    //     await stopVideoRecording();
-    //     'Success stop video recording...'.logger();
-    //   }
-    //   await cameraController?.dispose();
-    //   cameraController = null;
-    //   'Dispose camera success...'.logger();
-    // } catch (e) {
-    //   e.logger();
-    // }
   }
 
   Future<void> prepareCameraPage() async {
@@ -197,24 +148,10 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   Resolution _configureResolutionDeepArPreset({bool? onStoryIsPhoto}) {
     print('DeepAR: onStoryIsPhoto: ${onStoryIsPhoto}');
     print('DeepAR: Platform.isIOS: ${Platform.isIOS}, _iOSVersion: ${_iOSVersion}, minIphoneVersionForResolutionCamera: ${minIphoneVersionForResolutionCamera}');
-    // if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
-    //   print('DeepAR: Resolution.high');
-    //   return Resolution.high;
-    // } else {
-    //   print('DeepAR: Resolution.veryHigh');
-    //   // return onStoryIsPhoto != null && onStoryIsPhoto == true ? Resolution.veryHigh : Resolution.high;
-    //   return Resolution.veryHigh;
-    // }
+
     return Resolution.veryHigh;
   }
 
-  // ResolutionPreset _configureResolutionPreset({bool? onStoryIsPhoto}) {
-  //   if (Platform.isIOS && int.parse(_iOSVersion?.replaceAll('.', '') ?? '') <= minIphoneVersionForResolutionCamera) {
-  //     return ResolutionPreset.high;
-  //   } else {
-  //     return onStoryIsPhoto != null && onStoryIsPhoto == true ? ResolutionPreset.veryHigh : ResolutionPreset.max;
-  //   }
-  // }
 
   Future<void> onFlashButtonPressed() async {
     deepArController!.toggleFlash();

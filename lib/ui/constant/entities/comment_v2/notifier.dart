@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/delete_comment/bloc.dart';
 import 'package:hyppe/core/bloc/delete_comment/state.dart';
-import 'package:hyppe/core/bloc/postviewer/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -10,7 +9,6 @@ import 'package:hyppe/core/models/collection/utils/search_people/search_people.d
 import 'package:hyppe/core/query_request/comment_data_query.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/widget/sub_comment_list_tile.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ux/routing.dart';
 
 import '../../../../core/models/collection/localization_v2/localization_model.dart';
