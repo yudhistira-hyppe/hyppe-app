@@ -50,7 +50,7 @@ class VideoThumbnailReport extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 13,
+                    fontSize: 11,
                   )),
               videoData?.email == SharedPreference().readStorage(SpKeys.email)
                   ? GestureDetector(

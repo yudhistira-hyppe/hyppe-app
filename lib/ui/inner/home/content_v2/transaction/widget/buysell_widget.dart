@@ -49,7 +49,7 @@ class BuySellWidget extends StatelessWidget {
         keterangan = language?.from ?? 'from';
         titleColor = kHyppeRed;
         blockColor = kHyppeRedLight;
-        title = language?.buy ?? 'buy';
+        title = language?.purchased ?? 'Purchased';
         fullname = data?.penjual ?? '';
         email = data?.emailpenjual ?? '';
         if (data?.jenis == 'BOOST_CONTENT') {
@@ -61,12 +61,11 @@ class BuySellWidget extends StatelessWidget {
           email = data?.email ?? '';
         }
         break;
-
       default:
         keterangan = language?.forr ?? '';
         titleColor = kHyppeGreen;
         blockColor = kHyppeGreenLight;
-        title = language?.sell ?? '';
+        title = language?.soldOut ?? 'Sold out';
         fullname = data?.pembeli ?? '';
         email = data?.emailpembeli ?? '';
     }
@@ -199,7 +198,7 @@ class BuySellWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextWidget(
-                      textToDisplay: System().currencyFormat(amount: data?.totalamount),
+                      textToDisplay: "${data?.debetKredit} ${System().currencyFormat(amount: data?.totalamount)}",
                       textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontWeight: FontWeight.bold),
                     ),
                     CustomTextWidget(

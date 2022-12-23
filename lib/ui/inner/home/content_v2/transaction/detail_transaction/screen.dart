@@ -29,7 +29,7 @@ class DetailTransaction extends StatelessWidget {
             case TransactionType.buy:
               titleColor = kHyppeRed;
               blockColor = kHyppeRedLight;
-              title = notifier2.translate.buy ?? '';
+              title = notifier2.translate.purchased ?? 'Purchased';
               bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
               if (notifier.dataTransactionDetail?.jenis == 'BOOST_CONTENT') {
                 titleColor = kHyppeJingga;
@@ -47,7 +47,7 @@ class DetailTransaction extends StatelessWidget {
             default:
               titleColor = kHyppeGreen;
               blockColor = kHyppeGreenLight;
-              title = notifier2.translate.sell ?? 'sell';
+              title = notifier2.translate.soldOut ?? 'Sold Out';
               bodyWidget = MiddleBuySellDetailWidget(data: notifier.dataTransactionDetail, language: notifier2.translate);
               if (notifier.dataTransactionDetail?.jenis == 'BOOST_CONTENT') {
                 titleColor = kHyppeJingga;

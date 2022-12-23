@@ -794,5 +794,7 @@
   "maximumPrice" : "Harga maksimal Rp50.000.000.",
   "minimumPrice" : "Harga minimal Rp50.000.",
   "noBankAccount2" : "Tidak ada rekening bank",
-  "hideReplies" : "Sembunyikan Balasan"
+  "hideReplies" : "Sembunyikan Balasan",
+  "purchased" : "Dibeli",
+  "soldOut" : "Terjual"
 }

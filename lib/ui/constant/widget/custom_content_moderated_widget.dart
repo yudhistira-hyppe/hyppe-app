@@ -46,8 +46,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
         children: [
           CustomBaseCacheImage(
             imageUrl: thumbnail,
-            memCacheWidth: 200,
-            memCacheHeight: 200,
+            memCacheWidth: 50,
+            memCacheHeight: 50,
             imageBuilder: (_, imageProvider) {
               return Container(
                 width: width,

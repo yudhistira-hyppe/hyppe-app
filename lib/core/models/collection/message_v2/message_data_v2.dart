@@ -157,6 +157,7 @@ class DisqusLogs {
   String? reactionIcon;
   String? lineID;
   Mate? senderInfo;
+  String? id;
 
   DisqusLogs({
     this.createdAt,
@@ -171,9 +172,11 @@ class DisqusLogs {
     this.reactionIcon,
     this.lineID,
     this.senderInfo,
+    this.id,
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     createdAt = json['createdAt'];
     txtMessages = json['txtMessages'];
     receiver = json['receiver'];

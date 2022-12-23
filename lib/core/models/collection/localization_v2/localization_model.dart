@@ -794,6 +794,8 @@ class LocalizationModelV2 {
   String? noBankAccount2;
   String? hideReplies;
   String? reply2;
+  String? purchased;
+  String? soldOut;
 
   LocalizationModelV2({
     this.login,
@@ -1591,6 +1593,8 @@ class LocalizationModelV2 {
     this.noBankAccount2,
     this.hideReplies,
     this.reply2,
+    this.purchased,
+    this.soldOut,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2407,5 +2411,7 @@ class LocalizationModelV2 {
     noBankAccount2 = json["noBankAccount2"];
     hideReplies = json["hideReplies"];
     reply2 = json["reply2"];
+    purchased = json["purchased"];
+    soldOut = json["soldOut"];
   }
 }

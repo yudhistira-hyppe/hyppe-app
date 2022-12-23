@@ -54,6 +54,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
     _routeArgument = routeArgument;
 
     if (_routeArgument?.postID != null) {
+      print("hit Api dulu");
       _initialVid(context);
     } else {
       _data = _routeArgument?.vidData;

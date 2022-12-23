@@ -794,5 +794,7 @@
   "maximumPrice" : "Maximum price is IDR 50,000,000.",
   "minimumPrice" : "Minimum price is IDR 50,000.",
   "noBankAccount2" : "No Bank account!",
-  "hideReplies" : "Hide Replies"
+  "hideReplies" : "Hide Replies",
+  "purchased" : "Purchased",
+  "soldOut" : "Sold out"
 }

@@ -183,10 +183,11 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
       )..txtMessages = message;
 
       messageController.clear();
-
+      var uniquKey = UniqueKey().toString();
       addMessage(
         // context: context,
         logs: DisqusLogs(
+          id: uniquKey,
           active: true,
           updatedAt: ts,
           createdAt: ts,
@@ -200,6 +201,16 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
       final notifier = MessageBlocV2();
       await notifier.createDiscussionBloc(context, disqusArgument: param);
+
+      final fetch = notifier.messageFetch;
+
+      if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {
+        print(fetch.data[0]['disqusLogs'][0]['disqusID']);
+        DisqusLogs? _updatedData;
+        _updatedData = discussData?.first.disqusLogs.firstWhere((element) => element.id == uniquKey);
+        _updatedData?.id = fetch.data[0]['disqusLogs'][0]['disqusID'];
+      }
+      if (fetch.chatState == MessageState.createDiscussionBlocError) {}
     } catch (e) {
       e.toString().logger();
     }
@@ -439,17 +450,24 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   ) async {
     final _routing = Routing();
     final notifier = MessageBlocV2();
-    String? postId = _discussData?.first.disqusLogs[_selectData].lineID;
+    String? _id = _discussData?.first.disqusLogs[_selectData].id;
+    print('discuss log');
+    print(_id);
+    print(_selectData);
+    _discussData?.first.disqusLogs.removeWhere((item) => item.id == _id);
+
     try {
-      await notifier.deleteDiscussionBloc(context, postEmail: '', postId: postId ?? '');
+      await notifier.deleteDiscussionBloc(context, postEmail: '', id: _id ?? '');
       final fetch = notifier.messageFetch;
       if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
         _selectData = -1;
-        getMessageDiscussion(context, reload: true);
+        // getMessageDiscussion(context, reload: true);
+        // context.read<MessageNotifier>().getDiscussion();
       }
     } catch (e) {
       _routing.moveBack();
       e.logger();
     }
+    notifyListeners();
   }
 }

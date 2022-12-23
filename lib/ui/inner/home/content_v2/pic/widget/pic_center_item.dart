@@ -37,6 +37,8 @@ class PicCenterItem extends StatelessWidget {
       child: Stack(
         children: [
           CustomBaseCacheImage(
+            memCacheWidth: 100,
+            memCacheHeight: 100,
             widthPlaceHolder: 80,
             heightPlaceHolder: 80,
             imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? "") : "${data?.fullThumbPath}",
