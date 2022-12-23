@@ -51,10 +51,13 @@ class BottomWithdrawalWidget extends StatelessWidget {
                       ? Padding(
                           padding: const EdgeInsets.only(top: 16.0),
                           child: Row(
-                            children: const [
-                              Text(
-                                'No Bank Account !',
-                                style: TextStyle(color: kHyppeRed),
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  '${translate.noBankAccount2}',
+                                  style: const TextStyle(color: kHyppeRed),
+                                ),
                               ),
                             ],
                           ),

@@ -116,7 +116,7 @@ class PicDetailBottom extends StatelessWidget {
                   )
                 : const SizedBox(),
             Container(
-              padding: const EdgeInsets.all(2),
+              // padding: const EdgeInsets.all(2),
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
               child: data != null
                   ? SingleChildScrollView(
@@ -129,7 +129,7 @@ class PicDetailBottom extends StatelessWidget {
                             textAlign: TextAlign.start,
                             seeLess: 'Show less',
                             seeMore: 'Show More',
-                            normStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppeLightButtonText),
+                            // normStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),

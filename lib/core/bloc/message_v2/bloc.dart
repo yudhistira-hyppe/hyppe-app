@@ -24,10 +24,7 @@ class MessageBlocV2 {
   MessageFetch get messageFetch => _messageFetch;
   setMessageFetch(MessageFetch val) => _messageFetch = val;
 
-  Future getDiscussionBloc(
-    BuildContext context, {
-    required DiscussArgument disqusArgument, String? disqusID
-  }) async {
+  Future getDiscussionBloc(BuildContext context, {required DiscussArgument disqusArgument, String? disqusID}) async {
     setMessageFetch(MessageFetch(MessageState.loading));
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
@@ -45,7 +42,7 @@ class MessageBlocV2 {
     formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(disqusArgument.postType)));
     formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(disqusArgument.discussEventType)));
 
-    if(disqusID != null){
+    if (disqusID != null) {
       formData.fields.add(MapEntry('disqusID', disqusID));
     }
 
@@ -134,14 +131,14 @@ class MessageBlocV2 {
   Future deleteDiscussionBloc(
     BuildContext context, {
     required String postEmail,
-    required String postId,
+    required String id,
   }) async {
     setMessageFetch(MessageFetch(MessageState.loading));
     String? token = SharedPreference().readStorage(SpKeys.userToken);
     String? email = SharedPreference().readStorage(SpKeys.email);
     Map data = {};
 
-    postEmail != '' ? data = {"_id": postId, "email": postEmail} : data = {"_id": postId};
+    postEmail != '' ? data = {"_id": id, "email": postEmail} : data = {"_id": id};
     await Repos().reposPost(
       context,
       (onResult) {

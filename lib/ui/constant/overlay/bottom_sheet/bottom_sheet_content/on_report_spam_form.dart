@@ -15,8 +15,15 @@ class OnReportSpamFormBottomSheet extends StatefulWidget {
   final ContentData? postData;
   final String? type;
   final bool inDetail;
+  final Function? onUpdate;
 
-  const OnReportSpamFormBottomSheet({Key? key, this.type, this.postData, this.inDetail = true}) : super(key: key);
+  const OnReportSpamFormBottomSheet({
+    Key? key,
+    this.type,
+    this.postData,
+    this.inDetail = true,
+    this.onUpdate,
+  }) : super(key: key);
 
   @override
   State<OnReportSpamFormBottomSheet> createState() => _OnReportSpamFormBottomSheetState();
@@ -128,7 +135,9 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                   function: notifier.isLoading
                                       ? null
                                       : () {
-                                          notifier.reportPost(context, inDetail: widget.inDetail);
+                                          notifier.reportPost(context, inDetail: widget.inDetail).whenComplete(() {
+                                            if (widget.onUpdate != null) widget.onUpdate;
+                                          });
                                         },
                                   child: notifier.isLoading
                                       ? const CustomLoading()

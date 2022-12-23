@@ -143,7 +143,9 @@ class _CommentListTileState extends State<CommentListTile> {
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: CustomTextWidget(
                               textStyle: TextStyle(color: Theme.of(context).colorScheme.primaryVariant),
-                              textToDisplay: "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply}...",
+                              textToDisplay: notifier.repliesComments.containsKey(widget.data?.comment?.lineID)
+                                  ? '${_language.hideReplies}'
+                                  : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",
                             ),
                           ),
                         )

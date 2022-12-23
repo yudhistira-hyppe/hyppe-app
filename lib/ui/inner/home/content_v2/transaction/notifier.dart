@@ -759,4 +759,31 @@ class TransactionNotifier extends ChangeNotifier {
     amountWithDrawal = '';
     Routing().moveBack();
   }
+
+  Future<bool> checkTransPanding(BuildContext context) async {
+    bool connect = await System().checkConnections();
+    bool pandingTransaction = false;
+    if (connect) {
+      final notifier = TransactionBloc();
+      await notifier.transPanding(context);
+      final fetch = notifier.transactionFetch;
+
+      if (fetch.postsState == TransactionState.checkPandingSuccess) {
+        if (fetch.data['waitingCount'] == 0) {
+          pandingTransaction = false;
+        } else {
+          pandingTransaction = true;
+        }
+      }
+      if (fetch.postsState == TransactionState.checkPandingError) {
+        pandingTransaction = false;
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        Routing().moveBack();
+        createWithdraw(context, pinController.text);
+      });
+    }
+    return pandingTransaction;
+  }
 }

@@ -51,6 +51,7 @@ class CardBoost extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text("${data?.boosted.isNotEmpty}"),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14.0),
                 child: Row(
@@ -189,19 +190,16 @@ class CardBoost extends StatelessWidget {
                       onTap: () {
                         switch (data?.postType) {
                           case 'pict':
-                            Routing().move(
-                              Routes.picDetail,
-                              argument: PicDetailScreenArgument()
-                                ..postID = data?.postID
-                                ..backPage = true,
-                            );
+                            Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: data));
                             break;
                           case 'vid':
                             return context.read<PreviewVidNotifier>().navigateToHyppeVidDetail(context, data);
                           case 'diary':
+                            List<ContentData> data1 = [];
+                            data1.add(data!);
                             Routing().move(
                               Routes.diaryDetail,
-                              argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                              argument: DiaryDetailScreenArgument(diaryData: data1, type: TypePlaylist.none)
                                 ..postID = data?.postID
                                 ..backPage = true,
                             );

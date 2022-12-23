@@ -260,4 +260,31 @@ class TransactionBloc {
       errorServiceType: System().getErrorTypeV2(type),
     );
   }
+
+  Future transPanding(BuildContext context) async {
+    var type = FeatureType.other;
+    setTransactionFetch(TransactionFetch(TransactionState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setTransactionFetch(TransactionFetch(TransactionState.checkPandingError, message: onResult.data, data: onResult.data));
+        } else {
+          setTransactionFetch(TransactionFetch(TransactionState.checkPandingSuccess, data: onResult.data));
+        }
+      },
+      (errorData) {
+        setTransactionFetch(TransactionFetch(TransactionState.checkPandingError, data: errorData.error));
+      },
+      headers: {
+        "x-auth-token": SharedPreference().readStorage(SpKeys.userToken),
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      withAlertMessage: false,
+      withCheckConnection: false,
+      host: UrlConstants.pandingTransaction,
+      methodType: MethodType.get,
+      errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
 }

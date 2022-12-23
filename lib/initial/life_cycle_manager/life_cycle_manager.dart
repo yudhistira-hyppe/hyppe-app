@@ -1,8 +1,11 @@
 import 'dart:async' show Timer;
 import 'dart:convert';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/bloc/device/state.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -63,13 +66,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     print("Status Lifecycle: $state");
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (state == AppLifecycleState.inactive) {
-
-      if(notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty){
+      if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
         notifier.forceResetPlayer(true);
       }
       notifier.pauseAudioPreview();
       // picNotifier.pauseAudioPlayer();
-      if(globalAudioPlayer != null){
+      if (globalAudioPlayer != null) {
         print('globalAudioPlayer!.pause');
         globalAudioPlayer!.pause();
       }
@@ -87,7 +89,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     if (state == AppLifecycleState.resumed) {
       "App Resumed".logger();
       notifier.resumeAudioPreview();
-      if(globalAudioPlayer != null){
+      if (globalAudioPlayer != null) {
         print('globalAudioPlayer!.resume');
         globalAudioPlayer!.resume();
       }
@@ -97,6 +99,18 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       if (_userToken != null) {
         try {
           await activity.activityAwake(context);
+          final fetch = activity.deviceFetch;
+          // if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
+          //   print('ini device activity ${fetch.data}');
+          //   await getDevice();
+          //
+          //   if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
+          //     SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+          //   } else {
+          //     SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+          //   }
+          // }
+
           final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
           if (isOnHomeScreen) {
             print("isOnHomeScreen hit ads");
@@ -111,6 +125,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       }
       _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
     }
+  }
+
+  Future getDevice() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    Map device = System().readAndroidBuildData(await deviceInfo.androidInfo);
+    SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
   }
 
   Future<AdsData> getPopUpAds() async {

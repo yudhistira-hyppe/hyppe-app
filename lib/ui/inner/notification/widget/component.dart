@@ -70,6 +70,7 @@ class Component extends StatelessWidget {
                     children: [
                       CustomTextWidget(
                         textToDisplay: data?.senderOrReceiverInfo?.username ?? '',
+                        textAlign: TextAlign.start,
                         textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,

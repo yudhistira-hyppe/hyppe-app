@@ -3,11 +3,9 @@ import 'package:hyppe/core/bloc/message_v2/bloc.dart';
 import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/query_request/discuss_data_query.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
@@ -135,7 +133,7 @@ class MessageNotifier extends ChangeNotifier {
 
   Future<void> deletetConversation(BuildContext context, String email, String postId) async {
     final notifier = MessageBlocV2();
-    await notifier.deleteDiscussionBloc(context, postEmail: email, postId: postId);
+    await notifier.deleteDiscussionBloc(context, postEmail: email, id: postId);
     final fetch = notifier.messageFetch;
     if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
       getDiscussion(context, reload: true);

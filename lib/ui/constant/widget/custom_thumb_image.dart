@@ -24,6 +24,8 @@ class CustomThumbImage extends StatelessWidget {
       onTap: onTap as void Function()?,
       child: CustomBaseCacheImage(
         imageUrl: "$imageUrl",
+        memCacheHeight: 100,
+        memCacheWidth: 100,
         widthPlaceHolder: 100,
         heightPlaceHolder: 100,
         imageBuilder: (context, imageProvider) {

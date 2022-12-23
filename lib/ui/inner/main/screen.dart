@@ -30,13 +30,6 @@ class _MainScreenState extends State<MainScreen> {
     _mainNotifier.initMain(context, isInitSocket: true);
     SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
     super.initState();
-    getDevice();
-  }
-
-  void getDevice() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    Map device = System().readAndroidBuildData(await deviceInfo.androidInfo);
-    SharedPreference().writeStorage(SpKeys.brand, device['brand']);
   }
 
   @override

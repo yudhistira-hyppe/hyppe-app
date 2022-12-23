@@ -30,7 +30,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
             Background incoming message sentTime => ${message.sentTime},
             Background incoming message threadId => ${message.threadId},
             Background incoming message ttl => ${message.ttl},
-            Background incoming message notification => ${message.notification?.title} ${message.notification?.body},\
+            Background incoming message notification => ${message.notification?.title} ${message.notification?.body}
             """
       .logger();
 

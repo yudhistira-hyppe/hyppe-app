@@ -325,7 +325,6 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        _storyController.pause();
                         ShowBottomSheet.onReportContent(
                           context,
                           adsData: widget.data,

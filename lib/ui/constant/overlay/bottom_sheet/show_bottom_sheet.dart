@@ -729,7 +729,6 @@ class ShowBottomSheet {
     Function? onUpdate,
     bool? inDetail,
   }) {
-    print('pop up pertama');
     showModalBottomSheet(
       context: _,
       builder: (builder) {
@@ -821,7 +820,7 @@ class ShowBottomSheet {
         );
       },
     ).whenComplete(() {
-      if (onUpdate != null) onUpdate();
+      // if (onUpdate != null) onUpdate();
     });
   }
 
