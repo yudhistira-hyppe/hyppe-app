@@ -17,8 +17,9 @@ import 'package:provider/provider.dart';
 import '../../../constant/widget/custom_loading.dart';
 
 class SearchContent extends StatefulWidget {
+  int index;
   final FeatureType? featureType;
-  const SearchContent({Key? key, this.featureType}) : super(key: key);
+  SearchContent({Key? key, this.featureType, this.index = 0}) : super(key: key);
 
   @override
   State<SearchContent> createState() => _SearchContentState();
@@ -29,6 +30,7 @@ class _SearchContentState extends State<SearchContent> {
 
   @override
   void initState() {
+    print('ini index ${widget.index}');
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     _scrollController.addListener(() => notifier.onScrollListenerFirstPage(context, _scrollController, widget.featureType ?? FeatureType.vid));
     super.initState();
@@ -69,7 +71,7 @@ class _SearchContentState extends State<SearchContent> {
                   strokeWidth: 2.0,
                   color: Colors.purple,
                   onRefresh: () async {
-                    await notifier.onInitialSearchNew(context);
+                    // await notifier.onInitialSearchNew(context);
                   },
                   child: GridView.builder(
                     controller: _scrollController,

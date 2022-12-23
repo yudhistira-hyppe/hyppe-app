@@ -50,9 +50,10 @@ class MyFrameStory extends StatelessWidget {
                     width: 43,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: myStoriesData.item1?.isEmpty ?? [].isEmpty
-                          ? context.read<TranslateNotifierV2>().translate.yourStory ?? ''
-                          : "${_system.formatterNumber(myStoriesData.item2)} / ${_system.formatterNumber(myStoriesData.item1?.length)}",
+                      textToDisplay: context.read<TranslateNotifierV2>().translate.yourStory ?? '',
+                      // textToDisplay: myStoriesData.item1?.isEmpty ?? [].isEmpty
+                      //     ? context.read<TranslateNotifierV2>().translate.yourStory ?? ''
+                      //     : "${_system.formatterNumber(myStoriesData.item2)} / ${_system.formatterNumber(myStoriesData.item1?.length)}",
                       textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: myStoriesData.item1?.isEmpty ?? [].isEmpty ? null : 1.0),
                     ),
                   )

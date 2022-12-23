@@ -25,21 +25,27 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
 
   @override
   void initState() {
-    context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     _tabController = TabController(length: 3, vsync: this);
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
     _tabController.addListener(
       () {
         setState(() {
           print('tab controller');
           _currentIndex = _tabController.index;
+          if (_currentIndex == 1) {
+            notifier.onInitialSearchNew(context, FeatureType.diary);
+          }
+          if (_currentIndex == 2) {
+            notifier.onInitialSearchNew(context, FeatureType.pic);
+          }
           print(_currentIndex);
         });
       },
     );
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
     if (notifier.searchContentFirstPage?.video == null) {
-      Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context));
+      Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context, FeatureType.vid));
     }
+    context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
     super.initState();
   }
 
@@ -124,10 +130,10 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
                             child: TabBarView(
                               physics: const NeverScrollableScrollPhysics(),
                               controller: _tabController,
-                              children: const [
-                                SearchContent(featureType: FeatureType.vid),
-                                SearchContent(featureType: FeatureType.diary),
-                                SearchContent(featureType: FeatureType.pic),
+                              children: [
+                                SearchContent(featureType: FeatureType.vid, index: 0),
+                                SearchContent(featureType: FeatureType.diary, index: 1),
+                                SearchContent(featureType: FeatureType.pic, index: 2),
                               ],
                             ),
                           ),

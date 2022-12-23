@@ -218,13 +218,36 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  onInitialSearchNew(BuildContext context) async {
+  Future onInitialSearchNew(BuildContext context, FeatureType featureType) async {
     focusNode.unfocus();
-    isLoading = true;
-    _searchContentFirstPage = AllContents();
-    _searchContentFirstPage?.diary = [];
-    _searchContentFirstPage?.video = [];
-    _searchContentFirstPage?.pict = [];
+
+    if (featureType == FeatureType.vid) {
+      if (_searchContentFirstPage?.video != null || (_searchContentFirstPage?.video?.length ?? 0) > 0) {
+        return null;
+      } else {
+        isLoading = true;
+        _searchContentFirstPage = AllContents();
+        // _searchContentFirstPage?.video = [];
+      }
+    }
+
+    if (featureType == FeatureType.diary) {
+      if (_searchContentFirstPage?.diary != null || (_searchContentFirstPage?.diary?.length ?? 0) > 0) {
+        return;
+      } else {
+        isLoading = true;
+        _searchContentFirstPage?.diary = [];
+      }
+    }
+
+    if (featureType == FeatureType.pic) {
+      if (_searchContentFirstPage?.pict != null || (_searchContentFirstPage?.pict?.length ?? 0) > 0) {
+        return null;
+      } else {
+        isLoading = true;
+        _searchContentFirstPage?.pict = [];
+      }
+    }
     _vidHasNext = true;
     _diaryHasNext = true;
     _picHasNext = true;
@@ -235,14 +258,23 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
 
     try {
-      final allContents = await allReload(context);
-      vidContentsQuery.featureType = FeatureType.vid;
-      diaryContentsQuery.featureType = FeatureType.diary;
-      picContentsQuery.featureType = FeatureType.pic;
-      _searchContentFirstPage?.video = allContents.video;
-      _searchContentFirstPage?.diary = allContents.diary;
-      _searchContentFirstPage?.pict = allContents.pict;
-      print('skipnya $_skipVid');
+      final allContents = await allReload(
+        context,
+        featureType: System().validatePostTypeV2(featureType),
+      );
+      if (featureType == FeatureType.vid) {
+        vidContentsQuery.featureType = FeatureType.vid;
+        _searchContentFirstPage?.video = allContents.video;
+      }
+      if (featureType == FeatureType.diary) {
+        diaryContentsQuery.featureType = FeatureType.diary;
+        _searchContentFirstPage?.diary = allContents.diary;
+      }
+      if (featureType == FeatureType.pic) {
+        picContentsQuery.featureType = FeatureType.pic;
+        _searchContentFirstPage?.pict = allContents.pict;
+      }
+
       // _searchContent?.vid?.data = await getListPosts(context, FeatureType.vid);
       // _searchContent?.diary?.data = await getListPosts(context, FeatureType.diary);
       // _searchContent?.pict?.data = await getListPosts(context, FeatureType.pic);
@@ -255,7 +287,7 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false}) async {
+  Future<AllContents> allReload(BuildContext context, {bool myContent = false, bool otherContent = false, String? featureType}) async {
     AllContents? res;
     // final notifier = PostsBloc();
     //
@@ -267,7 +299,7 @@ class SearchNotifier with ChangeNotifier {
     try {
       final notifier = PostsBloc();
 
-      await notifier.getAllContentsBlocV2(context, pageNumber: 1, pageRows: 18, visibility: 'PUBLIC', myContent: myContent, otherContent: otherContent);
+      await notifier.getAllContentsBlocV2(context, pageNumber: 1, pageRows: 18, visibility: 'PUBLIC', myContent: myContent, otherContent: otherContent, postType: featureType);
       final fetch = notifier.postsFetch;
       '${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);

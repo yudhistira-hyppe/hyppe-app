@@ -106,9 +106,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
             await getDevice();
 
             if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
-              SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+              print('devices true');
+              SharedPreference().writeStorage(SpKeys.canDeppAr.toString(), true);
             } else {
-              SharedPreference().writeStorage(SpKeys.brand, "${device['manufacturer'] - device['model']}");
+              print('devices false');
+              SharedPreference().writeStorage(SpKeys.canDeppAr.toString(), false);
             }
           }
 

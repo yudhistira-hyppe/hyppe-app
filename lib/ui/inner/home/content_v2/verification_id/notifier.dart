@@ -264,7 +264,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     return double.tryParse(s) != null;
   }
 
-  Future<void> validateIDCard() async {
+  Future<void> validateIDCard(context) async {
+    ShowGeneralDialog.loadingDialog(context);
     isLoading = true;
     final inputImage = InputImage.fromFilePath(imagePath);
     final textDetector = TextRecognizer(script: TextRecognitionScript.latin);
@@ -322,7 +323,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         lines++;
       }
     }
-
+    Routing().moveBack();
     isLoading = false;
     notifyListeners();
   }
@@ -334,7 +335,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     if (filePath != null) {
       imagePath = filePath.path;
       aspectRatio = cameraNotifier.cameraAspectRatio;
-      await validateIDCard();
+      await validateIDCard(context);
       Routing().moveAndPop(Routes.verificationIDStep5);
       context.read<CameraNotifier>().flashOff();
     }

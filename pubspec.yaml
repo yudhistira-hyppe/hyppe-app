@@ -16,9 +16,9 @@ dependencies:
     sdk: flutter
 
   # firebase and google services
-  firebase_core: ^1.12.0 # Enabling connecting to multiple Firebase apps.
+  firebase_core: ^1.19.1 # Enabling connecting to multiple Firebase apps.
   firebase_dynamic_links: ^4.0.5 # For using dynamic link feature
-  firebase_messaging: ^11.4.4 # A Flutter plugin to use the Firebase Cloud Messaging (FCM) API
+  firebase_messaging: ^11.2.6 # A Flutter plugin to use the Firebase Cloud Messaging (FCM) API
   google_sign_in: ^5.2.4 # A secure authentication system for signing in with a Google account on Android and iOS.
   firebase_auth: ^3.3.14
   firebase_crashlytics: ^2.6.3
@@ -34,7 +34,7 @@ dependencies:
   flutter_svg: ^1.0.3 # Untuk kebutuhan rendering svg file
   flutter_video_info: ^1.2.0 # Get basic metadata information of a video file.
   http_parser: ^4.0.0 # A platform-independent package for parsing and serializing HTTP formats.
-  intl: ^0.17.0-nullsafety.1 # Untuk kebutuhan format date and time
+  intl: ^0.17.0 # Untuk kebutuhan format date and time
   lottie: ^1.2.1 # load image
   path_provider: ^2.0.8 # Untuk kebutuhan get path directory di device
   permission_handler: ^10.0.0 # Untuk kebutuhan handling permission
@@ -99,7 +99,7 @@ dependencies:
   # stomp_dart_client: ^0.4.3 # For easy messaging interoperability
 
  
-#dependency_overrides:
+# dependency_overrides:
 #  firebase_core_platform_interface: 4.5.1
 #   camera: <=0.10.0
 

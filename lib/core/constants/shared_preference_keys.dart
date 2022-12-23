@@ -37,5 +37,5 @@ class SpKeys {
   static const String settingMarketPlace = 'settingMarketPlace';
   static const String referralFrom = 'referralFrom';
   static const String brand = 'brand';
-  static const String canDeppAr = 'canDeppAr';
+  static const bool canDeppAr = false;
 }
