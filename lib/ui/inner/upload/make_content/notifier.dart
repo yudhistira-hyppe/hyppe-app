@@ -107,8 +107,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   onActionChange(BuildContext context, bool photo) {
     isVideo = !photo;
     dynamic notifier;
-    final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand == 'OPPO') {
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
       notifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       notifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -282,8 +282,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
             final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
             notifier.fileContent = value.values.single?.map((e) => e.path).toList();
 
-            final brand = SharedPreference().readStorage(SpKeys.brand);
-            if (brand == 'OPPO') {
+            final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+            if (canDeppAr == 'true') {
               notifier.aspectRation = context.read<CameraDevicesNotifier>().cameraAspectRatio;
             } else {
               notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
@@ -321,8 +321,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onStopRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
-    final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand == 'OPPO') {
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -347,8 +347,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onRecordedVideo(BuildContext context) {
     print('start recors');
     dynamic cameraNotifier;
-    final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand == 'OPPO') {
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -360,8 +360,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onPauseRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
-    final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand == 'OPPO') {
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -374,8 +374,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onResumeRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
-    final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand == 'OPPO') {
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -389,8 +389,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onTakePicture(BuildContext context) {
     dynamic cameraNotifier;
-    final brand = SharedPreference().readStorage(SpKeys.brand);
-    if (brand == 'OPPO') {
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
@@ -406,20 +406,20 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     });
   }
 
-  final brand = SharedPreference().readStorage(SpKeys.brand);
+  final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
 
   @override
-  bool get hasError => brand == 'OPPO' ? cameraDevicesNotifier.hasError : cameraNotifier.hasError;
+  bool get hasError => canDeppAr == 'true' ? cameraDevicesNotifier.hasError : cameraNotifier.hasError;
 
   @override
-  bool get isInitialized => brand == 'OPPO' ? cameraDevicesNotifier.isInitialized : cameraNotifier.isInitialized;
+  bool get isInitialized => canDeppAr == 'true' ? cameraDevicesNotifier.isInitialized : cameraNotifier.isInitialized;
 
   @override
-  bool get isRecordingPaused => brand == 'OPPO' ? cameraDevicesNotifier.isRecordingPaused : cameraNotifier.isRecordingPaused;
+  bool get isRecordingPaused => canDeppAr == 'true' ? cameraDevicesNotifier.isRecordingPaused : cameraNotifier.isRecordingPaused;
 
   @override
-  bool get isRecordingVideo => brand == 'OPPO' ? cameraDevicesNotifier.isRecordingVideo : cameraNotifier.isRecordingVideo;
+  bool get isRecordingVideo => canDeppAr == 'true' ? cameraDevicesNotifier.isRecordingVideo : cameraNotifier.isRecordingVideo;
 
   @override
-  bool get isTakingPicture => brand == 'OPPO' ? cameraDevicesNotifier.isTakingPicture : cameraNotifier.isTakingPicture;
+  bool get isTakingPicture => canDeppAr == 'true' ? cameraDevicesNotifier.isTakingPicture : cameraNotifier.isTakingPicture;
 }

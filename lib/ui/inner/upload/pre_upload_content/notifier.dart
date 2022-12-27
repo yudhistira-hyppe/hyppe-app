@@ -1226,7 +1226,31 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void submitOwnership() {
+  Future submitOwnership(BuildContext context, {bool withAlert = false}) async {
+    if (priceController.text != '') {
+      final harga = num.parse(priceController.text.replaceAll(',', '').replaceAll('.', ''));
+      if (harga < 50000) {
+        if (withAlert) {
+          return ShowBottomSheet().onShowColouredSheet(context, language.minimumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+        } else {
+          toSell = false;
+          includeTotalViews = false;
+          includeTotalLikes = false;
+          priceController.clear();
+        }
+      }
+      if (harga > 50000000) {
+        if (withAlert) {
+          return ShowBottomSheet().onShowColouredSheet(context, language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
+        } else {
+          toSell = false;
+          includeTotalViews = false;
+          includeTotalLikes = false;
+          priceController.clear();
+        }
+      }
+    }
+
     if (toSell && priceController.text == '') {
       toSell = false;
     } else {

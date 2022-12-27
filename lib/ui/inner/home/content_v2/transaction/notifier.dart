@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hyppe/core/bloc/transaction/bloc.dart';
 import 'package:hyppe/core/bloc/transaction/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/bank_data.dart';
@@ -362,7 +363,7 @@ class TransactionNotifier extends ChangeNotifier {
     }
   }
 
-  Future getDetailTransactionHistory(BuildContext context, {required String id, type, jenis}) async {
+  Future getDetailTransactionHistory(BuildContext context, {required String id, type, jenis, bool isReward = false}) async {
     bool connect = await System().checkConnections();
     isDetailLoading = true;
     String email = SharedPreference().readStorage(SpKeys.email);
@@ -374,28 +375,27 @@ class TransactionNotifier extends ChangeNotifier {
         "email": email,
       };
       final notifier = TransactionBloc();
-      await notifier.getDetailHistoryTransaction(context, params: param);
+      await notifier.getDetailHistoryTransaction(context, params: param, isReward: isReward);
       final fetch = notifier.transactionFetch;
 
       if (fetch.postsState == TransactionState.getDetailHistorySuccess) {
         _timeVA = DateTime.now();
-        dataTransactionDetail = TransactionHistoryModel.fromJSON(fetch.data);
-        var _hourVa = _timeVA.hour - DateTime.parse(dataTransactionDetail!.time!).hour;
-        _minuteVa = _timeVA.minute - DateTime.parse(dataTransactionDetail!.time!).minute;
-        _secondVa = _timeVA.second - DateTime.parse(dataTransactionDetail!.time!).second;
-        print(_minuteVa);
-        if (_hourVa > 0) {
-          _minuteVa = 14 - _minuteVa - 60;
+        print(fetch.data[0]);
+        dataTransactionDetail = isReward ? TransactionHistoryModel.fromJSON(fetch.data[0]) : TransactionHistoryModel.fromJSON(fetch.data);
+        if (!isReward) {
+          var _hourVa = _timeVA.hour - DateTime.parse(dataTransactionDetail!.time!).hour;
+          _minuteVa = _timeVA.minute - DateTime.parse(dataTransactionDetail!.time!).minute;
+          _secondVa = _timeVA.second - DateTime.parse(dataTransactionDetail!.time!).second;
+          print(_minuteVa);
+          if (_hourVa > 0) {
+            _minuteVa = 14 - _minuteVa - 60;
+          } else {
+            _minuteVa = 14 - _minuteVa;
+          }
+          _secondVa = 60 - _secondVa;
         } else {
-          _minuteVa = 14 - _minuteVa;
+          dataTransactionDetail?.type = TransactionType.reward;
         }
-
-        _secondVa = 60 - _secondVa;
-        print(_timeVA);
-        print(dataTransactionDetail!.time!);
-        print(_hourVa);
-        print(_minuteVa);
-        print(_secondVa);
       }
 
       if (fetch.postsState == TransactionState.getDetailHistoryError) {

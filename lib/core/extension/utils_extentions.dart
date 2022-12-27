@@ -10,25 +10,25 @@ import '../models/collection/localization_v2/localization_model.dart';
 import '../services/shared_preference.dart';
 import '../services/system.dart';
 
-extension ContextScreen on BuildContext{
-  double getWidth(){
+extension ContextScreen on BuildContext {
+  double getWidth() {
     return MediaQuery.of(this).size.width;
   }
 
-  double getHeight(){
+  double getHeight() {
     return MediaQuery.of(this).size.height;
   }
 
-  TextTheme getTextTheme(){
+  TextTheme getTextTheme() {
     return Theme.of(this).textTheme;
   }
 
-  bool isDarkMode(){
+  bool isDarkMode() {
     return SharedPreference().readStorage(SpKeys.themeData) ?? false;
   }
 
-  int getAdsCount(){
-    try{
+  int getAdsCount() {
+    try {
       int _countAds = SharedPreference().readStorage(SpKeys.countAds);
       print('success get count $_countAds');
       if (_countAds == null) {
@@ -37,44 +37,42 @@ extension ContextScreen on BuildContext{
       } else {
         return _countAds;
       }
-    }catch(e){
+    } catch (e) {
       print('failed get count');
       SharedPreference().writeStorage(SpKeys.countAds, 0);
       return 0;
     }
-
   }
 
-  void setAdsCount(int count){
+  void setAdsCount(int count) {
     SharedPreference().writeStorage(SpKeys.countAds, count);
   }
 
-  String getNameByDate(){
+  String getNameByDate() {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyyMMdd_HHmmss');
     return formatter.format(now);
   }
 
-  void incrementAdsCount(){
+  void incrementAdsCount() {
     final current = getAdsCount();
     print('ads second : $current');
-    if(current < 5){
+    if (current < 5) {
       setAdsCount(getAdsCount() + 1);
-    }else{
+    } else {
       setAdsCount(0);
     }
   }
 
-  String getCurrentDate(){
+  String getCurrentDate() {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return formatter.format(now);
   }
-
 }
 
-extension StringDefine on String{
-  ContentType? translateType(){
+extension StringDefine on String {
+  ContentType? translateType() {
     if (this == "video") {
       return ContentType.video;
     } else if (this == "image") {
@@ -83,33 +81,33 @@ extension StringDefine on String{
     return null;
   }
 
-  bool isImageFormat(){
+  bool isImageFormat() {
     return System().lookupContentMimeType(this)?.contains('image') ?? false;
   }
 
-  String getGenderByLanguage(){
+  String getGenderByLanguage() {
     LocalizationModelV2 language = Provider.of<TranslateNotifierV2>(materialAppKey.currentContext!, listen: false).translate;
-    if(this == 'MALE'){
+    print('jenis kelamin $this');
+    if (this == 'MALE' || this == 'Laki-laki') {
       return language.male ?? 'Male';
-    }else{
+    } else {
       return language.female ?? 'Female';
     }
   }
 }
 
-extension IntegerExtension on int{
-  String getMinutes(){
-    if(this > 3600){
+extension IntegerExtension on int {
+  String getMinutes() {
+    if (this > 3600) {
       return 'more than 1 hour';
-    }else{
+    } else {
       final minutes = Duration(seconds: this).inMinutes;
-      final seconds = this%60;
-      if(seconds < 10){
+      final seconds = this % 60;
+      if (seconds < 10) {
         return '$minutes:0$seconds';
-      }else{
+      } else {
         return '$minutes:$seconds';
       }
-
     }
   }
 }

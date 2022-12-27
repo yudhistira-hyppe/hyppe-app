@@ -24,6 +24,8 @@ class TopDetailWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (data?.type == TransactionType.withdrawal) {
       return withdrawWidget(context);
+    } else if (data?.type == TransactionType.reward) {
+      return rewardWidget(context);
     } else if (data?.type == TransactionType.buy) {
       return buyWidget(context);
     } else {
@@ -159,6 +161,20 @@ class TopDetailWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget rewardWidget(context) {
+    return Column(
+      children: [
+        TwoColumnWidget(
+          language?.forr ?? 'for',
+          text2: data?.from,
+          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
+        ),
+        TwoColumnWidget('Status', text2: data?.status),
+        TwoColumnWidget(language?.time ?? 'Time', text2: data?.timestamp),
+      ],
     );
   }
 }

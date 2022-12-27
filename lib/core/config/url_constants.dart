@@ -339,6 +339,9 @@ class UrlConstants {
   /// post => Get Account Balance
   static const String accountBalances = "$accountBalancesRoutes/";
 
+  /// post => Get Account Balance
+  static const String detailRewards = "$accountBalancesRoutes/detailrewards";
+
   //old upload support file
   static const String verificationIDSupportingDocs = "$postsRoute/supportfile";
 
@@ -385,7 +388,6 @@ class UrlConstants {
 
   //FAQ
   static const String faqList = "/api/faqs/allfaqs";
-
 
   //Tiket Histories
   static const String ticketHistories = "/api/usertickets/filter";

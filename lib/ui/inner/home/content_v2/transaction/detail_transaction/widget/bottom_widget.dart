@@ -19,6 +19,8 @@ class BottomDetailWidget extends StatelessWidget {
       return withdrawWidget(context);
     } else if (data?.type == TransactionType.buy) {
       return buyWidget(context);
+    } else if (data?.type == TransactionType.reward) {
+      return rewardWidget(context);
     } else {
       return sellWidget(context);
     }
@@ -98,6 +100,25 @@ class BottomDetailWidget extends StatelessWidget {
         data?.jenis == 'BOOST_CONTENT' ? const SizedBox() : TwoColumnWidget(language?.adminFee, text2: System().currencyFormat(amount: data?.adminFee ?? 0)),
         TwoColumnWidget(language?.serviceFee, text2: System().currencyFormat(amount: data?.serviceFee ?? 0)),
         TwoColumnWidget(language?.totalPrice, text2: System().currencyFormat(amount: data?.totalamount ?? 0)),
+      ],
+    );
+  }
+
+  Widget rewardWidget(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        twelvePx,
+        const Divider(height: 0.2, thickness: 1, color: Color(0xffF7F7F7)),
+        twelvePx,
+        TwoColumnWidget(
+          language?.amountEarned,
+          text2: "",
+        ),
+        TwoColumnWidget(
+          "+${System().currencyFormat(amount: data?.kredit?.toInt())}",
+          text2: "",
+        ),
       ],
     );
   }

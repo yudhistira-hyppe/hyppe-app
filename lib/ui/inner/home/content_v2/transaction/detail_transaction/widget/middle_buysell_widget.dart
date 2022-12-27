@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/transaction/bank_account/transaction_history_model.dart';
 import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
@@ -23,7 +24,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: CustomTextWidget(
-            textToDisplay: language?.contentDetail ?? '',
+            textToDisplay: data?.type == TransactionType.reward ? 'Ads Detail' : language?.contentDetail ?? '',
             textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
@@ -85,11 +86,19 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CustomTextWidget(
-                    textToDisplay: data?.descriptionContent ?? '',
+                    textToDisplay: data?.type == TransactionType.reward ? data?.description ?? '' : data?.descriptionContent ?? '',
                     textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground),
                     maxLines: 3,
                     textAlign: TextAlign.start,
                   ),
+                  data?.type == TransactionType.reward
+                      ? CustomTextWidget(
+                          textToDisplay: "${data?.duration.toString()}s",
+                          textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.onBackground, fontSize: 10),
+                          maxLines: 3,
+                          textAlign: TextAlign.start,
+                        )
+                      : Container(),
                   sixPx,
                   CustomTextWidget(
                     textToDisplay:
@@ -114,7 +123,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                               ),
                             )
                           : Container(),
-                     (data?.like ?? false) ? twelvePx : Container(),
+                      (data?.like ?? false) ? twelvePx : Container(),
                       (data?.view ?? false)
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),

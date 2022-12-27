@@ -125,7 +125,7 @@ class TransactionBloc {
     );
   }
 
-  Future getDetailHistoryTransaction(BuildContext context, {required Map? params}) async {
+  Future getDetailHistoryTransaction(BuildContext context, {required Map? params, bool isReward = false}) async {
     var type = FeatureType.other;
     setTransactionFetch(TransactionFetch(TransactionState.loading));
 
@@ -144,7 +144,7 @@ class TransactionBloc {
       data: params,
       withAlertMessage: true,
       withCheckConnection: false,
-      host: UrlConstants.detailTransactionHistorys,
+      host: isReward ? UrlConstants.detailRewards : UrlConstants.detailTransactionHistorys,
       methodType: MethodType.post,
       errorServiceType: System().getErrorTypeV2(type),
     );

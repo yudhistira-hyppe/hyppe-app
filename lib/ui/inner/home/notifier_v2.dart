@@ -59,8 +59,19 @@ class HomeNotifier with ChangeNotifier {
   String _profileImage = '';
   String get profileImage => _profileImage;
 
+  List _filterList = [];
+  List get filterList => _filterList;
+
+  String _select = 'PUBLIC';
+  String get select => _select;
+
   set profileImage(String url) {
     _profileImage = url;
+    notifyListeners();
+  }
+
+  set select(String val) {
+    _select = val;
     notifyListeners();
   }
 
@@ -121,6 +132,7 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context) async {
+    getListFilter();
     'init Home'.logger();
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
@@ -190,6 +202,15 @@ class HomeNotifier with ChangeNotifier {
         onRefresh(context, 'PUBLIC');
       });
     }
+  }
+
+  void getListFilter() {
+    _filterList = [
+      {"id": '1', 'name': "${language.all}", 'code': 'PUBLIC'},
+      // {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
+      {"id": '3', 'name': "${language.following}", 'code': 'FOLLOWING'},
+      {"id": '4', 'name': "${language.onlyMe}", 'code': 'PRIVATE'},
+    ];
   }
 
   Future onRefresh(BuildContext context, String visibility) async {

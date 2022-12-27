@@ -2409,6 +2409,7 @@ class LocalizationModelV2 {
     usernameisAlreadyinUse = json["usernameisAlreadyinUse"];
     priceChangesSavedSuccessfully = json["priceChangesSavedSuccessfully"];
     maximumPrice = json["maximumPrice"];
+    minimumPrice = json["minimumPrice"];
     noBankAccount2 = json["noBankAccount2"];
     hideReplies = json["hideReplies"];
     reply2 = json["reply2"];

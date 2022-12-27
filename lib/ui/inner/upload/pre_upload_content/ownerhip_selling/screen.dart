@@ -29,7 +29,7 @@ class OwnershipSellingScreen extends StatelessWidget {
           centerTitle: false,
           leading: CustomIconButtonWidget(
             onPressed: () {
-              notifier.submitOwnership();
+              notifier.submitOwnership(context);
             },
             defaultColor: true,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
@@ -248,14 +248,7 @@ class OwnershipSellingScreen extends StatelessWidget {
                     if (!notifier.toSell && (notifier.priceController.text == '' || notifier.priceController.text == '0')) {
                       Routing().moveBack();
                     } else {
-                      final harga = num.parse(notifier.priceController.text.replaceAll(',', '').replaceAll('.', ''));
-                      if (harga < 50000) {
-                        return ShowBottomSheet().onShowColouredSheet(_, notifier.language.minimumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-                      }
-                      if (harga > 50000000) {
-                        return ShowBottomSheet().onShowColouredSheet(_, notifier.language.maximumPrice ?? '', color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg");
-                      }
-                      notifier.submitOwnership();
+                      notifier.submitOwnership(context, withAlert: true);
                     }
                   }
                 : null,

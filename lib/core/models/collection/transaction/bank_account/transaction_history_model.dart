@@ -54,6 +54,9 @@ class TransactionHistoryModel {
   bool? apsara;
   MediaModel? media;
   String? debetKredit;
+  String? from;
+  num? duration;
+  num? kredit;
 
   TransactionHistoryModel.fromJSON(dynamic json) {
     id = json['_id'];
@@ -104,7 +107,9 @@ class TransactionHistoryModel {
     totalview = json['totalview'] ?? 0;
     debetKredit = json['debetKredit'] ?? '';
     apsara = json['apsara'] == null
-        ? false
+        ? json['apsaraId'] != ''
+            ? true
+            : false
         : json['apsara'] != ''
             ? json['apsara']
             : false;
@@ -113,6 +118,9 @@ class TransactionHistoryModel {
         : json['media'] is List
             ? null
             : MediaModel.fromJSON(json['media']);
+    from = json['from'] ?? '';
+    duration = (json['duration'] is int) ? json['duration'].toDouble() : json['duration'];
+    kredit = (json['kredit'] is int) ? json['kredit'].toDouble() : json['kredit'];
   }
 
   String? concatThumbUri() {

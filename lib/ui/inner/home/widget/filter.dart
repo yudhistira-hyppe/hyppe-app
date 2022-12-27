@@ -14,58 +14,51 @@ class FilterLanding extends StatefulWidget {
 }
 
 class _FilterLandingState extends State<FilterLanding> {
-  String _select = 'PUBLIC';
-  List filterList = [];
-
   @override
   void initState() {
     super.initState();
     // final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
   }
 
-  void selected(val) {
-    _select = val;
-    setState(() {});
-  }
-
-  bool pickedFilter(String? tile) => filterList.contains(tile) ? true : false;
+  // bool pickedFilter(String? tile) => filterList.contains(tile) ? true : false;
 
   @override
   Widget build(BuildContext context) {
     return Consumer3<LikeNotifier, TranslateNotifierV2, HomeNotifier>(builder: (context, notifier, transNotifier, homeNotifier, child) {
-      filterList = [
-        {"id": '1', 'name': "${transNotifier.translate.all}", 'code': 'PUBLIC'},
-        // {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
-        {"id": '3', 'name': "${transNotifier.translate.following}", 'code': 'FOLLOWING'},
-        {"id": '4', 'name': "${transNotifier.translate.onlyMe}", 'code': 'PRIVATE'},
-      ];
       return Padding(
-        padding: EdgeInsets.fromLTRB(8, 8, 0, 12),
-        child: Container(
+        padding: const EdgeInsets.fromLTRB(8, 8, 0, 12),
+        child: SizedBox(
           height: 50.0,
           child: ListView(
             scrollDirection: Axis.horizontal,
             shrinkWrap: false,
             children: [
               ...List.generate(
-                filterList.length,
+                homeNotifier.filterList.length,
                 (index) => GestureDetector(
                   onTap: () {
                     homeNotifier.isLoadingVid = true;
                     homeNotifier.isLoadingDiary = true;
                     homeNotifier.isLoadingPict = true;
-                    selected(filterList[index]['code']);
-                    notifier.changeVisibility(context, filterList[index]['code']);
+                    // selected(homeNotifier.filterList[index]['code']);
+                    homeNotifier.select = homeNotifier.filterList[index]['code'];
+                    notifier.changeVisibility(context, homeNotifier.filterList[index]['code']);
                   },
                   child: Chip(
-                      // selected: notifier.pickedVisibility(filterList[index]['code']),
-                      backgroundColor: _select == filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
-                      shape: StadiumBorder(
-                          side: BorderSide(color: _select == filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.secondaryContainer)),
-                      label: CustomTextWidget(
-                        textToDisplay: filterList[index]['name'],
-                        textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: _select == filterList[index]['code'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
-                      )),
+                    // selected: notifier.pickedVisibility(homeNotifier.filterList[index]['code']),
+                    backgroundColor: homeNotifier.select == homeNotifier.filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+                    shape: StadiumBorder(
+                        side: BorderSide(
+                            color:
+                                homeNotifier.select == homeNotifier.filterList[index]['code'] ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.secondaryContainer)),
+                    label: CustomTextWidget(
+                      textToDisplay: homeNotifier.filterList[index]['name'],
+                      textStyle: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: homeNotifier.select == homeNotifier.filterList[index]['code'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
               ),
 

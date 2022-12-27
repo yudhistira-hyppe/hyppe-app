@@ -69,13 +69,17 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
     _selectData = -1;
 
     _eventService.addDiscussHandler(EventKey.messageReceivedKey, this);
+    print(argument.discussData);
     _discussData = argument.discussData;
     try {
       discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
     } catch (e) {
       '$e'.logger();
     }
-    // getMessageDiscussion(context, reload: true);
+
+    if (argument.discussData == null) {
+      newGetMessageDiscussion(context, reload: true);
+    }
   }
 
   void disposeNotifier() {
@@ -125,6 +129,47 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //         .build(),
   //   );
   // }
+
+  Future<void> newGetMessageDiscussion(
+    BuildContext context, {
+    bool reload = false,
+  }) async {
+    Future<List<MessageDataV2>> _resFuture;
+
+    discussQuery.receiverParty = _argument.emailReceiver;
+
+    try {
+      if (reload) {
+        print('reload contentsQuery : 20');
+        _resFuture = discussQuery.reload(context);
+      } else {
+        _resFuture = discussQuery.loadNext(context);
+      }
+
+      final res = await _resFuture;
+      if (reload) {
+        List<MessageDataV2> resData = [];
+        final data = res.firstWhereOrNull((element) {
+          return element.senderOrReceiverInfo?.username == argument.usernameReceiver.replaceAll("@", '');
+        });
+        if (data != null) {
+          resData.add(data);
+        }
+        discussData = resData;
+      } else {
+        discussData = [...(discussData ?? [] as List<MessageDataV2>)] + res;
+      }
+
+      // sort descending
+      try {
+        discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
+      } catch (e) {
+        '$e'.logger();
+      }
+    } catch (e) {
+      'load discuss list: ERROR: $e'.logger();
+    }
+  }
 
   Future<void> getMessageDiscussion(
     BuildContext context, {
@@ -205,10 +250,9 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
       final fetch = notifier.messageFetch;
 
       if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {
-        print(fetch.data[0]['disqusLogs'][0]['disqusID']);
         DisqusLogs? _updatedData;
         _updatedData = discussData?.first.disqusLogs.firstWhere((element) => element.id == uniquKey);
-        _updatedData?.id = fetch.data[0]['disqusLogs'][0]['disqusID'];
+        _updatedData?.id = fetch.data[0]['disqusLogs'][0]['_id'];
       }
       if (fetch.chatState == MessageState.createDiscussionBlocError) {}
     } catch (e) {
@@ -451,9 +495,6 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
     final _routing = Routing();
     final notifier = MessageBlocV2();
     String? _id = _discussData?.first.disqusLogs[_selectData].id;
-    print('discuss log');
-    print(_id);
-    print(_selectData);
     _discussData?.first.disqusLogs.removeWhere((item) => item.id == _id);
 
     try {
