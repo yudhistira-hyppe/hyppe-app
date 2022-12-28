@@ -57,6 +57,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
           padding: const EdgeInsets.only(left: 4.5, right: 16.0),
           itemCount: notifier.peopleItemCount(error),
           itemBuilder: (context, index) {
+            print('ini story orang ${notifier.peopleStoriesData?.length}');
             int itemIndex = index - 1;
 
             if (notifier.peopleStoriesData != null) {

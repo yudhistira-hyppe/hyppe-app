@@ -11,12 +11,14 @@ class CameraDevicesPage extends StatefulWidget {
   final Function(CameraDevicesNotifier cameraNotifier) onCameraNotifierUpdate;
   final Function? onChangeAppLifecycleState;
   final List<Widget> additionalViews;
+  final bool backCamera;
 
   const CameraDevicesPage({
     Key? key,
     required this.additionalViews,
     this.onChangeAppLifecycleState,
     required this.onCameraNotifierUpdate,
+    this.backCamera = false,
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class _CameraDevicesPageState extends State<CameraDevicesPage> with WidgetsBindi
   @override
   void afterFirstLayout(BuildContext context) {
     notifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    notifier.initCamera(context, mounted);
+    notifier.initCamera(context, mounted, backCamera: widget.backCamera);
   }
 
   @override

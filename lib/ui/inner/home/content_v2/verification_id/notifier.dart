@@ -17,6 +17,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ux/path.dart';
@@ -79,6 +80,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   bool get isLoading => _isLoading;
 
   CameraNotifier cameraNotifier = CameraNotifier();
+  CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
   TextEditingController _realNameController = TextEditingController();
   TextEditingController _birtDateController = TextEditingController();
   TextEditingController _birtPlaceController = TextEditingController();
@@ -265,7 +267,6 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   Future<void> validateIDCard(context) async {
-    ShowGeneralDialog.loadingDialog(context);
     isLoading = true;
     final inputImage = InputImage.fromFilePath(imagePath);
     final textDetector = TextRecognizer(script: TextRecognitionScript.latin);
@@ -330,19 +331,33 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   @override
   Future<void> onTakePicture(BuildContext context) async {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-    File? filePath = await cameraNotifier.takePicture();
-    if (filePath != null) {
-      imagePath = filePath.path;
-      aspectRatio = cameraNotifier.cameraAspectRatio;
-      await validateIDCard(context);
-      Routing().moveAndPop(Routes.verificationIDStep5);
-      context.read<CameraNotifier>().flashOff();
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     }
+    ShowGeneralDialog.loadingDialog(context);
+    cameraNotifier.takePicture().then((filePath) async {
+      if (filePath != null) {
+        imagePath = filePath.path;
+        aspectRatio = cameraNotifier.cameraAspectRatio;
+        await validateIDCard(context);
+        Routing().moveAndPop(Routes.verificationIDStep5);
+        context.read<CameraNotifier>().flashOff();
+      }
+    });
   }
 
   void onTakeSelfie(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         selfiePath = filePath.path;
@@ -361,7 +376,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         } else {
           await postVerificationData(context);
         }
-        context.read<CameraNotifier>().flashOff();
+        // context.read<CameraNotifier>().flashOff();
       }
     });
   }

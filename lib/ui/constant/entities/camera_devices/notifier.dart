@@ -34,15 +34,14 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     if (setState) notifyListeners();
   }
 
-  Future<void> initCamera(BuildContext context, bool mounted) async {
-    print('camera init');
+  Future<void> initCamera(BuildContext context, bool mounted, {bool backCamera = false}) async {
     try {
       flashMode = FlashMode.off;
 
       camera = await availableCameras();
 
       cameraController = CameraController(
-        camera[0],
+        backCamera ? camera[0] : camera[1],
         ResolutionPreset.veryHigh,
         enableAudio: true,
       );

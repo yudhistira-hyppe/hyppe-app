@@ -74,7 +74,7 @@ class TranslateNotifierV2 with ChangeNotifier {
 
   List<FAQData> _listFAQ = [];
   List<FAQData> get listFAQ => _listFAQ;
-  set listFAQ(List<FAQData> values){
+  set listFAQ(List<FAQData> values) {
     _listFAQ = values;
     notifyListeners();
   }
@@ -84,26 +84,25 @@ class TranslateNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getListOfFAQ(BuildContext context, {String? category}) async{
-    try{
+  Future getListOfFAQ(BuildContext context, {String? category}) async {
+    try {
       _listFAQ = [];
       final bloc = FAQBloc();
       await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: category));
       final fetch = bloc.faqFetch;
-      if(fetch.state == FAQState.faqSuccess){
-        if(fetch.data != null){
-          fetch.data.forEach((v){
+      if (fetch.state == FAQState.faqSuccess) {
+        if (fetch.data != null) {
+          fetch.data.forEach((v) {
             _listFAQ.add(FAQData.fromJson(v));
           });
         }
         notifyListeners();
-      }else if (fetch.state == FAQState.faqError){
+      } else if (fetch.state == FAQState.faqError) {
         throw fetch.data;
       }
-    }catch(e){
+    } catch (e) {
       'Error getListOfFAQ: $e'.logger();
     }
-
   }
 
   Future getListOfLanguage(BuildContext context) async {
@@ -127,6 +126,7 @@ class TranslateNotifierV2 with ChangeNotifier {
   Future loadLanguage({int? index}) async {
     late String langIso;
     final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+    print('langiso adalah 1 $_isoCodeCache');
 
     if (index == null && _isoCodeCache != null) {
       langIso = _isoCodeCache == "en" ? "en" : "id";

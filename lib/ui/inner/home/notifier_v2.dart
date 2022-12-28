@@ -1,7 +1,10 @@
+// import 'dart:js';
+
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -58,9 +61,6 @@ class HomeNotifier with ChangeNotifier {
 
   String _profileImage = '';
   String get profileImage => _profileImage;
-
-  List _filterList = [];
-  List get filterList => _filterList;
 
   String _select = 'PUBLIC';
   String get select => _select;
@@ -132,7 +132,6 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context) async {
-    getListFilter();
     'init Home'.logger();
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
@@ -202,15 +201,6 @@ class HomeNotifier with ChangeNotifier {
         onRefresh(context, 'PUBLIC');
       });
     }
-  }
-
-  void getListFilter() {
-    _filterList = [
-      {"id": '1', 'name': "${language.all}", 'code': 'PUBLIC'},
-      // {"id": '2', 'name': "${transNotifier.translate.friends}", 'code': 'FRIEND'},
-      {"id": '3', 'name': "${language.following}", 'code': 'FOLLOWING'},
-      {"id": '4', 'name': "${language.onlyMe}", 'code': 'PRIVATE'},
-    ];
   }
 
   Future onRefresh(BuildContext context, String visibility) async {

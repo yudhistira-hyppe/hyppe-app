@@ -22,6 +22,7 @@ import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/google_sign_in_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
@@ -247,6 +248,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'manual');
       SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
+      SharedPreference().writeStorage(SpKeys.isoCode, signData.langIso);
+      await context.read<TranslateNotifierV2>().initTranslate(context);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
       print('iduser');
       print(signData.idUser);

@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_load_more_list.dart';
 import 'package:provider/provider.dart';
 
@@ -73,7 +74,9 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                         child: CustomElevatedButton(
                           height: 42,
                           width: SizeConfig.screenWidth,
-                          function: () => notifier.initTranslate(context, index: index),
+                          function: () {
+                            notifier.initTranslate(context, index: index);
+                          },
                           buttonStyle: const ButtonStyle(),
                           child: CustomTextWidget(
                             textToDisplay: notifier.listLanguage[index].lang ?? '',
@@ -83,9 +86,7 @@ class _NewAccountLanguageContentState extends State<NewAccountLanguageContent> {
                       ),
                     ),
                   ),
-                  notifier.loadMore
-                      ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language}")
-                      : const SizedBox.shrink(),
+                  notifier.loadMore ? SignUpLoadMoreList(caption: "${notifier.translate.loadMore} ${notifier.translate.language}") : const SizedBox.shrink(),
                   const RotatedBox(
                     quarterTurns: 3,
                     child: CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg'),

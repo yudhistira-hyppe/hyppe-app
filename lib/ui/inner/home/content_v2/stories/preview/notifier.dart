@@ -89,17 +89,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async {}
 
-
-  Future<void> initialPeopleStories(
-    BuildContext context, {
-    bool reload = false,
-        List<ContentData>? list
-  }) async {
+  Future<void> initialPeopleStories(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 
     try {
       if (list != null) {
-        for(var data in list){
+        for (var data in list) {
           print('data stories: ${data.toJson().toString()}');
         }
         if (reload) {
@@ -110,17 +105,17 @@ class PreviewStoriesNotifier with ChangeNotifier {
         peopleContentsQuery.hasNext = list.length == peopleContentsQuery.limit;
         if (list.isNotEmpty) peopleContentsQuery.page++;
       } else {
-        if(reload){
-          res = await peopleContentsQuery.reload(context);
-        }else{
+        if (reload) {
+          res = await peopleContentsQuery.loadNext(context, isLandingPage: true);
+          // res = await peopleContentsQuery.reload(context);
+        } else {
           res = await peopleContentsQuery.loadNext(context, isLandingPage: true);
         }
-
       }
 
       if (reload) {
         peopleStoriesData = res;
-        if(scrollController.hasClients){
+        if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
             duration: const Duration(milliseconds: 300),
@@ -141,7 +136,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !peopleContentsQuery.loading && hasNext) {
-      print('hariyanto2');
       initialPeopleStories(context);
     }
   }

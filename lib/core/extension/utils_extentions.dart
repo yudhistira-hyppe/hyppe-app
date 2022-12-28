@@ -87,7 +87,6 @@ extension StringDefine on String {
 
   String getGenderByLanguage() {
     LocalizationModelV2 language = Provider.of<TranslateNotifierV2>(materialAppKey.currentContext!, listen: false).translate;
-    print('jenis kelamin $this');
     if (this == 'MALE' || this == 'Laki-laki') {
       return language.male ?? 'Male';
     } else {

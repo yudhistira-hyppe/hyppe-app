@@ -196,6 +196,7 @@ class UserBloc {
 
   Future signInBlocV2(BuildContext context, {required Function() function, required String email, required String password, latitude, longtitude}) async {
     setUserFetch(UserFetch(UserState.loading));
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
     platForm = Platform.isAndroid ? "android" : "ios";
@@ -212,6 +213,7 @@ class UserBloc {
         "longitude": latitude ?? "${double.parse("0.0")}",
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
+      "lang": lang ?? 'id',
     };
     'Login payload => $payload'.logger();
     print('payload');
@@ -419,12 +421,7 @@ class UserBloc {
     );
   }
 
-  Future getUserProfilesBloc(
-      BuildContext context, {
-        String? search,
-        required bool withAlertMessage,
-        bool isByUsername = false
-  }) async {
+  Future getUserProfilesBloc(BuildContext context, {String? search, required bool withAlertMessage, bool isByUsername = false}) async {
     setUserFetch(UserFetch(UserState.loading));
     var formData = FormData();
     formData.fields.add(MapEntry('search', search ?? SharedPreference().readStorage(SpKeys.email)));

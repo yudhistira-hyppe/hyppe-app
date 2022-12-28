@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera//widgets/camera_flash_button.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/screen.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -46,7 +49,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     return Consumer<VerificationIDNotifier>(
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
@@ -54,89 +57,173 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
           return false;
         },
         child: Scaffold(
-          body: CameraPage(
-            onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraNotifier = cameraNotifier,
-            backCamera: true,
-            additionalViews: <Widget>[
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  width: double.infinity,
-                  height: SizeConfig.screenHeight! * 0.07,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Theme.of(context).colorScheme.primary.withOpacity(0.44),
-                        Colors.transparent,
-                      ],
-                    ),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-              SafeArea(
-                top: Platform.isIOS,
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
-                      CustomTextWidget(
-                        textToDisplay: notifier.language.idVerification ?? '',
-                        textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
+          body: canDeppAr == 'true'
+              ? CameraDevicesPage(
+                  onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraDevicesNotifier = cameraNotifier,
+                  backCamera: true,
+                  additionalViews: <Widget>[
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        width: double.infinity,
+                        height: SizeConfig.screenHeight! * 0.07,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Theme.of(context).colorScheme.primary.withOpacity(0.44),
+                              Colors.transparent,
+                            ],
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              // Align(
-              //   alignment: const Alignment(-0.8, 0.8),
-              //   child: CameraSwitchButton(),
-              // ),
-              Align(
-                alignment: const Alignment(0.0, 0.9),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                      width: 90,
-                      // color: Colors.red,
                     ),
-                    SizedBox(
-                        height: 105 * SizeConfig.scaleDiagonal,
-                        width: 105 * SizeConfig.scaleDiagonal,
-                        child: CustomIconButtonWidget(
-                          iconData: "${AssetPath.vectorPath}shutter.svg",
-                          onPressed: () => notifier.onTakePicture(context),
-                        )),
-                    const SizedBox(width: 90, child: CameraFlashButton()),
+                    SafeArea(
+                      top: Platform.isIOS,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.idVerification ?? '',
+                              textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Align(
+                    //   alignment: const Alignment(-0.8, 0.8),
+                    //   child: CameraSwitchButton(),
+                    // ),
+                    Align(
+                      alignment: const Alignment(0.0, 0.9),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                            width: 90,
+                            // color: Colors.red,
+                          ),
+                          SizedBox(
+                              height: 105 * SizeConfig.scaleDiagonal,
+                              width: 105 * SizeConfig.scaleDiagonal,
+                              child: CustomIconButtonWidget(
+                                iconData: "${AssetPath.vectorPath}shutter.svg",
+                                onPressed: () => notifier.onTakePicture(context),
+                              )),
+                          const SizedBox(width: 90, child: CameraFlashButton()),
+                        ],
+                      ),
+                    ),
+
+                    const Align(
+                      alignment: Alignment.center,
+                      child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}card.svg",
+                        defaultColor: false,
+                        height: 183,
+                        width: 281,
+                      ),
+                    ),
+                    Align(
+                      alignment: const Alignment(0.0, 0.6),
+                      child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
+                    )
+                  ],
+                )
+              : CameraPage(
+                  onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraNotifier = cameraNotifier,
+                  backCamera: true,
+                  additionalViews: <Widget>[
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        width: double.infinity,
+                        height: SizeConfig.screenHeight! * 0.07,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Theme.of(context).colorScheme.primary.withOpacity(0.44),
+                              Colors.transparent,
+                            ],
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(8),
+                            topRight: Radius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SafeArea(
+                      top: Platform.isIOS,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CustomTextButton(onPressed: () => notifier.retryTakeIdCard(), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
+                            CustomTextWidget(
+                              textToDisplay: notifier.language.idVerification ?? '',
+                              textStyle: textTheme.subtitle1?.copyWith(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Align(
+                    //   alignment: const Alignment(-0.8, 0.8),
+                    //   child: CameraSwitchButton(),
+                    // ),
+                    Align(
+                      alignment: const Alignment(0.0, 0.9),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                            width: 90,
+                            // color: Colors.red,
+                          ),
+                          SizedBox(
+                              height: 105 * SizeConfig.scaleDiagonal,
+                              width: 105 * SizeConfig.scaleDiagonal,
+                              child: CustomIconButtonWidget(
+                                iconData: "${AssetPath.vectorPath}shutter.svg",
+                                onPressed: () => notifier.onTakePicture(context),
+                              )),
+                          const SizedBox(width: 90, child: CameraFlashButton()),
+                        ],
+                      ),
+                    ),
+
+                    const Align(
+                      alignment: Alignment.center,
+                      child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}card.svg",
+                        defaultColor: false,
+                        height: 183,
+                        width: 281,
+                      ),
+                    ),
+                    Align(
+                      alignment: const Alignment(0.0, 0.6),
+                      child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
+                    )
                   ],
                 ),
-              ),
-
-              const Align(
-                alignment: Alignment.center,
-                child: CustomIconWidget(
-                  iconData: "${AssetPath.vectorPath}card.svg",
-                  defaultColor: false,
-                  height: 183,
-                  width: 281,
-                ),
-              ),
-              Align(
-                alignment: const Alignment(0.0, 0.6),
-                child: CustomTextWidget(textToDisplay: notifier.language.cameraTakeIdCardInfo ?? '', textStyle: textTheme.subtitle1?.copyWith(color: Colors.white)),
-              )
-            ],
-          ),
         ),
       ),
     );
