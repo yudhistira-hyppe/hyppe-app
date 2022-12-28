@@ -11,6 +11,8 @@ enum UserType { verified, notVerified }
 enum MethodType { get, post, download, postUploadProfile, postUploadContent, delete }
 enum TypePlaylist { landingpage, mine, other, search, none }
 enum TicketType {accountVerification, content, transaction, owner, problemBugs, ads}
+enum TicketStatus {newest, inProgress, solved, notSolved}
+enum AppealStatus {newest, flaging, notSuspended, suspend, removed}
 enum ErrorType {
   myStory,
   peopleStory,

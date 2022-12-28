@@ -93,6 +93,25 @@ extension StringDefine on String {
       return language.female ?? 'Female';
     }
   }
+
+  String getDateFormat(String format, LocalizationModelV2 translate, {bool isToday = true}) {
+    try {
+      final initForm = DateFormat(format);
+      final parsedDate = DateTime.parse(this);
+      if (isToday) {
+        if (parsedDate.isToday()) {
+          return translate.today ?? 'Today';
+        } else if (parsedDate.isToday()) {
+          return translate.yesterday ?? 'Yesterday';
+        }
+      }
+      final get = initForm.format(parsedDate);
+      final DateFormat formatter = DateFormat('dd/MM/yyyy');
+      return formatter.format(DateTime.parse(get));
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
 }
 
 extension IntegerExtension on int {
@@ -108,5 +127,17 @@ extension IntegerExtension on int {
         return '$minutes:$seconds';
       }
     }
+  }
+}
+
+extension DateHelpers on DateTime {
+  bool isToday() {
+    final now = DateTime.now();
+    return now.day == this.day && now.month == this.month && now.year == this.year;
+  }
+
+  bool isYesterday() {
+    final yesterday = DateTime.now().subtract(Duration(days: 1));
+    return yesterday.day == this.day && yesterday.month == this.month && yesterday.year == this.year;
   }
 }

@@ -8,6 +8,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
+import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -25,6 +26,7 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
   @override
   void initState() {
+    TranslateNotifierV2().startLoadingFAQ();
     super.initState();
   }
 
@@ -60,31 +62,36 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                   notifier.getListOfFAQ(context, category: value);
                 },
               ),
-              Container(
-                padding: const EdgeInsets.all(11),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black.withOpacity(0.12),
+              GestureDetector(
+                onTap: (){
+                  Routing().move(Routes.ticketHistory);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(11),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.black.withOpacity(0.12),
+                    ),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                child: Row(
-                  children: [
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}ticket.svg",
-                    ),
-                    tenPx,
-                    CustomTextWidget(
-                      textToDisplay: notifier.translate.yourTicketIssue ?? '',
-                      textStyle: Theme.of(context).primaryTextTheme.caption,
-                      textAlign: TextAlign.start,
-                    ),
-                    const Spacer(),
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}chevron_right.svg",
-                    ),
-                  ],
+                  child: Row(
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}ticket.svg",
+                      ),
+                      tenPx,
+                      CustomTextWidget(
+                        textToDisplay: notifier.translate.yourTicketIssue ?? '',
+                        textStyle: Theme.of(context).primaryTextTheme.caption,
+                        textAlign: TextAlign.start,
+                      ),
+                      const Spacer(),
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}chevron_right.svg",
+                      ),
+                    ],
+                  ),
                 ),
               ),
               twentyFourPx,
@@ -95,7 +102,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
               eightPx,
               Expanded(
                 child: Container(
-                  child: notifier.listFAQ.isNotEmpty
+                  child: !notifier.isLoading ? notifier.listFAQ.isNotEmpty
                       ? ListView.builder(
                           itemCount: notifier.listFAQ.length,
                           itemBuilder: (context, index) {
@@ -105,13 +112,20 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
 
                             return GestureDetector(
                                 onTap: () {
-                                  Routing().move(Routes.faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
+                                  Routing().move(Routes
+                                      .faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
                                 },
                                 child: Container(width: double.infinity, margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10), child: Text(notifier.listFAQ[index].kategori ?? '')));
                           })
                       : Center(
                           child: Text(notifier.translate.noData ?? 'No Data Found'),
-                        ),
+                        ) : ListView.builder(
+                      itemCount: 8,
+                      itemBuilder: (context, index) {
+                        return Container(
+                            margin: const EdgeInsets.only(bottom: 10, right: 10),
+                            child: const CustomShimmer(width: double.infinity, height: 25, radius: 8,));
+                      }),
                 ),
               ),
 

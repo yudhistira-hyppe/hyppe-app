@@ -11,7 +11,11 @@ class GenericResponse {
 
   GenericResponse.fromJson(Map<String, dynamic> json) {
     responseCode = json['response_code'];
-    responseData = json['data'];
+    if(json['data'] != null){
+      responseData = json['data'];
+    }else if(json['arrdata'] != null){
+      responseData = json['arrdata'];
+    }
     messages = json['messages'] != null ? Messages.fromJson(json['messages']) : null;
   }
 }

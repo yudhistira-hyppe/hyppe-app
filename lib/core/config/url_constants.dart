@@ -391,4 +391,7 @@ class UrlConstants {
 
   //Tiket Histories
   static const String ticketHistories = "/api/usertickets/filter";
+  static const String ticketComments = "/api/usertickets/comment";
+  static const String replyComment = "/api/usertickets/reply";
+  static const String reportHistories = "/api/reportuser/listreport";
 }

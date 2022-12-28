@@ -12,6 +12,7 @@ import 'package:hyppe/core/models/collection/faq/faq_request.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/utils/language/language_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/payment_method/notifier.dart';
@@ -51,6 +52,7 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import '../../core/models/collection/faq/faq_data.dart';
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
 
 class TranslateNotifierV2 with ChangeNotifier {
   TranslateNotifierV2._private();
@@ -59,6 +61,9 @@ class TranslateNotifierV2 with ChangeNotifier {
 
   LocalizationModelV2 _translate = LocalizationModelV2();
   LocalizationModelV2 get translate => _translate;
+
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
 
   set translate(LocalizationModelV2 val) {
     _translate = val;
@@ -84,8 +89,14 @@ class TranslateNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
+  startLoadingFAQ() {
+    _isLoading = true;
+  }
+
   Future getListOfFAQ(BuildContext context, {String? category}) async {
     try {
+      _isLoading = true;
+      notifyListeners();
       _listFAQ = [];
       final bloc = FAQBloc();
       await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: category));
@@ -102,6 +113,9 @@ class TranslateNotifierV2 with ChangeNotifier {
       }
     } catch (e) {
       'Error getListOfFAQ: $e'.logger();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -197,6 +211,8 @@ class TranslateNotifierV2 with ChangeNotifier {
     context.read<PaymentNotifier>().translate(translate);
     context.read<PaymentSummaryNotifier>().translate(translate);
     context.read<CommentNotifierV2>().translate(translate);
+    context.read<TicketHistoryNotifier>().translate(translate);
+    context.read<DetailTicketNotifier>().translate(translate);
     // await context.read<TransactionNotifier>().translate(translate);
     // await context.read<PinAccountNotifier>().translate(translate);
 

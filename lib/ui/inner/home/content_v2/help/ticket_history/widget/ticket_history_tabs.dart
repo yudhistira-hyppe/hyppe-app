@@ -1,23 +1,20 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/notifier.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/constants/size_config.dart';
-import '../../../../../../inner/upload/preview_content/notifier.dart';
-import '../../../../../widget/custom_text_button.dart';
-import '../../../../../widget/custom_text_widget.dart';
+import '../../../../../../constant/widget/custom_text_button.dart';
+import '../../../../../../constant/widget/custom_text_widget.dart';
 
-class MusicTabsScreen extends StatelessWidget {
-  const MusicTabsScreen({Key? key}) : super(key: key);
+class TicketHistoryTabsScreen extends StatelessWidget {
+  const TicketHistoryTabsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<PreviewContentNotifier>(context);
+    final notifier = Provider.of<TicketHistoryNotifier>(context);
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
-        eightPx,
         Expanded(
           flex: 1,
           child: Column(
@@ -30,22 +27,21 @@ class MusicTabsScreen extends StatelessWidget {
                   children: [
                     CustomTextWidget(
                       textAlign: TextAlign.center,
-                      textToDisplay: notifier.language.popular ?? '',
-                      textStyle: TextStyle(fontSize: 14, color: notifier.pageMusic == 0 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
+                      textToDisplay: notifier.language.help ?? 'Help',
+                      textStyle: TextStyle(fontSize: 14, color: notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageMusic = 0,
+                onPressed: () => notifier.isHelpTab = true,
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageMusic == 0 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : null),
               ),
             ],
           ),
         ),
-        eightPx,
         Expanded(
           flex: 1,
           child: Column(
@@ -58,24 +54,22 @@ class MusicTabsScreen extends StatelessWidget {
                   children: [
                     CustomTextWidget(
                       textAlign: TextAlign.center,
-                      textToDisplay: notifier.language.explore ?? '',
-                      textStyle: TextStyle(fontSize: 14, color: notifier.pageMusic == 1 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
+                      textToDisplay: notifier.language.contentAppeal ?? 'Content Appeal',
+                      textStyle: TextStyle(fontSize: 14, color: !notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageMusic = 1,
+                onPressed: () => notifier.isHelpTab = false,
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageMusic == 1 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: !notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : null),
               ),
             ],
           ),
         ),
-        eightPx
       ],
     );
   }
 }
-
