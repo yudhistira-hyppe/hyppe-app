@@ -20,7 +20,7 @@ class ListBoostNotifier with ChangeNotifier {
     bool connect = await System().checkConnections();
     if (connect) {
       if (!reload) _pageNumber = 0;
-      String param = '?pageNumber=$_pageNumber&pageRow=10';
+      String param = '?pageNumber=$_pageNumber&pageRow=5';
 
       final notifier = UtilsBlocV2();
       await notifier.getListBoost(context, param);

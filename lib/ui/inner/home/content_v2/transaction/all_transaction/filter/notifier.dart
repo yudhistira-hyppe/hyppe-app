@@ -285,17 +285,27 @@ class FilterTransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void scrollList(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-      _skip += _limit;
-      isScrollLoading = true;
+  void scrollList(BuildContext context, ScrollController scrollController, {bool isReload = false}) async {
+    if (isReload) {
+      _skip = 0;
       if (_param.isEmpty) {
         final email = SharedPreference().readStorage(SpKeys.email);
         _param.addAll({"skip": _skip, "limit": _limit, "email": email, "buy": false, "sell": false, "withdrawal": false});
       }
       _param.addAll({"skip": _skip});
-      await getAllTransaction(context, loading: false, param2: _param);
-      isScrollLoading = false;
+      await getAllTransaction(context, loading: false, param2: _param, fromNewFilter: true);
+    } else {
+      if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+        _skip += _limit;
+        isScrollLoading = true;
+        if (_param.isEmpty) {
+          final email = SharedPreference().readStorage(SpKeys.email);
+          _param.addAll({"skip": _skip, "limit": _limit, "email": email, "buy": false, "sell": false, "withdrawal": false});
+        }
+        _param.addAll({"skip": _skip});
+        await getAllTransaction(context, loading: false, param2: _param);
+        isScrollLoading = false;
+      }
     }
   }
 }

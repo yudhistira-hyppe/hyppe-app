@@ -123,7 +123,7 @@ class SelfProfileNotifier with ChangeNotifier {
 
   String displayBio() => user.profile != null
       ? user.profile?.bio != null
-          ? '"${user.profile?.bio}"'
+          ? '${user.profile?.bio}'
           : ""
       : "";
 
@@ -220,11 +220,42 @@ class SelfProfileNotifier with ChangeNotifier {
       // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
       notifyListeners();
     }
+    switch (pageIndex) {
+    }
     user.vids = await vidContentsQuery.reload(context, myContent: true);
-    user.diaries = await diaryContentsQuery.reload(context, myContent: true);
-    user.pics = await picContentsQuery.reload(context, myContent: true);
+    // user.diaries = await diaryContentsQuery.reload(context, myContent: true);
+    // user.pics = await picContentsQuery.reload(context, myContent: true);
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future getDataPerPgage(BuildContext context) async {
+    switch (pageIndex) {
+      case 0:
+        {
+          if (user.vids == null) {
+            user.vids = await vidContentsQuery.reload(context, myContent: true);
+            notifyListeners();
+          }
+        }
+        break;
+      case 1:
+        {
+          if (user.diaries == null) {
+            user.diaries = await diaryContentsQuery.reload(context, myContent: true);
+            notifyListeners();
+          }
+        }
+        break;
+      case 2:
+        {
+          if (user.pics == null) {
+            user.pics = await picContentsQuery.reload(context, myContent: true);
+            notifyListeners();
+          }
+        }
+        break;
+    }
   }
 
   Widget optionButton() {
@@ -241,12 +272,14 @@ class SelfProfileNotifier with ChangeNotifier {
     final connect = await _system.checkConnections();
     if (connect) {
       if (pageIndex == 0) _routing.move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: user.vids?[index]));
-      if (pageIndex == 1)
+      if (pageIndex == 1) {
         _routing.move(Routes.diaryDetail,
             argument: DiaryDetailScreenArgument(diaryData: user.diaries, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.mine));
-      if (pageIndex == 2)
+      }
+      if (pageIndex == 2) {
         _routing.move(Routes.picSlideDetailPreview,
             argument: SlidedPicDetailScreenArgument(picData: user.pics, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.mine));
+      }
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }

@@ -40,7 +40,10 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageIndex = 0,
+                onPressed: () {
+                  notifier.pageIndex = 0;
+                  notifier.getDataPerPgage(context);
+                },
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
@@ -68,7 +71,10 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageIndex = 1,
+                onPressed: () {
+                  notifier.pageIndex = 1;
+                  notifier.getDataPerPgage(context);
+                },
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
@@ -96,7 +102,10 @@ class _SelfProfileBottomState extends State<SelfProfileBottom> {
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageIndex = 2,
+                onPressed: () {
+                  notifier.pageIndex = 2;
+                  notifier.getDataPerPgage(context);
+                },
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,

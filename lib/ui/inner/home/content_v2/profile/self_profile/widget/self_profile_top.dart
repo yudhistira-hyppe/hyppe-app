@@ -251,7 +251,7 @@ class SelfProfileTop extends StatelessWidget {
                           textAlign: TextAlign.start,
                           seeLess: 'Show less',
                           seeMore: 'Show More',
-                          normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
+                          normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                           expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                         ),

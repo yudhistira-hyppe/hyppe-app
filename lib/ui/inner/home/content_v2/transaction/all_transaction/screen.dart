@@ -52,149 +52,158 @@ class _AllTransactionState extends State<AllTransaction> {
               textToDisplay: '${notifier2.translate.transaction}',
             ),
           ),
-          body: SingleChildScrollView(
-            controller: _scrollController,
-            child: Column(children: [
-              SizedBox(
-                height: 50,
-                child: notifier.newFilterList.isNotEmpty
-                    ? ListView(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: false,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              notifier.resetFilter(context, back: false);
-                              _select = 0;
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Chip(
-                                // selected: notifier.pickedVisibility(notifier.newFilterList[index]['id']),
-                                shape: StadiumBorder(
-                                    side: BorderSide(
-                                  color: kHyppeLightSecondary,
-                                )),
-                                label: Icon(Icons.close_rounded),
-                              ),
-                            ),
-                          ),
-                          ...List.generate(
-                            notifier.newFilterList.length,
-                            (index) => GestureDetector(
-                              onTap: () {
-                                notifier.filter(context, notifier.newFilterList[index]['id']);
-                                notifier.filterSelected(context, notifier.newFilterList[index]['id']);
-                                if (notifier.newFilterList[index]['id'] != 1) {
-                                  selected(notifier.newFilterList[index]['id']);
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Chip(
-                                    // selected: notifier.pickedVisibility(notifier.newFilterList[index]['id']),
-                                    backgroundColor: notifier.newFilterList[index]['selected'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
-                                    shape: StadiumBorder(
-                                        side: BorderSide(
-                                      color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeLightSecondary,
-                                    )),
-                                    label: CustomTextWidget(
-                                      textToDisplay: notifier.newFilterList[index]['name'],
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
-                                    )),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : ListView(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: false,
-                        children: [
-                          ...List.generate(
-                            notifier.filterList.length,
-                            (index) => GestureDetector(
-                              onTap: () {
-                                notifier.filter(context, notifier.filterList[index]['id']);
-                                if (notifier.filterList[index]['id'] != 1) {
-                                  selected(notifier.filterList[index]['id']);
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Chip(
-                                    // selected: notifier.pickedVisibility(notifier.filterList[index]['id']),
-                                    avatar: notifier.filterList[index]['icon'] == ''
-                                        ? null
-                                        : CustomIconWidget(
-                                            iconData: '${AssetPath.vectorPath}${notifier.filterList[index]['icon']}',
-                                          ),
-                                    backgroundColor: _select == notifier.filterList[index]['id'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
-                                    shape: StadiumBorder(
-                                        side: BorderSide(
-                                      color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeLightSecondary,
-                                    )),
-                                    label: CustomTextWidget(
-                                      textToDisplay: notifier.filterList[index]['name'],
-                                      textStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
-                                    )),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-              notifier.isLoading
-                  ? const ShimmerAllTransactionHistory()
-                  : notifier.dataAllTransaction?.isEmpty ?? false
-                      ? EmptyBankAccount(
-                          textWidget: Column(
+          body: RefreshIndicator(
+            strokeWidth: 2.0,
+            color: Colors.purple,
+            key: _refreshIndicatorKey,
+            onRefresh: () async {
+              notifier.scrollList(context, _scrollController, isReload: true);
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              child: Column(children: [
+                SizedBox(
+                  height: 50,
+                  child: notifier.newFilterList.isNotEmpty
+                      ? ListView(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: false,
                           children: [
-                            CustomTextWidget(
-                              textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
-                              maxLines: 4,
+                            GestureDetector(
+                              onTap: () {
+                                notifier.resetFilter(context, back: false);
+                                _select = 0;
+                              },
+                              child: const Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Chip(
+                                  // selected: notifier.pickedVisibility(notifier.newFilterList[index]['id']),
+                                  shape: StadiumBorder(
+                                      side: BorderSide(
+                                    color: kHyppeLightSecondary,
+                                  )),
+                                  label: Icon(Icons.close_rounded),
+                                ),
+                              ),
+                            ),
+                            ...List.generate(
+                              notifier.newFilterList.length,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  notifier.filter(context, notifier.newFilterList[index]['id']);
+                                  notifier.filterSelected(context, notifier.newFilterList[index]['id']);
+                                  if (notifier.newFilterList[index]['id'] != 1) {
+                                    selected(notifier.newFilterList[index]['id']);
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Chip(
+                                      // selected: notifier.pickedVisibility(notifier.newFilterList[index]['id']),
+                                      backgroundColor: notifier.newFilterList[index]['selected'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+                                      shape: StadiumBorder(
+                                          side: BorderSide(
+                                        color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeLightSecondary,
+                                      )),
+                                      label: CustomTextWidget(
+                                        textToDisplay: notifier.newFilterList[index]['name'],
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(color: notifier.newFilterList[index]['selected'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                                      )),
+                                ),
+                              ),
                             ),
                           ],
-                        ))
-                      : Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: notifier.dataAllTransaction?.length,
-                              itemBuilder: (context, index) {
-                                String title = '';
-                                switch (notifier.dataAllTransaction?[index].type) {
-                                  case TransactionType.withdrawal:
-                                    title = notifier2.translate.withdrawal ?? '';
-                                    return WithdrawalWidget(
-                                      title: title,
-                                      language: notifier2.translate,
-                                      data: notifier.dataAllTransaction?[index],
-                                    );
-                                  case TransactionType.reward:
-                                    title = notifier2.translate.reward ?? '';
-                                    return RewardWidget(
-                                      title: title,
-                                      language: notifier2.translate,
-                                      data: notifier.dataAllTransaction?[index],
-                                    );
-                                  default:
-                                    return BuySellWidget(
-                                      data: notifier.dataAllTransaction?[index],
-                                      language: notifier2.translate,
-                                    );
-                                }
-                              }),
+                        )
+                      : ListView(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: false,
+                          children: [
+                            ...List.generate(
+                              notifier.filterList.length,
+                              (index) => GestureDetector(
+                                onTap: () {
+                                  notifier.filter(context, notifier.filterList[index]['id']);
+                                  if (notifier.filterList[index]['id'] != 1) {
+                                    selected(notifier.filterList[index]['id']);
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Chip(
+                                      // selected: notifier.pickedVisibility(notifier.filterList[index]['id']),
+                                      avatar: notifier.filterList[index]['icon'] == ''
+                                          ? null
+                                          : CustomIconWidget(
+                                              iconData: '${AssetPath.vectorPath}${notifier.filterList[index]['icon']}',
+                                            ),
+                                      backgroundColor: _select == notifier.filterList[index]['id'] ? Theme.of(context).colorScheme.onSecondary : Theme.of(context).backgroundColor,
+                                      shape: StadiumBorder(
+                                          side: BorderSide(
+                                        color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeLightSecondary,
+                                      )),
+                                      label: CustomTextWidget(
+                                        textToDisplay: notifier.filterList[index]['name'],
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(color: _select == notifier.filterList[index]['id'] ? kHyppePrimary : kHyppeSecondary, fontWeight: FontWeight.bold),
+                                      )),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-              notifier.isScrollLoading ? const CustomLoading() : const SizedBox(),
-            ]),
+                ),
+                notifier.isLoading
+                    ? const ShimmerAllTransactionHistory()
+                    : notifier.dataAllTransaction?.isEmpty ?? false
+                        ? EmptyBankAccount(
+                            textWidget: Column(
+                            children: [
+                              CustomTextWidget(
+                                textToDisplay: notifier2.translate.youDontHaveAnyTransactionsYet ?? '',
+                                maxLines: 4,
+                              ),
+                            ],
+                          ))
+                        : Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: notifier.dataAllTransaction?.length,
+                                itemBuilder: (context, index) {
+                                  String title = '';
+                                  switch (notifier.dataAllTransaction?[index].type) {
+                                    case TransactionType.withdrawal:
+                                      title = notifier2.translate.withdrawal ?? '';
+                                      return WithdrawalWidget(
+                                        title: title,
+                                        language: notifier2.translate,
+                                        data: notifier.dataAllTransaction?[index],
+                                      );
+                                    case TransactionType.reward:
+                                      title = notifier2.translate.reward ?? '';
+                                      return RewardWidget(
+                                        title: title,
+                                        language: notifier2.translate,
+                                        data: notifier.dataAllTransaction?[index],
+                                      );
+                                    default:
+                                      return BuySellWidget(
+                                        data: notifier.dataAllTransaction?[index],
+                                        language: notifier2.translate,
+                                      );
+                                  }
+                                }),
+                          ),
+                notifier.isScrollLoading ? const CustomLoading() : const SizedBox(),
+              ]),
+            ),
           ),
         );
       },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/eula.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -14,6 +16,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/services/shared_preference.dart';
@@ -26,11 +29,22 @@ class VerificationIDStep1 extends StatefulWidget {
 }
 
 class _VerificationIDStep1State extends State<VerificationIDStep1> {
+  String dataText = '';
   @override
   void initState() {
     final ntfr = Provider.of<VerificationIDNotifier>(context, listen: false);
     ntfr.clearAllTempData();
+    readFile();
     super.initState();
+  }
+
+  readFile() async {
+    String? isoCode = SharedPreference().readStorage(SpKeys.isoCode) ?? 'en';
+    print('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+    var request = await rootBundle.loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+    setState(() {
+      dataText = request;
+    });
   }
 
   @override
@@ -54,14 +68,25 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
           centerTitle: false,
         ),
         body: SingleChildScrollView(
-          child: Column(children: <Widget>[
-            Html(
-              data: eulaHtml(context, (SharedPreference().readStorage(SpKeys.themeData) ?? false)),
+          child: Column(children: [
+            // Html(
+            //   data: eulaHtml(context, (SharedPreference().readStorage(SpKeys.themeData) ?? false)),
+            // ),
+            SizedBox(
+              height: SizeConfig.screenHeight,
+              child: Markdown(
+                data: dataText,
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
+                onTapLink: (text, href, title) async {
+                  try {
+                    print('markdown  $text, $href, $title');
+                    await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
+                  } catch (e) {
+                    // 'error href : $e'.logger();
+                  }
+                },
+              ),
             ),
-            twentyFourPx,
-            twentyFourPx,
-            twentyFourPx,
-            twentyFourPx,
 
             // Expanded(
             //   child: InAppWebView(

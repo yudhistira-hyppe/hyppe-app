@@ -9,15 +9,13 @@ class UserAgreementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        leading: const BackButton(),
         title: CustomTextWidget(
+          textStyle: theme.textTheme.subtitle1,
           textToDisplay: context.watch<TranslateNotifierV2>().translate.endUserLicenseAgreement ?? '',
-          textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
       body: const UserAgreementDemoScreen(),

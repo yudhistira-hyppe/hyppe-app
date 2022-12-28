@@ -215,9 +215,7 @@ class OtherProfileNotifier with ChangeNotifier {
   }
 
   initialOtherProfile(BuildContext context, {OtherProfileArgument? argument, bool refresh = false}) async {
-    print('ini argument');
-    print(argument?.postID);
-    print(argument?.postID);
+    pageIndex = 0;
     user = UserInfoModel();
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
 
@@ -237,10 +235,10 @@ class OtherProfileNotifier with ChangeNotifier {
     diaryContentsQuery.searchText = userEmail ?? '';
     picContentsQuery.searchText = userEmail ?? '';
 
-    if(argument?.profile != null){
+    if (argument?.profile != null) {
       user.profile = argument?.profile;
       notifyListeners();
-    }else{
+    } else {
       final usersNotifier = UserBloc();
       await usersNotifier.getUserProfilesBloc(context, search: userEmail, withAlertMessage: true);
       final usersFetch = usersNotifier.userFetch;
@@ -251,17 +249,52 @@ class OtherProfileNotifier with ChangeNotifier {
       }
     }
 
-
     if (refresh) {
       checkFollowingToUser(context, userEmail ?? '');
     }
-
-    print('test10');
-    user.vids = await vidContentsQuery.reload(context, otherContent: true);
-    user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
-    user.pics = await picContentsQuery.reload(context, otherContent: true);
+    user.vids ??= await vidContentsQuery.reload(context, otherContent: true);
+    // user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+    // user.pics = await picContentsQuery.reload(context, otherContent: true);
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future getDataPerPgage(BuildContext context) async {
+    switch (pageIndex) {
+      case 0:
+        {
+          if (user.vids == null) {
+            isLoading = true;
+            notifyListeners();
+            user.vids = await vidContentsQuery.reload(context, otherContent: true);
+            isLoading = false;
+            notifyListeners();
+          }
+        }
+        break;
+      case 1:
+        {
+          if (user.diaries == null) {
+            isLoading = true;
+            notifyListeners();
+            user.diaries = await diaryContentsQuery.reload(context, otherContent: true);
+            isLoading = false;
+            notifyListeners();
+          }
+        }
+        break;
+      case 2:
+        {
+          if (user.pics == null) {
+            isLoading = true;
+            notifyListeners();
+            user.pics = await picContentsQuery.reload(context, otherContent: true);
+            isLoading = false;
+            notifyListeners();
+          }
+        }
+        break;
+    }
   }
 
   Future followUser(BuildContext context) async {

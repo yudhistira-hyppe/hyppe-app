@@ -57,16 +57,11 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initMain(
-    BuildContext context, {
-      bool onUpdateProfile = false,
-        bool isInitSocket = false
-  }) async {
+  Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false}) async {
     // Connect to socket
-    if(isInitSocket){
+    if (isInitSocket) {
       _connectAndListenToSocket();
     }
-
 
     // Auto follow user if app is install from a dynamic link
     DynamicLinkService.followSender(context);
@@ -172,16 +167,15 @@ class MainNotifier with ChangeNotifier {
               print('ini message dari socket ${msgData.disqusID}');
               if (msgData.disqusLogs[0].receiver == email) {
                 NotificationService().showNotification(
-                  RemoteMessage(
-                    notification: RemoteNotification(
-                      // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
-                      title: "@${msgData.disqusLogs[0].sender}",
-                      body: msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+                    RemoteMessage(
+                      notification: RemoteNotification(
+                        // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
+                        title: "${msgData.username}",
+                        body: msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+                      ),
+                      data: msgData.toJson(),
                     ),
-                    data: msgData.toJson(),
-                  ),
-                  data: msgData
-                );
+                    data: msgData);
                 _eventService.notifyMessageReceived(msgData);
               }
             } catch (e) {

@@ -35,12 +35,16 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     CustomTextWidget(
                       textToDisplay: "Vids",
                       textStyle: TextStyle(
-                          fontSize: 14, color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                        fontSize: 14,
+                        color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
                       ),
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageIndex = 0,
+                onPressed: () {
+                  notifier.pageIndex = 0;
+                  notifier.getDataPerPgage(context);
+                },
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
@@ -65,12 +69,16 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     CustomTextWidget(
                       textToDisplay: "Diaries",
                       textStyle: TextStyle(
-                          fontSize: 14, color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                        fontSize: 14,
+                        color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
                       ),
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageIndex = 1,
+                onPressed: () {
+                  notifier.pageIndex = 1;
+                  notifier.getDataPerPgage(context);
+                },
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
@@ -95,12 +103,16 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                     CustomTextWidget(
                       textToDisplay: "Pics",
                       textStyle: TextStyle(
-                          fontSize: 14, color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                        fontSize: 14,
+                        color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
                       ),
                     ),
                   ],
                 ),
-                onPressed: () => notifier.pageIndex = 2,
+                onPressed: () {
+                  notifier.pageIndex = 2;
+                  notifier.getDataPerPgage(context);
+                },
               ),
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
