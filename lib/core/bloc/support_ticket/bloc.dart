@@ -7,11 +7,14 @@ import 'package:hyppe/core/bloc/support_ticket/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
+
+import '../../arguments/ticket_argument.dart';
 
 class SupportTicketBloc {
   final _repos = Repos();
@@ -139,11 +142,97 @@ class SupportTicketBloc {
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
         'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
-      withAlertMessage: false,
-      withCheckConnection: false,
+      withAlertMessage: true,
+      withCheckConnection: true,
       host: UrlConstants.faqList,
       methodType: MethodType.post,
       errorServiceType: System().getErrorTypeV2(FeatureType.other),
     );
+  }
+
+  Future getTicketHistories(BuildContext context, TicketArgument request, {isDetail = false}) async{
+    setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult){
+        if((onResult.statusCode ?? 300) > HTTP_CODE){
+          setSupportTicket(SupportTicketFetch(SupportTicketState.getTicketHistoriesError));
+        }else{
+          setSupportTicket(SupportTicketFetch(SupportTicketState.getTicketHistoriesSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData){
+        setSupportTicket(SupportTicketFetch(SupportTicketState.getTicketHistoriesError));
+      },
+      data: request.toJson(),
+      headers: {
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      host: !isDetail ? UrlConstants.ticketHistories : UrlConstants.ticketComments,
+      withAlertMessage: true,
+      methodType: MethodType.post,
+      withCheckConnection: true,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
+  }
+
+  Future getReportHistories(BuildContext context, TicketArgument request) async{
+    setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult){
+        if((onResult.statusCode ?? 300) > HTTP_CODE){
+          setSupportTicket(SupportTicketFetch(SupportTicketState.getContentAppealError));
+        }else{
+          setSupportTicket(SupportTicketFetch(SupportTicketState.getContentAppealSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData){
+        setSupportTicket(SupportTicketFetch(SupportTicketState.getContentAppealError));
+      },
+      data: request.toJson(),
+      headers: {
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      host: UrlConstants.reportHistories,
+      withAlertMessage: true,
+      methodType: MethodType.post,
+      withCheckConnection: true,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
+  }
+
+  Future sendComment(BuildContext context, TicketArgument request, {Function? onSuccess}) async{
+    setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
+    final formData = FormData();
+    request.type = 'comment';
+    'request sendComment ${request.toJson()}'.logger();
+    formData.fields.add(const MapEntry('type', 'comment'));
+    formData.fields.add(MapEntry('status', request.status ?? 'new'));
+    formData.fields.add(MapEntry('body', request.body ?? ''));
+    formData.fields.add(MapEntry('IdUserticket', request.idUserTicket ?? ''));
+    await _repos.reposPost(context,
+      (onResult){
+        if((onResult.statusCode ?? 300) > HTTP_CODE){
+          setSupportTicket(SupportTicketFetch(SupportTicketState.sendCommentError));
+        }else{
+          if(onSuccess != null){
+            onSuccess();
+          }
+          setSupportTicket(SupportTicketFetch(SupportTicketState.sendCommentSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      }, (errorData){
+        setSupportTicket(SupportTicketFetch(SupportTicketState.sendCommentError));
+      },
+      headers: {
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+        'x-auth-user': SharedPreference().readStorage(SpKeys.email)
+      },
+      data: formData,
+      host: UrlConstants.replyComment,
+      withAlertMessage: true,
+      methodType: MethodType.post,
+      withCheckConnection: true,
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),);
   }
 }

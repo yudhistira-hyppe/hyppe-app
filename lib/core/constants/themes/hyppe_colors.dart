@@ -29,6 +29,7 @@ const kHyppeDisabled = Color(0xffbababa);
 const kHyppeBackground = Color(0xff121212);
 
 const kHyppeSurface = Color(0xff1D2124);
+const kHyppeBorder = Color(0xffF7F7F7);
 const kHyppeSecondary = Color(0xff707070);
 const kHyppeTextPrimary = Color(0xffFFFFFF);
 
@@ -54,6 +55,20 @@ const kSkeleton = LinearGradient(
   ],
 );
 
+///type ticket colors
+const kHyppeBgNew = Color(0xffFCE6ED);
+const kHyppeBgInprogress = Color(0xffFFEED9);
+const kHyppeBgSolved = Color(0xffF1F6E5);
+const kHyppeBgSensitive = Color(0xffB457F6);
+const kHyppeBgNotSolve = Color(0xffEEEEEE);
+const kHyppeFontNew = Color(0xffE92A63);
+const kHyppeFontInprogress = Color(0xffFF9B21);
+const kHyppeFontSolve = Color(0xff84B122);
+const kHyppeFontNotSolve = Color(0xff7B7B7B);
+const kHyppeBgSender = Color(0xff72808B);
+const kHyppeBgReceiver = Color(0xffD3D3D3);
+
+///basic colors
 const kHyppeCyan = Color(0xff00A3FF);
 const kHyppeCyanLight = Color(0xffD6EFFD);
 const kHyppeRed = Color(0xffDD0000);

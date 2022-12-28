@@ -115,6 +115,8 @@ class Routes {
   static const String supportTicket = '/support-ticket';
   static const String appeal = '/appeal';
   static const String appealSuccess = '/appeal-success';
+  static const String ticketHistory = '/ticket-history';
+  static const String detailTAHistory = '/detail-ticket-appeal-history';
 
   //boost
   static const String boostUpload = '/boost-upload';

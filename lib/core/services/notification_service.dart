@@ -154,7 +154,7 @@ class NotificationService {
   Future showNotification(RemoteMessage message, {MessageDataV2? data, String? idNotif}) async {
     if(idNotif != null){
       try{
-        flutterLocalNotificationsPlugin.cancel(0, tag: idNotif);
+        await flutterLocalNotificationsPlugin.cancel(0, tag: idNotif);
       }catch(e){
         'Error Get rid the notification $e'.logger();
       }

@@ -398,6 +398,10 @@ class System {
     }
   }
 
+  String getTimeWIB(String hour, String minute){
+    return '$hour:$minute WIB';
+  }
+
   TransactionType convertTransactionType(String? type) {
     switch (type) {
       case "Sell":

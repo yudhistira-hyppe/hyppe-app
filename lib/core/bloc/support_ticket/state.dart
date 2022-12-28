@@ -7,6 +7,12 @@ enum SupportTicketState {
   getLevelError,
   postTicketSuccess,
   postTicketError,
+  getTicketHistoriesSuccess,
+  getTicketHistoriesError,
+  getContentAppealSuccess,
+  getContentAppealError,
+  sendCommentSuccess,
+  sendCommentError,
   faqError,
   faqSuccess,
 }

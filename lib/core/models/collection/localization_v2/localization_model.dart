@@ -125,6 +125,7 @@ class LocalizationModelV2 {
   String? d;
   String? w;
   String? today;
+  String? yesterday;
   String? deleteThis;
   String? afterThatThis;
   String? willBePermanentlyDeleted;
@@ -159,6 +160,7 @@ class LocalizationModelV2 {
   String? newPost;
   String? writeACaption;
   String? tagPeople;
+  String? category;
   String? selectCategory;
   String? seeMore;
   String? advancedSettings;
@@ -797,6 +799,31 @@ class LocalizationModelV2 {
   String? purchased;
   String? soldOut;
   String? localeDatetime;
+  String? accountVerification;
+  String? content;
+  String? problemBugs;
+  String? ads;
+  String? newLabel;
+  String? inProgress;
+  String? solved;
+  String? notSolved;
+  String? ticket;
+  String? ticketHistory;
+  String? contentAppeal;
+  String? notSuspend;
+  String? suspend;
+  String? flagAsSensitive;
+  String? source;
+  String? submissionTime;
+  String? operationSystem;
+  String? applicationVersion;
+  String? attachment;
+  String? messageTicketHandled;
+  String? sensitiveType;
+  String? reasonOfAppeal;
+  String? issueStatement;
+  String? notDefined;
+  String? dontHaveMessagesYet;
 
   LocalizationModelV2(
       {this.login,
@@ -925,6 +952,7 @@ class LocalizationModelV2 {
       this.d,
       this.w,
       this.today,
+      this.yesterday,
       this.deleteThis,
       this.afterThatThis,
       this.willBePermanentlyDeleted,
@@ -959,6 +987,7 @@ class LocalizationModelV2 {
       this.newPost,
       this.writeACaption,
       this.tagPeople,
+      this.category,
       this.selectCategory,
       this.seeMore,
       this.advancedSettings,
@@ -1596,7 +1625,33 @@ class LocalizationModelV2 {
       this.reply2,
       this.purchased,
       this.soldOut,
-      this.localeDatetime});
+      this.localeDatetime,
+      this.accountVerification,
+      this.content,
+      this.problemBugs,
+      this.ads,
+      this.newLabel,
+      this.inProgress,
+      this.solved,
+      this.notSolved,
+      this.ticket,
+      this.ticketHistory,
+      this.contentAppeal,
+      this.notSuspend,
+      this.suspend,
+      this.flagAsSensitive,
+      this.source,
+      this.submissionTime,
+      this.operationSystem,
+      this.applicationVersion,
+      this.attachment,
+      this.messageTicketHandled,
+      this.sensitiveType,
+      this.reasonOfAppeal,
+      this.issueStatement,
+      this.notDefined,
+      this.dontHaveMessagesYet
+    });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -1725,6 +1780,7 @@ class LocalizationModelV2 {
     d = json['d'];
     w = json['w'];
     today = json['today'];
+    yesterday = json['yesterday'];
     deleteThis = json['deleteThis'];
     afterThatThis = json['afterThatThis'];
     willBePermanentlyDeleted = json['willBePermanentlyDeleted'];
@@ -1759,6 +1815,7 @@ class LocalizationModelV2 {
     newPost = json['newPost'];
     writeACaption = json['writeACaption'];
     tagPeople = json['tagPeople'];
+    category = json['category'];
     selectCategory = json['selectCategory'];
     seeMore = json['seeMore'];
     advancedSettings = json['advancedSettings'];
@@ -2415,5 +2472,30 @@ class LocalizationModelV2 {
     purchased = json["purchased"];
     soldOut = json["soldOut"];
     localeDatetime = json['localeDatetime'];
+    accountVerification = json['accountVerification'];
+    content = json['content'];
+    problemBugs = json['problemBugs'];
+    ads = json['ads'];
+    newLabel = json['new'];
+    inProgress = json['inProgress'];
+    solved = json['solved'];
+    notSolved = json['notSolved'];
+    ticket = json['ticket'];
+    ticketHistory = json['ticketHistory'];
+    contentAppeal = json['contentAppeal'];
+    notSuspend = json['notSuspend'];
+    suspend = json['suspend'];
+    flagAsSensitive = json['flagAsSensitive'];
+    source = json['source'];
+    submissionTime = json['submissionTime'];
+    operationSystem = json['operationSystem'];
+    applicationVersion = json['applicationVersion'];
+    attachment = json['attachment'];
+    messageTicketHandled = json['messageTicketHandled'];
+    sensitiveType = json['sensitiveType'];
+    reasonOfAppeal = json['reasonOfAppeal'];
+    issueStatement = json['issueStatement'];
+    notDefined = json['notDefined'];
+    dontHaveMessagesYet = json['dontHaveMessagesYet'];
   }
 }

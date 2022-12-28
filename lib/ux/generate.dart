@@ -111,6 +111,9 @@ import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
+import '../core/arguments/detail_ticket_argument.dart';
+import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
+import '../ui/inner/home/content_v2/help/ticket_history/screen.dart';
 import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
 
 class Generate {
@@ -329,6 +332,10 @@ class Generate {
         return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
       case Routes.appealSuccess:
         return MaterialPageRoute(builder: (_) => SuccessAppeal(data: settings.arguments as ContentData));
+      case Routes.ticketHistory:
+        return MaterialPageRoute(builder: (_) => const TicketHistoryScreen());
+      case Routes.detailTAHistory:
+        return MaterialPageRoute(builder: (_) => DetailTicketScreen(data: settings.arguments as DetailTicketArgument));
 
       //------boost
       case Routes.boostUpload:

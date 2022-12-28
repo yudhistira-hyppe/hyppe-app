@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -9,6 +9,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../constant/widget/custom_search_bar.dart';
 
@@ -78,7 +79,8 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                         }, child: Container(
                           width: double.infinity,
                           margin: const EdgeInsets.only( top: 10, bottom: 10, right: 10),
-                          child: textSearched(context, widget.data.details[index].description ?? '', controller.text),));
+                          child: htmlText(context, widget.data.details[index].description ?? '')));
+                          // child: textSearched(context, widget.data.details[index].description ?? '', controller.text),));
                       }),
                 )),
               Container(
@@ -133,6 +135,12 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
         ),
       ),
     );
+  }
+
+  Widget htmlText(BuildContext context, String text){
+    return Html(data: text, onLinkTap: (text, ctx, map, e){
+      launchUrl(Uri(path: text));
+    },);
   }
 
   Widget textSearched(BuildContext context, String text, String key){
