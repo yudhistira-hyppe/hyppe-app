@@ -83,7 +83,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             title: Row(
               children: [
                 CustomTextWidget(
-                  textToDisplay: notifier.language.ticketHistory ?? 'Ticket History',
+                  textToDisplay: dataTicket.ticketNo ?? 'Ticket History',
                   textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
                 ),
                 eightPx,
@@ -169,7 +169,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             title: Row(
               children: [
                 CustomTextWidget(
-                  textToDisplay: notifier.language.ticketHistory ?? 'Ticket History',
+                  textToDisplay: notifier.language.contentAppeal ?? 'Content Appeal',
                   textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
                 ),
                 eightPx,
@@ -252,7 +252,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                           child: Container(color: Colors.black12),
                         ),
                       ),
-                      _contentInfo(textTheme, title: notifier.language.ticket ?? 'Ticket', value: dataAppeal.postID ?? ''),
+                      _contentInfo(textTheme, title: 'Post ID', value: dataAppeal.postID ?? ''),
                       if(dataAppeal.createdAt != null)
                         Builder(builder: (context){
                           try{
@@ -591,7 +591,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               await notifier.sendComment(context, notifier.commentController.text);
               // notifier.addComment(context);
             },
-        ): SizedBox.shrink(),
+        ): const SizedBox.shrink(),
       ),
         onChanged: (value){
           setState(() {

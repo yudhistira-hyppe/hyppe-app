@@ -79,7 +79,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                         }, child: Container(
                           width: double.infinity,
                           margin: const EdgeInsets.only( top: 10, bottom: 10, right: 10),
-                          child: htmlText(context, widget.data.details[index].description ?? '')));
+                          child: htmlText(context, widget.data.details[index].description ?? '', key: controller.text)));
                           // child: textSearched(context, widget.data.details[index].description ?? '', controller.text),));
                       }),
                 )),
@@ -137,10 +137,61 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
     );
   }
 
-  Widget htmlText(BuildContext context, String text){
-    return Html(data: text, onLinkTap: (text, ctx, map, e){
-      launchUrl(Uri(path: text));
-    },);
+  Widget htmlText(BuildContext context, String text, {String? key}){
+    if(key != null){
+      if(key.isNotEmpty){
+        final List<String> splits = text.split(' ').where((element) => element.isNotEmpty).toList();
+        final List<String> spans = [];
+        for(var i = 0; i < splits.length; i++){
+          final data = splits[i];
+          final keyLength = key.length;
+          final dataLength = data.length;
+          print('compare text search : $key : ${dataLength > keyLength ? data.substring(0, (keyLength)) : 'skip scan'} : ${dataLength > keyLength ? data.substring((keyLength), (dataLength)) : 'skip scan'}');
+          if(dataLength > keyLength){
+            if(data.substring(0, keyLength).toLowerCase() == key.toLowerCase()){
+              if(i == splits.length){
+                spans.add('<span>$key</span>');
+                spans.add(data.substring(keyLength, dataLength));
+              }else{
+                spans.add('<span>$key</span>');
+                spans.add('${data.substring(keyLength, dataLength)} ');
+              }
+            }else{
+              if(i == splits.length){
+                spans.add(data);
+              }else{
+                spans.add('$data ');
+              }
+            }
+          }else{
+            if(i == splits.length){
+              spans.add(data);
+            }else{
+              spans.add('$data ');
+            }
+          }
+        }
+
+        var fixTextHtml = '';
+        for(var text in spans){
+          fixTextHtml += text;
+        }
+        return Html(data: fixTextHtml, onLinkTap: (text, ctx, map, e){
+          launchUrl(Uri(path: text));
+        }, style: {"span": Style(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)},);
+
+      }else{
+        return Html(data: text, onLinkTap: (text, ctx, map, e){
+          launchUrl(Uri(path: text));
+        },);
+      }
+    }else{
+      return Html(data: text, onLinkTap: (text, ctx, map, e){
+        launchUrl(Uri(path: text));
+      },);
+    }
+    
+    
   }
 
   Widget textSearched(BuildContext context, String text, String key){
