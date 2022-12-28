@@ -25,7 +25,7 @@ class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayo
     final notifier = Provider.of<TicketHistoryNotifier>(context, listen: false);
     notifier.startLoad();
     _scrollController.addListener(() {
-      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange && notifier.hasNextTicket) {
         notifier.onLoadList(context);
       }
     });

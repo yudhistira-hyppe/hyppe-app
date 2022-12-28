@@ -24,7 +24,7 @@ class _ContentAppealScreenState extends State<ContentAppealScreen> with AfterFir
     final notifier = Provider.of<TicketHistoryNotifier>(context, listen: false);
     notifier.startLoad();
     _scrollController.addListener(() {
-      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange && notifier.hasNextAppeal) {
         notifier.onLoadAppealList(context);
       }
     });

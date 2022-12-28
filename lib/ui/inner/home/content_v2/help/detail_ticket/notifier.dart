@@ -13,7 +13,7 @@ class DetailTicketNotifier extends ChangeNotifier{
     notifyListeners();
   }
 
-  final FocusNode _inputNode = FocusNode();
+  FocusNode _inputNode = FocusNode();
   FocusNode get inputNode => _inputNode;
 
   TextEditingController _commentController = TextEditingController();
@@ -27,7 +27,20 @@ class DetailTicketNotifier extends ChangeNotifier{
   }
 
   initState(TicketModel model){
+    _commentController = TextEditingController();
+    _inputNode = FocusNode();
     _ticketModel = model;
+  }
+
+  disposeState(){
+    try{
+      _ticketModel = null;
+      _commentController.dispose();
+      _inputNode.dispose();
+    }catch(e){
+      e.logger();
+    }
+
   }
 
 

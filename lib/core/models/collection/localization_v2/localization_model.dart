@@ -824,6 +824,7 @@ class LocalizationModelV2 {
   String? issueStatement;
   String? notDefined;
   String? dontHaveMessagesYet;
+  String? seeContent;
 
   LocalizationModelV2(
       {this.login,
@@ -1650,7 +1651,8 @@ class LocalizationModelV2 {
       this.reasonOfAppeal,
       this.issueStatement,
       this.notDefined,
-      this.dontHaveMessagesYet
+      this.dontHaveMessagesYet,
+      this.seeContent,
     });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2497,5 +2499,6 @@ class LocalizationModelV2 {
     issueStatement = json['issueStatement'];
     notDefined = json['notDefined'];
     dontHaveMessagesYet = json['dontHaveMessagesYet'];
+    seeContent = json['seeContent'];
   }
 }

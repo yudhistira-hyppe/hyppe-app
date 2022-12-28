@@ -823,5 +823,6 @@
   "reasonOfAppeal": "Alasan Banding",
   "issueStatement": "Laporan isu",
   "notDefined": "Tidak Terdefinisi",
-  "dontHaveMessagesYet": "Belum memiliki pesan"
+  "dontHaveMessagesYet": "Belum memiliki pesan",
+  "seeContent": "See Content"
 }

@@ -823,5 +823,6 @@
   "reasonOfAppeal": "Reason of Appeal",
   "issueStatement": "Issue Statement",
   "notDefined": "Not Defined",
-  "dontHaveMessagesYet": "Don't have messages yet"
+  "dontHaveMessagesYet": "Don't have messages yet",
+  "seeContent": "Lihat Konten"
 }

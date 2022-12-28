@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/detail_ticket_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -23,6 +21,7 @@ import '../../../../../constant/widget/custom_content_moderated_widget.dart';
 import '../../../../../constant/widget/custom_text_button.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 import '../../../../../constant/widget/icon_button_widget.dart';
+import '../../../../notification/notifier.dart';
 import 'notifier.dart';
 
 class DetailTicketScreen extends StatefulWidget {
@@ -48,8 +47,21 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   void initState() {
     if(widget.data.ticketModel != null){
       context.read<DetailTicketNotifier>().initState(widget.data.ticketModel!);
+    }else{
+      context.read<DetailTicketNotifier>().disposeState();
     }
     super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    try{
+      context.read<DetailTicketNotifier>().disposeState();
+    }catch(e){
+      e.logger();
+    }
+    super.dispose();
   }
 
   @override
@@ -216,8 +228,21 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                 }
                             ),
                             tenPx,
-                            CustomTextWidget(textToDisplay: dataAppeal.description ?? '', maxLines: 3, textStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),)
+                            CustomTextWidget(textToDisplay: dataAppeal.description ?? '', maxLines: 3, textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),),
+
                           ],
+                        ),
+                      ),
+                      if(dataAppeal.status != AppealStatus.newest)
+                      Container(
+                        margin: const EdgeInsets.only(right: 16),
+                        width: double.infinity,
+                        alignment: Alignment.bottomRight,
+                        child: InkWell(
+                          onTap: (){
+                            context.read<NotificationNotifier>().navigateToContent(context, dataAppeal.postType, dataAppeal.postID);
+                          },
+                          child: CustomTextWidget(textAlign: TextAlign.end,textToDisplay: notifier.language.seeContent ?? '', textStyle: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontSize: 10),),
                         ),
                       ),
                       Padding(
