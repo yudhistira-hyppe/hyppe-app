@@ -26,7 +26,14 @@ class DetailTicketNotifier extends ChangeNotifier{
     notifyListeners();
   }
 
-  initState(TicketModel model){
+  bool _isShimmer = false;
+  bool get isShimmer => _isShimmer;
+  set isShimmer(bool state){
+    _isShimmer = state;
+    notifyListeners();
+  }
+
+  initStateDetailTicket(TicketModel model){
     _commentController = TextEditingController();
     _inputNode = FocusNode();
     _ticketModel = model;
@@ -40,13 +47,15 @@ class DetailTicketNotifier extends ChangeNotifier{
     }catch(e){
       e.logger();
     }
-
   }
 
 
-  Future getDetailTicket(BuildContext context) async{
+  Future getDetailTicket(BuildContext context, ) async{
     List<TicketModel>? res;
     try{
+      if(_ticketModel == null){
+        isShimmer = true;
+      }
       final bloc = SupportTicketBloc();
       await bloc.getTicketHistories(context, TicketArgument(id: _ticketModel?.id, type: 'comment'), isDetail: true);
       final fetch = bloc.supportTicketFetch;
@@ -59,9 +68,12 @@ class DetailTicketNotifier extends ChangeNotifier{
       }
     }catch(e){
       'TicketsDataQuery Reload Error : $e'.logger();
+      return res ?? [];
+    }finally{
+      isShimmer = false;
     }
 
-    return res ?? [];
+
   }
 
   Future sendComment(BuildContext context, String message) async{

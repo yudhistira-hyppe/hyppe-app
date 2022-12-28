@@ -55,7 +55,7 @@ class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayo
           if(index == notifier.listTickets.length){
             return const Center(child: CustomLoading());
           }else{
-            return ItemTicketHistory(data: notifier.listTickets[index], model: notifier.language);
+            return ItemTicketHistory(data: notifier.listTickets[index], model: notifier.language, isFirst: index == 0);
           }
         }) : Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),

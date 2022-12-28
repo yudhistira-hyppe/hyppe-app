@@ -16,7 +16,8 @@ import '../../../../../../../core/models/collection/support_ticket/ticket_model.
 class ItemTicketHistory extends StatelessWidget {
   TicketModel data;
   LocalizationModelV2 model;
-  ItemTicketHistory({Key? key, required this.data, required this.model}) : super(key: key);
+  bool isFirst;
+  ItemTicketHistory({Key? key, required this.data, required this.model, required this.isFirst}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class ItemTicketHistory extends StatelessWidget {
         Routing().move(Routes.detailTAHistory, argument: DetailTicketArgument(ticketModel: data));
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10, left: 16, right: 16),
+        margin: EdgeInsets.only(bottom: 7, left: 16, right: 16, top: (isFirst ? 7 : 3)),
         padding: const EdgeInsets.only(left: 12, right: 12, top: 9, bottom: 12),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),

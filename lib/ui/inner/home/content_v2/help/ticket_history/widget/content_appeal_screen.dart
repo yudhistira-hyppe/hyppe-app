@@ -53,7 +53,7 @@ class _ContentAppealScreenState extends State<ContentAppealScreen> with AfterFir
           if(index == notifier.listAppeals.length){
             return const Center(child: CustomLoading());
           }else{
-            return ItemContentAppeal(data: notifier.listAppeals[index], model: notifier.language);
+            return ItemContentAppeal(data: notifier.listAppeals[index], model: notifier.language, isFirst: index == 0,);
           }
         }) : Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),

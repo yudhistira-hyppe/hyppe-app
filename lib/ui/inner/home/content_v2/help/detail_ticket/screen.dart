@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/detail_ticket_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -10,6 +12,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
 
@@ -46,13 +49,18 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   @override
   void initState() {
     if(widget.data.ticketModel != null){
-      context.read<DetailTicketNotifier>().initState(widget.data.ticketModel!);
+      context.read<DetailTicketNotifier>().initStateDetailTicket(widget.data.ticketModel!);
     }else{
       context.read<DetailTicketNotifier>().disposeState();
     }
     super.initState();
   }
 
+
+  @override
+  void deactivate() {
+    super.deactivate();
+  }
 
   @override
   void dispose() {
@@ -92,7 +100,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             ),
             centerTitle: false,
           ),
-          body: Column(
+          body: notifier.isShimmer ? _getShimmerDetail(context) : Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
@@ -602,7 +610,135 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     );
   }
 
-  
-  
+  Widget _getShimmerDetail(BuildContext context,){
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+              color: kHyppeLightSurface, ),
+            child: Container(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+              child: Column(
+                children: [
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                  _shimmerDetailTicket(),
+                  eightPx,
+                ],
+              ),
+            ),
+          ),
+          const CustomShimmer(
+            width: double.infinity,
+            padding: EdgeInsets.only(left: 13, right: 10, top: 10, bottom: 10),
+            margin: EdgeInsets.only(left: 16, right: 16),
+            radius: 8,
+          ),
+          tenPx,
+          Container(
+            margin: const EdgeInsets.only(left: 16, right: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _shimmerSender(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerSender(context),
+                eightPx,
+                _shimmerSender(context),
+                eightPx,
+                _shimmerSender(context),
+                eightPx,
+                _shimmerSender(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerSender(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+                _shimmerSender(context),
+                eightPx,
+                _shimmerReceiver(context),
+                eightPx,
+
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _shimmerDetailTicket(){
+    var fixWidth = 6.0;
+    final randomWidth = Random().nextInt(60).toDouble();
+    if(randomWidth > fixWidth){
+      fixWidth = randomWidth;
+    }
+    return Row(
+      children: [
+        Expanded(child: CustomShimmer(radius: 8, height: 16,)),
+        SizedBox(width: fixWidth,),
+        Expanded(child: CustomShimmer(radius: 8, height: 16,)),
+      ],
+    );
+  }
+
+  Widget _shimmerSender(BuildContext context,){
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.centerRight,
+      child: CustomShimmer(
+        radius: 8,
+        width: context.getWidth() * 0.6,
+        height: 20,
+      ),
+    );
+  }
+
+  Widget _shimmerReceiver(BuildContext context,){
+    return Container(
+      width: double.infinity,
+      alignment: Alignment.centerLeft,
+      child: CustomShimmer(
+        radius: 8,
+        width: context.getWidth() * 0.6,
+        height: 20,
+      ),
+    );
+  }
 
 }
+
