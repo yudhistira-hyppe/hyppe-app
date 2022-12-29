@@ -81,6 +81,8 @@ class SupportTicketBloc {
     FormData formData = FormData.fromMap(data!);
 
     if (docFiles != null) {
+      print('ini doc file');
+      print(System().basenameFiles(docFiles[0].path));
       for (File docFile in docFiles) {
         formData.files.add(
           MapEntry(
@@ -150,18 +152,18 @@ class SupportTicketBloc {
     );
   }
 
-  Future getTicketHistories(BuildContext context, TicketArgument request, {isDetail = false}) async{
+  Future getTicketHistories(BuildContext context, TicketArgument request, {isDetail = false}) async {
     setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
     await _repos.reposPost(
       context,
-      (onResult){
-        if((onResult.statusCode ?? 300) > HTTP_CODE){
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getTicketHistoriesError));
-        }else{
+        } else {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getTicketHistoriesSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-      (errorData){
+      (errorData) {
         setSupportTicket(SupportTicketFetch(SupportTicketState.getTicketHistoriesError));
       },
       data: request.toJson(),
@@ -176,18 +178,18 @@ class SupportTicketBloc {
     );
   }
 
-  Future getReportHistories(BuildContext context, TicketArgument request) async{
+  Future getReportHistories(BuildContext context, TicketArgument request) async {
     setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
     await _repos.reposPost(
       context,
-      (onResult){
-        if((onResult.statusCode ?? 300) > HTTP_CODE){
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getContentAppealError));
-        }else{
+        } else {
           setSupportTicket(SupportTicketFetch(SupportTicketState.getContentAppealSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
-      (errorData){
+      (errorData) {
         setSupportTicket(SupportTicketFetch(SupportTicketState.getContentAppealError));
       },
       data: request.toJson(),
@@ -202,7 +204,7 @@ class SupportTicketBloc {
     );
   }
 
-  Future sendComment(BuildContext context, TicketArgument request, {Function? onSuccess}) async{
+  Future sendComment(BuildContext context, TicketArgument request, {Function? onSuccess}) async {
     setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
     final formData = FormData();
     request.type = 'comment';
@@ -211,28 +213,28 @@ class SupportTicketBloc {
     formData.fields.add(MapEntry('status', request.status ?? 'new'));
     formData.fields.add(MapEntry('body', request.body ?? ''));
     formData.fields.add(MapEntry('IdUserticket', request.idUserTicket ?? ''));
-    await _repos.reposPost(context,
-      (onResult){
-        if((onResult.statusCode ?? 300) > HTTP_CODE){
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setSupportTicket(SupportTicketFetch(SupportTicketState.sendCommentError));
-        }else{
-          if(onSuccess != null){
+        } else {
+          if (onSuccess != null) {
             onSuccess();
           }
           setSupportTicket(SupportTicketFetch(SupportTicketState.sendCommentSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
-      }, (errorData){
+      },
+      (errorData) {
         setSupportTicket(SupportTicketFetch(SupportTicketState.sendCommentError));
       },
-      headers: {
-        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
-        'x-auth-user': SharedPreference().readStorage(SpKeys.email)
-      },
+      headers: {'x-auth-token': SharedPreference().readStorage(SpKeys.userToken), 'x-auth-user': SharedPreference().readStorage(SpKeys.email)},
       data: formData,
       host: UrlConstants.replyComment,
       withAlertMessage: true,
       methodType: MethodType.post,
       withCheckConnection: true,
-      errorServiceType: System().getErrorTypeV2(FeatureType.other),);
+      errorServiceType: System().getErrorTypeV2(FeatureType.other),
+    );
   }
 }

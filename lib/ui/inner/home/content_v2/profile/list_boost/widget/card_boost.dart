@@ -197,12 +197,7 @@ class CardBoost extends StatelessWidget {
                           case 'diary':
                             List<ContentData> data1 = [];
                             data1.add(data!);
-                            Routing().move(
-                              Routes.diaryDetail,
-                              argument: DiaryDetailScreenArgument(diaryData: data1, type: TypePlaylist.none)
-                                ..postID = data?.postID
-                                ..backPage = true,
-                            );
+                            Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: data1, type: TypePlaylist.none));
                             break;
                         }
                       },

@@ -131,30 +131,30 @@ Kami akan menggunakan data yang anda masukan sebagai pengguna premium, termasuk 
 **2. Cara kami menggunakan data pribadi Anda**
 
 Kami akan menggunakan informasi yang kami kumpulkan tentang Anda dengan cara berikut:
--   Memberi tahu Anda tentang perubahan pada layanan kami;
--   Menyediakan dukungan pengguna untuk Anda;
--   Menyesuaikan konten yang Anda terima dan menyediakan konten khusus yang akan menarik minat Anda;
--   Memungkinkan Anda untuk membagikan Konten Pengguna dan berinteraksi dengan pengguna lain;
--   Memungkinkan layanan perpesanan kami untuk berfungsi jika Anda memilih untuk menggunakan fungsi ini;
--   Berkomunikasi dengan Anda;
--   Untuk membantu kami mendeteksi dan melawan penyalahgunaan, tindakan berbahaya, penipuan, spam, dan aktivitas ilegal di Aplikasi;
--   Memudahkan Anda untuk melakukan transaksi di dalam Aplikasi;
--   Memungkinkan Anda untuk memperoleh pendapatan dan menarik hasil pendapatan di dalam Aplikasi;
--   Memastikan Anda mendapatkan perlindungan atas kepemilikan konten;
--   Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
--   Memastikan keselamatan dan keamanan Anda, termasuk meninjau konten pengguna dan metadata terkait untuk pelanggaran Pedoman Komunitas kami dan konten tidak sesuai lainnya;
--   Memastikan konten disajikan dengan cara yang paling efektif untuk Anda dan perangkat Anda;
--   Meningkatkan, mempromosikan, dan mengembangkan Aplikasi serta mempromosikan topik, tagar, dan kampanye populer pada Aplikasi;
--   Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
--   Memungkinkan Anda untuk berpartisipasi dalam fitur interaktif di Aplikasi;
--   Untuk memungkinkan Anda bersosialisasi di Aplikasi;
--   Untuk memastikan bahwa Anda cukup umur untuk menggunakan Aplikasi kami (sebagaimana diwajibkan oleh hukum).
--   Menyediakan iklan yang disesuaikan untuk Anda;
--   Menyediakan layanan berbasis lokasi untuk Anda (saat layanan tersebut tersedia di yurisdiksi Anda);
--   Untuk memberitahu algoritma kami
--   Memberlakukan syarat, ketentuan, dan kebijakan kami;
--   Mengatur Aplikasi, termasuk pemecahan masalah; dan
--   Untuk memfasilitasi penjualan, promosi, dan pembelian barang dan layanan serta untuk menyediakan dukungan pengguna.
+- Memberi tahu Anda tentang perubahan pada layanan kami;
+- Menyediakan dukungan pengguna untuk Anda;
+- Menyesuaikan konten yang Anda terima dan menyediakan konten khusus yang akan menarik minat Anda;
+- Memungkinkan Anda untuk membagikan Konten Pengguna dan berinteraksi dengan pengguna lain;
+- Memungkinkan layanan perpesanan kami untuk berfungsi jika Anda memilih untuk menggunakan fungsi ini;
+- Berkomunikasi dengan Anda;
+- Untuk membantu kami mendeteksi dan melawan penyalahgunaan, tindakan berbahaya, penipuan, spam, dan aktivitas ilegal di Aplikasi;
+- Memudahkan Anda untuk melakukan transaksi di dalam Aplikasi;
+- Memungkinkan Anda untuk memperoleh pendapatan dan menarik hasil pendapatan di dalam Aplikasi;
+- Memastikan Anda mendapatkan perlindungan atas kepemilikan konten;
+- Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
+- Memastikan keselamatan dan keamanan Anda, termasuk meninjau konten pengguna dan metadata terkait untuk pelanggaran Pedoman Komunitas kami dan konten tidak sesuai lainnya;
+- Memastikan konten disajikan dengan cara yang paling efektif untuk Anda dan perangkat Anda;
+- Meningkatkan, mempromosikan, dan mengembangkan Aplikasi serta mempromosikan topik, tagar, dan kampanye populer pada Aplikasi;
+- Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
+- Memungkinkan Anda untuk berpartisipasi dalam fitur interaktif di Aplikasi;
+- Untuk memungkinkan Anda bersosialisasi di Aplikasi;
+- Untuk memastikan bahwa Anda cukup umur untuk menggunakan Aplikasi kami (sebagaimana diwajibkan oleh hukum).
+- Menyediakan iklan yang disesuaikan untuk Anda;
+- Menyediakan layanan berbasis lokasi untuk Anda (saat layanan tersebut tersedia di yurisdiksi Anda);
+- Untuk memberitahu algoritma kami
+- Memberlakukan syarat, ketentuan, dan kebijakan kami;
+- Mengatur Aplikasi, termasuk pemecahan masalah; dan
+- Untuk memfasilitasi penjualan, promosi, dan pembelian barang dan layanan serta untuk menyediakan dukungan pengguna.
     
 
   
@@ -206,10 +206,10 @@ Kami juga mungkin membagikan informasi Anda dengan anggota, anak perusahaan, ata
 **Penegakan Hukum**
 
 Kami akan membagikan informasi Anda kepada lembaga penegak hukum, otoritas publik, atau organisasi lain jika diwajibkan secara hukum untuk melakukannya, atau jika penggunaan tersebut diperlukan secara wajar untuk:
--   mematuhi kewajiban, proses, atau permintaan hukum;
--   menegakkan Ketentuan Layanan kami dan perjanjian, kebijakan, serta standar lainnya, termasuk penyelidikan segala potensi pelanggaran di dalamnya;
--   mendeteksi, mencegah, atau mengatasi masalah keamanan, penipuan, atau teknis; atau
--   melindungi hak, properti, atau keselamatan kami, pengguna kami, pihak ketiga, atau publik sebagaimana diwajibkan atau diizinkan oleh hukum (termasuk bertukar informasi dengan perusahaan dan organisasi lain untuk tujuan perlindungan penipuan dan pengurangan risiko kredit).
+- mematuhi kewajiban, proses, atau permintaan hukum;
+- menegakkan Ketentuan Layanan kami dan perjanjian, kebijakan, serta standar lainnya, termasuk penyelidikan segala potensi pelanggaran di dalamnya;
+- mendeteksi, mencegah, atau mengatasi masalah keamanan, penipuan, atau teknis; atau
+- melindungi hak, properti, atau keselamatan kami, pengguna kami, pihak ketiga, atau publik sebagaimana diwajibkan atau diizinkan oleh hukum (termasuk bertukar informasi dengan perusahaan dan organisasi lain untuk tujuan perlindungan penipuan dan pengurangan risiko kredit).
     
 
   
@@ -566,46 +566,46 @@ Sepanjang diperbolehkan berdasarkan hukum yang berlaku, ketentuan-ketentuan tamb
 
 _**Pemberitahuan sehubungan dengan apple.**_
 
--   Ketentuan ini adalah antara anda dan Hyppe; apple bukan merupakan pihak dalam ketentuan ini.
+- Ketentuan ini adalah antara anda dan Hyppe; apple bukan merupakan pihak dalam ketentuan ini.
     
--   Lisensi yang diberikan kepada anda berdasarkan ketentuan ini terbatas pada hak yang bersifat pribadi, terbatas, tidak eksklusif dan tidak dapat dialihkan untuk memasang _platform_ pada perangkat(-perangkat) apple yang diperbolehkan oleh apple yang anda miliki atau kuasai untuk penggunaan yang bersifat pribadi dan non-komersial, dengan tunduk pada peraturan-peraturan penggunaan yang diatur dalam ketentuan layanan _apple app store._
+- Lisensi yang diberikan kepada anda berdasarkan ketentuan ini terbatas pada hak yang bersifat pribadi, terbatas, tidak eksklusif dan tidak dapat dialihkan untuk memasang _platform_ pada perangkat(-perangkat) apple yang diperbolehkan oleh apple yang anda miliki atau kuasai untuk penggunaan yang bersifat pribadi dan non-komersial, dengan tunduk pada peraturan-peraturan penggunaan yang diatur dalam ketentuan layanan _apple app store._
     
--   Apple tidak bertanggung jawab atas _platform_ atau konten dari _platform_ tersebut dan tidak memiliki kewajiban apapun untuk menyediakan setiap layanan pemeliharaan atau dukungan untuk _platform._
+- Apple tidak bertanggung jawab atas _platform_ atau konten dari _platform_ tersebut dan tidak memiliki kewajiban apapun untuk menyediakan setiap layanan pemeliharaan atau dukungan untuk _platform._
     
--   Dalam hal _platform_ gagal untuk memenuhi setiap jaminan yang berlaku, anda dapat memberitahu apple, dan apple akan mengembalikan harga pembelian _platform_, jika ada, kepada anda. Sepanjang batas maksimum yang diperbolehkan menurut hukum yang berlaku, apple tidak memiliki kewajiban jaminan apapun sehubungan dengan _platform_.
+- Dalam hal _platform_ gagal untuk memenuhi setiap jaminan yang berlaku, anda dapat memberitahu apple, dan apple akan mengembalikan harga pembelian _platform_, jika ada, kepada anda. Sepanjang batas maksimum yang diperbolehkan menurut hukum yang berlaku, apple tidak memiliki kewajiban jaminan apapun sehubungan dengan _platform_.
     
--   Apple tidak bertanggung jawab untuk menanggapi setiap klaim dari anda atau pihak ketiga terkait dengan _platform_ atau penguasaan atau penggunaan _platform_ oleh anda, termasuk namun tidak terbatas pada (a) klaim-klaim tanggung jawab produk; (b) setiap klaim bahwa _platform_ gagal untuk memenuhi setiap persyaratan hukum atau peraturan perundang-undangan yang berlaku; dan (c) klaim-klaim yang timbul berdasarkan [peraturan perundang-undangan mengenai] perlindungan konsumen atau peraturan perundang-undangan yang serupa.
+- Apple tidak bertanggung jawab untuk menanggapi setiap klaim dari anda atau pihak ketiga terkait dengan _platform_ atau penguasaan atau penggunaan _platform_ oleh anda, termasuk namun tidak terbatas pada (a) klaim-klaim tanggung jawab produk; (b) setiap klaim bahwa _platform_ gagal untuk memenuhi setiap persyaratan hukum atau peraturan perundang-undangan yang berlaku; dan (c) klaim-klaim yang timbul berdasarkan [peraturan perundang-undangan mengenai] perlindungan konsumen atau peraturan perundang-undangan yang serupa.
     
--   Dalam hal terdapat klaim dari pihak ketiga bahwa _platform_ atau penguasaan dan penggunaan _platform_ oleh anda melanggar hak kekayaan intelektual pihak ketiga tersebut, maka apple tidak bertanggung jawab atas pemeriksaan, pembelaan, penyelesaian atau pelepasan klaim pelanggaran terhadap hak kekayaan intelektual tersebut.
+- Dalam hal terdapat klaim dari pihak ketiga bahwa _platform_ atau penguasaan dan penggunaan _platform_ oleh anda melanggar hak kekayaan intelektual pihak ketiga tersebut, maka apple tidak bertanggung jawab atas pemeriksaan, pembelaan, penyelesaian atau pelepasan klaim pelanggaran terhadap hak kekayaan intelektual tersebut.
     
--   Anda menyatakan dan menjamin bahwa (a) anda tidak berada di suatu negara yang tunduk pada embargo pemerintah a.s., atau yang telah ditetapkan oleh pemerintah a.s. sebagai negara “pendukung teroris”; dan (b) anda tidak terdaftar di setiap daftar pemerintah a.s. untuk pihak-pihak yang dilarang atau dibatasi.
+- Anda menyatakan dan menjamin bahwa (a) anda tidak berada di suatu negara yang tunduk pada embargo pemerintah a.s., atau yang telah ditetapkan oleh pemerintah a.s. sebagai negara “pendukung teroris”; dan (b) anda tidak terdaftar di setiap daftar pemerintah a.s. untuk pihak-pihak yang dilarang atau dibatasi.
     
--   Apple dan anak perusahaan-anak perusahaannya merupakan pihak ketiga yang menerima manfaat dari ketentuan ini dan, atas persetujuan anda atas syarat-syarat dan ketentuan-ketentuan dalam ketentuan ini, apple berhak (dan dianggap telah menerima hak) untuk memaksakan pelaksanaan atas ketentuan ini terhadap anda sebagai pihak ketiga yang menerima manfaat dari ketentuan ini.
+- Apple dan anak perusahaan-anak perusahaannya merupakan pihak ketiga yang menerima manfaat dari ketentuan ini dan, atas persetujuan anda atas syarat-syarat dan ketentuan-ketentuan dalam ketentuan ini, apple berhak (dan dianggap telah menerima hak) untuk memaksakan pelaksanaan atas ketentuan ini terhadap anda sebagai pihak ketiga yang menerima manfaat dari ketentuan ini.
     
--   Hyppe secara tegas mengesahkan penggunaan _platform_ oleh beberapa pengguna melalui _family sharing_ atau fungsi serupa lainnya yang disediakan oleh apple.
+- Hyppe secara tegas mengesahkan penggunaan _platform_ oleh beberapa pengguna melalui _family sharing_ atau fungsi serupa lainnya yang disediakan oleh apple.
 
 _**Windows phone store.**_
 
 Dengan mengunduh _platform_ dari _windows phone store_ (atau penggantinya) yang dijalankan oleh microsoft, inc. Atau afiliasi-afiliasi nya, anda secara khusus mengakui dan menyetujui bahwa:
 
--   Anda berhak untuk memasang dan menggunakan satu salinan dari _platform_ sampai dengan lima (5) perangkat yang memungkinkan _windows phone_, yang terafiliasi dengan akun microsoft yang anda gunakan untuk mengakses _windows phone store_. Di luar dari itu, kami mencadangkan hak untuk memberlakukan ketentuan-ketentuan tambahan atau mengenakan biaya-biaya tambahan.
+- Anda berhak untuk memasang dan menggunakan satu salinan dari _platform_ sampai dengan lima (5) perangkat yang memungkinkan _windows phone_, yang terafiliasi dengan akun microsoft yang anda gunakan untuk mengakses _windows phone store_. Di luar dari itu, kami mencadangkan hak untuk memberlakukan ketentuan-ketentuan tambahan atau mengenakan biaya-biaya tambahan.
     
--   Anda mengakui bahwa microsoft corporation, produsen perangkat telepon dan operator jaringan anda tidak memiliki kewajiban apapun untuk menyediakan setiap layanan pemeliharaan dan dukungan sehubungan dengan _platform_.
+- Anda mengakui bahwa microsoft corporation, produsen perangkat telepon dan operator jaringan anda tidak memiliki kewajiban apapun untuk menyediakan setiap layanan pemeliharaan dan dukungan sehubungan dengan _platform_.
     
 
 **Amazon appstore.**
 
 Dengan mengunduh _platform_ dari _amazon appstore_(atau penerus-penerusnya) yang dijalankan oleh _amazon digital services_, inc. Atau afiliasi-afiliasi nya (“**amazon**”), anda secara khusus mengakui dan menyetujui bahwa:
 
--   Dalam hal terdapat ketidaksesuaian antara (a) _amazon appstore terms of use_ atau ketentuan-ketentuan lain yang ditetapkan oleh amazon sebagai ketentuan-ketentuan lisensi pengguna akhir standar untuk amazon appstore (“_**amazon appstore eula terms**_”), dan (b) syarat-syarat dan ketentuan-ketentuan lain dalam ketentuan ini, maka _amazon appstore eula terms_ yang akan berlaku sehubungan dengan penggunaan oleh anda atas _platform_ yang anda unduh dari _amazon appstore_, dan
+- Dalam hal terdapat ketidaksesuaian antara (a) _amazon appstore terms of use_ atau ketentuan-ketentuan lain yang ditetapkan oleh amazon sebagai ketentuan-ketentuan lisensi pengguna akhir standar untuk amazon appstore (“_**amazon appstore eula terms**_”), dan (b) syarat-syarat dan ketentuan-ketentuan lain dalam ketentuan ini, maka _amazon appstore eula terms_ yang akan berlaku sehubungan dengan penggunaan oleh anda atas _platform_ yang anda unduh dari _amazon appstore_, dan
     
--   Amazon tidak memiliki tanggung jawab atau kewajiban apapun sehubungan dengan kepatuhan atau ketidakpatuhan Hyppe atau anda (atau setiap pengguna lainnya) atas ketentuan ini atau _amazon appstore eula terms._
+- Amazon tidak memiliki tanggung jawab atau kewajiban apapun sehubungan dengan kepatuhan atau ketidakpatuhan Hyppe atau anda (atau setiap pengguna lainnya) atas ketentuan ini atau _amazon appstore eula terms._
     
 
 **Google play.**
 
 Dengan mengunduh _platform_ dari _google play_ (atau penerus-penerusnya) yang dijalankan oleh google, inc. Atau salah satu afiliasinya (“**google**”), anda secara khusus mengakui dan menyetujui bahwa:
 
--   Dalam hal terdapat ketidaksesuaian antara (a) _google play terms of services_ dan _google play business dan program policies_ atau ketentuan-ketentuan lain yang ditetapkan oleh google sebagai ketentuan-ketentuan lisensi pengguna akhir standar untuk _google play_ (secara bersama-sama disebut “**ketentuan _google play_**”), dan (b) syarat-syarat dan ketentuan-ketentuan lain dalam ketentuan ini, maka ketentuan _google play_ yang akan berlaku sehubungan dengan penggunaan anda atas _platform_ yang anda unduh dari _google play_, dan
+- Dalam hal terdapat ketidaksesuaian antara (a) _google play terms of services_ dan _google play business dan program policies_ atau ketentuan-ketentuan lain yang ditetapkan oleh google sebagai ketentuan-ketentuan lisensi pengguna akhir standar untuk _google play_ (secara bersama-sama disebut “**ketentuan _google play_**”), dan (b) syarat-syarat dan ketentuan-ketentuan lain dalam ketentuan ini, maka ketentuan _google play_ yang akan berlaku sehubungan dengan penggunaan anda atas _platform_ yang anda unduh dari _google play_, dan
     
--   Anda dengan ini mengakui bahwa google tidak memiliki tanggung jawab atau kewajiban apapun sehubungan dengan kepatuhan atau ketidakpatuhan Hyppe atau anda (atau setiap pengguna lainnya) atas ketentuan ini atau ketentuan _google play._
+- Anda dengan ini mengakui bahwa google tidak memiliki tanggung jawab atau kewajiban apapun sehubungan dengan kepatuhan atau ketidakpatuhan Hyppe atau anda (atau setiap pengguna lainnya) atas ketentuan ini atau ketentuan _google play._
