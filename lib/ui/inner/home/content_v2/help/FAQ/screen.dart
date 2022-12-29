@@ -4,6 +4,7 @@ import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -12,6 +13,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../constant/widget/custom_search_bar.dart';
 
 class FAQDetailScreen extends StatefulWidget {
@@ -66,24 +68,46 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                 Expanded(
                     child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 6),
-                  child: ListView.builder(
-                      itemCount: widget.data.details.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                            onTap: () async {
-                              if (widget.data.details[index].detail.isNotEmpty) {
-                                await Routing().move(Routes.faqDetail, argument: FAQArgument(details: widget.data.details[index].detail));
-                                if (widget.data.isLogin) {
-                                  Routing().moveBack();
+                  child: Builder(builder: (context) {
+                    var count = 0;
+                    for (var detail in widget.data.details) {
+                      count += detail.detail.length;
+                    }
+                    final isAccordion = (count > 0);
+                    return ListView.builder(
+                        itemCount: widget.data.details.length,
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                              onTap: () async {
+                                if (widget.data.details[index].detail.isNotEmpty) {
+                                  await Routing().move(Routes.faqDetail, argument: FAQArgument(details: widget.data.details[index].detail));
+                                  if (widget.data.isLogin) {
+                                    Routing().moveBack();
+                                  }
                                 }
-                              }
-                            },
-                            child: Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
-                                child: htmlText(context, widget.data.details[index].description ?? '', key: controller.text)));
-                        // child: textSearched(context, widget.data.details[index].description ?? '', controller.text),));
-                      }),
+                              },
+                              child: Stack(
+                                children: [
+                                  if ((widget.data.details[index].detail).isNotEmpty)
+                                    const Positioned(
+                                        top: 25,
+                                        left: 0,
+                                        child: CustomIconWidget(
+                                          iconData: '${AssetPath.vectorPath}ic_arrow_right.svg',
+                                          width: 20,
+                                          height: 20,
+                                          defaultColor: false,
+                                          color: kHyppePrimary,
+                                        )),
+                                  Container(
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(top: 10, bottom: 10, left: (isAccordion ? 20 : 0)),
+                                      child: htmlText(context, widget.data.details[index].description ?? '', key: controller.text)),
+                                ],
+                              ));
+                          // child: textSearched(context, widget.data.details[index].description ?? '', controller.text),));
+                        });
+                  }),
                 )),
               Container(
                 padding: const EdgeInsets.all(11),

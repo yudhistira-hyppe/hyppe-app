@@ -46,16 +46,22 @@ class _ContentAppealScreenState extends State<ContentAppealScreen> with AfterFir
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<TicketHistoryNotifier>(context);
-    return !notifier.isLoadingInit ? notifier.appealLength != 0 ? ListView.builder(
-        itemCount: notifier.appealLength,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          if(index == notifier.listAppeals.length){
-            return const Center(child: CustomLoading());
-          }else{
-            return ItemContentAppeal(data: notifier.listAppeals[index], model: notifier.language, isFirst: index == 0,);
-          }
-        }) : Center(
+    return !notifier.isLoadingInit ? notifier.appealLength != 0 ? RefreshIndicator(
+      strokeWidth: 2.0,
+      color: Colors.purple,
+      onRefresh: () async { notifier.initContentAppeal(context, isRefresh: true); },
+      child: ListView.builder(
+          itemCount: notifier.appealLength,
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            if(index == notifier.listAppeals.length){
+              return const Center(child: CustomLoading());
+            }else{
+              return ItemContentAppeal(data: notifier.listAppeals[index], model: notifier.language, isFirst: index == 0,);
+            }
+          }),
+    ) : Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
     ): ListView.builder(
         itemCount: 15,

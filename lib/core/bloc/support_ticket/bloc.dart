@@ -204,7 +204,7 @@ class SupportTicketBloc {
     );
   }
 
-  Future sendComment(BuildContext context, TicketArgument request, {Function? onSuccess}) async {
+  Future sendComment(BuildContext context, TicketArgument request, {Function? onSuccess, List<File>? files}) async {
     setSupportTicket(SupportTicketFetch(SupportTicketState.loading));
     final formData = FormData();
     request.type = 'comment';
@@ -213,6 +213,19 @@ class SupportTicketBloc {
     formData.fields.add(MapEntry('status', request.status ?? 'new'));
     formData.fields.add(MapEntry('body', request.body ?? ''));
     formData.fields.add(MapEntry('IdUserticket', request.idUserTicket ?? ''));
+    if (files != null) {
+      for (var file in files) {
+        formData.files.add(MapEntry(
+            "supportFile",
+            await MultipartFile.fromFile(file.path,
+                filename: "${System().basenameFiles(file.path)}.${System().extensionFiles(file.path)?.replaceAll(".", "")}",
+                contentType: MediaType(
+                  System().lookupContentMimeType(file.path)?.split('/')[0] ?? '',
+                  System().extensionFiles(file.path)?.replaceAll(".", "") ?? "",
+                ))));
+      }
+    }
+
     await _repos.reposPost(
       context,
       (onResult) {

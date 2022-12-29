@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/detail_ticket_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -15,13 +16,13 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
+import 'package:mime/mime.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/size_config.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/widget/custom_content_moderated_widget.dart';
-import '../../../../../constant/widget/custom_text_button.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
 import '../../../../../constant/widget/icon_button_widget.dart';
 import '../../../../notification/notifier.dart';
@@ -37,6 +38,7 @@ class DetailTicketScreen extends StatefulWidget {
 }
 
 class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirstLayoutMixin{
+
 
   @override
   void afterFirstLayout(BuildContext context) {
@@ -100,63 +102,69 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             ),
             centerTitle: false,
           ),
-          body: notifier.isShimmer ? _getShimmerDetail(context) : Column(
+          body: dataTicket.detail == null ? _getShimmerDetail(context) : Column(
             mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
-                        padding: const EdgeInsets.only(top: 8, bottom: 8),
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: kHyppeLightSurface, ),
-                        child: Column(
-                          children: [
-                            _contentInfo(textTheme, title: notifier.language.ticket ?? 'Ticket', value: dataTicket.ticketNo ?? ''),
-                            _contentInfo(textTheme, title: notifier.language.source ?? 'Source', value: dataTicket.sourceName ?? ''),
-                            if(dataTicket.dateTime != null)
-                              Builder(builder: (context){
-                                try{
-                                  var fixSplitDateTime = dataTicket.dateTime?.split('T');
-                                  var fixSplitTime = fixSplitDateTime?[1].split(':');
-                                  return _contentInfo(textTheme, title: notifier.language.submissionTime ?? 'Submission Time', value: '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: false)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00') }');
-                                }catch(e){
-                                  'Error Builder Date fix : $e'.logger();
-                                  return const SizedBox.shrink();
-                                }
-                              },
-                            ),
-                            _contentInfo(textTheme, title: notifier.language.operationSystem ?? 'Operation System', value: dataTicket.os ?? (notifier.language.notDefined ?? 'Not Defined')),
-                            _contentInfo(textTheme, title: notifier.language.category ?? 'Category', value: dataTicket.category ?? ''),
-                            _contentInfo(textTheme, title: notifier.language.level ?? 'Level', value: dataTicket.levelName ?? ''),
-                            _contentInfo(textTheme, title: notifier.language.description ?? 'Description', value: dataTicket.body ?? ''),
-                            _contentInfo(textTheme, title: notifier.language.attachment ?? 'Attachment', value: '${dataTicket.fsSourceUri?.length ?? '0'}')
-                          ],
+                child: RefreshIndicator(
+                  strokeWidth: 2.0,
+                  color: Colors.purple,
+                  onRefresh: ()=> notifier.getDetailTicket(context, isRefresh: true),
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 12),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          width: double.infinity,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: kHyppeLightSurface, ),
+                          child: Column(
+                            children: [
+                              _contentInfo(textTheme, title: notifier.language.ticket ?? 'Ticket', value: dataTicket.ticketNo ?? ''),
+                              _contentInfo(textTheme, title: notifier.language.source ?? 'Source', value: dataTicket.sourceName ?? ''),
+                              if(dataTicket.dateTime != null)
+                                Builder(builder: (context){
+                                  try{
+                                    var fixSplitDateTime = dataTicket.dateTime?.split('T');
+                                    var fixSplitTime = fixSplitDateTime?[1].split(':');
+                                    return _contentInfo(textTheme, title: notifier.language.submissionTime ?? 'Submission Time', value: '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: false)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00') }');
+                                  }catch(e){
+                                    'Error Builder Date fix : $e'.logger();
+                                    return const SizedBox.shrink();
+                                  }
+                                },
+                              ),
+                              _contentInfo(textTheme, title: notifier.language.operationSystem ?? 'Operation System', value: dataTicket.os ?? (notifier.language.notDefined ?? 'Not Defined')),
+                              _contentInfo(textTheme, title: notifier.language.category ?? 'Category', value: dataTicket.category ?? ''),
+                              _contentInfo(textTheme, title: notifier.language.level ?? 'Level', value: dataTicket.levelName ?? ''),
+                              _contentInfo(textTheme, title: notifier.language.description ?? 'Description', value: dataTicket.body ?? ''),
+                              _contentInfo(textTheme, title: notifier.language.attachment ?? 'Attachment', value: '${dataTicket.fsSourceUri?.length ?? '0'}')
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.only(left: 13, right: 10, top: 10, bottom: 10),
-                        margin: const EdgeInsets.only(left: 16, right: 16),
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: kHyppeLightSurface, ),
-                        child: Row(
-                          children: [
-                            const CustomIconWidget(iconData: '${AssetPath.vectorPath}info-icon.svg', defaultColor: false, color: kHyppeLightSecondary,),
-                            twelvePx,
-                            CustomTextWidget(textToDisplay: notifier.language.messageTicketHandled ?? '', textStyle: const TextStyle(fontWeight: FontWeight.w400, color: kHyppeLightSecondary, fontSize: 12),)
-                          ],
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(left: 13, right: 10, top: 10, bottom: 10),
+                          margin: const EdgeInsets.only(left: 16, right: 16),
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(8)),
+                            color: kHyppeLightSurface, ),
+                          child: Row(
+                            children: [
+                              const CustomIconWidget(iconData: '${AssetPath.vectorPath}info-icon.svg', defaultColor: false, color: kHyppeLightSecondary,),
+                              twelvePx,
+                              CustomTextWidget(textToDisplay: notifier.language.messageTicketHandled ?? '', textStyle: const TextStyle(fontWeight: FontWeight.w400, color: kHyppeLightSecondary, fontSize: 12),)
+                            ],
+                          ),
                         ),
-                      ),
-                      sixteenPx,
-                      _getListChats(context, dataTicket.detail, notifier),
-                    ],
+                        sixteenPx,
+                        _getListChats(context, dataTicket.detail, notifier),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -200,59 +208,92 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     children: [
                       Container(
                         margin: const EdgeInsets.only(bottom: 10, left: 12, right: 12, top: 5),
-                        child: Row(
+                        child: Stack(
                           children: [
-                            Builder(
-                                builder: (context) {
-                                  var thumbnail = '';
-                                  final imageInfo = dataAppeal.media?.imageInfo;
-                                  final videoInfo = dataAppeal.media?.videoInfo;
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 16),
+                              child: Row(
+                                children: [
+                                  Builder(
+                                      builder: (context) {
+                                        var thumbnail = '';
+                                        final imageInfo = dataAppeal.media?.imageInfo;
+                                        final videoInfo = dataAppeal.media?.videoInfo;
 
-                                  String? urlImage;
-                                  String? urlVideo;
-                                  if(imageInfo != null){
-                                    if(imageInfo.isNotEmpty){
-                                      urlImage = dataAppeal.media?.imageInfo?.first.url;
-                                    }
-                                  }else if(videoInfo != null){
-                                    if(videoInfo.isNotEmpty){
-                                      urlVideo = dataAppeal.media?.videoInfo?.first.coverURL;
-                                    }
-                                  }
-                                  if(urlImage != null){
-                                    thumbnail = urlImage;
-                                  }else if(urlVideo != null){
-                                    thumbnail = urlVideo;
-                                  }else{
-                                    thumbnail = System().showUserPicture(dataAppeal.mediaThumbEndPoint) ?? '';
-                                  }
-                                  return CustomContentModeratedWidget(
-                                    width: 40,
-                                    height: 40,
-                                    isSale: false,
-                                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                                    thumbnail: thumbnail,
-                                  );
-                                }
+                                        String? urlImage;
+                                        String? urlVideo;
+                                        if(imageInfo != null){
+                                          if(imageInfo.isNotEmpty){
+                                            urlImage = dataAppeal.media?.imageInfo?.first.url;
+                                          }
+                                        }else if(videoInfo != null){
+                                          if(videoInfo.isNotEmpty){
+                                            urlVideo = dataAppeal.media?.videoInfo?.first.coverURL;
+                                          }
+                                        }
+                                        if(urlImage != null){
+                                          thumbnail = urlImage;
+                                        }else if(urlVideo != null){
+                                          thumbnail = urlVideo;
+                                        }else{
+                                          thumbnail = System().showUserPicture(dataAppeal.mediaThumbEndPoint) ?? '';
+                                        }
+                                        return CustomContentModeratedWidget(
+                                          width: 40,
+                                          height: 40,
+                                          isSale: false,
+                                          isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                          thumbnail: thumbnail,
+                                        );
+                                      }
+                                  ),
+                                  tenPx,
+                                  CustomTextWidget(textToDisplay: dataAppeal.description ?? '', maxLines: 3, textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),),
+
+                                ],
+                              ),
                             ),
-                            tenPx,
-                            CustomTextWidget(textToDisplay: dataAppeal.description ?? '', maxLines: 3, textStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.w400, fontSize: 12),),
+                            if(dataAppeal.status != AppealStatus.newest)
+                              Positioned(
+                                right: 0,
+                                bottom: 0,
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 16),
+                                  height: 80,
+                                  width: context.getWidth() * 0.3,
+                                  alignment: Alignment.bottomRight,
+                                  child: InkWell(
+                                    onTap: () async{
+                                      notifier.isLoadNavigate = true;
+                                      Future.delayed(const Duration(seconds: 1),(){
+                                        notifier.isLoadNavigate = false;
+                                      });
+                                      await context.read<NotificationNotifier>().navigateToContent(context, dataAppeal.postType, dataAppeal.postID);
 
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        CustomTextWidget(textAlign: TextAlign.end,textToDisplay: notifier.language.seeContent ?? '', textStyle: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontSize: 10),),
+                                        if(notifier.isLoadNavigate)
+                                        fourPx,
+                                        if(notifier.isLoadNavigate)
+                                        const SizedBox(
+                                            width: 10,
+                                            height: 10,
+                                            child: CircularProgressIndicator(color: kHyppePrimary, strokeWidth: 1,)
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),
-                      if(dataAppeal.status != AppealStatus.newest)
-                      Container(
-                        margin: const EdgeInsets.only(right: 16),
-                        width: double.infinity,
-                        alignment: Alignment.bottomRight,
-                        child: InkWell(
-                          onTap: (){
-                            context.read<NotificationNotifier>().navigateToContent(context, dataAppeal.postType, dataAppeal.postID);
-                          },
-                          child: CustomTextWidget(textAlign: TextAlign.end,textToDisplay: notifier.language.seeContent ?? '', textStyle: const TextStyle(color: kHyppePrimary, fontWeight: FontWeight.w700, fontSize: 10),),
-                        ),
-                      ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
                         child: SizedBox(
@@ -442,9 +483,22 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   }
 
   Widget _getListChats(BuildContext context, List<TicketDetail>? chats, DetailTicketNotifier notifier){
+    Map<String, List<TicketDetail>?> groupChats = {};
+
     final email = SharedPreference().readStorage(SpKeys.email);
     if(chats != null){
       if(chats.isNotEmpty){
+        for(var chat in chats){
+          final chatDate = chat.datetime?.split('T')[0];
+          if(chatDate != null){
+            if(groupChats[chatDate] != null){
+              groupChats[chatDate]?.add(chat);
+            }else{
+              groupChats[chatDate] = [];
+              groupChats[chatDate]?.add(chat);
+            }
+          }
+        }
         return Container(
           width: double.infinity,
           padding: const EdgeInsets.only(left: 16, right: 16),
@@ -462,6 +516,41 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     }else{
       return SizedBox(height: 300, child: Center(child: CustomTextWidget(textToDisplay: notifier.language.dontHaveMessagesYet ?? "Don't have messages yet"),));
     }
+  }
+
+  Widget _groupChatsLayout(BuildContext context, Map<String, List<TicketDetail>?> groupChats){
+    List<Widget> listChats = [];
+    final email = SharedPreference().readStorage(SpKeys.email);
+    groupChats.forEach((key, value) {
+      if(value != null){
+        listChats.add(Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Column(children: value.map((e){
+            if(email == e.email){
+              return _senderLayout(context, e);
+            }else{
+              return _receiveLayout(context, e);
+            }
+          }).toList(),),
+        ));
+      }
+    });
+    return Container(
+      child: Column(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Stack(
+              children: [],
+            ),
+          ),
+          Column(
+            children: listChats
+          )
+        ],
+      ),
+    );
   }
 
   Widget _receiveLayout(BuildContext context, TicketDetail chatData){
@@ -538,8 +627,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
+
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  _getGridListImages(chatData.fsTargetUri ?? []),
                   CustomTextWidget(
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
@@ -561,52 +652,228 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     );
   }
 
+  Widget _getGridListImages(List<String> images){
+
+    final fixList = images.where((element) => extensionFromMime(element).startsWith('image')).toList();
+    final lenght = fixList.length;
+    var thumbnail = '';
+    if(lenght == 1){
+      return CustomContentModeratedWidget(
+        width: 200,
+        height: 200,
+        isSale: false,
+        isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+        thumbnail: fixList[0],
+      );
+    }else if(lenght == 2){
+      return Row(
+        children: [
+          CustomContentModeratedWidget(
+            width: 100,
+            height: 100,
+            isSale: false,
+            isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+            thumbnail: fixList[0],
+          ),
+          tenPx,
+          CustomContentModeratedWidget(
+            width: 100,
+            height: 100,
+            isSale: false,
+            isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+            thumbnail: fixList[1],
+          ),
+        ],
+      );
+    }else if(lenght == 3){
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CustomContentModeratedWidget(
+                width: 100,
+                height: 100,
+                isSale: false,
+                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                thumbnail: fixList[0],
+              ),
+              tenPx,
+              CustomContentModeratedWidget(
+                width: 100,
+                height: 100,
+                isSale: false,
+                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                thumbnail: fixList[1],
+              ),
+            ],
+          ),
+          tenPx,
+          CustomContentModeratedWidget(
+            width: 100,
+            height: 100,
+            isSale: false,
+            isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+            thumbnail: fixList[2],
+          ),
+        ],
+      );
+    }else if(lenght == 4){
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CustomContentModeratedWidget(
+                width: 100,
+                height: 100,
+                isSale: false,
+                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                thumbnail: fixList[0],
+              ),
+              tenPx,
+              CustomContentModeratedWidget(
+                width: 100,
+                height: 100,
+                isSale: false,
+                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                thumbnail: fixList[1],
+              ),
+            ],
+          ),
+          tenPx,
+          Row(
+            children: [
+              CustomContentModeratedWidget(
+                width: 100,
+                height: 100,
+                isSale: false,
+                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                thumbnail: fixList[2],
+              ),
+              tenPx,
+              CustomContentModeratedWidget(
+                width: 100,
+                height: 100,
+                isSale: false,
+                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                thumbnail: fixList[3],
+              ),
+            ],
+          ),
+        ],
+      );
+    }else{
+      return const SizedBox.shrink();
+    }
+  }
+
   Widget _buildTextInput(BuildContext context, DetailTicketNotifier notifier) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      color: Theme.of(context).colorScheme.surface,
-      child: TextFormField(
-        minLines: 1,
-        maxLines: 7,
-        focusNode: notifier.inputNode,
-        keyboardType: TextInputType.text,
-        keyboardAppearance: Brightness.dark,
-        controller: notifier.commentController,
-        textInputAction: TextInputAction.unspecified,
-        style: Theme.of(context).textTheme.bodyText2,
-        autofocus: true,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Theme.of(context).colorScheme.primary,
-          hintText: "${notifier.language.typeAMessage}...",
-          hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-          suffixIcon: notifier.commentController.text.isNotEmpty
-              ? CustomTextButton(
-            child: CustomTextWidget(
-              textToDisplay: notifier.language.send ?? '',
-              textStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primaryVariant,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if((notifier.files ?? []).isNotEmpty)
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: notifier.files?.map((e){
+                final isImage = System().lookupContentMimeType(e.path)?.startsWith('image') ?? false;
+                return Stack(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      width: 100,
+                      height: 100,
+                      margin: const EdgeInsets.only(left: 5, right: 5, top: 16 ),
+                      padding: EdgeInsets.all(isImage ? 0 : 16 ),
+                      decoration: BoxDecoration(
+                        color: kHyppeBgSensitive.withOpacity(0.4),
+                          borderRadius: const BorderRadius.all(Radius.circular(8)), border: Border.all(color: kHyppeLightSecondary)),
+                      child: isImage ? e != null ? ClipRRect(
+                          child: Image.file(e, fit: BoxFit.cover, width: 100, height: 100,), borderRadius: const BorderRadius.all(Radius.circular(8)),): Text(
+                        '${e.path.split('/').last}'
+                      ) : Text(
+                          '${e.path.split('/').last}'
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: (){
+                            final index = notifier.files?.indexOf(e);
+                            if(index != null){
+                              notifier.removeFiles(index);
+                            }
+                          },
+                            child: CustomIconWidget(iconData: '${AssetPath.vectorPath}remove.svg', defaultColor: false, color: Colors.red,)))
+                  ],
+                );
+              }).toList() ?? [],
             ),
-            onPressed: () async {
-              notifier.inputNode.unfocus();
-              await notifier.sendComment(context, notifier.commentController.text);
-              // notifier.addComment(context);
-            },
-        ): const SizedBox.shrink(),
-      ),
-        onChanged: (value){
-          setState(() {
+          ),
+          if((notifier.files ?? []).isNotEmpty)
+            twelvePx,
+          Container(
+            padding: const EdgeInsets.all(16),
+            color: Theme.of(context).colorScheme.surface,
+            child: TextFormField(
+              minLines: 1,
+              maxLines: 7,
+              focusNode: notifier.inputNode,
+              keyboardType: TextInputType.text,
+              keyboardAppearance: Brightness.dark,
+              controller: notifier.commentController,
+              textInputAction: TextInputAction.unspecified,
+              style: Theme.of(context).textTheme.bodyText2,
+              autofocus: true,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Theme.of(context).colorScheme.primary,
+                hintText: "${notifier.language.typeAMessage}...",
+                hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
+                suffixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: (){
+                            notifier.onTapOnFrameLocalMedia(context);
+                          },
+                            child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}galery_icon.svg")),
+                        notifier.commentController.text.isNotEmpty ? tenPx : twelvePx,
+                        if(notifier.commentController.text.isNotEmpty)
+                        GestureDetector(
+                          onTap: () async{
+                            notifier.inputNode.unfocus();
+                            await notifier.sendComment(context, notifier.commentController.text);
+                          },
+                            child: const CustomIconWidget(
+                              height: 24,
+                              width: 24,
+                              iconData: "${AssetPath.vectorPath}logo-purple.svg", defaultColor: false, color: kHyppePrimary,)),
+                        if(notifier.commentController.text.isNotEmpty)
+                          twelvePx
+                      ],
+                    )
+            ),
+              onChanged: (value){
+                setState(() {
 
-          });
-        },
+                });
+              },
     ),
+          ),
+        ],
+      ),
     );
   }
 

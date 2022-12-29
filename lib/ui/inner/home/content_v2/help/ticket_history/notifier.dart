@@ -54,13 +54,21 @@ class TicketHistoryNotifier extends ChangeNotifier{
   bool get hasNextAppeal => appealsDataQuery.hasNext;
   int get appealLength => appealsDataQuery.hasNext ? (_listAppeals.length + 1) : _listAppeals.length;
 
-  Future initHelpTicket(BuildContext context) async{
+  Future initHelpTicket(BuildContext context, {isRefresh = false}) async{
+    if(isRefresh){
+      _isLoadingInit = true;
+      notifyListeners();
+    }
     _listTickets = await ticketsDataQuery.reload(context);
     _isLoadingInit = false;
     notifyListeners();
   }
 
-  Future initContentAppeal(BuildContext context) async{
+  Future initContentAppeal(BuildContext context, {isRefresh = false}) async{
+    if(isRefresh){
+      _isLoadingInit = true;
+      notifyListeners();
+    }
     _listAppeals = await appealsDataQuery.reloadReport(context);
     _isLoadingInit = false;
     notifyListeners();
