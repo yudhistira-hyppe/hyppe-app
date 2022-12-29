@@ -34,7 +34,7 @@ class AutoCompleteSearch extends StatelessWidget {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Expanded(child: Center(child: Text('${notifier.language.userIsNotFound}'))),
+                              Expanded(child: Center(child: Text('${notifier.language.noResultsFor} "${notifier.searchController.text}"'))),
                             ],
                           )
                         : ListView.builder(

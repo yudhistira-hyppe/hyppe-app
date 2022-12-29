@@ -196,6 +196,7 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   initialSelfProfile(BuildContext context) async {
+    pageIndex = 0;
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     vidContentsQuery.featureType = FeatureType.vid;

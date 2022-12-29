@@ -196,10 +196,10 @@ class ReportNotifier with ChangeNotifier {
         Routing().moveBack();
       }
       final language = context.read<TranslateNotifierV2>().translate;
-      ShowBottomSheet().onShowColouredSheet(context, language.reportReceived ?? '', subCaption: language.yourReportWillbeHandledImmediately, color: kHyppeTextSuccess);
+      ShowBottomSheet().onShowColouredSheet(context, language.reportReceived ?? '', subCaption: language.yourReportWillbeHandledImmediately, color: kHyppeTextSuccess, milisecond: 1000);
     } else {
       _isLoading = false;
-      ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: kHyppeRed);
+      ShowBottomSheet().onShowColouredSheet(context, fetch.message, color: kHyppeRed, milisecond: 500);
     }
 
     notifyListeners();

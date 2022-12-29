@@ -305,8 +305,6 @@ class ShowBottomSheet {
     // );
   }
 
-
-
   static onShowCompleteProfile(_) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -494,6 +492,7 @@ class ShowBottomSheet {
     EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
     final Function()? functionSubCaption,
     final String? subCaptionButton,
+    final int? milisecond,
   }) async {
     final _result = await showModalBottomSheet<bool>(
       isScrollControlled: enableDrag,
@@ -517,6 +516,7 @@ class ShowBottomSheet {
                 textOverflow: textOverflow,
                 subCaptionButton: subCaptionButton,
                 functionSubCaption: functionSubCaption,
+                milisecond: milisecond,
               )),
         );
       },

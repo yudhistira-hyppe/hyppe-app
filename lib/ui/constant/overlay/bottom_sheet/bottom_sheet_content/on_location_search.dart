@@ -37,7 +37,7 @@ class _OnLocationSearchBottomSheetState extends State<OnLocationSearchBottomShee
           elevation: 0,
           centerTitle: false,
           leading: GestureDetector(
-              onTap: widget.onSave,
+              onTap: () => Routing().moveBack(),
               child: Icon(
                 Icons.clear_rounded,
                 color: Theme.of(context).colorScheme.onSurface,

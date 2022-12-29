@@ -831,5 +831,6 @@
   "addDocument" : "Tambahkan Dokumen",
   "youCanAddupto3SupportingDocuments" : "Kamu dapat menambahkan hingga 3 pendukung dokumen",
   "thankYou" : "Terimakasih ",
-  "thankYouforYourFeedback" : "Terima kasih atas tanggapan Anda"
+  "thankYouforYourFeedback" : "Terima kasih atas tanggapan Anda",
+  "noResultsFor" : "Tidak ada hasil untuk "
 }

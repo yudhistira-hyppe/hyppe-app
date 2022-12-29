@@ -832,6 +832,7 @@ class LocalizationModelV2 {
   String? youCanAddupto3SupportingDocuments;
   String? thankYou;
   String? thankYouforYourFeedback;
+  String? noResultsFor;
 
   LocalizationModelV2({
     this.login,
@@ -1667,6 +1668,7 @@ class LocalizationModelV2 {
     this.youCanAddupto3SupportingDocuments,
     this.thankYou,
     this.thankYouforYourFeedback,
+    this.noResultsFor,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2522,5 +2524,6 @@ class LocalizationModelV2 {
     youCanAddupto3SupportingDocuments = json['youCanAddupto3SupportingDocuments'];
     thankYou = json['thankYou'];
     thankYouforYourFeedback = json['thankYouforYourFeedback'];
+    noResultsFor = json['noResultsFor'];
   }
 }

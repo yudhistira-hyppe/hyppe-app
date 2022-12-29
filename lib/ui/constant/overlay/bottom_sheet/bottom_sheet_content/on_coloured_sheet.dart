@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -21,6 +23,7 @@ class OnColouredSheet extends StatefulWidget {
   final Function()? functionSubCaption;
   final String? subCaptionButton;
   final TextOverflow? textOverflow;
+  final int? milisecond;
   const OnColouredSheet({
     Key? key,
     required this.caption,
@@ -34,6 +37,7 @@ class OnColouredSheet extends StatefulWidget {
     this.function,
     this.textOverflow,
     this.functionSubCaption,
+    this.milisecond,
   }) : super(key: key);
 
   @override
@@ -42,6 +46,7 @@ class OnColouredSheet extends StatefulWidget {
 
 class _OnColouredSheetState extends State<OnColouredSheet> {
   final ValueNotifier<bool> _loading = ValueNotifier(false);
+  bool close = false;
 
   void _conditionalFunction() async {
     if (widget.function == null) {
@@ -60,6 +65,26 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
         }
       }
     }
+  }
+
+  @override
+  void initState() {
+    if (widget.milisecond != null) {
+      Timer(Duration(milliseconds: widget.milisecond ?? 0), () {
+        if (!close) {
+          Routing().moveBack();
+        }
+      });
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    setState(() {
+      close = true;
+    });
+    super.dispose();
   }
 
   @override
