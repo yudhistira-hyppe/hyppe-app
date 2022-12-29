@@ -131,7 +131,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                                   try{
                                     var fixSplitDateTime = dataTicket.dateTime?.split('T');
                                     var fixSplitTime = fixSplitDateTime?[1].split(':');
-                                    return _contentInfo(textTheme, title: notifier.language.submissionTime ?? 'Submission Time', value: '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: false)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00') }');
+                                    return _contentInfo(textTheme, title: notifier.language.submissionTime ?? 'Submission Time', value: '${fixSplitDateTime?[0].getDateFormat("yyyy-MM-dd", notifier.language, isToday: true)} ${System().getTimeWIB(fixSplitTime?[0] ?? '00', fixSplitTime?[1] ?? '00') }');
                                   }catch(e){
                                     'Error Builder Date fix : $e'.logger();
                                     return const SizedBox.shrink();
@@ -485,7 +485,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   Widget _getListChats(BuildContext context, List<TicketDetail>? chats, DetailTicketNotifier notifier){
     Map<String, List<TicketDetail>?> groupChats = {};
 
-    final email = SharedPreference().readStorage(SpKeys.email);
+    // final email = SharedPreference().readStorage(SpKeys.email);
     if(chats != null){
       if(chats.isNotEmpty){
         for(var chat in chats){
@@ -499,17 +499,18 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             }
           }
         }
-        return Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(children: chats.map((e){
-            if(email == e.email){
-              return _senderLayout(context, e);
-            }else{
-              return _receiveLayout(context, e);
-            }
-          }).toList(),),
-        );
+        return _groupChatsLayout(context, groupChats, notifier);
+        // return Container(
+        //   width: double.infinity,
+        //   padding: const EdgeInsets.only(left: 16, right: 16),
+        //   child: Column(children: chats.map((e){
+        //     if(email == e.email){
+        //       return _senderLayout(context, e);
+        //     }else{
+        //       return _receiveLayout(context, e);
+        //     }
+        //   }).toList(),),
+        // );
       }else{
         return SizedBox(height: 300, child: Center(child: CustomTextWidget(textToDisplay: notifier.language.dontHaveMessagesYet ?? "Don't have messages yet"),));
       }
@@ -518,38 +519,67 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     }
   }
 
-  Widget _groupChatsLayout(BuildContext context, Map<String, List<TicketDetail>?> groupChats){
-    List<Widget> listChats = [];
+  Widget _groupChatsLayout(BuildContext context, Map<String, List<TicketDetail>?> groupChats, DetailTicketNotifier notifier){
+    final List<Widget> groups = [];
     final email = SharedPreference().readStorage(SpKeys.email);
     groupChats.forEach((key, value) {
       if(value != null){
-        listChats.add(Container(
-          width: double.infinity,
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(children: value.map((e){
-            if(email == e.email){
-              return _senderLayout(context, e);
-            }else{
-              return _receiveLayout(context, e);
-            }
-          }).toList(),),
-        ));
+        groups.add(Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          child: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        height: 30,
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          height: 1,
+                          child: Container(color: Colors.black12),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        decoration: BoxDecoration(border: Border.all(color: kHyppeSecondary), borderRadius: const BorderRadius.all(Radius.circular(8)), color: kHyppeLightInactive1),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        child: CustomTextWidget(textToDisplay: key.getDateFormat("yyyy-MM-dd", notifier.language, isToday: true)),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              sixteenPx,
+              Builder(builder: (context){
+                List<Widget> listChats = [];
+                listChats.add(Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Column(children: value.map((e){
+                    if(email == e.email){
+                      return _senderLayout(context, e);
+                    }else{
+                      return _receiveLayout(context, e);
+                    }
+                  }).toList(),),
+                ));
+                return Column(
+                  children: listChats,
+                );
+              })
+            ],
+          ),
+        )
+        );
       }
     });
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: Stack(
-              children: [],
-            ),
-          ),
-          Column(
-            children: listChats
-          )
-        ],
-      ),
+    return Column(
+      children: groups,
     );
   }
 
