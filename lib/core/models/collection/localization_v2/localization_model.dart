@@ -833,6 +833,8 @@ class LocalizationModelV2 {
   String? thankYou;
   String? thankYouforYourFeedback;
   String? noResultsFor;
+  String? max3Images;
+  String? max4Images;
 
   LocalizationModelV2({
     this.login,
@@ -1669,6 +1671,8 @@ class LocalizationModelV2 {
     this.thankYou,
     this.thankYouforYourFeedback,
     this.noResultsFor,
+    thismax3Images,
+    thismax4Images,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2209,7 +2213,6 @@ class LocalizationModelV2 {
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
     deletingYourAccountIsPermanent = json['deletingYourAccountIsPermanent'];
-
     commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
     notReceivingOTP = json['notReceivingOTP'];
     resendOTP = json['resendOTP'];
@@ -2525,5 +2528,7 @@ class LocalizationModelV2 {
     thankYou = json['thankYou'];
     thankYouforYourFeedback = json['thankYouforYourFeedback'];
     noResultsFor = json['noResultsFor'];
+    max3Images = json['max3Images'];
+    max4Images = json['max4Images'];
   }
 }

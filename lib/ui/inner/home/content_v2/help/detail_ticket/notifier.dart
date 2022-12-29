@@ -123,23 +123,35 @@ class DetailTicketNotifier extends ChangeNotifier{
   }
 
   void onTapOnFrameLocalMedia(BuildContext context, {isPdf = false}) async {
+    final filesLenght = files?.length ?? 0;
     try {
-      await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: isPdf).then((value) async {
-        Future.delayed(const Duration(milliseconds: 1000), () async {
-          if (value.values.single != null) {
-            files ??= [];
-            files?.addAll(value.values.single?.map((e) => e).toList() ?? []);
-            notifyListeners();
-            if(files != null){
-              for(var file in files!){
-                'onTapOnFrameLocalMedia files : ${System().lookupContentMimeType(file.path)} => ${file.path.split('/').last}'.logger();
+      if(filesLenght >= 4){
+        ShowGeneralDialog.pickFileErrorAlert(context, language.max4Images ?? 'Max 4 images');
+      }else{
+        await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: isPdf, model: language).then((value) async {
+          Future.delayed(const Duration(milliseconds: 1000), () async {
+            if (value.values.single != null) {
+              final fixFiles = value.values.single?.map((e) => e).toList() ?? [];
+              final totalLenght = fixFiles.length + filesLenght;
+              if(totalLenght > 4){
+                ShowGeneralDialog.pickFileErrorAlert(context, language.max4Images ?? 'Max 4 images');
+              }else{
+                files ??= [];
+                files?.addAll(fixFiles);
+                notifyListeners();
+                if(files != null){
+                  for(var file in files!){
+                    'onTapOnFrameLocalMedia files : ${System().lookupContentMimeType(file.path)} => ${file.path.split('/').last}'.logger();
+                  }
+                }
               }
+            } else {
+              if (value.keys.single.isNotEmpty) ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
             }
-          } else {
-            if (value.keys.single.isNotEmpty) ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
-          }
+          });
         });
-      });
+      }
+
     } catch (e) {
       ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }

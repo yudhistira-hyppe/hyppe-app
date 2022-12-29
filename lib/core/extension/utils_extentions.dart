@@ -101,7 +101,7 @@ extension StringDefine on String {
       if (isToday) {
         if (parsedDate.isToday()) {
           return translate.today ?? 'Today';
-        } else if (parsedDate.isToday()) {
+        } else if (parsedDate.isYesterday()) {
           return translate.yesterday ?? 'Yesterday';
         }
       }
@@ -133,6 +133,9 @@ extension IntegerExtension on int {
 extension DateHelpers on DateTime {
   bool isToday() {
     final now = DateTime.now();
+    // print('DateHelpers ${now.day} : ${this.day}');
+    // print('DateHelpers ${now.month} : ${this.month}');
+    // print('DateHelpers ${now.year} : ${this.year}');
     return now.day == this.day && now.month == this.month && now.year == this.year;
   }
 

@@ -832,5 +832,7 @@
   "youCanAddupto3SupportingDocuments" : "Kamu dapat menambahkan hingga 3 pendukung dokumen",
   "thankYou" : "Terimakasih ",
   "thankYouforYourFeedback" : "Terima kasih atas tanggapan Anda",
-  "noResultsFor" : "Tidak ada hasil untuk "
+  "noResultsFor" : "Tidak ada hasil untuk ",
+  "max3Images": "Maksimal 3 gambar",
+  "max4Images": "Maksimal 4 gambar"
 }

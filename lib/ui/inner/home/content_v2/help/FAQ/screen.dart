@@ -219,24 +219,36 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
         }
         return Html(
           data: fixTextHtml,
-          onLinkTap: (text, ctx, map, e) {
-            launchUrl(Uri(path: text));
+          onLinkTap: (text, ctx, map, e) async {
+            print('test1');
+            await launchUrl(
+              Uri.parse(text ?? ''),
+              mode: LaunchMode.externalApplication,
+            );
           },
           style: {"span": Style(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)},
         );
       } else {
         return Html(
           data: text,
-          onLinkTap: (text, ctx, map, e) {
-            launchUrl(Uri(path: text));
+          onLinkTap: (text, ctx, map, e) async {
+            print('test2');
+            await launchUrl(
+              Uri.parse(text ?? ''),
+              mode: LaunchMode.externalApplication,
+            );
           },
         );
       }
     } else {
       return Html(
         data: text,
-        onLinkTap: (text, ctx, map, e) {
-          launchUrl(Uri(path: text));
+        onLinkTap: (text, ctx, map, e) async {
+          print('test3 ');
+          await launchUrl(
+            Uri.parse(text ?? ''),
+            mode: LaunchMode.externalApplication,
+          );
         },
       );
     }
