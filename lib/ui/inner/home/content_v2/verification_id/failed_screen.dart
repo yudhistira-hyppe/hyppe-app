@@ -42,8 +42,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
             titleSpacing: 0,
             title: CustomTextWidget(
               textToDisplay: notifier.language.idVerification ?? '',
-              textStyle:
-                  Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
+              textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
             ),
             centerTitle: false,
           ),
@@ -54,14 +53,9 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Center(
-                    child: Image(
-                        image: AssetImage(
-                            "${AssetPath.pngPath}verification-failed.png")),
+                    child: Image(image: AssetImage("${AssetPath.pngPath}verification-failed.png")),
                   ),
-                  CustomTextWidget(
-                      textOverflow: TextOverflow.visible,
-                      textAlign: TextAlign.left,
-                      textToDisplay: notifier.language.failedIdCardInfoTitle ?? ''),
+                  CustomTextWidget(textOverflow: TextOverflow.visible, textAlign: TextAlign.left, textToDisplay: notifier.language.failedIdCardInfoTitle ?? ''),
                   _buildDivider(context),
                   CustomTextWidget(
                     textToDisplay: notifier.language.failedIdCardInfoSubTitle ?? '',
@@ -79,8 +73,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                     children: [
                       CustomTextWidget(textToDisplay: notifier.language.help ?? ''),
                       const SizedBox(width: 10),
-                      const CustomIconWidget(
-                          iconData: "${AssetPath.vectorPath}help.svg"),
+                      const CustomIconWidget(iconData: "${AssetPath.vectorPath}help.svg"),
                     ],
                   ),
                   const SizedBox(height: 110)
@@ -88,8 +81,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
               ),
             ),
           ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           floatingActionButton: Container(
             height: 130 * SizeConfig.scaleDiagonal,
             padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
@@ -101,30 +93,23 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                   onTap: () => notifier.retrySelfie(context),
                   child: Text(
                     notifier.language.retakeSelfie ?? '',
-                    style: textTheme.titleMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primaryVariant),
+                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                   ),
                 ),
                 const SizedBox(height: 16),
                 CustomElevatedButton(
                   width: SizeConfig.screenWidth,
                   height: 44.0 * SizeConfig.scaleDiagonal,
-                  function: () => Routing()
-                      .moveAndPop(Routes.verificationIDStepSupportDocsEula),
+                  function: () => Routing().moveAndPop(Routes.verificationIDStepSupportDocsEula),
                   child: CustomTextWidget(
                     textToDisplay: notifier.language.uploadSupportDoc ?? '',
-                    textStyle: textTheme.button
-                        ?.copyWith(color: kHyppeLightButtonText),
+                    textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                   buttonStyle: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
-                    shadowColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
-                    overlayColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant),
+                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -136,9 +121,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
     );
   }
 
-  Widget _buildDivider(context) => Divider(
-      thickness: 1.0,
-      color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
+  Widget _buildDivider(context) => Divider(thickness: 1.0, color: Theme.of(context).dividerTheme.color?.withOpacity(0.1));
 
   Widget _unorderedList(String text) {
     return Padding(

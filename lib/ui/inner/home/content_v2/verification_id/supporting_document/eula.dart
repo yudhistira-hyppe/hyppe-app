@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/eula.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
@@ -16,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VerificationIDStepSupportDocsEula extends StatefulWidget {
   const VerificationIDStepSupportDocsEula({Key? key}) : super(key: key);
@@ -25,6 +28,22 @@ class VerificationIDStepSupportDocsEula extends StatefulWidget {
 }
 
 class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSupportDocsEula> {
+  String dataText = '';
+
+  @override
+  void initState() {
+    readFile();
+    super.initState();
+  }
+
+  readFile() async {
+    String? isoCode = SharedPreference().readStorage(SpKeys.isoCode) ?? 'en';
+    var request = await rootBundle.loadString('${AssetPath.dummyMdPath}eula_kyc_$isoCode.md');
+    setState(() {
+      dataText = request;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -50,24 +69,38 @@ class _VerificationIDStepSupportDocsEulaState extends State<VerificationIDStepSu
             ),
             centerTitle: false,
           ),
-          body: Container(
-              child: Column(children: <Widget>[
-            Expanded(
-              child: Html(
-                data: eulaHtml(context, (SharedPreference().readStorage(SpKeys.themeData) ?? false)),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              // Html(
+              //   data: eulaHtml(context, (SharedPreference().readStorage(SpKeys.themeData) ?? false)),
+              // ),
+              SizedBox(
+                height: SizeConfig.screenHeight,
+                child: Markdown(
+                  data: dataText,
+                  padding: EdgeInsets.only(left: 16, right: 16, bottom: 220, top: 16),
+                  onTapLink: (text, href, title) async {
+                    try {
+                      print('markdown  $text, $href, $title');
+                      await launchUrl(Uri.parse(text), mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      // 'error href : $e'.logger();
+                    }
+                  },
+                ),
               ),
 
-              // InAppWebView(
-              //   initialOptions: InAppWebViewGroupOptions(crossPlatform: InAppWebViewOptions(supportZoom: false)),
-              //   initialUrlRequest: URLRequest(
-              //     url: Uri.parse("https://localhost/assets/eula.html"),
+              // Expanded(
+              //   child: InAppWebView(
+              //     initialOptions: InAppWebViewGroupOptions(crossPlatform: InAppWebViewOptions(supportZoom: false)),
+              //     initialUrlRequest: URLRequest(url: Uri.parse("http://localhost:8080/assets/eula.html")),
+              //     onWebViewCreated: (controller) {},
+              //     onLoadStart: (controller, url) {},
+              //     onLoadStop: (controller, url) {},
               //   ),
-              //   onWebViewCreated: (controller) {},
-              //   onLoadStart: (controller, url) {},
-              //   onLoadStop: (controller, url) {},
-              // ),
-            )
-          ])),
+              // )
+            ]),
+          ),
           floatingActionButton: Container(
             height: 140 * SizeConfig.scaleDiagonal,
             padding: const EdgeInsets.only(top: 20, left: 16, right: 16),

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -330,27 +331,25 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                       ),
                       const SizedBox(height: 20),
                       Center(
-                        child: CustomTextWidget(
-                          textToDisplay: notifier.language.dataDidntShow ?? '',
-                        ),
+                        child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(text: notifier.language.dataDidntShow ?? '', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppeTextLightPrimary), children: [
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()..onTap = () => Routing().moveAndRemoveUntil(Routes.verificationIDStepSupportDocsEula, Routes.verificationIDStepSupportDocsEula),
+                                text: notifier.language.tapHere,
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppePrimary),
+                              ),
+                              TextSpan(
+                                text: notifier.language.toAppeal ?? '',
+                                style: const TextStyle(color: kHyppeTextLightPrimary),
+                              ),
+                            ])),
                       ),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () => Routing().moveAndRemoveUntil(Routes.verificationIDStepSupportDocsEula, Routes.verificationIDStepSupportDocsEula),
-                          child: RichText(
-                            text: TextSpan(
-                              text: notifier.language.tapHere,
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: kHyppePrimary),
-                              children: <TextSpan>[
-                                TextSpan(
-                                  text: notifier.language.toAppeal ?? '',
-                                  style: const TextStyle(color: kHyppeTextLightPrimary),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
+                      // Center(
+                      //   child: CustomTextWidget(
+                      //     textToDisplay: notifier.language.dataDidntShow ?? '',
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),

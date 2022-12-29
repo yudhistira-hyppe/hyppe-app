@@ -51,7 +51,7 @@ class PreviewPicNotifier with ChangeNotifier, GeneralMixin {
       if (list != null) {
         if (reload) {
           contentsQuery.hasNext = true;
-          contentsQuery.page = 2;
+          contentsQuery.page = 1;
         }
         res.addAll(list);
         contentsQuery.hasNext = list.length == contentsQuery.limit;

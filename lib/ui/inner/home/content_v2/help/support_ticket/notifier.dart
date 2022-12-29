@@ -140,7 +140,7 @@ class SupportTicketNotifier with ChangeNotifier {
         if (value.values.single != null) {
           // pickedSupportingDocs = value.values.single;
           for (var element in value.values.single!) {
-            if ((pickedSupportingDocs?.length ?? 0) < 3) {
+            if ((pickedSupportingDocs?.length ?? 0) < 4) {
               pickedSupportingDocs!.add(element);
             }
           }

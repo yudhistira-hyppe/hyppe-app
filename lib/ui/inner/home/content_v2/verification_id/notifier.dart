@@ -249,7 +249,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     if (nameText == "") {
       ShowBottomSheet().onShowColouredSheet(
         context,
-        "Silahkan masukan nama lengkap anda",
+        language.pleaseEnterYourFullName ?? "Silahkan masukan nama lengkap anda",
         color: Theme.of(context).colorScheme.error,
         maxLines: 2,
       );

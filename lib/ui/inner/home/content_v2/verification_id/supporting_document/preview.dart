@@ -97,7 +97,7 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Add Document',
+                        notifier.language.addDocument ?? 'Add Document',
                         style: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary, fontWeight: FontWeight.bold),
                       ),
                       const Icon(

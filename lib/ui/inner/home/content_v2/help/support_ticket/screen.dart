@@ -155,12 +155,13 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 ),
                 Row(
                   children: [
-                    GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted), child: CustomIconWidget(iconData: "${AssetPath.vectorPath}storage.svg")),
+                    GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted), child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}storage.svg")),
                     twentyFourPx,
                     // GestureDetector(onTap: () => supportNotifier.onPickSupportedDocument(context, mounted, pdf: true), child: CustomIconWidget(iconData: "${AssetPath.vectorPath}sisipkan.svg")),
                   ],
                 ),
                 ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: supportNotifier.pickedSupportingDocs?.length ?? 0,
                   itemBuilder: (context, index) => ListTile(
@@ -170,7 +171,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                     trailing: GestureDetector(
                       onTap: () {
                         setState(() {
-                          if(supportNotifier.pickedSupportingDocs != null){
+                          if (supportNotifier.pickedSupportingDocs != null) {
                             supportNotifier.pickedSupportingDocs?.removeAt(index);
                           }
                         });
@@ -190,7 +191,12 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                     );
                   },
                 ),
-                (supportNotifier.pickedSupportingDocs?.length ?? 0) > 1 ? Text('Max 3 Files') : Container(),
+                (supportNotifier.pickedSupportingDocs?.length ?? 0) > 1
+                    ? const Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Text('Max 4 Files'),
+                      )
+                    : Container(),
                 twentyPx,
                 SizedBox(
                   width: SizeConfig.screenWidth,

@@ -113,27 +113,27 @@ Kami akan menggunakan informasi yang kami kumpulkan tentang Anda dengan cara ber
  - Memberi tahu Anda tentang perubahan pada layanan kami;
  - Menyediakan dukungan pengguna untuk Anda;
  - Menyesuaikan konten yang Anda terima dan menyediakan konten khusus yang akan menarik minat Anda;
--   Memungkinkan Anda untuk membagikan Konten Pengguna dan berinteraksi dengan pengguna lain;
--   Memungkinkan layanan perpesanan kami untuk berfungsi jika Anda memilih untuk menggunakan fungsi ini;
--   Berkomunikasi dengan Anda;
--   Untuk membantu kami mendeteksi dan melawan penyalahgunaan, tindakan berbahaya, penipuan, spam, dan aktivitas ilegal di Aplikasi;
--   Memudahkan Anda untuk melakukan transaksi di dalam Aplikasi;
--   Memungkinkan Anda untuk memperoleh pendapatan dan menarik hasil pendapatan di dalam Aplikasi;
--   Memastikan Anda mendapatkan perlindungan atas kepemilikan konten;
--   Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
--   Memastikan keselamatan dan keamanan Anda, termasuk meninjau konten pengguna dan metadata terkait untuk pelanggaran Pedoman Komunitas kami dan konten tidak sesuai lainnya;
--   Memastikan konten disajikan dengan cara yang paling efektif untuk Anda dan perangkat Anda;
--   Meningkatkan, mempromosikan, dan mengembangkan Aplikasi serta mempromosikan topik, tagar, dan kampanye populer pada Aplikasi;
--   Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
--   Memungkinkan Anda untuk berpartisipasi dalam fitur interaktif di Aplikasi;
--   Untuk memungkinkan Anda bersosialisasi di Aplikasi;
--   Untuk memastikan bahwa Anda cukup umur untuk menggunakan Aplikasi kami (sebagaimana diwajibkan oleh hukum).
--   Menyediakan iklan yang disesuaikan untuk Anda;
--   Menyediakan layanan berbasis lokasi untuk Anda (saat layanan tersebut tersedia di yurisdiksi Anda);
--   Untuk memberitahu algoritma kami
--   Memberlakukan syarat, ketentuan, dan kebijakan kami;
--   Mengatur Aplikasi, termasuk pemecahan masalah; dan
--   Untuk memfasilitasi penjualan, promosi, dan pembelian barang dan layanan serta untuk menyediakan dukungan pengguna.
+ - Memungkinkan Anda untuk membagikan Konten Pengguna dan berinteraksi dengan pengguna lain;
+ - Memungkinkan layanan perpesanan kami untuk berfungsi jika Anda memilih untuk menggunakan fungsi ini;
+ - Berkomunikasi dengan Anda;
+ - Untuk membantu kami mendeteksi dan melawan penyalahgunaan, tindakan berbahaya, penipuan, spam, dan aktivitas ilegal di Aplikasi;
+ - Memudahkan Anda untuk melakukan transaksi di dalam Aplikasi;
+ - Memungkinkan Anda untuk memperoleh pendapatan dan menarik hasil pendapatan di dalam Aplikasi;
+ - Memastikan Anda mendapatkan perlindungan atas kepemilikan konten;
+ - Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
+ - Memastikan keselamatan dan keamanan Anda, termasuk meninjau konten pengguna dan metadata terkait untuk pelanggaran Pedoman Komunitas kami dan konten tidak sesuai lainnya;
+ - Memastikan konten disajikan dengan cara yang paling efektif untuk Anda dan perangkat Anda;
+ - Meningkatkan, mempromosikan, dan mengembangkan Aplikasi serta mempromosikan topik, tagar, dan kampanye populer pada Aplikasi;
+ - Melakukan analisis data dan menguji Aplikasi untuk memastikan stabilitas dan keamanannya;
+ - Memungkinkan Anda untuk berpartisipasi dalam fitur interaktif di Aplikasi;
+ - Untuk memungkinkan Anda bersosialisasi di Aplikasi;
+ - Untuk memastikan bahwa Anda cukup umur untuk menggunakan Aplikasi kami (sebagaimana diwajibkan oleh hukum).
+ - Menyediakan iklan yang disesuaikan untuk Anda;
+ - Menyediakan layanan berbasis lokasi untuk Anda (saat layanan tersebut tersedia di yurisdiksi Anda);
+ - Untuk memberitahu algoritma kami
+ - Memberlakukan syarat, ketentuan, dan kebijakan kami;
+ - Mengatur Aplikasi, termasuk pemecahan masalah; dan
+ - Untuk memfasilitasi penjualan, promosi, dan pembelian barang dan layanan serta untuk menyediakan dukungan pengguna.
 
 
 **3. Bagaimana kami membagikan data pribadi Anda**
