@@ -1080,6 +1080,7 @@ class PreviewContentNotifier with ChangeNotifier {
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }
 
+  //Tag Hariyanto
   Future makeThumbnail(BuildContext context, int index) async {
     if (System().lookupContentMimeType(fileContent?[index] ?? '')?.startsWith('image') ?? false) {
       showNext = true;

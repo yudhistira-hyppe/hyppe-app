@@ -18,6 +18,7 @@ class HelpTicketScreen extends StatefulWidget {
 class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayoutMixin{
 
   final ScrollController _scrollController = ScrollController();
+  final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
 
 
   @override
@@ -48,16 +49,23 @@ class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayo
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<TicketHistoryNotifier>(context);
-    return !notifier.isLoadingInit ? notifier.ticketLenght != 0 ? ListView.builder(
-        itemCount: notifier.ticketLenght,
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          if(index == notifier.listTickets.length){
-            return const Center(child: CustomLoading());
-          }else{
-            return ItemTicketHistory(data: notifier.listTickets[index], model: notifier.language, isFirst: index == 0);
-          }
-        }) : Center(
+    return !notifier.isLoadingInit ? notifier.ticketLenght != 0 ? RefreshIndicator(
+      key: _globalKey,
+      strokeWidth: 2.0,
+      color: Colors.purple,
+      onRefresh: () => notifier.initHelpTicket(context, isRefresh: true),
+      child: ListView.builder(
+          itemCount: notifier.ticketLenght,
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            if(index == notifier.listTickets.length){
+              return const Center(child: CustomLoading());
+            }else{
+              return ItemTicketHistory(data: notifier.listTickets[index], model: notifier.language, isFirst: index == 0);
+            }
+          }),
+    ) : Center(
       child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
     ): ListView.builder(
       itemCount: 15,

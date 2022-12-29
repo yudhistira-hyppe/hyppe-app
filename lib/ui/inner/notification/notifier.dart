@@ -213,21 +213,21 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     if (setState) notifyListeners();
   }
 
-  void navigateToContent(BuildContext context, postType, postID) {
+  Future navigateToContent(BuildContext context, postType, postID) async{
     final featureType = System().getFeatureTypeV2(postType ?? '');
     print('navigateToContent $postType, $postID, $featureType');
     switch (featureType) {
       case FeatureType.vid:
-        onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
+        await onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)), postID);
         break;
       case FeatureType.diary:
-        onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)), postID);
+        await onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)), postID);
         break;
       case FeatureType.pic:
-        onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)), postID);
+        await onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)), postID);
         break;
       case FeatureType.story:
-        onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
+        await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
         break;
       case FeatureType.txtMsg:
 

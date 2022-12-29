@@ -29,7 +29,7 @@ void disposeGlobalAudio() async {
     await globalAudioPlayer!.stop();
     await globalAudioPlayer!.dispose();
   } catch (e) {
-    'globalAudioPlayer error : $e'.logger();
+    'globalAudioPlayer error : $e '.logger();
   }
 }
 

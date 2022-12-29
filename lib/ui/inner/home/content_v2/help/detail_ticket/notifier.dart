@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import '../../../../../../core/arguments/ticket_argument.dart';
 import '../../../../../../core/bloc/support_ticket/bloc.dart';
+import '../../../../../../core/constants/enum.dart';
 import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
 import '../../../../../../core/models/collection/support_ticket/ticket_model.dart';
-
+import '../../../../../../core/services/system.dart';
+import '../../../../../constant/overlay/general_dialog/show_general_dialog.dart';
 class DetailTicketNotifier extends ChangeNotifier{
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
@@ -26,12 +30,30 @@ class DetailTicketNotifier extends ChangeNotifier{
     notifyListeners();
   }
 
-  bool _isShimmer = false;
-  bool get isShimmer => _isShimmer;
-  set isShimmer(bool state){
-    _isShimmer = state;
+  bool _isLoadNavigate = false;
+  bool get isLoadNavigate => _isLoadNavigate;
+  set isLoadNavigate(bool state){
+    _isLoadNavigate = state;
     notifyListeners();
   }
+
+  List<File>? _files = [];
+  List<File>? get files => _files;
+  set files(List<File>? data){
+    _files = data;
+    notifyListeners();
+  }
+
+  removeFiles(int index){
+    files?.removeAt(index);
+    notifyListeners();
+  }
+
+  removeAllFiles(){
+    files = [];
+    notifyListeners();
+  }
+
 
   initStateDetailTicket(TicketModel model){
     _commentController = TextEditingController();
@@ -42,6 +64,7 @@ class DetailTicketNotifier extends ChangeNotifier{
   disposeState(){
     try{
       _ticketModel = null;
+      _files = [];
       _commentController.dispose();
       _inputNode.dispose();
     }catch(e){
@@ -50,11 +73,12 @@ class DetailTicketNotifier extends ChangeNotifier{
   }
 
 
-  Future getDetailTicket(BuildContext context, ) async{
+  Future getDetailTicket(BuildContext context, {isRefresh = false}) async{
     List<TicketModel>? res;
     try{
-      if(_ticketModel == null){
-        isShimmer = true;
+      if(isRefresh){
+        _ticketModel?.detail = null;
+        notifyListeners();
       }
       final bloc = SupportTicketBloc();
       await bloc.getTicketHistories(context, TicketArgument(id: _ticketModel?.id, type: 'comment'), isDetail: true);
@@ -69,8 +93,6 @@ class DetailTicketNotifier extends ChangeNotifier{
     }catch(e){
       'TicketsDataQuery Reload Error : $e'.logger();
       return res ?? [];
-    }finally{
-      isShimmer = false;
     }
 
 
@@ -83,8 +105,9 @@ class DetailTicketNotifier extends ChangeNotifier{
       if(ticketID != null){
         if(status != null){
           final bloc = SupportTicketBloc();
-          await bloc.sendComment(context, TicketArgument(idUserTicket: ticketID, body: message, status: status ), onSuccess: () async{
+          await bloc.sendComment(context, TicketArgument(idUserTicket: ticketID, body: message, status: status,), files: _files, onSuccess: () async{
             commentController.text = '';
+            removeAllFiles();
             await getDetailTicket(context);
           });
         }else{
@@ -96,6 +119,29 @@ class DetailTicketNotifier extends ChangeNotifier{
 
     }catch(e){
       'sendComment Error : $e'.logger();
+    }
+  }
+
+  void onTapOnFrameLocalMedia(BuildContext context, {isPdf = false}) async {
+    try {
+      await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: isPdf).then((value) async {
+        Future.delayed(const Duration(milliseconds: 1000), () async {
+          if (value.values.single != null) {
+            files ??= [];
+            files?.addAll(value.values.single?.map((e) => e).toList() ?? []);
+            notifyListeners();
+            if(files != null){
+              for(var file in files!){
+                'onTapOnFrameLocalMedia files : ${System().lookupContentMimeType(file.path)} => ${file.path.split('/').last}'.logger();
+              }
+            }
+          } else {
+            if (value.keys.single.isNotEmpty) ShowGeneralDialog.pickFileErrorAlert(context, value.keys.single);
+          }
+        });
+      });
+    } catch (e) {
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 }
