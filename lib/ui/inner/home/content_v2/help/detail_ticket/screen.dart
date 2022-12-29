@@ -660,7 +660,10 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
 
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if(chatData.fsTargetUri?.isNotEmpty ?? false)
                   _getGridListImages(chatData.fsTargetUri ?? []),
+                  if(chatData.fsTargetUri?.isNotEmpty ?? false)
+                  tenPx,
                   CustomTextWidget(
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
@@ -683,43 +686,25 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
   }
 
   Widget _getGridListImages(List<String> images){
-
-    final fixList = images.where((element) => extensionFromMime(element).startsWith('image')).toList();
+    final fixList = images.where((element){
+      '_getGridListImages : ${extensionFromMime(element)}'.logger();
+      return System().lookupContentMimeType(element)?.contains('image') ?? false;
+    }).toList();
     final lenght = fixList.length;
     var thumbnail = '';
-    if(lenght == 1){
-      return CustomContentModeratedWidget(
-        width: 200,
-        height: 200,
-        isSale: false,
-        isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-        thumbnail: fixList[0],
-      );
-    }else if(lenght == 2){
-      return Row(
-        children: [
-          CustomContentModeratedWidget(
-            width: 100,
-            height: 100,
+    return Container(
+      margin: const EdgeInsets.all(5),
+      child: Builder(builder: (context){
+        if(lenght == 1){
+          return CustomContentModeratedWidget(
+            width: 200,
+            height: 200,
             isSale: false,
-            isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
             thumbnail: fixList[0],
-          ),
-          tenPx,
-          CustomContentModeratedWidget(
-            width: 100,
-            height: 100,
-            isSale: false,
-            isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-            thumbnail: fixList[1],
-          ),
-        ],
-      );
-    }else if(lenght == 3){
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+          );
+        }else if(lenght == 2){
+          return Row(
             children: [
               CustomContentModeratedWidget(
                 width: 100,
@@ -737,43 +722,31 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                 thumbnail: fixList[1],
               ),
             ],
-          ),
-          tenPx,
-          CustomContentModeratedWidget(
-            width: 100,
-            height: 100,
-            isSale: false,
-            isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-            thumbnail: fixList[2],
-          ),
-        ],
-      );
-    }else if(lenght == 4){
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+          );
+        }else if(lenght == 3){
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomContentModeratedWidget(
-                width: 100,
-                height: 100,
-                isSale: false,
-                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                thumbnail: fixList[0],
+              Row(
+                children: [
+                  CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[0],
+                  ),
+                  tenPx,
+                  CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[1],
+                  ),
+                ],
               ),
               tenPx,
-              CustomContentModeratedWidget(
-                width: 100,
-                height: 100,
-                isSale: false,
-                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                thumbnail: fixList[1],
-              ),
-            ],
-          ),
-          tenPx,
-          Row(
-            children: [
               CustomContentModeratedWidget(
                 width: 100,
                 height: 100,
@@ -781,26 +754,65 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                 isSafe: false, //notifier.postData.data.listVid[index].isSafe,
                 thumbnail: fixList[2],
               ),
+            ],
+          );
+        }else if(lenght == 4){
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[0],
+                  ),
+                  tenPx,
+                  CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[1],
+                  ),
+                ],
+              ),
               tenPx,
-              CustomContentModeratedWidget(
-                width: 100,
-                height: 100,
-                isSale: false,
-                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                thumbnail: fixList[3],
+              Row(
+                children: [
+                  CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[2],
+                  ),
+                  tenPx,
+                  CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[3],
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
-      );
-    }else{
-      return const SizedBox.shrink();
-    }
+          );
+        }else{
+          return const SizedBox.shrink();
+        }
+      }),
+    );
+
   }
 
   Widget _buildTextInput(BuildContext context, DetailTicketNotifier notifier) {
     return Container(
       color: Colors.transparent,
+      margin: const EdgeInsets.only(top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -808,43 +820,65 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: notifier.files?.map((e){
-                final isImage = System().lookupContentMimeType(e.path)?.startsWith('image') ?? false;
-                return Stack(
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      width: 100,
-                      height: 100,
-                      margin: const EdgeInsets.only(left: 5, right: 5, top: 16 ),
-                      padding: EdgeInsets.all(isImage ? 0 : 16 ),
-                      decoration: BoxDecoration(
-                        color: kHyppeBgSensitive.withOpacity(0.4),
-                          borderRadius: const BorderRadius.all(Radius.circular(8)), border: Border.all(color: kHyppeLightSecondary)),
-                      child: isImage ? e != null ? ClipRRect(
-                          child: Image.file(e, fit: BoxFit.cover, width: 100, height: 100,), borderRadius: const BorderRadius.all(Radius.circular(8)),): Text(
-                        '${e.path.split('/').last}'
-                      ) : Text(
-                          '${e.path.split('/').last}'
-                      ),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: notifier.files?.map((e){
+                    final isImage = System().lookupContentMimeType(e.path)?.startsWith('image') ?? false;
+                    return Stack(
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          width: 100,
+                          height: 100,
+                          margin: const EdgeInsets.only(left: 5, right: 5, top: 16 ),
+                          padding: EdgeInsets.all(isImage ? 0 : 16 ),
+                          decoration: BoxDecoration(
+                            color: kHyppeBgSensitive.withOpacity(0.4),
+                              borderRadius: const BorderRadius.all(Radius.circular(8)), border: Border.all(color: kHyppeLightSecondary)),
+                          child: isImage ? e != null ? ClipRRect(
+                              child: Image.file(e, fit: BoxFit.cover, width: 100, height: 100,), borderRadius: const BorderRadius.all(Radius.circular(8)),): Text(
+                            '${e.path.split('/').last}'
+                          ) : Text(
+                              '${e.path.split('/').last}'
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                            right: 0,
+                            child: GestureDetector(
+                              onTap: (){
+                                final index = notifier.files?.indexOf(e);
+                                if(index != null){
+                                  notifier.removeFiles(index);
+                                }
+                              },
+                                child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}remove.svg', defaultColor: false, color: Colors.red,)))
+                      ],
+                    );
+                  }).toList() ?? [],
+                ),
+                GestureDetector(
+                  onTap: (){
+                    notifier.removeAllFiles();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    margin: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(100)), color: Colors.red),
+                    child: const CustomIconWidget(
+                      width: 50,
+                      height: 50,
+                      defaultColor: false,
+                      color: Colors.white,
+                      iconData: '${AssetPath.vectorPath}close.svg',
                     ),
-                    Positioned(
-                      top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: (){
-                            final index = notifier.files?.indexOf(e);
-                            if(index != null){
-                              notifier.removeFiles(index);
-                            }
-                          },
-                            child: CustomIconWidget(iconData: '${AssetPath.vectorPath}remove.svg', defaultColor: false, color: Colors.red,)))
-                  ],
-                );
-              }).toList() ?? [],
+                  ),
+                )
+              ],
             ),
           ),
           if((notifier.files ?? []).isNotEmpty)

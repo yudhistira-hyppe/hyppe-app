@@ -133,9 +133,9 @@ extension IntegerExtension on int {
 extension DateHelpers on DateTime {
   bool isToday() {
     final now = DateTime.now();
-    print('DateHelpers ${now.day} : ${this.day}');
-    print('DateHelpers ${now.month} : ${this.month}');
-    print('DateHelpers ${now.year} : ${this.year}');
+    // print('DateHelpers ${now.day} : ${this.day}');
+    // print('DateHelpers ${now.month} : ${this.month}');
+    // print('DateHelpers ${now.year} : ${this.year}');
     return now.day == this.day && now.month == this.month && now.year == this.year;
   }
 

@@ -208,9 +208,9 @@ class TicketDetail{
       }
     }
     if(map['fsTargetUri'] != null){
-      fsSourceName = [];
+      fsTargetUri = [];
       if(map['fsTargetUri'].isNotEmpty){
-        map['fsTargetUri'].forEach((v) => fsSourceName?.add(v));
+        map['fsTargetUri'].forEach((v) => fsTargetUri?.add(v));
       }
     }
     avatar = Avatar.fromJson(map['avatar']);

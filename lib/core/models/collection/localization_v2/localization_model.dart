@@ -825,6 +825,8 @@ class LocalizationModelV2 {
   String? notDefined;
   String? dontHaveMessagesYet;
   String? seeContent;
+  String? max3Images;
+  String? max4Images;
 
   LocalizationModelV2(
       {this.login,
@@ -1653,6 +1655,8 @@ class LocalizationModelV2 {
       this.notDefined,
       this.dontHaveMessagesYet,
       this.seeContent,
+      this.max3Images,
+      this.max4Images
     });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2501,5 +2505,7 @@ class LocalizationModelV2 {
     notDefined = json['notDefined'];
     dontHaveMessagesYet = json['dontHaveMessagesYet'];
     seeContent = json['seeContent'];
+    max3Images = json['max3Images'];
+    max4Images = json['max4Images'];
   }
 }

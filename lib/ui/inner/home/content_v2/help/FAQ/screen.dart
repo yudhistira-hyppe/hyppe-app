@@ -126,7 +126,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                       children: [
                         CustomTextButton(
                           onPressed: () {
-                            Routing().moveAndPop(Routes.supportTicket);
+                            Routing().moveBack();
                           },
                           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSurface)),
                           child: CustomTextWidget(
@@ -137,7 +137,7 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                         sixPx,
                         CustomTextButton(
                           onPressed: () {
-                            // notifier.navigateToBankAccount();
+                            Routing().moveBack();
                           },
                           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
                           child: CustomTextWidget(
@@ -196,22 +196,26 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
         for(var text in spans){
           fixTextHtml += text;
         }
-        return Html(data: fixTextHtml, onLinkTap: (text, ctx, map, e){
-          launchUrl(Uri(path: text));
+        return Html(data: fixTextHtml, onLinkTap: (text, ctx, map, e) async {
+          print('test1');
+          await launchUrl(Uri.parse(text ?? ''),
+            mode: LaunchMode.externalApplication,);
         }, style: {"span": Style(color: kHyppePrimary, backgroundColor: kHyppeLightWarning)},);
 
       }else{
-        return Html(data: text, onLinkTap: (text, ctx, map, e){
-          launchUrl(Uri(path: text));
+        return Html(data: text, onLinkTap: (text, ctx, map, e) async{
+          print('test2');
+          await launchUrl(Uri.parse(text ?? ''),
+            mode: LaunchMode.externalApplication,);
         },);
       }
     }else{
-      return Html(data: text, onLinkTap: (text, ctx, map, e){
-        launchUrl(Uri(path: text));
+      return Html(data: text, onLinkTap: (text, ctx, map, e) async{
+        print('test3 ');
+        await launchUrl(Uri.parse(text ?? ''),
+          mode: LaunchMode.externalApplication,);
       },);
     }
-    
-    
   }
 
   Widget textSearched(BuildContext context, String text, String key){

@@ -824,5 +824,7 @@
   "issueStatement": "Issue Statement",
   "notDefined": "Not Defined",
   "dontHaveMessagesYet": "Don't have messages yet",
-  "seeContent": "Lihat Konten"
+  "seeContent": "Lihat Konten",
+  "max3Images": "Max 3 images",
+  "max4Images": "Max 4 images"
 }

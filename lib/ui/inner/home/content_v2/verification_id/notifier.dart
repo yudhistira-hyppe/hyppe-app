@@ -485,7 +485,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
                 if (pickedSupportingDocs!.length < 3) {
                   pickedSupportingDocs!.add(element);
                 } else {
-                  ShowGeneralDialog.pickFileErrorAlert(context, 'Max 3 image');
+                  ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
                 }
               }
 
@@ -500,7 +500,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
               }
             }
           } else {
-            ShowGeneralDialog.pickFileErrorAlert(context, 'Max 3 image');
+            ShowGeneralDialog.pickFileErrorAlert(context, language.max3Images ?? 'Max 3 images');
             isLoading = false;
           }
         }

@@ -13,6 +13,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
@@ -451,6 +452,7 @@ class System {
     FeatureType? featureType,
     required BuildContext context,
     bool pdf = false,
+    LocalizationModelV2? model
   }) async {
     final ImagePicker _imagePicker = ImagePicker();
 
@@ -522,7 +524,7 @@ class System {
             }
             _filePickerResult = imageFileList;
           } else {
-            _errorMsg = "Please select one or max 3 image";
+            _errorMsg = (model != null) ? (model.max3Images ?? 'Please select one or max 3 image') : "Please select one or max 3 image";
           }
         }
       }
