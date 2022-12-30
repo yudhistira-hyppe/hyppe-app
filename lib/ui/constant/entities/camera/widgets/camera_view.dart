@@ -48,6 +48,17 @@ class _CameraViewState extends State<CameraView> {
     final notifier = context.read<CameraNotifier>();
     notifier.deepArController ??= DeepArController();
     _effectsList2 = [
+      {"path": "BabyChewbacca", "efect": "baby_chewbacca.deepar", "preview": "preview.png"},
+      {"path": "BigGlasses", "efect": "big_glasses.deepar", "preview": "preview.png"},
+      {"path": "Chief", "efect": "chief.deepar", "preview": "preview.png"},
+      {"path": "CrossedEyes", "efect": "crossed_eyes.deepar", "preview": "preview.png"},
+      {"path": "FreeBeauty", "efect": "freebeauty.deepar", "preview": "preview.png"},
+      {"path": "Jokester", "efect": "jokerster.deepar", "preview": "preview.png"},
+      {"path": "LizardSkin", "efect": "lizard_skin.deepar", "preview": "preview.png"},
+      {"path": "NeonWires", "efect": "neon_wires.deepar", "preview": "preview.png"},
+      {"path": "Peter", "efect": "peter.deepar", "preview": "preview.png"},
+      {"path": "PopFace", "efect": "pop_face.deepar", "preview": "preview.png"},
+      {"path": "Samurai", "efect": "samurai.deepar", "preview": "preview.png"},
       {"path": "BurningEffect", "efect": "burning_effect.deepar", "preview": "preview.png"},
       {"path": "DevilNeonHorns", "efect": "Neon_Devil_Horns.deepar", "preview": "preview.png"},
       {"path": "ElephantTrunk", "efect": "Elephant_Trunk.deepar", "preview": "preview.png"},
@@ -314,7 +325,6 @@ class _CameraViewState extends State<CameraView> {
       ),
     );
   }
-
 
   /// Get all deepar effects from assets
   ///

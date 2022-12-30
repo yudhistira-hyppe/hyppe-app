@@ -141,6 +141,17 @@ flutter:
     - assets/effect/Stallone/
     - assets/effect/VendettaMask/
     - assets/effect/VikingHelmetPBR/
+    - assets/effect/BabyChewbacca/
+    - assets/effect/BigGlasses/
+    - assets/effect/Chief/
+    - assets/effect/CrossedEyes/
+    - assets/effect/FreeBeauty/
+    - assets/effect/Jokester/
+    - assets/effect/LizardSkin/
+    - assets/effect/NeonWires/
+    - assets/effect/Peter/
+    - assets/effect/PopFace/
+    - assets/effect/Samurai/
  
   fonts:
     - family: Lato
