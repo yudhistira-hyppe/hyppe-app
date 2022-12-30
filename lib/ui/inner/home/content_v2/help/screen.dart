@@ -16,6 +16,8 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/arguments/ticket_argument.dart';
+
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
 
@@ -62,9 +64,10 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                   notifier.getListOfFAQ(context, category: value);
                 },
               ),
+              if(!notifier.isLoading)
               GestureDetector(
-                onTap: (){
-                  Routing().move(Routes.ticketHistory);
+                onTap: () async{
+                  Routing().move(Routes.ticketHistory, argument: TicketArgument(values: notifier.onProgressTicket));
                 },
                 child: Container(
                   padding: const EdgeInsets.all(11),
@@ -153,6 +156,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
               //         isThreeLine: true,
               //       )),
               // ),
+              if(!notifier.isLoading && (notifier.onProgressTicket.length < 10))
               Container(
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(

@@ -5,6 +5,7 @@ import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/widget/help_t
 import 'package:hyppe/ui/inner/home/content_v2/help/ticket_history/widget/ticket_history_tabs.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../core/arguments/ticket_argument.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/size_config.dart';
 import '../../../../../../ux/routing.dart';
@@ -12,7 +13,8 @@ import '../../../../../constant/widget/custom_text_widget.dart';
 import '../../../../../constant/widget/icon_button_widget.dart';
 
 class TicketHistoryScreen extends StatefulWidget {
-  const TicketHistoryScreen({Key? key}) : super(key: key);
+  final TicketArgument data;
+  const TicketHistoryScreen({Key? key, required this.data}) : super(key: key);
 
   @override
   State<TicketHistoryScreen> createState() => _TicketHistoryScreenState();
@@ -20,8 +22,11 @@ class TicketHistoryScreen extends StatefulWidget {
 
 class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
 
-
-
+  @override
+  void initState() {
+    context.read<TicketHistoryNotifier>().startOpenHistory(widget.data.values ?? []);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +60,5 @@ class _TicketHistoryScreenState extends State<TicketHistoryScreen> {
     );
   }
 
-  @override
-  void initState() {
-    context.read<TicketHistoryNotifier>().startOpenHistory();
-    super.initState();
-  }
+
 }

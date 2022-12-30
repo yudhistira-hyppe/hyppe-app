@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hyppe/core/query_request/tickets_data_query.dart';
-
 import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
 import '../../../../../../core/models/collection/support_ticket/appeal_model.dart';
 import '../../../../../../core/models/collection/support_ticket/ticket_model.dart';
@@ -24,11 +23,20 @@ class TicketHistoryNotifier extends ChangeNotifier{
   bool get isLoadingInit => _isLoadingInit;
 
   startLoad(){
+    _showAllTickets = false;
     _isLoadingInit = true;
   }
 
-  startOpenHistory(){
+  startOpenHistory(List<TicketModel> values){
+    _onProgressTickets = values;
     _isHelpTab = true;
+  }
+
+  List<TicketModel> _onProgressTickets = [];
+  List<TicketModel> get onProgressTicket => _onProgressTickets;
+  set onProgressTicket(List<TicketModel> values){
+    _onProgressTickets = values;
+    notifyListeners();
   }
 
   List<TicketModel> _listTickets = [];
@@ -45,6 +53,13 @@ class TicketHistoryNotifier extends ChangeNotifier{
     notifyListeners();
   }
 
+  bool _showAllTickets = true;
+  bool get showAllTickets => _showAllTickets;
+  set showAllTickets(bool state){
+    _showAllTickets = state;
+    notifyListeners();
+  }
+
   TicketsDataQuery ticketsDataQuery = TicketsDataQuery()..page = 0..limit = 10;
   TicketsDataQuery appealsDataQuery =  TicketsDataQuery()..page = 0..limit = 10;
 
@@ -53,6 +68,8 @@ class TicketHistoryNotifier extends ChangeNotifier{
 
   bool get hasNextAppeal => appealsDataQuery.hasNext;
   int get appealLength => appealsDataQuery.hasNext ? (_listAppeals.length + 1) : _listAppeals.length;
+
+
 
   Future initHelpTicket(BuildContext context, {isRefresh = false}) async{
     if(isRefresh){

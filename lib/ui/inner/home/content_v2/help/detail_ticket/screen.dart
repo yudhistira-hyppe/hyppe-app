@@ -617,12 +617,16 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     textStyle: Theme.of(context).textTheme.bodyText2,
                     textToDisplay: chatData.body ?? 'No Message',
                   ),
-                  // CustomTextWidget(
-                  //   textAlign: TextAlign.end,
-                  //   textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
-                  //   textToDisplay: chatData.datetime == null ? "" : System().dateFormatter(chatData.datetime ?? '', 1),
-                  //   // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
-                  // ),
+                  Builder(
+                      builder: (context) {
+                        final times = chatData.datetime?.split('T')[1].split(':');
+                        return CustomTextWidget(
+                          textAlign: TextAlign.end,
+                          textToDisplay: times != null ? times.isNotEmpty ? '${times[0]}:${times[1]}' : '' : '',
+                          textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 10),
+                        );
+                      }
+                  )
                 ],
               ),
             ),
@@ -668,14 +672,19 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
                     textOverflow: TextOverflow.clip,
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.black),
+                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.white),
                     textToDisplay: chatData.body ?? 'No Messages',
                   ),
-                  // CustomTextWidget(
-                  //   textAlign: TextAlign.end,
-                  //   textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
-                  //   textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
-                  // ),
+                  Builder(
+                    builder: (context) {
+                      final times = chatData.datetime?.split('T')[1].split(':');
+                      return CustomTextWidget(
+                        textAlign: TextAlign.end,
+                        textToDisplay: times != null ? times.isNotEmpty ? '${times[0]}:${times[1]}' : '' : '',
+                        textStyle: const TextStyle(color: Colors.white, fontSize: 10),
+                      );
+                    }
+                  ),
                 ],
               ),
             ),

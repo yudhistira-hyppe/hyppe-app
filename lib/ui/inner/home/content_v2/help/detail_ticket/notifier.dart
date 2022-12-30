@@ -94,8 +94,6 @@ class DetailTicketNotifier extends ChangeNotifier{
       'TicketsDataQuery Reload Error : $e'.logger();
       return res ?? [];
     }
-
-
   }
 
   Future sendComment(BuildContext context, String message) async{

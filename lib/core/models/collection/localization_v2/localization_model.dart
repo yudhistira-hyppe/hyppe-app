@@ -835,6 +835,9 @@ class LocalizationModelV2 {
   String? noResultsFor;
   String? max3Images;
   String? max4Images;
+  String? messageMaxTickets;
+  String? seeTicketHistory;
+  String? activeTicketIssue;
 
   LocalizationModelV2({
     this.login,
@@ -1671,8 +1674,11 @@ class LocalizationModelV2 {
     this.thankYou,
     this.thankYouforYourFeedback,
     this.noResultsFor,
-    thismax3Images,
-    thismax4Images,
+    this.max3Images,
+    this.max4Images,
+    this.messageMaxTickets,
+    this.seeTicketHistory,
+    this.activeTicketIssue,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2530,5 +2536,8 @@ class LocalizationModelV2 {
     noResultsFor = json['noResultsFor'];
     max3Images = json['max3Images'];
     max4Images = json['max4Images'];
+    messageMaxTickets = json['messageMaxTickets'];
+    seeTicketHistory = json['seeTicketHistory'];
+    activeTicketIssue = json['activeTicketIssue'];
   }
 }

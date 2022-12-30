@@ -1,3 +1,5 @@
+import 'package:hyppe/core/models/collection/support_ticket/ticket_model.dart';
+
 class TicketArgument{
   String? id;
   String? iduser;
@@ -10,6 +12,8 @@ class TicketArgument{
   int? limit;
   bool? descending;
   String? email;
+  bool? close;
+  List<TicketModel>? values;
 
 
   TicketArgument({
@@ -23,6 +27,8 @@ class TicketArgument{
     this.status,
     this.body,
     this.email,
+    this.close,
+    this.values
   });
 
   TicketArgument.fromJson(Map<String, dynamic> map){
@@ -34,6 +40,7 @@ class TicketArgument{
     limit = map['limit'];
     descending = map['descending'];
     email = map['email'];
+    close = map['close'];
   }
 
   Map<String, dynamic> toJson(){
@@ -70,6 +77,9 @@ class TicketArgument{
     }
     if(idUserTicket != null){
       result['IdUserticket'] = idUserTicket;
+    }
+    if(close != null){
+      result['close'] = close;
     }
 
     return result;

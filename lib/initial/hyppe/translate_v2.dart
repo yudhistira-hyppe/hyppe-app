@@ -49,7 +49,10 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ui/inner/home/content_v2/change_password/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
+import '../../core/arguments/ticket_argument.dart';
+import '../../core/bloc/support_ticket/bloc.dart';
 import '../../core/models/collection/faq/faq_data.dart';
+import '../../core/models/collection/support_ticket/ticket_model.dart';
 import '../../ui/constant/entities/comment_v2/notifier.dart';
 import '../../ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import '../../ui/inner/home/content_v2/help/detail_ticket/notifier.dart';
@@ -84,6 +87,13 @@ class TranslateNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
+  List<TicketModel> _onProgressTickets = [];
+  List<TicketModel> get onProgressTicket => _onProgressTickets;
+  set onProgressTicket(List<TicketModel> values){
+    _onProgressTickets = values;
+    notifyListeners();
+  }
+
   set loadMore(bool val) {
     _loadMore = val;
     notifyListeners();
@@ -99,6 +109,7 @@ class TranslateNotifierV2 with ChangeNotifier {
       notifyListeners();
       _listFAQ = [];
       final bloc = FAQBloc();
+      await getOnProgressTickets(context);
       await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: category));
       final fetch = bloc.faqFetch;
       if (fetch.state == FAQState.faqSuccess) {
@@ -119,6 +130,19 @@ class TranslateNotifierV2 with ChangeNotifier {
     }
   }
 
+  Future getOnProgressTickets(BuildContext context) async{
+    final idUser = SharedPreference().readStorage(SpKeys.userID);
+    try{
+      final bloc = SupportTicketBloc();
+      await bloc.getTicketHistories(context, TicketArgument(page: 0, limit: 10, descending: true, iduser: idUser, close: false));
+      final fetch = bloc.supportTicketFetch;
+
+      onProgressTicket = (fetch.data as List<dynamic>?)?.map((e) => TicketModel.fromJson(e as Map<String, dynamic>)).toList() ?? [];
+    }catch(e){
+      'TicketsDataQuery Reload Error : $e'.logger();
+    }
+  }
+
   Future getListOfLanguage(BuildContext context) async {
     if (_listLanguage.isEmpty) {
       final notifier = UtilsBlocV2();
@@ -136,6 +160,8 @@ class TranslateNotifierV2 with ChangeNotifier {
       }
     }
   }
+
+
 
   Future loadLanguage({int? index}) async {
     late String langIso;

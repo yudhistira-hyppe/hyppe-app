@@ -826,16 +826,16 @@
   "notDefined": "Not Defined",
   "dontHaveMessagesYet": "Don't have messages yet",
   "seeContent": "Lihat Konten",
-<<<<<<< HEAD
   "theIDCardNumberAndorYourRealNamedidnotMatch" : "The ID card number and/or your Real Name did not match. Make sure the lighting sufficient and the ID card is in a good condition. Please try again",
   "pleaseEnterYourFullName" : "Please enter your full name",
   "addDocument" : "Add Document",
   "youCanAddupto3SupportingDocuments" : "You can add up to 3 supporting documents",
   "thankYou" : "Thank You",
   "thankYouforYourFeedback" : "Thank you for your feedback",
-  "noResultsFor" : "No results for "
-=======
+  "noResultsFor" : "No results for ",
   "max3Images": "Max 3 images",
-  "max4Images": "Max 4 images"
->>>>>>> 002488042da6e53181d2f68d89588a000f0b4ebc
+  "max4Images": "Max 4 images",
+  "messageMaxTickets": "You’ve reached maximum allowed",
+  "seeTicketHistory": "See Ticket History",
+  "activeTicketIssue": "Active Ticket Issue"
 }

@@ -834,5 +834,8 @@
   "thankYouforYourFeedback" : "Terima kasih atas tanggapan Anda",
   "noResultsFor" : "Tidak ada hasil untuk ",
   "max3Images": "Maksimal 3 gambar",
-  "max4Images": "Maksimal 4 gambar"
+  "max4Images": "Maksimal 4 gambar",
+  "messageMaxTickets": "Anda telah mencapai batas maksimum yang diizinkan",
+  "seeTicketHistory": "Melihat Riwayat Tiket",
+  "activeTicketIssue": "Tiket Isu Aktif"
 }

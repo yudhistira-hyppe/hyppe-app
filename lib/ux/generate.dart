@@ -12,6 +12,7 @@ import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/referral_list_user.dart';
+import 'package:hyppe/core/arguments/ticket_argument.dart';
 import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
@@ -333,7 +334,7 @@ class Generate {
       case Routes.appealSuccess:
         return MaterialPageRoute(builder: (_) => SuccessAppeal(data: settings.arguments as ContentData));
       case Routes.ticketHistory:
-        return MaterialPageRoute(builder: (_) => const TicketHistoryScreen());
+        return MaterialPageRoute(builder: (_) => TicketHistoryScreen(data: settings.arguments as TicketArgument));
       case Routes.detailTAHistory:
         return MaterialPageRoute(builder: (_) => DetailTicketScreen(data: settings.arguments as DetailTicketArgument));
 
