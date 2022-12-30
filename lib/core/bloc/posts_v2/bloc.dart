@@ -122,10 +122,10 @@ class PostsBloc {
 
   Future getAllContentsBlocV2(
     BuildContext context, {
-      int pageRows = 5,
-        bool myContent = false,
-        bool otherContent = false,
-        String? postType,
+    int pageRows = 5,
+    bool myContent = false,
+    bool otherContent = false,
+    String? postType,
     required String visibility,
     required int pageNumber,
   }) async {
@@ -138,9 +138,9 @@ class PostsBloc {
     formData.fields.add(const MapEntry('withActive', 'true'));
     formData.fields.add(const MapEntry('withDetail', 'true'));
     formData.fields.add(const MapEntry('withInsight', 'true'));
-    if(postType != null){
+    if (postType != null) {
       formData.fields.add(MapEntry('postType', postType));
-      if(postType == 'story'){
+      if (postType == 'story') {
         formData.fields.add(const MapEntry('withExp', 'true'));
       }
     }
@@ -214,10 +214,9 @@ class PostsBloc {
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
-    if(idMusic != null){
+    if (idMusic != null) {
       formData.fields.add(MapEntry('musicId', idMusic));
     }
-
 
     formData.fields.add(MapEntry('location', location ?? ''));
     formData.fields.add(MapEntry('tagDescription', tagDescription?.join(',') ?? ''));
@@ -244,7 +243,6 @@ class PostsBloc {
       (onResult) {
         print('Error Create Post ${onResult.statusCode}');
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
@@ -343,7 +341,7 @@ class PostsBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setPostsFetch(PostsFetch(PostsState.updateContentsError));
+          setPostsFetch(PostsFetch(PostsState.updateContentsError, data: onResult));
         } else {
           setPostsFetch(PostsFetch(PostsState.updateContentsSuccess, data: onResult));
         }
@@ -355,7 +353,7 @@ class PostsBloc {
       headers: {
         'x-auth-user': email,
       },
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.updatepost,
       methodType: MethodType.post,

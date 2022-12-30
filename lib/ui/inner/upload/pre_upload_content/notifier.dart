@@ -693,9 +693,6 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
     final fetch = notifier.postsFetch;
 
-    print('update update');
-    print(fetch.postsState);
-
     if (fetch.postsState == PostsState.updateContentsSuccess) {
       context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
             context,
@@ -751,6 +748,13 @@ class PreUploadContentNotifier with ChangeNotifier {
       }
 
       _onExit();
+    } else {
+      updateContent = false;
+      notifyListeners();
+      final message = json.decode(fetch.data.toString());
+      if (message['messages']['info'][0] != '' || message['messages']['info'][0] != null) {
+        return ShowBottomSheet().onShowColouredSheet(context, message['messages']['info'][0], color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg", maxLines: 4);
+      }
     }
   }
 
