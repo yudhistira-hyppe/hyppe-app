@@ -1,5 +1,11 @@
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/utils/ticket/ticket_url.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+
+import '../../../config/env.dart';
 
 class TicketModel{
   String? id;
@@ -18,6 +24,7 @@ class TicketModel{
   List<String>? fsSourceUri;
   List<String>? fsSourceName;
   List<String>? fsTargetUri;
+  List<String> imageUrl = [];
   int? version;
   String? os;
   Avatar? avatar;
@@ -40,6 +47,8 @@ class TicketModel{
 
 
   TicketModel.fromJson(Map<String, dynamic> map){
+    final emailUser = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
     id = map['_id'];
     ticketNo = map['nomortiket'];
     subject = map['subject'];
@@ -79,6 +88,9 @@ class TicketModel{
       fsSourceName = [];
       if(map['fsTargetUri'].isNotEmpty){
         map['fsTargetUri'].forEach((v) => fsSourceName?.add(v));
+      }
+      for(var i = 0; i < fsSourceName!.length; i ++){
+        imageUrl.add('${Env.data.baseUrl}/${UrlConstants.apiV4}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser');
       }
     }
     version = map['version'];
@@ -172,9 +184,12 @@ class TicketDetail{
   List<String>? fsSourceUri;
   List<String>? fsSourceName;
   List<String>? fsTargetUri;
+  List<TicketUrl> ticketUrls = [];
   Avatar? avatar;
 
   TicketDetail.fromJson(Map<String, dynamic> map){
+    final emailUser = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
     id = map['_id'];
     type = map['type'];
     body = map['body'];
@@ -212,7 +227,13 @@ class TicketDetail{
       if(map['fsTargetUri'].isNotEmpty){
         map['fsTargetUri'].forEach((v) => fsTargetUri?.add(v));
       }
+      for(var i = 0; i < fsTargetUri!.length; i ++){
+        ticketUrls.add(TicketUrl(localDir: fsTargetUri![i], realUrl: '${Env.data.baseUrl}/${UrlConstants.apiV4}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser'));
+      }
     }
+    
     avatar = Avatar.fromJson(map['avatar']);
   }
+
+  get mediaEndpoint => null;
 }

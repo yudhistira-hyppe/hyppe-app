@@ -48,8 +48,6 @@ enum ErrorType {
   login
 }
 enum TransactionType { sell, buy, withdrawal, boost, reward, none }
-enum WalletEventEnum { miniDana, acquiring }
-enum WalletResourceType { maskDanaId, balance, userKYC, transactionUrl, topUpUrl, oauthUrl }
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
 enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none }
 enum InteractiveEvent { initial, accept, request, done, revoke, none }

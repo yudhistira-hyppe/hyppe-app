@@ -4,7 +4,6 @@ import 'package:hyppe/ui/constant/entities/appeal/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
-import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:hyppe/ui/constant/entities/web_view/notifier.dart';
@@ -134,7 +133,6 @@ class AppDependencies {
         ChangeNotifierProvider(create: (context) => ReportNotifier()),
 
         // Playlist
-        ChangeNotifierProvider(create: (context) => PlaylistNotifier()),
         ChangeNotifierProvider(create: (context) => LikeNotifier()),
         ChangeNotifierProvider(create: (context) => FollowRequestUnfollowNotifier()),
 

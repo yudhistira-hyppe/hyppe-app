@@ -21,6 +21,7 @@ import 'package:mime/mime.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/size_config.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../core/models/collection/utils/ticket/ticket_url.dart';
 import '../../../../../../ux/routing.dart';
 import '../../../../../constant/widget/custom_content_moderated_widget.dart';
 import '../../../../../constant/widget/custom_text_widget.dart';
@@ -603,7 +604,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               ),
             ),
             constraints: BoxConstraints(
-              maxWidth: SizeConfig.screenWidth! * 0.7,
+              maxWidth: SizeConfig.screenWidth! * 0.65,
             ),
             child: Padding(
               padding: EdgeInsets.all(10 * SizeConfig.scaleDiagonal),
@@ -656,16 +657,21 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               ),
             ),
             constraints: BoxConstraints(
-              maxWidth: SizeConfig.screenWidth! * 0.7,
+              maxWidth: SizeConfig.screenWidth! * 0.65,
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Column(
 
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if(chatData.fsTargetUri?.isNotEmpty ?? false)
-                  _getGridListImages(chatData.fsTargetUri ?? []),
+                  Builder(
+                    builder: (context) {
+
+                      return _getGridListImages(chatData.ticketUrls);
+                    }
+                  ),
                   if(chatData.fsTargetUri?.isNotEmpty ?? false)
                   tenPx,
                   CustomTextWidget(
@@ -694,15 +700,15 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     );
   }
 
-  Widget _getGridListImages(List<String> images){
-    final fixList = images.where((element){
-      '_getGridListImages : ${extensionFromMime(element)}'.logger();
-      return System().lookupContentMimeType(element)?.contains('image') ?? false;
+  Widget _getGridListImages(List<TicketUrl> urls){
+    final fixList = urls.where((element){
+      '_getGridListImages : ${extensionFromMime(element.localDir)}'.logger();
+      return System().lookupContentMimeType(element.localDir)?.contains('image') ?? false;
     }).toList();
     final lenght = fixList.length;
     var thumbnail = '';
     return Container(
-      margin: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(top: 10, bottom: 10),
       child: Builder(builder: (context){
         if(lenght == 1){
           return CustomContentModeratedWidget(
@@ -710,58 +716,100 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             height: 200,
             isSale: false,
             isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-            thumbnail: fixList[0],
+            thumbnail: fixList[0].realUrl,
           );
         }else if(lenght == 2){
           return Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomContentModeratedWidget(
+              Container(
                 width: 100,
                 height: 100,
-                isSale: false,
-                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                thumbnail: fixList[0],
+                alignment: Alignment.center,
+                child: CustomContentModeratedWidget(
+                  width: 100,
+                  height: 100,
+                  isSale: false,
+                  isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                  thumbnail: fixList[0].realUrl,
+                ),
               ),
               tenPx,
-              CustomContentModeratedWidget(
+              Container(
                 width: 100,
                 height: 100,
-                isSale: false,
-                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                thumbnail: fixList[1],
+                alignment: Alignment.center,
+                child: CustomContentModeratedWidget(
+                  width: 100,
+                  height: 100,
+                  isSale: false,
+                  isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                  thumbnail: fixList[1].realUrl,
+                ),
               ),
             ],
           );
         }else if(lenght == 3){
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomContentModeratedWidget(
+                  Container(
                     width: 100,
                     height: 100,
-                    isSale: false,
-                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: fixList[0],
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[0].realUrl,
+                    ),
                   ),
                   tenPx,
-                  CustomContentModeratedWidget(
+                  Container(
                     width: 100,
                     height: 100,
-                    isSale: false,
-                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: fixList[1],
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[1].realUrl,
+                    ),
                   ),
                 ],
               ),
               tenPx,
-              CustomContentModeratedWidget(
-                width: 100,
-                height: 100,
-                isSale: false,
-                isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                thumbnail: fixList[2],
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[2].realUrl,
+                    ),
+                  ),
+                  tenPx,
+                  Container(
+                    width: 100,
+                    height: 100,
+                    color: Colors.transparent,
+                  ),
+                ],
               ),
             ],
           );
@@ -770,41 +818,65 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomContentModeratedWidget(
+                  Container(
                     width: 100,
                     height: 100,
-                    isSale: false,
-                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: fixList[0],
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[0].realUrl,
+                    ),
                   ),
                   tenPx,
-                  CustomContentModeratedWidget(
+                  Container(
                     width: 100,
                     height: 100,
-                    isSale: false,
-                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: fixList[1],
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[1].realUrl,
+                    ),
                   ),
                 ],
               ),
               tenPx,
               Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomContentModeratedWidget(
+                  Container(
                     width: 100,
                     height: 100,
-                    isSale: false,
-                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: fixList[2],
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[2].realUrl,
+                    ),
                   ),
                   tenPx,
-                  CustomContentModeratedWidget(
+                  Container(
                     width: 100,
                     height: 100,
-                    isSale: false,
-                    isSafe: false, //notifier.postData.data.listVid[index].isSafe,
-                    thumbnail: fixList[3],
+                    alignment: Alignment.center,
+                    child: CustomContentModeratedWidget(
+                      width: 100,
+                      height: 100,
+                      isSale: false,
+                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                      thumbnail: fixList[3].realUrl,
+                    ),
                   ),
                 ],
               ),
