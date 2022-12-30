@@ -1,8 +1,15 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/query_request/tickets_data_query.dart';
+import 'package:provider/provider.dart';
+import '../../../../../../core/arguments/ticket_argument.dart';
+import '../../../../../../core/bloc/support_ticket/bloc.dart';
+import '../../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../../core/models/collection/localization_v2/localization_model.dart';
 import '../../../../../../core/models/collection/support_ticket/appeal_model.dart';
 import '../../../../../../core/models/collection/support_ticket/ticket_model.dart';
+import '../../../../../../core/services/shared_preference.dart';
+import '../../../../../../initial/hyppe/translate_v2.dart';
 
 class TicketHistoryNotifier extends ChangeNotifier{
 
@@ -77,6 +84,7 @@ class TicketHistoryNotifier extends ChangeNotifier{
       notifyListeners();
     }
     _listTickets = await ticketsDataQuery.reload(context);
+    await getOnProgressTickets(context);
     _isLoadingInit = false;
     notifyListeners();
   }
@@ -89,6 +97,20 @@ class TicketHistoryNotifier extends ChangeNotifier{
     _listAppeals = await appealsDataQuery.reloadReport(context);
     _isLoadingInit = false;
     notifyListeners();
+  }
+
+  Future getOnProgressTickets(BuildContext context) async{
+    final idUser = SharedPreference().readStorage(SpKeys.userID);
+    try{
+      final bloc = SupportTicketBloc();
+      await bloc.getTicketHistories(context, TicketArgument(page: 0, limit: 10, descending: true, iduser: idUser, close: false));
+      final fetch = bloc.supportTicketFetch;
+      final notifier = context.read<TranslateNotifierV2>();
+      onProgressTicket = (fetch.data as List<dynamic>?)?.map((e) => TicketModel.fromJson(e as Map<String, dynamic>)).toList() ?? [];
+      notifier.onProgressTicket = onProgressTicket;
+    }catch(e){
+      'TicketsDataQuery Reload Error : $e'.logger();
+    }
   }
 
   Future onLoadList(BuildContext context)async{

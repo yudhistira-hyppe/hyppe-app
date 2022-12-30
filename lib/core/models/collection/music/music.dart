@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-
-import '../../../bloc/posts_v2/bloc.dart';
-import '../../../bloc/posts_v2/state.dart';
 
 class Music{
   String? id;
