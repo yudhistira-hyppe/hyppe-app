@@ -21,7 +21,9 @@ import 'package:provider/provider.dart';
 class ButtonBoost extends StatefulWidget {
   final ContentData? contentData;
   final bool marginBool;
-  const ButtonBoost({Key? key, this.contentData, this.marginBool = false}) : super(key: key);
+  Function? startState;
+  Function? afterState;
+  ButtonBoost({Key? key, this.contentData, this.marginBool = false, this.startState, this.afterState}) : super(key: key);
   @override
   State<ButtonBoost> createState() => _ButtonBoostState();
 }
@@ -134,18 +136,18 @@ class _ButtonBoostState extends State<ButtonBoost> {
                     notifier.certified = widget.contentData?.certified ?? false;
                     notifier.priceController.text = widget.contentData?.saleAmount?.toInt().toString() ?? '';
 
-                    if (globalAudioPlayer != null) {
-                      globalAudioPlayer!.pause();
+                    if (widget.startState != null) {
+                      widget.startState!();
                     }
 
-                    Routing()
+                    await Routing()
                         .move(
                       Routes.preUploadContent,
                       argument: UpdateContentsArgument(onEdit: true, contentData: widget.contentData, content: ''),
                     )
                         .whenComplete(() {
-                      if (globalAudioPlayer != null) {
-                        globalAudioPlayer!.resume();
+                      if (widget.afterState != null) {
+                        widget.afterState!();
                       }
                       Routing().moveBack();
                     });

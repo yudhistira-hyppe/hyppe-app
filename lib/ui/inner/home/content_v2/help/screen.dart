@@ -136,7 +136,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                           }),
                 ),
               ),
-              if (!notifier.isLoading && (notifier.onProgressTicket.length < 10))
+              if (!notifier.isLoading)
                 Container(
                   padding: const EdgeInsets.all(11),
                   decoration: BoxDecoration(
@@ -155,28 +155,34 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                       ),
                       fortyPx,
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextWidget(
-                              textToDisplay: notifier.translate.stillNeedsHelp ?? '',
-                              maxLines: 2,
-                              textAlign: TextAlign.start,
-                            ),
-                            CustomTextButton(
-                              onPressed: () {
-                                // notifier.navigateToBankAccount();
-                                Routing().moveAndPop(Routes.supportTicket);
-                              },
-                              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
-                              child: CustomTextWidget(
-                                textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                                textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                          CustomTextWidget(
+                            textToDisplay: notifier.translate.stillNeedsHelp ?? '',
+                            maxLines: 2,
+                            textAlign: TextAlign.start,
+                          ),
+                          notifier.onProgressTicket.length < 10
+                              ? CustomTextButton(
+                                  onPressed: () {
+                                    // notifier.navigateToBankAccount();
+                                    Routing().moveAndPop(Routes.supportTicket);
+                                  },
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.translate.submitTicketIssue ?? '',
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                                  ),
+                                )
+                              : CustomTextButton(
+                                  onPressed: () {},
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSecondary)),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.translate.submitTicketIssue ?? '',
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                                  ),
+                                ),
+                        ]),
+                      ),
                     ],
                   ),
                 )

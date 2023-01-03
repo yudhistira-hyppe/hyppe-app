@@ -386,10 +386,10 @@ class UrlConstants {
   static const String getMusicMood = "/api/mood/";
   static const String getMusics = "/api/music";
 
-  //FAQ
+  /// FAQ
   static const String faqList = "/api/faqs/allfaqs";
 
-  //Tiket Histories
+  /// Tiket Histories
   static const String ticketHistories = "/api/usertickets/filter";
   static const String ticketComments = "/api/usertickets/comment";
   static const String replyComment = "/api/usertickets/reply";

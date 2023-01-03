@@ -156,6 +156,12 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                   child: ButtonBoost(
                     marginBool: true,
                     contentData: widget.data,
+                    startState: (){
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                    },
+                    afterState: (){
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                    },
                   ),
                 )
               : Container(),

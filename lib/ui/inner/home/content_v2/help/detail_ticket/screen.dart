@@ -994,7 +994,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                             notifier.onTapOnFrameLocalMedia(context);
                           },
                             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}galery_icon.svg")),
-                        notifier.commentController.text.isNotEmpty ? tenPx : twelvePx,
+                        notifier.commentController.text.isNotEmpty ? tenPx : fourPx,
                         if(notifier.commentController.text.isNotEmpty)
                         GestureDetector(
                           onTap: () async{

@@ -33,6 +33,7 @@ class StoryPage extends StatefulWidget {
   final bool? isScrolling;
   final Function? onNextPage;
   final PageController? controller;
+  final int index;
 
   const StoryPage({
     this.onNextPage,
@@ -40,6 +41,7 @@ class StoryPage extends StatefulWidget {
     this.isScrolling,
     this.storyParentIndex,
     this.controller,
+    required this.index
   });
   @override
   _StoryPageState createState() => _StoryPageState();
@@ -47,7 +49,6 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   String _when = "";
-  int currentStory = 0;
   List<StoryItem> _storyItems = [];
   AnimationController? _animationController;
   final StoryController _storyController = StoryController();
@@ -343,6 +344,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                           storyController: _storyController,
                           currentStory: notifier.currentStory,
                           animationController: _animationController,
+                          currentIndex: widget.index,
                         ),
                       ),
                 AnimatedSwitcher(
@@ -373,7 +375,6 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
   void afterFirstLayout(BuildContext context) {
     isLoading = true;
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       Future.delayed(Duration.zero, () {
         notifier.initializeData(context, _storyController, widget.data ?? ContentData());

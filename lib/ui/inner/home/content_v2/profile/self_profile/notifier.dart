@@ -221,8 +221,6 @@ class SelfProfileNotifier with ChangeNotifier {
       // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
       notifyListeners();
     }
-    switch (pageIndex) {
-    }
     user.vids = await vidContentsQuery.reload(context, myContent: true);
     // user.diaries = await diaryContentsQuery.reload(context, myContent: true);
     // user.pics = await picContentsQuery.reload(context, myContent: true);

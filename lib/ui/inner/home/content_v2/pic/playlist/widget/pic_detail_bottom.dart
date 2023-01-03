@@ -16,22 +16,17 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-// import 'package:hyppe/core/constants/thumb/profile_image.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
-// import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-// import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -152,7 +147,7 @@ class PicDetailBottom extends StatelessWidget {
             ),
             eightPx,
             if (data?.music?.musicTitle != null)
-              notifier.isLoadMusic
+              notifier.preventMusic ? const SizedBox.shrink() : notifier.isLoadMusic
                   ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
                   : MusicStatusDetail(
                       music: data!.music!,
@@ -234,7 +229,11 @@ class PicDetailBottom extends StatelessWidget {
                 context,
                 '${AssetPath.vectorPath}cart.svg',
                 value2.translate.buy ?? 'buy',
-                () => ShowBottomSheet.onBuyContent(context, data: data),
+                ()async{
+                  value.preventMusic = true;
+                  await ShowBottomSheet.onBuyContent(context, data: data);
+                  value.preventMusic = false;
+                },
               ),
 
             // _buildButton(
