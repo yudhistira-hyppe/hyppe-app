@@ -196,7 +196,7 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   initialSelfProfile(BuildContext context) async {
-    _pageIndex = 0;
+    // pageIndex = 0;
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     vidContentsQuery.featureType = FeatureType.vid;
@@ -228,11 +228,12 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getDataPerPgage(BuildContext context) async {
+  Future getDataPerPgage(BuildContext context, {bool isReload = false}) async {
+    print(pageIndex);
     switch (pageIndex) {
       case 0:
         {
-          if (user.vids == null) {
+          if (user.vids == null || isReload) {
             user.vids = await vidContentsQuery.reload(context, myContent: true);
             notifyListeners();
           }
@@ -240,7 +241,7 @@ class SelfProfileNotifier with ChangeNotifier {
         break;
       case 1:
         {
-          if (user.diaries == null) {
+          if (user.diaries == null || isReload) {
             user.diaries = await diaryContentsQuery.reload(context, myContent: true);
             notifyListeners();
           }
@@ -248,7 +249,7 @@ class SelfProfileNotifier with ChangeNotifier {
         break;
       case 2:
         {
-          if (user.pics == null) {
+          if (user.pics == null || isReload) {
             user.pics = await picContentsQuery.reload(context, myContent: true);
             notifyListeners();
           }

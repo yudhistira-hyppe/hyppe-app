@@ -24,6 +24,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
   @override
   void initState() {
     final notifier = context.read<SelfProfileNotifier>();
+    notifier.pageIndex = 0;
     notifier.initialSelfProfile(context);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
@@ -85,7 +86,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> {
             strokeWidth: 2.0,
             color: Colors.purple,
             onRefresh: () async {
-              await notifier.initialSelfProfile(context);
+              await notifier.getDataPerPgage(context, isReload: true);
             },
             child: CustomScrollView(
               controller: _scrollController,

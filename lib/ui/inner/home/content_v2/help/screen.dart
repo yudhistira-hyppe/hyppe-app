@@ -64,39 +64,39 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                   notifier.getListOfFAQ(context, category: value);
                 },
               ),
-              if(!notifier.isLoading)
-              GestureDetector(
-                onTap: () async{
-                  Routing().move(Routes.ticketHistory, argument: TicketArgument(values: notifier.onProgressTicket));
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(11),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: Colors.black.withOpacity(0.12),
+              if (!notifier.isLoading)
+                GestureDetector(
+                  onTap: () async {
+                    Routing().move(Routes.ticketHistory, argument: TicketArgument(values: notifier.onProgressTicket));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black.withOpacity(0.12),
+                      ),
+                      borderRadius: BorderRadius.circular(4),
                     ),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    children: [
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}ticket.svg",
-                      ),
-                      tenPx,
-                      CustomTextWidget(
-                        textToDisplay: notifier.translate.yourTicketIssue ?? '',
-                        textStyle: Theme.of(context).primaryTextTheme.caption,
-                        textAlign: TextAlign.start,
-                      ),
-                      const Spacer(),
-                      const CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}chevron_right.svg",
-                      ),
-                    ],
+                    child: Row(
+                      children: [
+                        const CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}ticket.svg",
+                        ),
+                        tenPx,
+                        CustomTextWidget(
+                          textToDisplay: notifier.translate.yourTicketIssue ?? '',
+                          textStyle: Theme.of(context).primaryTextTheme.caption,
+                          textAlign: TextAlign.start,
+                        ),
+                        const Spacer(),
+                        const CustomIconWidget(
+                          iconData: "${AssetPath.vectorPath}chevron_right.svg",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
               twentyFourPx,
               CustomTextWidget(
                 textToDisplay: notifier.translate.frequentlyAskedQuestions ?? '',
@@ -105,84 +105,87 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
               eightPx,
               Expanded(
                 child: Container(
-                  child: !notifier.isLoading ? notifier.listFAQ.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: notifier.listFAQ.length,
-                          itemBuilder: (context, index) {
-                            for (var data in notifier.listFAQ[index].detail) {
-                              print('data details : ${data.toJson()}');
-                            }
+                  child: !notifier.isLoading
+                      ? notifier.listFAQ.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: notifier.listFAQ.length,
+                              itemBuilder: (context, index) {
+                                for (var data in notifier.listFAQ[index].detail) {
+                                  print('data details : ${data.toJson()}');
+                                }
 
-                            return GestureDetector(
-                                onTap: () {
-                                  Routing().move(Routes
-                                      .faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
-                                },
-                                child: Container(width: double.infinity, margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10), child: Text(notifier.listFAQ[index].kategori ?? '')));
-                          })
-                      : Center(
-                          child: Text(notifier.translate.noData ?? 'No Data Found'),
-                        ) : ListView.builder(
-                      itemCount: 8,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            margin: const EdgeInsets.only(bottom: 10, right: 10),
-                            child: const CustomShimmer(width: double.infinity, height: 25, radius: 8,));
-                      }),
+                                return GestureDetector(
+                                    onTap: () {
+                                      Routing().move(Routes.faqDetail, argument: FAQArgument(details: notifier.listFAQ[index].detail));
+                                    },
+                                    child: Container(width: double.infinity, margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10), child: Text(notifier.listFAQ[index].kategori ?? '')));
+                              })
+                          : Center(
+                              child: Text(notifier.translate.noData ?? 'No Data Found'),
+                            )
+                      : ListView.builder(
+                          itemCount: 8,
+                          itemBuilder: (context, index) {
+                            return Container(
+                                margin: const EdgeInsets.only(bottom: 10, right: 10),
+                                child: const CustomShimmer(
+                                  width: double.infinity,
+                                  height: 25,
+                                  radius: 8,
+                                ));
+                          }),
                 ),
               ),
-              if(!notifier.isLoading)
-              Container(
-                padding: const EdgeInsets.all(11),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Colors.black.withOpacity(0.12),
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  color: context.isDarkMode() ? Colors.black12 : kHyppeLightSurface,
-                ),
-                child: Row(
-                  children: [
-                    const CustomIconWidget(
-                      iconData: "${AssetPath.vectorPath}customer-support.svg",
-                      defaultColor: false,
+              if (!notifier.isLoading)
+                Container(
+                  padding: const EdgeInsets.all(11),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Colors.black.withOpacity(0.12),
                     ),
-                    fortyPx,
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                    borderRadius: BorderRadius.circular(16),
+                    color: context.isDarkMode() ? Colors.black12 : kHyppeLightSurface,
+                  ),
+                  child: Row(
+                    children: [
+                      const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}customer-support.svg",
+                        defaultColor: false,
+                      ),
+                      fortyPx,
+                      Expanded(
+                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                           CustomTextWidget(
                             textToDisplay: notifier.translate.stillNeedsHelp ?? '',
                             maxLines: 2,
                             textAlign: TextAlign.start,
                           ),
-                          notifier.onProgressTicket.length < 10 ? CustomTextButton(
-                            onPressed: () {
-                              // notifier.navigateToBankAccount();
-                              Routing().moveAndPop(Routes.supportTicket);
-                            },
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
-                            child: CustomTextWidget(
-                              textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
-                            ),
-                          ) : CustomTextButton(
-                            onPressed: () {
-                            },
-                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSecondary)),
-                            child: CustomTextWidget(
-                              textToDisplay: notifier.translate.submitTicketIssue ?? '',
-                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
-                            ),
-                          ),
-                        ],
+                          notifier.onProgressTicket.length < 10
+                              ? CustomTextButton(
+                                  onPressed: () {
+                                    // notifier.navigateToBankAccount();
+                                    Routing().moveAndPop(Routes.supportTicket);
+                                  },
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.translate.submitTicketIssue ?? '',
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                                  ),
+                                )
+                              : CustomTextButton(
+                                  onPressed: () {},
+                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSecondary)),
+                                  child: CustomTextWidget(
+                                    textToDisplay: notifier.translate.submitTicketIssue ?? '',
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                                  ),
+                                ),
+                        ]),
                       ),
-                    )
-                  ],
-                ),
-              )
+                    ],
+                  ),
+                )
             ],
           ),
         ),

@@ -239,7 +239,7 @@ class SelfProfileTop extends StatelessWidget {
             notifier.displayBio().length > 2
                 ? Container(
                     padding: const EdgeInsets.all(2),
-                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
+                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.3),
                     // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
                     child: SingleChildScrollView(
                         child: Column(
@@ -247,10 +247,10 @@ class SelfProfileTop extends StatelessWidget {
                       children: [
                         CustomDescContent(
                           desc: notifier.displayBio(),
-                          trimLines: 5,
+                          trimLines: 3,
                           textAlign: TextAlign.start,
-                          seeLess: notifier.language.seeLess,
-                          seeMore: notifier.language.seeMoreContent,
+                          seeLess: ' Show less',
+                          seeMore: ' Show More',
                           normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                           expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
