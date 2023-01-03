@@ -141,7 +141,7 @@ class HyppeHomeSignAndSecurity extends StatelessWidget {
           const SizedBox(width: 5),
           CustomTextWidget(
             textToDisplay: statusText,
-            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor),
+            textStyle: Theme.of(context).textTheme.caption?.copyWith(color: statusColor, fontWeight: status == 'verified' ? FontWeight.bold : FontWeight.normal),
           ),
         ],
       ),

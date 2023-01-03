@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
 
@@ -101,11 +102,13 @@ class _CustomDescContentState extends State<CustomDescContent> {
         textAlign: textAlign,
         textDirection: textDirection,
         textScaleFactor: textScaleFactor,
-        maxLines: widget.trimLines,
+        maxLines: 2,
       );
 
       textPainter.layout(minWidth: 0, maxWidth: maxWidth);
       final linkSize = textPainter.size;
+      print('linkSize $linkSize');
+      print('maxWidth $maxWidth');
 
       textPainter.text = _delimiter;
       textPainter.layout(minWidth: 0, maxWidth: maxWidth);
@@ -130,7 +133,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         endIndex = pos.offset;
         linkLongerThanLine = true;
       }
-      if (textPainter.didExceedMaxLines) {
+      if (textPainter.didExceedMaxLines || (endIndex < widget.desc.length)) {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
           children: collectDescItems(
@@ -194,12 +197,16 @@ class _CustomDescContentState extends State<CustomDescContent> {
   List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
     final fixDesc = _readMore
         ? lastIndex != null
-            ? widget.desc.substring(0, lastIndex) + (linkLongerThanLine ? _kLineSeparator : '')
+            ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
             : widget.desc
         : widget.desc;
-    final splitDesc = fixDesc.split(' ');
+    var splitDesc = fixDesc.split(' ');
+    // splitDesc.removeWhere((e) => e == '');
+
     final List<ItemDesc> descItems = [];
     var tempDesc = '';
+
+    // print('check descItems3 ${fixDesc}');
     for (var item in splitDesc) {
       if (item.isNotEmpty) {
         final firstChar = item[0];
@@ -223,9 +230,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
       descItems.add(ItemDesc(desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''), type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
     }
 
-    for (var check in descItems) {
-      print('check descItems ${check.desc}');
-    }
+    // for (var check in descItems) {
+    //   print('CaptionType.seeMore ${check.type}');
+    //   print('check descItems ${check.desc}');
+    // }
     return descItems;
   }
 }

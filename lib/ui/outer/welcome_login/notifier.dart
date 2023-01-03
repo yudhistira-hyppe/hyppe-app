@@ -229,7 +229,11 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'socmed');
-      // SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
+      SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
+
+      print('ini login lewat google ${signData.username}');
+      print('ini login lewat google ${signData.idUser}');
+      print('ini login lewat google ${SharedPreference().readStorage(SpKeys.userID)}');
       DeviceBloc().activityAwake(context);
 
       if (signData.interest?.isEmpty ?? false) {
