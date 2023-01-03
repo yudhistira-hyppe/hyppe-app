@@ -837,5 +837,7 @@
   "max4Images": "Max 4 images",
   "messageMaxTickets": "You’ve reached maximum allowed",
   "seeTicketHistory": "See Ticket History",
-  "activeTicketIssue": "Active Ticket Issue"
+  "activeTicketIssue": "Active Ticket Issue",
+  "seeMoreContent": "See More",
+  "seeLess": "See Less"
 }

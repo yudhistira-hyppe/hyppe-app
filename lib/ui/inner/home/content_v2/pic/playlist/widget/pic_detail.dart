@@ -23,6 +23,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:readmore/readmore.dart';
 
+import '../../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class PicDetail extends StatefulWidget {
@@ -49,6 +50,8 @@ class _PicDetailState extends State<PicDetail> {
 
   @override
   Widget build(BuildContext context) {
+
+    final translate = context.read<TranslateNotifierV2>().translate;
     return WillPopScope(
       onWillPop: () {
         resetZooming();
@@ -278,8 +281,8 @@ class _PicDetailState extends State<PicDetail> {
                               desc: "${widget.arguments?.description}",
                               trimLines: 5,
                               textAlign: TextAlign.start,
-                              seeLess: 'Show less',
-                              seeMore: 'Show More',
+                              seeLess: translate.seeLess,
+                              seeMore: translate.seeMoreContent,
                               normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
                               hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
                               expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),

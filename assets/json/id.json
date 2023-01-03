@@ -837,5 +837,7 @@
   "max4Images": "Maksimal 4 gambar",
   "messageMaxTickets": "Anda telah mencapai batas maksimum yang diizinkan",
   "seeTicketHistory": "Melihat Riwayat Tiket",
-  "activeTicketIssue": "Tiket Isu Aktif"
+  "activeTicketIssue": "Tiket Isu Aktif",
+  "seeMoreContent": "Lihat Selengkapnya",
+  "seeLess": "Sembunyikan"
 }

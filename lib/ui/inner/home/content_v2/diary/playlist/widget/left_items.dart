@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/button_boost.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
@@ -75,6 +76,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     print('lokasi is ${widget.location}');
+
+    final notifier = context.read<TranslateNotifierV2>();
     return Container(
       width: widget.music != null ? double.infinity : SizeConfig.screenWidth! / 1.3,
       // alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
@@ -123,8 +126,8 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     desc: "${widget.description}",
                     trimLines: 5,
                     textAlign: TextAlign.start,
-                    seeLess: 'Show less',
-                    seeMore: 'Show More',
+                    seeLess: notifier.translate.seeLess,
+                    seeMore: notifier.translate.seeMoreContent,
                     normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
                     hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
                     expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
