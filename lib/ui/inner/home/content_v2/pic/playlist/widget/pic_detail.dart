@@ -218,7 +218,11 @@ class _PicDetailState extends State<PicDetail> {
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
-                            function: () => ShowBottomSheet.onBuyContent(context, data: widget.arguments),
+                            function: ()async{
+                              // notifier.preventMusic = true;
+                              ShowBottomSheet.onBuyContent(context, data: widget.arguments);
+                              // notifier.preventMusic = true;
+                            },
                           ),
                         // _buildButtonV2(
                         //   context: context,

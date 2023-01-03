@@ -155,6 +155,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () async {
                                 notifier.preventMusic = true;
+                                SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
                                   contentData: widget.data,
@@ -164,6 +165,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 );
 
                                 notifier.preventMusic = false;
+                                SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                               },
                             )
                           : const SizedBox(),
@@ -292,7 +294,13 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
-                            function: () => ShowBottomSheet.onBuyContent(context, data: widget.data),
+                            function: () async{
+                              notifier.preventMusic = true;
+                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                              await ShowBottomSheet.onBuyContent(context, data: widget.data);
+                              notifier.preventMusic = false;
+                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                            },
                           ),
                       ],
                     ),
@@ -391,10 +399,12 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                         ? ButtonBoost(
                             contentData: widget.data,
                             startState: (){
+                              SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                               notifier.preventMusic = true;
                             },
                             afterState: (){
                               notifier.preventMusic = false;
+                              SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                             },
                           )
                         : Container(),

@@ -108,7 +108,11 @@ class RightItems extends StatelessWidget {
                         "${AssetPath.vectorPath}cart.svg",
                         value2.translate.buy ?? 'buy',
                         colorIcon: kHyppeLightButtonText,
-                        onTap: () => ShowBottomSheet.onBuyContent(context, data: data),
+                        onTap: ()async{
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                          await ShowBottomSheet.onBuyContent(context, data: data);
+                          SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                        },
                       ),
                   ],
                 ),

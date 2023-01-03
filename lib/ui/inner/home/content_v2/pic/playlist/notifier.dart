@@ -44,6 +44,8 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   StatusFollowing _statusFollowing = StatusFollowing.none;
   bool _isLoadMusic = true;
   bool get isLoadMusic => _isLoadMusic;
+  bool _preventMusic = false;
+  bool get preventMusic => _preventMusic;
   String _urlMusic = '';
   String get urlMusic => _urlMusic;
 
@@ -55,6 +57,11 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   set isLoadMusic(bool state) {
     _isLoadMusic = state;
+    notifyListeners();
+  }
+
+  set preventMusic(bool state){
+    _preventMusic = state;
     notifyListeners();
   }
 

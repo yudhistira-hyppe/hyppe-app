@@ -121,15 +121,17 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                       widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                           ? CustomBalloonWidget(
                               child: GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   widget.storyController.pause();
-                                  ShowBottomSheet().onShowOptionContent(
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                                  await ShowBottomSheet().onShowOptionContent(
                                     context,
                                     contentData: widget.data!,
                                     captionTitle: hyppeDiary,
                                     storyController: widget.storyController,
                                     onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
                                   );
+                                  SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,
