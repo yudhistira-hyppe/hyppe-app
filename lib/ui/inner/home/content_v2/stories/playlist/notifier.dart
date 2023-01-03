@@ -104,6 +104,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   List<ContentData> get dataUserStories => _dataUserStories;
   TextEditingController get textEditingController => _textEditingController;
 
+
+  int _currentIndex = -1;
+  int get currentIndex => _currentIndex;
+  bool _hitApiMusic = false;
+  bool get hitApiMusic => _hitApiMusic;
+
   set result(List<StoryItem> val) {
     _result = val;
     notifyListeners();
@@ -155,6 +161,16 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   set dataUserStories(List<ContentData> val) {
     _dataUserStories = val;
+    notifyListeners();
+  }
+
+  set currentIndex(int index){
+    _currentIndex = index;
+    notifyListeners();
+  }
+
+  set hitApiMusic(bool state){
+    _hitApiMusic = state;
     notifyListeners();
   }
 
@@ -216,37 +232,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     animationController.forward();
   }
 
-  void initMusic(BuildContext context, Music music) async{
-    try {
-      isLoadMusic = true;
-      notifyListeners();
-      final urlMusic = music.apsaraMusicUrl?.playUrl;
-      if(urlMusic != null){
-        _urlMusic?.playUrl = urlMusic;
-        notifyListeners();
 
-      }else{
-        if((music.apsaraMusic ?? '').isNotEmpty){
-          final url = await getMusicApsara(context, music.apsaraMusic!);
-          if(url != null){
-            _urlMusic = url;
-            notifyListeners();
-          }else{
-            throw 'url music is null';
-          }
-        }else{
-          throw 'apsaramusic is empty';
-        }
-      }
-
-      isLoadMusic = false;
-      notifyListeners();
-    }catch(e){
-      "Error Init Video $e".logger();
-      isLoadMusic = false;
-      notifyListeners();
-    }
-  }
 
   Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
     try {
@@ -348,6 +334,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       return '';
     }
   }
+
 
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;

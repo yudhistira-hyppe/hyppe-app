@@ -196,7 +196,7 @@ class SelfProfileNotifier with ChangeNotifier {
   }
 
   initialSelfProfile(BuildContext context) async {
-    pageIndex = 0;
+    _pageIndex = 0;
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
     vidContentsQuery.featureType = FeatureType.vid;
@@ -220,8 +220,6 @@ class SelfProfileNotifier with ChangeNotifier {
       user.profile = usersFetch.data;
       // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
       notifyListeners();
-    }
-    switch (pageIndex) {
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);
     // user.diaries = await diaryContentsQuery.reload(context, myContent: true);

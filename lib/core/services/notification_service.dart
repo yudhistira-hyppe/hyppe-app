@@ -94,7 +94,6 @@ class NotificationService {
               }else if(data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING'){
                 materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
               }else{
-                if(data.postType == '')
                 materialAppKey.currentContext!.read<NotificationNotifier>().navigateToContent(materialAppKey.currentContext!, data.postType, data.postId);
               }
             }else if(map['postType'] != null){
@@ -186,16 +185,14 @@ class NotificationService {
         );
       }
     }catch(e){
-      if (deviceID != null) {
-        if (message.notification != null) {
-          await flutterLocalNotificationsPlugin.show(
-            message.hashCode,
-            message.notification?.title ?? '',
-            message.notification?.body,
-            platformChannelSpecifics,
-            payload: message.notification?.body ?? "{}",
-          );
-        }
+      if (message.notification != null) {
+        await flutterLocalNotificationsPlugin.show(
+          message.hashCode,
+          message.notification?.title ?? '',
+          message.notification?.body,
+          platformChannelSpecifics,
+          payload: json.encode(message.data),
+        );
       }
       e.logger();
     }

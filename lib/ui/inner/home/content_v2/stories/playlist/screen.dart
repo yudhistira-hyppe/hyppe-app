@@ -35,6 +35,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
 
   @override
   void afterFirstLayout(BuildContext context) {
+    notifier.currentIndex = -1;
     notifier.initState(context, widget.argument);
   }
 
@@ -65,6 +66,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                       controller: _pageController,
                       itemCount: notifier.dataUserStories.length,
                       onPageChanged: (index) async{
+                        notifier.currentIndex = index;
                         if(notifier.dataUserStories.length > 5){
                           if(index == (notifier.dataUserStories.length - 1)){
                             final values = await notifier.myContentsQuery.loadNext(context, isLandingPage: true);
@@ -91,6 +93,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
+                              index: index,
                               controller: _pageController,
                             ),
                           );
@@ -106,6 +109,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               isScrolling: _pageController.position.activity?.isScrolling,
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
+                              index: index,
                               onNextPage: () => notifier.nextPage(),
                               controller: _pageController,
                             ),
@@ -115,6 +119,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                           isScrolling: _pageController.position.activity?.isScrolling,
                           storyParentIndex: notifier.storyParentIndex,
                           data: notifier.dataUserStories[index],
+                          index: index,
                           onNextPage: () => notifier.nextPage(),
                           controller: _pageController,
                         );

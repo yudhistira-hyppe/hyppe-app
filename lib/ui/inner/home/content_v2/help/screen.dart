@@ -131,7 +131,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                       }),
                 ),
               ),
-              if(!notifier.isLoading && (notifier.onProgressTicket.length < 10))
+              if(!notifier.isLoading)
               Container(
                 padding: const EdgeInsets.all(11),
                 decoration: BoxDecoration(
@@ -158,12 +158,20 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                             maxLines: 2,
                             textAlign: TextAlign.start,
                           ),
-                          CustomTextButton(
+                          notifier.onProgressTicket.length < 10 ? CustomTextButton(
                             onPressed: () {
                               // notifier.navigateToBankAccount();
                               Routing().moveAndPop(Routes.supportTicket);
                             },
                             style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                            child: CustomTextWidget(
+                              textToDisplay: notifier.translate.submitTicketIssue ?? '',
+                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),
+                            ),
+                          ) : CustomTextButton(
+                            onPressed: () {
+                            },
+                            style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightSecondary)),
                             child: CustomTextWidget(
                               textToDisplay: notifier.translate.submitTicketIssue ?? '',
                               textStyle: Theme.of(context).textTheme.button?.copyWith(color: Colors.white),

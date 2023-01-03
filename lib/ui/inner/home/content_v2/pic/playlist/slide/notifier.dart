@@ -62,6 +62,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   String get adsUrl => _adsUrl;
   bool _isLoadMusic = true;
   bool get isLoadMusic => _isLoadMusic;
+  bool _preventMusic = false;
+  bool get preventMusic => _preventMusic;
   bool _hitApiMusic = false;
   bool get hitApiMusic => _hitApiMusic;
   String _urlMusic = '';
@@ -83,6 +85,11 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   set isLoadMusic(bool state){
     _isLoadMusic = state;
+    notifyListeners();
+  }
+
+  set preventMusic(bool state){
+    _preventMusic = state;
     notifyListeners();
   }
 

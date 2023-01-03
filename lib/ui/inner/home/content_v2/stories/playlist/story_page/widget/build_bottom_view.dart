@@ -23,6 +23,7 @@ class BuildBottomView extends StatefulWidget {
   final AnimationController? animationController;
   final ContentData? data;
   final int? currentStory;
+  final int currentIndex;
 
   BuildBottomView({
     Key? key,
@@ -30,6 +31,7 @@ class BuildBottomView extends StatefulWidget {
     required this.animationController,
     required this.data,
     required this.currentStory,
+    required this.currentIndex
   });
 
   @override
@@ -66,7 +68,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                     child: widget.data?.mediaType == 'video'
                         ? MusicStatusPage(music: widget.data!.music!)
                         : notifier.isLoadMusic
-                            ? LoadingMusicStory(apsaraMusic: widget.data!.music!)
+                            ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex,)
                             : MusicStatusPage(
                                 music: widget.data!.music!,
                                 urlMusic: notifier.urlMusic?.playUrl ?? '',
@@ -100,7 +102,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                 vertical: 0,
                               )
                             : notifier.isLoadMusic
-                                ? LoadingMusicStory(apsaraMusic: widget.data!.music!)
+                                ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex,)
                                 : MusicStatusPage(
                                     music: widget.data!.music!,
                                     urlMusic: notifier.urlMusic?.playUrl ?? '',

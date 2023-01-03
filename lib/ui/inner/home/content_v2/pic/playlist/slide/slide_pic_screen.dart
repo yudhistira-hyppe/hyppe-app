@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/constants/enum.dart';
@@ -156,9 +154,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () async {
-                                if (globalAudioPlayer != null) {
-                                  globalAudioPlayer!.pause();
-                                }
+                                notifier.preventMusic = true;
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
                                   contentData: widget.data,
@@ -167,10 +163,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                   onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
                                 );
 
-                                if (globalAudioPlayer != null) {
-                                  globalAudioPlayer!.seek(Duration.zero);
-                                  globalAudioPlayer!.resume();
-                                }
+                                notifier.preventMusic = false;
                               },
                             )
                           : const SizedBox(),
@@ -377,7 +370,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             ),
                             if (widget.data.music?.musicTitle != null && (widget.data.apsaraId ?? '').isNotEmpty)
-                              notifier.isLoadMusic
+                              notifier.preventMusic ? const SizedBox.shrink() :notifier.isLoadMusic
                                   ? LoadingMusicScreen(
                                       music: widget.data.music!,
                                       index: widget.rootIndex,
@@ -397,6 +390,12 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? ButtonBoost(
                             contentData: widget.data,
+                            startState: (){
+                              notifier.preventMusic = true;
+                            },
+                            afterState: (){
+                              notifier.preventMusic = false;
+                            },
                           )
                         : Container(),
                     (widget.data.boosted.isNotEmpty) && widget.data.email == SharedPreference().readStorage(SpKeys.email)
