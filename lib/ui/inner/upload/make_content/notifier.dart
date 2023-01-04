@@ -275,7 +275,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   void onTapOnFrameLocalMedia(BuildContext context) async {
     setLoading(true);
     try {
-      await System().getLocalMedia(featureType: featureType, context: context).then((value) async {
+      print('isVideo $isVideo');
+      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));

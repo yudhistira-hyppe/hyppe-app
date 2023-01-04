@@ -54,7 +54,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set groupPeopleStory(Map<String, List<ContentData>> map){
+  set groupPeopleStory(Map<String, List<ContentData>> map) {
     _groupPeopleStory = map;
     notifyListeners();
   }
@@ -64,7 +64,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set myStoryGroup(Map<String, List<ContentData>> map){
+  set myStoryGroup(Map<String, List<ContentData>> map) {
     _myStoryGroup = map;
     notifyListeners();
   }
@@ -114,12 +114,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  Future initialMyStoryGroup(BuildContext context) async{
-    try{
+  Future initialMyStoryGroup(BuildContext context) async {
+    try {
       final email = SharedPreference().readStorage(SpKeys.email);
       final res = await myContentsQuery.reload(context);
       myStoryGroup[email] = res;
-    }catch(e){
+    } catch (e) {
       'load my story list: ERROR: $e'.logger();
     }
   }
@@ -155,10 +155,10 @@ class PreviewStoriesNotifier with ChangeNotifier {
       if (reload) {
         peopleStoriesData = res;
         groupPeopleStory = {};
-        for(var data in res){
+        for (var data in res) {
           final email = data.email;
-          if(email != null){
-            if(groupPeopleStory[email] == null){
+          if (email != null) {
+            if (groupPeopleStory[email] == null) {
               groupPeopleStory[email] = [];
             }
             groupPeopleStory[email]?.add(data);
@@ -172,10 +172,10 @@ class PreviewStoriesNotifier with ChangeNotifier {
           );
         }
       } else {
-        for(var data in res){
+        for (var data in res) {
           final email = data.email;
-          if(email != null){
-            if(groupPeopleStory[email] == null){
+          if (email != null) {
+            if (groupPeopleStory[email] == null) {
               groupPeopleStory[email] = [];
             }
             groupPeopleStory[email]?.add(data);
@@ -204,7 +204,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
         Routes.storyDetail,
         argument: StoryDetailScreenArgument(
           storyData: myStoriesData,
-          myStory: true,
         ),
       );
     } else {
@@ -213,15 +212,16 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToStoryGroup(BuildContext context, List stories){
+  void navigateToStoryGroup(BuildContext context, List stories) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
-    if(stories.isNotEmpty){
+    if (stories.isNotEmpty) {
       _routing.move(
-          Routes.showStories,
-          argument: StoryDetailScreenArgument(groupStories: myStoryGroup,
-          ),
+        Routes.showStories,
+        argument: StoryDetailScreenArgument(
+          groupStories: myStoryGroup,
+        ),
       );
-    }else{
+    } else {
       uploadStories(context);
     }
   }

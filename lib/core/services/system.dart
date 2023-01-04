@@ -448,7 +448,7 @@ class System {
     }
   }
 
-  Future<Map<String, List<File>?>> getLocalMedia({FeatureType? featureType, required BuildContext context, bool pdf = false, LocalizationModelV2? model}) async {
+  Future<Map<String, List<File>?>> getLocalMedia({FeatureType? featureType, required BuildContext context, bool pdf = false, LocalizationModelV2? model, bool isVideo = false}) async {
     final ImagePicker _imagePicker = ImagePicker();
 
     final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
@@ -583,40 +583,49 @@ class System {
       }
 
       if (featureType == FeatureType.story) {
-        final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.media, allowCompression: false);
+        if (isVideo) {
+          final _pickerResult = await FilePicker.platform.pickFiles(allowMultiple: true, type: FileType.video, allowCompression: false);
+          if (_pickerResult != null) {
+            // untuk menampung file yang failed di validasi
+            String _failFile = '';
 
-        // validasi durasi
-        if (_pickerResult != null) {
-          // untuk menampung file yang failed di validasi
-          String _failFile = '';
+            // validasi count post
+            if (_validateCountPost(_pickerResult.files.length) == false) {
+              for (int element = 0; element < _pickerResult.files.length; element++) {
+                // validasi content type
+                if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
+                  await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
+                    _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
 
-          // validasi count post
-          if (_validateCountPost(_pickerResult.files.length) == false) {
-            for (int element = 0; element < _pickerResult.files.length; element++) {
-              // validasi content type
-              if (_pickerResult.files[element].extension?.toLowerCase() == MP4 || _pickerResult.files[element].extension?.toLowerCase() == MOV) {
-                await getVideoMetadata(_pickerResult.files[element].path ?? '').then((value) {
-                  _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+                    // hapus file yang durasinya lebih dari 15 detik
+                    if (_duration.inSeconds > 15) {
+                      _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
+                      _pickerResult.files.removeAt(element);
+                    }
+                  });
+                }
+              }
 
-                  // hapus file yang durasinya lebih dari 15 detik
-                  if (_duration.inSeconds > 15) {
-                    _failFile = '$_failFile, ${_pickerResult.files[element].name}\n';
-                    _pickerResult.files.removeAt(element);
-                  }
-                });
+              // show toast if there is fail file
+              if (_failFile.isNotEmpty) {
+                _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
+              }
+
+              if (_pickerResult.files.isNotEmpty) {
+                _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
               }
             }
+          }
+        } else {
+          final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
 
-            // show toast if there is fail file
-            if (_failFile.isNotEmpty) {
-              _errorMsg = '${notifier.theFileDurationExceedsTheMaximumLimitForThisFeature} :\n$_failFile';
-            }
-
-            if (_pickerResult.files.isNotEmpty) {
-              _filePickerResult = _pickerResult.files.map((file) => File(file.path ?? '')).toList();
-            }
+          if (_pickerResult != null) {
+            _filePickerResult = [File(_pickerResult.path)];
           }
         }
+
+        // validasi durasi
+
       }
     }
 
