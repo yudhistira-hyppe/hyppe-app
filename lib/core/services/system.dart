@@ -448,7 +448,13 @@ class System {
     }
   }
 
-  Future<Map<String, List<File>?>> getLocalMedia({FeatureType? featureType, required BuildContext context, bool pdf = false, LocalizationModelV2? model, bool isVideo = false}) async {
+  Future<Map<String, List<File>?>> getLocalMedia({
+    FeatureType? featureType,
+    required BuildContext context,
+    bool pdf = false,
+    LocalizationModelV2? model,
+    bool isVideo = false,
+  }) async {
     final ImagePicker _imagePicker = ImagePicker();
 
     final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
