@@ -53,8 +53,8 @@ import 'package:story_view/story_view.dart';
 
 class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery myContentsQuery = ContentsDataQuery()
-  ..page = 2
-  ..limit = 5
+    ..page = 2
+    ..limit = 5
     ..onlyMyData = true
     ..featureType = FeatureType.story;
 
@@ -104,7 +104,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   List<ContentData> get dataUserStories => _dataUserStories;
   TextEditingController get textEditingController => _textEditingController;
 
-
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
   bool _hitApiMusic = false;
@@ -140,11 +139,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set isLoadMusic(bool state){
+  set isLoadMusic(bool state) {
     _isLoadMusic = state;
   }
 
-  set urlMusic(MusicUrl? val){
+  set urlMusic(MusicUrl? val) {
     _urlMusic = val;
     notifyListeners();
   }
@@ -164,12 +163,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set currentIndex(int index){
+  set currentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }
 
-  set hitApiMusic(bool state){
+  set hitApiMusic(bool state) {
     _hitApiMusic = state;
     notifyListeners();
   }
@@ -232,8 +231,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     animationController.forward();
   }
 
-
-
   Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
     try {
       final notifier = PostsBloc();
@@ -260,7 +257,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
     _result = [];
     if (data.mediaType?.translateType() == ContentType.image) {
-      if(data.music?.apsaraMusic != null){
+      if (data.music?.apsaraMusic != null) {
         data.music?.apsaraMusicUrl = await getMusicApsara(context, data.music!.apsaraMusic!);
         final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
         _result.add(
@@ -277,7 +274,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             },
           ),
         );
-      }else{
+      } else {
         _result.add(
           StoryItem.pageImage(
             url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
@@ -292,7 +289,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           ),
         );
       }
-
     }
     if (data.mediaType?.translateType() == ContentType.video) {
       String urlApsara = '';
@@ -334,7 +330,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       return '';
     }
   }
-
 
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
     Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;

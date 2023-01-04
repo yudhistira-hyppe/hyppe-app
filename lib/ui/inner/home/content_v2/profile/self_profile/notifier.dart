@@ -230,6 +230,18 @@ class SelfProfileNotifier with ChangeNotifier {
 
   Future getDataPerPgage(BuildContext context, {bool isReload = false}) async {
     print(pageIndex);
+    if (isReload) {
+      final usersNotifier = UserBloc();
+      await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
+      final usersFetch = usersNotifier.userFetch;
+
+      if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+        user.profile = null;
+        user.profile = usersFetch.data;
+        // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
+        notifyListeners();
+      }
+    }
     switch (pageIndex) {
       case 0:
         {

@@ -124,10 +124,10 @@ class VidDetailBottom extends StatelessWidget {
                         children: [
                           CustomDescContent(
                             desc: "${data?.description}",
-                            trimLines: 2,
+                            trimLines: 3,
                             textAlign: TextAlign.start,
-                            seeLess: 'Show less',
-                            seeMore: 'Show More',
+                            seeLess: ' Show less',
+                            seeMore: ' Show More',
                             normStyle: Theme.of(context).textTheme.subtitle2,
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),

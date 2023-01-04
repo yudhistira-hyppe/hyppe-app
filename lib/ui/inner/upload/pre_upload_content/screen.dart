@@ -100,7 +100,6 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         loadingCompress(notifier.progressCompress),
                         // Text("${notifier.progressCompress}"),
                         // Text("${notifier.videoSize / 1000000} mb"),
-
                         captionWidget(textTheme, notifier),
                         sixteenPx,
                         _buildDivider(context),

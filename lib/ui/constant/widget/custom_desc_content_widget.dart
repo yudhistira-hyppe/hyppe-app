@@ -89,6 +89,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         style: _defaultDelimiterStyle,
         recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
 
+    print('desc ${widget.desc}');
     Widget result = LayoutBuilder(builder: (context, constraints) {
       assert(constraints.hasBoundedWidth);
       final maxWidth = constraints.maxWidth;
@@ -102,13 +103,11 @@ class _CustomDescContentState extends State<CustomDescContent> {
         textAlign: textAlign,
         textDirection: textDirection,
         textScaleFactor: textScaleFactor,
-        maxLines: 2,
+        maxLines: widget.trimLines,
       );
 
       textPainter.layout(minWidth: 0, maxWidth: maxWidth);
       final linkSize = textPainter.size;
-      print('linkSize $linkSize');
-      print('maxWidth $maxWidth');
 
       textPainter.text = _delimiter;
       textPainter.layout(minWidth: 0, maxWidth: maxWidth);
@@ -129,11 +128,14 @@ class _CustomDescContentState extends State<CustomDescContent> {
         ));
         endIndex = textPainter.getOffsetBefore(pos.offset) ?? 0;
       } else {
-        var pos = textPainter.getPositionForOffset(textSize.bottomLeft(Offset.zero));
+        var pos = textPainter.getPositionForOffset(
+          textSize.bottomLeft(Offset.zero),
+        );
         endIndex = pos.offset;
         linkLongerThanLine = true;
       }
-      if (textPainter.didExceedMaxLines || (endIndex < widget.desc.length)) {
+
+      if (textPainter.didExceedMaxLines) {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
           children: collectDescItems(
@@ -153,7 +155,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
       } else {
         var textSpan = TextSpan(
           style: effectiveTextStyle,
-          children: collectDescItems(context, getDescItems(lastIndex: endIndex, linkLongerThanLine: linkLongerThanLine)),
+          children: collectDescItems(context, getDescItems(lastIndex: null, linkLongerThanLine: linkLongerThanLine)),
         );
         return Text.rich(
           textSpan,
@@ -195,13 +197,14 @@ class _CustomDescContentState extends State<CustomDescContent> {
   }
 
   List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
+    print('readmore $_readMore');
     final fixDesc = _readMore
         ? lastIndex != null
             ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
             : widget.desc
         : widget.desc;
     var splitDesc = fixDesc.split(' ');
-    // splitDesc.removeWhere((e) => e == '');
+    splitDesc.removeWhere((e) => e == '');
 
     final List<ItemDesc> descItems = [];
     var tempDesc = '';

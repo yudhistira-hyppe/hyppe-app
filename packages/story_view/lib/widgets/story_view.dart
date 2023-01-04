@@ -539,6 +539,7 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
   @override
   void initState() {
     super.initState();
+    print('story look ${widget.storyItems.length}');
     _eventService.addVideoHandler(kVideoEventKey, this);
 
     // All pages after the first unshown page should have their shown value as

@@ -246,15 +246,16 @@ class SelfProfileTop extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomDescContent(
-                          desc: notifier.displayBio(),
-                          trimLines: 3,
-                          textAlign: TextAlign.start,
-                          seeLess: ' Show less',
-                          seeMore: ' Show More',
-                          normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
-                          hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        ),
+                            desc: notifier.displayBio(),
+                            trimLines: 3,
+                            textAlign: TextAlign.start,
+                            seeLess: ' Show less',
+                            seeMore: ' Show More',
+                            normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
+                            hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                            expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                  color: Theme.of(context).colorScheme.primaryVariant,
+                                )),
                         // ReadMoreText(
                         //   notifier.displayBio(),
                         //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",

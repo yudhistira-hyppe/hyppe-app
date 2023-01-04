@@ -20,6 +20,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
+import 'package:readmore/readmore.dart';
 
 class CommentListTile extends StatefulWidget {
   final bool fromFront;
@@ -83,16 +84,17 @@ class _CommentListTileState extends State<CommentListTile> {
                     ),
                   ),
                   SizedBox(height: 6 * SizeConfig.scaleDiagonal),
+
                   CustomDescContent(
-                      desc: comment?.txtMessages ?? '',
-                      trimLines: 5,
-                      textAlign: TextAlign.start,
-                      seeLess: 'Show less',
-                      seeMore: 'Show More',
-                      textOverflow: TextOverflow.visible,
-                      normStyle: Theme.of(context).textTheme.bodyText2,
-                      hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant)
+                    desc: comment?.txtMessages ?? '',
+                    trimLines: 5,
+                    textAlign: TextAlign.start,
+                    seeLess: 'Show less',
+                    seeMore: 'Show More',
+                    textOverflow: TextOverflow.visible,
+                    normStyle: Theme.of(context).textTheme.bodyText2,
+                    hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                   ),
                   SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                   Row(

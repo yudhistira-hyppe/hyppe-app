@@ -35,14 +35,7 @@ class StoryPage extends StatefulWidget {
   final PageController? controller;
   final int index;
 
-  const StoryPage({
-    this.onNextPage,
-    this.data,
-    this.isScrolling,
-    this.storyParentIndex,
-    this.controller,
-    required this.index
-  });
+  const StoryPage({this.onNextPage, this.data, this.isScrolling, this.storyParentIndex, this.controller, required this.index});
   @override
   _StoryPageState createState() => _StoryPageState();
 }

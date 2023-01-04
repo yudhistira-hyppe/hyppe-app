@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:provider/provider.dart';
@@ -47,9 +46,6 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
 
   @override
   Widget build(BuildContext context) {
-
-
-
     return ChangeNotifierProvider<StoriesPlaylistNotifier>(
       create: (context) => notifier,
       child: WillPopScope(
@@ -65,15 +61,14 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                   ? PageView.builder(
                       controller: _pageController,
                       itemCount: notifier.dataUserStories.length,
-                      onPageChanged: (index) async{
+                      onPageChanged: (index) async {
                         notifier.currentIndex = index;
-                        if(notifier.dataUserStories.length > 5){
-                          if(index == (notifier.dataUserStories.length - 1)){
+                        if (notifier.dataUserStories.length > 5) {
+                          if (index == (notifier.dataUserStories.length - 1)) {
                             final values = await notifier.myContentsQuery.loadNext(context, isLandingPage: true);
-                            if(values.isNotEmpty){
+                            if (values.isNotEmpty) {
                               notifier.dataUserStories = [...(notifier.dataUserStories)] + values;
                             }
-
                             final prev = context.read<PreviewStoriesNotifier>();
                             prev.initialPeopleStories(context, list: values);
                           }

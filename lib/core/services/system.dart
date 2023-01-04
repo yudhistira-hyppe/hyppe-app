@@ -399,7 +399,7 @@ class System {
     }
   }
 
-  String getTimeWIB(String hour, String minute){
+  String getTimeWIB(String hour, String minute) {
     return '$hour:$minute WIB';
   }
 
@@ -448,12 +448,7 @@ class System {
     }
   }
 
-  Future<Map<String, List<File>?>> getLocalMedia({
-    FeatureType? featureType,
-    required BuildContext context,
-    bool pdf = false,
-    LocalizationModelV2? model
-  }) async {
+  Future<Map<String, List<File>?>> getLocalMedia({FeatureType? featureType, required BuildContext context, bool pdf = false, LocalizationModelV2? model}) async {
     final ImagePicker _imagePicker = ImagePicker();
 
     final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;

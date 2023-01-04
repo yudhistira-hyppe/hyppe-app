@@ -113,6 +113,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
         }
       }
 
+      print('get story ${res.length}');
+
       if (reload) {
         peopleStoriesData = res;
         if (scrollController.hasClients) {
@@ -146,6 +148,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         Routes.storyDetail,
         argument: StoryDetailScreenArgument(
           storyData: myStoriesData,
+          myStory: true,
         ),
       );
     } else {
