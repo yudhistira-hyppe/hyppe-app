@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
@@ -28,14 +29,21 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
+import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:provider/provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../../app.dart';
+import '../../../../core/arguments/progress_upload_argument.dart';
+import '../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../core/config/url_constants.dart';
 import '../../../../core/models/collection/music/music.dart';
 import '../../../../core/models/collection/music/music_type.dart';
+import '../../../../core/services/event_service.dart';
 
 class PreviewContentNotifier with ChangeNotifier {
+  final eventService = EventService();
+  dynamic _uploadSuccess;
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -1127,6 +1135,71 @@ class PreviewContentNotifier with ChangeNotifier {
       persistentBottomSheetController?.closed.whenComplete(() => isSheetOpen = false);
     } else {
       ShowBottomSheet().onShowColouredSheet(context, language.filterIsOnlySupportedForImage ?? '', color: kHyppeTextWarning, maxLines: 2);
+    }
+  }
+
+  Future postStoryContent(BuildContext context) async{
+
+    final _orientation = context.read<CameraNotifier>().orientation;
+    try {
+      // _connectAndListenToSocket(context);
+      final notifier = PostsBloc();
+      print('featureType : $featureType');
+      notifier.postContentsBlocV2(
+        context,
+        type: featureType ?? FeatureType.other,
+        visibility: 'PUBLIC',
+        tags: [],
+        tagDescription: [],
+        allowComment: true,
+        certified: true,
+        fileContents: fileContent ?? [],
+        description: '',
+        cats: [],
+        tagPeople: [],
+        idMusic: fixSelectedMusic?.id,
+        saleAmount: "0",
+        saleLike: false,
+        saleView: false,
+        rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
+        location: '',
+        onReceiveProgress: (count, total) async {
+          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+        },
+        onSendProgress: (received, total) async {
+          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+        },
+      ).then((value) {
+        _uploadSuccess = value;
+        'Create post content with value $value'.logger();
+        // _eventService.notifyUploadFinishingUp(_uploadSuccess);
+        eventService.notifyUploadSuccess(_uploadSuccess);
+      });
+      Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+    } catch (e) {
+      print('Error create post : $e');
+      eventService.notifyUploadFailed(
+        DioError(
+          requestOptions: RequestOptions(
+            path: UrlConstants.createuserposts,
+          ),
+          error: e,
+        ),
+      );
+      'e'.logger();
+    } finally {
+
+      try {
+        audioPreviewPlayer.stop();
+        audioPreviewPlayer.dispose();
+      } catch (e) {
+        'Error dispose AudioPreviewPlayer : $e'.logger();
+      }
+
+      defaultPath = null;
+      if (betterPlayerController != null) {
+        betterPlayerController!.dispose();
+      }
     }
   }
 

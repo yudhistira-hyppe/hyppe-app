@@ -612,7 +612,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       width: 30,
                       height: 30,
                       decoration: BoxDecoration(color: kHyppeLightInactive2, borderRadius: BorderRadius.circular(1000)),
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         size: 15,
                       ),
@@ -802,12 +802,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
               )),
           notifier.boostContent?.typeBoost == 'automatic' ? const SizedBox() : sixteenPx,
           notifier.boostContent?.typeBoost == 'automatic'
-              ? SizedBox()
+              ? const SizedBox.shrink()
               : detailText(notifier.language.boostTime,
                   "${System().capitalizeFirstLetter(notifier.boostContent?.sessionBoost?.name ?? '')} (${notifier.boostContent?.sessionBoost?.start?.substring(0, 5)} - ${notifier.boostContent?.sessionBoost?.end?.substring(0, 5)} WIB) "),
           notifier.boostContent?.typeBoost == 'automatic' ? const SizedBox() : sixteenPx,
           notifier.boostContent?.typeBoost == 'automatic'
-              ? SizedBox()
+              ? const SizedBox.shrink()
               : detailText(notifier.language.interval, '${notifier.boostContent?.intervalBoost?.value} ${notifier.boostContent?.intervalBoost?.remark}'),
           sixteenPx,
           detailText(notifier.language.startDate, '${System().dateFormatter(notifier.boostContent?.dateBoostStart ?? '', 5)},  ${notifier.boostContent?.sessionBoost?.start?.substring(0, 5)}'),

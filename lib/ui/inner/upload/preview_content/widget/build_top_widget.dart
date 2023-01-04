@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -32,7 +33,7 @@ class BuildTopWidget extends StatelessWidget {
                     child: notifier.showNext
                         ? CustomTextButton(
                             child: CustomTextWidget(
-                              textToDisplay: notifier.addTextItemMode ? notifier.language.save ?? 'save' : notifier.language.next ?? 'next',
+                              textToDisplay: notifier.addTextItemMode ? (notifier.language.save ?? 'save') : notifier.featureType == FeatureType.story ? (notifier.language.post  ?? 'post') : (notifier.language.next ?? 'next'),
                               textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                             ),
                             style: ButtonStyle(
@@ -40,8 +41,11 @@ class BuildTopWidget extends StatelessWidget {
                               padding: MaterialStateProperty.all(const EdgeInsets.only(top: 0.0, bottom: 0.0)),
                             ),
                             onPressed: (){
+
                               if(notifier.addTextItemMode){
                                 notifier.applyTextItem(globalKey);
+                              }else if(notifier.featureType == FeatureType.story){
+                                notifier.postStoryContent(context);
                               }else{
                                 notifier.forceResetPlayer(true);
                                 notifier.navigateToPreUploaded(context);

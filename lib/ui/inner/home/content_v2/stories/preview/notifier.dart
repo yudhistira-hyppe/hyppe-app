@@ -210,8 +210,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToStoryGroup(BuildContext context){
-    if(myStoryGroup.isNotEmpty){
+  void navigateToStoryGroup(BuildContext context, List stories){
+    print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
+    if(stories.isNotEmpty){
       _routing.move(
           Routes.showStories,
           argument: StoryDetailScreenArgument(groupStories: myStoryGroup,
@@ -224,7 +225,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void uploadStories(BuildContext context) {
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    notifier.thumbnailLocalMedia();
+    // notifier.thumbnailLocalMedia();
     notifier.featureType = FeatureType.story;
     notifier.selectedDuration = 15;
     Routing().move(Routes.makeContent);
