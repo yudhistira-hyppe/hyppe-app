@@ -29,6 +29,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
             Background incoming message threadId => ${message.threadId},
             Background incoming message ttl => ${message.ttl},
             Background incoming message notification => ${message.notification?.title} ${message.notification?.body}
+            Background incoming message tag => ${message.notification?.android?.tag}
             """
       .logger();
 

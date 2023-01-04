@@ -48,6 +48,7 @@ class _AdsScreenState extends State<AdsScreen> {
   void initState() {
     _storyItems.add(StoryItem.pageVideo(widget.argument.adsUrl,
         controller: _storyController,
+        id: widget.argument.data.adsId ?? '',
         requestHeaders: {
           'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),

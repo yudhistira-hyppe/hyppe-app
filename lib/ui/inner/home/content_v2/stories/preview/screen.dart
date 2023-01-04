@@ -73,7 +73,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                 index: itemIndex,
                 data: notifier.peopleStoriesData?[itemIndex],
               );
-            } else {
+            }else {
               if (context.read<ErrorService>().isInitialError(error, notifier.peopleStoriesData)) {
                 return Row(
                   mainAxisSize: MainAxisSize.min,

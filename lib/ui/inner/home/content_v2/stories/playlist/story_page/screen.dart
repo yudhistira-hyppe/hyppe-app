@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -23,8 +22,6 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_bottom_view.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_replay_caption.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/build_top_view.dart';
-
-import '../../../../../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
 
 class StoryPage extends StatefulWidget {
@@ -65,7 +62,6 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
     }
     _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
 
-    setState(() {});
     super.initState();
   }
 

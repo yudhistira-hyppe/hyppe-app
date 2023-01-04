@@ -10,6 +10,7 @@ class MessageDataV2 {
   String? disqusID;
   String? room;
   String? createdAt;
+  String? fcmMessage;
   SenderOrReceiverInfo? senderOrReceiverInfo;
   Mate? mate;
   List<DisqusLogs> disqusLogs = [];
@@ -20,6 +21,7 @@ class MessageDataV2 {
 
   MessageDataV2({
     this.createdAt,
+    this.fcmMessage,
     this.mate,
     this.disqusLogs = const [],
     this.active,
@@ -54,6 +56,11 @@ class MessageDataV2 {
     username = json['username'];
     lastestMessage = json["lastestMessage"];
     senderOrReceiverInfo = json['senderOrReceiverInfo'] != null ? SenderOrReceiverInfo.fromJson(json['senderOrReceiverInfo']) : null;
+    if(json['fcmMessage'] != null){
+      fcmMessage = json['fcmMessage'];
+    }else{
+      fcmMessage = lastestMessage;
+    }
   }
 
   Map<String, dynamic> toJson() {

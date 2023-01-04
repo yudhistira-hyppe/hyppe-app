@@ -83,6 +83,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   Color? _sendButtonColor;
   PageController? _pageController = PageController(initialPage: 0);
   List<ContentData> _dataUserStories = [];
+  Map<String, List<ContentData>> _groupUserStories = {};
   final TextEditingController _textEditingController = TextEditingController();
 
   bool get isReactAction => _isReactAction;
@@ -102,6 +103,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   Color? get buttonColor => _sendButtonColor;
   PageController? get pageController => _pageController;
   List<ContentData> get dataUserStories => _dataUserStories;
+  Map<String, List<ContentData>> get groupUserStories => _groupUserStories;
   TextEditingController get textEditingController => _textEditingController;
 
 
@@ -161,6 +163,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   set dataUserStories(List<ContentData> val) {
     _dataUserStories = val;
+    notifyListeners();
+  }
+
+  set groupUserStories(Map<String, List<ContentData>> maps){
+    _groupUserStories = maps;
     notifyListeners();
   }
 
@@ -254,6 +261,74 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     return null;
   }
 
+
+  Future initializeUserStories(BuildContext context, StoryController storyController, List<ContentData> stories) async{
+    _result = [];
+    for(final story in stories){
+      if (story.mediaType?.translateType() == ContentType.image) {
+        if(story.music?.apsaraMusic != null){
+          story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
+          final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
+          _result.add(
+            StoryItem.pageImage(
+              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              controller: storyController,
+              imageFit: BoxFit.contain,
+              isImages: true,
+              id: story.postID ?? '',
+              duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+              requestHeaders: {
+                'post-id': story.postID ?? '',
+                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+              },
+
+            ),
+          );
+        }else{
+          _result.add(
+            StoryItem.pageImage(
+              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              controller: storyController,
+              imageFit: BoxFit.contain,
+              isImages: true,
+              id: story.postID ?? '',
+              requestHeaders: {
+                'post-id': story.postID ?? '',
+                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+              },
+            ),
+          );
+        }
+
+      }
+      if (story.mediaType?.translateType() == ContentType.video) {
+        String urlApsara = '';
+        if (story.isApsara ?? false) {
+          await getVideoApsara(context, story.apsaraId ?? '').then((value) {
+            urlApsara = value;
+          });
+        }
+        print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
+        _result.add(
+          StoryItem.pageVideo(
+            urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
+            controller: storyController,
+            id: story.postID ?? '',
+            requestHeaders: {
+              'post-id': story.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+            duration: Duration(seconds: story.metadata?.duration ?? 15),
+          ),
+        );
+      }
+    }
+    notifyListeners();
+  }
+
   // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
   Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
     // List<StoryItem> _result = [];
@@ -269,6 +344,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
+            id: data.postID ?? '',
             duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
             requestHeaders: {
               'post-id': data.postID ?? '',
@@ -284,6 +360,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
+            id: data.postID ?? '',
             requestHeaders: {
               'post-id': data.postID ?? '',
               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
@@ -306,6 +383,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         StoryItem.pageVideo(
           urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
           controller: storyController,
+          id: data.postID ?? '',
           requestHeaders: {
             'post-id': data.postID ?? '',
             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
@@ -351,6 +429,19 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     } else {
       _dataUserStories = _routeArgument?.storyData ?? [];
       notifyListeners();
+    }
+  }
+
+  void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument){
+    final myEmail = _sharedPrefs.readStorage(SpKeys.email);
+    _currentPage = routeArgument.index;
+    final groups = routeArgument.groupStories;
+
+    if(groups != null){
+      for(final value in groups[myEmail]!){
+        print('content value : ${value.postID}');
+      }
+      _groupUserStories = groups;
     }
   }
 

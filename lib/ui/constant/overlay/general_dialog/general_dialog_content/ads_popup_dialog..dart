@@ -54,6 +54,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
           'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
         },
+        id: widget.data.adsId ?? '',
         duration: Duration(milliseconds: ((widget.data.duration ?? 15) * 1000).toInt())));
     print('isShowPopAds true');
     SharedPreference().writeStorage(SpKeys.isShowPopAds, true);

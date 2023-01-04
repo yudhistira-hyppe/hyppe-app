@@ -171,7 +171,7 @@ class MainNotifier with ChangeNotifier {
                       notification: RemoteNotification(
                         // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
                         title: "${msgData.username}",
-                        body: msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+                        body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
                       ),
                       data: msgData.toJson(),
                     ),

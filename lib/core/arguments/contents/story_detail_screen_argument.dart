@@ -5,6 +5,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 class StoryDetailScreenArgument extends ContentScreenArgument {
   final double index;
   final List<ContentData>? storyData;
+  final Map<String, List<ContentData>>? groupStories;
 
   @override
   FeatureType get featureType => FeatureType.story;
@@ -12,5 +13,6 @@ class StoryDetailScreenArgument extends ContentScreenArgument {
   StoryDetailScreenArgument({
     this.index = 0,
     this.storyData,
+    this.groupStories
   });
 }
