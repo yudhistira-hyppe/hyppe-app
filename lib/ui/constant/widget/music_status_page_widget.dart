@@ -18,7 +18,8 @@ class MusicStatusPage extends StatefulWidget {
   final Music music;
   double vertical;
   String? urlMusic;
-  MusicStatusPage({Key? key, required this.music, this.urlMusic, this.vertical = 10}) : super(key: key);
+  bool isPlay;
+  MusicStatusPage({Key? key, required this.music, this.urlMusic, this.vertical = 10, this.isPlay = true}) : super(key: key);
 
   @override
   State<MusicStatusPage> createState() => _MusicStatusPageState();
@@ -160,8 +161,10 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
     if ((widget.urlMusic ?? '').isNotEmpty) {
       initMusic(context, widget.urlMusic!);
     } else if ((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty) {
-      print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
-      initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
+      if(widget.isPlay){
+        print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
+        initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
+      }
     }
   }
 }

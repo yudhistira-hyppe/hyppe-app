@@ -39,6 +39,8 @@ class StoryItem {
   /// story item.
   bool shown;
 
+  final String id;
+
   String? source;
 
   bool? isImages;
@@ -47,6 +49,7 @@ class StoryItem {
   final Widget view;
   StoryItem(
     this.view, {
+    required this.id,
     this.source,
     this.shown = false,
     this.isImages = false,
@@ -64,6 +67,7 @@ class StoryItem {
   static StoryItem text({
     required String title,
     required Color backgroundColor,
+    required String id,
     Key? key,
     TextStyle? textStyle,
     bool shown = false,
@@ -112,6 +116,7 @@ class StoryItem {
       ),
       shown: shown,
       duration: duration ?? const Duration(seconds: 3),
+      id: id
     );
   }
 
@@ -120,6 +125,7 @@ class StoryItem {
   factory StoryItem.pageImage({
     required String url,
     required StoryController controller,
+    required String id,
     Key? key,
     Color? backgroundColor,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -173,6 +179,7 @@ class StoryItem {
       ),
       shown: shown,
       isImages: true,
+      id: id,
       duration: duration ?? const Duration(seconds: 3),
     );
   }
@@ -183,6 +190,7 @@ class StoryItem {
     required String url,
     required Text caption,
     required StoryController controller,
+    required String id,
     Key? key,
     BoxFit imageFit = BoxFit.cover,
     Map<String, String>? requestHeaders,
@@ -227,6 +235,7 @@ class StoryItem {
         ),
       ),
       shown: shown,
+      id: id,
       duration: duration ?? const Duration(seconds: 3),
     );
   }
@@ -236,6 +245,7 @@ class StoryItem {
   factory StoryItem.pageVideo(
     String url, {
     required StoryController controller,
+    required String id,
     Key? key,
     Duration? duration,
     BoxFit imageFit = BoxFit.fitWidth,
@@ -282,6 +292,7 @@ class StoryItem {
           ),
         ),
         source: url,
+        id: id,
         shown: shown,
         duration: duration ?? const Duration(seconds: 1));
   }
@@ -292,6 +303,7 @@ class StoryItem {
   factory StoryItem.pageProviderImage(
     ImageProvider image, {
     Key? key,
+    required String id,
     BoxFit imageFit = BoxFit.fitWidth,
     String? caption,
     bool shown = false,
@@ -341,6 +353,7 @@ class StoryItem {
           ),
         ),
         shown: shown,
+        id: id,
         duration: duration ?? const Duration(seconds: 3));
   }
 
@@ -355,6 +368,7 @@ class StoryItem {
     bool roundedTop = true,
     bool roundedBottom = false,
     Duration? duration,
+    required String id,
   }) {
     return StoryItem(
       Container(
@@ -386,6 +400,7 @@ class StoryItem {
           ),
         ),
       ),
+      id: id,
       shown: shown,
       duration: duration ?? const Duration(seconds: 3),
     );

@@ -136,6 +136,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
         },
+        id: data.postID ?? '',
         controller: storyController,
         duration: Duration(seconds: data.metadata?.duration ?? 15),
       ),

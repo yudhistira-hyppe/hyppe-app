@@ -66,7 +66,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                   Container(
                     margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
                     child: widget.data?.mediaType == 'video'
-                        ? MusicStatusPage(music: widget.data!.music!)
+                        ? MusicStatusPage(music: widget.data!.music!,)
                         : notifier.isLoadMusic
                             ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex,)
                             : MusicStatusPage(

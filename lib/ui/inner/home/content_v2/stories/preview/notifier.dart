@@ -1,3 +1,5 @@
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -24,13 +26,21 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   List<ContentData>? _peopleStoriesData;
 
+  Map<String, List<ContentData>> _groupPeopleStory = {};
+
   List<ContentData>? _myStoriesData;
+
+  Map<String, List<ContentData>> _myStoryGroup = {};
 
   int _totalViews = 0;
 
   List<ContentData>? get peopleStoriesData => _peopleStoriesData;
 
+  Map<String, List<ContentData>> get groupPeopleStory => _groupPeopleStory;
+
   List<ContentData>? get myStoriesData => _myStoriesData;
+
+  Map<String, List<ContentData>> get myStoryGroup => _myStoryGroup;
 
   int get totalViews => _totalViews;
 
@@ -44,8 +54,18 @@ class PreviewStoriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set groupPeopleStory(Map<String, List<ContentData>> map){
+    _groupPeopleStory = map;
+    notifyListeners();
+  }
+
   set myStoriesData(List<ContentData>? val) {
     _myStoriesData = val;
+    notifyListeners();
+  }
+
+  set myStoryGroup(Map<String, List<ContentData>> map){
+    _myStoryGroup = map;
     notifyListeners();
   }
 
@@ -53,6 +73,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
     _totalViews = val;
     notifyListeners();
   }
+
+  int groupItemCount(dynamic error) => _groupPeopleStory == null && error == null
+      ? 10
+      : peopleContentsQuery.hasNext
+          ? (_groupPeopleStory.length) + 1
+          : (_groupPeopleStory.length) + 1;
 
   int peopleItemCount(dynamic error) => _peopleStoriesData == null && error == null
       ? 10
@@ -63,8 +89,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
   bool get hasNext => peopleContentsQuery.hasNext;
 
   Future initialStories(BuildContext context, {List<ContentData>? list}) async {
-    initialMyStories(context);
-    print('hariyanto3');
+    // initialMyStories(context);
+    initialMyStoryGroup(context);
+    print('initialStories');
     initialPeopleStories(context, reload: true, list: list);
   }
 
@@ -83,6 +110,16 @@ class PreviewStoriesNotifier with ChangeNotifier {
         }
       }
     } catch (e) {
+      'load my story list: ERROR: $e'.logger();
+    }
+  }
+
+  Future initialMyStoryGroup(BuildContext context) async{
+    try{
+      final email = SharedPreference().readStorage(SpKeys.email);
+      final res = await myContentsQuery.reload(context);
+      myStoryGroup[email] = res;
+    }catch(e){
       'load my story list: ERROR: $e'.logger();
     }
   }
@@ -117,6 +154,16 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
       if (reload) {
         peopleStoriesData = res;
+        groupPeopleStory = {};
+        for(var data in res){
+          final email = data.email;
+          if(email != null){
+            if(groupPeopleStory[email] == null){
+              groupPeopleStory[email] = [];
+            }
+            groupPeopleStory[email]?.add(data);
+          }
+        }
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -125,6 +172,15 @@ class PreviewStoriesNotifier with ChangeNotifier {
           );
         }
       } else {
+        for(var data in res){
+          final email = data.email;
+          if(email != null){
+            if(groupPeopleStory[email] == null){
+              groupPeopleStory[email] = [];
+            }
+            groupPeopleStory[email]?.add(data);
+          }
+        }
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
       }
 
@@ -157,9 +213,22 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
+  void navigateToStoryGroup(BuildContext context, List stories){
+    print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
+    if(stories.isNotEmpty){
+      _routing.move(
+          Routes.showStories,
+          argument: StoryDetailScreenArgument(groupStories: myStoryGroup,
+          ),
+      );
+    }else{
+      uploadStories(context);
+    }
+  }
+
   void uploadStories(BuildContext context) {
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
-    notifier.thumbnailLocalMedia();
+    // notifier.thumbnailLocalMedia();
     notifier.featureType = FeatureType.story;
     notifier.selectedDuration = 15;
     Routing().move(Routes.makeContent);

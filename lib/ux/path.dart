@@ -51,6 +51,7 @@ class Routes {
   static const String diarySeeAllScreen = '/diary-see-all-screen';
 
   static const String storyDetail = '/story-detail';
+  static const String showStories = '/show-stories';
 
   static const String appSettings = '/app-settings';
   static const String themeScreen = '/theme-screen';

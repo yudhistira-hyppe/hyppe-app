@@ -237,7 +237,7 @@ class _DiaryPageState extends State<DiaryPage> {
                       : widget.data?.music?.musicTitle != null
                           ? Padding(
                               padding: const EdgeInsets.all(15.0),
-                              child: MusicStatusPage(music: widget.data!.music!),
+                              child: MusicStatusPage(music: widget.data!.music!, isPlay: false,),
                             )
                           : Container(),
                 )

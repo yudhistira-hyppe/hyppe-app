@@ -43,6 +43,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_group/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
@@ -191,7 +192,8 @@ class Generate {
 
       case Routes.storyDetail:
         return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
-
+      case Routes.showStories:
+        return MaterialPageRoute(builder: (_) => StoryGroupScreen(argument: settings.arguments as StoryDetailScreenArgument));
       case Routes.appSettings:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
 

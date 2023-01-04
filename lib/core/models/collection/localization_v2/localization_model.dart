@@ -838,6 +838,8 @@ class LocalizationModelV2 {
   String? messageMaxTickets;
   String? seeTicketHistory;
   String? activeTicketIssue;
+  String? seeMoreContent;
+  String? seeLess;
 
   LocalizationModelV2({
     this.login,
@@ -1679,6 +1681,8 @@ class LocalizationModelV2 {
     this.messageMaxTickets,
     this.seeTicketHistory,
     this.activeTicketIssue,
+    this.seeMoreContent,
+    this.seeLess,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2539,5 +2543,7 @@ class LocalizationModelV2 {
     messageMaxTickets = json['messageMaxTickets'];
     seeTicketHistory = json['seeTicketHistory'];
     activeTicketIssue = json['activeTicketIssue'];
+    seeMoreContent = json['seeMoreContent'];
+    seeLess = json['seeLess'];
   }
 }

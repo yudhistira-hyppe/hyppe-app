@@ -30,12 +30,13 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
     super.initState();
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));
+    notifier.initState(context, widget.argument);
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
     notifier.currentIndex = -1;
-    notifier.initState(context, widget.argument);
+
   }
 
   @override

@@ -988,13 +988,14 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
                 suffixIcon: Row(
                   mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
                           onTap: (){
                             notifier.onTapOnFrameLocalMedia(context);
                           },
                             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}galery_icon.svg")),
-                        notifier.commentController.text.isNotEmpty ? tenPx : fourPx,
+                        notifier.commentController.text.isNotEmpty ? tenPx : twelvePx,
                         if(notifier.commentController.text.isNotEmpty)
                         GestureDetector(
                           onTap: () async{
@@ -1006,7 +1007,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                               width: 24,
                               iconData: "${AssetPath.vectorPath}logo-purple.svg", defaultColor: false, color: kHyppePrimary,)),
                         if(notifier.commentController.text.isNotEmpty)
-                          twelvePx
+                          tenPx
                       ],
                     )
             ),
