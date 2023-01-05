@@ -436,7 +436,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
-    _currentPage = routeArgument.index;
+    _currentPage = routeArgument.peopleIndex.toDouble();
     _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
     final storyItems = routeArgument.storyItems;

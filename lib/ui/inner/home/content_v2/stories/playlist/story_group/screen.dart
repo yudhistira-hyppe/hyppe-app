@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/screen_v2.dart';
 import 'package:provider/provider.dart';
-import 'package:story_view/controller/story_controller.dart';
 
 import '../../../../../../../core/arguments/contents/story_detail_screen_argument.dart';
 import '../notifier.dart';
@@ -24,7 +23,8 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.argument.index.toInt());
+    print('initState peopleIndex : ${widget.argument.peopleIndex}');
+    _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));
     notifier.initStateGroup(context, widget.argument);
   }

@@ -374,7 +374,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         argument: StoryDetailScreenArgument(
             groupStories: groupPeopleStory,
             storyItems: storyItemGroup,
-          peopleIndex: index,
+            peopleIndex: index,
         )
     );
   }
