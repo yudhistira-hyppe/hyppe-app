@@ -37,9 +37,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Map<String, List<ContentData>> _groupPeopleStory = {};
 
-  Map<String, List<StoryItem>> _storyItemGroup = {};
-
-
   List<ContentData>? _myStoriesData;
 
   Map<String, List<ContentData>> _myStoryGroup = {};
@@ -49,8 +46,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
   List<ContentData>? get peopleStoriesData => _peopleStoriesData;
 
   Map<String, List<ContentData>> get groupPeopleStory => _groupPeopleStory;
-
-  Map<String, List<StoryItem>> get storyItemGroup => _storyItemGroup;
 
   List<ContentData>? get myStoriesData => _myStoriesData;
 
@@ -72,11 +67,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   set groupPeopleStory(Map<String, List<ContentData>> map) {
     _groupPeopleStory = map;
-    notifyListeners();
-  }
-
-  set storyItemGroup(Map<String, List<StoryItem>> maps){
-    _storyItemGroup = maps;
     notifyListeners();
   }
 
@@ -176,7 +166,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
       if (reload) {
         peopleStoriesData = res;
         groupPeopleStory = {};
-        storyItemGroup = {};
         for (var data in res) {
           final email = data.email;
           if (email != null) {
@@ -186,7 +175,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
             groupPeopleStory[email]?.add(data);
           }
         }
-        setStoriItems(context);
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -195,7 +183,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
           );
         }
       } else {
-        storyItemGroup = {};
         for (var data in res) {
           final email = data.email;
           if (email != null) {
@@ -206,7 +193,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
           }
         }
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
-        setStoriItems(context);
       }
 
       if (peopleStoriesData != null) {
@@ -217,83 +203,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  Future setStoriItems(BuildContext context) async{
-    _groupPeopleStory.forEach((key, value) async{
-      for(final story in value){
-        final userEmail = story.email;
-        if(userEmail != null){
-          if (story.mediaType?.translateType() == ContentType.image) {
-            if (story.music?.apsaraMusic != null) {
-              story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
-              final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
-              if(_storyItemGroup[userEmail] == null){
-                _storyItemGroup[userEmail] = [];
-              }
-              _storyItemGroup[userEmail]?.add(
-                StoryItem.pageImage(
-                  url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
-                  controller: storyController,
-                  imageFit: BoxFit.contain,
-                  isImages: true,
-                  id: story.postID ?? '',
-                  duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
-                  requestHeaders: {
-                    'post-id': story.postID ?? '',
-                    'x-auth-user': SharedPreference().readStorage(SpKeys.email),
-                    'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
-                  },
-                ),
-              );
-            } else {
-              if(_storyItemGroup[userEmail] == null){
-                _storyItemGroup[userEmail] = [];
-              }
-              _storyItemGroup[userEmail]?.add(
-                StoryItem.pageImage(
-                  url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
-                  controller: storyController,
-                  imageFit: BoxFit.contain,
-                  isImages: true,
-                  id: story.postID ?? '',
-                  requestHeaders: {
-                    'post-id': story.postID ?? '',
-                    'x-auth-user': SharedPreference().readStorage(SpKeys.email),
-                    'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
-                  },
-                ),
-              );
-            }
-          }
-          if (story.mediaType?.translateType() == ContentType.video) {
-            String urlApsara = '';
-            if (story.isApsara ?? false) {
-              await getVideoApsara(context, story.apsaraId ?? '').then((value) {
-                urlApsara = value;
-              });
-            }
-            print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
-            if(_storyItemGroup[userEmail] == null){
-              _storyItemGroup[userEmail] = [];
-            }
-            _storyItemGroup[userEmail]?.add(
-              StoryItem.pageVideo(
-                urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
-                controller: storyController,
-                id: story.postID ?? '',
-                requestHeaders: {
-                  'post-id': story.postID ?? '',
-                  'x-auth-user': SharedPreference().readStorage(SpKeys.email),
-                  'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
-                },
-                duration: Duration(seconds: story.metadata?.duration ?? 15),
-              ),
-            );
-          }
-        }
-      }
 
-    });
-  }
 
   Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
     try {
@@ -359,7 +269,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
         Routes.showStories,
         argument: StoryDetailScreenArgument(
             groupStories: myStoryGroup,
-            storyItems: storyItemGroup,
         ),
       );
     } else {
@@ -373,7 +282,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
         Routes.showStories,
         argument: StoryDetailScreenArgument(
             groupStories: groupPeopleStory,
-            storyItems: storyItemGroup,
             peopleIndex: index,
         )
     );

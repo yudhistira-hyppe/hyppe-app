@@ -83,12 +83,14 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-      notifier.initializeUserStories(context, _storyController, widget.stories);
-      Future.delayed(const Duration(milliseconds: 1000), () {
-        setState(() {
-          isLoading = false;
+      notifier.initializeUserStories(context, _storyController, widget.stories).then((value){
+        Future.delayed(const Duration(milliseconds: 500), () {
+          setState(() {
+            isLoading = false;
+          });
         });
       });
+
     });
   }
 

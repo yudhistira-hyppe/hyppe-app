@@ -67,8 +67,7 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                         final key = notifier.groupUserStories.keys.elementAt(index);
                         print('Story index $index : ${notifier.currentPage}, ${notifier.currentIndex}, $key');
                         final values = notifier.groupUserStories[key] ?? [];
-                        final item = notifier.storyItemGroup[key] ?? [];
-                        if (notifier.currentIndex == index) {
+                        if (notifier.currentIndex == index && notifier.currentPage?.floor() == index) {
                           double value = (notifier.currentPage ?? 1) - index;
                           double degValue = notifier.degreeToRadian(value * 90);
                           return Transform(
@@ -83,6 +82,7 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                             ),
                           );
                         }
+
                         return Center(
                           child: CircularProgressIndicator(
                             strokeWidth: 2.0,

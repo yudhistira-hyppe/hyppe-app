@@ -84,7 +84,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   PageController? _pageController = PageController(initialPage: 0);
   List<ContentData> _dataUserStories = [];
   Map<String, List<ContentData>> _groupUserStories = {};
-  Map<String, List<StoryItem>> _storyItemGroup = {};
   final TextEditingController _textEditingController = TextEditingController();
 
   bool get isReactAction => _isReactAction;
@@ -105,7 +104,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   PageController? get pageController => _pageController;
   List<ContentData> get dataUserStories => _dataUserStories;
   Map<String, List<ContentData>> get groupUserStories => _groupUserStories;
-  Map<String, List<StoryItem>> get storyItemGroup => _storyItemGroup;
   TextEditingController get textEditingController => _textEditingController;
 
   int _currentIndex = -1;
@@ -172,10 +170,6 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set storyItemGroup(Map<String, List<StoryItem>> maps){
-    _storyItemGroup = maps;
-    notifyListeners();
-  }
 
   set currentIndex(int index) {
     _currentIndex = index;
@@ -439,12 +433,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _currentPage = routeArgument.peopleIndex.toDouble();
     _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
-    final storyItems = routeArgument.storyItems;
     if (groups != null) {
       _groupUserStories = groups;
-    }
-    if(storyItems != null){
-      _storyItemGroup = storyItems;
     }
   }
 
