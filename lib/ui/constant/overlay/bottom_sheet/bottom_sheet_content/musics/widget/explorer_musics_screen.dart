@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_text_widget.dart';
+import '../../../../../widget/no_result_found.dart';
 import 'music_item.dart';
 
 class ExplorerMusicsScreen extends StatefulWidget {
@@ -59,8 +60,6 @@ class _ExplorerMusicsScreenState extends State<ExplorerMusicsScreen> {
         }
         return MusicItemScreen(music: notifier.listExpMusics[index], index: index, isExplored: true,);
       },
-    ): Center(
-      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    );
+    ): const NoResultFound();
   }
 }

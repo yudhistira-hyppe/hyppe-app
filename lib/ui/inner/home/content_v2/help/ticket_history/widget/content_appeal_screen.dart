@@ -7,6 +7,7 @@ import '../../../../../../constant/widget/after_first_layout_mixin.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
 import '../../../../../../constant/widget/custom_shimmer.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
+import '../../../../../../constant/widget/no_result_found.dart';
 
 class ContentAppealScreen extends StatefulWidget {
   const ContentAppealScreen({Key? key}) : super(key: key);
@@ -61,9 +62,7 @@ class _ContentAppealScreenState extends State<ContentAppealScreen> with AfterFir
               return ItemContentAppeal(data: notifier.listAppeals[index], model: notifier.language, isFirst: index == 0,);
             }
           }),
-    ) : Center(
-      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    ): ListView.builder(
+    ) : const NoResultFound(): ListView.builder(
         itemCount: 15,
         itemBuilder: (context, index) {
           return const Padding(

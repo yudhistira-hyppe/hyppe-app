@@ -17,6 +17,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/arguments/ticket_argument.dart';
+import '../../../../constant/widget/no_result_found.dart';
 
 class HelpScreen extends StatefulWidget {
   const HelpScreen({Key? key}) : super(key: key);
@@ -120,9 +121,7 @@ class _HelpScreenState extends State<HelpScreen> with AfterFirstLayoutMixin {
                                     },
                                     child: Container(width: double.infinity, margin: const EdgeInsets.only(top: 10, bottom: 10, right: 10), child: Text(notifier.listFAQ[index].kategori ?? '')));
                               })
-                          : Center(
-                              child: Text(notifier.translate.noData ?? 'No Data Found'),
-                            )
+                          : const NoResultFound()
                       : ListView.builder(
                           itemCount: 8,
                           itemBuilder: (context, index) {

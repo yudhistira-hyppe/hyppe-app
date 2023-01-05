@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -11,6 +13,13 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:story_view/controller/story_controller.dart';
+import 'package:story_view/widgets/story_view.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+
+import '../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../core/bloc/posts_v2/state.dart';
+import '../../../../../../core/models/collection/music/music.dart';
 
 class PreviewStoriesNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -28,6 +37,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Map<String, List<ContentData>> _groupPeopleStory = {};
 
+  Map<String, List<StoryItem>> _storyItemGroup = {};
+
+
   List<ContentData>? _myStoriesData;
 
   Map<String, List<ContentData>> _myStoryGroup = {};
@@ -38,11 +50,15 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Map<String, List<ContentData>> get groupPeopleStory => _groupPeopleStory;
 
+  Map<String, List<StoryItem>> get storyItemGroup => _storyItemGroup;
+
   List<ContentData>? get myStoriesData => _myStoriesData;
 
   Map<String, List<ContentData>> get myStoryGroup => _myStoryGroup;
 
   int get totalViews => _totalViews;
+
+  StoryController storyController = StoryController();
 
   changeBorderColor(ContentData contentData) {
     contentData.isViewed = true;
@@ -56,6 +72,11 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   set groupPeopleStory(Map<String, List<ContentData>> map) {
     _groupPeopleStory = map;
+    notifyListeners();
+  }
+
+  set storyItemGroup(Map<String, List<StoryItem>> maps){
+    _storyItemGroup = maps;
     notifyListeners();
   }
 
@@ -155,6 +176,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
       if (reload) {
         peopleStoriesData = res;
         groupPeopleStory = {};
+        storyItemGroup = {};
         for (var data in res) {
           final email = data.email;
           if (email != null) {
@@ -164,6 +186,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
             groupPeopleStory[email]?.add(data);
           }
         }
+        setStoriItems(context);
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -172,6 +195,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
           );
         }
       } else {
+        storyItemGroup = {};
         for (var data in res) {
           final email = data.email;
           if (email != null) {
@@ -182,6 +206,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
           }
         }
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
+        setStoriItems(context);
       }
 
       if (peopleStoriesData != null) {
@@ -189,6 +214,121 @@ class PreviewStoriesNotifier with ChangeNotifier {
       }
     } catch (e) {
       'load people story list: ERROR: $e'.logger();
+    }
+  }
+
+  Future setStoriItems(BuildContext context) async{
+    _groupPeopleStory.forEach((key, value) async{
+      for(final story in value){
+        final userEmail = story.email;
+        if(userEmail != null){
+          if (story.mediaType?.translateType() == ContentType.image) {
+            if (story.music?.apsaraMusic != null) {
+              story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
+              final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
+              if(_storyItemGroup[userEmail] == null){
+                _storyItemGroup[userEmail] = [];
+              }
+              _storyItemGroup[userEmail]?.add(
+                StoryItem.pageImage(
+                  url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+                  controller: storyController,
+                  imageFit: BoxFit.contain,
+                  isImages: true,
+                  id: story.postID ?? '',
+                  duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+                  requestHeaders: {
+                    'post-id': story.postID ?? '',
+                    'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+                    'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+                  },
+                ),
+              );
+            } else {
+              if(_storyItemGroup[userEmail] == null){
+                _storyItemGroup[userEmail] = [];
+              }
+              _storyItemGroup[userEmail]?.add(
+                StoryItem.pageImage(
+                  url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+                  controller: storyController,
+                  imageFit: BoxFit.contain,
+                  isImages: true,
+                  id: story.postID ?? '',
+                  requestHeaders: {
+                    'post-id': story.postID ?? '',
+                    'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+                    'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+                  },
+                ),
+              );
+            }
+          }
+          if (story.mediaType?.translateType() == ContentType.video) {
+            String urlApsara = '';
+            if (story.isApsara ?? false) {
+              await getVideoApsara(context, story.apsaraId ?? '').then((value) {
+                urlApsara = value;
+              });
+            }
+            print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
+            if(_storyItemGroup[userEmail] == null){
+              _storyItemGroup[userEmail] = [];
+            }
+            _storyItemGroup[userEmail]?.add(
+              StoryItem.pageVideo(
+                urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
+                controller: storyController,
+                id: story.postID ?? '',
+                requestHeaders: {
+                  'post-id': story.postID ?? '',
+                  'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+                  'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+                },
+                duration: Duration(seconds: story.metadata?.duration ?? 15),
+              ),
+            );
+          }
+        }
+      }
+
+    });
+  }
+
+  Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        final String dur = jsonMap['Duration'];
+        final duration = double.parse(dur);
+        return MusicUrl(playUrl: jsonMap['PlayUrl'], duration: duration);
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
+  }
+
+  Future getVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        return jsonMap['PlayUrl'].toString();
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+      return '';
     }
   }
 
@@ -212,18 +352,33 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToStoryGroup(BuildContext context, List stories) {
+  void navigateToMyStoryGroup(BuildContext context, List stories) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,
         argument: StoryDetailScreenArgument(
-          groupStories: myStoryGroup,
+            groupStories: myStoryGroup,
+            storyItems: storyItemGroup,
+            controller: storyController,
         ),
       );
     } else {
       uploadStories(context);
     }
+  }
+
+  void navigateToPeopleStoryGroup(BuildContext context, int index) {
+    print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
+    _routing.move(
+        Routes.showStories,
+        argument: StoryDetailScreenArgument(
+            groupStories: groupPeopleStory,
+            storyItems: storyItemGroup,
+            controller: storyController,
+          peopleIndex: index,
+        )
+    );
   }
 
   void uploadStories(BuildContext context) {
