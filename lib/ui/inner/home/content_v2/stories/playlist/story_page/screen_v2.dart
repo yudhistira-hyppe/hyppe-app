@@ -28,18 +28,14 @@ import '../notifier.dart';
 
 class StoryPageV2 extends StatefulWidget {
   final List<ContentData> stories;
-  final List<StoryItem> items;
   bool? isScrolling;
   final PageController? controller;
-  final StoryController storyController;
 
   StoryPageV2({
     Key? key,
     required this.stories,
-    required this.items,
     this.isScrolling,
     this.controller,
-    required this.storyController
   }) : super(key: key);
 
   @override
@@ -49,12 +45,13 @@ class StoryPageV2 extends StatefulWidget {
 class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin{
   Map<String, String> times = {};
   late AnimationController animationController;
+  final StoryController _storyController = StoryController();
   late ContentData currentData;
   bool isLoading = true;
 
   @override
   void initState() {
-    isLoading = true;
+    // isLoading = false;
     currentData = widget.stories[0];
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
     if(widget.stories.isNotEmpty){
@@ -76,7 +73,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
 
   @override
   void dispose() {
-    widget.storyController.dispose();
+    _storyController.dispose();
     animationController.dispose();
     super.dispose();
   }
@@ -85,10 +82,9 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
   void afterFirstLayout(BuildContext context) {
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-      
-      Future.delayed(const Duration(milliseconds: 500), () {
-        // notifier.initializeUserStories(context, widget.storyController, widget.stories, widget.items);
+      final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
+      notifier.initializeUserStories(context, _storyController, widget.stories);
+      Future.delayed(const Duration(milliseconds: 1000), () {
         setState(() {
           isLoading = false;
         });
@@ -108,18 +104,28 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     }
     // logic when list isScrolled, pause the story
     if (widget.isScrolling ?? false) {
-      widget.storyController.pause();
-    } else {
-      if (widget.storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction && !notifier.isReactAction) {
-        widget.storyController.play();
+      try{
+        _storyController.pause();
+      }catch(e){
+        'error pause story : $e'.logger();
       }
+
+    } else {
+      try{
+        if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction && !notifier.isReactAction) {
+          _storyController.play();
+        }
+      }catch(e){
+        'error pause story : $e'.logger();
+      }
+
     }
 
     if (notifier.forceStop) {
-      widget.storyController.pause();
+      _storyController.pause();
     }
 
-    if(widget.items.isEmpty){
+    if(notifier.result.isEmpty){
       return isLoading ? Container(
           color: Colors.black,
           width: 100,
@@ -208,12 +214,12 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
               print('testtttt');
               context.read<LikeNotifier>().likePost(context, currentData);
             },
-            controller: widget.storyController,
-            storyItems: widget.items,
+            controller: _storyController,
+            storyItems: notifier.result,
             progressPosition: ProgressPosition.top,
             onStoryShow: (storyItem) async {
 
-              int pos = widget.items.indexOf(storyItem);
+              int pos = notifier.result.indexOf(storyItem);
               notifier.setCurrentStory(pos);
 
               setState(() {
@@ -224,7 +230,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                 }
               });
 
-              widget.storyController.playbackNotifier.listen((value) {
+              _storyController.playbackNotifier.listen((value) {
                 if (value == PlaybackState.previous) {
                   if (widget.controller?.page == 0) {
                     notifier.onCloseStory(mounted);
@@ -316,13 +322,13 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
           BuildTopView(
             when: times[currentData.postID ?? ''] ?? '',
             data: currentData,
-            storyController: widget.storyController,
+            storyController: _storyController,
           ),
           (currentData.isReport ?? false) ? Container() :
           Form(
             child: BuildBottomView(
               data: currentData,
-              storyController: widget.storyController,
+              storyController: _storyController,
               currentStory: notifier.currentStory,
               animationController: animationController,
               currentIndex: widget.stories.indexOf(currentData),

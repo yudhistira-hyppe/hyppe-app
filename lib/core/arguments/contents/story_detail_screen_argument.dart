@@ -11,10 +11,9 @@ class StoryDetailScreenArgument extends ContentScreenArgument {
   final List<ContentData>? storyData;
   final Map<String, List<ContentData>>? groupStories;
   final Map<String, List<StoryItem>>? storyItems;
-  final StoryController? controller;
 
   @override
   FeatureType get featureType => FeatureType.story;
 
-  StoryDetailScreenArgument({this.index = 0, this.peopleIndex = 0, this.storyData, this.groupStories, this.storyItems, this.controller});
+  StoryDetailScreenArgument({this.index = 0, this.peopleIndex = 0, this.storyData, this.groupStories, this.storyItems});
 }

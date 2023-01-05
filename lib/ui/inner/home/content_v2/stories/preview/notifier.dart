@@ -360,7 +360,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
         argument: StoryDetailScreenArgument(
             groupStories: myStoryGroup,
             storyItems: storyItemGroup,
-            controller: storyController,
         ),
       );
     } else {
@@ -375,7 +374,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
         argument: StoryDetailScreenArgument(
             groupStories: groupPeopleStory,
             storyItems: storyItemGroup,
-            controller: storyController,
           peopleIndex: index,
         )
     );

@@ -31,7 +31,6 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
 
   @override
   void afterFirstLayout(BuildContext context) {
-    notifier.currentIndex = -1;
 
   }
 
@@ -66,7 +65,7 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                       },
                       itemBuilder: (context, index){
                         final key = notifier.groupUserStories.keys.elementAt(index);
-                        print('Story index $index : ${notifier.currentPage}, $key');
+                        print('Story index $index : ${notifier.currentPage}, ${notifier.currentIndex}, $key');
                         final values = notifier.groupUserStories[key] ?? [];
                         final item = notifier.storyItemGroup[key] ?? [];
                         if (notifier.currentIndex == index) {
@@ -81,8 +80,6 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                               isScrolling: _pageController.position.activity?.isScrolling ?? false,
                               controller: _pageController,
                               stories: values,
-                              items: item,
-                              storyController: widget.argument.controller ?? StoryController(),
                             ),
                           );
                         }

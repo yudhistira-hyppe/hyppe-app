@@ -267,75 +267,71 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
 
 
-  // Future initializeUserStories(BuildContext context, StoryController storyController, List<ContentData> stories, List<StoryItem> myItems) async {
-  //   _result = [];
-  //   if(items.isNotEmpty){
-  //     _result = myItems;
-  //   }else{
-  //     for (final story in stories) {
-  //       if (story.mediaType?.translateType() == ContentType.image) {
-  //         if (story.music?.apsaraMusic != null) {
-  //           story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
-  //           final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
-  //           _result.add(
-  //             StoryItem.pageImage(
-  //               url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
-  //               controller: storyController,
-  //               imageFit: BoxFit.contain,
-  //               isImages: true,
-  //               id: story.postID ?? '',
-  //               duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
-  //               requestHeaders: {
-  //                 'post-id': story.postID ?? '',
-  //                 'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-  //                 'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-  //               },
-  //             ),
-  //           );
-  //         } else {
-  //           _result.add(
-  //             StoryItem.pageImage(
-  //               url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
-  //               controller: storyController,
-  //               imageFit: BoxFit.contain,
-  //               isImages: true,
-  //               id: story.postID ?? '',
-  //               requestHeaders: {
-  //                 'post-id': story.postID ?? '',
-  //                 'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-  //                 'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-  //               },
-  //             ),
-  //           );
-  //         }
-  //       }
-  //       if (story.mediaType?.translateType() == ContentType.video) {
-  //         String urlApsara = '';
-  //         if (story.isApsara ?? false) {
-  //           await getVideoApsara(context, story.apsaraId ?? '').then((value) {
-  //             urlApsara = value;
-  //           });
-  //         }
-  //         print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
-  //         _result.add(
-  //           StoryItem.pageVideo(
-  //             urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
-  //             controller: storyController,
-  //             id: story.postID ?? '',
-  //             requestHeaders: {
-  //               'post-id': story.postID ?? '',
-  //               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-  //               'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-  //             },
-  //             duration: Duration(seconds: story.metadata?.duration ?? 15),
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   }
-  //
-  //   notifyListeners();
-  // }
+  Future initializeUserStories(BuildContext context, StoryController storyController, List<ContentData> stories) async {
+    _result = [];
+    for (final story in stories) {
+      if (story.mediaType?.translateType() == ContentType.image) {
+        if (story.music?.apsaraMusic != null) {
+          story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
+          final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
+          _result.add(
+            StoryItem.pageImage(
+              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              controller: storyController,
+              imageFit: BoxFit.contain,
+              isImages: true,
+              id: story.postID ?? '',
+              duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+              requestHeaders: {
+                'post-id': story.postID ?? '',
+                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+              },
+            ),
+          );
+        } else {
+          _result.add(
+            StoryItem.pageImage(
+              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              controller: storyController,
+              imageFit: BoxFit.contain,
+              isImages: true,
+              id: story.postID ?? '',
+              requestHeaders: {
+                'post-id': story.postID ?? '',
+                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+              },
+            ),
+          );
+        }
+      }
+      if (story.mediaType?.translateType() == ContentType.video) {
+        String urlApsara = '';
+        if (story.isApsara ?? false) {
+          await getVideoApsara(context, story.apsaraId ?? '').then((value) {
+            urlApsara = value;
+          });
+        }
+        print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
+        _result.add(
+          StoryItem.pageVideo(
+            urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
+            controller: storyController,
+            id: story.postID ?? '',
+            requestHeaders: {
+              'post-id': story.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+            duration: Duration(seconds: story.metadata?.duration ?? 15),
+          ),
+        );
+      }
+    }
+
+    notifyListeners();
+  }
 
   // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
   Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
@@ -441,7 +437,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
     _currentPage = routeArgument.index;
-    _currentIndex = 0;
+    _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
     final storyItems = routeArgument.storyItems;
     if (groups != null) {
