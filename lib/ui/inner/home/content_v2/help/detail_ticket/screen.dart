@@ -611,6 +611,15 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  if(chatData.fsTargetUri?.isNotEmpty ?? false)
+                  Builder(
+                      builder: (context) {
+
+                        return _getGridListImages(chatData.ticketUrls);
+                      }
+                  ),
+                  if(chatData.fsTargetUri?.isNotEmpty ?? false)
+                    tenPx,
                   CustomTextWidget(
                     // textToDisplay: chatData.message,
                     textAlign: TextAlign.start,
