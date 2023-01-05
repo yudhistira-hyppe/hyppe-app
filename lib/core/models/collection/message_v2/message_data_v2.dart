@@ -56,9 +56,9 @@ class MessageDataV2 {
     username = json['username'];
     lastestMessage = json["lastestMessage"];
     senderOrReceiverInfo = json['senderOrReceiverInfo'] != null ? SenderOrReceiverInfo.fromJson(json['senderOrReceiverInfo']) : null;
-    if(json['fcmMessage'] != null){
+    if (json['fcmMessage'] != null) {
       fcmMessage = json['fcmMessage'];
-    }else{
+    } else {
       fcmMessage = lastestMessage;
     }
   }
@@ -165,6 +165,7 @@ class DisqusLogs {
   String? lineID;
   Mate? senderInfo;
   String? id;
+  List<Medias> medias = [];
 
   DisqusLogs({
     this.createdAt,
@@ -180,6 +181,7 @@ class DisqusLogs {
     this.lineID,
     this.senderInfo,
     this.id,
+    this.medias = const [],
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -200,6 +202,11 @@ class DisqusLogs {
     reactionIcon = json['reaction_icon'];
     lineID = json['lineID'];
     senderInfo = json['senderInfo'] != null ? Mate.fromJson(json['senderInfo']) : null;
+    if (json['medias'] != null) {
+      json['medias'].forEach((v) {
+        medias.add(Medias.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -322,5 +329,31 @@ class SenderOrReceiverInfo {
     data['email'] = email;
     data['username'] = username;
     return data;
+  }
+}
+
+class Medias {
+  String? createdAt;
+  String? postType;
+  String? description;
+  bool? active;
+  String? mediaType;
+  String? mediaThumbEndpoint;
+  String? postID;
+  bool? apsara;
+  String? apsaraId;
+
+  Medias({this.createdAt, this.postType, this.description, this.active, this.mediaType, this.mediaThumbEndpoint, this.postID, this.apsara, this.apsaraId});
+
+  Medias.fromJson(Map<String, dynamic> json) {
+    createdAt = json['createdAt'];
+    postType = json['postType'];
+    description = json['description'];
+    active = json['active'];
+    mediaType = json['mediaType'];
+    mediaThumbEndpoint = json['mediaThumbEndpoint'];
+    postID = json['postID'];
+    apsara = json['apsara'];
+    apsaraId = json['apsaraId'];
   }
 }

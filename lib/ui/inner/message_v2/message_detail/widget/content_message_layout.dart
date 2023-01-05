@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/services/system.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -24,7 +25,7 @@ class ContentMessageLayout extends StatelessWidget {
             Routes.imagePreviewScreen,
             argument: ImagePreviewArgument(
               heroTag: message.hashCode,
-              sourceImage: message?.content.first.fullThumbPath ?? '',
+              sourceImage: message?.medias.first.mediaThumbEndpoint ?? '',
             ),
           );
         },
@@ -44,7 +45,7 @@ class ContentMessageLayout extends StatelessWidget {
                 ),
               );
             },
-            imageUrl: (message?.content.first.apsara ?? false) ? message?.content.first.mediaThumbEndpoint ?? '' : message?.content.first.fullThumbPath,
+            imageUrl: (message?.medias.first.apsara ?? false) ? message?.medias.first.mediaThumbEndpoint ?? '' : System().showUserPicture(message?.medias.first.mediaThumbEndpoint),
             emptyWidget: Container(
               height: 50,
               decoration: const BoxDecoration(

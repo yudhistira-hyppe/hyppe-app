@@ -26,7 +26,6 @@ class StoryPageV2 extends StatefulWidget {
   bool? isScrolling;
   final PageController? controller;
 
-
   StoryPageV2({
     Key? key,
     required this.stories,
@@ -38,7 +37,7 @@ class StoryPageV2 extends StatefulWidget {
   State<StoryPageV2> createState() => _StoryPageV2State();
 }
 
-class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin{
+class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   Map<String, String> times = {};
   late AnimationController animationController;
   final StoryController _storyController = StoryController();
@@ -50,10 +49,10 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     isLoading = true;
     currentData = widget.stories[0];
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
-    if(widget.stories.isNotEmpty){
-      for(final story in widget.stories){
+    if (widget.stories.isNotEmpty) {
+      for (final story in widget.stories) {
         final postId = story.postID;
-        if(postId != null){
+        if (postId != null) {
           times[postId] = '${System().readTimestamp(
             DateTime.parse(story.createdAt ?? '').millisecondsSinceEpoch,
             context,
@@ -65,7 +64,6 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
 
     super.initState();
   }
-
 
   @override
   void dispose() {
@@ -87,7 +85,6 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
       });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,180 +108,179 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
       _storyController.pause();
     }
 
-    if(notifier.result.isEmpty){
-      return isLoading ? Container(
-          color: Colors.black,
-          width: 100,
-          height: 100,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              SizedBox(
-                height: 90,
-                child: SizedBox(
-                  height: 10,
-                  child: CustomLoading(),
-                ),
-              ),
-            ],
-          )) : Container(
-          color: Colors.black,
-          width: 100,
-          height: 100,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              SizedBox(
-                height: 90,
-                child: SizedBox(
-                  height: 10,
-                  child: CustomLoading(),
-                ),
-              ),
-            ],
-          ));
-    }else{
+    if (notifier.result.isEmpty) {
       return isLoading
           ? Container(
-          color: Colors.black,
-          width: 100,
-          height: 100,
-          child: Stack(
-            children: [
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    SizedBox(
-                      height: 90,
-                      child: SizedBox(
-                        height: 10,
-                        child: CustomLoading(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 50,
-                right: 20,
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: CustomTextButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                        const EdgeInsets.only(left: 0.0),
-                      ),
-                    ),
-                    // onPressed: () => notifier.onCloseStory(context, arguments),
-                    onPressed: () => notifier.onCloseStory(mounted),
-                    child: const CustomIconWidget(
-                      defaultColor: false,
-                      color: kHyppeLightButtonText,
-                      iconData: "${AssetPath.vectorPath}close.svg",
+              color: Colors.black,
+              width: 100,
+              height: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                    height: 90,
+                    child: SizedBox(
+                      height: 10,
+                      child: CustomLoading(),
                     ),
                   ),
+                ],
+              ))
+          : Container(
+              color: Colors.black,
+              width: 100,
+              height: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                    height: 90,
+                    child: SizedBox(
+                      height: 10,
+                      child: CustomLoading(),
+                    ),
+                  ),
+                ],
+              ));
+    } else {
+      return isLoading
+          ? Container(
+              color: Colors.black,
+              width: 100,
+              height: 100,
+              child: Stack(
+                children: [
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SizedBox(
+                          height: 90,
+                          child: SizedBox(
+                            height: 10,
+                            child: CustomLoading(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 50,
+                    right: 20,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: CustomTextButton(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.only(left: 0.0),
+                          ),
+                        ),
+                        // onPressed: () => notifier.onCloseStory(context, arguments),
+                        onPressed: () => notifier.onCloseStory(context, mounted),
+                        child: const CustomIconWidget(
+                          defaultColor: false,
+                          color: kHyppeLightButtonText,
+                          iconData: "${AssetPath.vectorPath}close.svg",
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ))
+          : Stack(
+              children: [
+                StoryView(
+                  inline: false,
+                  repeat: false,
+                  progressColor: kHyppeLightButtonText,
+                  durationColor: kHyppeLightButtonText,
+                  onDouble: () {
+                    print('testtttt');
+                    context.read<LikeNotifier>().likePost(context, currentData);
+                  },
+                  controller: _storyController,
+                  storyItems: notifier.result,
+                  progressPosition: ProgressPosition.top,
+                  onStoryShow: (storyItem) async {
+                    setState(() {
+                      int pos = notifier.result.indexOf(storyItem);
+                      notifier.setCurrentStory(pos);
+                      try {
+                        currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
+                      } catch (e) {
+                        'Error get current content data: $e'.logger();
+                      }
+                    });
+
+                    _storyController.playbackNotifier.listen((value) {
+                      if (value == PlaybackState.previous) {
+                        print("widget.controller?.page ${storyItem}");
+                        if (notifier.currentStory == 0) {
+                          print('kesini');
+                          // notifier.onCloseStory(context, mounted);
+                        } else {
+                          widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                        }
+                      }
+                    });
+
+                    // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
+                  },
+                  onComplete: () {
+                    widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                    final currentIndex = notifier.dataUserStories.length - 1;
+                    final isLastPage = currentIndex == widget.controller?.page;
+                    // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                    // notifier.pageController =
+                    print('onComplete Diary');
+                    System().increaseViewCount(context, currentData).whenComplete(() {});
+                    if (isLastPage) {
+                      notifier.onCloseStory(context, mounted);
+                    }
+                  },
+                  onEverySecond: (duration) {},
+                  onVerticalSwipeComplete: (v) {
+                    // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
+                    if (v == Direction.down) notifier.onCloseStory(context, mounted);
+                  },
                 ),
-              )
-            ],
-          )) : Stack(
-        children: [
-          StoryView(
-            inline: false,
-            repeat: false,
-            progressColor: kHyppeLightButtonText,
-            durationColor: kHyppeLightButtonText,
-            onDouble: () {
-              print('testtttt');
-              context.read<LikeNotifier>().likePost(context, currentData);
-            },
-            controller: _storyController,
-            storyItems: notifier.result,
-            progressPosition: ProgressPosition.top,
-            onStoryShow: (storyItem) async {
+                Container(),
+                BuildTopView(
+                  when: times[currentData.postID ?? ''] ?? '',
+                  data: currentData,
+                  storyController: _storyController,
+                ),
+                Form(
+                  child: BuildBottomView(
+                    data: currentData,
+                    storyController: _storyController,
+                    currentStory: notifier.currentStory,
+                    animationController: animationController,
+                    currentIndex: widget.stories.indexOf(currentData),
+                  ),
+                ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 800),
+                  transitionBuilder: (child, animation) {
+                    animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
 
-              int pos = notifier.result.indexOf(storyItem);
-              notifier.setCurrentStory(pos);
-
-              setState(() {
-                try{
-                  currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
-                }catch(e){
-                  'Error get current content data: $e'.logger();
-                }
-              });
-
-              _storyController.playbackNotifier.listen((value) {
-                if (value == PlaybackState.previous) {
-                  if (widget.controller?.page == 0) {
-                    notifier.onCloseStory(mounted);
-                  } else {
-                    widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                  }
-                }
-              });
-
-              // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
-            },
-            onComplete: () {
-              widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-              final currentIndex = notifier.dataUserStories.length - 1;
-              final isLastPage = currentIndex == widget.controller?.page;
-              // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-              // notifier.pageController =
-              print('onComplete Diary');
-              System().increaseViewCount(context, currentData).whenComplete(() {});
-              if (isLastPage) {
-                notifier.onCloseStory(mounted);
-              }
-            },
-            onEverySecond: (duration) {},
-            onVerticalSwipeComplete: (v) {
-              // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
-              if (v == Direction.down) notifier.onCloseStory(mounted);
-            },
-          ),
-          Container(),
-          BuildTopView(
-            when: times[currentData.postID ?? ''] ?? '',
-            data: currentData,
-            storyController: _storyController,
-          ),
-          Form(
-            child: BuildBottomView(
-              data: currentData,
-              storyController: _storyController,
-              currentStory: notifier.currentStory,
-              animationController: animationController,
-              currentIndex: widget.stories.indexOf(currentData),
-            ),
-          ),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 800),
-            transitionBuilder: (child, animation) {
-              animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
-
-              return ScaleTransition(
-                scale: animation,
-                alignment: Alignment.center,
-                child: child,
-              );
-            },
-            child: notifier.linkCopied
-                ? const Center(
-              child: LinkCopied(),
-            )
-                : const SizedBox.shrink(),
-          ),
-          BuildReplayCaption(data: currentData),
-          ...notifier.buildItems(animationController)
-        ],
-      );
+                    return ScaleTransition(
+                      scale: animation,
+                      alignment: Alignment.center,
+                      child: child,
+                    );
+                  },
+                  child: notifier.linkCopied
+                      ? const Center(
+                          child: LinkCopied(),
+                        )
+                      : const SizedBox.shrink(),
+                ),
+                BuildReplayCaption(data: currentData),
+                ...notifier.buildItems(animationController)
+              ],
+            );
     }
   }
-
-
-
-
 }

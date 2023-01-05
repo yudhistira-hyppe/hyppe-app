@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     Future.delayed(Duration(milliseconds: 500), () {
       'didPopNext isOnHomeScreen true'.logger();
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
-      context.read<ReportNotifier>().inPosition = contentPosition.home;
+      // context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
     super.didPopNext();

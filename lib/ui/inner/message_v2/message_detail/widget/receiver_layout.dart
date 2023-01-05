@@ -34,7 +34,7 @@ class ReceiverLayout extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if ((chatData?.content.isNotEmpty ?? false))
+            if ((chatData?.medias.isNotEmpty ?? false))
               ContentMessageLayout(
                 message: chatData,
               ),

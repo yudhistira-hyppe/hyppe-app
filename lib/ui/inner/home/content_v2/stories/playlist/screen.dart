@@ -36,7 +36,6 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
   @override
   void afterFirstLayout(BuildContext context) {
     notifier.currentIndex = -1;
-
   }
 
   @override
@@ -51,7 +50,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
       create: (context) => notifier,
       child: WillPopScope(
         onWillPop: () async {
-          notifier.onCloseStory(mounted);
+          notifier.onCloseStory(context, mounted);
           return false;
         },
         child: Scaffold(

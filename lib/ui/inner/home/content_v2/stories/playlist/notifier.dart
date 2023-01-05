@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/scheduler.dart';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
@@ -655,13 +656,17 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void onCloseStory(bool mounted) {
+  void onCloseStory(BuildContext context, bool mounted) {
     if (mounted) {
       _textEditingController.clear();
       if (_routeArgument?.postID != null) {
         _routing.moveAndPop(Routes.lobby);
       } else {
-        _routing.moveBack();
+        SchedulerBinding.instance?.addPostFrameCallback((_) {
+          Navigator.pop(context);
+        });
+
+        // _routing.moveBack();
       }
     }
   }

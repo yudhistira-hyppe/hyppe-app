@@ -145,7 +145,7 @@ class PreviewContentNotifier with ChangeNotifier {
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
 
-  set isLoadVideo(bool val){
+  set isLoadVideo(bool val) {
     _isLoadVideo = val;
     notifyListeners();
   }
@@ -195,12 +195,12 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set url(String? val){
+  set url(String? val) {
     _url = val;
     notifyListeners();
   }
 
-  set isLoadingMusic(bool state){
+  set isLoadingMusic(bool state) {
     _isLoadingMusic = state;
     notifyListeners();
   }
@@ -215,20 +215,20 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set pageMusic(int state){
+  set pageMusic(int state) {
     _pageMusic = state;
     _selectedMusic = null;
     _currentMusic = null;
     _selectedType = null;
     audioPlayer.stop();
-    for(var music in _listMusics){
-      if(music.isSelected){
+    for (var music in _listMusics) {
+      if (music.isSelected) {
         final index = _listMusics.indexOf(music);
         _listMusics[index].isSelected = false;
       }
     }
-    for(var music in _listExpMusics){
-      if(music.isSelected){
+    for (var music in _listExpMusics) {
+      if (music.isSelected) {
         final index = _listExpMusics.indexOf(music);
         _listExpMusics[index].isSelected = false;
       }
@@ -251,154 +251,155 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void setFileContent(String path, int index){
+  void setFileContent(String path, int index) {
     _fileContent?[index] = path;
     notifyListeners();
   }
 
-  set listType(List<MusicGroupType> values){
+  set listType(List<MusicGroupType> values) {
     _listTypes = values;
     notifyListeners();
   }
 
-  void setMusicGroupState(int index, bool state){
+  void setMusicGroupState(int index, bool state) {
     _listTypes[index].isSeeAll = state;
     notifyListeners();
   }
 
-  set listMusics(List<Music> values){
+  set listMusics(List<Music> values) {
     _listMusics = values;
-    _isNextMusic = (values.length%10 == 0);
+    _isNextMusic = (values.length % 10 == 0);
     notifyListeners();
   }
 
-  set isNextMusic(bool state){
+  set isNextMusic(bool state) {
     _isNextMusic = state;
     notifyListeners();
   }
 
-  set listExpMusics(List<Music> values){
+  set listExpMusics(List<Music> values) {
     _listExpMusics = values;
-    _isNextExpMusic = (values.length%10 == 0);
+    _isNextExpMusic = (values.length % 10 == 0);
     notifyListeners();
   }
 
-  set selectedType(MusicType? type){
+  set selectedType(MusicType? type) {
     _selectedType = type;
     notifyListeners();
   }
 
-  set selectedMusicEnum(MusicEnum? val){
+  set selectedMusicEnum(MusicEnum? val) {
     _selectedMusicEnum = val;
     notifyListeners();
   }
 
-  set listGenres(List<MusicType> types){
+  set listGenres(List<MusicType> types) {
     _listGenres = types;
     notifyListeners();
   }
 
-  set listThemes(List<MusicType> types){
+  set listThemes(List<MusicType> types) {
     _listThemes = types;
     notifyListeners();
   }
 
-  set listMoods(List<MusicType> types){
+  set listMoods(List<MusicType> types) {
     _listMoods = types;
     notifyListeners();
   }
 
-  set currentMusic(Music? music){
+  set currentMusic(Music? music) {
     _currentMusic = music;
     notifyListeners();
   }
 
-  set selectedMusic(Music? music){
+  set selectedMusic(Music? music) {
     _selectedMusic = music;
     notifyListeners();
   }
 
-  set fixSelectedMusic(Music? music){
+  set fixSelectedMusic(Music? music) {
     _fixSelectedMusic = music;
     notifyListeners();
   }
 
-  set isLoadNextMusic(bool state){
+  set isLoadNextMusic(bool state) {
     _isLoadNextMusic = state;
     notifyListeners();
   }
 
-  set isLoadNextExpMusic(bool state){
+  set isLoadNextExpMusic(bool state) {
     _isLoadNextExpMusic = state;
     notifyListeners();
   }
 
-  set defaultPath(String? val){
+  set defaultPath(String? val) {
     _defaultPath = val;
   }
 
-  bool isNoDataTypes(){
+  bool isNoDataTypes() {
     var isNoData = false;
     var count = 0;
-    if(_listThemes.isEmpty){
+    if (_listThemes.isEmpty) {
       count += 1;
     }
 
-    if(_listMoods.isEmpty){
+    if (_listMoods.isEmpty) {
       count += 1;
     }
 
-    if(_listGenres.isEmpty){
+    if (_listGenres.isEmpty) {
       count += 1;
     }
-    if(count > 2){
+    if (count > 2) {
       isNoData = true;
     }
 
     return isNoData;
   }
 
-  void resumeAudioPreview(){
-    try{
+  void resumeAudioPreview() {
+    try {
       audioPreviewPlayer.resume();
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
   }
 
-  void pauseAudioPreview(){
-    try{
+  void pauseAudioPreview() {
+    try {
       audioPreviewPlayer.pause();
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
   }
 
-  void onScrollExpMusics(BuildContext context, )async{
-    if(scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange){
-      if(!_isLoadNextExpMusic){
-
+  void onScrollExpMusics(
+    BuildContext context,
+  ) async {
+    if (scrollExpController.offset >= scrollExpController.position.maxScrollExtent && !scrollExpController.position.outOfRange) {
+      if (!_isLoadNextExpMusic) {
         print('Test onScrollExpMusics');
-        if(_isNextExpMusic){
-          try{
+        if (_isNextExpMusic) {
+          try {
             _isLoadNextExpMusic = true;
-            final int pageNumber = _listExpMusics.length~/10;
+            final int pageNumber = _listExpMusics.length ~/ 10;
             List<Music> res = [];
             final myId = _selectedType?.id;
-            if(myId != null){
-              if(_selectedMusicEnum == MusicEnum.mood){
+            if (myId != null) {
+              if (_selectedMusicEnum == MusicEnum.mood) {
                 res = await getMusics(context, keyword: searchController.text, idMood: myId, pageNumber: pageNumber);
-              }else if(_selectedMusicEnum == MusicEnum.genre){
+              } else if (_selectedMusicEnum == MusicEnum.genre) {
                 res = await getMusics(context, keyword: searchController.text, idGenre: myId, pageNumber: pageNumber);
-              }else{
+              } else {
                 res = await getMusics(context, keyword: searchController.text, idTheme: myId, pageNumber: pageNumber);
               }
-              _isNextExpMusic = res.isEmpty ? false : res.length%10 == 0;
+              _isNextExpMusic = res.isEmpty ? false : res.length % 10 == 0;
               _listExpMusics.addAll(res);
             }
-          }catch(e){
+          } catch (e) {
             'Error onScrollMusics : $e'.logger();
-          }finally{
+          } finally {
             _isLoadNextExpMusic = false;
             notifyListeners();
           }
@@ -407,20 +408,20 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  void onScrollMusics(BuildContext context) async{
-    if(scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange){
-      if(!_isLoadNextMusic){
-        if(_isNextMusic){
-          try{
+  void onScrollMusics(BuildContext context) async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+      if (!_isLoadNextMusic) {
+        if (_isNextMusic) {
+          try {
             _isLoadNextMusic = true;
-            final int pageNumber = _listMusics.length~/10;
+            final int pageNumber = _listMusics.length ~/ 10;
             final res = await getMusics(context, keyword: searchController.text, pageNumber: pageNumber);
-            _isNextMusic = res.isEmpty ? false : res.length%10 == 0;
+            _isNextMusic = res.isEmpty ? false : res.length % 10 == 0;
             _listMusics.addAll(res);
             notifyListeners();
-          }catch(e){
+          } catch (e) {
             'Error onScrollMusics : $e'.logger();
-          }finally{
+          } finally {
             _isLoadNextMusic = false;
           }
         }
@@ -429,15 +430,15 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void onChangeSearchMusic(BuildContext context, String value) {
-    if(value.length > 2){
-      for(var music in _listMusics){
-        if(music.isSelected){
+    if (value.length > 2) {
+      for (var music in _listMusics) {
+        if (music.isSelected) {
           final index = _listMusics.indexOf(music);
           _listMusics[index].isSelected = false;
         }
       }
-      for(var music in _listExpMusics){
-        if(music.isSelected){
+      for (var music in _listExpMusics) {
+        if (music.isSelected) {
           final index = _listExpMusics.indexOf(music);
           _listExpMusics[index].isSelected = false;
         }
@@ -446,148 +447,148 @@ class PreviewContentNotifier with ChangeNotifier {
       _selectedMusic = null;
       _selectedType = null;
       notifyListeners();
-      Future.delayed(const Duration(milliseconds: 500), () async{
+      Future.delayed(const Duration(milliseconds: 500), () async {
         final currentValue = searchController.text;
-        if(currentValue == value){
+        if (currentValue == value) {
           _isLoadingMusic = true;
           notifyListeners();
-          try{
+          try {
             listMusics = await getMusics(context, keyword: value);
             _listGenres = await getMusicCategories(context, MusicEnum.genre, keyword: value);
             _listThemes = await getMusicCategories(context, MusicEnum.theme, keyword: value);
             _listMoods = await getMusicCategories(context, MusicEnum.mood, keyword: value);
-          }catch(e){
+          } catch (e) {
             'Error onChangeSearchMusic : $e'.logger();
-          }finally{
+          } finally {
             _isLoadingMusic = false;
             FocusScope.of(context).unfocus();
             notifyListeners();
           }
         }
       });
-    }else{
-      if(value.isEmpty){
+    } else {
+      if (value.isEmpty) {
         initListMusics(context);
         FocusScope.of(context).unfocus();
       }
     }
   }
 
-  void forceResetPlayer(bool isChanged){
+  void forceResetPlayer(bool isChanged) {
     print('forceResetPlayer');
     _currentMusic = null;
     _selectedMusic = null;
-    for(var data in _listMusics){
-      if(data.isPlay){
+    for (var data in _listMusics) {
+      if (data.isPlay) {
         data.isPlay = false;
       }
-      if(data.isSelected){
+      if (data.isSelected) {
         data.isSelected = false;
       }
     }
-    for(var data in _listExpMusics){
-      if(data.isPlay){
+    for (var data in _listExpMusics) {
+      if (data.isPlay) {
         data.isPlay = false;
       }
-      if(data.isSelected){
+      if (data.isSelected) {
         data.isSelected = false;
       }
     }
-    try{
+    try {
       audioPlayer.stop();
-      if(isChanged){
+      if (isChanged) {
         notifyListeners();
       }
-    }catch(e){
+    } catch (e) {
       'forceResetPlayer error: $e'.logger();
     }
-
   }
 
-  Future initListMusics(BuildContext context) async{
+  Future initListMusics(BuildContext context) async {
     audioPlayer.onPlayerStateChanged.listen((event) {
-      if(event == PlayerState.completed){
-        try{
-          if(_currentMusic != null){
+      if (event == PlayerState.completed) {
+        try {
+          if (_currentMusic != null) {
             final index = _listMusics.indexOf(_currentMusic!);
-            if(index != -1){
+            if (index != -1) {
               _listMusics[index].isPlay = false;
-            }else{
+            } else {
               final expIndex = _listExpMusics.indexOf(_currentMusic!);
-              if(expIndex != -1){
+              if (expIndex != -1) {
                 _listExpMusics[_indexView].isPlay = false;
-              }else{
+              } else {
                 forceResetPlayer(false);
               }
             }
-          }else{
+          } else {
             forceResetPlayer(false);
           }
-        }catch(e){
+        } catch (e) {
           forceResetPlayer(false);
           e.logger();
-        }finally{
+        } finally {
           notifyListeners();
         }
-
       }
     });
     _isLoadingMusic = true;
-    try{
-      _listTypes = [MusicGroupType(group: language.theme ?? 'Theme', isSeeAll: false), MusicGroupType(group: language.genre ?? 'Genre', isSeeAll: false), MusicGroupType(group: language.mood ?? 'Mood', isSeeAll: false)];
+    try {
+      _listTypes = [
+        MusicGroupType(group: language.theme ?? 'Theme', isSeeAll: false),
+        MusicGroupType(group: language.genre ?? 'Genre', isSeeAll: false),
+        MusicGroupType(group: language.mood ?? 'Mood', isSeeAll: false)
+      ];
       listMusics = await getMusics(context);
       _listGenres = await getMusicCategories(context, MusicEnum.genre);
       _listThemes = await getMusicCategories(context, MusicEnum.theme);
       _listMoods = await getMusicCategories(context, MusicEnum.mood);
       notifyListeners();
-    }catch(e){
+    } catch (e) {
       'Error initListMusics : $e'.logger();
-    }finally{
+    } finally {
       _isLoadingMusic = false;
     }
   }
 
-  Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood =''}) async{
+  Future getMusicByType(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = ''}) async {
     listExpMusics = await getMusics(context, keyword: keyword, idGenre: idGenre, idTheme: idTheme, idMood: idMood);
     notifyListeners();
   }
 
-  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood ='', int pageNumber = 0, int pageRow = 10}) async{
+  Future<List<Music>> getMusics(BuildContext context, {String keyword = '', String idGenre = '', String idTheme = '', String idMood = '', int pageNumber = 0, int pageRow = 10}) async {
     List<Music>? res = [];
     _isLoadingMusic = true;
-    try{
+    try {
       final bloc = MusicDataBloc();
       await bloc.getMusics(context, keyword: keyword, idTheme: idTheme, idGenre: idGenre, idMood: idMood, pageNumber: pageNumber, pageRow: pageRow);
       final fetch = bloc.musicDataFetch;
-      if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
+      if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
         res = (fetch.data as List<dynamic>?)?.map((item) => Music.fromJson(item as Map<String, dynamic>)).toList();
         print('res length = ${res?.length}');
         return res ?? [];
-      }else if(fetch.musicDataState == MusicState.getMusicBlocError){
+      } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
         throw '${(fetch.data as DioError).message}';
       }
-    }catch(e){
+    } catch (e) {
       print('Error getMusics : $e');
-    }finally{
-
+    } finally {
       _isLoadingMusic = false;
     }
     return [];
   }
 
-  Future<List<MusicType>> getMusicCategories(BuildContext context, MusicEnum type, {String keyword = ''}) async{
+  Future<List<MusicType>> getMusicCategories(BuildContext context, MusicEnum type, {String keyword = ''}) async {
     List<MusicType>? res = [];
-    try{
+    try {
       final bloc = MusicDataBloc();
       await bloc.getTypeMusic(context, type, keyword: keyword);
       final fetch = bloc.musicDataFetch;
-      if(fetch.musicDataState == MusicState.getMusicsBlocSuccess){
+      if (fetch.musicDataState == MusicState.getMusicsBlocSuccess) {
         res = (fetch.data as List<dynamic>?)?.map((item) => MusicType.fromJson(item as Map<String, dynamic>)).toList();
-
-      }else if(fetch.musicDataState == MusicState.getMusicBlocError){
+      } else if (fetch.musicDataState == MusicState.getMusicBlocError) {
         throw '${(fetch.data as DioError).message}';
       }
-    }catch(e){
+    } catch (e) {
       print('Error getMusicCategories : $e');
     }
     return res ?? [];
@@ -598,49 +599,50 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> videoMerger(BuildContext context, String urlAudio, {isInit = false}) async{
-    try{
-      if(urlAudio.isNotEmpty){
+  Future<void> videoMerger(BuildContext context, String urlAudio, {isInit = false}) async {
+    try {
+      if (urlAudio.isNotEmpty) {
         _isLoadVideo = true;
         notifyListeners();
         String outputPath = await System().getSystemPath(params: 'postVideo');
         outputPath = '${outputPath + materialAppKey.currentContext!.getNameByDate()}.mp4';
 
         String command = '-stream_loop -1 -i $urlAudio -i ${_fileContent?[_indexView]} -shortest -c copy $outputPath';
-        await FFmpegKit.executeAsync(command, (session) async{
-          final codeSession = await session.getReturnCode();
-          if(ReturnCode.isSuccess(codeSession)){
-            print('ReturnCode = Success');
-            await restartVideoPlayer(outputPath, context, isInit: isInit);
-          }else if(ReturnCode.isCancel(codeSession)){
-            print('ReturnCode = Cancel');
-            _isLoadVideo = false;
-            notifyListeners();
-            throw 'Merge video is canceled';
-            // Cancel
-          }else{
-            print('ReturnCode = Error');
-            _isLoadVideo = false;
-            notifyListeners();
-            throw 'Merge video is Error';
-            // Error
-          }
-
-        }, (log){
-          print('FFmpegKit ${log.getMessage()}');
-        },);
-      }else{
+        await FFmpegKit.executeAsync(
+          command,
+          (session) async {
+            final codeSession = await session.getReturnCode();
+            if (ReturnCode.isSuccess(codeSession)) {
+              print('ReturnCode = Success');
+              await restartVideoPlayer(outputPath, context, isInit: isInit);
+            } else if (ReturnCode.isCancel(codeSession)) {
+              print('ReturnCode = Cancel');
+              _isLoadVideo = false;
+              notifyListeners();
+              throw 'Merge video is canceled';
+              // Cancel
+            } else {
+              print('ReturnCode = Error');
+              _isLoadVideo = false;
+              notifyListeners();
+              throw 'Merge video is Error';
+              // Error
+            }
+          },
+          (log) {
+            print('FFmpegKit ${log.getMessage()}');
+          },
+        );
+      } else {
         throw 'UrlAudio is empty';
       }
-
-    }catch(e){
+    } catch (e) {
       'videoMerger Error : $e'.logger();
       ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }finally{
+    } finally {
       _isLoadVideo = false;
       notifyListeners();
     }
-
   }
 
   Future restartVideoPlayer(String outputPath, BuildContext context, {bool isInit = true}) async {
@@ -652,11 +654,11 @@ class PreviewContentNotifier with ChangeNotifier {
     _sourceFile = SourceFile.local;
     _betterPlayerController = null;
     notifyListeners();
-    if(isInit){
+    if (isInit) {
       initVideoPlayer(context);
     }
-    if(path.isNotEmpty){
-      if(path != _defaultPath){
+    if (path.isNotEmpty) {
+      if (path != _defaultPath) {
         await File(path).delete();
       }
     }
@@ -672,79 +674,76 @@ class PreviewContentNotifier with ChangeNotifier {
   //   });
   // }
 
-  void setDefaultVideo(BuildContext context) async{
-    try{
+  void setDefaultVideo(BuildContext context) async {
+    try {
       _isLoadVideo = true;
       notifyListeners();
       final _isImage = (_fileContent?[_indexView] ?? '').isImageFormat();
-      if(_isImage){
+      if (_isImage) {
         _selectedMusic = null;
         _fixSelectedMusic = null;
         _selectedType = null;
         audioPreviewPlayer.stop();
         audioPreviewPlayer.dispose();
         notifyListeners();
-      }else{
-        if(_defaultPath != null){
+      } else {
+        if (_defaultPath != null) {
           await restartVideoPlayer(_defaultPath!, context);
           _selectedMusic = null;
           _fixSelectedMusic = null;
           _selectedType = null;
           notifyListeners();
-        }else{
+        } else {
           throw 'defaultPath is null';
         }
       }
-
-    }catch(e){
+    } catch (e) {
       e.logger();
       ShowBottomSheet().onShowColouredSheet(context, '$e', color: kHyppeDanger, maxLines: 2);
-    }finally{
+    } finally {
       _isLoadVideo = false;
       notifyListeners();
     }
   }
 
-  void disposeMusic() async{
-    try{
+  void disposeMusic() async {
+    try {
       forceResetPlayer(false);
       await audioPlayer.dispose();
-    }catch(e){
+    } catch (e) {
       'disposeMusic error : $e'.logger();
     }
   }
 
-  void dialogDisposesMusic()async{
-    try{
+  void dialogDisposesMusic() async {
+    try {
       await audioPlayer.stop();
       await audioPlayer.dispose();
-    }catch(e){
+    } catch (e) {
       'disposeMusic error : $e'.logger();
     }
   }
 
-
-  void playExpMusic(BuildContext context, Music music, int index) async{
-    try{
+  void playExpMusic(BuildContext context, Music music, int index) async {
+    try {
       // final currentMusic = notifier.currentMusic;
       _listExpMusics[index].isLoad = true;
 
       notifyListeners();
       var url = music.apsaraMusicUrl?.playUrl ?? '';
-      if(_currentMusic != null){
-
+      if (_currentMusic != null) {
         final currentIndex = _listExpMusics.indexOf(_currentMusic!);
-        if(music.isPlay){
+        if (music.isPlay) {
           await audioPlayer.stop();
           _listExpMusics[index].isPlay = false;
 
           currentMusic?.isPlay = false;
           notifyListeners();
-        }else{
+        } else {
           await audioPlayer.stop();
-          if(url.isNotEmpty){
+          if (url.isNotEmpty) {
             await audioPlayer.play(UrlSource(url));
-          }else{
+          } else {
             throw 'url music is null';
           }
 
@@ -756,11 +755,11 @@ class PreviewContentNotifier with ChangeNotifier {
 
           notifyListeners();
         }
-      }else{
+      } else {
         await audioPlayer.stop();
-        if(url != null){
+        if (url != null) {
           await audioPlayer.play(UrlSource(url));
-        }else{
+        } else {
           throw 'url music is null';
         }
         _currentMusic = music;
@@ -768,40 +767,38 @@ class PreviewContentNotifier with ChangeNotifier {
         _listExpMusics[index].isPlay = true;
         notifyListeners();
       }
-
-    }catch(e){
-
+    } catch (e) {
       'Error Play Music : $e'.logger();
 
       _listExpMusics[index].isPlay = false;
       notifyListeners();
-    }finally{
+    } finally {
       _listExpMusics[index].isLoad = false;
       notifyListeners();
     }
   }
 
-  void playMusic(BuildContext context, Music music, int index) async{
-    try{
+  void playMusic(BuildContext context, Music music, int index) async {
+    try {
       // final currentMusic = notifier.currentMusic;
       _listMusics[index].isLoad = true;
 
       notifyListeners();
       var url = music.apsaraMusicUrl?.playUrl ?? '';
-      if(_currentMusic != null){
+      if (_currentMusic != null) {
         print('playMusic : up');
         final currentIndex = _listMusics.indexOf(_currentMusic!);
-        if(music.isPlay){
+        if (music.isPlay) {
           await audioPlayer.stop();
           _listMusics[index].isPlay = false;
 
           currentMusic?.isPlay = false;
           notifyListeners();
-        }else{
+        } else {
           await audioPlayer.stop();
-          if(url != null){
+          if (url != null) {
             await audioPlayer.play(UrlSource(url));
-          }else{
+          } else {
             throw 'url music is null';
           }
 
@@ -813,12 +810,12 @@ class PreviewContentNotifier with ChangeNotifier {
 
           notifyListeners();
         }
-      }else{
+      } else {
         print('playMusic : down');
         await audioPlayer.stop();
-        if(url != null){
+        if (url != null) {
           await audioPlayer.play(UrlSource(url));
-        }else{
+        } else {
           throw 'url music is null';
         }
         _currentMusic = music;
@@ -826,53 +823,47 @@ class PreviewContentNotifier with ChangeNotifier {
         _listMusics[index].isPlay = true;
         notifyListeners();
       }
-
-    }catch(e){
-
+    } catch (e) {
       'Error Play Music : $e'.logger();
 
       _listMusics[index].isPlay = false;
       notifyListeners();
-    }finally{
+    } finally {
       _listMusics[index].isLoad = false;
       notifyListeners();
     }
-
   }
 
-  void selectExpMusic(Music music, int index){
-
-    if(_selectedMusic != null){
-      if(_selectedMusic!.id == music.id){
+  void selectExpMusic(Music music, int index) {
+    if (_selectedMusic != null) {
+      if (_selectedMusic!.id == music.id) {
         _selectedMusic = null;
         notifyListeners();
         _listExpMusics[index].isSelected = false;
-
-      }else{
+      } else {
         _listExpMusics[_listExpMusics.indexOf(_selectedMusic!)].isSelected = false;
         _listExpMusics[index].isSelected = true;
         _selectedMusic = music;
       }
-    }else{
+    } else {
       _listExpMusics[index].isSelected = true;
       _selectedMusic = music;
     }
     notifyListeners();
   }
 
-  void selectMusic(Music music, int index){
-
-    if(_selectedMusic != null){
-      if(_selectedMusic!.id == music.id){
+  void selectMusic(Music music, int index) {
+    if (_selectedMusic != null) {
+      if (_selectedMusic!.id == music.id) {
         _selectedMusic = null;
         notifyListeners();
         _listMusics[index].isSelected = false;
-      }else{
+      } else {
         _listMusics[_listMusics.indexOf(_selectedMusic!)].isSelected = false;
         _listMusics[index].isSelected = true;
         _selectedMusic = music;
       }
-    }else{
+    } else {
       _listMusics[index].isSelected = true;
       _selectedMusic = music;
     }
@@ -888,7 +879,7 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  void initVideoPlayer(BuildContext context,{isSaveDefault = false}) async {
+  void initVideoPlayer(BuildContext context, {isSaveDefault = false}) async {
     BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
       autoPlay: false,
       fit: BoxFit.contain,
@@ -900,14 +891,14 @@ class PreviewContentNotifier with ChangeNotifier {
       ),
     );
     print('_url : $_url');
-    if(isSaveDefault){
+    if (isSaveDefault) {
       _fixSelectedMusic = null;
       _selectedMusic = null;
       _currentMusic = null;
       _selectedType = null;
       // notifyListeners();
       final _isImage = (_defaultPath ?? '').isImageFormat();
-      if(!_isImage){
+      if (!_isImage) {
         _defaultPath = _url;
       }
     }
@@ -951,7 +942,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
       // notifier.setVideoPlayerController(_betterPlayerController);
 
-    }catch(e){
+    } catch (e) {
       "Error Init Video $e".logger();
     } finally {
       _isLoadVideo = false;
@@ -1078,7 +1069,11 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.isEdit = false;
     notifier.featureType = featureType;
     notifier.fileContent = fileContent;
-    notifier.thumbNail = _thumbNails != null ? _thumbNails!.isNotEmpty ? _thumbNails![0] : null : null;
+    notifier.thumbNail = _thumbNails != null
+        ? _thumbNails!.isNotEmpty
+            ? _thumbNails![0]
+            : null
+        : null;
     notifier.privacyTitle == '' ? notifier.privacyTitle = notifier.language.public ?? 'public' : notifier.privacyTitle = notifier.privacyTitle;
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
     notifier.musicSelected = _fixSelectedMusic;
@@ -1094,7 +1089,7 @@ class PreviewContentNotifier with ChangeNotifier {
       showNext = true;
     } else {
       _thumbNails = [];
-      try{
+      try {
         for (int i = 0; i <= index; i++) {
           print('adsasdasd asdads');
           print(fileContent![index]!);
@@ -1106,7 +1101,7 @@ class PreviewContentNotifier with ChangeNotifier {
           );
           _thumbNails?.add(_thumbnail);
         }
-      }catch(e){
+      } catch (e) {
         print('makeThumbnail Error $e');
       }
 
@@ -1138,13 +1133,13 @@ class PreviewContentNotifier with ChangeNotifier {
     }
   }
 
-  Future postStoryContent(BuildContext context) async{
-
+  Future postStoryContent(BuildContext context) async {
     final _orientation = context.read<CameraNotifier>().orientation;
     try {
       // _connectAndListenToSocket(context);
       final notifier = PostsBloc();
       print('featureType : $featureType');
+
       notifier.postContentsBlocV2(
         context,
         type: featureType ?? FeatureType.other,
@@ -1152,7 +1147,7 @@ class PreviewContentNotifier with ChangeNotifier {
         tags: [],
         tagDescription: [],
         allowComment: true,
-        certified: true,
+        certified: false,
         fileContents: fileContent ?? [],
         description: '',
         cats: [],
@@ -1188,7 +1183,6 @@ class PreviewContentNotifier with ChangeNotifier {
       );
       'e'.logger();
     } finally {
-
       try {
         audioPreviewPlayer.stop();
         audioPreviewPlayer.dispose();

@@ -7,7 +7,6 @@ import '../../../../../../../core/arguments/contents/story_detail_screen_argumen
 import '../notifier.dart';
 
 class StoryGroupScreen extends StatefulWidget {
-
   final StoryDetailScreenArgument argument;
 
   const StoryGroupScreen({Key? key, required this.argument}) : super(key: key);
@@ -26,7 +25,6 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));
     notifier.initStateGroup(context, widget.argument);
-
   }
 
   @override
@@ -40,14 +38,13 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
     _pageController.removeListener(() => this);
   }
 
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<StoriesPlaylistNotifier>(
       create: (context) => notifier,
       child: WillPopScope(
-        onWillPop: ()async{
-          notifier.onCloseStory(mounted);
+        onWillPop: () async {
+          notifier.onCloseStory(context, mounted);
           return false;
         },
         child: Scaffold(
@@ -55,16 +52,15 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
           body: Consumer<StoriesPlaylistNotifier>(
             builder: (context, notifier, child) {
               print('groupUserStories : ${notifier.groupUserStories}');
-              return notifier.groupUserStories.isNotEmpty 
+              return notifier.groupUserStories.isNotEmpty
                   ? PageView.builder(
                       controller: _pageController,
                       itemCount: notifier.groupUserStories.length,
-                      onPageChanged: (index)async{
+                      onPageChanged: (index) async {
                         notifier.currentIndex = index;
-
                       },
-                      itemBuilder: (context, index){
-                        try{
+                      itemBuilder: (context, index) {
+                        try {
                           final key = notifier.groupUserStories.keys.elementAt(index);
                           final values = notifier.groupUserStories[key] ?? [];
                           if (notifier.currentPage?.floor() == index) {
@@ -75,13 +71,9 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                                 ..setEntry(3, 2, 0.001)
                                 ..rotateY(degValue),
                               alignment: Alignment.centerRight,
-                              child: StoryPageV2(
-                                  isScrolling: _pageController.position.activity?.isScrolling,
-                                  controller: _pageController,
-                                  stories: values
-                              ),
+                              child: StoryPageV2(isScrolling: _pageController.position.activity?.isScrolling, controller: _pageController, stories: values),
                             );
-                          }else if((notifier.currentPage?.floor() ?? 0) + 1 == index){
+                          } else if ((notifier.currentPage?.floor() ?? 0) + 1 == index) {
                             double value = (notifier.currentPage ?? 1) - index;
                             double degValue = notifier.degreeToRadian(value * 90);
                             return Transform(
@@ -101,23 +93,24 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                             controller: _pageController,
                             stories: values,
                           );
-                        }catch(e){
+                        } catch (e) {
                           return StoryPageV2(
                             isScrolling: _pageController.position.activity?.isScrolling ?? false,
                             controller: _pageController,
                             stories: [],
                           );
                         }
-
-                      }) :  Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.0,
-                  backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-                ),
-              );
+                      })
+                  : Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                      ),
+                    );
             },
           ),
         ),
-    ),);
+      ),
+    );
   }
 }
