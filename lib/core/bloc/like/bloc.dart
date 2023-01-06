@@ -18,7 +18,7 @@ class LikeBloc {
   Future likePostUserBloc(BuildContext context, {required String postId, required String emailOwner, required bool isLike}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
-    final Map<String, String> _data = {"eventType": isLike ? "LIKE" : "UNLIKE", "postID": postId, "receiverParty": emailOwner};
+    final Map<String, String> _data = {"eventType": !isLike ? "LIKE" : "UNLIKE", "postID": postId, "receiverParty": emailOwner};
 
     await _repos.reposPost(
       context,

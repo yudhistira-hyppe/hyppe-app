@@ -239,7 +239,6 @@ class UserBloc {
         }
       },
       (errorData) {
-        print('salah 2');
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           Routing().moveBack();
           function();
@@ -415,6 +414,7 @@ class UserBloc {
         setUserFetch(UserFetch(UserState.changePasswordError));
         Dio().close(force: true);
       },
+      errorServiceType: ErrorType.login,
       host: UrlConstants.changePassword,
       withAlertMessage: true,
       methodType: MethodType.post,

@@ -1,2 +1,2 @@
-const version = 59;
+const version = 60;
 const dynamic window = null;

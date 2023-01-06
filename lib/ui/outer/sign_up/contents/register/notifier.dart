@@ -204,11 +204,12 @@ class RegisterNotifier with ChangeNotifier {
             String realDeviceId = await System().getDeviceIdentifier();
             String platForm = Platform.isAndroid ? "android" : "ios";
             String deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
+            String lang = SharedPreference().readStorage(SpKeys.isoCode);
 
             final notifier = UserBloc();
             await notifier.signUpBlocV2(
               context,
-              data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm),
+              data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm, lang: lang),
             );
             final fetch = notifier.userFetch;
             loading = false;

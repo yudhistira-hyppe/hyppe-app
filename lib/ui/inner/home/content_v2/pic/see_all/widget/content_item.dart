@@ -163,14 +163,23 @@ class ContentItem extends StatelessWidget {
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: Consumer<LikeNotifier>(
-                                      builder: (context, notifier, child) => InkWell(
-                                        child: CustomIconWidget(
-                                          defaultColor: false,
-                                          color: data?.isLiked == true ? kHyppePrimary : Theme.of(context).iconTheme.color,
-                                          iconData: '${AssetPath.vectorPath}${data?.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
-                                        ),
-                                        onTap: () => notifier.likePost(context, data ?? ContentData()),
-                                      ),
+                                      builder: (context, notifier, child) => data?.insight?.isloading ?? false
+                                          ? const SizedBox(
+                                              height: 21,
+                                              width: 21,
+                                              child: CircularProgressIndicator(
+                                                color: kHyppePrimary,
+                                                strokeWidth: 2,
+                                              ),
+                                            )
+                                          : InkWell(
+                                              child: CustomIconWidget(
+                                                defaultColor: false,
+                                                color: data?.isLiked == true ? kHyppePrimary : Theme.of(context).iconTheme.color,
+                                                iconData: '${AssetPath.vectorPath}${data?.isLiked == true ? 'liked.svg' : 'none-like.svg'}',
+                                              ),
+                                              onTap: () => notifier.likePost(context, data ?? ContentData()),
+                                            ),
                                     ),
                                   ),
                                 ],

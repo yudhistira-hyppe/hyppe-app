@@ -38,102 +38,114 @@ class CustomContentModeratedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final theme = Theme.of(context);
+    ValueNotifier<int> _networklHasErrorNotifier = ValueNotifier(0);
 
-    return Padding(
-      padding: padding,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomBaseCacheImage(
-            imageUrl: thumbnail,
-            memCacheWidth: 50,
-            memCacheHeight: 50,
-            imageBuilder: (_, imageProvider) {
-              return Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  image: DecorationImage(
-                    fit: boxFitContent,
-                    image: imageProvider,
-                  ),
-                ),
-              );
-            },
-            errorWidget: (_, __, ___) {
-              return Container(
-                width: width,
-                height: height,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: boxFitError,
-                    image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                  ),
-                ),
-              );
-            },
-            emptyWidget: Container(
-              width: width,
-              height: height,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: boxFitError,
-                  image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                ),
-              ),
-            ),
-          ),
-          if (featureType != FeatureType.pic)
-            CustomIconWidget(
-              defaultColor: false,
-              width: 24 * SizeConfig.scaleDiagonal,
-              height: 24 * SizeConfig.scaleDiagonal,
-              iconData: "${AssetPath.vectorPath}pause.svg",
-            ),
-          if (!isSafe)
-            ClipRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: blurIfNotSafe,
-                  sigmaY: blurIfNotSafe,
-                ),
-                child: Container(
+    return ValueListenableBuilder(
+      valueListenable: _networklHasErrorNotifier,
+      builder: (context, count, child) {
+        return Padding(
+          padding: padding,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              CustomBaseCacheImage(
+                // cacheKey: _networklHasErrorNotifier.value.toString(),
+                imageUrl: thumbnail,
+                memCacheWidth: 50,
+                memCacheHeight: 50,
+                imageBuilder: (_, imageProvider) {
+                  return Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      image: DecorationImage(
+                        fit: boxFitContent,
+                        image: imageProvider,
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (_, __, ___) {
+                  return GestureDetector(
+                    onTap: () {
+                      _networklHasErrorNotifier.value++;
+                    },
+                    child: Container(
+                      width: width,
+                      height: height,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: boxFitError,
+                          image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                emptyWidget: Container(
                   width: width,
                   height: height,
-                  color: Colors.black.withOpacity(0),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: boxFitError,
+                      image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          if (!isSafe)
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CustomIconWidget(
-                    defaultColor: false,
-                    iconData: "${AssetPath.vectorPath}moderated.svg",
+              if (featureType != FeatureType.pic)
+                CustomIconWidget(
+                  defaultColor: false,
+                  width: 24 * SizeConfig.scaleDiagonal,
+                  height: 24 * SizeConfig.scaleDiagonal,
+                  iconData: "${AssetPath.vectorPath}pause.svg",
+                ),
+              if (!isSafe)
+                ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: blurIfNotSafe,
+                      sigmaY: blurIfNotSafe,
+                    ),
+                    child: Container(
+                      width: width,
+                      height: height,
+                      color: Colors.black.withOpacity(0),
+                    ),
                   ),
-                  eightPx,
-                  CustomTextWidget(
-                    textToDisplay: "in Moderate",
-                    textStyle: theme.textTheme.bodyText2,
-                  )
-                ],
-              ),
-            ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Visibility(
-              visible: isSale,
-              child: const CustomIconWidget(
-                iconData: "${AssetPath.vectorPath}sale.svg",
-                defaultColor: false,
-              ),
-            ),
-          )
-        ],
-      ),
+                ),
+              if (!isSafe)
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: "${AssetPath.vectorPath}moderated.svg",
+                      ),
+                      eightPx,
+                      CustomTextWidget(
+                        textToDisplay: "in Moderate",
+                        textStyle: theme.textTheme.bodyText2,
+                      )
+                    ],
+                  ),
+                ),
+              Align(
+                alignment: Alignment.topRight,
+                child: Visibility(
+                  visible: isSale,
+                  child: const CustomIconWidget(
+                    iconData: "${AssetPath.vectorPath}sale.svg",
+                    defaultColor: false,
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

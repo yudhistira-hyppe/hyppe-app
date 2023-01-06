@@ -43,6 +43,7 @@ class PicDetailBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final _themes = Theme.of(context);
+    final translate = context.read<TranslateNotifierV2>().translate;
 
     return Container(
       width: SizeConfig.screenWidth,
@@ -50,7 +51,9 @@ class PicDetailBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED') ? ContentViolationWidget(data: data ?? ContentData()) : Container(),
+          data?.email == SharedPreference().readStorage(SpKeys.email) && (data?.reportedStatus == 'OWNED')
+              ? ContentViolationWidget(data: data ?? ContentData(), text: translate.thisHyppePicisSubjectToModeration ?? '')
+              : Container(),
           twelvePx,
           _buildDescription(context),
           (data?.reportedStatus != 'OWNED' && data?.reportedStatus != 'BLURRED' && data?.reportedStatus2 != 'BLURRED') &&
@@ -147,12 +150,14 @@ class PicDetailBottom extends StatelessWidget {
             ),
             eightPx,
             if (data?.music?.musicTitle != null)
-              notifier.preventMusic ? const SizedBox.shrink() : notifier.isLoadMusic
-                  ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
-                  : MusicStatusDetail(
-                      music: data!.music!,
-                      urlMusic: notifier.urlMusic,
-                    ),
+              notifier.preventMusic
+                  ? const SizedBox.shrink()
+                  : notifier.isLoadMusic
+                      ? LoadingDetailMusicScreen(apsaraMusic: data!.music!.apsaraMusic ?? '')
+                      : MusicStatusDetail(
+                          music: data!.music!,
+                          urlMusic: notifier.urlMusic,
+                        ),
             if (data?.music?.musicTitle != null) eightPx,
             data != null
                 ? GestureDetector(
@@ -184,9 +189,18 @@ class PicDetailBottom extends StatelessWidget {
             Consumer<LikeNotifier>(
                 builder: (context, notifier, child) =>
                     // data != null ?
-                    _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
-                      notifier.likePost(context, data ?? ContentData());
-                    }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)),
+                    data?.insight?.isloading ?? false
+                        ? const SizedBox(
+                            height: 21,
+                            width: 21,
+                            child: CircularProgressIndicator(
+                              color: kHyppePrimary,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : _buildButton(context, '${AssetPath.vectorPath}${(value.data?.isLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${value.data?.insight?.likes ?? 0}", () {
+                            notifier.likePost(context, data ?? ContentData());
+                          }, colorIcon: (value.data?.isLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)),
 
             //   builder: (context, notifier, child) => data != null
             //       ? _buildButton(
@@ -229,7 +243,7 @@ class PicDetailBottom extends StatelessWidget {
                 context,
                 '${AssetPath.vectorPath}cart.svg',
                 value2.translate.buy ?? 'buy',
-                ()async{
+                () async {
                   value.preventMusic = true;
                   await ShowBottomSheet.onBuyContent(context, data: data);
                   value.preventMusic = false;

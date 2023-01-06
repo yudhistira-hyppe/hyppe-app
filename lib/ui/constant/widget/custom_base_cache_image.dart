@@ -12,6 +12,7 @@ class CustomCacheManager {
 
 class CustomBaseCacheImage extends StatelessWidget {
   final String? imageUrl;
+  final String? cacheKey;
   final int? memCacheWidth;
   final int? memCacheHeight;
   final double widthPlaceHolder;
@@ -25,6 +26,7 @@ class CustomBaseCacheImage extends StatelessWidget {
   const CustomBaseCacheImage({
     Key? key,
     this.headers,
+    this.cacheKey,
     this.imageUrl,
     this.errorWidget,
     this.imageBuilder,
@@ -41,6 +43,7 @@ class CustomBaseCacheImage extends StatelessWidget {
     SizeConfig().init(context);
     return (imageUrl ?? '').isNotEmpty
         ? CachedNetworkImage(
+            // cacheKey: cacheKey,
             imageUrl: "$imageUrl",
             httpHeaders: headers,
             errorWidget: errorWidget,

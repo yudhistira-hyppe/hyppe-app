@@ -4,14 +4,9 @@ class SignUpDataArgument {
   String deviceId;
   String imei;
   String platForm;
+  String lang;
 
-  SignUpDataArgument({
-    required this.email,
-    required this.password,
-    required this.deviceId,
-    required this.imei,
-    required this.platForm
-  });
+  SignUpDataArgument({required this.email, required this.password, required this.deviceId, required this.imei, required this.platForm, this.lang = 'id'});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -20,6 +15,7 @@ class SignUpDataArgument {
     data['deviceId'] = deviceId;
     data['imei'] = imei;
     data['regSrc'] = platForm;
+    data['lang'] = lang;
     return data;
   }
 }

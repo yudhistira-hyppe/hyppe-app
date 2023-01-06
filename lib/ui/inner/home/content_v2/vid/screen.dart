@@ -275,18 +275,27 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                               Consumer<LikeNotifier>(
                                                 builder: (context, notifier, child) => Align(
                                                   alignment: Alignment.bottomRight,
-                                                  child: InkWell(
-                                                    child: CustomIconWidget(
-                                                      defaultColor: false,
-                                                      color: (vidData?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
-                                                      iconData: '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                                                    ),
-                                                    onTap: () {
-                                                      if (vidData != null) {
-                                                        notifier.likePost(context, vidData);
-                                                      }
-                                                    },
-                                                  ),
+                                                  child: vidData?.insight?.isloading ?? false
+                                                      ? const SizedBox(
+                                                          height: 21,
+                                                          width: 21,
+                                                          child: CircularProgressIndicator(
+                                                            color: kHyppePrimary,
+                                                            strokeWidth: 2,
+                                                          ),
+                                                        )
+                                                      : InkWell(
+                                                          child: CustomIconWidget(
+                                                            defaultColor: false,
+                                                            color: (vidData?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color,
+                                                            iconData: '${AssetPath.vectorPath}${(vidData?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                                          ),
+                                                          onTap: () {
+                                                            if (vidData != null) {
+                                                              notifier.likePost(context, vidData);
+                                                            }
+                                                          },
+                                                        ),
                                                 ),
                                               ),
                                             ],

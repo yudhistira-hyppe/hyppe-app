@@ -97,7 +97,11 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
         floatingActionButton: CustomElevatedButton(
           width: 375.0 * SizeConfig.scaleDiagonal,
           height: 44.0 * SizeConfig.scaleDiagonal,
-          function: () => notifier.submitPay(context, price: widget.argument?.totalAmount),
+          function: () {
+            if (!notifier.isLoading) {
+              notifier.submitPay(context, price: widget.argument?.totalAmount);
+            }
+          },
           // function: () => Routing().move(Routes.paymentSummaryScreen),
           child: notifier.isLoading
               ? const CustomLoading()

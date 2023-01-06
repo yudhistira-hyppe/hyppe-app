@@ -112,10 +112,10 @@ class BuySellWidget extends StatelessWidget {
                           textStyle: Theme.of(context).textTheme.caption,
                         ),
                         sixPx,
-                        const CustomIconWidget(
+                        CustomIconWidget(
                           iconData: "${AssetPath.vectorPath}unread.svg",
                           defaultColor: false,
-                          color: Colors.green,
+                          color: (data?.status ?? '') == 'Cancel' ? Colors.red : Colors.green,
                         ),
                       ],
                     ),

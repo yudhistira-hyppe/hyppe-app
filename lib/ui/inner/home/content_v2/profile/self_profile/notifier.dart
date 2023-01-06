@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
@@ -25,6 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 
@@ -183,6 +185,9 @@ class SelfProfileNotifier with ChangeNotifier {
               List<ContentData> _res = await picContentsQuery.loadNext(context, myContent: true);
               if (_res.isNotEmpty) {
                 user.pics = [...(user.pics ?? []), ..._res];
+                // if (user.pics != null) {
+                //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
+                // }
               } else {
                 print("Post Pic Dah Mentok");
               }
@@ -195,7 +200,7 @@ class SelfProfileNotifier with ChangeNotifier {
     }
   }
 
-  initialSelfProfile(BuildContext context) async {
+  Future initialSelfProfile(BuildContext context) async {
     // pageIndex = 0;
     _statusKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
     if (user.vids == null && user.diaries == null && user.pics == null) _isLoading = true;
@@ -222,10 +227,19 @@ class SelfProfileNotifier with ChangeNotifier {
       notifyListeners();
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);
+
+    // if (user.vids != null) {
+    //   await Future.wait(user.vids!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
+    // }
+
     // user.diaries = await diaryContentsQuery.reload(context, myContent: true);
     // user.pics = await picContentsQuery.reload(context, myContent: true);
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future cacheImage(BuildContext context, String url) async {
+    precacheImage(CachedNetworkImageProvider(url, maxHeight: 50, maxWidth: 50), context);
   }
 
   Future getDataPerPgage(BuildContext context, {bool isReload = false}) async {
@@ -263,6 +277,9 @@ class SelfProfileNotifier with ChangeNotifier {
         {
           if (user.pics == null || isReload) {
             user.pics = await picContentsQuery.reload(context, myContent: true);
+            // if (user.pics != null) {
+            //   await Future.wait(user.pics!.map((e) => cacheImage(context, e.mediaThumbEndPoint!)));
+            // }
             notifyListeners();
           }
         }

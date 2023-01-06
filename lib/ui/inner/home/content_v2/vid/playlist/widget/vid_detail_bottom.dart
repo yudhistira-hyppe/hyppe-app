@@ -178,9 +178,18 @@ class VidDetailBottom extends StatelessWidget {
           children: <Widget>[
             Consumer<LikeNotifier>(
               builder: (context, notifier, child) => data != null
-                  ? _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
-                      () => notifier.likePost(context, data ?? ContentData()),
-                      colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
+                  ? data?.insight?.isloading ?? false
+                      ? const SizedBox(
+                          height: 21,
+                          width: 21,
+                          child: CircularProgressIndicator(
+                            color: kHyppePrimary,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : _buildButton(context, '${AssetPath.vectorPath}${(data?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}', "${data?.insight?.likes ?? 0}",
+                          () => notifier.likePost(context, data ?? ContentData()),
+                          colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
                   : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
             data != null

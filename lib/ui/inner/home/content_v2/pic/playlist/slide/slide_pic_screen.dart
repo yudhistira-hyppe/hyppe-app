@@ -268,12 +268,24 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                       children: [
                         sixteenPx,
                         Consumer<LikeNotifier>(
-                          builder: (context, notifier, child) => _buildButtonV2(
-                            context: context,
-                            colorIcon: (widget.data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                            iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            function: () => notifier.likePost(context, widget.data),
-                          ),
+                          builder: (context, notifier, child) => widget.data.insight?.isloading ?? false
+                              ? const SizedBox(
+                                  height: 21,
+                                  width: 21,
+                                  child: CircularProgressIndicator(
+                                    color: kHyppePrimary,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : _buildButtonV2(
+                                  context: context,
+                                  colorIcon: (widget.data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                  iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  function: () {
+                                    print('ini l0000ike');
+                                    notifier.likePost(context, widget.data);
+                                  },
+                                ),
                         ),
                         eightPx,
                         _buildButtonV2(
@@ -294,7 +306,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
-                            function: () async{
+                            function: () async {
                               notifier.preventMusic = true;
                               SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                               await ShowBottomSheet.onBuyContent(context, data: widget.data);
@@ -378,15 +390,17 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             ),
                             if (widget.data.music?.musicTitle != null && (widget.data.apsaraId ?? '').isNotEmpty)
-                              notifier.preventMusic ? const SizedBox.shrink() :notifier.isLoadMusic
-                                  ? LoadingMusicScreen(
-                                      music: widget.data.music!,
-                                      index: widget.rootIndex,
-                                    )
-                                  : MusicStatusPage(
-                                      music: widget.data.music!,
-                                      urlMusic: notifier.urlMusic,
-                                    )
+                              notifier.preventMusic
+                                  ? const SizedBox.shrink()
+                                  : notifier.isLoadMusic
+                                      ? LoadingMusicScreen(
+                                          music: widget.data.music!,
+                                          index: widget.rootIndex,
+                                        )
+                                      : MusicStatusPage(
+                                          music: widget.data.music!,
+                                          urlMusic: notifier.urlMusic,
+                                        )
                           ],
                         )),
                       ),
@@ -398,11 +412,11 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             widget.data.email == SharedPreference().readStorage(SpKeys.email)
                         ? ButtonBoost(
                             contentData: widget.data,
-                            startState: (){
+                            startState: () {
                               SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                               notifier.preventMusic = true;
                             },
-                            afterState: (){
+                            afterState: () {
                               notifier.preventMusic = false;
                               SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                             },

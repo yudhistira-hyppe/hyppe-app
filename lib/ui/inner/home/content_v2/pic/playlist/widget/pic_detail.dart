@@ -50,7 +50,6 @@ class _PicDetailState extends State<PicDetail> {
 
   @override
   Widget build(BuildContext context) {
-
     final translate = context.read<TranslateNotifierV2>().translate;
     return WillPopScope(
       onWillPop: () {
@@ -205,12 +204,22 @@ class _PicDetailState extends State<PicDetail> {
                     Row(
                       children: [
                         Consumer<LikeNotifier>(
-                          builder: (context, notifier, child) => _buildButtonV2(
-                            context: context,
-                            colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                            iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
-                            function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
-                          ),
+                          builder: (context, notifier, child) => widget.arguments?.insight?.isloading ?? false
+                              ? Container(
+                                  height: 21,
+                                  width: 21,
+                                  margin: const EdgeInsets.only(left: 20),
+                                  child: const CircularProgressIndicator(
+                                    color: kHyppePrimary,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : _buildButtonV2(
+                                  context: context,
+                                  colorIcon: (widget.arguments?.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                  iconData: '${AssetPath.vectorPath}${(widget.arguments?.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
+                                ),
                         ),
                         _buildButtonV2(
                           context: context,
@@ -221,7 +230,7 @@ class _PicDetailState extends State<PicDetail> {
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
-                            function: ()async{
+                            function: () async {
                               // notifier.preventMusic = true;
                               ShowBottomSheet.onBuyContent(context, data: widget.arguments);
                               // notifier.preventMusic = true;

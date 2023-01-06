@@ -182,6 +182,7 @@ class Repos {
           context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong ?? '');
 
           if (withAlertMessage) {
+            print('alert message show');
             // TO DO : Nunggu backend support multi language, sementara di hardcode
             final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
             String alertMessage = _errorData.message ?? _language.somethingWentWrong ?? '';
