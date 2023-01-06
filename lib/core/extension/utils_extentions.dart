@@ -112,6 +112,10 @@ extension StringDefine on String {
       return 'Error: $e';
     }
   }
+
+  int getMilliSeconds(){
+    return DateTime.parse(System().dateTimeRemoveT(this)).millisecondsSinceEpoch;
+  }
 }
 
 extension IntegerExtension on int {
