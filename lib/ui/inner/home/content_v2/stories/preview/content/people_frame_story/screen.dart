@@ -49,7 +49,8 @@ class PeopleFrameStory extends StatelessWidget {
                 context.read<PreviewStoriesNotifier>().changeBorderColor(data ?? ContentData());
                 context.read<ViewerStoriesNotifier>().postViewer(context, data?.postID ?? '');
                 // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
-                context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
+                // context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
+                context.read<PreviewStoriesNotifier>().navigateToPeopleStoryGroup(context, index);
               },
               // imageUrl: context.read<PreviewStoriesNotifier>().onProfilePicShow(data[index].profilePicture),
               imageUrl: System().showUserPicture(data?.avatar?.mediaEndpoint),

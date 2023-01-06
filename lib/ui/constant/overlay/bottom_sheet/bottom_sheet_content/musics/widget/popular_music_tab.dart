@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../inner/upload/preview_content/notifier.dart';
 import '../../../../../widget/custom_text_widget.dart';
+import '../../../../../widget/no_result_found.dart';
 import 'music_item.dart';
 
 class PopularMusicTab extends StatefulWidget {
@@ -59,8 +60,6 @@ class _PopularMusicTabState extends State<PopularMusicTab> {
         }
         return MusicItemScreen(music: notifier.listMusics[index], index: index);
       },
-    ): Center(
-      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    );
+    ): const NoResultFound();
   }
 }

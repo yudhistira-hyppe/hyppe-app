@@ -13,6 +13,7 @@ import '../../../../../../../core/models/collection/support_ticket/ticket_model.
 import '../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
+import '../../../../../../constant/widget/no_result_found.dart';
 import '../notifier.dart';
 
 class HelpTicketScreen extends StatefulWidget {
@@ -92,9 +93,7 @@ class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayo
           )
         ],
       ) : _onProgressTicketLayout(notifier.onProgressTicket, notifier),
-    ) : Center(
-      child: CustomTextWidget(textToDisplay: notifier.language.noData ?? ''),
-    ): ListView.builder(
+    ) : const NoResultFound(): ListView.builder(
       itemCount: 15,
         itemBuilder: (context, index) {
      return const Padding(

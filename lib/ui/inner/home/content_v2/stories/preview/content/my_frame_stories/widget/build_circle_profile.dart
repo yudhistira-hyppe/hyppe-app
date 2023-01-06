@@ -26,7 +26,7 @@ class BuildCircleProfile extends StatelessWidget {
     SizeConfig().init(context);
     return InkWell(
       // onTap: () => context.read<PreviewStoriesNotifier>().onTapHandler(context),
-      onTap: () => context.read<PreviewStoriesNotifier>().navigateToStoryGroup(context, listStory ?? []),
+      onTap: () => context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, listStory ?? []),
       child: Container(
         child: Stack(
           alignment: Alignment.bottomRight,
