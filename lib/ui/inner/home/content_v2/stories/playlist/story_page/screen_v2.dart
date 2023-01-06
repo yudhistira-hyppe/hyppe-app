@@ -11,12 +11,17 @@ import 'package:story_view/widgets/story_view.dart';
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/constants/size_config.dart';
 import '../../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../../core/constants/utils.dart';
 import '../../../../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../../../../core/services/system.dart';
+import '../../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../constant/entities/like/notifier.dart';
+import '../../../../../../constant/entities/report/notifier.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
+import '../../../../../../constant/widget/custom_background_layer.dart';
 import '../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../constant/widget/custom_loading.dart';
+import '../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../constant/widget/custom_text_button.dart';
 import '../../../../../../constant/widget/link_copied_widget.dart';
 import '../notifier.dart';
@@ -42,11 +47,11 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
   late AnimationController animationController;
   final StoryController _storyController = StoryController();
   late ContentData currentData;
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
-    isLoading = true;
+    // isLoading = false;
     currentData = widget.stories[0];
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
     if (widget.stories.isNotEmpty) {
@@ -77,10 +82,11 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-      notifier.initializeUserStories(context, _storyController, widget.stories);
-      Future.delayed(const Duration(milliseconds: 500), () {
-        setState(() {
-          isLoading = false;
+      notifier.initializeUserStories(context, _storyController, widget.stories).then((value) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          setState(() {
+            isLoading = false;
+          });
         });
       });
     });
@@ -97,10 +103,18 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     }
     // logic when list isScrolled, pause the story
     if (widget.isScrolling ?? false) {
-      _storyController.pause();
+      try {
+        _storyController.pause();
+      } catch (e) {
+        'error pause story : $e'.logger();
+      }
     } else {
-      if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction && !notifier.isReactAction) {
-        _storyController.play();
+      try {
+        if (_storyController.playbackNotifier.valueOrNull == PlaybackState.pause && !notifier.isKeyboardActive && !notifier.isShareAction && !notifier.isReactAction) {
+          _storyController.play();
+        }
+      } catch (e) {
+        'error pause story : $e'.logger();
       }
     }
 
@@ -177,7 +191,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                           ),
                         ),
                         // onPressed: () => notifier.onCloseStory(context, arguments),
-                        onPressed: () => notifier.onCloseStory(context, mounted),
+                        onPressed: () => notifier.onCloseStory(mounted),
                         child: const CustomIconWidget(
                           defaultColor: false,
                           color: kHyppeLightButtonText,
@@ -190,76 +204,154 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
               ))
           : Stack(
               children: [
-                StoryView(
-                  inline: false,
-                  repeat: false,
-                  progressColor: kHyppeLightButtonText,
-                  durationColor: kHyppeLightButtonText,
-                  onDouble: () {
-                    print('testtttt');
-                    context.read<LikeNotifier>().likePost(context, currentData);
-                  },
-                  controller: _storyController,
-                  storyItems: notifier.result,
-                  progressPosition: ProgressPosition.top,
-                  onStoryShow: (storyItem) async {
-                    setState(() {
-                      int pos = notifier.result.indexOf(storyItem);
-                      notifier.setCurrentStory(pos);
-                      try {
-                        currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
-                      } catch (e) {
-                        'Error get current content data: $e'.logger();
-                      }
-                    });
+                (currentData.isReport ?? false)
+                    ? const SizedBox.shrink()
+                    : StoryView(
+                        inline: false,
+                        repeat: false,
+                        progressColor: kHyppeLightButtonText,
+                        durationColor: kHyppeLightButtonText,
+                        onDouble: () {
+                          print('testtttt');
+                          context.read<LikeNotifier>().likePost(context, currentData);
+                        },
+                        controller: _storyController,
+                        storyItems: notifier.result,
+                        progressPosition: ProgressPosition.top,
+                        onStoryShow: (storyItem) async {
+                          int pos = notifier.result.indexOf(storyItem);
+                          notifier.setCurrentStory(pos);
 
-                    _storyController.playbackNotifier.listen((value) {
-                      if (value == PlaybackState.previous) {
-                        print("widget.controller?.page ${storyItem}");
-                        if (notifier.currentStory == 0) {
-                          print('kesini');
-                          // notifier.onCloseStory(context, mounted);
-                        } else {
-                          widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                        }
-                      }
-                    });
+                          setState(() {
+                            try {
+                              currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
+                            } catch (e) {
+                              'Error get current content data: $e'.logger();
+                            }
+                          });
 
-                    // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
-                  },
-                  onComplete: () {
-                    widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                    final currentIndex = notifier.dataUserStories.length - 1;
-                    final isLastPage = currentIndex == widget.controller?.page;
-                    // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                    // notifier.pageController =
-                    print('onComplete Diary');
-                    System().increaseViewCount(context, currentData).whenComplete(() {});
-                    if (isLastPage) {
-                      notifier.onCloseStory(context, mounted);
-                    }
-                  },
-                  onEverySecond: (duration) {},
-                  onVerticalSwipeComplete: (v) {
-                    // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
-                    if (v == Direction.down) notifier.onCloseStory(context, mounted);
-                  },
-                ),
-                Container(),
+                          // _storyController.playbackNotifier.listen((value) {
+                          //   if (value == PlaybackState.previous) {
+                          //     print('playbackNotifier : ${widget.controller?.page}:$pos');
+                          //     final page = widget.controller?.page;
+                          //     if(page != null){
+                          //       if (page == 0 && pos == 0) {
+                          //         notifier.onCloseStory(mounted);
+                          //       } else if(page >= 1 && pos == 0) {
+                          //         widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          //       }
+                          //     }
+                          //   }
+                          // });
+
+                          // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
+                        },
+                        onFirstPrev: (storyItem) {
+                          int pos = notifier.result.indexOf(storyItem);
+                          final page = widget.controller?.page;
+                          if (page != null) {
+                            if (page == 0 && pos == 0) {
+                              notifier.onCloseStory(mounted);
+                            } else if (page >= 1 && pos == 0) {
+                              widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                            }
+                          }
+                        },
+                        onComplete: () {
+                          widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          final currentIndex = notifier.dataUserStories.length - 1;
+                          final isLastPage = currentIndex == widget.controller?.page;
+                          // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                          // notifier.pageController =
+                          print('onComplete Diary');
+                          System().increaseViewCount(context, currentData).whenComplete(() {});
+                          if (isLastPage) {
+                            notifier.onCloseStory(mounted);
+                          }
+                        },
+                        onEverySecond: (duration) {},
+                        onVerticalSwipeComplete: (v) {
+                          // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
+                          if (v == Direction.down) notifier.onCloseStory(mounted);
+                        },
+                      ),
+                (currentData.isReport ?? false)
+                    ? Stack(
+                        children: [
+                          CustomBackgroundLayer(
+                            sigmaX: 30,
+                            sigmaY: 30,
+                            // thumbnail: picData!.content[arguments].contentUrl,
+                            thumbnail: (currentData.isApsara ?? false) ? currentData.mediaThumbEndPoint : currentData.fullThumbPath,
+                          ),
+                          SafeArea(
+                              child: SizedBox(
+                            width: SizeConfig.screenWidth,
+                            child: Consumer<TranslateNotifierV2>(
+                              builder: (context, transnot, child) => Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Spacer(),
+                                  const CustomIconWidget(
+                                    iconData: "${AssetPath.vectorPath}eye-off.svg",
+                                    defaultColor: false,
+                                    height: 30,
+                                  ),
+                                  Text(transnot.translate.sensitiveContent ?? 'Sensitive Content', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                                  Text("HyppeStory ${transnot.translate.contentContainsSensitiveMaterial}",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                      )),
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      context.read<ReportNotifier>().seeContent(context, currentData, hyppeStory);
+                                      context.read<StoriesPlaylistNotifier>().onUpdate();
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      margin: const EdgeInsets.all(8),
+                                      width: SizeConfig.screenWidth,
+                                      decoration: const BoxDecoration(
+                                        border: Border(
+                                          top: BorderSide(
+                                            color: Colors.white,
+                                            width: 1,
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "${transnot.translate.see} HyppeStory",
+                                        style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                  thirtyTwoPx,
+                                ],
+                              ),
+                            ),
+                          )),
+                        ],
+                      )
+                    : Container(),
                 BuildTopView(
                   when: times[currentData.postID ?? ''] ?? '',
                   data: currentData,
                   storyController: _storyController,
                 ),
-                Form(
-                  child: BuildBottomView(
-                    data: currentData,
-                    storyController: _storyController,
-                    currentStory: notifier.currentStory,
-                    animationController: animationController,
-                    currentIndex: widget.stories.indexOf(currentData),
-                  ),
-                ),
+                (currentData.isReport ?? false)
+                    ? Container()
+                    : Form(
+                        child: BuildBottomView(
+                          data: currentData,
+                          storyController: _storyController,
+                          currentStory: notifier.currentStory,
+                          animationController: animationController,
+                          currentIndex: widget.stories.indexOf(currentData),
+                        ),
+                      ),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 800),
                   transitionBuilder: (child, animation) {

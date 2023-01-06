@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -11,6 +13,13 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/extension/custom_extension.dart';
+import 'package:story_view/controller/story_controller.dart';
+import 'package:story_view/widgets/story_view.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+
+import '../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../core/bloc/posts_v2/state.dart';
+import '../../../../../../core/models/collection/music/music.dart';
 
 class PreviewStoriesNotifier with ChangeNotifier {
   final _routing = Routing();
@@ -43,6 +52,8 @@ class PreviewStoriesNotifier with ChangeNotifier {
   Map<String, List<ContentData>> get myStoryGroup => _myStoryGroup;
 
   int get totalViews => _totalViews;
+
+  StoryController storyController = StoryController();
 
   changeBorderColor(ContentData contentData) {
     contentData.isViewed = true;
@@ -192,6 +203,45 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
+
+
+  Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        final String dur = jsonMap['Duration'];
+        final duration = double.parse(dur);
+        return MusicUrl(playUrl: jsonMap['PlayUrl'], duration: duration);
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
+  }
+
+  Future getVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        return jsonMap['PlayUrl'].toString();
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+      return '';
+    }
+  }
+
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !peopleContentsQuery.loading && hasNext) {
       initialPeopleStories(context);
@@ -212,18 +262,29 @@ class PreviewStoriesNotifier with ChangeNotifier {
     }
   }
 
-  void navigateToStoryGroup(BuildContext context, List stories) {
+  void navigateToMyStoryGroup(BuildContext context, List stories) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
     if (stories.isNotEmpty) {
       _routing.move(
         Routes.showStories,
         argument: StoryDetailScreenArgument(
-          groupStories: myStoryGroup,
+            groupStories: myStoryGroup,
         ),
       );
     } else {
       uploadStories(context);
     }
+  }
+
+  void navigateToPeopleStoryGroup(BuildContext context, int index) {
+    print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
+    _routing.move(
+        Routes.showStories,
+        argument: StoryDetailScreenArgument(
+            groupStories: groupPeopleStory,
+            peopleIndex: index,
+        )
+    );
   }
 
   void uploadStories(BuildContext context) {

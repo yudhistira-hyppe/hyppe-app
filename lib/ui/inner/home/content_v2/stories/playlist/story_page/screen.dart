@@ -117,7 +117,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                 ))
             : Center(
                 child: GestureDetector(
-                  onTap: () => notifier.onCloseStory(context, mounted),
+                  onTap: () => notifier.onCloseStory(mounted),
                   child: const CustomDynamicLinkErrorWidget(),
                 ),
               );
@@ -173,7 +173,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                           ),
                         ),
                         // onPressed: () => notifier.onCloseStory(context, context, arguments),
-                        onPressed: () => notifier.onCloseStory(context, mounted),
+                        onPressed: () => notifier.onCloseStory(mounted),
                         child: const CustomIconWidget(
                           defaultColor: false,
                           color: kHyppeLightButtonText,
@@ -218,7 +218,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                           _storyController.playbackNotifier.listen((value) {
                             if (value == PlaybackState.previous) {
                               if (widget.controller?.page == 0) {
-                                notifier.onCloseStory(context, mounted);
+                                notifier.onCloseStory(mounted);
                               } else {
                                 widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                               }
@@ -242,13 +242,13 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
                             // _storyController.next();
                           });
                           if (isLastPage) {
-                            notifier.onCloseStory(context, mounted);
+                            notifier.onCloseStory(mounted);
                           }
                         },
                         onEverySecond: (duration) {},
                         onVerticalSwipeComplete: (v) {
                           // if (v == Direction.down && mounted) notifier.onCloseStory(context, widget.arguments);
-                          if (v == Direction.down) notifier.onCloseStory(context, mounted);
+                          if (v == Direction.down) notifier.onCloseStory(mounted);
                         },
                       ),
                 // Padding(

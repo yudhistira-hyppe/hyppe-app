@@ -50,7 +50,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
       create: (context) => notifier,
       child: WillPopScope(
         onWillPop: () async {
-          notifier.onCloseStory(context, mounted);
+          notifier.onCloseStory(mounted);
           return false;
         },
         child: Scaffold(

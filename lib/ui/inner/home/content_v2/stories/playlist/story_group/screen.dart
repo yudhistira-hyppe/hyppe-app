@@ -22,15 +22,14 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.argument.index.toInt());
+    print('initState peopleIndex : ${widget.argument.peopleIndex}');
+    _pageController = PageController(initialPage: widget.argument.peopleIndex);
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));
     notifier.initStateGroup(context, widget.argument);
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
-    notifier.currentIndex = -1;
-  }
+  void afterFirstLayout(BuildContext context) {}
 
   @override
   void dispose() {
@@ -44,7 +43,7 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
       create: (context) => notifier,
       child: WillPopScope(
         onWillPop: () async {
-          notifier.onCloseStory(context, mounted);
+          notifier.onCloseStory(mounted);
           return false;
         },
         child: Scaffold(
@@ -60,46 +59,31 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                         notifier.currentIndex = index;
                       },
                       itemBuilder: (context, index) {
-                        try {
-                          final key = notifier.groupUserStories.keys.elementAt(index);
-                          final values = notifier.groupUserStories[key] ?? [];
-                          if (notifier.currentPage?.floor() == index) {
-                            double value = (notifier.currentPage ?? 1) - index;
-                            double degValue = notifier.degreeToRadian(value * 90);
-                            return Transform(
-                              transform: Matrix4.identity()
-                                ..setEntry(3, 2, 0.001)
-                                ..rotateY(degValue),
-                              alignment: Alignment.centerRight,
-                              child: StoryPageV2(isScrolling: _pageController.position.activity?.isScrolling, controller: _pageController, stories: values),
-                            );
-                          } else if ((notifier.currentPage?.floor() ?? 0) + 1 == index) {
-                            double value = (notifier.currentPage ?? 1) - index;
-                            double degValue = notifier.degreeToRadian(value * 90);
-                            return Transform(
-                              transform: Matrix4.identity()
-                                ..setEntry(3, 2, 0.002)
-                                ..rotateY(degValue),
-                              alignment: Alignment.centerLeft,
-                              child: StoryPageV2(
-                                isScrolling: _pageController.position.activity?.isScrolling ?? false,
-                                controller: _pageController,
-                                stories: values,
-                              ),
-                            );
-                          }
-                          return StoryPageV2(
-                            isScrolling: _pageController.position.activity?.isScrolling ?? false,
-                            controller: _pageController,
-                            stories: values,
-                          );
-                        } catch (e) {
-                          return StoryPageV2(
-                            isScrolling: _pageController.position.activity?.isScrolling ?? false,
-                            controller: _pageController,
-                            stories: [],
+                        final key = notifier.groupUserStories.keys.elementAt(index);
+                        print('Story index $index : ${notifier.currentPage}, ${notifier.currentIndex}, $key');
+                        final values = notifier.groupUserStories[key] ?? [];
+                        if (notifier.currentIndex == index && notifier.currentPage?.floor() == index) {
+                          double value = (notifier.currentPage ?? 1) - index;
+                          double degValue = notifier.degreeToRadian(value * 90);
+                          return Transform(
+                            transform: Matrix4.identity()
+                              ..setEntry(3, 2, 0.001)
+                              ..rotateY(degValue),
+                            alignment: Alignment.centerRight,
+                            child: StoryPageV2(
+                              isScrolling: _pageController.position.activity?.isScrolling ?? false,
+                              controller: _pageController,
+                              stories: values,
+                            ),
                           );
                         }
+
+                        return Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.0,
+                            backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                          ),
+                        );
                       })
                   : Center(
                       child: CircularProgressIndicator(

@@ -321,6 +321,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         );
       }
     }
+
     notifyListeners();
   }
 
@@ -426,14 +427,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
-    final myEmail = _sharedPrefs.readStorage(SpKeys.email);
-    _currentPage = routeArgument.index;
+    // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
+    _currentPage = routeArgument.peopleIndex.toDouble();
+    _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
-
     if (groups != null) {
-      for (final value in groups[myEmail]!) {
-        print('content value : ${value.postID}');
-      }
       _groupUserStories = groups;
     }
   }
@@ -656,18 +654,24 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  void onCloseStory(BuildContext context, bool mounted) {
+  bool _ableClose = true;
+  void onCloseStory(bool mounted) {
     if (mounted) {
-      _textEditingController.clear();
-      if (_routeArgument?.postID != null) {
-        _routing.moveAndPop(Routes.lobby);
-      } else {
-        SchedulerBinding.instance?.addPostFrameCallback((_) {
-          Navigator.pop(context);
-        });
-
-        // _routing.moveBack();
+      if (_ableClose) {
+        _textEditingController.clear();
+        if (_routeArgument?.postID != null) {
+          print('onCloseStory moveAndPop ');
+          _routing.moveAndPop(Routes.lobby);
+        } else {
+          print('onCloseStory moveBack');
+          _routing.moveBack();
+        }
+        _ableClose = false;
       }
+
+      Future.delayed(const Duration(milliseconds: 700), () {
+        _ableClose = true;
+      });
     }
   }
 

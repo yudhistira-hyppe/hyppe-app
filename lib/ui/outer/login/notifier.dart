@@ -123,7 +123,7 @@ class LoginNotifier extends LoadingNotifier with ChangeNotifier {
     try{
       final listFAQ = [];
       final bloc = FAQBloc();
-      await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: 'Login'));
+      await bloc.getAllFAQs(context, arg: FAQRequest(type: 'faq', kategori: 'Masuk dan Pengaturan Akun'));
       final fetch = bloc.faqFetch;
       if(fetch.state == FAQState.faqSuccess){
         if(fetch.data != null){
