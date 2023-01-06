@@ -4,6 +4,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/scree
 import 'package:provider/provider.dart';
 
 import '../../../../../../../core/arguments/contents/story_detail_screen_argument.dart';
+import '../../../../../../constant/widget/custom_loading.dart';
 import '../notifier.dart';
 
 class StoryGroupScreen extends StatefulWidget {
@@ -29,7 +30,10 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {}
+  void afterFirstLayout(BuildContext context) {
+    final notif = context.read<StoriesPlaylistNotifier>();
+    notif.currentIndex = -1;
+  }
 
   @override
   void dispose() {
@@ -56,6 +60,8 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                       controller: _pageController,
                       itemCount: notifier.groupUserStories.length,
                       onPageChanged: (index) async {
+
+                        print('StoryGroupScreen index: $index');
                         notifier.currentIndex = index;
                       },
                       itemBuilder: (context, index) {
@@ -73,24 +79,45 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                             child: StoryPageV2(
                               isScrolling: _pageController.position.activity?.isScrolling ?? false,
                               controller: _pageController,
+                              index: index,
                               stories: values,
                             ),
                           );
                         }
 
-                        return Center(
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.0,
-                            backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-                          ),
-                        );
+                        return Container(
+                            color: Colors.black,
+                            width: 100,
+                            height: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(
+                                  height: 90,
+                                  child: SizedBox(
+                                    height: 10,
+                                    child: CustomLoading(),
+                                  ),
+                                ),
+                              ],
+                            ));
                       })
-                  : Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.0,
-                        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                  : Container(
+                  color: Colors.black,
+                  width: 100,
+                  height: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SizedBox(
+                        height: 90,
+                        child: SizedBox(
+                          height: 10,
+                          child: CustomLoading(),
+                        ),
                       ),
-                    );
+                    ],
+                  ));
             },
           ),
         ),

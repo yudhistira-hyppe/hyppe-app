@@ -29,12 +29,14 @@ import '../notifier.dart';
 class StoryPageV2 extends StatefulWidget {
   final List<ContentData> stories;
   bool? isScrolling;
+  final int index;
   final PageController? controller;
 
   StoryPageV2({
     Key? key,
     required this.stories,
     this.isScrolling,
+    required this.index,
     this.controller,
   }) : super(key: key);
 
@@ -82,6 +84,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
+      notifier.setCurrentStory(-1);
       notifier.initializeUserStories(context, _storyController, widget.stories).then((value) {
         Future.delayed(const Duration(milliseconds: 500), () {
           setState(() {
@@ -221,7 +224,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                         onStoryShow: (storyItem) async {
                           int pos = notifier.result.indexOf(storyItem);
                           notifier.setCurrentStory(pos);
-
+                          notifier.isLoadMusic = true;
                           setState(() {
                             try {
                               currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
@@ -347,9 +350,9 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                         child: BuildBottomView(
                           data: currentData,
                           storyController: _storyController,
-                          currentStory: notifier.currentStory,
+                          currentStory: widget.stories.indexOf(currentData),
                           animationController: animationController,
-                          currentIndex: widget.stories.indexOf(currentData),
+                          currentIndex: widget.index,
                         ),
                       ),
                 AnimatedSwitcher(

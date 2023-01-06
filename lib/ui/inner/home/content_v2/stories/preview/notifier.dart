@@ -180,7 +180,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
             final aDate = a.createdAt?.getMilliSeconds();
             final bDate = b.createdAt?.getMilliSeconds();
             if(aDate != null && bDate != null){
-              return bDate.compareTo(aDate);
+              return aDate.compareTo(bDate);
             }else{
               return 0;
             }
@@ -209,7 +209,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
             final aDate = a.createdAt?.getMilliSeconds();
             final bDate = b.createdAt?.getMilliSeconds();
             if(aDate != null && bDate != null){
-              return bDate.compareTo(aDate);
+              return aDate.compareTo(bDate);
             }else{
               return 0;
             }
