@@ -433,6 +433,9 @@ class StoryView extends StatefulWidget {
   /// Callback for when a story is currently being shown.
   final ValueChanged<StoryItem>? onStoryShow;
 
+  ///Trigger when on the first story item
+  final Function(StoryItem)? onFirstPrev;
+
   /// Where the progress indicator should be placed.
   final ProgressPosition progressPosition;
 
@@ -467,6 +470,7 @@ class StoryView extends StatefulWidget {
     this.onRepeat,
     this.onInit,
     this.onStoryShow,
+    this.onFirstPrev,
     this.onEverySecond,
     this.progressPosition = ProgressPosition.top,
     this.isAds = false,
@@ -798,7 +802,13 @@ class StoryViewState extends State<StoryView> with TickerProviderStateMixin, Vid
     }
 
     if (_currentStory == widget.storyItems.first) {
+      if(_currentStory != null){
+        if(widget.onFirstPrev != null){
+          widget.onFirstPrev!(_currentStory!);
+        }
+      }
       _beginPlay();
+
     } else {
       _currentStory?.shown = false;
       int lastPos = widget.storyItems.indexOf(_currentStory);

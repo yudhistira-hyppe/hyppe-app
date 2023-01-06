@@ -232,17 +232,32 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                 }
               });
 
-              _storyController.playbackNotifier.listen((value) {
-                if (value == PlaybackState.previous) {
-                  if (widget.controller?.page == 0) {
-                    notifier.onCloseStory(mounted);
-                  } else {
-                    widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                  }
-                }
-              });
+              // _storyController.playbackNotifier.listen((value) {
+              //   if (value == PlaybackState.previous) {
+              //     print('playbackNotifier : ${widget.controller?.page}:$pos');
+              //     final page = widget.controller?.page;
+              //     if(page != null){
+              //       if (page == 0 && pos == 0) {
+              //         notifier.onCloseStory(mounted);
+              //       } else if(page >= 1 && pos == 0) {
+              //         widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+              //       }
+              //     }
+              //   }
+              // });
 
               // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
+            },
+            onFirstPrev: (storyItem){
+              int pos = notifier.result.indexOf(storyItem);
+              final page = widget.controller?.page;
+              if(page != null){
+                if (page == 0 && pos == 0) {
+                  notifier.onCloseStory(mounted);
+                } else if(page >= 1 && pos == 0) {
+                  widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                }
+              }
             },
             onComplete: () {
               widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);

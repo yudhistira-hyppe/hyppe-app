@@ -655,15 +655,25 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       e.toString().logger();
     }
   }
-
-  void onCloseStory(bool mounted) {
+  bool _ableClose = true;
+  void onCloseStory(bool mounted){
     if (mounted) {
-      _textEditingController.clear();
-      if (_routeArgument?.postID != null) {
-        _routing.moveAndPop(Routes.lobby);
-      } else {
-        _routing.moveBack();
+      if(_ableClose){
+        _textEditingController.clear();
+        if (_routeArgument?.postID != null) {
+          print('onCloseStory moveAndPop ');
+          _routing.moveAndPop(Routes.lobby);
+        } else {
+          print('onCloseStory moveBack');
+          _routing.moveBack();
+        }
+        _ableClose = false;
       }
+
+      Future.delayed(const Duration(milliseconds: 700), (){
+        _ableClose = true;
+      });
+
     }
   }
 
