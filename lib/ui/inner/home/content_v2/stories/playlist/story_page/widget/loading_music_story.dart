@@ -11,7 +11,8 @@ import '../../notifier.dart';
 class LoadingMusicStory extends StatefulWidget {
   final Music apsaraMusic;
   final int index;
-  const LoadingMusicStory({Key? key, required this.index, required this.apsaraMusic}) : super(key: key);
+  final int current;
+  const LoadingMusicStory({Key? key, required this.index, required this.current, required this.apsaraMusic}) : super(key: key);
 
   @override
   State<LoadingMusicStory> createState() => _LoadingMusicStoryState();
@@ -47,8 +48,8 @@ class _LoadingMusicStoryState extends State<LoadingMusicStory> with AfterFirstLa
     try {
       final apsaraId = music.apsaraMusic;
       if((apsaraId ?? '').isNotEmpty){
-        print('check index hit ${widget.index} : ${notif.currentIndex}');
-        if(notif.currentIndex == -1 || (notif.currentIndex == widget.index)){
+        print('check index hit (${widget.index} : ${notif.currentIndex}) and (${widget.current} : ${notif.currentStory})');
+        if((notif.currentIndex == -1 && notif.currentStory == -1) || (notif.currentIndex == widget.index && notif.currentStory == widget.current)){
           final url = await notif.getMusicApsara(context, apsaraId!);
           if(url != null){
             // widget.music.apsaraMusicUrl?.playUrl = url;

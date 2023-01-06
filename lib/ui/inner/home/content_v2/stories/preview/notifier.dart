@@ -175,6 +175,17 @@ class PreviewStoriesNotifier with ChangeNotifier {
             groupPeopleStory[email]?.add(data);
           }
         }
+        groupPeopleStory.forEach((key, value) {
+          groupPeopleStory[key]?.sort((a, b){
+            final aDate = a.createdAt?.getMilliSeconds();
+            final bDate = b.createdAt?.getMilliSeconds();
+            if(aDate != null && bDate != null){
+              return aDate.compareTo(bDate);
+            }else{
+              return 0;
+            }
+          });
+        });
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -193,6 +204,17 @@ class PreviewStoriesNotifier with ChangeNotifier {
           }
         }
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
+        groupPeopleStory.forEach((key, value) {
+          groupPeopleStory[key]?.sort((a, b){
+            final aDate = a.createdAt?.getMilliSeconds();
+            final bDate = b.createdAt?.getMilliSeconds();
+            if(aDate != null && bDate != null){
+              return aDate.compareTo(bDate);
+            }else{
+              return 0;
+            }
+          });
+        });
       }
 
       if (peopleStoriesData != null) {

@@ -59,7 +59,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
               children: [
                 ViewerStoriesButton(
                   data: widget.data,
-                  currentStory: widget.currentStory,
+                  currentStory: widget.currentStory == -1 ? 0 : widget.currentStory,
                   storyController: widget.storyController,
                 ),
                 if (widget.data?.music?.musicTitle != null)
@@ -68,7 +68,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                     child: widget.data?.mediaType == 'video'
                         ? MusicStatusPage(music: widget.data!.music!,)
                         : notifier.isLoadMusic
-                            ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex,)
+                            ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex, current: widget.currentStory ?? 0,)
                             : MusicStatusPage(
                                 music: widget.data!.music!,
                                 urlMusic: notifier.urlMusic?.playUrl ?? '',
@@ -102,7 +102,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                 vertical: 0,
                               )
                             : notifier.isLoadMusic
-                                ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex,)
+                                ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex, current: widget.currentStory ?? 0,)
                                 : MusicStatusPage(
                                     music: widget.data!.music!,
                                     urlMusic: notifier.urlMusic?.playUrl ?? '',

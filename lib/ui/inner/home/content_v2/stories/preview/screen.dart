@@ -54,6 +54,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
         child: ListView.builder(
           controller: notifier.scrollController,
           scrollDirection: Axis.horizontal,
+          physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(left: 4.5, right: 16.0),
           itemCount: notifier.peopleItemCount(error),
           itemBuilder: (context, index) {

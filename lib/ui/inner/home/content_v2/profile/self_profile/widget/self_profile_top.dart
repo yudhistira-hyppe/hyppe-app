@@ -1,11 +1,9 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/services/notification_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_elevated_button.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -17,7 +15,6 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -249,8 +246,8 @@ class SelfProfileTop extends StatelessWidget {
                             desc: notifier.displayBio(),
                             trimLines: 3,
                             textAlign: TextAlign.start,
-                            seeLess: ' Show less',
-                            seeMore: ' Show More',
+                            seeLess: ' ${notifier.language.seeLess}',
+                            seeMore: ' ${notifier.language.seeMoreContent}',
                             normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
                             hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(

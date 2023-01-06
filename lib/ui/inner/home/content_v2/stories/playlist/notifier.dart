@@ -109,6 +109,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
+  int _pageIndex = -1;
+  int get pageIndex => _pageIndex;
   bool _hitApiMusic = false;
   bool get hitApiMusic => _hitApiMusic;
 
@@ -173,6 +175,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
   set currentIndex(int index) {
     _currentIndex = index;
+    notifyListeners();
+  }
+
+  set pageIndex(int index){
+    _pageIndex = index;
     notifyListeners();
   }
 
