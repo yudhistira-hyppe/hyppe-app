@@ -114,7 +114,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                           textToDisplay: supportNotifier.levelData[index].descLevel ?? '',
                           textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                         ),
-                        subtitle: Text('The condition will appear if the users problem need technical   that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
+                        subtitle: Text('The condition will appear if the users problem need technical that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
                         controlAffinity: ListTileControlAffinity.leading,
                         activeColor: Theme.of(context).colorScheme.primaryVariant,
                         isThreeLine: true,

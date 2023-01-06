@@ -135,7 +135,7 @@ class SupportTicketNotifier with ChangeNotifier {
     // isLoading = true;
     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     try {
-      await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: pdf).then((value) async {
+      await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: pdf, maxFile: 4).then((value) async {
         debugPrint('Pick => ' + value.toString());
         if (value.values.single != null) {
           // pickedSupportingDocs = value.values.single;
@@ -177,7 +177,7 @@ class SupportTicketNotifier with ChangeNotifier {
         'body': descriptionController.text,
         'categoryTicket': idCategory,
         'levelTicket': idLevelTicket,
-        // 'sourceTicket': 'asdasd',
+        'sourceTicket': '631176cc9e2f00002c0050c8',
         'status': 'new',
       };
       print(data);

@@ -89,6 +89,14 @@ class ApiAction {
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
 
+    if (url == UrlConstants.createuserposts) {
+      if (Env.data.debug == true) {
+        url = UrlConstants.stagingUploadBaseApi + UrlConstants.apiV4 + UrlConstants.createuserposts;
+      } else {
+        url = UrlConstants.productionUploadBaseApi + UrlConstants.apiV4 + UrlConstants.createuserposts;
+      }
+    }
+
     // if (Env.dataUrlv4.contains(url)) {
     //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
     // } else {

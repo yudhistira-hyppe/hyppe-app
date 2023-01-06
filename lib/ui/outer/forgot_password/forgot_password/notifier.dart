@@ -75,6 +75,16 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
               email: emailController.text,
             ),
           );
+        } else {
+          ShowBottomSheet().onShowColouredSheet(
+            context,
+            "${fetch.data['messages']['info'][0]}",
+            maxLines: 3,
+            sizeIcon: 15,
+            color: kHyppeRed,
+            iconColor: kHyppeTextPrimary,
+            iconSvg: "${AssetPath.vectorPath}remove.svg",
+          );
         }
       } catch (e) {
         setLoading(false);

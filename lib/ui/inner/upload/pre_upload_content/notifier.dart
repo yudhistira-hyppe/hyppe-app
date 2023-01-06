@@ -633,8 +633,8 @@ class PreUploadContentNotifier with ChangeNotifier {
         'Create post content with value $value'.logger();
         // _eventService.notifyUploadFinishingUp(_uploadSuccess);
         eventService.notifyUploadSuccess(_uploadSuccess);
-        final decode = json.decode(_uploadSuccess.toString());
-        _postIdPanding = decode['data']['postID'];
+        // final decode = json.decode(_uploadSuccess.toString());
+        // _postIdPanding = decode['data']['postID'];
         if (_boostContent != null) _boostContentBuy(context);
       });
       if (_boostContent == null) clearUpAndBackToHome(context);

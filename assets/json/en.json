@@ -835,6 +835,7 @@
   "noResultsFor" : "No results for ",
   "max3Images": "Max 3 images",
   "max4Images": "Max 4 images",
+  "pleaseSelectOneortheMaxFileis": "Please select one or the max file is ",
   "messageMaxTickets": "You’ve reached maximum allowed",
   "seeTicketHistory": "See Ticket History",
   "activeTicketIssue": "Active Ticket Issue",

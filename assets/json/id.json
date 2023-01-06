@@ -835,6 +835,7 @@
   "noResultsFor" : "Tidak ada hasil untuk ",
   "max3Images": "Maksimal 3 gambar",
   "max4Images": "Maksimal 4 gambar",
+  "pleaseSelectOneortheMaxFileis": "Silahkan pilih salah satu atau max file adalah ",
   "messageMaxTickets": "Anda telah mencapai batas maksimum yang diizinkan",
   "seeTicketHistory": "Melihat Riwayat Tiket",
   "activeTicketIssue": "Tiket Isu Aktif",

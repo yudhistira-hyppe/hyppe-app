@@ -454,10 +454,11 @@ class System {
     bool pdf = false,
     LocalizationModelV2? model,
     bool isVideo = false,
+    int maxFile = 3,
   }) async {
     final ImagePicker _imagePicker = ImagePicker();
 
-    final notifier = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final notifier = context.read<TranslateNotifierV2>().translate;
     Duration _duration;
     String _errorMsg = '';
     List<File>? _filePickerResult;
@@ -518,14 +519,14 @@ class System {
           }
         } else {
           final List<XFile>? selectedImages = await _imagePicker.pickMultiImage(imageQuality: 90);
-          if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= 3) {
+          if ((selectedImages?.isNotEmpty ?? false) && (selectedImages?.length ?? 0) <= maxFile) {
             for (XFile file in selectedImages ?? []) {
               debugPrint(file.path);
               imageFileList.add(File(file.path));
             }
             _filePickerResult = imageFileList;
           } else {
-            _errorMsg = (model != null) ? (model.max3Images ?? 'Please select one or max 3 image') : "Please select one or max 3 image";
+            _errorMsg = "${notifier.pleaseSelectOneortheMaxFileis} $maxFile";
           }
         }
       }

@@ -34,12 +34,13 @@ class UserBloc {
   String platForm = "";
 
   Future recoverPasswordBloc(BuildContext context, {required String email}) async {
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setUserFetch(UserFetch(UserState.RecoverError, data: GenericResponse.fromJson(onResult.data).responseData));
+          setUserFetch(UserFetch(UserState.RecoverError, data: onResult.data));
         } else {
           setUserFetch(UserFetch(UserState.RecoverSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
@@ -57,8 +58,9 @@ class UserBloc {
         "event": "RECOVER_PASS",
         "status": "INITIAL",
         "deviceId": SharedPreference().readStorage(SpKeys.fcmToken),
+        "lang": lang ?? 'id',
       },
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.recoverPassword,
       methodType: MethodType.post,
@@ -67,6 +69,7 @@ class UserBloc {
 
   Future recoverPasswordOTPBloc(BuildContext context, {required String email, required String otp}) async {
     setUserFetch(UserFetch(UserState.loading));
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
     await Repos().reposPost(
@@ -92,6 +95,7 @@ class UserBloc {
         "event": "VERIFY_OTP",
         "status": "REPLY",
         "deviceId": SharedPreference().readStorage(SpKeys.fcmToken),
+        "lang": lang ?? 'id',
       },
       withAlertMessage: false,
       withCheckConnection: true,
@@ -106,6 +110,7 @@ class UserBloc {
     realDeviceId = await System().getDeviceIdentifier();
     referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
     platForm = Platform.isAndroid ? "android" : "ios";
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "GMAIL",
@@ -119,6 +124,7 @@ class UserBloc {
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
       "devicetype": platForm,
+      "lang": lang ?? 'id',
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -153,6 +159,7 @@ class UserBloc {
     realDeviceId = await System().getDeviceIdentifier();
     referralEmail = DynamicLinkService.getPendingReferralEmailDynamicLinks();
     platForm = Platform.isAndroid ? "android" : "ios";
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     dynamic payload = {
       'email': email.toLowerCase(),
       "socmedSource": "APPLE",
@@ -166,6 +173,7 @@ class UserBloc {
         "latitude": longtitude ?? "${double.parse("0.0")}",
       },
       "devicetype": platForm,
+      "lang": lang ?? 'id',
     };
     'Payload in social login referralPayload $payload'.logger();
 
@@ -392,6 +400,7 @@ class UserBloc {
 
   Future changePasswordBloc(BuildContext context, {required String oldPass, required String newPass}) async {
     setUserFetch(UserFetch(UserState.loading));
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     await Repos().reposPost(
       context,
       (onResult) {
@@ -417,6 +426,7 @@ class UserBloc {
         "email": SharedPreference().readStorage(SpKeys.email),
         "oldPass": oldPass,
         "newPass": newPass,
+        "lang": lang ?? 'id',
       },
     );
   }
@@ -525,6 +535,7 @@ class UserBloc {
     deviceID = SharedPreference().readStorage(SpKeys.fcmToken);
     realDeviceId = await System().getDeviceIdentifier();
     referralEmail = SharedPreference().readStorage(SpKeys.referralFrom) ?? '';
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
 
     await Repos().reposPost(
       context,
@@ -550,6 +561,7 @@ class UserBloc {
         "deviceId": "$deviceId",
         "referral": referralEmail,
         "imei": realDeviceId != "" ? realDeviceId : deviceID,
+        "lang": lang ?? 'id',
       },
       host: UrlConstants.verifyAccount,
       methodType: MethodType.post,
@@ -600,6 +612,7 @@ class UserBloc {
 
   Future signInWithGoogleBloc(BuildContext context, {required GoogleSignInAccount? userAccount}) async {
     setUserFetch(UserFetch(UserState.loading));
+    final lang = SharedPreference().readStorage(SpKeys.isoCode);
     await Repos().reposPost(
       context,
       (onResult) {
@@ -629,6 +642,7 @@ class UserBloc {
           "longitude": "${double.parse("0.0")}",
           "latitude": "${double.parse("0.0")}",
         },
+        "lang": lang ?? 'id',
       },
     );
   }
