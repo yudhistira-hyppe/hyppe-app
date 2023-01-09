@@ -17,7 +17,7 @@ class CommentNotification extends StatelessWidget {
           data: notifier.commentData() ?? [],
           itemCount: notifier.commentItemCount,
           builder: (context, index) {
-            if (notifier.commentData() == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(

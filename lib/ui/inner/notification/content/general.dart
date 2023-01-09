@@ -14,7 +14,7 @@ class GeneralNotification extends StatelessWidget {
           data: notifier.generalData() ?? [],
           itemCount: notifier.generalItemCount,
           builder: (context, index) {
-            if (notifier.generalData() == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -29,10 +30,16 @@ class MessageScreen extends StatefulWidget {
   _MessageScreenState createState() => _MessageScreenState();
 }
 
-class _MessageScreenState extends State<MessageScreen> {
+class _MessageScreenState extends State<MessageScreen> with RouteAware {
   final _notifier = MessageNotifier();
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -40,6 +47,15 @@ class _MessageScreenState extends State<MessageScreen> {
     _notifier.getDiscussion(context, reload: true);
     _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
     super.initState();
+  }
+
+  @override
+  void didPopNext() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _notifier.getDiscussion(context, reload: true);
+    });
+
+    super.didPopNext();
   }
 
   @override

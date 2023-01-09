@@ -311,14 +311,14 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           if (kDebugMode) {
             print("Gender => $trimText\n");
           }
-          genderController.text = "Laki-Laki";
+          genderController.text = language.male ?? "Laki-Laki";
         }
 
         if (trimText.toLowerCase().contains("perempuan")) {
           if (kDebugMode) {
             print("Gender => $trimText\n");
           }
-          genderController.text = "Perempuan";
+          genderController.text = language.female ?? "Perempuan";
         }
 
         lines++;
@@ -408,6 +408,8 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       final bloc = VerificationIDBloc();
       await bloc.postVerificationIDBloc(
         context,
+        // idcardnumber: '12312312312312312',
+        // nama: 'a. taslim fuadi',
         idcardnumber: idCardNumber,
         nama: realName,
         tempatLahir: birtPlaceController.text,
@@ -556,9 +558,10 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
           "Success Upload",
           maxLines: 2,
         );
-        if (_sheetResponse) {
-          clearAndMoveToLobby();
-        }
+        print('inin $_sheetResponse');
+        // if (_sheetResponse) {
+        clearAndMoveToLobby();
+        // }
       } else if (fetch.verificationIDState == VerificationIDState.loading) {
         {
           isLoading = true;
@@ -664,15 +667,15 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   void continueSelfie(BuildContext context) {
     var error = 0;
-    if (idCardName == "") {
-      errorName = language.itDoesntMatchIdentity ?? "Nama tidak sesuai KTP";
-      error++;
-    }
+    // if (idCardName == "") {
+    //   errorName = language.itDoesntMatchIdentity ?? "Nama tidak sesuai KTP";
+    //   error++;
+    // }
 
-    if (idCardNumber == "") {
-      errorKtp = language.noKTPCantBeRead ?? "Nomor KTP tidak terbaca";
-      error++;
-    }
+    // if (idCardNumber == "") {
+    //   errorKtp = language.noKTPCantBeRead ?? "Nomor KTP tidak terbaca";
+    //   error++;
+    // }
 
     if (genderController.text == "") {
       errorGender = language.genderMustBeFilled ?? "Jenis kelamin harus diisi";

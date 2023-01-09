@@ -56,7 +56,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   onTap: () {
                     notifier.screen = notifier.listScreen.keys.elementAt(index);
                     notifier.pageIndex = notifier.listScreen.keys.toList().indexOf(notifier.screen ?? Container());
-                    notifier.getNotifications(context, reload: true, eventType: notifier.eventType(index));
+                    notifier.getNotifications(context, reload: true, eventTypes: notifier.eventType(index));
                   },
                   child: Container(
                     child: Padding(
@@ -77,9 +77,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       border: Border(
                         bottom: BorderSide(
                           width: 2,
-                          color: notifier.listScreen.keys.elementAt(index) == notifier.screen
-                              ? Theme.of(context).colorScheme.primaryVariant
-                              : Theme.of(context).colorScheme.primary,
+                          color: notifier.listScreen.keys.elementAt(index) == notifier.screen ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),
@@ -87,8 +85,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 ),
               ),
             ),
-            if (notifier.loadingForObject(NotificationNotifier.refreshKey))
-              LinearProgressIndicator(color: Theme.of(context).colorScheme.primaryVariant, backgroundColor: Colors.grey),
+            if (notifier.loadingForObject(NotificationNotifier.refreshKey)) LinearProgressIndicator(color: Theme.of(context).colorScheme.primaryVariant, backgroundColor: Colors.grey),
             context.read<ErrorService>().isInitialError(error, notifier.data)
                 ? CustomErrorWidget(
                     errorType: ErrorType.notification,
@@ -100,8 +97,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       transitionBuilder: (child, animation) {
                         animation = CurvedAnimation(parent: animation, curve: Curves.easeOut, reverseCurve: Curves.easeIn);
 
-                        return SlideTransition(
-                            position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation), child: child);
+                        return SlideTransition(position: Tween<Offset>(begin: const Offset(0.0, 1.0), end: const Offset(0.0, 0.0)).animate(animation), child: child);
                       },
                       child: notifier.screen ?? Container(),
                     ),

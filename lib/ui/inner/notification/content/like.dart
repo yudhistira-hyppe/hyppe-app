@@ -14,7 +14,7 @@ class LikeNotification extends StatelessWidget {
           data: notifier.likeData() ?? [],
           itemCount: notifier.likeItemCount,
           builder: (context, index) {
-            if (notifier.likeData() == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(

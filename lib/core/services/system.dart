@@ -1023,19 +1023,23 @@ class System {
   }
 
   Future<void> increaseViewCount(BuildContext context, v2.ContentData data) async {
-    try {
-      final notifier = ViewBloc();
-      await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
-      final fetch = notifier.viewFetch;
-      if (!(data.insight?.isView ?? true)) {
-        if (fetch.viewState == ViewState.viewUserPostSuccess) {
-          data.insight?.views = (data.insight?.views ?? 0) + 1;
-          data.insight?.isView = true;
+    String myEmail = SharedPreference().readStorage(SpKeys.email) ?? "";
+    if (myEmail != data.email) {
+      try {
+        final notifier = ViewBloc();
+        await notifier.viewPostUserBloc(context, postId: data.postID ?? '', emailOwner: data.email ?? '');
+        final fetch = notifier.viewFetch;
+
+        if (!(data.insight?.isView ?? true)) {
+          if (fetch.viewState == ViewState.viewUserPostSuccess) {
+            data.insight?.views = (data.insight?.views ?? 0) + 1;
+            data.insight?.isView = true;
+          }
         }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Interactive error with $e');
+      } catch (e) {
+        if (kDebugMode) {
+          print('Interactive error with $e');
+        }
       }
     }
   }

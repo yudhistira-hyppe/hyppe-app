@@ -17,16 +17,13 @@ class PicPlaylishScreen extends StatefulWidget {
   final String url;
   final ContentData contentData;
   final TransformationController transformationController;
-  const PicPlaylishScreen({Key? key,
-    required this.data, required this.url,
-    required this.contentData, required this.transformationController}) : super(key: key);
+  const PicPlaylishScreen({Key? key, required this.data, required this.url, required this.contentData, required this.transformationController}) : super(key: key);
 
   @override
   State<PicPlaylishScreen> createState() => _PicPlaylishScreenState();
 }
 
 class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
-
   @override
   void initState() {
     context.incrementAdsCount();
@@ -35,12 +32,12 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
       if (widget.url.isNotEmpty && widget.data.adsId != null) {
         final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
         if (!isShowAds) {
-          if(globalAudioPlayer != null){
+          if (globalAudioPlayer != null) {
             globalAudioPlayer!.pause();
           }
           final count = context.getAdsCount();
           await System().adsPopUp(materialAppKey.currentContext!, widget.data, widget.url, isPopUp: false);
-          if(globalAudioPlayer != null){
+          if (globalAudioPlayer != null) {
             globalAudioPlayer!.resume();
           }
         }
@@ -57,7 +54,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   void dispose() {
-    if(globalAudioPlayer != null){
+    if (globalAudioPlayer != null) {
       disposeGlobalAudio();
     }
 

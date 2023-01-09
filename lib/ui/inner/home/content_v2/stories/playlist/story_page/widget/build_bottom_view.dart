@@ -25,14 +25,7 @@ class BuildBottomView extends StatefulWidget {
   final int? currentStory;
   final int currentIndex;
 
-  BuildBottomView({
-    Key? key,
-    required this.storyController,
-    required this.animationController,
-    required this.data,
-    required this.currentStory,
-    required this.currentIndex
-  });
+  BuildBottomView({Key? key, required this.storyController, required this.animationController, required this.data, required this.currentStory, required this.currentIndex});
 
   @override
   State<BuildBottomView> createState() => _BuildBottomViewState();
@@ -66,9 +59,15 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                   Container(
                     margin: const EdgeInsets.only(left: 16, right: 16, top: 8),
                     child: widget.data?.mediaType == 'video'
-                        ? MusicStatusPage(music: widget.data!.music!,)
+                        ? MusicStatusPage(
+                            music: widget.data!.music!,
+                          )
                         : notifier.isLoadMusic
-                            ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex, current: widget.currentStory ?? 0,)
+                            ? LoadingMusicStory(
+                                apsaraMusic: widget.data!.music!,
+                                index: widget.currentIndex,
+                                current: widget.currentStory ?? 0,
+                              )
                             : MusicStatusPage(
                                 music: widget.data!.music!,
                                 urlMusic: notifier.urlMusic?.playUrl ?? '',
@@ -102,7 +101,11 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                                 vertical: 0,
                               )
                             : notifier.isLoadMusic
-                                ? LoadingMusicStory(apsaraMusic: widget.data!.music!, index: widget.currentIndex, current: widget.currentStory ?? 0,)
+                                ? LoadingMusicStory(
+                                    apsaraMusic: widget.data!.music!,
+                                    index: widget.currentIndex,
+                                    current: widget.currentStory ?? 0,
+                                  )
                                 : MusicStatusPage(
                                     music: widget.data!.music!,
                                     urlMusic: notifier.urlMusic?.playUrl ?? '',

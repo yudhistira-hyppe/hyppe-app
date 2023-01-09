@@ -15,7 +15,7 @@ class MentionNotification extends StatelessWidget {
           data: notifier.mentionData() ?? [],
           itemCount: notifier.mentionItemCount,
           builder: (context, index) {
-            if (notifier.mentionData() == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(

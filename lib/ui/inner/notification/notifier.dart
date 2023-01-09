@@ -57,6 +57,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   int get itemCount => _data == null ? 10 : (_data?.length ?? 0);
 
   int get likeItemCount => likeData() == null ? 10 : (likeData()?.length ?? 0);
@@ -76,13 +79,16 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
   Future<void> getNotifications(
     BuildContext context, {
     bool reload = false,
-    NotificationCategory? eventType,
+    NotificationCategory? eventTypes,
   }) async {
+    _isLoading = true;
+    notifyListeners();
     Future<List<NotificationModel>> _resFuture;
-    notificationsQuery = notificationsQuery..eventType = eventType;
+    notificationsQuery = notificationsQuery..eventType = eventTypes;
     try {
       if (reload) {
         print('reload contentsQuery : 22');
+        notificationsQuery.eventType = eventType(_pageIndex);
         _resFuture = notificationsQuery.reload(context);
       } else {
         _resFuture = notificationsQuery.loadNext(context);
@@ -97,6 +103,8 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     } catch (e) {
       'load notification list: ERROR: $e'.logger();
     }
+    _isLoading = false;
+    notifyListeners();
   }
 
   void scrollListener(BuildContext context, ScrollController scrollController) {
@@ -213,7 +221,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     if (setState) notifyListeners();
   }
 
-  Future navigateToContent(BuildContext context, postType, postID) async{
+  Future navigateToContent(BuildContext context, postType, postID) async {
     final featureType = System().getFeatureTypeV2(postType ?? '');
     print('navigateToContent $postType, $postID, $featureType');
     switch (featureType) {
@@ -230,37 +238,35 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         await onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)), postID);
         break;
       case FeatureType.txtMsg:
-
         return;
       case FeatureType.other:
         return;
     }
   }
 
-  void checkAndNavigateToProfile(BuildContext context, String? username) async{
+  void checkAndNavigateToProfile(BuildContext context, String? username) async {
     UserProfileModel? result = null;
-    try{
-      if(username != null){
+    try {
+      if (username != null) {
         final fixUsername = username.replaceAll(' ', '');
         final usersNotifier = UserBloc();
         await usersNotifier.getUserProfilesBloc(context, search: fixUsername, withAlertMessage: true, isByUsername: true);
         final usersFetch = usersNotifier.userFetch;
         if (usersFetch.userState == UserState.getUserProfilesSuccess) {
           result = usersFetch.data;
-          if(result != null){
+          if (result != null) {
             Routing().move(Routes.otherProfile, argument: OtherProfileArgument(profile: result, senderEmail: result.email));
-          }else{
+          } else {
             throw "Couldn't find the user ";
           }
-        }else if (usersFetch.userState == UserState.getUserProfilesError){
+        } else if (usersFetch.userState == UserState.getUserProfilesError) {
           throw "Couldn't find the user";
         }
-      }else{
+      } else {
         throw "Couldn't find the user";
       }
-
-    }catch(e){
-      try{
+    } catch (e) {
+      try {
         await ShowBottomSheet().onShowColouredSheet(
           context,
           language.userIsNotFound ?? '$e',
@@ -268,11 +274,10 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
           iconSvg: "${AssetPath.vectorPath}close.svg",
           sizeIcon: 15,
         );
-      }catch(e){
+      } catch (e) {
         e.logger();
       }
     }
-
   }
 
   Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback, postID) async {
@@ -292,16 +297,16 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future onGetMessageDetail(BuildContext context, Function(MessageDataV2) callback, String disqusID) async{
+  Future onGetMessageDetail(BuildContext context, Function(MessageDataV2) callback, String disqusID) async {
     final bloc = MessageBlocV2();
     final List<MessageDataV2> data = [];
     final disqusArgument = DiscussArgument(email: SharedPreference().readStorage(SpKeys.email), receiverParty: '');
     await bloc.getDiscussionBloc(context, disqusArgument: disqusArgument, disqusID: disqusID);
     final fetch = bloc.messageFetch;
-    if(fetch.chatState == MessageState.createDiscussionBlocSuccess){
-      if(fetch.data.isNotEmpty){
+    if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {
+      if (fetch.data.isNotEmpty) {
         fetch.data.forEach((v) => data.add(MessageDataV2.fromJson(v)));
-        if(data.isNotEmpty){
+        if (data.isNotEmpty) {
           callback(data[0]);
         }
       }

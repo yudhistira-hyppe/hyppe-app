@@ -286,7 +286,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                               textSpan: TextSpan(style: textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary), text: notifier.language.confirmIdGenuine),
                             ),
                           ),
-                          Checkbox(checkColor: Colors.white, value: notifier.acceptTos, onChanged: (e) => notifier.checked())
+                          Checkbox(checkColor: Colors.white, value: notifier.acceptTos, activeColor: kHyppePrimary, onChanged: (e) => notifier.checked())
                         ],
                       ),
                       const SizedBox(height: 70),

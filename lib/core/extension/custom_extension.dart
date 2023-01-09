@@ -8,8 +8,7 @@ extension CustomDateTimeExtentision on DateTime {
 
   DateTime get firstDateOfLastMonth => subtract(
         Duration(
-          days: DateUtils.getDaysInMonth(DateTime.now().isFirstMonth ? DateTime.now().year - 1 : DateTime.now().year,
-                  DateTime.now().isFirstMonth ? DateTime.december : DateTime.now().month - 1) +
+          days: DateUtils.getDaysInMonth(DateTime.now().isFirstMonth ? DateTime.now().year - 1 : DateTime.now().year, DateTime.now().isFirstMonth ? DateTime.december : DateTime.now().month - 1) +
               DateTime.now().day -
               1,
         ),
@@ -29,9 +28,9 @@ extension MarkAllNotificationAsRead on List<NotificationModel> {
   List<NotificationModel> filterNotification(List<NotificationCategory> notificationCategory) {
     List<NotificationModel> _result = [];
     for (var element1 in this) {
-      if (notificationCategory.contains(System().getNotificationCategory(element1.eventType ?? ''))) {
-        _result.add(element1);
-      }
+      // if (notificationCategory.contains(System().getNotificationCategory(element1.eventType ?? ''))) {
+      _result.add(element1);
+      // }
     }
     return _result;
   }

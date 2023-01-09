@@ -51,8 +51,8 @@ class CustomContentModeratedWidget extends StatelessWidget {
               CustomBaseCacheImage(
                 // cacheKey: _networklHasErrorNotifier.value.toString(),
                 imageUrl: thumbnail,
-                memCacheWidth: 50,
-                memCacheHeight: 50,
+                memCacheWidth: 70,
+                memCacheHeight: 70,
                 imageBuilder: (_, imageProvider) {
                   return Container(
                     width: width,
@@ -67,18 +67,13 @@ class CustomContentModeratedWidget extends StatelessWidget {
                   );
                 },
                 errorWidget: (_, __, ___) {
-                  return GestureDetector(
-                    onTap: () {
-                      _networklHasErrorNotifier.value++;
-                    },
-                    child: Container(
-                      width: width,
-                      height: height,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: boxFitError,
-                          image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                        ),
+                  return Container(
+                    width: width,
+                    height: height,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: boxFitError,
+                        image: const AssetImage('${AssetPath.pngPath}content-error.png'),
                       ),
                     ),
                   );

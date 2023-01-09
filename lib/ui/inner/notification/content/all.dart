@@ -16,7 +16,7 @@ class AllNotification extends StatelessWidget {
           data: notifier.data ?? [],
           itemCount: notifier.itemCount,
           builder: (context, index) {
-            if (notifier.data == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(

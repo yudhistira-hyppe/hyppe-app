@@ -176,12 +176,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
           }
         }
         groupPeopleStory.forEach((key, value) {
-          groupPeopleStory[key]?.sort((a, b){
+          groupPeopleStory[key]?.sort((a, b) {
             final aDate = a.createdAt?.getMilliSeconds();
             final bDate = b.createdAt?.getMilliSeconds();
-            if(aDate != null && bDate != null){
+            if (aDate != null && bDate != null) {
               return aDate.compareTo(bDate);
-            }else{
+            } else {
               return 0;
             }
           });
@@ -205,12 +205,12 @@ class PreviewStoriesNotifier with ChangeNotifier {
         }
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
         groupPeopleStory.forEach((key, value) {
-          groupPeopleStory[key]?.sort((a, b){
+          groupPeopleStory[key]?.sort((a, b) {
             final aDate = a.createdAt?.getMilliSeconds();
             final bDate = b.createdAt?.getMilliSeconds();
-            if(aDate != null && bDate != null){
+            if (aDate != null && bDate != null) {
               return aDate.compareTo(bDate);
-            }else{
+            } else {
               return 0;
             }
           });
@@ -224,8 +224,6 @@ class PreviewStoriesNotifier with ChangeNotifier {
       'load people story list: ERROR: $e'.logger();
     }
   }
-
-
 
   Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
     try {
@@ -290,7 +288,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
       _routing.move(
         Routes.showStories,
         argument: StoryDetailScreenArgument(
-            groupStories: myStoryGroup,
+          groupStories: myStoryGroup,
         ),
       );
     } else {
@@ -300,13 +298,11 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void navigateToPeopleStoryGroup(BuildContext context, int index) {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
-    _routing.move(
-        Routes.showStories,
+    _routing.move(Routes.showStories,
         argument: StoryDetailScreenArgument(
-            groupStories: groupPeopleStory,
-            peopleIndex: index,
-        )
-    );
+          groupStories: groupPeopleStory,
+          peopleIndex: index,
+        ));
   }
 
   void uploadStories(BuildContext context) {

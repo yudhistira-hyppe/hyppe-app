@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/services/error_service.dart';
+import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
@@ -10,18 +11,24 @@ import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/option_bar.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/search_content.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderStateMixin {
+class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late TabController _tabController;
   int _currentIndex = 0;
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
 
   @override
   void initState() {
@@ -53,6 +60,40 @@ class _SearchScreenState extends State<SearchScreen> with SingleTickerProviderSt
   void dispose() {
     _tabController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPop() {
+    'didPop searfc false'.logger();
+    super.didPop();
+  }
+
+  @override
+  void didPopNext() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
+    });
+
+    super.didPopNext();
+  }
+
+  @override
+  void didPushNext() {
+    'didPushNext searchFirst false'.logger();
+
+    super.didPushNext();
+  }
+
+  @override
+  void deactivate() {
+    'deactivate searfc false'.logger();
+
+    super.deactivate();
+  }
+
+  @override
+  void didPush() {
+    'didPush searfc false'.logger();
   }
 
   @override

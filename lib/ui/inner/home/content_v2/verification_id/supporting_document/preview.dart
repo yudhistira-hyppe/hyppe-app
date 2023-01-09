@@ -115,7 +115,11 @@ class _VerificationIDStepSupportingDocsPreviewState extends State<VerificationID
             child: CustomElevatedButton(
               width: SizeConfig.screenWidth,
               height: 44.0 * SizeConfig.scaleDiagonal,
-              function: () => notifier.onSaveSupportedDocument(context),
+              function: () {
+                if (!notifier.isLoading) {
+                  notifier.onSaveSupportedDocument(context);
+                }
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
