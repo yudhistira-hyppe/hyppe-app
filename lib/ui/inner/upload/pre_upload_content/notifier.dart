@@ -12,7 +12,6 @@ import 'package:hyppe/core/bloc/google_map_place/state.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
-import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
@@ -51,11 +50,9 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
-// import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
   final eventService = EventService();
@@ -484,33 +481,33 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  void _connectAndListenToSocket(BuildContext context) async {
-    final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
-    String? token = SharedPreference().readStorage(SpKeys.userToken);
-    String? email = SharedPreference().readStorage(SpKeys.email);
-    if (socketService.isRunning) socketService.closeSocket();
-    socketService.connectToSocket(
-      () {
-        socketService.events(SocketService.eventNotif, (result) {
-          '$result'.logger();
-          homeNotifier.onRefresh(context, _visibility);
-          // homeNotifier.isHaveSomethingNew = true;
-          socketService.closeSocket();
-        });
-      },
-      host: Env.data.baseUrl,
-      options: OptionBuilder()
-          .setAuth({
-            "x-auth-user": "$email",
-            "x-auth-token": "$token",
-          })
-          .setTransports(
-            ['websocket'],
-          )
-          .disableAutoConnect()
-          .build(),
-    );
-  }
+  // void _connectAndListenToSocket(BuildContext context) async {
+  //   final homeNotifier = Provider.of<HomeNotifier>(context, listen: false);
+  //   String? token = SharedPreference().readStorage(SpKeys.userToken);
+  //   String? email = SharedPreference().readStorage(SpKeys.email);
+  //   if (socketService.isRunning) socketService.closeSocket();
+  //   socketService.connectToSocket(
+  //     () {
+  //       socketService.events(SocketService.eventNotif, (result) {
+  //         '$result'.logger();
+  //         homeNotifier.onRefresh(context, _visibility);
+  //         // homeNotifier.isHaveSomethingNew = true;
+  //         socketService.closeSocket();
+  //       });
+  //     },
+  //     host: Env.data.baseUrl,
+  //     options: OptionBuilder()
+  //         .setAuth({
+  //           "x-auth-user": "$email",
+  //           "x-auth-token": "$token",
+  //         })
+  //         .setTransports(
+  //           ['websocket'],
+  //         )
+  //         .disableAutoConnect()
+  //         .build(),
+  //   );
+  // }
 
   void _onExit({bool isDisposeVid = true}) {
     print('ini exit');
@@ -550,6 +547,8 @@ class PreUploadContentNotifier with ChangeNotifier {
 
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
+      notifier.height = null;
+      notifier.width = null;
       try {
         notifier.audioPreviewPlayer.stop();
         notifier.audioPreviewPlayer.dispose();
@@ -603,9 +602,14 @@ class PreUploadContentNotifier with ChangeNotifier {
     try {
       // _connectAndListenToSocket(context);
       final notifier = PostsBloc();
+      final size = context.read<PreviewContentNotifier>();
+      final width = size.width;
+      final height = size.height;
       print('featureType : $featureType');
       notifier.postContentsBlocV2(
         context,
+        width: width,
+        height: height,
         type: featureType ?? FeatureType.other,
         visibility: privacyValue,
         tags: hastagCaption,

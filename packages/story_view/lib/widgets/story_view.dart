@@ -248,6 +248,7 @@ class StoryItem {
     required String id,
     Key? key,
     Duration? duration,
+    Size? size,
     BoxFit imageFit = BoxFit.fitWidth,
     String? caption,
     bool shown = false,
@@ -256,6 +257,7 @@ class StoryItem {
     /// Xulu Developer Code:
     Color? backgroundColor,
   }) {
+
     return StoryItem(
         Container(
           key: key,
@@ -266,7 +268,8 @@ class StoryItem {
                 url,
                 controller: controller,
                 requestHeaders: requestHeaders,
-
+                width: size?.width,
+                height: size?.height,
                 /// Xulu Developer Code:
                 backgroundColor: backgroundColor,
               ),

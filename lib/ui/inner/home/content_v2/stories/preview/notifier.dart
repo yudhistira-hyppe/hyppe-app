@@ -168,6 +168,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
         groupPeopleStory = {};
         for (var data in res) {
           final email = data.email;
+          print('people postID: ${data.postID}');
           if (email != null) {
             if (groupPeopleStory[email] == null) {
               groupPeopleStory[email] = [];

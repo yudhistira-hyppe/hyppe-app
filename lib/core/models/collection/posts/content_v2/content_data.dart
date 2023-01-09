@@ -347,6 +347,10 @@ class Metadata {
 
   String? email;
 
+  int? width;
+
+  int? height;
+
   Metadata({
     this.duration,
     this.postRoll,
@@ -354,6 +358,8 @@ class Metadata {
     this.midRoll,
     this.postID,
     this.email,
+    this.width,
+    this.height
   });
 
   Metadata.fromJson(Map<String, dynamic> json) {
@@ -363,6 +369,8 @@ class Metadata {
     midRoll = json['midRoll'];
     postID = json['postID'];
     email = json['email'];
+    width = json['width'];
+    height = json['height'];
   }
 
   Map<String, dynamic> toJson() {
@@ -373,6 +381,8 @@ class Metadata {
     data['midRoll'] = midRoll;
     data['postID'] = postID;
     data['email'] = email;
+    data['width'] = width;
+    data['height'] = height;
     return data;
   }
 }

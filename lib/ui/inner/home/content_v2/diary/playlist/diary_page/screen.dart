@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/music_status_page_widget.dart';
@@ -32,7 +31,7 @@ class DiaryPage extends StatefulWidget {
   final PageController? controller;
   final int? total;
 
-  const DiaryPage({this.data, this.isScrolling, required this.function, this.controller, this.total});
+  DiaryPage({this.data, this.isScrolling, required this.function, this.controller, this.total});
 
   @override
   _DiaryPageState createState() => _DiaryPageState();
@@ -42,7 +41,7 @@ class _DiaryPageState extends State<DiaryPage> {
   // bool _postViewAdded = false;
   List<StoryItem> _storyItems = [];
   final StoryController _storyController = StoryController();
-  int _curentPosition = 0;
+  // int _curentPosition = 0;
   bool isLoading = false;
 
   // void _addPostView() {

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/scheduler.dart';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
@@ -312,12 +311,20 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             urlApsara = value;
           });
         }
+        Size? videoSize;
+        final width = story.metadata?.width?.toDouble();
+        final height = story.metadata?.height?.toDouble();
+        if(width != null && height != null){
+          videoSize = Size(width, height);
+          videoSize = videoSize.getFixSize(context);
+        }
         print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
         _result.add(
           StoryItem.pageVideo(
             urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
             controller: storyController,
             id: story.postID ?? '',
+            size: videoSize,
             requestHeaders: {
               'post-id': story.postID ?? '',
               'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
@@ -380,6 +387,13 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           urlApsara = value;
         });
       }
+      Size? videoSize;
+      final width = data.metadata?.width?.toDouble();
+      final height = data.metadata?.height?.toDouble();
+      if(width != null && height != null){
+        videoSize = Size(width, height);
+        videoSize = videoSize.getFixSize(context);
+      }
       print('StoryItem.pageVideo ${data.postID} : $urlApsara, ${data.fullContentPath}, ${data.metadata?.duration}');
       _result.add(
         StoryItem.pageVideo(
@@ -391,6 +405,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
             'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
           },
+          size: videoSize,
           duration: Duration(seconds: data.metadata?.duration ?? 15),
         ),
       );

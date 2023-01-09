@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/register_referral_argument.dart';
@@ -7,7 +6,6 @@ import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/models/collection/error/error_model.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/referral/model_referral.dart';
 import 'package:hyppe/core/services/shared_preference.dart';

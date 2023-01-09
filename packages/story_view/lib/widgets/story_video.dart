@@ -52,6 +52,9 @@ class StoryVideo extends StatefulWidget {
   final StoryController? storyController;
   final VideoLoader videoLoader;
 
+  double? videoWidth;
+  double? videoHeight;
+
   /// Xulu Developer Code:
   final Color? backgroundColor;
 
@@ -60,6 +63,8 @@ class StoryVideo extends StatefulWidget {
     Key? key,
     this.backgroundColor,
     this.storyController,
+    this.videoWidth,
+    this.videoHeight
   }) : super(key: key ?? UniqueKey());
 
   static StoryVideo url(
@@ -67,6 +72,8 @@ class StoryVideo extends StatefulWidget {
     Key? key,
     Color? backgroundColor,
     StoryController? controller,
+    double? width,
+    double? height,
     Map<String, String>? requestHeaders,
   }) {
     return StoryVideo(
@@ -76,7 +83,8 @@ class StoryVideo extends StatefulWidget {
       ),
       key: key,
       storyController: controller,
-
+      videoWidth: width,
+      videoHeight: height,
       /// Xulu Developer Code:
       backgroundColor: backgroundColor,
     );
@@ -141,8 +149,8 @@ class StoryVideoState extends State<StoryVideo> {
             playerController?.setupDataSource(dataSource).then((_) {
               overridenAspectRatio = playerController?.videoPlayerController?.value.size?.height ?? 0 / (playerController?.videoPlayerController?.value.size?.width ?? 0);
 
-              _width = playerController?.videoPlayerController?.value.size?.width ?? 0;
-              _height = playerController?.videoPlayerController?.value.size?.height ?? 0;
+              _width = widget.videoWidth ?? playerController?.videoPlayerController?.value.size?.width ?? 0;
+              _height = widget.videoHeight ?? playerController?.videoPlayerController?.value.size?.height ?? 0;
 
               if (mounted) {
                 /// Xulu code
@@ -202,6 +210,7 @@ class StoryVideoState extends State<StoryVideo> {
       //           ),
       //         ),
       // );
+      print('width: $_width, height: $_height');
       if(playerController != null){
         return Center(
           child: SizedBox.expand(

@@ -11,7 +11,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/services/event_service.dart';
-import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/constant/widget/show_overlay_loading.dart';
 import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_complete_profile.dart';
@@ -26,7 +25,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/setting/setting_notifier.
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class AccountPreferencesNotifier extends ChangeNotifier {
@@ -360,7 +358,6 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           await notifier2.updateProfileBlocV2(context, data: _dataPersonalInfo.toUpdateProfileJson());
 
           final fetch = notifier.userFetch;
-          final fetch2 = notifier2.userFetch;
 
           if (fetch.userState == UserState.postBioSuccess) {}
           if (fetch.userState == UserState.postBioError) {}
