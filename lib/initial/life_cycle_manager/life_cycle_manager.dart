@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/bloc/device/state.dart';
-import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
 import 'package:hyppe/core/bloc/device/bloc.dart';
@@ -25,7 +24,6 @@ import '../../core/bloc/ads_video/state.dart';
 import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
-import '../../ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
 
 class LifeCycleManager extends StatefulWidget {

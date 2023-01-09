@@ -11,6 +11,7 @@ import '../services/shared_preference.dart';
 import '../services/system.dart';
 
 extension ContextScreen on BuildContext {
+
   double getWidth() {
     return MediaQuery.of(this).size.width;
   }
@@ -134,17 +135,37 @@ extension IntegerExtension on int {
   }
 }
 
+extension SizeHelpers on Size{
+  Size getFixSize(BuildContext context){
+    final heightScreen = context.getHeight();
+    final widthScreen = context.getWidth();
+    double fixHeight = height;
+    double fixWidth = width;
+    if(widthScreen < fixWidth){
+      final tempWidth = fixWidth;
+      fixWidth = widthScreen;
+      fixHeight = (fixHeight*fixWidth)/tempWidth;
+    }
+    if(heightScreen < fixHeight){
+      final tempHeight = heightScreen;
+      fixHeight = heightScreen;
+      fixWidth = (fixWidth*fixHeight)/tempHeight;
+    }
+    return Size(fixWidth, fixHeight);
+  }
+}
+
 extension DateHelpers on DateTime {
   bool isToday() {
     final now = DateTime.now();
     // print('DateHelpers ${now.day} : ${this.day}');
     // print('DateHelpers ${now.month} : ${this.month}');
     // print('DateHelpers ${now.year} : ${this.year}');
-    return now.day == this.day && now.month == this.month && now.year == this.year;
+    return now.day == day && now.month == month && now.year == year;
   }
 
   bool isYesterday() {
     final yesterday = DateTime.now().subtract(Duration(days: 1));
-    return yesterday.day == this.day && yesterday.month == this.month && yesterday.year == this.year;
+    return yesterday.day == day && yesterday.month == month && yesterday.year == year;
   }
 }

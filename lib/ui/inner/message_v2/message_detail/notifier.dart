@@ -3,7 +3,6 @@ import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/bloc/message_v2/bloc.dart';
 import 'package:hyppe/core/bloc/message_v2/state.dart';
-// import 'package:hyppe/core/constants/api.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/event/discuss_event_handler.dart';
 import 'package:hyppe/core/event/event_key.dart';
@@ -12,15 +11,9 @@ import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/query_request/discuss_data_query.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-// import 'package:hyppe/core/services/socket_service.dart';
-// import 'package:hyppe/core/services/system.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-// import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:provider/provider.dart';
-// import 'package:socket_io_client/socket_io_client.dart';
 
 class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   final _eventService = EventService();

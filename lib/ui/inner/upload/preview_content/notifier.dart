@@ -55,6 +55,10 @@ class PreviewContentNotifier with ChangeNotifier {
   List<Uint8List?>? _thumbNails;
   int _indexView = 0;
   int _pageMusic = 0;
+  int? _height;
+  int? get height => _height;
+  int? _width;
+  int? get width => _width;
   String? _url;
   String? _defaultPath;
   Music? _currentMusic;
@@ -143,6 +147,16 @@ class PreviewContentNotifier with ChangeNotifier {
   FeatureType? get featureType => _featureType;
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
+
+  set height(int? val){
+    _height = val;
+    notifyListeners();
+  }
+
+  set width(int? val){
+    _width = val;
+    notifyListeners();
+  }
 
   set isLoadVideo(bool val) {
     _isLoadVideo = val;
@@ -1138,9 +1152,10 @@ class PreviewContentNotifier with ChangeNotifier {
       // _connectAndListenToSocket(context);
       final notifier = PostsBloc();
       print('featureType : $featureType');
-
       notifier.postContentsBlocV2(
         context,
+        width: width,
+        height: height,
         type: featureType ?? FeatureType.other,
         visibility: 'PUBLIC',
         tags: [],
@@ -1183,6 +1198,8 @@ class PreviewContentNotifier with ChangeNotifier {
       'e'.logger();
     } finally {
       try {
+        _width = null;
+        _height = null;
         audioPreviewPlayer.stop();
         audioPreviewPlayer.dispose();
       } catch (e) {

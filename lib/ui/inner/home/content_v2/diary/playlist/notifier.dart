@@ -127,6 +127,13 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         }
       });
     }
+    Size? videoSize;
+    final width = data.metadata?.width?.toDouble();
+    final height = data.metadata?.height?.toDouble();
+    if(width != null && height != null){
+      videoSize = Size(width, height);
+      videoSize = videoSize.getFixSize(context);
+    }
     _result.add(
       StoryItem.pageVideo(
         urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
@@ -136,6 +143,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
         },
+        size: videoSize,
         id: data.postID ?? '',
         controller: storyController,
         duration: Duration(seconds: data.metadata?.duration ?? 15),

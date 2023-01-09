@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/app.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';

@@ -58,7 +58,9 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
     if (widget.stories.isNotEmpty) {
       for (final story in widget.stories) {
+
         final postId = story.postID;
+        print('StoryPageV2State: ${story.createdAt} : $postId');
         if (postId != null) {
           times[postId] = '${System().readTimestamp(
             DateTime.parse(story.createdAt ?? '').millisecondsSinceEpoch,
@@ -68,6 +70,8 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
         }
       }
     }
+
+    print('StoryPageV2State times: $times');
 
     super.initState();
   }

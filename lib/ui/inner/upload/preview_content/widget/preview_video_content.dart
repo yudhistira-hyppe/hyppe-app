@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
@@ -112,6 +111,11 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
         child: CustomLoading(),
       );
     }
+    final height = notifier.betterPlayerController?.videoPlayerController?.value.size?.height;
+    final width = notifier.betterPlayerController?.videoPlayerController?.value.size?.width;
+    print('PreviewVideoContent size video: $height : $width');
+    notifier.width = width?.toInt();
+    notifier.height = height?.toInt();
 
     return notifier.betterPlayerController?.isVideoInitialized() ?? false
         ? GestureDetector(

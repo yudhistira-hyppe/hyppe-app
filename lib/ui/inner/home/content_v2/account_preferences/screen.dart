@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ux/routing.dart';

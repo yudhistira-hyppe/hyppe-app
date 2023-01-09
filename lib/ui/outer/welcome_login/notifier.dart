@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
-// import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';

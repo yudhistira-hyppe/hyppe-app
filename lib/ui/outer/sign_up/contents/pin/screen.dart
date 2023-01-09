@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/widget/sign_up_pin_top.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
 import 'package:provider/provider.dart';
 
-// import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 
-// import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 

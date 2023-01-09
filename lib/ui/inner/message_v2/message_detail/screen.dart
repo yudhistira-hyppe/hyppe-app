@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-// import 'package:hyppe/core/constants/file_extension.dart';
-// import 'package:hyppe/core/constants/thumb/profile_image.dart';
 
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 
