@@ -130,6 +130,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
       final email = SharedPreference().readStorage(SpKeys.email);
       final res = await myContentsQuery.reload(context);
       myStoryGroup[email] = res;
+      notifyListeners();
     } catch (e) {
       'load my story list: ERROR: $e'.logger();
     }

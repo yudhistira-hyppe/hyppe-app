@@ -266,11 +266,11 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                         },
                         onComplete: () {
                           widget.controller?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
-                          final currentIndex = notifier.dataUserStories.length - 1;
+                          final currentIndex = notifier.groupUserStories.length - 1;
                           final isLastPage = currentIndex == widget.controller?.page;
                           // _pageController.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                           // notifier.pageController =
-                          print('onComplete Diary');
+                          print('onComplete Diary $currentIndex:${widget.controller?.page}');
                           System().increaseViewCount(context, currentData).whenComplete(() {});
                           if (isLastPage) {
                             notifier.onCloseStory(mounted);
