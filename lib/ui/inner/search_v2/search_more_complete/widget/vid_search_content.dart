@@ -105,28 +105,34 @@ class _VidSearchContentState extends State<VidSearchContent> {
                             data: widget.content?[index] ?? ContentData(),
                             onTap: () {
                               context.read<ReportNotifier>().inPosition = contentPosition.search;
+                              notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, index);
                               final _routing = Routing();
-                              switch (widget.featureType) {
-                                case FeatureType.vid:
-                                  _routing.move(Routes.vidDetail,
-                                      argument: VidDetailScreenArgument(vidData: widget.content?[index])
-                                        ..postID = widget.content?[index].postID
-                                        ..backPage = true);
-                                  break;
-                                case FeatureType.diary:
-                                  _routing.move(Routes.diaryDetail,
-                                      argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble(), type: TypePlaylist.none)
-                                        ..postID = widget.content?[index].postID
-                                        ..backPage = true);
-                                  break;
-                                case FeatureType.pic:
-                                  _routing.move(Routes.picDetail,
-                                      argument: PicDetailScreenArgument(picData: widget.content?[index])
-                                        ..postID = widget.content?[index].postID
-                                        ..backPage = true);
-                                  break;
-                                default:
-                              }
+                              // switch (widget.featureType) {
+                              //   case FeatureType.vid:
+                              //     _routing.move(Routes.vidDetail,
+                              //         argument: VidDetailScreenArgument(vidData: widget.content?[index])
+                              //           ..postID = widget.content?[index].postID
+                              //           ..backPage = true);
+                              //     break;
+
+                              //   case FeatureType.diary:
+                              //     _routing.move(Routes.diaryDetail,
+                              //         argument: DiaryDetailScreenArgument(
+                              //             diaryData: widget.content, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+
+                              //     _routing.move(Routes.diaryDetail,
+                              //         argument: DiaryDetailScreenArgument(diaryData: widget.content, index: index.toDouble(), type: TypePlaylist.none)
+                              //           ..postID = widget.content?[index].postID
+                              //           ..backPage = true);
+                              //     break;
+                              //   case FeatureType.pic:
+                              //     _routing.move(Routes.picDetail,
+                              //         argument: PicDetailScreenArgument(picData: widget.content?[index])
+                              //           ..postID = widget.content?[index].postID
+                              //           ..backPage = true);
+                              //     break;
+                              //   default:
+                              // }
 
                               // print(widget.content[index].username);
                               // context.read<PreviewPicNotifier>().navigateToHyppePicDetail(context, widget.content[index]);

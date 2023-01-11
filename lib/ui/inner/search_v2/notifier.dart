@@ -552,9 +552,7 @@ class SearchNotifier with ChangeNotifier {
       if (selectIndex == 3) {
         context.read<ReportNotifier>().type = 'diary';
         _routing.move(Routes.diaryDetail,
-            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search)
-              ..postID = data[index].postID
-              ..backPage = true);
+            argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
       }
       if (selectIndex == 4) {
         context.read<ReportNotifier>().type = 'pict';
