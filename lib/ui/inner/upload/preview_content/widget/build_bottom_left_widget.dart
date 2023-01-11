@@ -19,6 +19,7 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
   void initState() {
     final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () {
+      print('banyak kontent ${notifier.fileContent?.length}');
       for (var i = 0; i < (notifier.fileContent?.length ?? 0); i++) {
         notifier.makeThumbnail(materialAppKey.currentContext!, i);
       }

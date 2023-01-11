@@ -324,13 +324,13 @@ class ContentData {
 
   String? concatThumbUri() {
     return Env.data.baseUrl +
-        '/v4/' +
+        "/${Env.data.versionApi}/" +
         (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
         '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
   }
 
   String? concatContentUri() {
-    return Env.data.baseUrl + '/v4/' + (mediaEndpoint ?? '');
+    return Env.data.baseUrl + "/${Env.data.versionApi}/" + (mediaEndpoint ?? '');
   }
 }
 
@@ -351,16 +351,7 @@ class Metadata {
 
   int? height;
 
-  Metadata({
-    this.duration,
-    this.postRoll,
-    this.preRoll,
-    this.midRoll,
-    this.postID,
-    this.email,
-    this.width,
-    this.height
-  });
+  Metadata({this.duration, this.postRoll, this.preRoll, this.midRoll, this.postID, this.email, this.width, this.height});
 
   Metadata.fromJson(Map<String, dynamic> json) {
     duration = json['duration'];

@@ -338,6 +338,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
               function: () => loginGoogleSign(context),
             );
             final fetch = notifier.userFetch;
+            print('ini respone google ${fetch.data}');
             if (fetch.userState == UserState.LoginSuccess) {
               hide = true;
               final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);

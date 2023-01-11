@@ -96,6 +96,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   }
 
   @override
+  void dispose() {
+    _uploadNotifier.reset();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UploadNotifier>(context);
 
