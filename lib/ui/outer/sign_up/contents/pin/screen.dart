@@ -28,6 +28,7 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
   @override
   void initState() {
     final notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+    notifier.startTimers = true;
     notifier.startTimer();
     print(notifier.email);
     super.initState();

@@ -841,6 +841,7 @@ class LocalizationModelV2 {
   String? seeMoreContent;
   String? seeLess;
   String? pleaseSelectOneortheMaxFileis;
+  String? pleaseVerifyYourEmailFrst;
 
   LocalizationModelV2({
     this.login,
@@ -1685,6 +1686,7 @@ class LocalizationModelV2 {
     this.seeMoreContent,
     this.seeLess,
     this.pleaseSelectOneortheMaxFileis,
+    this.pleaseVerifyYourEmailFrst,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2548,5 +2550,6 @@ class LocalizationModelV2 {
     seeMoreContent = json['seeMoreContent'];
     seeLess = json['seeLess'];
     pleaseSelectOneortheMaxFileis = json['pleaseSelectOneortheMaxFileis'];
+    pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
   }
 }

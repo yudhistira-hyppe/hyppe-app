@@ -840,5 +840,6 @@
   "seeTicketHistory": "Melihat Riwayat Tiket",
   "activeTicketIssue": "Tiket Isu Aktif",
   "seeMoreContent": "Lihat Selengkapnya",
-  "seeLess": "Sembunyikan"
+  "seeLess": "Sembunyikan",
+  "pleaseVerifyYourEmailFrst" : "Silakan lakukan verifikasi email kamu terlebih dahulu"
 }

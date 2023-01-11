@@ -21,7 +21,7 @@ class SignUpPinTop extends StatelessWidget {
           twentyPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay:  "${notifier.language.pinTopText} ${notifier.email}",
+            textToDisplay: "${notifier.language.pinTopText} ${notifier.email}",
           ),
           fortyTwoPx,
           CustomRectangleInput(),
@@ -35,8 +35,27 @@ class SignUpPinTop extends StatelessWidget {
                       textToDisplay: notifier.language.didntReceiveTheCode ?? '',
                     ),
                     fourPx,
+                    // notifier.startTimers
+                    //     ? TweenAnimationBuilder<Duration>(
+                    //         duration: Duration(seconds: 10),
+                    //         tween: Tween(begin: Duration(seconds: 10), end: Duration.zero),
+                    //         onEnd: () {
+                    //           notifier.startTimers = false;
+                    //           print('notifier.startTimers ${notifier.startTimers}');
+                    //           // Routing().moveBack();
+                    //           // notifier.initTransactionHistory(context);
+                    //         },
+                    //         builder: (BuildContext context, Duration value, Widget? child) {
+                    //           final minutes = value.inMinutes;
+                    //           final seconds = value.inSeconds % 60;
+                    //           return CustomTextWidget(
+                    //             textToDisplay: ' 00 : ${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
+                    //             textStyle: notifier.resendStyle(context),
+                    //           );
+                    //         })
+                    //     : Container(),
                     InkWell(
-                      onTap: notifier.resendCode(context),
+                      onTap: notifier.resendCode(context, withStartTimer: true),
                       child: CustomTextWidget(
                         textOverflow: TextOverflow.visible,
                         textToDisplay: notifier.resendString(),
