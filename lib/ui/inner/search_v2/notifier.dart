@@ -537,6 +537,8 @@ class SearchNotifier with ChangeNotifier {
   }
 
   Future navigateToSeeAllScreen2(BuildContext context, List<ContentData> data, int index, int selectIndex) async {
+    print(index);
+    print(selectIndex);
     context.read<ReportNotifier>().inPosition = contentPosition.search;
     focusNode.unfocus();
     bool connect = await System().checkConnections();
@@ -557,9 +559,7 @@ class SearchNotifier with ChangeNotifier {
       if (selectIndex == 4) {
         context.read<ReportNotifier>().type = 'pict';
         _routing.move(Routes.picSlideDetailPreview,
-            argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search)
-              ..postID = data[index].postID
-              ..backPage = true);
+            argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {

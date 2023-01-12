@@ -80,6 +80,8 @@ class PreviewContentNotifier with ChangeNotifier {
   bool _addTextItemMode = false;
   Duration? _totalDuration;
   Duration? get totalDuration => _totalDuration;
+  bool _isLoadingBetterPlayer = false;
+  bool get isLoadingBetterPlayer => _isLoadingBetterPlayer;
   bool _isLoadVideo = false;
   bool get isLoadVideo => _isLoadVideo;
   bool _isLoadingMusic = true;
@@ -905,6 +907,8 @@ class PreviewContentNotifier with ChangeNotifier {
   }
 
   void initVideoPlayer(BuildContext context, {isSaveDefault = false}) async {
+    _isLoadingBetterPlayer = true;
+
     BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
       autoPlay: false,
       fit: BoxFit.contain,
@@ -964,13 +968,18 @@ class PreviewContentNotifier with ChangeNotifier {
           }
         },
       );
+      _isLoadingBetterPlayer = false;
+      notifyListeners();
 
       // notifier.setVideoPlayerController(_betterPlayerController);
 
     } catch (e) {
       "Error Init Video $e".logger();
+      initVideoPlayer(context);
     } finally {
       _isLoadVideo = false;
+      _isLoadingBetterPlayer = false;
+      notifyListeners();
     }
   }
 
