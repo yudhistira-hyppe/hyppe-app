@@ -30,7 +30,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -126,8 +125,8 @@ class VidDetailBottom extends StatelessWidget {
                             desc: "${data?.description}",
                             trimLines: 3,
                             textAlign: TextAlign.start,
-                            seeLess: notifier2.translate.seeLess,
-                            seeMore: notifier2.translate.seeMoreContent,
+                            seeLess: ' ${notifier2.translate.seeLess}',
+                            seeMore: ' ${notifier2.translate.seeMoreContent}',
                             normStyle: Theme.of(context).textTheme.subtitle2,
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),

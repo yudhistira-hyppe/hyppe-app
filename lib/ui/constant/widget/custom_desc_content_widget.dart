@@ -49,7 +49,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
   final String _kLineSeparator = '\u2028';
 
   void _onSeeMore() {
-    (_readMore ? 'test click seeMore' : 'test click seeLess').logger();
+    (_readMore ? 'test click seeMore' : 'test click seeLess ').logger();
     setState(() {
       _readMore = !_readMore;
     });
@@ -198,11 +198,12 @@ class _CustomDescContentState extends State<CustomDescContent> {
 
   List<ItemDesc> getDescItems({int? lastIndex, required bool linkLongerThanLine}) {
     print('readmore $_readMore');
-    final fixDesc = _readMore
+    var fixDesc = _readMore
         ? lastIndex != null
             ? widget.desc.substring(0, lastIndex + 1) + (linkLongerThanLine ? _kLineSeparator : '')
             : widget.desc
         : widget.desc;
+    fixDesc = fixDesc.replaceAll('\n@', '\n @');
     var splitDesc = fixDesc.split(' ');
     splitDesc.removeWhere((e) => e == '');
 
@@ -229,14 +230,15 @@ class _CustomDescContentState extends State<CustomDescContent> {
         }
       }
     }
+
     if (widget.seeMore != null && widget.seeLess != null) {
       descItems.add(ItemDesc(desc: _readMore ? (widget.seeMore ?? '') : (widget.seeLess ?? ''), type: _readMore ? CaptionType.seeMore : CaptionType.seeLess));
     }
 
-    // for (var check in descItems) {
-    //   print('CaptionType.seeMore ${check.type}');
-    //   print('check descItems ${check.desc}');
-    // }
+    for (var check in descItems) {
+      print('CaptionType.seeMore ${check.type}');
+      print('check descItems ${check.desc}');
+    }
     return descItems;
   }
 }
