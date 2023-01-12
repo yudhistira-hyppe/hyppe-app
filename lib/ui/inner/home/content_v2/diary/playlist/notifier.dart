@@ -122,7 +122,7 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
 
     if (data.isApsara ?? false) {
       await getVideoApsara(context, data.apsaraId ?? '').then((value) {
-        if(value != null){
+        if (value != null) {
           urlApsara = value;
         }
       });
@@ -130,10 +130,12 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     Size? videoSize;
     final width = data.metadata?.width?.toDouble();
     final height = data.metadata?.height?.toDouble();
-    if(width != null && height != null){
+    if (width != null && height != null) {
       videoSize = Size(width, height);
       videoSize = videoSize.getFixSize(context);
     }
+    print('url diary ${urlApsara}');
+    print('url diary ${data.fullContentPath}');
     _result.add(
       StoryItem.pageVideo(
         urlApsara != '' ? urlApsara : data.fullContentPath ?? '',

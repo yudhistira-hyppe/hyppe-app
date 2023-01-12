@@ -265,7 +265,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       await ShowBottomSheet().onShowColouredSheet(
         context,
-        'Your email has not been verified, click Ok to verify your email.',
+        language.pleaseVerifyYourEmailFrst ?? '',
         maxLines: 2,
         enableDrag: false,
         dismissible: false,
@@ -338,6 +338,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
               function: () => loginGoogleSign(context),
             );
             final fetch = notifier.userFetch;
+            print('ini respone google ${fetch.data}');
             if (fetch.userState == UserState.LoginSuccess) {
               hide = true;
               final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);

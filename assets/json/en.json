@@ -840,5 +840,6 @@
   "seeTicketHistory": "See Ticket History",
   "activeTicketIssue": "Active Ticket Issue",
   "seeMoreContent": "See More",
-  "seeLess": "See Less"
+  "seeLess": "See Less",
+  "pleaseVerifyYourEmailFrst" : "Please verify your email first"
 }

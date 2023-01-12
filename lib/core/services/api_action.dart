@@ -19,7 +19,7 @@ class ApiAction {
   ApiAction() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: Env.data.apiBaseUrl + '/${UrlConstants.apiV4}',
+        baseUrl: Env.data.apiBaseUrl + '/${Env.data.versionApi}',
         validateStatus: (status) => (status ?? 0) < 500,
       ),
     );
@@ -91,9 +91,9 @@ class ApiAction {
 
     if (url == UrlConstants.createuserposts) {
       if (Env.data.debug == true) {
-        url = UrlConstants.stagingUploadBaseApi + UrlConstants.apiV4 + UrlConstants.createuserposts;
+        url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
       } else {
-        url = UrlConstants.productionUploadBaseApi + UrlConstants.apiV4 + UrlConstants.createuserposts;
+        url = UrlConstants.productionUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
       }
     }
 

@@ -148,12 +148,12 @@ class PreviewContentNotifier with ChangeNotifier {
   List<String?>? get fileContent => _fileContent;
   List<double> filterMatrix(int index) => _filterMatrix[index];
 
-  set height(int? val){
+  set height(int? val) {
     _height = val;
     notifyListeners();
   }
 
-  set width(int? val){
+  set width(int? val) {
     _width = val;
     notifyListeners();
   }
@@ -643,10 +643,14 @@ class PreviewContentNotifier with ChangeNotifier {
             }
           },
           (log) {
+            _isLoadVideo = false;
+            notifyListeners();
             print('FFmpegKit ${log.getMessage()}');
           },
         );
       } else {
+        _isLoadVideo = false;
+        notifyListeners();
         throw 'UrlAudio is empty';
       }
     } catch (e) {

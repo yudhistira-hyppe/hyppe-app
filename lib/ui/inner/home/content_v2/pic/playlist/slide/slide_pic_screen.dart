@@ -318,7 +318,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                     ),
                     (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 16, bottom: 26, top: 16),
+                            padding: const EdgeInsets.only(left: 16, bottom: 0, top: 16),
                             child: Row(
                               children: [
                                 widget.data.tagPeople?.isNotEmpty ?? false
@@ -353,32 +353,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Row(
-                                      children: [
-                                        widget.data.tagPeople?.isNotEmpty ?? false
-                                            ? TagLabel(
-                                                icon: 'user',
-                                                label: '${widget.data.tagPeople?.length ?? 0} people',
-                                                function: () {
-                                                  notifier.showUserTag(context, widget.data.tagPeople, widget.data.postID);
-                                                  // vidNotifier.showUserTag(context, index, data.postID);
-                                                },
-                                              )
-                                            : const SizedBox(),
-                                        widget.data.location == '' || widget.data.location == null
-                                            ? const SizedBox()
-                                            : TagLabel(
-                                                icon: 'maptag',
-                                                label: "${widget.data.location}",
-                                                function: () {},
-                                              ),
-                                      ],
-                                    ),
-                                  )
-                                : const SizedBox(),
                             CustomDescContent(
                               desc: "${widget.data.description}",
                               trimLines: 5,

@@ -339,6 +339,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       notifier.fileContent = [file?.path ?? ''];
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
+
       notifyListeners();
       await _routing.move(Routes.previewContent);
     });

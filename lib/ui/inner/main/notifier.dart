@@ -193,7 +193,7 @@ class MainNotifier with ChangeNotifier {
           .setTransports(
             ['websocket'],
           )
-          .setPath('/v4/socket.io')
+          .setPath('/${Env.data.versionApi}/socket.io')
           .disableAutoConnect()
           .build(),
     );

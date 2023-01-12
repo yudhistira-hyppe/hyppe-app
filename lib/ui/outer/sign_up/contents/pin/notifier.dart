@@ -59,6 +59,14 @@ class SignUpPinNotifier with ChangeNotifier {
   RawKeyEvent? get rawKeyEvent => _rawKeyEvent;
   bool get resendPilih => _resendPilih;
 
+  bool _startTimers = true;
+  bool get startTimers => _startTimers;
+
+  set startTimers(bool val) {
+    _startTimers = val;
+    notifyListeners();
+  }
+
   set input1(String val) {
     _input1 = val;
     notifyListeners();
@@ -239,6 +247,7 @@ class SignUpPinNotifier with ChangeNotifier {
         },
       );
     }
+    print('start timer');
   }
 
   resetTimer() {
@@ -379,12 +388,15 @@ class SignUpPinNotifier with ChangeNotifier {
   }
 
   Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
+    print(_timer);
     if (_timer != "00:00") {
       // ignore: avoid_print
       return null;
     } else {
+      print(withStartTimer);
       return () async {
         if (withStartTimer) {
+          _timer = '';
           startTimer();
         }
         resend(context);
@@ -405,8 +417,8 @@ class SignUpPinNotifier with ChangeNotifier {
           language.checkYourEmail ?? 'Check Your Email',
           subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
         );
-        _timer = '';
-        startTimer();
+        // _timer = '';
+        // startTimer();
         return true;
       } else {
         print('Resend code failed');

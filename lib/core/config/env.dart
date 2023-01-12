@@ -29,7 +29,7 @@ class Env {
     baseUrl: UrlConstants.stagingBaseApi,
     deeplinkBaseUrl: UrlConstants.devDeeplinkUrl,
     apiBaseUrl: UrlConstants.stagingBaseApi,
-    // apiBaseUrl: UrlConstants.stagingBaseApi,
+    versionApi: UrlConstants.apiV5,
   );
 
   static final EnvData prod = EnvData(
@@ -42,6 +42,7 @@ class Env {
     baseUrl: UrlConstants.productionBaseApi,
     deeplinkBaseUrl: UrlConstants.prodDeeplinkUrl,
     apiBaseUrl: UrlConstants.productionBaseApi,
+    versionApi: UrlConstants.apiV5,
   );
 }
 
@@ -55,6 +56,7 @@ class EnvData {
   final String appID;
   final String appStoreID;
   final String baseUrl;
+  final String versionApi;
 
   EnvData({
     required this.debug,
@@ -66,5 +68,6 @@ class EnvData {
     required this.appID,
     required this.appStoreID,
     required this.baseUrl,
+    required this.versionApi,
   });
 }
