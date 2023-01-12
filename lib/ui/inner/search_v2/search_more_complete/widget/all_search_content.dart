@@ -53,13 +53,15 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   (widget.content?.users?.isNotEmpty ?? false) ? widgetUserList(_themes) : const SizedBox(),
                   sixteenPx,
                   // ------video content search
-                  (widget.content?.vid?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.vid, featureType: FeatureType.vid, title: 'HyppeVid') : const SizedBox(),
+                  (widget.content?.vid?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.vid, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2) : const SizedBox(),
                   sixteenPx,
                   //------diaries content search
-                  (widget.content?.diary?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.diary, featureType: FeatureType.diary, title: 'HyppeDiary') : const SizedBox(),
+                  (widget.content?.diary?.isNotEmpty ?? false)
+                      ? VidSearchContent(content: widget.content?.diary, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3)
+                      : const SizedBox(),
                   sixteenPx,
                   //------pic  content search
-                  (widget.content?.pict?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.pict, featureType: FeatureType.pic, title: 'HyppePic') : const SizedBox(),
+                  (widget.content?.pict?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.pict, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4) : const SizedBox(),
                 ],
               ),
             ),

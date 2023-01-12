@@ -23,7 +23,8 @@ class VidSearchContent extends StatefulWidget {
   final String? title;
   final List<ContentData>? content;
   final FeatureType? featureType;
-  const VidSearchContent({Key? key, this.content, this.featureType, this.title}) : super(key: key);
+  final int? selecIndex;
+  const VidSearchContent({Key? key, this.content, this.featureType, this.title, this.selecIndex}) : super(key: key);
 
   @override
   _VidSearchContentState createState() => _VidSearchContentState();
@@ -105,7 +106,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
                             data: widget.content?[index] ?? ContentData(),
                             onTap: () {
                               context.read<ReportNotifier>().inPosition = contentPosition.search;
-                              notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, index);
+                              notifier.navigateToSeeAllScreen2(context, widget.content ?? [], index, widget.selecIndex ?? 0);
                               final _routing = Routing();
                               // switch (widget.featureType) {
                               //   case FeatureType.vid:

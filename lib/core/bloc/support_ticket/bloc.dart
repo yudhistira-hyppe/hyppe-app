@@ -80,9 +80,9 @@ class SupportTicketBloc {
   }) async {
     FormData formData = FormData.fromMap(data!);
 
-    if (docFiles != null) {
+    if (docFiles?.isNotEmpty ?? [].isNotEmpty) {
       print('ini doc file');
-      print(System().basenameFiles(docFiles[0].path));
+      print(System().basenameFiles(docFiles![0].path));
       for (File docFile in docFiles) {
         formData.files.add(
           MapEntry(

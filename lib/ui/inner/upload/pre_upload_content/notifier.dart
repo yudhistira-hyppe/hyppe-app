@@ -186,13 +186,6 @@ class PreUploadContentNotifier with ChangeNotifier {
   String _tmpBoostIntervalId = '';
   String get tmpBoostIntervalId => _tmpBoostIntervalId;
 
-  String _Boost = '';
-  String get Boost => _Boost;
-  String _BoostTime = '';
-  String get BoostTime => _BoostTime;
-  String _BoostInterval = '';
-  String get BoostInterval => _BoostInterval;
-
   String _postIdPanding = '';
   String get postIdPanding => _postIdPanding;
   // UpdateContentsArgument get updateArguments => _arguments!;
@@ -201,6 +194,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   BoostResponse? _boostPaymentResponse;
   BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
+  
   set boostPaymentResponse(BoostResponse? value) {
     _boostPaymentResponse = value;
     notifyListeners();

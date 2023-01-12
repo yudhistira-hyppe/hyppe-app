@@ -98,28 +98,28 @@ class _BuildTopViewState extends State<BuildTopView> {
                         ),
                       )
                     : const SizedBox(),
-                (widget.data?.isReport != true) && widget.data?.email != SharedPreference().readStorage(SpKeys.email)
-                    ? GestureDetector(
-                        onTap: () {
-                          widget.storyController.pause();
-                          ShowBottomSheet.onReportContent(
-                            context,
-                            postData: widget.data,
-                            adsData: null,
-                            type: hyppeStory,
-                            onUpdate: () {
-                              widget.storyController.pause();
-                              context.read<StoriesPlaylistNotifier>().onUpdate();
-                            },
-                          );
-                        },
-                        child: const CustomIconWidget(
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}more.svg',
-                          color: kHyppeLightButtonText,
-                        ),
-                      )
-                    : SizedBox(),
+                // (widget.data?.isReport != true) && widget.data?.email != SharedPreference().readStorage(SpKeys.email)
+                //     ? GestureDetector(
+                //         onTap: () {
+                //           widget.storyController.pause();
+                //           ShowBottomSheet.onReportContent(
+                //             context,
+                //             postData: widget.data,
+                //             adsData: null,
+                //             type: hyppeStory,
+                //             onUpdate: () {
+                //               widget.storyController.pause();
+                //               context.read<StoriesPlaylistNotifier>().onUpdate();
+                //             },
+                //           );
+                //         },
+                //         child: const CustomIconWidget(
+                //           defaultColor: false,
+                //           iconData: '${AssetPath.vectorPath}more.svg',
+                //           color: kHyppeLightButtonText,
+                //         ),
+                //       )
+                //     : SizedBox(),
                 SizedBox(
                   width: 40,
                   height: 40,
