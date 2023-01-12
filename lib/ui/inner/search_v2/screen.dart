@@ -52,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     if (notifier.searchContentFirstPage?.video == null) {
       Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context, FeatureType.vid));
     }
-    context.read<ReportNotifier>().inPosition = contentPosition.searchFirst;
+    context.read<ReportNotifier>().setPosition(contentPosition.searchFirst);
     super.initState();
   }
 

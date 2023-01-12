@@ -97,7 +97,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void dispose() {
-    _uploadNotifier.reset();
+    _uploadNotifier.reset(isNotify: false);
     super.dispose();
   }
 
@@ -238,10 +238,12 @@ class UploadNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void reset() {
+  void reset({isNotify = true}) {
     _progress = 0.0;
     _isUploading = false;
     _message = _language.translate.contentUploaded ?? '';
-    notifyListeners();
+    if(isNotify){
+      notifyListeners();
+    }
   }
 }
