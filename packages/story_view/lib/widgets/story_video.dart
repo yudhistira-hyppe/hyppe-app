@@ -149,8 +149,10 @@ class StoryVideoState extends State<StoryVideo> {
             playerController?.setupDataSource(dataSource).then((_) {
               overridenAspectRatio = playerController?.videoPlayerController?.value.size?.height ?? 0 / (playerController?.videoPlayerController?.value.size?.width ?? 0);
               print('width: ${widget.videoWidth}, height: ${widget.videoHeight}');
-              _width = ((widget.videoWidth != null) ? (widget.videoWidth != 0.0) ? widget.videoWidth : (playerController?.videoPlayerController?.value.size?.width ?? 0.0) : (playerController?.videoPlayerController?.value.size?.width ?? 0.0)) ;
-              _height = ((widget.videoHeight != null) ? (widget.videoHeight != 0.0) ? widget.videoHeight : (playerController?.videoPlayerController?.value.size?.height ?? 0.0) : (playerController?.videoPlayerController?.value.size?.height ?? 0.0)) ;
+              final checkWidth = playerController?.videoPlayerController?.value.size?.width ?? 0.0;
+              final checkHeight = playerController?.videoPlayerController?.value.size?.height ?? 0.0;
+              _width = ((widget.videoWidth != null) ? (widget.videoWidth != 0.0) ? widget.videoWidth : checkWidth : checkWidth) ;
+              _height = ((widget.videoHeight != null) ? (widget.videoHeight != 0.0) ? widget.videoHeight : checkHeight : checkHeight) ;
 
               if (mounted) {
                 /// Xulu code
