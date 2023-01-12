@@ -153,9 +153,17 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  setHeight(int? val){
+    _height = val;
+  }
+
   set width(int? val) {
     _width = val;
     notifyListeners();
+  }
+
+  setWidth(int? val){
+    _width = val;
   }
 
   set isLoadVideo(bool val) {

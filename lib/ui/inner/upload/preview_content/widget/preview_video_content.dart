@@ -114,8 +114,10 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     final height = notifier.betterPlayerController?.videoPlayerController?.value.size?.height;
     final width = notifier.betterPlayerController?.videoPlayerController?.value.size?.width;
     print('PreviewVideoContent size video: $height : $width');
-    notifier.width = width?.toInt();
-    notifier.height = height?.toInt();
+    notifier.setWidth(width?.toInt());
+    notifier.setHeight(height?.toInt());
+    // notifier.width = width?.toInt();
+    // notifier.height = height?.toInt();
 
     return notifier.betterPlayerController?.isVideoInitialized() ?? false
         ? GestureDetector(
