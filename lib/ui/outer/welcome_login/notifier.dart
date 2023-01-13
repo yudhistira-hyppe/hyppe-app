@@ -229,10 +229,10 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.email, signData.email);
       SharedPreference().writeStorage(SpKeys.isLoginSosmed, 'socmed');
       SharedPreference().writeStorage(SpKeys.userID, signData.idUser);
+      print('login bahasa ${signData.langIso}');
+      SharedPreference().writeStorage(SpKeys.isoCode, signData.langIso);
+      await context.read<TranslateNotifierV2>().initTranslate(context);
 
-      print('ini login lewat google ${signData.username}');
-      print('ini login lewat google ${signData.idUser}');
-      print('ini login lewat google ${SharedPreference().readStorage(SpKeys.userID)}');
       DeviceBloc().activityAwake(context);
 
       if (signData.interest?.isEmpty ?? false) {
@@ -241,11 +241,9 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
         Routing().moveReplacement(Routes.lobby);
       }
     } else if (signData.userType == null) {
-      print('apa0 ${signData.userType?.index}');
       clearTextController();
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     } else if (signData.userType == UserType.verified) {
-      print('apa1 ${signData.userType?.index}');
       clearTextController();
       SharedPreference().writeStorage(SpKeys.userToken, signData.token);
       SharedPreference().writeStorage(SpKeys.email, signData.email);
@@ -254,9 +252,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
       SharedPreference().writeStorage(SpKeys.isoCode, signData.langIso);
       await context.read<TranslateNotifierV2>().initTranslate(context);
       // SharedPreference().writeStorage(SpKeys.onlineVersion, onlineVersion);
-      print('iduser');
-      print(signData.idUser);
-      print(SharedPreference().readStorage(SpKeys.userID));
+
       DeviceBloc().activityAwake(context);
       Routing().moveAndRemoveUntil(Routes.lobby, Routes.lobby);
     } else if (signData.userType == UserType.notVerified) {

@@ -58,7 +58,6 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
     if (widget.stories.isNotEmpty) {
       for (final story in widget.stories) {
-
         final postId = story.postID;
         print('StoryPageV2State: ${story.createdAt} : $postId');
         if (postId != null) {
@@ -226,6 +225,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                         storyItems: notifier.result,
                         progressPosition: ProgressPosition.top,
                         onStoryShow: (storyItem) async {
+                          print('ini kesini dong');
                           int pos = notifier.result.indexOf(storyItem);
                           notifier.setCurrentStory(pos);
                           notifier.isLoadMusic = true;
@@ -258,9 +258,9 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                           final page = widget.controller?.page;
                           if (page != null) {
                             if (page == 0 && pos == 0) {
-                              notifier.onCloseStory(mounted);
+                              // notifier.onCloseStory(mounted);
                             } else if (page >= 1 && pos == 0) {
-                              widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              // widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                             }
                           }
                         },

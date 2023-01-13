@@ -265,7 +265,6 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               notifyListeners();
             }).whenComplete(() {
               print('data gambar');
-
               _eventService.notifyUploadSuccess(fetch.data);
             });
           } else {
@@ -379,14 +378,26 @@ class AccountPreferencesNotifier extends ChangeNotifier {
               notifyListeners();
             }
           } else {
-            if (fetch.data['messages']['info'][0] == 'Unabled to proceed, username is already in use') {
-              return ShowBottomSheet().onShowColouredSheet(
-                context,
-                language.usernameisAlreadyinUse ?? '',
-                color: Colors.red,
-                iconSvg: "${AssetPath.vectorPath}remove.svg",
-              );
+            if (fetch.data['messages']['info'][0] != '') {
+              if (fetch.data['messages']['info'][0] == 'Unabled to proceed, username is already in use') {
+                return ShowBottomSheet().onShowColouredSheet(
+                  context,
+                  language.usernameisAlreadyinUse ?? '',
+                  color: Colors.red,
+                  iconSvg: "${AssetPath.vectorPath}remove.svg",
+                  milisecond: 1000,
+                );
+              } else {
+                return ShowBottomSheet().onShowColouredSheet(
+                  context,
+                  fetch.data['messages']['info'][0] ?? '',
+                  color: Colors.red,
+                  iconSvg: "${AssetPath.vectorPath}remove.svg",
+                  milisecond: 1000,
+                );
+              }
             }
+
             ShowBottomSheet().onShowColouredSheet(context, language.somethingsWrong ?? '', color: Colors.red);
           }
         } catch (e) {

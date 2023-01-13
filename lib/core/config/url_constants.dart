@@ -353,6 +353,9 @@ class UrlConstants {
   // new verification ID Upload
   static const String verificationIDWithSupportDocs = "$postsRoute/upload";
 
+  // get tag people in content
+  static const String tagPeople = "$postsRoute/tagpeople";
+
   /// get => Get Ads User
   static const String getAdsVideo = "$adsRoute/getAds/user?type=Content%20Ads";
 

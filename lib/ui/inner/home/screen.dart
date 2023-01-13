@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -20,6 +23,7 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/preview/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
+import 'package:move_to_background/move_to_background.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -130,47 +134,53 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeNotifier>(
-      builder: (_, notifier, __) => Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-          child: HomeAppBar(),
-        ),
-        body: RefreshIndicator(
-          key: _globalKey,
-          strokeWidth: 2.0,
-          color: Colors.purple,
-          onRefresh: () => notifier.onRefresh(context, notifier.visibilty),
-          child: Stack(
-            children: [
-              // notifier.isLoadingVid
-              // ? ListView(
-              //     controller: _scrollController,
-              //     physics: const AlwaysScrollableScrollPhysics(),
-              //     children: const [
-              //       ProcessUploadComponent(),
-              //       HyppePreviewStories(),
-              //       FilterLanding(),
-              //       Padding(
-              //         padding: EdgeInsets.only(top: 100.0),
-              //         child: CustomLoading(),
-              //       ),
-              //     ],
-              //   )
-              // :
-              ListView(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: const [
-                  ProcessUploadComponent(),
-                  HyppePreviewStories(),
-                  FilterLanding(),
-                  HyppePreviewVid(),
-                  HyppePreviewDiary(),
-                  HyppePreviewPic(),
-                ],
-              ),
-              // CustomPopUpNotification()
-            ],
+      builder: (_, notifier, __) => WillPopScope(
+        onWillPop: () async {
+          MoveToBackground.moveTaskToBack();
+          return false;
+        },
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+            child: HomeAppBar(),
+          ),
+          body: RefreshIndicator(
+            key: _globalKey,
+            strokeWidth: 2.0,
+            color: Colors.purple,
+            onRefresh: () => notifier.onRefresh(context, notifier.visibilty),
+            child: Stack(
+              children: [
+                // notifier.isLoadingVid
+                // ? ListView(
+                //     controller: _scrollController,
+                //     physics: const AlwaysScrollableScrollPhysics(),
+                //     children: const [
+                //       ProcessUploadComponent(),
+                //       HyppePreviewStories(),
+                //       FilterLanding(),
+                //       Padding(
+                //         padding: EdgeInsets.only(top: 100.0),
+                //         child: CustomLoading(),
+                //       ),
+                //     ],
+                //   )
+                // :
+                ListView(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: const [
+                    ProcessUploadComponent(),
+                    HyppePreviewStories(),
+                    FilterLanding(),
+                    HyppePreviewVid(),
+                    HyppePreviewDiary(),
+                    HyppePreviewPic(),
+                  ],
+                ),
+                // CustomPopUpNotification()
+              ],
+            ),
           ),
         ),
       ),

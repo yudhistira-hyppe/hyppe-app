@@ -88,4 +88,37 @@ class PostViewerBloc {
       withAlertMessage: withAlertConnection,
     );
   }
+
+  Future tagPeopleContentBloc(
+    BuildContext context, {
+    bool withAlertConnection = true,
+    required String postID,
+  }) async {
+    setPostViewerFetch(PostViewerFetch(PostViewerState.loading));
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
+        } else {
+          // print(onResult.data['data']);
+          setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewSuccess, data: onResult.data['data']));
+        }
+      },
+      (errorData) {
+        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
+      },
+      headers: {
+        "x-auth-user": SharedPreference().readStorage(SpKeys.email),
+      },
+      data: {
+        "postId": postID,
+      },
+      host: UrlConstants.tagPeople,
+      withCheckConnection: true,
+      methodType: MethodType.post,
+      withAlertMessage: withAlertConnection,
+    );
+  }
 }

@@ -46,7 +46,8 @@ enum ErrorType {
   unknown,
   register,
   login,
-  otpVerifyAccount
+  otpVerifyAccount,
+  updateProfile,
 }
 enum TransactionType { sell, buy, withdrawal, boost, reward, none }
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }

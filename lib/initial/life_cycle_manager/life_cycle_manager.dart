@@ -95,12 +95,15 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       final _userToken = SharedPreference().readStorage(SpKeys.userToken);
 
       if (_userToken != null) {
+        print('hahahahahahahaha');
         try {
           await activity.activityAwake(context);
           final fetch = activity.deviceFetch;
           if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
             await getDevice();
-
+            print('cek version loh ini ${activity.deviceFetch.version.runtimeType}');
+            //cek version aplikasi
+            await CheckVersion().check(context, activity.deviceFetch.version);
             if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
               SharedPreference().writeStorage(SpKeys.canDeppAr, 'true');
             } else {
@@ -114,8 +117,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
             await getAdsApsara();
           }
 
-          //cek version aplikasi
-          await CheckVersion().check(context, activity.deviceFetch.version);
+          print('cek version loh ini');
         } catch (e) {
           e.logger();
         }

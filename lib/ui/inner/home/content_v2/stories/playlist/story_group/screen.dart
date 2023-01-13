@@ -31,8 +31,8 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
 
   @override
   void afterFirstLayout(BuildContext context) {
-    final notif = context.read<StoriesPlaylistNotifier>();
-    notif.currentIndex = -1;
+    // final notif = context.read<StoriesPlaylistNotifier>();
+    // notif.currentIndex = -1;
   }
 
   @override
@@ -55,19 +55,20 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
           body: Consumer<StoriesPlaylistNotifier>(
             builder: (context, notifier, child) {
               print('groupUserStories : ${notifier.groupUserStories}');
+              print('notifier.groupUserStories.length : ${notifier.groupUserStories.length}');
               return notifier.groupUserStories.isNotEmpty
                   ? PageView.builder(
                       controller: _pageController,
                       itemCount: notifier.groupUserStories.length,
                       onPageChanged: (index) async {
-
                         print('StoryGroupScreen index: $index');
                         notifier.currentIndex = index;
                       },
                       itemBuilder: (context, index) {
-                        final key = notifier.groupUserStories.keys.elementAt(index);
+                        var key = notifier.groupUserStories.keys.elementAt(index);
                         print('Story index $index : ${notifier.currentPage}, ${notifier.currentIndex}, $key');
-                        final values = notifier.groupUserStories[key] ?? [];
+                        var values = notifier.groupUserStories[key] ?? [];
+
                         if (notifier.currentIndex == index && notifier.currentPage?.floor() == index) {
                           double value = (notifier.currentPage ?? 1) - index;
                           double degValue = notifier.degreeToRadian(value * 90);
@@ -103,21 +104,21 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                             ));
                       })
                   : Container(
-                  color: Colors.black,
-                  width: 100,
-                  height: 100,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      SizedBox(
-                        height: 90,
-                        child: SizedBox(
-                          height: 10,
-                          child: CustomLoading(),
-                        ),
-                      ),
-                    ],
-                  ));
+                      color: Colors.black,
+                      width: 100,
+                      height: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          SizedBox(
+                            height: 90,
+                            child: SizedBox(
+                              height: 10,
+                              child: CustomLoading(),
+                            ),
+                          ),
+                        ],
+                      ));
             },
           ),
         ),

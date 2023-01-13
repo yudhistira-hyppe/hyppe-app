@@ -50,6 +50,9 @@ class LikeNotifier with ChangeNotifier {
   bool _isScrollLoading = false;
   bool get isScrollLoading => _isScrollLoading;
 
+  List<TagPeople> _listTagPeople = [];
+  List<TagPeople> get listTagPeople => _listTagPeople;
+
   set visibilty(String val) {
     _visibilty = val;
     notifyListeners();
@@ -179,6 +182,21 @@ class LikeNotifier with ChangeNotifier {
       }
       fetch.data.forEach((v) {
         _listLikeView?.add(ViewContent.fromJson(v));
+      });
+      isLoading = false;
+    }
+  }
+
+  Future getTagPeople(BuildContext context, postId) async {
+    isLoading = true;
+    _listTagPeople = [];
+    final notifier = PostViewerBloc();
+    await notifier.tagPeopleContentBloc(context, postID: postId);
+
+    final fetch = notifier.postViewerFetch;
+    if (fetch.postViewerState == PostViewerState.likeViewSuccess) {
+      fetch.data.forEach((v) {
+        _listTagPeople.add(TagPeople.fromJson(v));
       });
       isLoading = false;
     }

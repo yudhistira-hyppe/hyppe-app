@@ -12,6 +12,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
+import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/fcm_service.dart';

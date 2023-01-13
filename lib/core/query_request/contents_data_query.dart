@@ -87,6 +87,7 @@ class ContentsDataQuery extends PaginationQueryInterface {
         } else if (featureType == FeatureType.pic) {
           res = resAll.pict;
         }
+
         hasNext = res?.length == limit;
         if (res?.length != null) page++;
         print('pageNumber check 1 : $page');

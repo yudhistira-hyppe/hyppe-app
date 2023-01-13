@@ -394,6 +394,7 @@ class UserBloc {
       onSendProgress: onSendProgress,
       host: UrlConstants.uploadProfilePictureV2,
       methodType: MethodType.postUploadProfile,
+      errorServiceType: ErrorType.updateProfile,
     );
   }
 
