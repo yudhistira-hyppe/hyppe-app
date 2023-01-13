@@ -92,6 +92,8 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                           scrollDirection: Axis.vertical,
                           onPageChanged: (verticalIndex) {
                             // notifier.urlMusic = '';
+                            notifier.mainIndex = verticalIndex;
+
                             if(verticalIndex == 0){
                               notifier.isLoadMusic = true;
                             }else{
@@ -111,6 +113,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       transformationController: transformationController,
                                       resetZooming: resetZooming,
                                       rootIndex: indexRoot,
+                                      mainIndex: indexPage,
                                     )
                                   : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data));
                             } else {

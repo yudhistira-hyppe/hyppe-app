@@ -42,13 +42,13 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
     } catch (e) {
       'Error MusicStatusPage : $e'.logger();
     }
-    globalAudioPlayer = null;
     super.deactivate();
   }
 
   @override
   void dispose() {
     print('dispose MusicStatusPage false');
+    globalAudioPlayer = null;
     audioPlayer.stop();
     audioPlayer.dispose();
     super.dispose();

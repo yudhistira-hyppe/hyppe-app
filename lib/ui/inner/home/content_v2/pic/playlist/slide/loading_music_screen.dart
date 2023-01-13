@@ -18,7 +18,8 @@ import '../../../../../../constant/widget/custom_text_widget.dart';
 class LoadingMusicScreen extends StatefulWidget {
   final Music music;
   final int index;
-  const LoadingMusicScreen({Key? key, required this.music, required this.index}) : super(key: key);
+  final int page;
+  const LoadingMusicScreen({Key? key, required this.music, required this.index, required this.page}) : super(key: key);
 
   @override
   State<LoadingMusicScreen> createState() => _LoadingMusicScreenState();
@@ -46,7 +47,7 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
       final apsaraId = music.apsaraMusic;
       if((apsaraId ?? '').isNotEmpty){
         print('check index hit ${widget.index} : ${notif.currentIndex}');
-        if(notif.currentIndex == -1 || (notif.currentIndex == widget.index)){
+        if((notif.currentIndex == -1 || (notif.currentIndex == widget.index) && (notif.mainIndex == -1 || (notif.mainIndex == widget.page)))){
           final url = await notif.getAdsVideoApsara(context, apsaraId!);
           if((url ?? '').isNotEmpty){
             // widget.music.apsaraMusicUrl?.playUrl = url;

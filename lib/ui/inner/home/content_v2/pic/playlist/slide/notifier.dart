@@ -70,6 +70,8 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   String get urlMusic => _urlMusic;
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
+  int _mainIndex = -1;
+  int get mainIndex => _mainIndex;
 
   SlidedPicDetailScreenArgument? _routeArgument;
 
@@ -105,6 +107,11 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   set currentIndex(int index){
     _currentIndex = index;
+    notifyListeners();
+  }
+
+  set mainIndex(int index){
+    _mainIndex = index;
     notifyListeners();
   }
 

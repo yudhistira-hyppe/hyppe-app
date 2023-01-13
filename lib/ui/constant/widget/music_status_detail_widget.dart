@@ -39,7 +39,7 @@ class _MusicStatusDetailState extends State<MusicStatusDetail>{
   @override
   void deactivate() {
     print('deactivate MusicStatusDetail false');
-    globalAudioPlayer = null;
+    // globalAudioPlayer = null;
     super.deactivate();
   }
 

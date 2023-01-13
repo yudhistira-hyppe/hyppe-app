@@ -39,7 +39,8 @@ class SlidePicScreen extends StatefulWidget {
   TransformationController transformationController;
   Function resetZooming;
   int rootIndex;
-  SlidePicScreen({Key? key, required this.data, required this.transformationController, required this.resetZooming, required this.rootIndex}) : super(key: key);
+  int mainIndex;
+  SlidePicScreen({Key? key, required this.data, required this.transformationController, required this.resetZooming, required this.rootIndex, required this.mainIndex}) : super(key: key);
 
   @override
   State<SlidePicScreen> createState() => _SlidePicScreenState();
@@ -369,6 +370,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                       ? LoadingMusicScreen(
                                           music: widget.data.music!,
                                           index: widget.rootIndex,
+                                          page: widget.mainIndex
                                         )
                                       : MusicStatusPage(
                                           music: widget.data.music!,
