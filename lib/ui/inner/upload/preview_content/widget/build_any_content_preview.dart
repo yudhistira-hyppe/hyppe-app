@@ -8,7 +8,6 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/widget/preview_video_content.dart';
 
-
 class BuildAnyContentPreviewer extends StatelessWidget {
   final GlobalKey? globalKey;
   final PageController pageController;
@@ -30,16 +29,17 @@ class BuildAnyContentPreviewer extends StatelessWidget {
               physics: notifier.addTextItemMode ? const NeverScrollableScrollPhysics() : null,
               itemCount: notifier.fileContent?.length,
               itemBuilder: (context, index) {
-
-                final _isImage = (notifier.fileContent?[index]??'').isImageFormat();
+                final _isImage = (notifier.fileContent?[index] ?? '').isImageFormat();
                 final validateUrl = System().validateUrl(notifier.fileContent?[index] ?? '');
                 print('validateUrl yes $validateUrl');
                 if (_isImage) {
-                  return PreviewImageContent(validateUrl: validateUrl, currIndex: index,);
+                  return PreviewImageContent(
+                    validateUrl: validateUrl,
+                    currIndex: index,
+                  );
                 }
                 notifier.toDiaryVideoPlayer(index, SourceFile.local);
                 return PreviewVideoContent();
-
               },
             ),
             for (int index = 0; index < notifier.additionalItem.length; index++) ...[

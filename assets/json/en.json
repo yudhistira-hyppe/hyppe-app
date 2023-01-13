@@ -841,5 +841,6 @@
   "activeTicketIssue": "Active Ticket Issue",
   "seeMoreContent": "See More",
   "seeLess": "See Less",
-  "pleaseVerifyYourEmailFrst" : "Please verify your email first"
+  "pleaseVerifyYourEmailFrst" : "Please verify your email first",
+  "fileMayBeInErrorChooseAnotherFile" : "File may be in error, choose another file"
 }

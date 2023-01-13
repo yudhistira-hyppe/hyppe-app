@@ -110,6 +110,9 @@ class PreviewContentNotifier with ChangeNotifier {
   List<MusicType> get listThemes => _listThemes;
   List<MusicType> _listMoods = [];
   List<MusicType> get listMoods => _listMoods;
+  int _errorHit = 0;
+  String _errorMessage = '';
+  String get errorMessage => _errorMessage;
 
   BetterPlayerController? _betterPlayerController;
   PersistentBottomSheetController? _persistentBottomSheetController;
@@ -900,6 +903,7 @@ class PreviewContentNotifier with ChangeNotifier {
 
   void initVideoPlayer(BuildContext context, {isSaveDefault = false}) async {
     _isLoadingBetterPlayer = true;
+    _errorMessage = '';
 
     BetterPlayerConfiguration betterPlayerConfiguration = const BetterPlayerConfiguration(
       autoPlay: false,
@@ -966,12 +970,19 @@ class PreviewContentNotifier with ChangeNotifier {
       // notifier.setVideoPlayerController(_betterPlayerController);
 
     } catch (e) {
+      _errorHit++;
       "Error Init Video $e".logger();
-      initVideoPlayer(context);
+      if (_errorHit <= 3) {
+        initVideoPlayer(context);
+      } else {
+        _errorHit = 0;
+        _isLoadingBetterPlayer = false;
+        _errorMessage = language.fileMayBeInErrorChooseAnotherFile ?? '';
+        notifyListeners();
+      }
     } finally {
       _isLoadVideo = false;
       _isLoadingBetterPlayer = false;
-      notifyListeners();
     }
   }
 

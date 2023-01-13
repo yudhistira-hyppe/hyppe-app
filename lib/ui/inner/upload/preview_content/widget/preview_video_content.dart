@@ -32,14 +32,6 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
   BetterPlayerController? _videoPlayerController;
   double _x = 0;
   double _y = 0;
-  @override
-  void initState() {
-    print('initState PreviewVideoContent');
-    final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    notifier.initVideoPlayer(context, isSaveDefault: true);
-    _videoPlayerController = notifier.betterPlayerController;
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -49,6 +41,10 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
 
   @override
   void afterFirstLayout(BuildContext context) {
+    print('initState PreviewVideoContent');
+    final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
+    notifier.initVideoPlayer(context, isSaveDefault: true);
+    _videoPlayerController = notifier.betterPlayerController;
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
   }
 
@@ -130,153 +126,156 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
           }
         }
         print('isloading ${notifier.isLoadingBetterPlayer}');
+        print('isloading ${notifier.errorMessage}');
 
         return notifier.isLoadingBetterPlayer
             ? Center(
-                child: CustomLoading(),
+                child: Container(),
               )
-            : notifier.betterPlayerController?.isVideoInitialized() ?? false
-                ? GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (notifier.betterPlayerController?.isPlaying() ?? false) {
-                          notifier.betterPlayerController?.pause();
-                        } else {
-                          notifier.betterPlayerController?.play();
-                        }
-                      });
-                    },
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Material(
-                          child: !notifier.isLoadVideo
-                              ? Center(
-                                  child: Platform.isAndroid
-                                      ? AspectRatio(
-                                          child: BetterPlayer(controller: notifier.betterPlayerController!),
-                                          aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 1,
-                                        )
-                                      : BetterPlayer(controller: notifier.betterPlayerController!),
-                                )
-                              : const Center(
-                                  child: CustomLoading(),
-                                ),
-                        ),
-                        if (notifier.fixSelectedMusic != null)
-                          Positioned(
-                            top: _y == 0 ? (context.getHeight() / 2) : _y,
-                            left: _x == 0 ? (context.getWidth() * 0.1) : _x,
-                            child: Draggable(
-                              childWhenDragging: const SizedBox.shrink(),
-                              feedback: MusicStatusSelected(
-                                music: notifier.fixSelectedMusic!,
-                                onClose: () {
-                                  notifier.setDefaultVideo(context);
-                                },
-                                isDrag: true,
-                                isPlay: false,
-                              ),
-                              child: MusicStatusSelected(
-                                music: notifier.fixSelectedMusic!,
-                                onClose: () {
-                                  notifier.setDefaultVideo(context);
-                                },
-                                isPlay: false,
-                              ),
-                              onDragEnd: (dragDetail) {
-                                notifier.audioPreviewPlayer.resume();
-                                setState(() {
-                                  _x = dragDetail.offset.dx;
-                                  _y = dragDetail.offset.dy;
-                                });
-                              },
-                              onDragStarted: () {
-                                notifier.audioPreviewPlayer.pause();
-                              },
-                            ),
-                          ),
-                        // Positioned.fill(
-                        //   child: Align(
-                        //     alignment: Alignment.center,
-                        //     child: Container(
-                        //       margin: const EdgeInsets.only(left: 70, right: 70),
-                        //       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                        //       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
-                        //       child: Row(
-                        //         crossAxisAlignment: CrossAxisAlignment.center,
-                        //         mainAxisAlignment: MainAxisAlignment.start,
-                        //         children: [
-                        //           InkWell(
-                        //             onTap: () {
-                        //               notifier.setDefaultVideo(context);
-                        //             },
-                        //             child: const CustomIconWidget(
-                        //               height: 20,
-                        //               width: 20,
-                        //               iconData: "${AssetPath.vectorPath}close_ads.svg",
-                        //             ),
-                        //           ),
-                        //           fourPx,
-                        //           Container(
-                        //             width: 1,
-                        //             height: 13,
-                        //             color: kHyppeGrey,
-                        //           ),
-                        //           sixPx,
-                        //           Expanded(
-                        //             child: CustomTextWidget(
-                        //               textOverflow: TextOverflow.ellipsis,
-                        //               maxLines: 3,
-                        //               textToDisplay: '${notifier.fixSelectedMusic?.musicTitle} - ${notifier.fixSelectedMusic?.artistName}',
-                        //               textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
-                        //             ),
-                        //           )
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        Positioned(
-                          right: 16,
-                          bottom: context.getHeight() * 0.4,
-                          child: InkWell(
-                            onTap: () {
+            : notifier.errorMessage != ''
+                ? Center(child: Text(notifier.errorMessage))
+                : notifier.betterPlayerController?.isVideoInitialized() ?? false
+                    ? GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (notifier.betterPlayerController?.isPlaying() ?? false) {
                               notifier.betterPlayerController?.pause();
-                              ShowBottomSheet.onChooseMusic(context);
-                            },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                const CustomIconWidget(
-                                  defaultColor: false,
-                                  iconData: "${AssetPath.vectorPath}circle_music.svg",
-                                ),
-                                fourPx,
-                                CustomTextWidget(
-                                    maxLines: 1,
-                                    textToDisplay: notifier.language.music ?? '',
-                                    textAlign: TextAlign.left,
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ))
-                              ],
+                            } else {
+                              notifier.betterPlayerController?.play();
+                            }
+                          });
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Material(
+                              child: !notifier.isLoadVideo
+                                  ? Center(
+                                      child: Platform.isAndroid
+                                          ? AspectRatio(
+                                              child: BetterPlayer(controller: notifier.betterPlayerController!),
+                                              aspectRatio: notifier.betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 1,
+                                            )
+                                          : BetterPlayer(controller: notifier.betterPlayerController!),
+                                    )
+                                  : const Center(
+                                      child: CustomLoading(),
+                                    ),
                             ),
-                          ),
+                            if (notifier.fixSelectedMusic != null)
+                              Positioned(
+                                top: _y == 0 ? (context.getHeight() / 2) : _y,
+                                left: _x == 0 ? (context.getWidth() * 0.1) : _x,
+                                child: Draggable(
+                                  childWhenDragging: const SizedBox.shrink(),
+                                  feedback: MusicStatusSelected(
+                                    music: notifier.fixSelectedMusic!,
+                                    onClose: () {
+                                      notifier.setDefaultVideo(context);
+                                    },
+                                    isDrag: true,
+                                    isPlay: false,
+                                  ),
+                                  child: MusicStatusSelected(
+                                    music: notifier.fixSelectedMusic!,
+                                    onClose: () {
+                                      notifier.setDefaultVideo(context);
+                                    },
+                                    isPlay: false,
+                                  ),
+                                  onDragEnd: (dragDetail) {
+                                    notifier.audioPreviewPlayer.resume();
+                                    setState(() {
+                                      _x = dragDetail.offset.dx;
+                                      _y = dragDetail.offset.dy;
+                                    });
+                                  },
+                                  onDragStarted: () {
+                                    notifier.audioPreviewPlayer.pause();
+                                  },
+                                ),
+                              ),
+                            // Positioned.fill(
+                            //   child: Align(
+                            //     alignment: Alignment.center,
+                            //     child: Container(
+                            //       margin: const EdgeInsets.only(left: 70, right: 70),
+                            //       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                            //       decoration: BoxDecoration(color: Colors.black.withOpacity(0.5), borderRadius: const BorderRadius.all(Radius.circular(16))),
+                            //       child: Row(
+                            //         crossAxisAlignment: CrossAxisAlignment.center,
+                            //         mainAxisAlignment: MainAxisAlignment.start,
+                            //         children: [
+                            //           InkWell(
+                            //             onTap: () {
+                            //               notifier.setDefaultVideo(context);
+                            //             },
+                            //             child: const CustomIconWidget(
+                            //               height: 20,
+                            //               width: 20,
+                            //               iconData: "${AssetPath.vectorPath}close_ads.svg",
+                            //             ),
+                            //           ),
+                            //           fourPx,
+                            //           Container(
+                            //             width: 1,
+                            //             height: 13,
+                            //             color: kHyppeGrey,
+                            //           ),
+                            //           sixPx,
+                            //           Expanded(
+                            //             child: CustomTextWidget(
+                            //               textOverflow: TextOverflow.ellipsis,
+                            //               maxLines: 3,
+                            //               textToDisplay: '${notifier.fixSelectedMusic?.musicTitle} - ${notifier.fixSelectedMusic?.artistName}',
+                            //               textStyle: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+                            //             ),
+                            //           )
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            Positioned(
+                              right: 16,
+                              bottom: context.getHeight() * 0.4,
+                              child: InkWell(
+                                onTap: () {
+                                  notifier.betterPlayerController?.pause();
+                                  ShowBottomSheet.onChooseMusic(context);
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const CustomIconWidget(
+                                      defaultColor: false,
+                                      iconData: "${AssetPath.vectorPath}circle_music.svg",
+                                    ),
+                                    fourPx,
+                                    CustomTextWidget(
+                                        maxLines: 1,
+                                        textToDisplay: notifier.language.music ?? '',
+                                        textAlign: TextAlign.left,
+                                        textStyle: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                        ))
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (!(notifier.betterPlayerController?.isPlaying() ?? false))
+                              const CustomIconWidget(
+                                defaultColor: false,
+                                iconData: "${AssetPath.vectorPath}pause.svg",
+                              )
+                          ],
                         ),
-                        if (!(notifier.betterPlayerController?.isPlaying() ?? false))
-                          const CustomIconWidget(
-                            defaultColor: false,
-                            iconData: "${AssetPath.vectorPath}pause.svg",
-                          )
-                      ],
-                    ),
-                  )
-                : const Center(
-                    child: CustomLoading(),
-                  );
+                      )
+                    : const Center(
+                        child: CustomLoading(),
+                      );
       },
     );
   }

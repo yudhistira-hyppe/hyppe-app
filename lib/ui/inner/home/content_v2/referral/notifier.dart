@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/register_referral_argument.dart';
 import 'package:hyppe/core/bloc/referral/bloc.dart';
@@ -72,28 +71,35 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  void _showSnackBar(Color color, String message, String desc) {
+  void _showSnackBar(BuildContext context, Color color, String message, String desc) {
     Routing _routing = Routing();
-    _routing.showSnackBar(
-      snackBar: SnackBar(
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        behavior: SnackBarBehavior.floating,
-        content: SafeArea(
-          child: SizedBox(
-            height: 56,
-            child: OnColouredSheet(
-              maxLines: 2,
-              caption: message,
-              subCaption: desc,
-              fromSnackBar: true,
-              iconSvg: "${AssetPath.vectorPath}remove.svg",
-            ),
-          ),
-        ),
-        backgroundColor: color,
-      ),
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      message,
+      color: color,
+      subCaption: desc,
+      iconSvg: "${AssetPath.vectorPath}remove.svg",
     );
+    // _routing.showSnackBar(
+    //   snackBar: SnackBar(`
+    //     margin: EdgeInsets.zero,
+    //     padding: EdgeInsets.zero,
+    //     behavior: SnackBarBehavior.floating,
+    //     content: SafeArea(
+    //       child: SizedBox(
+    //         height: 56,
+    //         child: OnColouredSheet(
+    //           maxLines: 2,
+    //           caption: message,
+    //           subCaption: desc,
+    //           fromSnackBar: true,
+    //           iconSvg: "${AssetPath.vectorPath}remove.svg",
+    //         ),
+    //       ),
+    //     ),
+    //     backgroundColor: color,
+    //   ),
+    // );
   }
 
   @override
@@ -134,10 +140,10 @@ class ReferralNotifier extends LoadingNotifier with ChangeNotifier {
       if (fetch.referralState == ReferralState.referralUserSuccess) {
         await onInitial(context);
         Routing().moveBack();
-        _showSnackBar(kHyppeTextSuccess, 'Success', 'username referal berhasil digunakan');
+        _showSnackBar(context, kHyppeTextSuccess, 'Success', 'username referal berhasil digunakan');
       }
       if (fetch.referralState == ReferralState.referralUserError) {
-        _showSnackBar(kHyppeDanger, 'Gagal', '${fetch.message['info'][0]}');
+        _showSnackBar(context, kHyppeDanger, 'Gagal', '${fetch.message['info'][0]}');
       }
     } else {
       setLoading(false);
