@@ -14,6 +14,7 @@ import '../../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../../constant/widget/custom_icon_widget.dart';
 import '../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../constant/widget/custom_text_widget.dart';
+import '../notifier.dart';
 
 class LoadingMusicScreen extends StatefulWidget {
   final Music music;
@@ -44,9 +45,12 @@ class _LoadingMusicScreenState extends State<LoadingMusicScreen> with AfterFirst
   void initMusic(BuildContext context, Music music, SlidedPicDetailNotifier notif) async{
     try {
       final apsaraId = music.apsaraMusic;
+      final detailNotifier = context.read<PicDetailNotifier>();
+      notif.urlMusic = '';
+      detailNotifier.urlMusic = '';
       if((apsaraId ?? '').isNotEmpty){
-        print('check index hit ${widget.index} : ${notif.currentIndex}');
-        if(notif.currentIndex == -1 || (notif.currentIndex == widget.index)){
+        print('check index hit ${widget.index} : ${notif.currentIndex} and my mainIndex = ${notif.mainIndex}');
+        if((notif.currentIndex == -1 || (notif.currentIndex == widget.index)) && notif.mainIndex == 0){
           final url = await notif.getAdsVideoApsara(context, apsaraId!);
           if((url ?? '').isNotEmpty){
             // widget.music.apsaraMusicUrl?.playUrl = url;

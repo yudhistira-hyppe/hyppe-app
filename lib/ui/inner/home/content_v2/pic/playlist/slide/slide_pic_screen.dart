@@ -370,10 +370,23 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                           music: widget.data.music!,
                                           index: widget.rootIndex,
                                         )
-                                      : MusicStatusPage(
-                                          music: widget.data.music!,
-                                          urlMusic: notifier.urlMusic,
-                                        )
+                                      : Builder(
+                                        builder: (context) {
+                                          final musicPost = notifier.urlMusic;
+                                          if(musicPost.isNotEmpty){
+                                            return MusicStatusPage(
+                                              music: widget.data.music!,
+                                              urlMusic: notifier.urlMusic,
+                                            );
+                                          }else{
+                                            return  LoadingMusicScreen(
+                                              music: widget.data.music!,
+                                              index: widget.rootIndex,
+                                            );
+                                          }
+
+                                        }
+                                      )
                           ],
                         )),
                       ),

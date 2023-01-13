@@ -1,11 +1,13 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:provider/provider.dart';
 
 import '../../../app.dart';
 import '../../../core/constants/asset_path.dart';
 import '../../../core/constants/themes/hyppe_colors.dart';
 import '../../../core/models/collection/music/music.dart';
+import '../../inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'custom_icon_widget.dart';
 import 'custom_spacer.dart';
 import 'custom_text_widget.dart';
@@ -39,12 +41,13 @@ class _MusicStatusDetailState extends State<MusicStatusDetail>{
   @override
   void deactivate() {
     print('deactivate MusicStatusDetail false');
-    globalAudioPlayer = null;
+    // globalAudioPlayer = null;
     super.deactivate();
   }
 
   @override
   void dispose() {
+    globalAudioPlayer = null;
     audioPlayer.stop();
     audioPlayer.dispose();
     super.dispose();

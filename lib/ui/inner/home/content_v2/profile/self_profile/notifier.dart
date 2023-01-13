@@ -96,6 +96,10 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  setPageIndex(int val){
+    _pageIndex = val;
+  }
+
   set descTextShowFlag(bool val) {
     _descTextShowFlag = val;
     notifyListeners();

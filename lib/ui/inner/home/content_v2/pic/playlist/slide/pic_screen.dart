@@ -48,7 +48,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
 
   @override
   void deactivate() {
-    globalAudioPlayer = null;
+    // globalAudioPlayer = null;
     super.deactivate();
   }
 

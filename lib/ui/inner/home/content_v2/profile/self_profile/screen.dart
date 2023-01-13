@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -17,17 +18,22 @@ class SelfProfileScreen extends StatefulWidget {
   _SelfProfileScreenState createState() => _SelfProfileScreenState();
 }
 
-class _SelfProfileScreenState extends State<SelfProfileScreen> {
+class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLayoutMixin{
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     final notifier = context.read<SelfProfileNotifier>();
-    notifier.pageIndex = 0;
-    notifier.initialSelfProfile(context);
+    notifier.setPageIndex(0);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = context.read<SelfProfileNotifier>();
+    notifier.initialSelfProfile(context);
   }
 
   @override
