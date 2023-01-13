@@ -23,17 +23,12 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
 
   @override
   void initState() {
-    print('preview 1');
     final _notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-    print('preview 2');
     _notifier.initialMatrixColor();
-    print('preview 3');
     _notifier.scrollController = ScrollController();
-    print('preview 4');
     _notifier.scrollExpController = ScrollController();
-    print('preview 5');
     _notifier.audioPlayer = AudioPlayer();
-    print('preview 6');
+
     super.initState();
   }
 

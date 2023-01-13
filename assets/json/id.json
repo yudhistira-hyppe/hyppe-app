@@ -841,5 +841,6 @@
   "activeTicketIssue": "Tiket Isu Aktif",
   "seeMoreContent": "Lihat Selengkapnya",
   "seeLess": "Sembunyikan",
-  "pleaseVerifyYourEmailFrst" : "Silakan lakukan verifikasi email kamu terlebih dahulu"
+  "pleaseVerifyYourEmailFrst" : "Silakan lakukan verifikasi email kamu terlebih dahulu",
+  "fileMayBeInErrorChooseAnotherFile" : "File mungkin eror, pilih file lain  "
 }
