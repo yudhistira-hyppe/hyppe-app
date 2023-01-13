@@ -37,6 +37,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
 
   @override
   void initState() {
+    _notifier.setMainIndex(0);
     _pageController = PageController(initialPage: widget.arguments.index.toInt());
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
@@ -76,14 +77,13 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                     onPageChanged: (value) async {
                       notifier.nextPlaylistPic(context, value);
                       notifier.initAdsVideo(context);
-                      print('onPageChanged Image : $value : ${notifier.listData?.length}');
-                      print('check index hit : my index $value');
-                      notifier.currentIndex = value;
-                      notifier.urlMusic = '';
-                      notifier.isLoadMusic = true;
                       final detailNotifier = context.read<PicDetailNotifier>();
+                      print('onPageChanged Image : $value : ${notifier.listData?.length}');
+                      print('check index hit : my index  ${notifier.currentIndex}: $value');
+                      notifier.currentIndex = value;
+                      notifier.isLoadMusic = true;
+                      notifier.mainIndex = 0;
                       detailNotifier.isLoadMusic = true;
-                      detailNotifier.urlMusic = '';
                     },
                     itemBuilder: (context, indexRoot) {
                       return PageView.builder(
@@ -92,15 +92,17 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                           scrollDirection: Axis.vertical,
                           onPageChanged: (verticalIndex) {
                             // notifier.urlMusic = '';
+                            final detailNotifier = context.read<PicDetailNotifier>();
                             notifier.mainIndex = verticalIndex;
-
-                            if(verticalIndex == 0){
-                              notifier.isLoadMusic = true;
-                            }else{
-                              final detailNotifier = context.read<PicDetailNotifier>();
-                              detailNotifier.isLoadMusic = true;
-                              detailNotifier.urlMusic = '';
-                            }
+                            notifier.isLoadMusic = true;
+                            detailNotifier.isLoadMusic = true;
+                            // if(verticalIndex != 0){
+                            //   notifier.isLoadMusic = true;
+                            // }else{
+                            //   final detailNotifier = context.read<PicDetailNotifier>();
+                            //   detailNotifier.isLoadMusic = true;
+                            //
+                            // }
 
                           },
                           itemBuilder: (context, indexPage) {
@@ -113,7 +115,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       transformationController: transformationController,
                                       resetZooming: resetZooming,
                                       rootIndex: indexRoot,
-                                      mainIndex: indexPage,
                                     )
                                   : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data));
                             } else {

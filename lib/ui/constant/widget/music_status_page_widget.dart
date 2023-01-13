@@ -6,7 +6,9 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:marquee/marquee.dart';
+import 'package:provider/provider.dart';
 
 import '../../../app.dart';
 import '../../../core/constants/asset_path.dart';
@@ -30,6 +32,7 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
 
   @override
   void initState() {
+    print('initState Url: ${widget.urlMusic}');
     super.initState();
   }
 
@@ -142,6 +145,7 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
 
   void initMusic(BuildContext context, String urlMusic) async {
     audioPlayer = AudioPlayer();
+    print('initMusic Url: $urlMusic');
     try {
       await audioPlayer.setReleaseMode(ReleaseMode.loop);
       if (urlMusic.isNotEmpty) {
@@ -157,12 +161,13 @@ class _MusicStatusPageState extends State<MusicStatusPage> with AfterFirstLayout
 
   @override
   void afterFirstLayout(BuildContext context) {
-    print('MusicStatusPage : ${widget.urlMusic}');
+
     if ((widget.urlMusic ?? '').isNotEmpty) {
+      globalAudioPlayer = audioPlayer;
       initMusic(context, widget.urlMusic!);
     } else if ((widget.music.apsaraMusicUrl?.playUrl ?? '').isNotEmpty) {
       if(widget.isPlay){
-        print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl}');
+        print('MusicStatusPage : ${widget.music.apsaraMusicUrl?.playUrl} : ${widget.urlMusic}');
         initMusic(context, widget.music.apsaraMusicUrl!.playUrl!);
       }
     }

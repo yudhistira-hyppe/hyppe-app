@@ -70,7 +70,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   String get urlMusic => _urlMusic;
   int _currentIndex = -1;
   int get currentIndex => _currentIndex;
-  int _mainIndex = -1;
+  int _mainIndex = 0;
   int get mainIndex => _mainIndex;
 
   SlidedPicDetailScreenArgument? _routeArgument;
@@ -88,6 +88,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   set isLoadMusic(bool state){
     _isLoadMusic = state;
     notifyListeners();
+  }
+
+  setLoadMusic(bool state){
+    _isLoadMusic = state;
   }
 
   set preventMusic(bool state){
@@ -113,6 +117,10 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   set mainIndex(int index){
     _mainIndex = index;
     notifyListeners();
+  }
+
+  setMainIndex(int index){
+    _mainIndex = index;
   }
 
   set currentPage(double? val) {

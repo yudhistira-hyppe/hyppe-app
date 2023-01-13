@@ -60,6 +60,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  setLoadMusic(bool state){
+    _isLoadMusic = state;
+  }
+
   set preventMusic(bool state){
     _preventMusic = state;
     notifyListeners();
