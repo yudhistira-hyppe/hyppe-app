@@ -843,6 +843,7 @@ class LocalizationModelV2 {
   String? pleaseSelectOneortheMaxFileis;
   String? pleaseVerifyYourEmailFrst;
   String? fileMayBeInErrorChooseAnotherFile;
+  String? blockThisAccount;
 
   LocalizationModelV2({
     this.login,
@@ -1689,6 +1690,7 @@ class LocalizationModelV2 {
     this.pleaseSelectOneortheMaxFileis,
     this.pleaseVerifyYourEmailFrst,
     this.fileMayBeInErrorChooseAnotherFile,
+    this.blockThisAccount,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2554,5 +2556,6 @@ class LocalizationModelV2 {
     pleaseSelectOneortheMaxFileis = json['pleaseSelectOneortheMaxFileis'];
     pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
     fileMayBeInErrorChooseAnotherFile = json['fileMayBeInErrorChooseAnotherFile'];
+    blockThisAccount = json['blockThisAccount'];
   }
 }

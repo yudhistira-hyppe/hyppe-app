@@ -24,6 +24,7 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_o
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_ownership_EULA.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_people_search.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_privacy_post.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_account.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content_form.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_spam_form.dart';
@@ -811,6 +812,47 @@ class ShowBottomSheet {
               ),
               padding: const EdgeInsets.all(0),
               child: OnReportSpamFormBottomSheet(
+                postData: postData,
+                type: type,
+                inDetail: inDetail ?? true,
+              ),
+            ),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      // if (onUpdate != null) onUpdate();
+    });
+  }
+
+  static onReportAccountContent(
+    _, {
+    StoryController? storyController,
+    ContentData? postData,
+    AdsData? adsData,
+    String? type,
+    Function? onUpdate,
+    bool? inDetail,
+  }) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      builder: (builder) {
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            child: Container(
+              height: SizeConfig.screenHeight ?? 0 / 1.09,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.all(0),
+              child: OnReportAccountBottomSheet(
                 postData: postData,
                 type: type,
                 inDetail: inDetail ?? true,

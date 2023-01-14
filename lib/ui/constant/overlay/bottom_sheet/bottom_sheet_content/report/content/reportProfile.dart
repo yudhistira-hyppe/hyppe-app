@@ -26,14 +26,23 @@ class ReportProfile extends StatelessWidget {
             child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg", defaultColor: false),
           ),
           Container(
-              alignment: Alignment.center,
-              height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
-              child: BuildListTile(
-                onTap: () => ShowBottomSheet.onReportSpamContent(context),
-                icon: "${AssetPath.vectorPath}report.svg",
-                title: notifier.translate.reportThisAccount ?? '',
-              ),
-              )
+            alignment: Alignment.center,
+            height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
+            child: BuildListTile(
+              onTap: () => ShowBottomSheet.onReportAccountContent(context, type: 'report'),
+              icon: "${AssetPath.vectorPath}report.svg",
+              title: notifier.translate.reportThisAccount ?? '',
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            height: 84.5 * (SizeConfig.screenHeight!) / SizeWidget.baseHeightXD,
+            child: BuildListTile(
+              onTap: () => ShowBottomSheet.onReportAccountContent(context, type: 'block'),
+              icon: "${AssetPath.vectorPath}block.svg",
+              title: notifier.translate.blockThisAccount ?? '',
+            ),
+          ),
         ],
       ),
     );

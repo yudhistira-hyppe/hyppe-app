@@ -842,5 +842,6 @@
   "seeMoreContent": "Lihat Selengkapnya",
   "seeLess": "Sembunyikan",
   "pleaseVerifyYourEmailFrst" : "Silakan lakukan verifikasi email kamu terlebih dahulu",
-  "fileMayBeInErrorChooseAnotherFile" : "File mungkin eror, pilih file lain  "
+  "fileMayBeInErrorChooseAnotherFile" : "File mungkin eror, pilih file lain  ",
+  "blockThisAccount" : "Blokir akun ini"
 }

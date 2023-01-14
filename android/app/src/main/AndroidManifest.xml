@@ -54,6 +54,7 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
+            android:exported="true"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:windowSoftInputMode="adjustResize">
@@ -84,6 +85,7 @@
                 <data android:scheme="flutter-twitter-login" /> <!-- host is option -->
             </intent-filter>
         </activity>
+       
         <meta-data
         android:name="flutterEmbedding" android:value="2"/>
         <!-- A custom Android Notification Channel to deliver FCM notifications on a non-default channel -->

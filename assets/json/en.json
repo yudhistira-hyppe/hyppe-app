@@ -842,5 +842,6 @@
   "seeMoreContent": "See More",
   "seeLess": "See Less",
   "pleaseVerifyYourEmailFrst" : "Please verify your email first",
-  "fileMayBeInErrorChooseAnotherFile" : "File may be in error, choose another file"
+  "fileMayBeInErrorChooseAnotherFile" : "File may be in error, choose another file",
+  "blockThisAccount" : "Block this account"
 }
