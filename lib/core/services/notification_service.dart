@@ -46,7 +46,7 @@ class NotificationService {
   static AndroidNotificationChannel channel = const AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    'This channel is used for important notifications.', // description
+    description: 'This channel is used for important notifications.', // description
     playSound: true,
     showBadge: true,
     enableLights: true,
@@ -64,7 +64,7 @@ class NotificationService {
   static AndroidNotificationDetails androidPlatformChannelSpecifics = const AndroidNotificationDetails(
     'android_id',
     'android_channel_name',
-    'android_channel_description',
+    channelDescription: 'android_channel_description',
     priority: Priority.max,
     importance: Importance.max,
     largeIcon: DrawableResourceAndroidBitmap('@mipmap/ic_launcher'),

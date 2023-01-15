@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.4 # The following adds the Cupertino Icons font to your application, Use with the CupertinoIcons class for iOS style icons.
   dio: ^4.0.6 # Untuk kebutuhan [HTTP Request]
   file_picker: ^4.4.0 # Use a native file explorer to pick single or multiple absolute file paths, with extension filtering support
-  flutter_local_notifications: ^8.2.0 # Untuk kebutuhan push notification
+  flutter_local_notifications: ^9.9.1 # Untuk kebutuhan push notification
   flutter_svg: ^1.0.3 # Untuk kebutuhan rendering svg file
   flutter_video_info: ^1.2.0 # Get basic metadata information of a video file.
   http_parser: ^4.0.0 # A platform-independent package for parsing and serializing HTTP formats.
