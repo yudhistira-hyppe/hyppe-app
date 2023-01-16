@@ -87,10 +87,14 @@ class PreviewVidNotifier with ChangeNotifier, GeneralMixin {
 
     try {
       if (list != null) {
+        print('masuk list tidak kosong');
         if (reload) {
+          print('masuk list tidak kosong 2');
           contentsQuery.page = 1;
           contentsQuery.hasNext = true;
         }
+        print('masuk list tidak kosong 3');
+        print('$list');
         res.addAll(list);
         contentsQuery.hasNext = list.length == contentsQuery.limit;
         if (list != null) contentsQuery.page++;

@@ -170,6 +170,7 @@ class HomeNotifier with ChangeNotifier {
           "Error Load Story : $e".logger();
         }
         try {
+          print("masuk vidio");
           await vid.initialVid(context, reload: true, list: allContents.video).then((value) => totLoading += 1);
         } catch (e) {
           "Error Load Video : $e".logger();
