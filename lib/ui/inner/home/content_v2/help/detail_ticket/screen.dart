@@ -15,6 +15,7 @@ import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/detail_ticket/widget/show_images.dart';
 import 'package:provider/provider.dart';
 import 'package:mime/mime.dart';
 
@@ -615,7 +616,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                   Builder(
                       builder: (context) {
 
-                        return _getGridListImages(chatData.ticketUrls);
+                        return _getGridListImages(context, chatData.ticketUrls);
                       }
                   ),
                   if(chatData.fsTargetUri?.isNotEmpty ?? false)
@@ -678,7 +679,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
                   Builder(
                     builder: (context) {
 
-                      return _getGridListImages(chatData.ticketUrls);
+                      return _getGridListImages(context, chatData.ticketUrls);
                     }
                   ),
                   if(chatData.fsTargetUri?.isNotEmpty ?? false)
@@ -709,192 +710,205 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
     );
   }
 
-  Widget _getGridListImages(List<TicketUrl> urls){
+  Widget _getGridListImages(BuildContext context, List<TicketUrl> urls){
     final fixList = urls.where((element){
       '_getGridListImages : ${extensionFromMime(element.localDir)}'.logger();
       return System().lookupContentMimeType(element.localDir)?.contains('image') ?? false;
     }).toList();
     final lenght = fixList.length;
-    var thumbnail = '';
-    return Container(
-      margin: const EdgeInsets.only(top: 10, bottom: 10),
-      child: Builder(builder: (context){
-        if(lenght == 1){
-          return CustomContentModeratedWidget(
-            width: 200,
-            height: 200,
-            isSale: false,
-            isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-            thumbnail: fixList[0].realUrl,
-          );
-        }else if(lenght == 2){
-          return Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 100,
-                height: 100,
-                alignment: Alignment.center,
-                child: CustomContentModeratedWidget(
+    final List<String> images = [];
+    for (var element in fixList) {
+      images.add(element.realUrl);
+    }
+    return GestureDetector(
+      onTap: (){
+        showDialog(
+            context: context,
+            builder: (context){
+          return ShowImages(imageUrls: images);
+        },
+        barrierColor: Colors.transparent);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 10, bottom: 10),
+        child: Builder(builder: (context){
+          if(lenght == 1){
+            return CustomContentModeratedWidget(
+              width: 200,
+              height: 200,
+              isSale: false,
+              isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+              thumbnail: fixList[0].realUrl,
+            );
+          }else if(lenght == 2){
+            return Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
                   width: 100,
                   height: 100,
-                  isSale: false,
-                  isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                  thumbnail: fixList[0].realUrl,
+                  alignment: Alignment.center,
+                  child: CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[0].realUrl,
+                  ),
                 ),
-              ),
-              tenPx,
-              Container(
-                width: 100,
-                height: 100,
-                alignment: Alignment.center,
-                child: CustomContentModeratedWidget(
+                tenPx,
+                Container(
                   width: 100,
                   height: 100,
-                  isSale: false,
-                  isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                  thumbnail: fixList[1].realUrl,
+                  alignment: Alignment.center,
+                  child: CustomContentModeratedWidget(
+                    width: 100,
+                    height: 100,
+                    isSale: false,
+                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                    thumbnail: fixList[1].realUrl,
+                  ),
                 ),
-              ),
-            ],
-          );
-        }else if(lenght == 3){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+              ],
+            );
+          }else if(lenght == 3){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[0].realUrl,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[0].realUrl,
+                      ),
                     ),
-                  ),
-                  tenPx,
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+                    tenPx,
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[1].realUrl,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[1].realUrl,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              tenPx,
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+                  ],
+                ),
+                tenPx,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[2].realUrl,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[2].realUrl,
+                      ),
                     ),
-                  ),
-                  tenPx,
-                  Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.transparent,
-                  ),
-                ],
-              ),
-            ],
-          );
-        }else if(lenght == 4){
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+                    tenPx,
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[0].realUrl,
+                      color: Colors.transparent,
                     ),
-                  ),
-                  tenPx,
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+                  ],
+                ),
+              ],
+            );
+          }else if(lenght == 4){
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[1].realUrl,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[0].realUrl,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              tenPx,
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+                    tenPx,
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[2].realUrl,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[1].realUrl,
+                      ),
                     ),
-                  ),
-                  tenPx,
-                  Container(
-                    width: 100,
-                    height: 100,
-                    alignment: Alignment.center,
-                    child: CustomContentModeratedWidget(
+                  ],
+                ),
+                tenPx,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
                       width: 100,
                       height: 100,
-                      isSale: false,
-                      isSafe: true, //notifier.postData.data.listVid[index].isSafe,
-                      thumbnail: fixList[3].realUrl,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[2].realUrl,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        }else{
-          return const SizedBox.shrink();
-        }
-      }),
+                    tenPx,
+                    Container(
+                      width: 100,
+                      height: 100,
+                      alignment: Alignment.center,
+                      child: CustomContentModeratedWidget(
+                        width: 100,
+                        height: 100,
+                        isSale: false,
+                        isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                        thumbnail: fixList[3].realUrl,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }else{
+            return const SizedBox.shrink();
+          }
+        }),
+      ),
     );
 
   }
