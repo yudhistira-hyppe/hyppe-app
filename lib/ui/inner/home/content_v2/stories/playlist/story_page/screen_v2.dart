@@ -45,7 +45,7 @@ class StoryPageV2 extends StatefulWidget {
 }
 
 class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
-  Map<String, String> times = {};
+  List<StoryItem> _storyItems = [];
   late AnimationController animationController;
   final StoryController _storyController = StoryController();
   late ContentData currentData;
@@ -56,21 +56,8 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     // isLoading = false;
     currentData = widget.stories[0];
     animationController = AnimationController(vsync: this, duration: const Duration(seconds: 10));
-    if (widget.stories.isNotEmpty) {
-      for (final story in widget.stories) {
-        final postId = story.postID;
-        print('StoryPageV2State: ${story.createdAt} : $postId');
-        if (postId != null) {
-          times[postId] = '${System().readTimestamp(
-            DateTime.parse(story.createdAt ?? '').millisecondsSinceEpoch,
-            context,
-            fullCaption: true,
-          )}';
-        }
-      }
-    }
 
-    print('StoryPageV2State times: $times');
+    // print('StoryPageV2State times: $times');
 
     super.initState();
   }
@@ -87,10 +74,13 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-      notifier.setCurrentStory(-1);
-      notifier.initializeUserStories(context, _storyController, widget.stories).then((value) {
+      // notifier.setCurrentStory(-1);
+      Future.delayed(Duration.zero, ()async {
+        print('afterFirstLayout init datas');
+        await notifier.initializeUserStories(context, _storyController, widget.stories);
         Future.delayed(const Duration(milliseconds: 500), () {
           setState(() {
+            _storyItems = notifier.result;
             isLoading = false;
           });
         });
@@ -103,9 +93,9 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
     SizeConfig().init(context);
     final notifier = Provider.of<StoriesPlaylistNotifier>(context);
     if (MediaQuery.of(context).viewInsets.bottom > 0.0 || notifier.textEditingController.text.isNotEmpty) {
-      setState(() => notifier.setIsKeyboardActive(true));
+      notifier.setIsKeyboardActive(true);
     } else {
-      setState(() => notifier.setIsKeyboardActive(false));
+      notifier.setIsKeyboardActive(false);
     }
     // logic when list isScrolled, pause the story
     if (widget.isScrolling ?? false) {
@@ -128,7 +118,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
       _storyController.pause();
     }
 
-    if (notifier.result.isEmpty) {
+    if (_storyItems.isEmpty) {
       return isLoading
           ? Container(
               color: Colors.black,
@@ -222,20 +212,21 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                           context.read<LikeNotifier>().likePost(context, currentData);
                         },
                         controller: _storyController,
-                        storyItems: notifier.result,
+                        storyItems: _storyItems,
                         progressPosition: ProgressPosition.top,
                         onStoryShow: (storyItem) async {
                           print('ini kesini dong');
-                          int pos = notifier.result.indexOf(storyItem);
+                          int pos = _storyItems.indexOf(storyItem);
                           notifier.setCurrentStory(pos);
                           notifier.isLoadMusic = true;
-                          setState(() {
-                            try {
-                              currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
-                            } catch (e) {
-                              'Error get current content data: $e'.logger();
-                            }
-                          });
+                          try {
+                            currentData = widget.stories.where((element) => element.postID == storyItem.id).first;
+                          } catch (e) {
+                            'Error get current content data: $e'.logger();
+                          }
+                          // setState(() {
+                          //
+                          // });
 
                           // _storyController.playbackNotifier.listen((value) {
                           //   if (value == PlaybackState.previous) {
@@ -254,13 +245,13 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                           // if (widget.userID == null) await notifier.addStoryView(context, pos, widget.data, widget.storyParentIndex, widget.userID);
                         },
                         onFirstPrev: (storyItem) {
-                          int pos = notifier.result.indexOf(storyItem);
+                          int pos = _storyItems.indexOf(storyItem);
                           final page = widget.controller?.page;
                           if (page != null) {
                             if (page == 0 && pos == 0) {
-                              // notifier.onCloseStory(mounted);
+                              notifier.onCloseStory(mounted);
                             } else if (page >= 1 && pos == 0) {
-                              // widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+                              widget.controller?.previousPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
                             }
                           }
                         },
@@ -344,7 +335,11 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                       )
                     : Container(),
                 BuildTopView(
-                  when: times[currentData.postID ?? ''] ?? '',
+                  when: System().readTimestamp(
+                    DateTime.parse(currentData.createdAt ?? '').millisecondsSinceEpoch,
+                    context,
+                    fullCaption: true,
+                  ) ?? '',
                   data: currentData,
                   storyController: _storyController,
                 ),
