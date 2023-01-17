@@ -26,6 +26,8 @@ class AllContents {
       if (json['story'].isNotEmpty) {
         json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
       }
+    } else {
+      story = [];
     }
 
     if (json['diary'] != null) {
@@ -33,6 +35,8 @@ class AllContents {
       if (json['diary'].isNotEmpty) {
         json['diary'].forEach((v) => diary?.add(ContentData.fromJson(v)));
       }
+    } else {
+      diary = [];
     }
 
     if (json['video'] != null) {
