@@ -244,6 +244,7 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
 
                           if (pickedDate != null && pickedDate != notifier.selectedBirthDate) {
                             notifier.selectedBirthDate = pickedDate;
+                            FocusScope.of(context).unfocus();
                           }
                         },
                         readOnly: true,
