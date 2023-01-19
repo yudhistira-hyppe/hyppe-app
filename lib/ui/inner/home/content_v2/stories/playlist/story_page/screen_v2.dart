@@ -72,7 +72,7 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
   @override
   void afterFirstLayout(BuildContext context) {
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
       // notifier.setCurrentStory(-1);
       Future.delayed(Duration.zero, ()async {

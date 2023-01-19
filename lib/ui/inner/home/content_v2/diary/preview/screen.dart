@@ -112,10 +112,10 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                                   },
                                 ),
                                 (notifier.diaryData?[index].saleAmount ?? 0) > 0
-                                    ? const Positioned(
+                                    ? Positioned(
                                         top: 3,
                                         right: 8,
-                                        child: CustomIconWidget(
+                                        child: const CustomIconWidget(
                                           iconData: "${AssetPath.vectorPath}sale.svg",
                                           height: 20,
                                           defaultColor: false,

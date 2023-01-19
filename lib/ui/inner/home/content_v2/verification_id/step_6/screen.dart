@@ -78,13 +78,13 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Expanded(flex: 4, child: CameraFlashButton()),
+                          Expanded(flex: 4, child: const CameraFlashButton()),
                           Expanded(
                             flex: 4,
                             child: SizedBox(
                                 height: 105 * SizeConfig.scaleDiagonal, child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}photo.svg", onPressed: () => notifier.onTakeSelfie(context))),
                           ),
-                          const Expanded(flex: 4, child: CameraSwitchButton())
+                          Expanded(flex: 4, child: const CameraSwitchButton())
                         ],
                       ),
                     ),
@@ -127,13 +127,13 @@ class _VerificationIDStep6State extends State<VerificationIDStep6> with RouteAwa
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Expanded(flex: 4, child: CameraFlashButton()),
+                          Expanded(flex: 4, child: const CameraFlashButton()),
                           Expanded(
                             flex: 4,
                             child: SizedBox(
                                 height: 105 * SizeConfig.scaleDiagonal, child: CustomIconButtonWidget(iconData: "${AssetPath.vectorPath}photo.svg", onPressed: () => notifier.onTakeSelfie(context))),
                           ),
-                          const Expanded(flex: 4, child: CameraSwitchButton())
+                          Expanded(flex: 4, child: const CameraSwitchButton())
                         ],
                       ),
                     ),

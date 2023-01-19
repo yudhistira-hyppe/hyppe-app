@@ -21,7 +21,7 @@ class HashtagShimmer extends StatelessWidget {
             Container(
               height: 50,
               width: 50,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: kSkeleton,
                 borderRadius: BorderRadius.all(Radius.circular(25))
               ),
@@ -34,7 +34,7 @@ class HashtagShimmer extends StatelessWidget {
                 Container(
                   height: 15,
                   width: 0.7 * context.getWidth(),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       gradient: kSkeleton,
                       borderRadius: BorderRadius.all(Radius.circular(5))
                   ),
@@ -43,7 +43,7 @@ class HashtagShimmer extends StatelessWidget {
                 Container(
                   height: 15,
                   width: 0.5 * context.getWidth(),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       gradient: kSkeleton,
                       borderRadius: BorderRadius.all(Radius.circular(5))
                   ),

@@ -108,10 +108,10 @@ const ColorScheme _darkColorScheme = ColorScheme.dark(
 const DividerThemeData _darkDividerThemeData = DividerThemeData(color: kHyppeDividerColor);
 
 final BottomSheetThemeData _lightBottomSheetThemeData = BottomSheetThemeData(
-    elevation: 0.0, backgroundColor: _lightColorScheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))));
+    elevation: 0.0, backgroundColor: _lightColorScheme.surface, shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))));
 
 final BottomSheetThemeData _darkBottomSheetThemeData = BottomSheetThemeData(
-    elevation: 0.0, backgroundColor: _darkColorScheme.surface, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))));
+    elevation: 0.0, backgroundColor: _darkColorScheme.surface, shape: RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))));
 
 final ChipThemeData _lightChipThemeData = ChipThemeData(
   elevation: 0.0,

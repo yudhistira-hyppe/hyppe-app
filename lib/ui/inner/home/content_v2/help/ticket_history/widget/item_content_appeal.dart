@@ -35,7 +35,7 @@ class ItemContentAppeal extends StatelessWidget {
         padding: const EdgeInsets.only(left: 12, right: 12, top: 9, bottom: 12),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
-          boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+          boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
           color: Theme.of(context).colorScheme.background,
         ),
         child: Column(

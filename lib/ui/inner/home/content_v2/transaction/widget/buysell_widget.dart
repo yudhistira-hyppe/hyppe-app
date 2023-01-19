@@ -75,7 +75,7 @@ class BuySellWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(5),
-        boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
       ),
       child: Material(
         color: Colors.transparent,
@@ -98,7 +98,7 @@ class BuySellWidget extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: blockColor,
                         borderRadius: BorderRadius.circular(5),
-                        boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
+                        boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                       ),
                       child: CustomTextWidget(
                         textToDisplay: title,
