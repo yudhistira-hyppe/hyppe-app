@@ -42,7 +42,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _timerLink = Timer(const Duration(seconds: 2), () => DynamicLinkService.handleDynamicLinks());
     _isolateService.turnOnWorkers();
     super.initState();
@@ -50,7 +50,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
     _timerLink?.cancel();
     if (_socketService.isRunning) _socketService.closeSocket();

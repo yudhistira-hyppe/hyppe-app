@@ -46,7 +46,7 @@ const kHyppeDividerColor = Color(0xff2c3236);
 
 const kSkeletonHighlightColor = Color(0xffADADAD);
 const kSkeletonBaseColor = Color(0xff878787);
-const kSkeleton = LinearGradient(
+final kSkeleton = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomLeft,
   colors: [

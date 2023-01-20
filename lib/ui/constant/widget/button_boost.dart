@@ -29,6 +29,7 @@ class ButtonBoost extends StatefulWidget {
 
 class _ButtonBoostState extends State<ButtonBoost> {
   bool isLoading = false;
+  
   @override
   Widget build(BuildContext context) {
     final _isKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);

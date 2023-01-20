@@ -25,8 +25,8 @@ class AutoCompleteSearch extends StatelessWidget {
                     ? Row(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Expanded(child: SizedBox(height: 50, child: CustomLoading())),
+                        children: [
+                          Expanded(child: const SizedBox(height: 50, child: CustomLoading())),
                         ],
                       )
                     : (notifier.searchPeolpleData?.isEmpty ?? false) && notifier.searchController.text != ''

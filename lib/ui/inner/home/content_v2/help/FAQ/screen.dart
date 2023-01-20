@@ -89,10 +89,10 @@ class _FAQDetailScreenState extends State<FAQDetailScreen> {
                               child: Stack(
                                 children: [
                                   if ((widget.data.details[index].detail).isNotEmpty)
-                                    const Positioned(
+                                    Positioned(
                                         top: 25,
                                         left: 0,
-                                        child: CustomIconWidget(
+                                        child: const CustomIconWidget(
                                           iconData: '${AssetPath.vectorPath}ic_arrow_right.svg',
                                           width: 20,
                                           height: 20,

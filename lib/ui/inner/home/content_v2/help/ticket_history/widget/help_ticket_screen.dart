@@ -87,7 +87,7 @@ class _HelpTicketScreenState extends State<HelpTicketScreen> with AfterFirstLayo
                 width: 50,
                 height: 50,
                 child: const CustomIconWidget(iconData: '${AssetPath.vectorPath}back-arrow.svg', width: 35, height: 35, defaultColor: false, color: Colors.white,),
-                decoration: BoxDecoration(boxShadow: const [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)], borderRadius: const BorderRadius.all(Radius.circular(25)), color: kHyppePrimary.withOpacity(0.5)),
+                decoration: BoxDecoration(boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)], borderRadius: const BorderRadius.all(Radius.circular(25)), color: kHyppePrimary.withOpacity(0.5)),
               ),
             ),
           )
