@@ -7,7 +7,7 @@ import 'package:hyppe/core/services/shared_preference.dart';
 
 import '../../../config/env.dart';
 
-class TicketModel{
+class TicketModel {
   String? id;
   String? ticketNo;
   String? subject;
@@ -45,8 +45,7 @@ class TicketModel{
 
   TicketModel();
 
-
-  TicketModel.fromJson(Map<String, dynamic> map){
+  TicketModel.fromJson(Map<String, dynamic> map) {
     final emailUser = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
     id = map['_id'];
@@ -60,36 +59,36 @@ class TicketModel{
     levelTicket = map['levelTicket'];
     sourceTicket = map['sourceTicket'];
     categoryTicket = map['categoryTicket'];
-    if(map['mediaUri'] != null){
+    if (map['mediaUri'] != null) {
       mediaUri = [];
-      if(map['mediaUri'].isNotEmpty){
+      if (map['mediaUri'].isNotEmpty) {
         map['mediaUri'].forEach((v) => mediaUri?.add(v));
       }
     }
-    if(map['originalName'] != null){
+    if (map['originalName'] != null) {
       originalName = [];
-      if(map['originalName'].isNotEmpty){
+      if (map['originalName'].isNotEmpty) {
         map['originalName'].forEach((v) => originalName?.add(v));
       }
     }
-    if(map['fsSourceUri'] != null){
+    if (map['fsSourceUri'] != null) {
       fsSourceUri = [];
-      if(map['fsSourceUri'].isNotEmpty){
+      if (map['fsSourceUri'].isNotEmpty) {
         map['fsSourceUri'].forEach((v) => fsSourceUri?.add(v));
       }
     }
-    if(map['fsSourceName'] != null){
+    if (map['fsSourceName'] != null) {
       fsSourceName = [];
-      if(map['fsSourceName'].isNotEmpty){
+      if (map['fsSourceName'].isNotEmpty) {
         map['fsSourceName'].forEach((v) => fsSourceName?.add(v));
       }
     }
-    if(map['fsTargetUri'] != null){
+    if (map['fsTargetUri'] != null) {
       fsSourceName = [];
-      if(map['fsTargetUri'].isNotEmpty){
+      if (map['fsTargetUri'].isNotEmpty) {
         map['fsTargetUri'].forEach((v) => fsSourceName?.add(v));
       }
-      for(var i = 0; i < fsSourceName!.length; i ++){
+      for (var i = 0; i < fsSourceName!.length; i++) {
         imageUrl.add('${Env.data.baseUrl}/${UrlConstants.apiV4}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser');
       }
     }
@@ -107,17 +106,17 @@ class TicketModel{
     sourceName = map['sourceName'];
     concat = map['concat'];
     pict = map['pict'];
-    if(map['detail'] != null){
+    if (map['detail'] != null) {
       detail = [];
-      if(map['detail'].isNotEmpty){
-        map['detail'].forEach((v)=> detail?.add(TicketDetail.fromJson(v)));
+      if (map['detail'].isNotEmpty) {
+        map['detail'].forEach((v) => detail?.add(TicketDetail.fromJson(v)));
       }
     }
     type = _getType(category ?? '');
     statusEnum = _getStatus(status ?? '');
   }
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     final result = <String, dynamic>{};
     result['_id'] = id;
     result['ticketNo'] = ticketNo;
@@ -139,38 +138,38 @@ class TicketModel{
     return result;
   }
 
-  TicketType _getType(String category){
-    if(category == 'Akun dan Verifikasi'){
+  TicketType _getType(String category) {
+    if (category == 'Akun dan Verifikasi') {
       return TicketType.accountVerification;
-    }else if(category == 'Konten'){
+    } else if (category == 'Konten') {
       return TicketType.content;
-    }else if(category == 'Transaksi'){
+    } else if (category == 'Transaksi') {
       return TicketType.transaction;
-    }else if(category == 'Kepemilikan'){
+    } else if (category == 'Kepemilikan') {
       return TicketType.owner;
-    }else if(category == 'Masalah Teknis dan Bug'){
+    } else if (category == 'Masalah Teknis dan Bug') {
       return TicketType.problemBugs;
-    }else if(category == 'Iklan'){
+    } else if (category == 'Iklan') {
       return TicketType.ads;
-    }else{
+    } else {
       return TicketType.content;
     }
   }
 
-  TicketStatus _getStatus(String status){
-    if(status == 'onprogress'){
+  TicketStatus _getStatus(String status) {
+    if (status == 'onprogress') {
       return TicketStatus.inProgress;
-    }else if(status == 'close'){
+    } else if (status == 'close') {
       return TicketStatus.solved;
-    }else if(status == 'new'){
+    } else if (status == 'new') {
       return TicketStatus.newest;
-    }else{
+    } else {
       return TicketStatus.notSolved;
     }
   }
 }
 
-class TicketDetail{
+class TicketDetail {
   String? id;
   String? type;
   String? body;
@@ -187,7 +186,7 @@ class TicketDetail{
   List<TicketUrl> ticketUrls = [];
   Avatar? avatar;
 
-  TicketDetail.fromJson(Map<String, dynamic> map){
+  TicketDetail.fromJson(Map<String, dynamic> map) {
     final emailUser = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
     id = map['_id'];
@@ -198,40 +197,40 @@ class TicketDetail{
     status = map['status'];
     fullname = map['fullName'];
     email = map['email'];
-    if(map['mediaUri'] != null){
+    if (map['mediaUri'] != null) {
       mediaUri = [];
-      if(map['mediaUri'].isNotEmpty){
+      if (map['mediaUri'].isNotEmpty) {
         map['mediaUri'].forEach((v) => mediaUri?.add(v));
       }
     }
-    if(map['originalName'] != null){
+    if (map['originalName'] != null) {
       originalName = [];
-      if(map['originalName'].isNotEmpty){
+      if (map['originalName'].isNotEmpty) {
         map['originalName'].forEach((v) => originalName?.add(v));
       }
     }
-    if(map['fsSourceUri'] != null){
+    if (map['fsSourceUri'] != null) {
       fsSourceUri = [];
-      if(map['fsSourceUri'].isNotEmpty){
+      if (map['fsSourceUri'].isNotEmpty) {
         map['fsSourceUri'].forEach((v) => fsSourceUri?.add(v));
       }
     }
-    if(map['fsSourceName'] != null){
+    if (map['fsSourceName'] != null) {
       fsSourceName = [];
-      if(map['fsSourceName'].isNotEmpty){
+      if (map['fsSourceName'].isNotEmpty) {
         map['fsSourceName'].forEach((v) => fsSourceName?.add(v));
       }
     }
-    if(map['fsTargetUri'] != null){
+    if (map['fsTargetUri'] != null) {
       fsTargetUri = [];
-      if(map['fsTargetUri'].isNotEmpty){
+      if (map['fsTargetUri'].isNotEmpty) {
         map['fsTargetUri'].forEach((v) => fsTargetUri?.add(v));
       }
-      for(var i = 0; i < fsTargetUri!.length; i ++){
-        ticketUrls.add(TicketUrl(localDir: fsTargetUri![i], realUrl: '${Env.data.baseUrl}/${UrlConstants.apiV4}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser'));
+      for (var i = 0; i < fsTargetUri!.length; i++) {
+        ticketUrls.add(TicketUrl(localDir: fsTargetUri![i], realUrl: '${Env.data.baseUrl}/${Env.data.versionApi}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser'));
       }
     }
-    
+
     avatar = Avatar.fromJson(map['avatar']);
   }
 
