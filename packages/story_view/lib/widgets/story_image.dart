@@ -30,8 +30,7 @@ class ImageLoader {
       onComplete();
     }
 
-    final fileStream =
-        DefaultCacheManager().getFileStream(url, headers: requestHeaders);
+    final fileStream = DefaultCacheManager().getFileStream(url, headers: requestHeaders);
 
     fileStream.listen(
       (fileResponse) {
@@ -47,7 +46,7 @@ class ImageLoader {
 
         state = LoadState.success;
 
-        PaintingBinding.instance.instantiateImageCodec(imageBytes).then((codec) {
+        PaintingBinding.instance?.instantiateImageCodec(imageBytes).then((codec) {
           frames = codec;
           onComplete();
         }, onError: (error) {
@@ -169,14 +168,13 @@ class StoryImageState extends State<StoryImage> {
 
     final nextFrame = await widget.imageLoader.frames?.getNextFrame();
 
-    if(nextFrame != null){
+    if (nextFrame != null) {
       currentFrame = nextFrame.image;
 
       if (nextFrame.duration > const Duration(milliseconds: 0)) {
         _timer = Timer(nextFrame.duration, forward);
       }
     }
-
 
     setState(() {});
   }

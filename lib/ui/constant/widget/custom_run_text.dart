@@ -4,12 +4,14 @@ class CustomRunText extends StatefulWidget {
   final Widget child;
   final Axis direction;
   final Duration animationDuration, backDuration, pauseDuration;
-  const CustomRunText({Key? key,
+  const CustomRunText({
+    Key? key,
     required this.child,
     this.direction = Axis.horizontal,
     this.animationDuration = const Duration(milliseconds: 6000),
     this.backDuration = const Duration(milliseconds: 800),
-    this.pauseDuration = const Duration(milliseconds: 800),}) : super(key: key);
+    this.pauseDuration = const Duration(milliseconds: 800),
+  }) : super(key: key);
 
   @override
   State<CustomRunText> createState() => _CustomRunTextState();
@@ -21,7 +23,7 @@ class _CustomRunTextState extends State<CustomRunText> {
   @override
   void initState() {
     scrollController = ScrollController(initialScrollOffset: 50.0);
-    WidgetsBinding.instance.addPostFrameCallback(scroll);
+    WidgetsBinding.instance?.addPostFrameCallback(scroll);
     super.initState();
   }
 

@@ -72,10 +72,10 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
   @override
   void afterFirstLayout(BuildContext context) {
     // final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
       // notifier.setCurrentStory(-1);
-      Future.delayed(Duration.zero, ()async {
+      Future.delayed(Duration.zero, () async {
         print('afterFirstLayout init datas');
         await notifier.initializeUserStories(context, _storyController, widget.stories);
         Future.delayed(const Duration(milliseconds: 500), () {
@@ -336,10 +336,11 @@ class _StoryPageV2State extends State<StoryPageV2> with SingleTickerProviderStat
                     : Container(),
                 BuildTopView(
                   when: System().readTimestamp(
-                    DateTime.parse(currentData.createdAt ?? '').millisecondsSinceEpoch,
-                    context,
-                    fullCaption: true,
-                  ) ?? '',
+                        DateTime.parse(currentData.createdAt ?? '').millisecondsSinceEpoch,
+                        context,
+                        fullCaption: true,
+                      ) ??
+                      '',
                   data: currentData,
                   storyController: _storyController,
                 ),

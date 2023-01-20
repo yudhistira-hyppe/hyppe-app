@@ -83,7 +83,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   }
 
   void initState(UserOtpScreenArgument argument) {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     this.argument = argument;
     pinController = TextEditingController();
     // startTimer();
@@ -91,7 +91,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
