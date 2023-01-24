@@ -73,6 +73,8 @@ dependencies:
   audioplayers: ^2.0.0
   image_cropper: ^3.0.1
   move_to_background: ^1.0.2
+  sqflite: ^2.2.3
+
 
 
 

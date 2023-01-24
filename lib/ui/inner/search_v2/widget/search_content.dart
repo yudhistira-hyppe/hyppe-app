@@ -71,7 +71,7 @@ class _SearchContentState extends State<SearchContent> {
                   strokeWidth: 2.0,
                   color: Colors.purple,
                   onRefresh: () async {
-                    // await notifier.onInitialSearchNew(context);
+                    await notifier.onInitialSearchNew(context, widget.featureType ?? FeatureType.vid, reload: true);
                   },
                   child: GridView.builder(
                     controller: _scrollController,

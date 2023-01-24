@@ -218,14 +218,20 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future onInitialSearchNew(BuildContext context, FeatureType featureType) async {
+  Future onInitialSearchNew(BuildContext context, FeatureType featureType, {bool reload = false}) async {
     focusNode.unfocus();
 
+    print('reload search');
+    print(reload);
+    print(reload == false);
+
     if (featureType == FeatureType.vid) {
-      if (_searchContentFirstPage?.video != null || (_searchContentFirstPage?.video?.length ?? 0) > 0) {
+      if ((_searchContentFirstPage?.video != null || (_searchContentFirstPage?.video?.length ?? 0) > 0) && reload == false) {
         return null;
       } else {
-        isLoading = true;
+        if (!reload) {
+          isLoading = true;
+        }
         _searchContentFirstPage = AllContents();
         // _searchContentFirstPage?.video = [];
       }
