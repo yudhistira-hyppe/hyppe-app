@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -18,6 +19,7 @@ class BuildCaptureIcon extends StatelessWidget {
         height: 105 * SizeConfig.scaleDiagonal,
         child: CustomIconButtonWidget(
           onPressed: () {
+            // context.read<CameraNotifier>().showEffect(isClose: true);
             if (notifier.isRecordingVideo) {
               if (notifier.featureType != FeatureType.pic && notifier.selectedDuration != 0) {
                 if (notifier.progressHuman < notifier.selectedDuration) {

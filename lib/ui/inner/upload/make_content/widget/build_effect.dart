@@ -19,7 +19,6 @@ class BuildEffect extends StatelessWidget {
         child: Center(
           child: GestureDetector(
             onTap: () {
-              print("isrecord $isRecord");
               notifier.showEffect();
             },
             child: const SizedBox(

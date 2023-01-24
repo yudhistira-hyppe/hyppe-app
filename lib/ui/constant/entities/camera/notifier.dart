@@ -97,7 +97,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
   }
 
   Future<void> onStoryPhotoVideo(bool isPhoto) async {
-
     if (loadingForObject(loadingForSwitching)) {
       setLoading(false, loadingObject: loadingForSwitching);
     } else {
@@ -151,7 +150,6 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
 
     return Resolution.veryHigh;
   }
-
 
   Future<void> onFlashButtonPressed() async {
     deepArController!.toggleFlash();
@@ -264,8 +262,12 @@ class CameraNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  void showEffect() {
-    _showEffected = !_showEffected;
+  void showEffect({bool isClose = false}) {
+    if (isClose) {
+      _showEffected = false;
+    } else {
+      _showEffected = !_showEffected;
+    }
     notifyListeners();
   }
 }

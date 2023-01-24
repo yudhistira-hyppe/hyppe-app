@@ -4,6 +4,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/SqliteData.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
@@ -64,6 +65,8 @@ class HomeNotifier with ChangeNotifier {
 
   String _select = 'PUBLIC';
   String get select => _select;
+
+  var db = DatabaseHelper();
 
   set profileImage(String url) {
     _profileImage = url;
@@ -132,6 +135,11 @@ class HomeNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context) async {
+    // db.initDb();
+    // await db.insertFilterCamera('2', 'filter viking', 'viking', 'viking.ong', context);
+    // db.checkFilterItemExists();
+    // await db.getFilterCamera();
+
     'init Home'.logger();
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
