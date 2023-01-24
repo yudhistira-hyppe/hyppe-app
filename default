@@ -1,0 +1,148 @@
+# Default server configuration
+server {
+        server_name     staging.hyppe.app;
+        location /v2/ {
+                proxy_pass https://172.16.0.4:8443/v2/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+	location /v2/biz/ {
+                proxy_pass https://172.16.0.4:3443/v2/biz/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        location /v3/ {
+                proxy_pass https://172.16.0.4:5000/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        location /v4/ {
+                proxy_pass https://172.16.0.4:5001/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        location /console/ {
+                proxy_pass http://172.16.0.4:3000/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        location /stream/ {
+                proxy_pass https://172.16.0.4:7443/stream/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+	}
+	location /thumb/ {
+                proxy_pass https://172.16.0.4:7443/thumb/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+	}
+	location /pict/ {
+                proxy_pass https://172.16.0.4:7443/pict/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        location /profilepict/ {
+                proxy_pass https://172.16.0.4:7443/profilepict/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+	location /socket.io/ {
+                proxy_pass https://172.16.0.4:8443/socket.io/;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+        location / {
+                proxy_pass https://172.16.0.2:3000;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+
+	root /home/ubuntu/workspace/www/html;
+ 
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+        ssl_certificate /home/ubuntu/workspace/SSL/hyppe_bundle.crt;
+        ssl_certificate_key /home/ubuntu/workspace/SSL/hyppe.key;
+}
+
+server {
+        server_name     console.hyppe.app;
+        
+        location / {
+                proxy_pass http://172.16.0.4:3000;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+
+        root /home/ubuntu/workspace/www/html;
+
+        listen 443;
+        #listen [::]:443 ssl default_server;
+        ssl_certificate /home/ubuntu/workspace/SSL/hyppe_bundle.crt;
+        ssl_certificate_key /home/ubuntu/workspace/SSL/hyppe.key;
+}
+
+server {
+        server_name     business.hyppe.app;
+
+        location / {
+                proxy_pass http://172.16.0.4:3001;
+                proxy_http_version 1.1;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+                proxy_cache_bypass $http_upgrade;
+        }
+
+        root /home/ubuntu/workspace/www/html;
+
+        listen 443;
+        #listen [::]:443 ssl default_server;
+        ssl_certificate /home/ubuntu/workspace/SSL/hyppe_bundle.crt;
+        ssl_certificate_key /home/ubuntu/workspace/SSL/hyppe.key;
+}
+
+#server {
+#	server_name	repo.hyppe.app;
+#	listen 443;
+#	root /var/www/html;
+#	ssl on;
+#       ssl_certificate /home/ubuntu/workspace/SSL/hyppe-app/hyppe-app-public.pem;
+#        ssl_certificate_key /home/ubuntu/workspace/SSL/hyppe-app/hyppe-app-private.pem;
+#}

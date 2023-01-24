@@ -1,3 +1,4 @@
+$FirebaseSDKVersion = '9.6.0'
 # Uncomment this line to define a global platform for your project
 platform :ios, '14.0'
 
@@ -30,7 +31,9 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-
+  pod("GoogleMLKit/TextRecognition") {
+     moduleName = "MLKitTextRecognition"
+  }
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
