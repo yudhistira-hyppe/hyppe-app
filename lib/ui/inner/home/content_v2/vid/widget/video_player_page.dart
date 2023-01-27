@@ -89,7 +89,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       if (_betterPlayerController != null) {
         if (_eventType != BetterPlayerEventType.showingAds) {
           if (_betterPlayerController?.isFullScreen ?? false) {
-            _betterPlayerController?.exitFullScreen();
+            // _betterPlayerController?.exitFullScreen();
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
@@ -282,6 +282,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         result = 0;
         break;
     }
+    print('secondOfAds: $result');
     return result;
   }
 
@@ -620,20 +621,21 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
   void _handleClosingAdsEvent(BetterPlayerRoll? roll) async {
     _removeAdsBetterPlayerControllerMap();
-    if (_isStartFullScreen) {
-      Future.delayed(Duration.zero, () {
-        setState(() {
-          _betterPlayerController?.enterFullScreen();
-          _isStartFullScreen = false;
-        });
-      });
-    }
+
 
     // resume user video
     setStateIfMounted(() {
       _eventType = null;
       // _userVideo(_eventType == null);
       _betterPlayerController?.play();
+      if (_isStartFullScreen) {
+        Future.delayed(Duration(milliseconds: 500), () {
+          _betterPlayerController?.enterFullScreen();
+          setState(() {
+            _isStartFullScreen = false;
+          });
+        });
+      }
       print('play video after ads');
     });
   }
