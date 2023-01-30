@@ -85,41 +85,41 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
   bool _isLoadOther = false;
   bool _isLoadSearch = false;
 
-  set isLoadMusic(bool state){
+  set isLoadMusic(bool state) {
     _isLoadMusic = state;
     notifyListeners();
   }
 
-  setLoadMusic(bool state){
+  setLoadMusic(bool state) {
     _isLoadMusic = state;
   }
 
-  set preventMusic(bool state){
+  set preventMusic(bool state) {
     _preventMusic = state;
     notifyListeners();
   }
 
-  set hitApiMusic(bool state){
+  set hitApiMusic(bool state) {
     _hitApiMusic = state;
     notifyListeners();
   }
 
-  set urlMusic(String val){
+  set urlMusic(String val) {
     _urlMusic = val;
     notifyListeners();
   }
 
-  set currentIndex(int index){
+  set currentIndex(int index) {
     _currentIndex = index;
     notifyListeners();
   }
 
-  set mainIndex(int index){
+  set mainIndex(int index) {
     _mainIndex = index;
     notifyListeners();
   }
 
-  setMainIndex(int index){
+  setMainIndex(int index) {
     _mainIndex = index;
   }
 
@@ -164,7 +164,7 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
         _hitApiMusic = false;
         notifyListeners();
         return jsonMap['PlayUrl'];
-      }else{
+      } else {
         throw 'error get file apsara';
       }
     } catch (e) {
@@ -193,14 +193,11 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   void onUpdate() => notifyListeners();
 
-
-
-
-
   Future initAdsVideo(BuildContext context) async {
     _adsUrl = '';
     final count = context.getAdsCount();
     String? urlAds;
+    print('COUNTS ADS $count');
 
     if (count == null) {
       context.setAdsCount(0);
@@ -214,38 +211,38 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future<void> nextPlaylistPic(BuildContext context, int value) async{
+  Future<void> nextPlaylistPic(BuildContext context, int value) async {
     print('onPageChanged Image : masuk');
-    if(_routeArgument?.type == TypePlaylist.landingpage){
-      if (value == ((listData?.length ?? 0) - 1) && (listData?.length ?? 0)%(contentsQuery.limit) == 0) {
+    if (_routeArgument?.type == TypePlaylist.landingpage) {
+      if (value == ((listData?.length ?? 0) - 1) && (listData?.length ?? 0) % (contentsQuery.limit) == 0) {
         print('onPageChanged Image : masuk');
-        try{
+        try {
           final values = await contentsQuery.loadNext(context, isLandingPage: true);
           if (values.isNotEmpty) {
             listData = [...(listData ?? []) as List<ContentData>] + values;
             final prev = context.read<PreviewPicNotifier>();
             prev.initialPic(context, list: values);
           }
-        }catch(e){
+        } catch (e) {
           'TypePlaylist.landingpage nextload error : $e'.logger();
         }
       }
-    }else if(_routeArgument?.type == TypePlaylist.search){
-      if(!_isLoadSearch){
+    } else if (_routeArgument?.type == TypePlaylist.search) {
+      if (!_isLoadSearch) {
         if (value >= ((listData?.length ?? 0) - 6)) {
-          try{
+          try {
             _isLoadSearch = true;
-          }catch(e){
+          } catch (e) {
             'TypePlaylist.search nextload error : $e'.logger();
-          }finally{
+          } finally {
             _isLoadSearch = false;
           }
         }
       }
-    }else if(_routeArgument?.type == TypePlaylist.mine && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
-      if(!_isLoadMine){
+    } else if (_routeArgument?.type == TypePlaylist.mine && (listData?.length ?? 0) % (contentsQuery.limit) == 0) {
+      if (!_isLoadMine) {
         if (value >= ((listData?.length ?? 0) - 6)) {
-          try{
+          try {
             _isLoadMine = true;
             final values = await contentsQuery.loadNext(context, myContent: true);
             if (values.isNotEmpty) {
@@ -253,17 +250,17 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
               final prev = context.read<SelfProfileNotifier>();
               prev.user.pics = [...(prev.user.pics ?? []), ...values];
             }
-          }catch(e){
+          } catch (e) {
             'TypePlaylist.mine nextload error : $e'.logger();
-          }finally{
+          } finally {
             _isLoadMine = false;
           }
         }
       }
-    }else if(_routeArgument?.type == TypePlaylist.other){
-      if(!_isLoadOther){
-        if (value >= ((listData?.length ?? 0) - 6) && (listData?.length ?? 0)%(contentsQuery.limit) == 0){
-          try{
+    } else if (_routeArgument?.type == TypePlaylist.other) {
+      if (!_isLoadOther) {
+        if (value >= ((listData?.length ?? 0) - 6) && (listData?.length ?? 0) % (contentsQuery.limit) == 0) {
+          try {
             _isLoadOther = true;
             final values = await contentsQuery.loadNext(context, otherContent: true);
             if (values.isNotEmpty) {
@@ -271,9 +268,9 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
               final prev = context.read<OtherProfileNotifier>();
               prev.user.pics = [...(prev.user.pics ?? []), ...values];
             }
-          }catch(e){
+          } catch (e) {
             'TypePlaylist.other nextload error : $e'.logger();
-          }finally{
+          } finally {
             _isLoadOther = false;
           }
         }

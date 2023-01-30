@@ -364,7 +364,7 @@ class _StoryPageState extends State<StoryPage> with SingleTickerProviderStateMix
   void afterFirstLayout(BuildContext context) {
     isLoading = true;
     final notifier = Provider.of<StoriesPlaylistNotifier>(context, listen: false);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Future.delayed(Duration.zero, () {
         notifier.initializeData(context, _storyController, widget.data ?? ContentData());
         setState(() {

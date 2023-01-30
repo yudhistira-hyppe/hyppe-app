@@ -1,9 +1,14 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/ads_argument.dart';
+import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
@@ -61,7 +66,7 @@ class _AdsScreenState extends State<AdsScreen> {
     super.initState();
   }
 
-  Future adsView(AdsData data, int time, {bool isClick = false}) async {
+  Future adsView(BuildContext context, AdsData data, int time, {bool isClick = false}) async {
     try {
       final notifier = AdsDataBloc();
       final request = ViewAdsRequest(
@@ -70,7 +75,26 @@ class _AdsScreenState extends State<AdsScreen> {
         useradsId: data.useradsId,
       );
       await notifier.viewAdsBloc(context, request, isClick: isClick);
+      final fetch = notifier.adsDataFetch;
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print("ini hasil ${fetch.data['rewards']}");
+        if (fetch.data['rewards'] == true) {
+          print("ini hasil ${mounted}");
+          if (mounted) {
+            ShowGeneralDialog.adsRewardPop(context);
+            Timer(const Duration(milliseconds: 800), () {
+              Routing().moveBack();
+              Timer(const Duration(milliseconds: 800), () {
+                Routing().moveBack();
+              });
+            });
+          }
+        }
+      } else {
+        Routing().moveBack();
+      }
 
+      return true;
       // final fetch = notifier.adsVideoFetch;
 
     } catch (e) {
@@ -153,8 +177,7 @@ class _AdsScreenState extends State<AdsScreen> {
                           nextDebouncer: false,
                           onComplete: () async {
                             _storyController.pause();
-                            await adsView(widget.argument.data, secondsVideo);
-                            Navigator.pop(context);
+                            await adsView(context, widget.argument.data, secondsVideo);
                           },
                         ),
                         widget.argument.data.isReport ?? false
@@ -346,7 +369,7 @@ class _AdsScreenState extends State<AdsScreen> {
                     secondsSkip < 1 || widget.argument.data.isReport == true
                         ? InkWell(
                             onTap: () {
-                              adsView(widget.argument.data, secondsVideo);
+                              adsView(context, widget.argument.data, secondsVideo);
                               Navigator.pop(context);
                             },
                             child: const Padding(
@@ -390,7 +413,7 @@ class _AdsScreenState extends State<AdsScreen> {
           onTap: () async {
             final uri = Uri.parse(data.adsUrlLink ?? '');
             if (await canLaunchUrl(uri)) {
-              adsView(widget.argument.data, secondsVideo, isClick: true);
+              adsView(context, widget.argument.data, secondsVideo, isClick: true);
               Navigator.pop(context);
               await launchUrl(
                 uri,
@@ -402,18 +425,27 @@ class _AdsScreenState extends State<AdsScreen> {
             // can't launch url, there is some error
           },
           child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            child: const Text(
-              'Learn more',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(top: 10, bottom: 10),
+              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+              child: const CustomTextWidget(
+                textToDisplay: 'Learn more',
+                textStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+
+              //  Text(
+              //   'Learn more',
+              //   style: TextStyle(
+              //     color: Colors.white,
+              //     fontSize: 14,
+              //     fontWeight: FontWeight.w700,
+              //   ),
+              // ),
               ),
-            ),
-            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-          ),
         ),
       ),
     );
