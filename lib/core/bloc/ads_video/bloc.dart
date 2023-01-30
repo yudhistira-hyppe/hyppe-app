@@ -21,17 +21,14 @@ class AdsDataBloc {
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
     await Repos().reposPost(context, (onResult) {
-      if ((onResult.statusCode ?? 300)  > HTTP_CODE) {
+      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
         setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
       } else {
         print('data: ${onResult.data}');
         final response = AdsVideo.fromJson(onResult.data);
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess,
-            data: response));
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
       }
-    },
-        (errorData) =>
-            setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
         host: isContent ? UrlConstants.getAdsVideo : UrlConstants.getSponsoredAds,
         withAlertMessage: false,
         withCheckConnection: false,
@@ -41,8 +38,8 @@ class AdsDataBloc {
           'x-auth-token': token,
         });
   }
-  
-  Future appAdsBloc(BuildContext context) async{
+
+  Future appAdsBloc(BuildContext context) async {
     setCommentFetch(AdsDataFetch(AdsDataState.loading));
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
@@ -52,12 +49,9 @@ class AdsDataBloc {
       } else {
         print('data: ${onResult.data}');
         final response = AdsVideo.fromJson(onResult.data);
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess,
-            data: response));
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
       }
-    },
-            (errorData) =>
-            setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
         host: UrlConstants.getInAppAds,
         withAlertMessage: false,
         withCheckConnection: false,
@@ -77,13 +71,10 @@ class AdsDataBloc {
         setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError));
       } else {
         print('data: ${onResult.data}');
-        final response = GenericResponse.fromJson(onResult.data);
-        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess,
-            data: response));
+        final response = GenericResponse.fromJson(onResult.data).responseData;
+        setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocSuccess, data: response));
       }
-    },
-        (errorData) =>
-            setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
+    }, (errorData) => setCommentFetch(AdsDataFetch(AdsDataState.getAdsVideoBlocError)),
         host: isClick ? UrlConstants.clickAds : UrlConstants.viewAds,
         withAlertMessage: false,
         data: request.toJson(),

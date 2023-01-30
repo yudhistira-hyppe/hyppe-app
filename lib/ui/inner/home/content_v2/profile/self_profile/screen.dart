@@ -1,5 +1,12 @@
+import 'dart:async';
+
+import 'package:hyppe/core/bloc/ads_video/bloc.dart';
+import 'package:hyppe/core/bloc/ads_video/state.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -11,6 +18,7 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/widget/self_
 import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_shimmer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/notifier.dart';
 import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 class SelfProfileScreen extends StatefulWidget {
@@ -18,7 +26,7 @@ class SelfProfileScreen extends StatefulWidget {
   _SelfProfileScreenState createState() => _SelfProfileScreenState();
 }
 
-class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLayoutMixin{
+class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLayoutMixin {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
 
@@ -27,6 +35,7 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLa
     final notifier = context.read<SelfProfileNotifier>();
     notifier.setPageIndex(0);
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    // ShowGeneralDialog.adsRewardPop(context);
     super.initState();
   }
 
@@ -40,6 +49,36 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLa
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Future adsView(BuildContext context, {bool isClick = false}) async {
+    bool lanjutan = false;
+    try {
+      final notifier = AdsDataBloc();
+      final request = ViewAdsRequest(
+        watchingTime: 11,
+        adsId: '63bfebdfa121c14ab4a564cb',
+        useradsId: '63d0ea69d4c2c926ce5cad12',
+      );
+      await notifier.viewAdsBloc(context, request, isClick: isClick);
+
+      final fetch = notifier.adsDataFetch;
+      // if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+      // print("ini hasil ${fetch.data['rewards']}");
+      // if (fetch.data['rewards'] == true) {
+      print("ini hasil ${mounted}");
+
+      var res = await ShowGeneralDialog.adsRewardPop(context);
+      Timer(const Duration(milliseconds: 800), () {
+        Routing().moveBack();
+        Timer(const Duration(milliseconds: 800), () {
+          Routing().moveBack();
+        });
+      });
+      return lanjutan;
+    } catch (e) {
+      // 'Failed hit view ads $e'.logger();
+    }
   }
 
   @override
@@ -61,6 +100,15 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLa
                 children: [
                   Row(
                     children: [
+                      // GestureDetector(
+                      //     onTap: () async {
+                      //       var response = await adsView(context);
+                      //       print("ini response $response");
+                      //       if (response) {
+                      //         Routing().moveBack();
+                      //       }
+                      //     },
+                      //     child: Text("show pop up")),
                       IconButton(
                         onPressed: () => notifier.routing.moveBack(),
                         icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
