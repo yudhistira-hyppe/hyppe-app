@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:hyppe/core/bloc/ads_video/state.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -73,8 +75,8 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
       );
       await notifier.viewAdsBloc(context, request, isClick: isClick);
 
-      // final fetch = notifier.adsVideoFetch;
-
+      final fetch = notifier.adsDataFetch;
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {}
     } catch (e) {
       'Failed hit view ads $e'.logger();
     }

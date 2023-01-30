@@ -158,7 +158,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setHeight(int? val){
+  setHeight(int? val) {
     _height = val;
   }
 
@@ -167,7 +167,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setWidth(int? val){
+  setWidth(int? val) {
     _width = val;
   }
 
@@ -1123,7 +1123,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
     notifier.musicSelected = _fixSelectedMusic;
     _fixSelectedMusic = null;
-    // notifier.compressVideo();
+    notifier.compressVideo();
 
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }

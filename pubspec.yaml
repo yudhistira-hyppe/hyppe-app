@@ -74,6 +74,7 @@ dependencies:
   image_cropper: ^3.0.1
   move_to_background: ^1.0.2
   sqflite: ^2.2.3
+  # secure_application: ^3.8.0
 
 
 

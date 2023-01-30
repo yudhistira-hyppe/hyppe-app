@@ -58,7 +58,7 @@ class _DiaryPageState extends State<DiaryPage> {
       isLoading = true;
     });
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       _storyItems = notifier.result;
       isLoading = false;

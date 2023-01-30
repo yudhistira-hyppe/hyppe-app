@@ -194,7 +194,7 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   BoostResponse? _boostPaymentResponse;
   BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
-  
+
   set boostPaymentResponse(BoostResponse? value) {
     _boostPaymentResponse = value;
     notifyListeners();
@@ -991,39 +991,60 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   Future<void> compressVideo() async {
-    if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
-      try {
-        final LightCompressor _lightCompressor = LightCompressor();
-        _desFile = await _destinationFile;
-        _lightCompressor.onProgressUpdated.listen((val) {
-          _progressCompress = val;
-          // print("contoh dari value yang di terima : $val");
-          notifyListeners();
-        });
+    // 1 hd 50/60
+    // 0.83
+    getVideoSize();
+    Duration? _duration;
+    int? _size;
+    await System().getVideoMetadata(File(fileContent?[0] ?? '').path).then((value) {
+      _size = value?.filesize ?? 0;
+      print('sebelum di bagi $_size');
+      var inMB = _size! / 1024 / 1024;
+      _size = inMB.toInt();
+      _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+      // _duration.inSeconds
+    });
 
-        final dynamic response = await _lightCompressor.compressVideo(
-          path: File(fileContent?[0] ?? '').path,
-          destinationPath: _desFile ?? '',
-          videoQuality: VideoQuality.medium,
-          isMinBitrateCheckEnabled: false,
-          // frameRate: 24, /* or ignore it */
-        );
+    print("size video ini $_size");
+    print(_duration?.inSeconds);
 
-        if (response is OnSuccess) {
-          _desFile = response.destinationPath;
-          _fileContent = [response.destinationPath];
-          getVideoSize();
-          _progressCompress = 100;
-          notifyListeners();
-        } else if (response is OnFailure) {
-          // print('failed');
-          // print(response.message);
-        } else if (response is OnCancelled) {
-          // print('cancel');
-          // print(response.isCancelled);
+    var normalSize = _duration!.inSeconds * 0.91;
+
+    if (_size! >= normalSize) {
+      if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
+        try {
+          final LightCompressor _lightCompressor = LightCompressor();
+          _desFile = await _destinationFile;
+          _lightCompressor.onProgressUpdated.listen((val) {
+            _progressCompress = val;
+            // print("contoh dari value yang di terima : $val");
+            notifyListeners();
+          });
+
+          final dynamic response = await _lightCompressor.compressVideo(
+            path: File(fileContent?[0] ?? '').path,
+            destinationPath: _desFile ?? '',
+            videoQuality: VideoQuality.high,
+            isMinBitrateCheckEnabled: false,
+            // frameRate: 24, /* or ignore it */
+          );
+
+          if (response is OnSuccess) {
+            _desFile = response.destinationPath;
+            _fileContent = [response.destinationPath];
+            getVideoSize();
+            _progressCompress = 100;
+            notifyListeners();
+          } else if (response is OnFailure) {
+            // print('failed');
+            // print(response.message);
+          } else if (response is OnCancelled) {
+            // print('cancel');
+            // print(response.isCancelled);
+          }
+        } catch (e) {
+          // VideoCompress.cancelCompression();
         }
-      } catch (e) {
-        // VideoCompress.cancelCompression();
       }
     }
   }
