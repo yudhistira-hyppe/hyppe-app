@@ -844,6 +844,9 @@ class LocalizationModelV2 {
   String? pleaseVerifyYourEmailFrst;
   String? fileMayBeInErrorChooseAnotherFile;
   String? blockThisAccount;
+  String? confirmPasswordCorrect;
+  String? confirmPasswordWrong;
+  String? allowedSpecialCharacters;
 
   LocalizationModelV2({
     this.login,
@@ -1691,6 +1694,9 @@ class LocalizationModelV2 {
     this.pleaseVerifyYourEmailFrst,
     this.fileMayBeInErrorChooseAnotherFile,
     this.blockThisAccount,
+    this.confirmPasswordCorrect,
+    this.confirmPasswordWrong,
+    this.allowedSpecialCharacters,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2557,5 +2563,8 @@ class LocalizationModelV2 {
     pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
     fileMayBeInErrorChooseAnotherFile = json['fileMayBeInErrorChooseAnotherFile'];
     blockThisAccount = json['blockThisAccount'];
+    confirmPasswordCorrect = json['confirmPasswordCorrect'];
+    confirmPasswordWrong = json['confirmPasswordWrong'];
+    allowedSpecialCharacters = json['allowedSpecialCharacters'];
   }
 }

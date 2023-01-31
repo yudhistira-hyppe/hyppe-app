@@ -843,5 +843,8 @@
   "seeLess": "Sembunyikan",
   "pleaseVerifyYourEmailFrst" : "Silakan lakukan verifikasi email kamu terlebih dahulu",
   "fileMayBeInErrorChooseAnotherFile" : "File mungkin eror, pilih file lain  ",
-  "blockThisAccount" : "Blokir akun ini"
+  "blockThisAccount" : "Blokir akun ini",
+  "confirmPasswordCorrect" : "Konfirmasi Kata Sandi Benar",
+  "confirmPasswordWrong" : "Konfirmasi Kata Sandi Salah",
+  "allowedSpecialCharacters" : "Spesial karakter yang diperbolehkan ! @ # $ % ^ & * _ "
 }

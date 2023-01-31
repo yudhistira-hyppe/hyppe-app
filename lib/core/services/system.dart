@@ -1010,6 +1010,14 @@ class System {
     return text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
   }
 
+  bool specialCharPass(String text) {
+    return text.contains(RegExp(r'[!@#$%^&*_]+$'));
+  }
+
+  bool canSpecialCharPass(String text) {
+    return text.contains(RegExp(r'[a-zA-Z0-9!@#$%^&*_]+$'));
+  }
+
   bool atLeastContainOneCharacterAndOneNumber({required String text}) {
     return text.length > 1 && text.contains(RegExp(r'[0-9]'));
   }

@@ -76,12 +76,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       inputDecoration: InputDecoration(
                         contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
                         labelText: notifier.language.email ?? '',
-                        labelStyle: Theme.of(context).textTheme.bodyText1?.copyWith(
-                            color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty
-                                ? Theme.of(context).colorScheme.primaryVariant
-                                : null),
-                        prefixIconConstraints:
-                            BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
+                        labelStyle: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            ?.copyWith(color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primaryVariant : null),
+                        prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                         prefixIcon: Transform.translate(
                           offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                           child: Transform.scale(

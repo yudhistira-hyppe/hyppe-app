@@ -33,7 +33,7 @@ class UserBloc {
   String referralEmail = "";
   String platForm = "";
 
-  Future recoverPasswordBloc(BuildContext context, {required String email}) async {
+  Future recoverPasswordBloc(BuildContext context, {required String email, String? event, String? status}) async {
     final lang = SharedPreference().readStorage(SpKeys.isoCode);
     setUserFetch(UserFetch(UserState.loading));
     await Repos().reposPost(

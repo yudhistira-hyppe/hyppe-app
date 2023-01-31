@@ -21,6 +21,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
+import 'package:screen_protector/screen_protector.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -65,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
+    disposeBlock();
 
     super.didPopNext();
   }
@@ -129,6 +131,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     //     notifier.saveCache();
     //   }
     // });
+  }
+
+  Future disposeBlock() async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOff();
+    // }
   }
 
   @override

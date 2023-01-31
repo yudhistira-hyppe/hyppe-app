@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/constants/enum.dart';
@@ -46,6 +48,39 @@ class SlidePicScreen extends StatefulWidget {
 }
 
 class _SlidePicScreenState extends State<SlidePicScreen> {
+  Future block() async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOn();
+    // }
+  }
+
+  Future disposeBlock() async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOff();
+    // }
+  }
+
+  @override
+  void initState() {
+    print('pindah screen ${widget.data.certified ?? false}');
+    if (widget.data.certified ?? false) {
+      print('pindah screen2 ${widget.data.certified ?? false}');
+      block();
+    } else {
+      disposeBlock();
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.data.certified ?? false) {
+      print('close dispose ${widget.data.certified ?? false}');
+      // disposeBlock();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
@@ -447,15 +482,5 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

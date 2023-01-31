@@ -843,5 +843,8 @@
   "seeLess": "See Less",
   "pleaseVerifyYourEmailFrst" : "Please verify your email first",
   "fileMayBeInErrorChooseAnotherFile" : "File may be in error, choose another file",
-  "blockThisAccount" : "Block this account"
+  "blockThisAccount" : "Block this account",
+  "confirmPasswordCorrect" : "Confirm Password Correct",
+  "confirmPasswordWrong" : "Confirm Password Wrong",
+  "allowedSpecialCharacters" : "Allowed special characters ! @ # $ % ^ & * _ "
 }

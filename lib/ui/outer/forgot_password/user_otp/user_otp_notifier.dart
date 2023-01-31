@@ -159,10 +159,11 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
           );
           final fetch = notifier.userFetch;
           if (fetch.userState == UserState.RecoverSuccess) {
-            _handleVerifyAction(
-              context: context,
-              message: language.yourResetCodeHasBeenVerified ?? '',
-            );
+            Routing().move(Routes.newPassword);
+            // _handleVerifyAction(
+            //   context: context,
+            //   message: language.yourResetCodeHasBeenVerified ?? '',
+            // );
           } else {
             if (fetch.data['messages']['info'][0] != null) {
               ShowBottomSheet().onShowColouredSheet(
@@ -241,9 +242,12 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     final notifier = UserBloc();
     try {
       setLoading(true, loadingObject: resendLoadKey);
+
       await notifier.recoverPasswordBloc(
         context,
         email: argument.email ?? '',
+        event: "RECOVER_PASS",
+        status: "INITIAL",
       );
       final fetch = notifier.userFetch;
 

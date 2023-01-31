@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/slide_pic_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_protector/screen_protector.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
@@ -42,7 +44,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
     super.initState();
-
   }
 
   @override
@@ -103,7 +104,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                             //   detailNotifier.isLoadMusic = true;
                             //
                             // }
-
                           },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];

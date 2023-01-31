@@ -75,6 +75,8 @@ dependencies:
   move_to_background: ^1.0.2
   sqflite: ^2.2.3
   # secure_application: ^3.8.0
+  screen_protector: ^1.2.0
+
 
 
 
