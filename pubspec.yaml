@@ -63,7 +63,7 @@ dependencies:
   crypto: ^3.0.0 
   uuid: ^3.0.6
   light_compressor: ^1.2.2
-  deepar_flutter: ^0.0.3
+  deepar_flutter: ^0.0.5
   flutter_html: ^3.0.0-alpha.3
 #  hive: ^2.2.3
 #  hive_flutter: ^1.1.0
