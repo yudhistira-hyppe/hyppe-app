@@ -30,6 +30,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
@@ -292,6 +293,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void _userVideo(bool autoPlay) async {
     print('test iklan data');
     print(widget.videoData?.postID);
+
+    if (widget.videoData?.certified ?? false) {
+      _preventScreenShootOn();
+    } else {
+      _preventScreenShootOff();
+    }
     // print(_clipsData.ads[0].rollDuration);
     // print(_clipsData.ads[1].rollUri);
     // print(_clipsData.ads[1].playingAt);
@@ -625,7 +632,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void _handleClosingAdsEvent(BetterPlayerRoll? roll) async {
     _removeAdsBetterPlayerControllerMap();
 
-
     // resume user video
     setStateIfMounted(() {
       _eventType = null;
@@ -681,6 +687,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void dispose() {
     _dispose();
     CustomRouteObserver.routeObserver.unsubscribe(this);
+    _preventScreenShootOff();
     super.dispose();
   }
 
@@ -704,6 +711,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void setStateIfMounted(f) {
     if (mounted) setState(f);
   }
+
+  bool preventScreenShoot = false;
+  void _preventScreenShootOn() async => await ScreenProtector.preventScreenshotOn();
+  void _preventScreenShootOff() async => await ScreenProtector.preventScreenshotOff();
 
   @override
   Widget build(BuildContext context) {

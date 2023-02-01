@@ -3,6 +3,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot_callback/screenshot_callback.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/constants/enum.dart';
@@ -51,9 +52,9 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
     print('pindah screen ${widget.data.certified ?? false}');
     if (widget.data.certified ?? false) {
       print('pindah screen2 ${widget.data.certified ?? false}');
-      System().block();
+      System().block(context);
     } else {
-      System().disposeBlock();
+      System().disposeBlock(context);
     }
     super.initState();
   }

@@ -124,6 +124,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       }
       _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
     }
+
+    if (state == AppLifecycleState.paused) {
+      // Show custom alert message or perform action
+      print('capture capture');
+    }
   }
 
   Future getDevice() async {

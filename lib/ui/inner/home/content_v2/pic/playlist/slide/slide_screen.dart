@@ -7,6 +7,7 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/slide_pic_scre
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:screen_protector/screen_protector.dart';
+import 'package:screenshot_callback/screenshot_callback.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
@@ -24,7 +25,7 @@ class SlidedPicDetail extends StatefulWidget {
   State<SlidedPicDetail> createState() => _SlidedPicDetailState();
 }
 
-class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayoutMixin {
+class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayoutMixin, WidgetsBindingObserver {
   final _notifier = SlidedPicDetailNotifier();
   late PageController _pageController;
   late PageController _mainPageController;
@@ -39,11 +40,21 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
     _notifier.setMainIndex(0);
     _pageController = PageController(initialPage: widget.arguments.index.toInt());
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Show custom alert message when the app is resumed
+      print("capture ter capture");
+    }
   }
 
   @override

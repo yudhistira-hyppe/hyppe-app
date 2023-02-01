@@ -64,9 +64,9 @@ class _DiaryPageState extends State<DiaryPage> {
       isLoading = false;
       if (widget.data?.certified ?? false) {
         print('pindah screen2 ${widget.data?.certified ?? false}');
-        System().block();
+        System().block(context);
       } else {
-        System().disposeBlock();
+        System().disposeBlock(context);
       }
     });
 

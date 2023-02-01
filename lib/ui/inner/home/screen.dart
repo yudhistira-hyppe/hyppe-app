@@ -26,6 +26,7 @@ import 'package:screen_protector/screen_protector.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
+import 'package:screenshot_callback/screenshot_callback.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayoutMixin {
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
+  ScreenshotCallback screenshotCallback = ScreenshotCallback();
 
   @override
   void didChangeDependencies() {
@@ -68,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
-    System().disposeBlock();
+    System().disposeBlock(context);
 
     super.didPopNext();
   }
@@ -117,6 +119,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
         ];
       }
       context.read<ReportNotifier>().inPosition = contentPosition.home;
+      init();
     });
 
     context.read<PreUploadContentNotifier>().onGetInterest(context);
@@ -133,6 +136,23 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     //     notifier.saveCache();
     //   }
     // });
+  }
+
+  void init() async {
+    await initScreenshotCallback();
+  }
+
+  //It must be created after permission is granted.
+  Future<void> initScreenshotCallback() async {
+    screenshotCallback = ScreenshotCallback();
+
+    screenshotCallback.addListener(() {
+      print('asd');
+    });
+
+    screenshotCallback.addListener(() {
+      print("We can add multiple listeners ");
+    });
   }
 
   @override
