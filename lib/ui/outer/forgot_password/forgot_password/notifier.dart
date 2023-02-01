@@ -110,7 +110,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
           // _sharedPrefs.writeStorage(SpKeys.isUserRequestRecoverPassword, true);
           await Future.delayed(const Duration(seconds: 1));
           // _routing.move(signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome));
-          _routing.move(
+          _routing.moveReplacement(
             Routes.userOtpScreen,
             argument: UserOtpScreenArgument(
               email: emailController.text,

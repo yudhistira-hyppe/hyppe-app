@@ -8,6 +8,8 @@ import 'package:hyppe/ui/constant/widget/custom_otp_field_widget.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 
 class CustomRectangleInput extends StatelessWidget {
+  Function afterSuccess;
+  CustomRectangleInput({required this.afterSuccess});
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -23,7 +25,7 @@ class CustomRectangleInput extends StatelessWidget {
               onChanged: (text) async {
                 print('lenght of the pin: ${text.length}');
                 if (text.length == 4) {
-                  await notifier.onVerifyButton(context);
+                  await notifier.onVerifyButton(context, afterSuccess);
                 }
                 // notifier.isOTPCodeFullFilled = notifier.pinController.text.length == 4;
               },
