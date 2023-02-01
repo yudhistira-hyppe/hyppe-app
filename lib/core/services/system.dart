@@ -47,6 +47,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
@@ -1240,5 +1241,17 @@ class System {
       'isPhysicalDevice': build.isPhysicalDevice,
       'systemFeatures': build.systemFeatures,
     };
+  }
+
+  Future block() async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOn();
+    // }
+  }
+
+  Future disposeBlock() async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOff();
+    // }
   }
 }

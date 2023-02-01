@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
+import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_response.dart';
+import 'package:hyppe/core/services/fcm_service.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
@@ -241,22 +247,25 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         email: emailController.text,
         event: 'COMPLETE',
         status: 'COMPLETE',
+        newPassword: password,
       );
       final fetch = notifier.userFetch;
       _loading = false;
       notifyListeners();
       print('ini hasil ${fetch.userState}');
       if (fetch.userState == UserState.RecoverSuccess) {
-        ShowBottomSheet().onShowColouredSheet(
+        if (!mounted) return false;
+        ShowBottomSheet()
+            .onShowColouredSheet(
           context,
-          language.incorrectPassword ?? 'Incorrect Password',
-          subCaption: language.allowedSpecialCharacters,
-          color: Theme.of(context).colorScheme.error,
-          iconSvg: "${AssetPath.vectorPath}close.svg",
+          language.newPasswordCreatedSuccessfully ?? '',
           sizeIcon: 15,
-        );
-        // final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
-        Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.welcomeLogin);
+          milisecond: 1000,
+        )
+            .whenComplete(() {
+          _handleSignIn(context, mounted);
+          // Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.welcomeLogin);
+        });
       } else {}
     } else {
       _loading = false;
@@ -268,104 +277,39 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     }
   }
 
-  // Future? nextButton(BuildContext context) async {
-  //   if (_validationRegister()) {
-  //     return () async {
-  //       if (!_system.atLeastEightCharacter(text: password)) {
-  //         ShowBottomSheet().onShowColouredSheet(
-  //           context,
-  //           language.incorrectPassword ?? 'Incorrect Password',
-  //           subCaption: language.atLeast8Characters,
-  //           color: Theme.of(context).colorScheme.error,
-  //           iconSvg: "${AssetPath.vectorPath}close.svg",
-  //           sizeIcon: 15,
-  //         );
-  //         return;
-  //       } else if (!_system.atLeastContainOneCharacterAndOneNumber(text: password)) {
-  //         ShowBottomSheet().onShowColouredSheet(
-  //           context,
-  //           language.incorrectPassword ?? 'Incorrect Password',
-  //           sizeIcon: 15,
-  //           color: Theme.of(context).colorScheme.error,
-  //           iconSvg: "${AssetPath.vectorPath}close.svg",
-  //           subCaption: language.atLeastContain1CharacterAnd1Number,
-  //         );
-  //         return;
-  //       } else if (!checkConfirmPassword()) {
-  //         ShowBottomSheet().onShowColouredSheet(
-  //           context,
-  //           language.incorrectPassword ?? 'Incorrect Password',
-  //           sizeIcon: 15,
-  //           color: Theme.of(context).colorScheme.error,
-  //           iconSvg: "${AssetPath.vectorPath}close.svg",
-  //           subCaption: language.atLeastContain1CharacterAnd1Number,
-  //         );
-  //         return;
-  //       } else {
-  //         if (loading) {
-  //           return;
-  //         }
-  //         bool connection = await System().checkConnections();
-  //         if (connection) {
-  //           final signUpPinNotifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+  Future _handleSignIn(BuildContext context, bool mounted) async {
+    try {
+      ShowGeneralDialog.loadingDialog(context);
+      await FcmService().initializeFcmIfNot();
+      final notifier = UserBloc();
+      if (!mounted) return false;
+      await notifier.signInBlocV2(
+        context,
+        function: () {},
+        email: emailController.text,
+        password: password,
+      );
 
-  //           // update loading state
-  //           loading = true;
-
-  //           final notifier = UserBloc();
-
-  //           await notifier.recoverPasswordBloc(
-  //             context,
-  //             email: emailController.text,
-  //             event: 'COMPLETE',
-  //             status: 'COMPLETE',
-  //           );
-  //           final fetch = notifier.userFetch;
-  //           loading = false;
-  //           if (fetch.userState == UserState.signUpSuccess) {
-  //             final SignUpResponse _result = SignUpResponse.fromJson(fetch.data);
-
-  //             SharedPreference().writeStorage(SpKeys.email, _result.email);
-  //             SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
-  //             // signUpPinNotifier.userToken = fetch.data['token'];
-  //             // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
-  //             signUpPinNotifier.username = _result.userName ?? "";
-  //             signUpPinNotifier.email = _result.email ?? "";
-  //             // signUpEulaNotifier.fullName = _result.fullName ?? "";
-  //             // signUpEulaNotifier.userName = _result.userName ?? "";
-  //             // signUpEulaNotifier.email = _result.email ?? "";
-
-  //             _hidePassword = true;
-  //             onReset();
-  //             notifyListeners();
-  //             Routing().moveAndRemoveUntil(
-  //               Routes.signUpPin,
-  //               Routes.root,
-  //               argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2),
-  //             );
-  //           } else {
-  //             // loading = false;
-  //             // // >>>>> Agar failed tetap ke signUpPin page
-  //             // signUpPinNotifier.email = emailController.text;
-  //             // Routing().moveAndRemoveUntil(
-  //             //   Routes.signUpPin,
-  //             //   Routes.root,
-  //             //   argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2),
-  //             // );
-  //           }
-  //         } else {
-  //           loading = false;
-  //           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-  //             Routing().moveBack();
-  //             nextButton(context);
-  //           });
-  //         }
-  //       }
-  //     };
-  //   } else {
-  //     return null;
-  //   }
-  // }
+      final fetch = notifier.userFetch;
+      if (fetch.userState == UserState.LoginSuccess) {
+        final UserProfileModel _result = UserProfileModel.fromJson(fetch.data);
+        if (_result.userType == null) {
+          ShowBottomSheet.onShowSomethingWhenWrong(context);
+        } else {
+          SharedPreference().writeStorage(SpKeys.userToken, _result.token);
+          SharedPreference().writeStorage(SpKeys.email, _result.email);
+          try {
+            DeviceBloc().activityAwake(context);
+          } catch (e) {
+            print(e);
+          }
+          Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void setLoading(

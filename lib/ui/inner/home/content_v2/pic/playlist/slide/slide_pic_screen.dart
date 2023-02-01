@@ -1,10 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_protector/screen_protector.dart';
 
 import '../../../../../../../core/constants/asset_path.dart';
 import '../../../../../../../core/constants/enum.dart';
@@ -48,26 +46,14 @@ class SlidePicScreen extends StatefulWidget {
 }
 
 class _SlidePicScreenState extends State<SlidePicScreen> {
-  Future block() async {
-    // if (!kDebugMode) {
-    await ScreenProtector.preventScreenshotOn();
-    // }
-  }
-
-  Future disposeBlock() async {
-    // if (!kDebugMode) {
-    await ScreenProtector.preventScreenshotOff();
-    // }
-  }
-
   @override
   void initState() {
     print('pindah screen ${widget.data.certified ?? false}');
     if (widget.data.certified ?? false) {
       print('pindah screen2 ${widget.data.certified ?? false}');
-      block();
+      System().block();
     } else {
-      disposeBlock();
+      System().disposeBlock();
     }
     super.initState();
   }

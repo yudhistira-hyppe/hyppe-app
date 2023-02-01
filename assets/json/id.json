@@ -846,5 +846,6 @@
   "blockThisAccount" : "Blokir akun ini",
   "confirmPasswordCorrect" : "Konfirmasi Kata Sandi Benar",
   "confirmPasswordWrong" : "Konfirmasi Kata Sandi Salah",
-  "allowedSpecialCharacters" : "Spesial karakter yang diperbolehkan ! @ # $ % ^ & * _ "
+  "allowedSpecialCharacters" : "Spesial karakter yang diperbolehkan ! @ # $ % ^ & * _ ",
+  "newPasswordCreatedSuccessfully": "Kata sandi baru berhasil dibuat"
 }

@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -66,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
-    disposeBlock();
+
+    System().disposeBlock();
 
     super.didPopNext();
   }
@@ -131,12 +133,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     //     notifier.saveCache();
     //   }
     // });
-  }
-
-  Future disposeBlock() async {
-    // if (!kDebugMode) {
-    await ScreenProtector.preventScreenshotOff();
-    // }
   }
 
   @override

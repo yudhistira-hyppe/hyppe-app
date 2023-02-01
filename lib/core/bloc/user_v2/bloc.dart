@@ -33,9 +33,19 @@ class UserBloc {
   String referralEmail = "";
   String platForm = "";
 
-  Future recoverPasswordBloc(BuildContext context, {required String email, String? event, String? status}) async {
+  Future recoverPasswordBloc(BuildContext context, {required String email, String? event, String? status, String newPassword = ''}) async {
     final lang = SharedPreference().readStorage(SpKeys.isoCode);
     setUserFetch(UserFetch(UserState.loading));
+    Map data = {
+      "email": email,
+      "event": event,
+      "status": status,
+      "deviceId": SharedPreference().readStorage(SpKeys.fcmToken),
+      "lang": lang ?? 'id',
+    };
+    if (newPassword != '') {
+      data['new_password'] = newPassword;
+    }
     await Repos().reposPost(
       context,
       (onResult) {
@@ -53,13 +63,7 @@ class UserBloc {
       onNoInternet: () {
         Routing().moveBack();
       },
-      data: {
-        "email": email,
-        "event": "RECOVER_PASS",
-        "status": "INITIAL",
-        "deviceId": SharedPreference().readStorage(SpKeys.fcmToken),
-        "lang": lang ?? 'id',
-      },
+      data: data,
       withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.recoverPassword,

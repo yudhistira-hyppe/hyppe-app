@@ -846,5 +846,6 @@
   "blockThisAccount" : "Block this account",
   "confirmPasswordCorrect" : "Confirm Password Correct",
   "confirmPasswordWrong" : "Confirm Password Wrong",
-  "allowedSpecialCharacters" : "Allowed special characters ! @ # $ % ^ & * _ "
+  "allowedSpecialCharacters" : "Allowed special characters ! @ # $ % ^ & * _ ",
+  "newPasswordCreatedSuccessfully": "New password created successfully"
 }

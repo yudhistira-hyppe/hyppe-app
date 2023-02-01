@@ -62,6 +62,12 @@ class _DiaryPageState extends State<DiaryPage> {
       notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       _storyItems = notifier.result;
       isLoading = false;
+      if (widget.data?.certified ?? false) {
+        print('pindah screen2 ${widget.data?.certified ?? false}');
+        System().block();
+      } else {
+        System().disposeBlock();
+      }
     });
 
     super.initState();

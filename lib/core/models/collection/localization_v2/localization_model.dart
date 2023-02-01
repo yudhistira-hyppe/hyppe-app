@@ -847,6 +847,7 @@ class LocalizationModelV2 {
   String? confirmPasswordCorrect;
   String? confirmPasswordWrong;
   String? allowedSpecialCharacters;
+  String? newPasswordCreatedSuccessfully;
 
   LocalizationModelV2({
     this.login,
@@ -1697,6 +1698,7 @@ class LocalizationModelV2 {
     this.confirmPasswordCorrect,
     this.confirmPasswordWrong,
     this.allowedSpecialCharacters,
+    this.newPasswordCreatedSuccessfully,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2566,5 +2568,6 @@ class LocalizationModelV2 {
     confirmPasswordCorrect = json['confirmPasswordCorrect'];
     confirmPasswordWrong = json['confirmPasswordWrong'];
     allowedSpecialCharacters = json['allowedSpecialCharacters'];
+    newPasswordCreatedSuccessfully = json['newPasswordCreatedSuccessfully'];
   }
 }
