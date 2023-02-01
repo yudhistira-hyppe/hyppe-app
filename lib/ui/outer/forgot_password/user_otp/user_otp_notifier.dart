@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
 import 'package:hyppe/core/bloc/user_v2/state.dart';
 
-import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -37,7 +36,6 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   final String _excededMessage = "OTP max attempt exceeded, please try after 30 minute";
 
-  Timer? _myTimer;
   bool get inCorrectCode => _inCorrectCode;
   // bool get isOTPCodeFullFilled => _isOTPCodeFullFilled;
 
@@ -164,7 +162,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   //   }
   // }
 
-  Future onVerifyButton(BuildContext context) async{
+  Future onVerifyButton(BuildContext context, Function afterSuccess) async{
     final notifier = UserBloc();
     try {
       // update loading state
@@ -177,7 +175,9 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
       );
       final fetch = notifier.userFetch;
       if (fetch.userState == UserState.RecoverSuccess) {
-        Routing().move(Routes.newPassword);
+        afterSuccess();
+        Routing().moveReplacement(Routes.newPassword);
+
         // _handleVerifyAction(
         //   context: context,
         //   message: language.yourResetCodeHasBeenVerified ?? '',

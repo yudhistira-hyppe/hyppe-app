@@ -100,7 +100,9 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
               textToDisplay: "${notifier.language.pinTopText2} ${notifier.argument.email}",
             ),
             twentyFourPx,
-            CustomRectangleInput(),
+            CustomRectangleInput(afterSuccess: (){
+              stopTime(isReset: true);
+            }),
             (!notifier.loadingForObject(notifier.resendLoadKey)) ? Column(children: [
               fortyPx,
               Row(
