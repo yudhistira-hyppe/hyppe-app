@@ -85,6 +85,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
 import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
+import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
 import 'package:hyppe/ui/outer/login/screen.dart';
 import 'package:hyppe/ui/outer/opening_logo/screen.dart';
@@ -173,6 +174,8 @@ class Generate {
       // ------------------------------------------------------------ //
       case Routes.forgotPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
+      case Routes.newPassword:
+        return MaterialPageRoute(builder: (_) => const SetNewPassword());
       case Routes.register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case Routes.userInterest:
@@ -328,7 +331,10 @@ class Generate {
       case Routes.help:
         return MaterialPageRoute(builder: (_) => const HelpScreen());
       case Routes.faqDetail:
-        return MaterialPageRoute(builder: (_) => FAQDetailScreen(data: settings.arguments as FAQArgument,));
+        return MaterialPageRoute(
+            builder: (_) => FAQDetailScreen(
+                  data: settings.arguments as FAQArgument,
+                ));
       case Routes.supportTicket:
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:

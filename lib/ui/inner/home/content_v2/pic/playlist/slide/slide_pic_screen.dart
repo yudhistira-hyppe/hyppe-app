@@ -47,6 +47,27 @@ class SlidePicScreen extends StatefulWidget {
 
 class _SlidePicScreenState extends State<SlidePicScreen> {
   @override
+  void initState() {
+    print('pindah screen ${widget.data.certified ?? false}');
+    if (widget.data.certified ?? false) {
+      print('pindah screen2 ${widget.data.certified ?? false}');
+      System().block();
+    } else {
+      System().disposeBlock();
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.data.certified ?? false) {
+      print('close dispose ${widget.data.certified ?? false}');
+      // disposeBlock();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
@@ -447,15 +468,5 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

@@ -382,6 +382,7 @@ class TransactionNotifier extends ChangeNotifier {
         _timeVA = DateTime.now();
         print(fetch.data[0]);
         dataTransactionDetail = isReward ? TransactionHistoryModel.fromJSON(fetch.data[0]) : TransactionHistoryModel.fromJSON(fetch.data);
+        print("ini detail ${dataTransactionDetail?.time}");
         if (!isReward) {
           var _hourVa = _timeVA.hour - DateTime.parse(dataTransactionDetail!.time!).hour;
           _minuteVa = _timeVA.minute - DateTime.parse(dataTransactionDetail!.time!).minute;

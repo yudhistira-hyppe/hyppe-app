@@ -59,12 +59,13 @@ class _DiaryPageState extends State<DiaryPage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       _storyItems = notifier.result;
-      Future.delayed(Duration(milliseconds: 500), (){
-        setState(() {
-          isLoading = false;
-        });
-      });
-
+      isLoading = false;
+      if (widget.data?.certified ?? false) {
+        print('pindah screen2 ${widget.data?.certified ?? false}');
+        System().block();
+      } else {
+        System().disposeBlock();
+      }
     });
 
     super.initState();

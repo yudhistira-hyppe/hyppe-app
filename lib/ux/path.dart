@@ -34,6 +34,7 @@ class Routes {
 // ------------------------------------------------------------- //
 
   static const String forgotPassword = '/forgot-password';
+  static const String newPassword = '/new-password';
   static const String register = '/register';
   static const String userInterest = '/user-interest';
   static const String userAgreement = '/user-agreement';
