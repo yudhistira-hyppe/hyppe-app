@@ -1018,7 +1018,9 @@ class System {
   }
 
   bool specialCharPass(String text) {
-    return text.contains(RegExp(r'[!@#$%^&*_]+$'));
+    final result = text.contains(RegExp(r'[!@#$%^&*_]'));
+    'specialCharPass:  $result'.logger();
+    return result;
   }
 
   bool canSpecialCharPass(String text) {
