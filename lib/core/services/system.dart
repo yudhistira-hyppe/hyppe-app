@@ -999,7 +999,11 @@ class System {
     return text.contains(name) || text.contains(email);
   }
 
-  bool atLeastEightCharacter({required String text}) {
+  bool atLeastEightUntilTwentyCharacter({required String text}) {
+    return text.length >= 8 && text.length <= 20;
+  }
+
+  bool atLeastEightCharacter({required String text}){
     return text.length >= 8;
   }
 
@@ -1253,5 +1257,19 @@ class System {
     // if (!kDebugMode) {
     await ScreenProtector.preventScreenshotOff();
     // }
+  }
+
+  String getFullTime(int seconds){
+    return '${getFormatMinutes(seconds)}:${getFormatSeconds(seconds)}';
+  }
+
+  String getFormatSeconds(int values) {
+    int stateSeconds = values % 60;
+    return stateSeconds < 10 ? '0$stateSeconds' : '$stateSeconds';
+  }
+
+  String getFormatMinutes(int values) {
+    int stateMinutes = Duration(seconds: values).inMinutes;
+    return stateMinutes < 10 ? '0$stateMinutes' : '$stateMinutes';
   }
 }

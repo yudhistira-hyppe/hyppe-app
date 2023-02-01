@@ -29,10 +29,8 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   }
 
   final _sharedPrefs = SharedPreference();
-
-  String _timer = "";
   bool _inCorrectCode = false;
-  bool _isOTPCodeFullFilled = false;
+  // bool _isOTPCodeFullFilled = false;
   TextEditingController pinController = TextEditingController();
 
   late UserOtpScreenArgument argument;
@@ -41,7 +39,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   Timer? _myTimer;
   bool get inCorrectCode => _inCorrectCode;
-  bool get isOTPCodeFullFilled => _isOTPCodeFullFilled;
+  // bool get isOTPCodeFullFilled => _isOTPCodeFullFilled;
 
   final String resendLoadKey = 'resendLoadKey';
 
@@ -50,37 +48,33 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     notifyListeners();
   }
 
-  set isOTPCodeFullFilled(bool val) {
-    _isOTPCodeFullFilled = val;
-    notifyListeners();
-  }
+  // set isOTPCodeFullFilled(bool val) {
+  //   _isOTPCodeFullFilled = val;
+  //   notifyListeners();
+  // }
 
-  set timer(String val) {
-    _timer = val;
-    notifyListeners();
-  }
 
   void onResetData() {
     pinController.clear();
     _inCorrectCode = false;
-    _isOTPCodeFullFilled = false;
+    // _isOTPCodeFullFilled = false;
   }
 
-  Color verifyButtonColor(BuildContext context) {
-    if (isOTPCodeFullFilled && !isLoading) {
-      return Theme.of(context).colorScheme.primaryVariant;
-    } else {
-      return Theme.of(context).colorScheme.surface;
-    }
-  }
+  // Color verifyButtonColor(BuildContext context) {
+  //   if (isOTPCodeFullFilled && !isLoading) {
+  //     return Theme.of(context).colorScheme.primaryVariant;
+  //   } else {
+  //     return Theme.of(context).colorScheme.surface;
+  //   }
+  // }
 
-  TextStyle verifyTextColor(BuildContext context) {
-    if (isOTPCodeFullFilled) {
-      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
-    } else {
-      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
-    }
-  }
+  // TextStyle verifyTextColor(BuildContext context) {
+  //   if (isOTPCodeFullFilled) {
+  //     return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
+  //   } else {
+  //     return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
+  //   }
+  // }
 
   void initState(UserOtpScreenArgument argument) {
     WidgetsBinding.instance.addObserver(this);
@@ -103,34 +97,6 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     super.didChangeAppLifecycleState(state);
   }
 
-  void startTimer() {
-    int _start = 60;
-    _myTimer = Timer.periodic(
-      const Duration(seconds: 1),
-      (Timer t) {
-        if (_start != 0) {
-          _start--;
-          if (_start.toString().length == 2) {
-            timer = "00:${_start.toString()}";
-          } else {
-            timer = "00:0${_start.toString()}";
-          }
-          notifyListeners();
-        } else {
-          t.cancel();
-          _myTimer?.cancel();
-          timer = "00:00";
-          notifyListeners();
-        }
-      },
-    );
-  }
-
-  void resetTimer() {
-    _timer = '';
-    _myTimer?.cancel();
-  }
-
   // String resendString() {
   //   if (_timer != "00:00") {
   //     return "Please wait for" + " $_timer";
@@ -144,57 +110,105 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primaryVariant);
   }
 
-  Function? onVerifyButton(BuildContext context) {
+  // Function? onVerifyButton(BuildContext context) {
+  //   final notifier = UserBloc();
+  //   if (isOTPCodeFullFilled) {
+  //     return () async {
+  //       try {
+  //         // update loading state
+  //         setLoading(true);
+  //
+  //         await notifier.recoverPasswordOTPBloc(
+  //           context,
+  //           otp: pinController.text,
+  //           email: argument.email ?? '',
+  //         );
+  //         final fetch = notifier.userFetch;
+  //         if (fetch.userState == UserState.RecoverSuccess) {
+  //           Routing().move(Routes.newPassword);
+  //           // _handleVerifyAction(
+  //           //   context: context,
+  //           //   message: language.yourResetCodeHasBeenVerified ?? '',
+  //           // );
+  //         } else {
+  //           if (fetch.data['messages']['info'][0] != null) {
+  //             ShowBottomSheet().onShowColouredSheet(
+  //               context,
+  //               fetch.data['messages']['info'][0] ?? '',
+  //               maxLines: 3,
+  //               color: Colors.red,
+  //               iconSvg: "${AssetPath.vectorPath}remove.svg",
+  //             );
+  //           } else {
+  //             ShowBottomSheet().onShowColouredSheet(
+  //               context,
+  //               language.somethingsWrong ?? '',
+  //               color: Colors.red,
+  //               iconSvg: "${AssetPath.vectorPath}remove.svg",
+  //             );
+  //           }
+  //
+  //           _inCorrectCode = true;
+  //         }
+  //       } finally {
+  //         try {
+  //           handleShowCountdown(notifier.userFetch.data.messages.info[0]);
+  //         } catch (e) {
+  //           print(e);
+  //         }
+  //         setLoading(false);
+  //       }
+  //     };
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
+  Future onVerifyButton(BuildContext context) async{
     final notifier = UserBloc();
-    if (isOTPCodeFullFilled) {
-      return () async {
-        try {
-          // update loading state
-          setLoading(true);
+    try {
+      // update loading state
+      setLoading(true);
 
-          await notifier.recoverPasswordOTPBloc(
+      await notifier.recoverPasswordOTPBloc(
+        context,
+        otp: pinController.text,
+        email: argument.email ?? '',
+      );
+      final fetch = notifier.userFetch;
+      if (fetch.userState == UserState.RecoverSuccess) {
+        Routing().move(Routes.newPassword);
+        // _handleVerifyAction(
+        //   context: context,
+        //   message: language.yourResetCodeHasBeenVerified ?? '',
+        // );
+      } else {
+        if (fetch.data['messages']['info'][0] != null) {
+          ShowBottomSheet().onShowColouredSheet(
             context,
-            otp: pinController.text,
-            email: argument.email ?? '',
+            fetch.data['messages']['info'][0] ?? '',
+            maxLines: 3,
+            color: Colors.red,
+            iconSvg: "${AssetPath.vectorPath}remove.svg",
           );
-          final fetch = notifier.userFetch;
-          if (fetch.userState == UserState.RecoverSuccess) {
-            Routing().move(Routes.newPassword);
-            // _handleVerifyAction(
-            //   context: context,
-            //   message: language.yourResetCodeHasBeenVerified ?? '',
-            // );
-          } else {
-            if (fetch.data['messages']['info'][0] != null) {
-              ShowBottomSheet().onShowColouredSheet(
-                context,
-                fetch.data['messages']['info'][0] ?? '',
-                maxLines: 3,
-                color: Colors.red,
-                iconSvg: "${AssetPath.vectorPath}remove.svg",
-              );
-            } else {
-              ShowBottomSheet().onShowColouredSheet(
-                context,
-                language.somethingsWrong ?? '',
-                color: Colors.red,
-                iconSvg: "${AssetPath.vectorPath}remove.svg",
-              );
-            }
-
-            _inCorrectCode = true;
-          }
-        } finally {
-          try {
-            handleShowCountdown(notifier.userFetch.data.messages.info[0]);
-          } catch (e) {
-            print(e);
-          }
-          setLoading(false);
+        } else {
+          ShowBottomSheet().onShowColouredSheet(
+            context,
+            language.somethingsWrong ?? '',
+            color: Colors.red,
+            iconSvg: "${AssetPath.vectorPath}remove.svg",
+          );
         }
-      };
-    } else {
-      return null;
+
+        _inCorrectCode = true;
+      }
+    } finally {
+      try {
+        handleShowCountdown(notifier.userFetch.data.messages.info[0]);
+      } catch (e) {
+        print(e);
+      }
+      setLoading(false);
     }
   }
 
@@ -225,20 +239,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     }
   }
 
-  Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
-    if (_timer != "00:00") {
-      return null;
-    } else {
-      return () async {
-        if (withStartTimer) {
-          startTimer();
-        }
-        resend(context);
-      };
-    }
-  }
-
-  Future resend(BuildContext context) async {
+  Future resend(BuildContext context, Function afterExecute) async {
     final notifier = UserBloc();
     try {
       setLoading(true, loadingObject: resendLoadKey);
@@ -253,6 +254,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
       if (fetch.userState == UserState.RecoverSuccess) {
         _sharedPrefs.removeValue(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
+        afterExecute();
         ShowBottomSheet().onShowColouredSheet(
           context,
           language.checkYourEmail ?? '',
