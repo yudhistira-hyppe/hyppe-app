@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -21,7 +22,7 @@ class SignUpPinTop extends StatelessWidget {
           twentyPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: "${notifier.language.pinTopText} ${notifier.email}",
+            textToDisplay: "${notifier.language.pinTopText2} ${notifier.email}",
           ),
           fortyTwoPx,
           CustomRectangleInput(),
@@ -31,7 +32,7 @@ class SignUpPinTop extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomTextWidget(
-                      textStyle: Theme.of(context).textTheme.caption,
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
                       textToDisplay: notifier.language.didntReceiveTheCode ?? '',
                     ),
                     fourPx,

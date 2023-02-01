@@ -8,6 +8,7 @@ class LocalizationModelV2 {
   String? dontHaveAnAccount;
   String? registerHere;
   String? or;
+  String? inWord;
   String? continueUsingGoogle;
   String? notAValidEmailAddress;
   String? incorrectPassword;
@@ -30,10 +31,17 @@ class LocalizationModelV2 {
   String? tooManyFailedAttempts;
   String? unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes;
   String? createNewPassword;
+  String? newPassword;
+  String? rewriteNewPassword;
+  String? enterPassword;
+  String? messageNewPassword;
+  String? messageTimeoutPin;
   String? yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword;
   String? reTypePassword;
+  String? yourPasswordMustBeAtLeast;
   String? mustNotContainYourNameOrEmail;
   String? atLeast8Characters;
+  String? atLeast8til20Chars;
   String? atLeastContain1CharacterAnd1Number;
   String? next;
   String? submit;
@@ -440,7 +448,8 @@ class LocalizationModelV2 {
   String? likeB;
   String? likeM;
   String? likeK;
-  String? pinTopText;
+  String? pinTopText1;
+  String? pinTopText2;
   String? yourEmailHasBeenVerified;
   String? hiYouHaveNewContentPleasePullDownToRefresh;
   String? sorryUnexpectedError;
@@ -859,6 +868,7 @@ class LocalizationModelV2 {
     this.dontHaveAnAccount,
     this.registerHere,
     this.or,
+    this.inWord,
     this.continueUsingGoogle,
     this.notAValidEmailAddress,
     this.incorrectPassword,
@@ -881,10 +891,17 @@ class LocalizationModelV2 {
     this.tooManyFailedAttempts,
     this.unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes,
     this.createNewPassword,
+    this.newPassword,
+    this.rewriteNewPassword,
+    this.enterPassword,
+    this.messageNewPassword,
+    this.messageTimeoutPin,
     this.yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword,
     this.reTypePassword,
+    this.yourPasswordMustBeAtLeast,
     this.mustNotContainYourNameOrEmail,
     this.atLeast8Characters,
+    this.atLeast8til20Chars,
     this.atLeastContain1CharacterAnd1Number,
     this.next,
     this.rotate,
@@ -1291,7 +1308,8 @@ class LocalizationModelV2 {
     this.likeB,
     this.likeM,
     this.likeK,
-    this.pinTopText,
+    this.pinTopText1,
+    this.pinTopText2,
     this.yourEmailHasBeenVerified,
     this.hiYouHaveNewContentPleasePullDownToRefresh,
     this.sorryUnexpectedError,
@@ -1711,6 +1729,7 @@ class LocalizationModelV2 {
     dontHaveAnAccount = json['dontHaveAnAccount'];
     registerHere = json['registerHere'];
     or = json['or'];
+    inWord = json['in'];
     continueUsingGoogle = json['continueUsingGoogle'];
     notAValidEmailAddress = json['notAValidEmailAddress'];
     incorrectPassword = json['incorrectPassword'];
@@ -1733,10 +1752,17 @@ class LocalizationModelV2 {
     tooManyFailedAttempts = json['tooManyFailedAttempts'];
     unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes = json['unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes'];
     createNewPassword = json['createNewPassword'];
+    newPassword = json["newPassword"];
+    rewriteNewPassword = json["rewriteNewPassword"];
+    enterPassword = json["enterPassword"];
+    messageNewPassword = json['messageNewPassword'];
+    messageTimeoutPin = json['messageTimeoutPin'];
     yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword = json['yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword'];
     reTypePassword = json['reTypePassword'];
+    yourPasswordMustBeAtLeast = json['yourPasswordMustBeAtLeast'];
     mustNotContainYourNameOrEmail = json['mustNotContainYourNameOrEmail'];
     atLeast8Characters = json['atLeast8Characters'];
+    atLeast8til20Chars = json['atLeast8til20Chars'];
     atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
     next = json['next'];
     rotate = json['rotate'];
@@ -2144,7 +2170,8 @@ class LocalizationModelV2 {
     likeB = json['likeB'];
     likeM = json['likeM'];
     likeK = json['likeK'];
-    pinTopText = json['pinTopText'];
+    pinTopText1 = json['pinTopText1'];
+    pinTopText2 = json['pinTopText2'];
     yourEmailHasBeenVerified = json['yourEmailHasBeenVerified'];
     hiYouHaveNewContentPleasePullDownToRefresh = json['hiYouHaveNewContentPleasePullDownToRefresh'];
     sorryUnexpectedError = json['sorryUnexpectedError'];
