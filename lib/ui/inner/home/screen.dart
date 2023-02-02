@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
@@ -23,7 +19,6 @@ import 'package:hyppe/ui/inner/home/content_v2/pic/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/screen.dart';
-import 'package:screen_protector/screen_protector.dart';
 import '../../../core/services/route_observer_service.dart';
 import '../../constant/widget/after_first_layout_mixin.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -51,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void didPop() {
     isHomeScreen = false;
     'didPop isOnHomeScreen $isHomeScreen'.logger();
-    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.didPop();
   }
 
@@ -60,7 +54,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     Future.delayed(const Duration(milliseconds: 500), () {
       isHomeScreen = true;
       'didPopNext isOnHomeScreen $isHomeScreen'.logger();
-      // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
@@ -73,15 +66,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void didPushNext() {
     isHomeScreen = false;
     'didPushNext isOnHomeScreen $isHomeScreen'.logger();
-    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.didPushNext();
   }
 
   @override
   void dispose() {
     CustomRouteObserver.routeObserver.unsubscribe(this);
-    // print('isOnHomeScreen false');
-    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.dispose();
   }
 
@@ -89,15 +79,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   void deactivate() {
     isHomeScreen = false;
     'deactivate isOnHomeScreen $isHomeScreen'.logger();
-    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.deactivate();
   }
 
   @override
   void didPush() {
-    // isHomeScreen = false;
     'didPush isOnHomeScreen $isHomeScreen'.logger();
-    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
   }
 
   @override
@@ -129,12 +116,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     super.initState();
     'ini iniststate home'.logger();
 
-    // Future.delayed(const Duration(seconds: 10), () {
-    //   if (mounted) {
-    //     final notifier = Provider.of<CacheService>(context, listen: false);
-    //     notifier.saveCache();
-    //   }
-    // });
   }
 
   void init() async {

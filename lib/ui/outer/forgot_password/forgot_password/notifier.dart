@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
-import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_response.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';

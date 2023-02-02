@@ -5,10 +5,7 @@ import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:provider/provider.dart';
 
-import 'package:hyppe/core/services/shared_preference.dart';
-
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -79,9 +76,6 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
     final theme = Theme.of(context);
     return Consumer<UserOtpNotifier>(
       builder: (_, notifier, __) {
-        final cts = DateTime.now();
-        final lts = DateTime.fromMillisecondsSinceEpoch(
-            SharedPreference().readStorage(SpKeys.lastTimeStampReachMaxAttempRecoverPassword) ?? DateTime.now().millisecondsSinceEpoch);
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -97,6 +91,7 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
             eightPx,
             CustomTextWidget(
               textStyle: Theme.of(context).textTheme.bodyText2,
+              maxLines: 3,
               textToDisplay: "${notifier.language.pinTopText2} ${notifier.argument.email}",
             ),
             twentyFourPx,
