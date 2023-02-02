@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -48,25 +49,18 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPop() {
-    'didPop isOnHomeScreen false'.logger();
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    isHomeScreen = false;
+    'didPop isOnHomeScreen $isHomeScreen'.logger();
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.didPop();
   }
 
-  // @override
-  // void didPush() {
-  //   Future.delayed(Duration(seconds: 1), (){
-  //     print('didPush isOnHomeScreen ${!SharedPreference().readStorage(SpKeys.isOnHomeScreen)}');
-  //     SharedPreference().writeStorage(SpKeys.isOnHomeScreen, !SharedPreference().readStorage(SpKeys.isOnHomeScreen));
-  //   });
-  //   super.didPush();
-  // }
-
   @override
   void didPopNext() {
-    Future.delayed(Duration(milliseconds: 500), () {
-      'didPopNext isOnHomeScreen true'.logger();
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      isHomeScreen = true;
+      'didPopNext isOnHomeScreen $isHomeScreen'.logger();
+      // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, true);
       context.read<ReportNotifier>().inPosition = contentPosition.home;
     });
 
@@ -77,8 +71,9 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPushNext() {
-    'didPushNext isOnHomeScreen false'.logger();
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    isHomeScreen = false;
+    'didPushNext isOnHomeScreen $isHomeScreen'.logger();
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.didPushNext();
   }
 
@@ -92,19 +87,23 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void deactivate() {
-    'deactivate isOnHomeScreen false'.logger();
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    isHomeScreen = false;
+    'deactivate isOnHomeScreen $isHomeScreen'.logger();
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     super.deactivate();
   }
 
   @override
   void didPush() {
-    'didPush isOnHomeScreen false'.logger();
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    // isHomeScreen = false;
+    'didPush isOnHomeScreen $isHomeScreen'.logger();
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
   }
 
   @override
   void initState() {
+    isHomeScreen = true;
+    'isOnHomeScreen $isHomeScreen'.logger();
     Future.delayed(Duration.zero, () {
       final notifier = context.read<HomeNotifier>();
       notifier.setSessionID();
