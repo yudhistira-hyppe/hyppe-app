@@ -52,7 +52,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 iconData: '${AssetPath.vectorPath}back-arrow.svg',
               ),
               title: CustomTextWidget(
-                textToDisplay: notifier.language.reset ?? '',
+                textToDisplay: notifier.language.forgotPassword  ?? '',
                 textStyle: style.bodyText1?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
@@ -87,7 +87,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       },
                       inputDecoration: InputDecoration(
                         contentPadding: EdgeInsets.only(left: 16, bottom: (notifier.invalidEmail != null) ? 0 : 16, right: 16),
-                        labelText: notifier.language.email ?? '',
+                        labelText: notifier.language.email ?? 'Email',
                         labelStyle: Theme.of(context)
                             .textTheme
                             .bodyText1
@@ -126,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         child: notifier.isLoading
                             ? const CustomLoading()
                             : CustomTextWidget(
-                                textToDisplay: notifier.language.reset ?? '',
+                                textToDisplay: notifier.language.next ?? 'Next',
                                 textStyle: notifier.emailNextTextColor(context),
                               ),
                       ),

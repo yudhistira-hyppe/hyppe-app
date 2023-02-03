@@ -200,13 +200,15 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.max,
       children: [
+        if(widget.iconSvg != null)
         CustomIconWidget(
-          iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
+          iconData: widget.iconSvg!,
           defaultColor: false,
           height: widget.sizeIcon,
           width: widget.sizeIcon,
           color: widget.iconColor,
         ),
+        if(widget.iconSvg != null)
         fourteenPx,
         Expanded(
           child: Column(

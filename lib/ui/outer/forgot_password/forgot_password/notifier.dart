@@ -87,6 +87,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
 
   void initState() {
     _text = "";
+    _invalidEmail = null;
     Future.delayed(Duration.zero, () {
       emailController.clear();
       notifyListeners();
@@ -108,21 +109,33 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         setLoading(false);
         if (fetch.userState == UserState.RecoverSuccess) {
           // signUpPinNotifier.email = emailController.text;
+          // ShowBottomSheet().onShowColouredSheet(
+          //   context,
+          //   language.checkYourEmail ?? 'Check Your Email',
+          //   subCaption: language.weHaveSentAVerificationCodeToYourEmail,
+          // );
           ShowBottomSheet().onShowColouredSheet(
-            context,
-            language.checkYourEmail ?? 'Check Your Email',
-            subCaption: language.weHaveSentAVerificationCodeToYourEmail,
+              context,
+              language.titleSuccessPin ?? ' ',
+              subCaption: language.messageSuccessPin,
+              maxLines: 3,
+              borderRadius: 8,
+              color: kHyppeTextLightPrimary,
+              padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+              margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
           );
           _sharedPrefs.writeStorage(SpKeys.email, emailController.text);
           // _sharedPrefs.writeStorage(SpKeys.isUserRequestRecoverPassword, true);
-          await Future.delayed(const Duration(seconds: 1));
+          Future.delayed(const Duration(seconds: 2), (){
+            _routing.moveReplacement(
+              Routes.userOtpScreen,
+              argument: UserOtpScreenArgument(
+                email: emailController.text,
+              ),
+            );
+          });
           // _routing.move(signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome));
-          _routing.moveReplacement(
-            Routes.userOtpScreen,
-            argument: UserOtpScreenArgument(
-              email: emailController.text,
-            ),
-          );
+
         } else {
           final responseCode = fetch.data['response_code'];
           print('onClickForgotPassword: error $responseCode ');
