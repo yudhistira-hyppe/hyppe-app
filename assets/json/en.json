@@ -856,5 +856,9 @@
   "confirmPasswordCorrect" : "Confirm Password Correct",
   "confirmPasswordWrong" : "Confirm Password Wrong",
   "allowedSpecialCharacters" : "Allowed special characters ! @ # $ % ^ & * _ ",
-  "newPasswordCreatedSuccessfully": "New password created successfully"
+  "newPasswordCreatedSuccessfully": "New password created successfully",
+  "messageInvalidEmail": "Please enter your valid email address",
+  "titleEmailIsGmail": "Your account is already registered",
+  "messageEmailIsGmail": "Please sign in using your Gmail account.",
+  "pleaseEnterRegisteredEmail": "Enter registered email address."
 }

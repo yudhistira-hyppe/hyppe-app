@@ -857,6 +857,10 @@ class LocalizationModelV2 {
   String? confirmPasswordWrong;
   String? allowedSpecialCharacters;
   String? newPasswordCreatedSuccessfully;
+  String? messageInvalidEmail;
+  String? titleEmailIsGmail;
+  String? messageEmailIsGmail;
+  String? pleaseEnterRegisteredEmail;
 
   LocalizationModelV2({
     this.login,
@@ -1717,6 +1721,10 @@ class LocalizationModelV2 {
     this.confirmPasswordWrong,
     this.allowedSpecialCharacters,
     this.newPasswordCreatedSuccessfully,
+    this.messageInvalidEmail,
+    this.titleEmailIsGmail,
+    this.messageEmailIsGmail,
+    this.pleaseEnterRegisteredEmail
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2596,5 +2604,9 @@ class LocalizationModelV2 {
     confirmPasswordWrong = json['confirmPasswordWrong'];
     allowedSpecialCharacters = json['allowedSpecialCharacters'];
     newPasswordCreatedSuccessfully = json['newPasswordCreatedSuccessfully'];
+    messageInvalidEmail = json['messageInvalidEmail'];
+    titleEmailIsGmail = json['titleEmailIsGmail'];
+    messageEmailIsGmail = json['messageEmailIsGmail'];
+    pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
   }
 }

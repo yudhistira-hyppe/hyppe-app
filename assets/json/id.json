@@ -856,5 +856,9 @@
   "confirmPasswordCorrect" : "Konfirmasi Kata Sandi Benar",
   "confirmPasswordWrong" : "Konfirmasi Kata Sandi Salah",
   "allowedSpecialCharacters" : "Spesial karakter yang diperbolehkan ! @ # $ % ^ & * _ ",
-  "newPasswordCreatedSuccessfully": "Kata sandi baru berhasil dibuat"
+  "newPasswordCreatedSuccessfully": "Kata sandi baru berhasil dibuat",
+  "messageInvalidEmail": "Masukan alamat email yang valid",
+  "titleEmailIsGmail": "Akun Kamu Telah Terdaftar",
+  "messageEmailIsGmail": "Silakan masuk menggunakan akun Gmail.",
+  "pleaseEnterRegisteredEmail": "Masukan alamat email yang terdaftar"
 }

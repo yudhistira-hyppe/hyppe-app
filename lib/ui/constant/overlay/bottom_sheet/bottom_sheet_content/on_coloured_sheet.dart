@@ -24,6 +24,8 @@ class OnColouredSheet extends StatefulWidget {
   final String? subCaptionButton;
   final TextOverflow? textOverflow;
   final int? milisecond;
+  final bool isArrow;
+  final bool isMargin;
   const OnColouredSheet({
     Key? key,
     required this.caption,
@@ -38,6 +40,8 @@ class OnColouredSheet extends StatefulWidget {
     this.textOverflow,
     this.functionSubCaption,
     this.milisecond,
+    this.isArrow = false,
+    this.isMargin = false
   }) : super(key: key);
 
   @override
@@ -89,7 +93,7 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Row(
+    return widget.isMargin ? _withMargin() :Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,4 +194,62 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
       ],
     );
   }
+
+  Widget _withMargin(){
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        CustomIconWidget(
+          iconData: widget.iconSvg ?? "${AssetPath.vectorPath}valid-invert.svg",
+          defaultColor: false,
+          height: widget.sizeIcon,
+          width: widget.sizeIcon,
+          color: widget.iconColor,
+        ),
+        fourteenPx,
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomTextWidget(
+                maxLines: widget.maxLines,
+                textOverflow: widget.textOverflow,
+                textToDisplay: widget.caption,
+                textAlign: TextAlign.left,
+                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 10, fontWeight: FontWeight.w700),
+              ),
+              if(widget.subCaption != null)
+              CustomTextWidget(
+                maxLines: widget.maxLines,
+                textOverflow: widget.textOverflow,
+                textToDisplay: widget.subCaption!,
+                textAlign: TextAlign.left,
+                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+        ),
+        if(widget.isArrow)
+        InkWell(
+          onTap: (){
+            if(widget.function != null){
+              widget.function!();
+            }
+          },
+          child: const CustomIconWidget(
+            iconData: "${AssetPath.vectorPath}arrow_right.svg",
+            defaultColor: false,
+            height: 20,
+            width: 20,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
 }
+
+

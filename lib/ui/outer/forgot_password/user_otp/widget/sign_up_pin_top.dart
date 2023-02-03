@@ -33,6 +33,7 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
   @override
   void initState() {
     super.initState();
+    pleaseWait = 60;
     timeout = 600;
     startTime();
   }

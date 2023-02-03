@@ -42,6 +42,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   bool get hidePassword => _hidePassword;
   bool _hideConfirmPassword = false;
   bool get hideConfirmPassword => _hideConfirmPassword;
+  String? _invalidEmail = null;
+  String? get invalidEmail => _invalidEmail;
 
   set password(String val) {
     _password = val;
@@ -63,6 +65,11 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     notifyListeners();
   }
 
+  set invalidEmail(String? val){
+    _invalidEmail = val;
+    notifyListeners();
+  }
+
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -79,6 +86,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void initState() {
+    _text = "";
     Future.delayed(Duration.zero, () {
       emailController.clear();
       notifyListeners();
@@ -116,30 +124,56 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
             ),
           );
         } else {
-          ShowBottomSheet().onShowColouredSheet(
-            context,
-            "${fetch.data['messages']['info'][0]}",
-            maxLines: 3,
-            sizeIcon: 15,
-            color: kHyppeRed,
-            iconColor: kHyppeTextPrimary,
-            iconSvg: "${AssetPath.vectorPath}remove.svg",
-          );
+          final responseCode = fetch.data['response_code'];
+          print('onClickForgotPassword: error $responseCode ');
+
+          if(responseCode == 800){
+            ShowBottomSheet().onShowColouredSheet(
+              context,
+              language.titleEmailIsGmail ?? '',
+              subCaption: language.messageEmailIsGmail,
+              maxLines: 3,
+              borderRadius: 8,
+              sizeIcon: 20,
+              color: kHyppeBlue,
+              isArrow: true,
+              iconColor: kHyppeBorder,
+              padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+              margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+              iconSvg: "${AssetPath.vectorPath}info_white.svg",
+              function: (){
+                _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+              }
+            );
+          }else if(responseCode == 801){
+            invalidEmail = language.pleaseEnterRegisteredEmail;
+          }else{
+            ShowBottomSheet().onShowColouredSheet(
+              context,
+              "${fetch.data['messages']['info'][0]}",
+              maxLines: 3,
+              sizeIcon: 15,
+              color: kHyppeRed,
+              iconColor: kHyppeTextPrimary,
+              iconSvg: "${AssetPath.vectorPath}remove.svg",
+            );
+          }
+
         }
       } catch (e) {
         setLoading(false);
       }
     } else {
-      // ShowBottomSheet().onShowColouredSheet(
-      //   context,
-      //   language .formAccountDoesNotContainEmail,
-      //   maxLines: 2,
-      //   sizeIcon: 15,
-      //   color: kHyppeTextWarning,
-      //   iconColor: kHyppeTextPrimary,
-      //   iconSvg: "${AssetPath.vectorPath}report.svg",
-      //   subCaption: language.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
-      // );
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        language.formAccountDoesNotContainEmail ?? '',
+        maxLines: 2,
+        sizeIcon: 15,
+        color: kHyppeTextWarning,
+        iconColor: kHyppeTextPrimary,
+        iconSvg: "${AssetPath.vectorPath}report.svg",
+        subCaption: language.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
+      );
     }
   }
 
@@ -150,6 +184,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         iconData: '${AssetPath.vectorPath}valid.svg',
       );
     } else {
+
+
       return const SizedBox.shrink();
     }
   }

@@ -477,6 +477,43 @@ class ShowBottomSheet {
     ).whenComplete(onClose ?? () {});
   }
 
+//   Future<bool> onShowMarginColouredSheet(
+//   _,
+//   String caption, {
+//   int? maxLines,
+//       TextOverflow? textOverflow,
+//   Color color = kHyppeTextSuccess,
+//       String? subCaption,
+//   String? iconSvg,
+//       double? sizeIcon,
+//   Color? iconColor,
+//       Function? function,
+//   bool enableDrag = true,
+//       bool dismissible = true,
+//   EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
+//   final Function()? functionSubCaption,
+//   final String? subCaptionButton,
+//   final int? milisecond,}) async {
+//     final _result = await showModalBottomSheet<bool>(
+//         context: context,
+//         isDismissible: true,
+//         backgroundColor: Colors.transparent,
+//         builder: (ctx){
+//       return SafeArea(child: Container(
+//         decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(8)), color: color),
+//         child: Row(
+//           crossAxisAlignment: CrossAxisAlignment.center,
+//           children: [
+//             sixteenPx,
+//
+//           ],
+//         ),
+//       ));
+//     });
+//
+//     return _result ?? false;
+// }
+
   Future<bool> onShowColouredSheet(
     _,
     String caption, {
@@ -490,7 +527,10 @@ class ShowBottomSheet {
     Function? function,
     bool enableDrag = true,
     bool dismissible = true,
+        bool isArrow = false,
     EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
+        EdgeInsets? margin,
+        double? borderRadius,
     final Function()? functionSubCaption,
     final String? subCaptionButton,
     final int? milisecond,
@@ -504,9 +544,12 @@ class ShowBottomSheet {
       builder: (builder) {
         return SafeArea(
           child: Container(
+            margin: margin,
               padding: padding,
-              decoration: BoxDecoration(color: color),
+              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 0))),
               child: OnColouredSheet(
+                isArrow: isArrow,
+                isMargin: margin != null,
                 caption: caption,
                 maxLines: maxLines,
                 subCaption: subCaption,

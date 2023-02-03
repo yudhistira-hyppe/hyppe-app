@@ -25,6 +25,7 @@ class CustomRectangleInput extends StatelessWidget {
               onChanged: (text) async {
                 print('lenght of the pin: ${text.length}');
                 if (text.length == 4) {
+                  notifier.inCorrectCode = false;
                   await notifier.onVerifyButton(context, afterSuccess);
                 }
                 // notifier.isOTPCodeFullFilled = notifier.pinController.text.length == 4;
