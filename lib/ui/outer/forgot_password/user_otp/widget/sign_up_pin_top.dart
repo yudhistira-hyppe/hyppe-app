@@ -73,6 +73,12 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
   }
 
   @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Consumer<UserOtpNotifier>(
