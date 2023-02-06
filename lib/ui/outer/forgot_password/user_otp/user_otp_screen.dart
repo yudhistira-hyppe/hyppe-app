@@ -9,6 +9,9 @@ import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
+import '../../../../core/constants/asset_path.dart';
+import '../../../constant/widget/icon_button_widget.dart';
+
 class UserOtpScreen extends StatefulWidget {
   final UserOtpScreenArgument argument;
 
@@ -48,6 +51,11 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
           child: KeyboardDisposal(
             child: Scaffold(
               appBar: AppBar(
+                leading: CustomIconButtonWidget(
+                  color: Theme.of(context).iconTheme.color,
+                  onPressed: () => Navigator.pop(context),
+                  iconData: '${AssetPath.vectorPath}back-arrow.svg',
+                ),
                 automaticallyImplyLeading: false,
                 title: CustomTextWidget(
                   textStyle: Theme.of(context).textTheme.headline6,

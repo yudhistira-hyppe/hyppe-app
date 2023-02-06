@@ -176,18 +176,19 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
       } catch (e) {
         setLoading(false);
       }
-    } else {
-      ShowBottomSheet().onShowColouredSheet(
-        context,
-        language.formAccountDoesNotContainEmail ?? '',
-        maxLines: 2,
-        sizeIcon: 15,
-        color: kHyppeTextWarning,
-        iconColor: kHyppeTextPrimary,
-        iconSvg: "${AssetPath.vectorPath}report.svg",
-        subCaption: language.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
-      );
     }
+    // else {
+    //   ShowBottomSheet().onShowColouredSheet(
+    //     context,
+    //     language.formAccountDoesNotContainEmail ?? '',
+    //     maxLines: 2,
+    //     sizeIcon: 15,
+    //     color: kHyppeTextWarning,
+    //     iconColor: kHyppeTextPrimary,
+    //     iconSvg: "${AssetPath.vectorPath}report.svg",
+    //     subCaption: language.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
+    //   );
+    // }
   }
 
   Widget emailSuffixIcon() {
