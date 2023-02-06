@@ -16,6 +16,8 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dar
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../../app.dart';
+
 class SupportTicketNotifier with ChangeNotifier {
   bool _isLoadingCategory = false;
   bool get isLoadingCategory => _isLoadingCategory;
@@ -133,7 +135,9 @@ class SupportTicketNotifier with ChangeNotifier {
 
   void onPickSupportedDocument(BuildContext context, mounted, {bool pdf = false}) async {
     // isLoading = true;
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    isHomeScreen = false;
+    print('isOnHomeScreen $isHomeScreen');
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     try {
       await System().getLocalMedia(featureType: FeatureType.other, context: context, pdf: pdf, maxFile: 4).then((value) async {
         debugPrint('Pick => ' + value.toString());

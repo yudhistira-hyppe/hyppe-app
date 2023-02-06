@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/profile/user_profile_model.dart';
-import 'package:hyppe/core/models/collection/user_v2/sign_up/sign_up_response.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
@@ -43,6 +42,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   bool get hidePassword => _hidePassword;
   bool _hideConfirmPassword = false;
   bool get hideConfirmPassword => _hideConfirmPassword;
+  String? _invalidEmail = null;
+  String? get invalidEmail => _invalidEmail;
 
   set password(String val) {
     _password = val;
@@ -64,6 +65,11 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     notifyListeners();
   }
 
+  set invalidEmail(String? val){
+    _invalidEmail = val;
+    notifyListeners();
+  }
+
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -80,6 +86,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void initState() {
+    _text = "";
+    _invalidEmail = null;
     Future.delayed(Duration.zero, () {
       emailController.clear();
       notifyListeners();
@@ -101,46 +109,84 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         setLoading(false);
         if (fetch.userState == UserState.RecoverSuccess) {
           // signUpPinNotifier.email = emailController.text;
+          // ShowBottomSheet().onShowColouredSheet(
+          //   context,
+          //   language.checkYourEmail ?? 'Check Your Email',
+          //   subCaption: language.weHaveSentAVerificationCodeToYourEmail,
+          // );
           ShowBottomSheet().onShowColouredSheet(
-            context,
-            language.checkYourEmail ?? 'Check Your Email',
-            subCaption: language.weHaveSentAVerificationCodeToYourEmail,
+              context,
+              language.titleSuccessPin ?? ' ',
+              subCaption: language.messageSuccessPin,
+              maxLines: 3,
+              borderRadius: 8,
+              color: kHyppeTextLightPrimary,
+              padding: EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
+              margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
           );
           _sharedPrefs.writeStorage(SpKeys.email, emailController.text);
           // _sharedPrefs.writeStorage(SpKeys.isUserRequestRecoverPassword, true);
-          await Future.delayed(const Duration(seconds: 1));
+          Future.delayed(const Duration(seconds: 2), (){
+            _routing.moveReplacement(
+              Routes.userOtpScreen,
+              argument: UserOtpScreenArgument(
+                email: emailController.text,
+              ),
+            );
+          });
           // _routing.move(signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome));
-          _routing.moveReplacement(
-            Routes.userOtpScreen,
-            argument: UserOtpScreenArgument(
-              email: emailController.text,
-            ),
-          );
+
         } else {
-          ShowBottomSheet().onShowColouredSheet(
-            context,
-            "${fetch.data['messages']['info'][0]}",
-            maxLines: 3,
-            sizeIcon: 15,
-            color: kHyppeRed,
-            iconColor: kHyppeTextPrimary,
-            iconSvg: "${AssetPath.vectorPath}remove.svg",
-          );
+          final responseCode = fetch.data['response_code'];
+          print('onClickForgotPassword: error $responseCode ');
+
+          if(responseCode == 800){
+            ShowBottomSheet().onShowColouredSheet(
+              context,
+              language.titleEmailIsGmail ?? '',
+              subCaption: language.messageEmailIsGmail,
+              maxLines: 3,
+              borderRadius: 8,
+              sizeIcon: 20,
+              color: kHyppeBlue,
+              isArrow: true,
+              iconColor: kHyppeBorder,
+              padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
+              margin: EdgeInsets.only(left: 16, right: 16, bottom: 25),
+              iconSvg: "${AssetPath.vectorPath}info_white.svg",
+              function: (){
+                _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+              }
+            );
+          }else if(responseCode == 801){
+            invalidEmail = language.pleaseEnterRegisteredEmail;
+          }else{
+            ShowBottomSheet().onShowColouredSheet(
+              context,
+              "${fetch.data['messages']['info'][0]}",
+              maxLines: 3,
+              sizeIcon: 15,
+              color: kHyppeRed,
+              iconColor: kHyppeTextPrimary,
+              iconSvg: "${AssetPath.vectorPath}remove.svg",
+            );
+          }
+
         }
       } catch (e) {
         setLoading(false);
       }
     } else {
-      // ShowBottomSheet().onShowColouredSheet(
-      //   context,
-      //   language .formAccountDoesNotContainEmail,
-      //   maxLines: 2,
-      //   sizeIcon: 15,
-      //   color: kHyppeTextWarning,
-      //   iconColor: kHyppeTextPrimary,
-      //   iconSvg: "${AssetPath.vectorPath}report.svg",
-      //   subCaption: language.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
-      // );
+      ShowBottomSheet().onShowColouredSheet(
+        context,
+        language.formAccountDoesNotContainEmail ?? '',
+        maxLines: 2,
+        sizeIcon: 15,
+        color: kHyppeTextWarning,
+        iconColor: kHyppeTextPrimary,
+        iconSvg: "${AssetPath.vectorPath}report.svg",
+        subCaption: language.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
+      );
     }
   }
 
@@ -151,6 +197,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
         iconData: '${AssetPath.vectorPath}valid.svg',
       );
     } else {
+
+
       return const SizedBox.shrink();
     }
   }

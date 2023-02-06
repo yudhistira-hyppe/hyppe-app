@@ -490,7 +490,10 @@ class ShowBottomSheet {
     Function? function,
     bool enableDrag = true,
     bool dismissible = true,
+        bool isArrow = false,
     EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
+        EdgeInsets? margin,
+        double? borderRadius,
     final Function()? functionSubCaption,
     final String? subCaptionButton,
     final int? milisecond,
@@ -504,9 +507,12 @@ class ShowBottomSheet {
       builder: (builder) {
         return SafeArea(
           child: Container(
+            margin: margin,
               padding: padding,
-              decoration: BoxDecoration(color: color),
+              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 0))),
               child: OnColouredSheet(
+                isArrow: isArrow,
+                isMargin: margin != null,
                 caption: caption,
                 maxLines: maxLines,
                 subCaption: subCaption,

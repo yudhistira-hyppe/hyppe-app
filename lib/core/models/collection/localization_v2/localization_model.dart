@@ -25,6 +25,8 @@ class LocalizationModelV2 {
   String? resendNewCode;
   String? yourIdentityHasBeenVerified;
   String? incorrectCode;
+  String? titleSuccessPin;
+  String? messageSuccessPin;
   String? sessionExpired;
   String? yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest;
   String? backToRegisterPage;
@@ -43,7 +45,10 @@ class LocalizationModelV2 {
   String? atLeast8Characters;
   String? atLeast8til20Chars;
   String? atLeastContain1CharacterAnd1Number;
+  String? oneSpecialCharacter;
+  String? labelExampleSpecialChar;
   String? next;
+  String? resetPassword;
   String? submit;
   String? rotate;
   String? passwordDoesntMatch;
@@ -857,6 +862,10 @@ class LocalizationModelV2 {
   String? confirmPasswordWrong;
   String? allowedSpecialCharacters;
   String? newPasswordCreatedSuccessfully;
+  String? messageInvalidEmail;
+  String? titleEmailIsGmail;
+  String? messageEmailIsGmail;
+  String? pleaseEnterRegisteredEmail;
 
   LocalizationModelV2({
     this.login,
@@ -885,6 +894,8 @@ class LocalizationModelV2 {
     this.resendNewCode,
     this.yourIdentityHasBeenVerified,
     this.incorrectCode,
+    this.titleSuccessPin,
+    this.messageSuccessPin,
     this.sessionExpired,
     this.yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest,
     this.backToRegisterPage,
@@ -903,7 +914,10 @@ class LocalizationModelV2 {
     this.atLeast8Characters,
     this.atLeast8til20Chars,
     this.atLeastContain1CharacterAnd1Number,
+    this.oneSpecialCharacter,
+    this.labelExampleSpecialChar,
     this.next,
+    this.resetPassword,
     this.rotate,
     this.submit,
     this.passwordDoesntMatch,
@@ -1717,6 +1731,10 @@ class LocalizationModelV2 {
     this.confirmPasswordWrong,
     this.allowedSpecialCharacters,
     this.newPasswordCreatedSuccessfully,
+    this.messageInvalidEmail,
+    this.titleEmailIsGmail,
+    this.messageEmailIsGmail,
+    this.pleaseEnterRegisteredEmail
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1746,6 +1764,8 @@ class LocalizationModelV2 {
     resendNewCode = json['resendNewCode'];
     yourIdentityHasBeenVerified = json['yourIdentityHasBeenVerified'];
     incorrectCode = json['incorrectCode'];
+    titleSuccessPin = json['titleSuccessPin'];
+    messageSuccessPin = json['messageSuccessPin'];
     sessionExpired = json['sessionExpired'];
     yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest = json['yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest'];
     backToRegisterPage = json['backToRegisterPage'];
@@ -1764,8 +1784,11 @@ class LocalizationModelV2 {
     atLeast8Characters = json['atLeast8Characters'];
     atLeast8til20Chars = json['atLeast8til20Chars'];
     atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
+    labelExampleSpecialChar = json['labelExampleSpecialChar'];
+    oneSpecialCharacter = json['oneSpecialCharacter'];
     next = json['next'];
     rotate = json['rotate'];
+    resetPassword = json['resetPassword'];
     submit = json['submit'];
     passwordDoesntMatch = json['passwordDoesntMatch'];
     register = json['register'];
@@ -2596,5 +2619,10 @@ class LocalizationModelV2 {
     confirmPasswordWrong = json['confirmPasswordWrong'];
     allowedSpecialCharacters = json['allowedSpecialCharacters'];
     newPasswordCreatedSuccessfully = json['newPasswordCreatedSuccessfully'];
+    messageInvalidEmail = json['messageInvalidEmail'];
+    titleEmailIsGmail = json['titleEmailIsGmail'];
+    messageEmailIsGmail = json['messageEmailIsGmail'];
+    pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
+
   }
 }
