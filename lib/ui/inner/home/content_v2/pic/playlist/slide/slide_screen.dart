@@ -1,13 +1,10 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/slide_pic_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:screen_protector/screen_protector.dart';
-import 'package:screenshot_callback/screenshot_callback.dart';
 
 import '../../../../../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../../../../constant/widget/after_first_layout_mixin.dart';
@@ -76,6 +73,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       create: (context) => _notifier,
       child: WillPopScope(
         onWillPop: () {
+          System().disposeBlock();
           resetZooming();
           return Future.value(true);
         },

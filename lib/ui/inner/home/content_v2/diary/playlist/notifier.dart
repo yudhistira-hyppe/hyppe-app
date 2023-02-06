@@ -213,9 +213,11 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (mounted) {
       if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
         'ada postid'.logger();
+        System().disposeBlock();
         Routing().moveAndPop(Routes.lobby);
       } else {
         'tanpa postid'.logger();
+        System().disposeBlock();
         Routing().moveBack();
       }
     }

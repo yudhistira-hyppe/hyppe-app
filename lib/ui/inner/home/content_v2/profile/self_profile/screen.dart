@@ -6,6 +6,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/advertising/view_ads_request.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -26,7 +27,7 @@ class SelfProfileScreen extends StatefulWidget {
   _SelfProfileScreenState createState() => _SelfProfileScreenState();
 }
 
-class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLayoutMixin {
+class _SelfProfileScreenState extends State<SelfProfileScreen> with RouteAware, AfterFirstLayoutMixin {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey<RefreshIndicatorState> _globalKey = GlobalKey<RefreshIndicatorState>();
 
@@ -42,7 +43,14 @@ class _SelfProfileScreenState extends State<SelfProfileScreen> with AfterFirstLa
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SelfProfileNotifier>();
+    System().disposeBlock();
     notifier.initialSelfProfile(context);
+  }
+
+  @override
+  void didPopNext() {
+    System().disposeBlock();
+    super.didPopNext();
   }
 
   @override

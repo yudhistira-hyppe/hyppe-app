@@ -180,8 +180,10 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future<bool> onPop() async {
     if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
+      System().disposeBlock();
       Routing().moveAndPop(Routes.lobby);
     } else {
+      System().disposeBlock();
       Routing().moveBack();
     }
 

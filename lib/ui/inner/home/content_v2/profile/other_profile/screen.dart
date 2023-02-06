@@ -2,6 +2,7 @@ import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -30,6 +31,7 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context, argument: widget.arguments));
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    System().disposeBlock();
     super.initState();
   }
 

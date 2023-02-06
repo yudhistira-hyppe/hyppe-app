@@ -76,8 +76,6 @@ dependencies:
   sqflite: ^2.2.3
   # secure_application: ^3.8.0
   screen_protector: ^1.2.0
-  screen_capture_event: ^1.1.1
-  screenshot_callback: ^2.0.3
 
 
 

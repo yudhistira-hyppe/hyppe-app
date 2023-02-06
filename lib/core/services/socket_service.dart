@@ -25,6 +25,7 @@ class SocketService {
   //-------------------------------- Version 2 --------------------------------------//
   static const String eventNotif = 'event_notif';
   static const String eventDiscuss = 'event_disqus';
+  static const String eventAds = 'ads_test';
 
   /// connect to socket
   void connectToSocket(VoidCallback onEvent, {required String host, required Map<String, dynamic> options}) {

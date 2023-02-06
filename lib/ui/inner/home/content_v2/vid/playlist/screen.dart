@@ -37,13 +37,13 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
     if (widget.arguments.vidData?.certified ?? false) {
       System().block(context);
     } else {
-      System().disposeBlock(context);
+      System().disposeBlock();
     }
   }
 
   @override
   void dispose() {
-    System().disposeBlock(context);
+    System().disposeBlock();
     super.dispose();
   }
 

@@ -47,9 +47,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:screen_capture_event/screen_capture_event.dart';
 import 'package:screen_protector/screen_protector.dart';
-import 'package:screenshot_callback/screenshot_callback.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
@@ -1251,25 +1249,22 @@ class System {
     };
   }
 
-  final ScreenCaptureEvent screenListener = ScreenCaptureEvent();
   Future block(BuildContext context) async {
     // if (!kDebugMode) {
-    print('test');
-    _addListenerPreventScreenshot(context);
     await ScreenProtector.preventScreenshotOn();
     await ScreenProtector.protectDataLeakageOn();
     // }
   }
 
-  Future disposeBlock(BuildContext context) async {
+  Future disposeBlock() async {
     // if (!kDebugMode) {
     await ScreenProtector.preventScreenshotOff();
-    _addListenerPreventScreenshot(context);
     // }
   }
 
   void _addListenerPreventScreenshot(BuildContext context) async {
     bool isrecord = await ScreenProtector.isRecording();
+
     print("isrecord $isrecord");
   }
 
