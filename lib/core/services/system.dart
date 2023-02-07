@@ -80,7 +80,12 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      if(url.isNotEmpty){
+        return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      }else{
+        return '';
+      }
+
 
       // return Env.data.baseUrl + url +
       //     "?x-auth-token=" +

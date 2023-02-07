@@ -126,7 +126,7 @@ class TransactionHistoryModel {
   String? concatThumbUri() {
     final fixMedia = mediaThumbEndpoint ?? '';
     if(fixMedia.isNotEmpty){
-      return Env.data.baseUrl + (mediaThumbEndpoint ?? '') + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+      return Env.data.baseUrl + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
     }else{
       return fixMedia;
     }
