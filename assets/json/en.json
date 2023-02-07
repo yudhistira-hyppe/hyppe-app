@@ -865,5 +865,12 @@
   "messageInvalidEmail": "Please enter your valid email address",
   "titleEmailIsGmail": "Your account is already registered",
   "messageEmailIsGmail": "Please sign in using your Gmail account.",
-  "pleaseEnterRegisteredEmail": "Enter registered email address."
+  "pleaseEnterRegisteredEmail": "Enter registered email address.",
+  "contentPreferences" : "Content Preferences",
+  "customization" : "Customization",
+  "bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect" : "By selecting this setting, the homepage view will only display posts based on the features you select.",
+  "descAllowComment":"To increase interaction with your audience.",
+  "allowSharing":"Allow Sharing.",
+  "descAllowSharing" : "To increase reach and introduce your content to new audiences.",
+  "sharePost" : "Share Post"
 }

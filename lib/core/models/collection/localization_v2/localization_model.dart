@@ -866,6 +866,13 @@ class LocalizationModelV2 {
   String? titleEmailIsGmail;
   String? messageEmailIsGmail;
   String? pleaseEnterRegisteredEmail;
+  String? contentPreferences;
+  String? customization;
+  String? bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect;
+  String? descAllowComment;
+  String? allowSharing;
+  String? descAllowSharing;
+  String? sharePost;
 
   LocalizationModelV2({
     this.login,
@@ -1734,7 +1741,14 @@ class LocalizationModelV2 {
     this.messageInvalidEmail,
     this.titleEmailIsGmail,
     this.messageEmailIsGmail,
-    this.pleaseEnterRegisteredEmail
+    this.pleaseEnterRegisteredEmail,
+    this.contentPreferences,
+    this.customization,
+    this.bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect,
+    this.descAllowComment,
+    this.allowSharing,
+    this.descAllowSharing,
+    this.sharePost,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2623,6 +2637,12 @@ class LocalizationModelV2 {
     titleEmailIsGmail = json['titleEmailIsGmail'];
     messageEmailIsGmail = json['messageEmailIsGmail'];
     pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
-
+    contentPreferences = json['contentPreferences'];
+    customization = json['customization'];
+    bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect = json['bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect'];
+    descAllowComment = json['descAllowComment'];
+    allowSharing = json['allowSharing'];
+    descAllowSharing = json['descAllowSharing'];
+    sharePost = json['sharePost'];
   }
 }

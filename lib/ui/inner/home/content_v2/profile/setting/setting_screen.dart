@@ -89,6 +89,11 @@ class SettingScreen extends StatelessWidget {
                     icon: 'person-plus.svg',
                     caption: '${notifier.translate.referralID}',
                   ),
+                  SettingTile(
+                    onTap: () => Routing().move(Routes.contentPreferences),
+                    icon: 'person-plus.svg',
+                    caption: '${notifier.translate.referralID}',
+                  ),
                 ],
               ),
               sixteenPx,
