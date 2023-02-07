@@ -865,5 +865,12 @@
   "messageInvalidEmail": "Masukan alamat email yang valid",
   "titleEmailIsGmail": "Akun Kamu Telah Terdaftar",
   "messageEmailIsGmail": "Silakan masuk menggunakan akun Gmail.",
-  "pleaseEnterRegisteredEmail": "Masukan alamat email yang terdaftar"
+  "pleaseEnterRegisteredEmail": "Masukan alamat email yang terdaftar",
+  "contentPreferences" : "Preferensi Konten",
+  "customization" : "Kustomisasi",
+  "bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect" : "Dengan memilih pengaturan ini, tampilan beranda hanya akan menampilkan postingan berdasarkan fitur yang kamu pilih.",
+  "descAllowComment":"Untuk meningkatkan interaksi dengan audiens kamu.",
+  "allowSharing":"Izinkan Berbagi.",
+  "descAllowSharing" : "Untuk meningkatkan jangkauan dan meperkenalkan konten kamu ke audiens baru.",
+  "sharePost" : "Bagikan Postingan"
 }

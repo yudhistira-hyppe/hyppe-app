@@ -24,6 +24,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -225,6 +226,9 @@ class Generate {
 
       case Routes.completeProfile:
         return MaterialPageRoute(builder: (_) => ProfileCompletion(argument: AccountPreferenceScreenArgument(fromSignUpFlow: false)));
+
+      case Routes.contentPreferences:
+        return MaterialPageRoute(builder: (_) => const ContentPreferencesScreen());
 
       case Routes.referralScreen:
         return MaterialPageRoute(builder: (_) => const Referral());
