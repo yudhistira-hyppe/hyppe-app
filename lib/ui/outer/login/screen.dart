@@ -47,10 +47,13 @@ class LoginScreen extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                               decoration: BoxDecoration(border: Border.all(color: kHyppeLightSecondary, width: 1.0), borderRadius: const BorderRadius.all(Radius.circular(5))),
                               child: GestureDetector(
-                                onTap: () async{
+                                onTap: () async {
                                   await notifier.goToHelpLogin(context);
                                 },
-                                child: CustomTextWidget(textToDisplay: notifier.language.help ?? 'Help', textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),),
+                                child: CustomTextWidget(
+                                  textToDisplay: notifier.language.help ?? 'Help',
+                                  textStyle: Theme.of(context).primaryTextTheme.bodyText1?.copyWith(fontSize: 14),
+                                ),
                               ),
                             ),
                           ),
