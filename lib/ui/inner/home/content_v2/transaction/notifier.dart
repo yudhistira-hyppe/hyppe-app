@@ -145,6 +145,10 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  setSkip(int val){
+    _skip = val;
+  }
+
   set isDetailLoading(bool val) {
     _isDetailLoading = val;
     notifyListeners();
@@ -158,6 +162,10 @@ class TransactionNotifier extends ChangeNotifier {
   set isLoading(bool val) {
     _isLoading = val;
     notifyListeners();
+  }
+
+  setIsLoading(bool val){
+    _isLoading = val;
   }
 
   set isLoadingInProgress(bool val) {
@@ -259,8 +267,10 @@ class TransactionNotifier extends ChangeNotifier {
       } catch (e) {
         print(e);
       }
-      isLoading = false;
-      notifyListeners();
+      _isLoading = false;
+      Future.delayed(const Duration(milliseconds: 250), (){
+        notifyListeners();
+      });
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
         initBankAccount(context);

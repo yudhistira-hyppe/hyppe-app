@@ -53,7 +53,9 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
   @override
   void didPopNext() {
     Future.delayed(const Duration(milliseconds: 500), () {
-      _notifier.getDiscussion(context, reload: true);
+      if(mounted){
+        _notifier.getDiscussion(context, reload: true);
+      }
     });
 
     super.didPopNext();
