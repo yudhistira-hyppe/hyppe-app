@@ -35,7 +35,7 @@ class _TransactionState extends State<Transaction> {
   @override
   void initState() {
     final _notifier = context.read<TransactionNotifier>();
-    _notifier.skip = 0;
+    _notifier.setSkip(0);
     _notifier.initTransactionHistory(context);
     _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));
     super.initState();
@@ -43,7 +43,7 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void dispose() {
-    Provider.of<TransactionNotifier>(context, listen: false).isLoading = false;
+    Provider.of<TransactionNotifier>(context, listen: false).setIsLoading(false);
     super.dispose();
   }
 
