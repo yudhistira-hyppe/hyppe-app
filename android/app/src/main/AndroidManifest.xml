@@ -42,6 +42,7 @@
     <application
         android:name="${applicationName}"
         android:label="Hyppe"
+        android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:showOnLockScreen="true"

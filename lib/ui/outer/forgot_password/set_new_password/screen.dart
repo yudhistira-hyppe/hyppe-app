@@ -31,7 +31,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
     final translate = context.read<TranslateNotifierV2>().translate;
     return Consumer<ForgotPasswordNotifier>(
       builder: (_, notifier, __){
-        final isMatch = notifier.passwordController.text == notifier.passwordConfirmController.text;
+        final isMatch = notifier.passwordConfirmController.text.isNotEmpty ? notifier.passwordController.text == notifier.passwordConfirmController.text : true;
         return Scaffold(
           appBar: AppBar(
             leading: CustomIconButtonWidget(

@@ -327,14 +327,26 @@ class ContentData {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl +
-        "/${Env.data.versionApi}/" +
-        (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    final fixMedia = mediaThumbEndPoint ?? mediaEndpoint ?? '';
+    if(fixMedia.isNotEmpty){
+      return Env.data.baseUrl +
+          "/${Env.data.versionApi}/" +
+          fixMedia +
+          '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    }else{
+      return fixMedia;
+    }
+
   }
 
   String? concatContentUri() {
-    return Env.data.baseUrl + "/${Env.data.versionApi}/" + (mediaEndpoint ?? '');
+    final fixMedia = mediaEndpoint ?? '';
+    if(fixMedia.isNotEmpty){
+      return Env.data.baseUrl + "/${Env.data.versionApi}/" + (mediaEndpoint ?? '');
+    }else{
+      return '';
+    }
+
   }
 }
 

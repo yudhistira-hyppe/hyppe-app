@@ -77,6 +77,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   void initState(UserOtpScreenArgument argument) {
     WidgetsBinding.instance.addObserver(this);
     this.argument = argument;
+    _inCorrectCode = false;
     pinController = TextEditingController();
     // startTimer();
   }
@@ -183,22 +184,22 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
         //   message: language.yourResetCodeHasBeenVerified ?? '',
         // );
       } else {
-        if (fetch.data['messages']['info'][0] != null) {
-          ShowBottomSheet().onShowColouredSheet(
-            context,
-            fetch.data['messages']['info'][0] ?? '',
-            maxLines: 3,
-            color: Colors.red,
-            iconSvg: "${AssetPath.vectorPath}remove.svg",
-          );
-        } else {
-          ShowBottomSheet().onShowColouredSheet(
-            context,
-            language.somethingsWrong ?? '',
-            color: Colors.red,
-            iconSvg: "${AssetPath.vectorPath}remove.svg",
-          );
-        }
+        // if (fetch.data['messages']['info'][0] != null) {
+        //   ShowBottomSheet().onShowColouredSheet(
+        //     context,
+        //     fetch.data['messages']['info'][0] ?? '',
+        //     maxLines: 3,
+        //     color: Colors.red,
+        //     iconSvg: "${AssetPath.vectorPath}remove.svg",
+        //   );
+        // } else {
+        //   ShowBottomSheet().onShowColouredSheet(
+        //     context,
+        //     language.somethingsWrong ?? '',
+        //     color: Colors.red,
+        //     iconSvg: "${AssetPath.vectorPath}remove.svg",
+        //   );
+        // }
 
         _inCorrectCode = true;
       }
