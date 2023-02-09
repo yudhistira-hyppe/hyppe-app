@@ -18,7 +18,6 @@ class SpKeys {
   static const String isoCode = "isoCode";
   static const String themeData = 'themeData';
 
-  static const String isUserRequestRecoverPassword = 'isUserRequestRecoverPassword';
   static const String isUserInOTP = 'isUserInOTP';
   static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
   static const String countAds = 'countAds';

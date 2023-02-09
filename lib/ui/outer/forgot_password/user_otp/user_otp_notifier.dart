@@ -213,33 +213,6 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
     }
   }
 
-  Future _handleVerifyAction({
-    required String message,
-    required BuildContext context,
-  }) async {
-    try {
-      // TODO: old code
-      // setLoading(false);
-      // await ShowBottomSheet().onShowColouredSheet(context, language.verified, subCaption: message);
-      // Routing().moveAndRemoveUntil(
-      //   signUpVerified,
-      //   root,
-      //   argument: VerifyPageArgument(
-      //     otp: pinController.text,
-      //     redirect: VerifyPageRedirection.toHome,
-      //   ),
-      // );
-      SharedPreference().removeValue(SpKeys.isUserRequestRecoverPassword);
-      await _directLogin(context, message);
-    } catch (e) {
-      print(e);
-      Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
-    } finally {
-      setLoading(false);
-      onResetData();
-    }
-  }
-
   Future resend(BuildContext context, Function afterExecute) async {
     final notifier = UserBloc();
     try {

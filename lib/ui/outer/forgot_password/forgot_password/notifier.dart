@@ -148,7 +148,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
               maxLines: 3,
               borderRadius: 8,
               sizeIcon: 20,
-              color: kHyppeBlue,
+              color: kHyppeTextLightPrimary,
               isArrow: true,
               iconColor: kHyppeBorder,
               padding: EdgeInsets.only(left: 16, right: 20, top: 12, bottom: 12),
