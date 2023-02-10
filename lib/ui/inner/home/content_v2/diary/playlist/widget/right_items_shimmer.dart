@@ -49,7 +49,7 @@ class RightItemsShimmer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _customIcon("${AssetPath.vectorPath}music.svg"),
+                _customIcon("${AssetPath.vectorPath}music_stroke_white.svg"),
                 twelvePx,
                 CustomShimmer(width: (SizeConfig.screenWidth! - 68), height: 16, radius: 4),
               ],
