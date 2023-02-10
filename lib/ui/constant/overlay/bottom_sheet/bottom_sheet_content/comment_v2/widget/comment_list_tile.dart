@@ -20,7 +20,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_rich_text_widget.dart';
-import 'package:readmore/readmore.dart';
 
 class CommentListTile extends StatefulWidget {
   final bool fromFront;

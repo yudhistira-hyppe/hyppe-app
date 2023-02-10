@@ -8,7 +8,6 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
-import 'package:readmore/readmore.dart';
 
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -17,7 +16,6 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../../core/models/collection/music/music.dart';
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
-import '../../../../../../constant/widget/music_status_page_widget.dart';
 
 class LeftItems extends StatefulWidget {
   final String? userName;
@@ -132,18 +130,6 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
                     expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                   ),
-                  // ReadMoreText(
-                  //   "${widget.description}",
-                  //   trimLines: 5,
-                  //   trimMode: TrimMode.Line,
-                  //   textAlign: TextAlign.left,
-                  //   trimExpandedText: 'Show less',
-                  //   trimCollapsedText: 'Show more',
-                  //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                  //   style: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
-                  //   moreStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                  //   lessStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                  // ),
                 ],
               ),
             ),

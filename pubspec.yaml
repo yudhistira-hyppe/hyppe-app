@@ -48,13 +48,12 @@ dependencies:
   collection: ^1.16.0 # Collections and utilities functions and classes related to collections.
   computer: ^3.2.0 # Easy to use pool of concurrent workers with compute() like API.
   package_info_plus: ^1.3.0 # For querying information about the application package
-  flutter_inappwebview: ^5.4.4+3 # To add an inline webview, to use an headless webview, and to open an in-app browser window
+  flutter_inappwebview: ^5.7.2+3 # To add an inline webview, to use an headless webview, and to open an in-app browser window
   pin_code_fields: ^7.4.0 # Help to generate pin code fields.
   flutter_markdown: ^0.6.8 # A markdown viewer for flutter
   native_device_orientation: ^1.0.0 # A plugin project that allows for getting the native device orientation.
   socket_io_client: ^2.0.0-beta.4-nullsafety.0 # Dartlang port of socket.io-client for web, flutter, dartvm to use.
   image_picker: ^0.8.4+9 # Picking images from the image library, and taking new pictures with the camera.
-  readmore: ^2.1.0
   # flutter_facebook_auth: ^4.3.0
   # twitter_login: ^4.2.2
   location: ^4.4.0
