@@ -54,7 +54,6 @@ dependencies:
   native_device_orientation: ^1.0.0 # A plugin project that allows for getting the native device orientation.
   socket_io_client: ^2.0.0-beta.4-nullsafety.0 # Dartlang port of socket.io-client for web, flutter, dartvm to use.
   image_picker: ^0.8.4+9 # Picking images from the image library, and taking new pictures with the camera.
-  readmore: ^2.1.0
   # flutter_facebook_auth: ^4.3.0
   # twitter_login: ^4.2.2
   location: ^4.4.0

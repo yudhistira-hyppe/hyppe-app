@@ -131,18 +131,6 @@ class VidDetailBottom extends StatelessWidget {
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),
-                          // ReadMoreText(
-                          //   "${data?.description}",
-                          //   trimLines: 2,
-                          //   trimMode: TrimMode.Line,
-                          //   textAlign: TextAlign.left,
-                          //   trimExpandedText: 'Show less',
-                          //   trimCollapsedText: 'Show more',
-                          //   colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                          //   style: Theme.of(context).textTheme.subtitle2,
-                          //   moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          //   lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          // ),
                         ],
                       ),
                     )

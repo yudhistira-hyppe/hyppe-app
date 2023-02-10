@@ -14,7 +14,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -120,19 +119,6 @@ class OtherProfileTop extends StatelessWidget {
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                           expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                         ),
-                        // ReadMoreText(
-                        //   notifier.displayBio(),
-                        //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                        //   trimLines: 5,
-                        //   trimMode: TrimMode.Line,
-                        //   textAlign: TextAlign.start,
-                        //   trimExpandedText: 'Show less',
-                        //   trimCollapsedText: 'Show more',
-                        //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                        //   style: Theme.of(context).textTheme.bodyText2!.copyWith(),
-                        //   moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        //   lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        // ),
                       ],
                     )),
                   )

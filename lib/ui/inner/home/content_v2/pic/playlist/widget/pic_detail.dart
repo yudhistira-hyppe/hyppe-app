@@ -6,7 +6,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/tag_label.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +20,6 @@ import 'package:hyppe/ui/constant/widget/custom_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
@@ -296,19 +294,6 @@ class _PicDetailState extends State<PicDetail> {
                               hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
                               expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                             ),
-                            // ReadMoreText(
-                            //   "${widget.arguments?.description}",
-                            //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                            //   trimLines: 5,
-                            //   trimMode: TrimMode.Line,
-                            //   textAlign: TextAlign.left,
-                            //   trimExpandedText: 'Show less',
-                            //   trimCollapsedText: 'Show more',
-                            //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                            //   style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                            //   moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                            //   lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                            // ),
                           ],
                         )),
                       ),

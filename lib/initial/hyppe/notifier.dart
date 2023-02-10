@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -103,6 +104,8 @@ class HyppeNotifier with ChangeNotifier {
       }
     }catch(e){
       'handleStartUp error: $e'.logger();
+      FirebaseCrashlytics.instance
+          .log('Hyppe Error: $e');
       Future.delayed(const Duration(milliseconds: 700), (){
         _routing.moveReplacement(Routes.welcomeLogin);
       });
