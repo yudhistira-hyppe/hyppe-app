@@ -7,14 +7,12 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:provider/provider.dart';
 
 class CustomFollowButton extends StatelessWidget {
-  final String caption;
   final Function() onPressed;
   final StatusFollowing isFollowing;
   final bool checkIsLoading;
 
   const CustomFollowButton({
     Key? key,
-    required this.caption,
     required this.onPressed,
     required this.isFollowing,
     required this.checkIsLoading,
@@ -24,7 +22,8 @@ class CustomFollowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     String title = '';
-    bool _isNotFollowing = isFollowing == StatusFollowing.rejected || isFollowing == StatusFollowing.none;
+    bool _isAbleToClick = isFollowing != StatusFollowing.requested;
+    bool _isNotFollowing = (isFollowing == StatusFollowing.rejected || isFollowing == StatusFollowing.none );
 
     return Consumer<TranslateNotifierV2>(builder: (context, value, _) {
       switch (isFollowing) {
@@ -37,9 +36,9 @@ class CustomFollowButton extends StatelessWidget {
         default:
           title = value.translate.follow ?? 'Follow';
       }
-      isFollowing == StatusFollowing.requested;
+      // isFollowing == StatusFollowing.requested;
       return InkWell(
-        onTap: _isNotFollowing ? onPressed : null,
+        onTap: _isAbleToClick ? onPressed : null,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: checkIsLoading

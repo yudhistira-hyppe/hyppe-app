@@ -21,6 +21,13 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
   List<dynamic> _listFollow = [];
   List<dynamic> get listFollow => _listFollow;
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool state){
+    _isLoading = state;
+    notifyListeners();
+  }
+
   set listFollow(List<dynamic> val) {
     _listFollow = val;
     notifyListeners();
@@ -96,6 +103,7 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
 
   Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index, isUnFollow = false}) async {
     try {
+      isLoading = true;
       final notifier = FollowBloc();
       await notifier.followUserBlocV2(
         context,
@@ -105,12 +113,14 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
         ),
       );
       final fetch = notifier.followFetch;
+      isLoading = false;
       if (fetch.followState == FollowState.followUserSuccess) {
         return true;
       } else {
         return false;
       }
     } catch (e) {
+      isLoading = false;
       return false;
     }
   }

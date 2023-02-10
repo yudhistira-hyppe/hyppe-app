@@ -247,10 +247,9 @@ class VidDetailBottom extends StatelessWidget {
                     return value.checkIsLoading
                         ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                         : CustomFollowButton(
-                            caption: value3.translate.follow ?? 'follow',
                             onPressed: () async {
                               try {
-                                await value.followUser(context);
+                                await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
                               } catch (e) {
                                 'follow error $e'.logger();
                               }

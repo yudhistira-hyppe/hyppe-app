@@ -297,11 +297,10 @@ class PicDetailBottom extends StatelessWidget {
                         value.checkIsLoading
                             ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                             : CustomFollowButton(
-                                caption: value3.translate.follow ?? '',
                                 checkIsLoading: value.checkIsLoading,
                                 onPressed: () async {
                                   try {
-                                    await value.followUser(context);
+                                    await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
                                   } catch (e) {
                                     e.logger();
                                   }
