@@ -1,5 +1,6 @@
+import 'package:flutter/cupertino.dart';
 
-class UserProfileAvatarModel{
+class UserProfileAvatarModel {
   String? createdAt;
 
   String? mediaBasePath;
@@ -14,7 +15,9 @@ class UserProfileAvatarModel{
 
   String? updatedAt;
 
-  UserProfileAvatarModel({this.createdAt, this.mediaBasePath, this.mediaUri, this.active, this.mediaType, this.mediaEndpoint, this.updatedAt});
+  String? imageKey; //untuk key image cache
+
+  UserProfileAvatarModel({this.createdAt, this.mediaBasePath, this.mediaUri, this.active, this.mediaType, this.mediaEndpoint, this.updatedAt, this.imageKey});
 
   UserProfileAvatarModel.fromJson(Map<String, dynamic> json) {
     createdAt = json['createdAt'];
@@ -24,6 +27,7 @@ class UserProfileAvatarModel{
     mediaType = json['mediaType'];
     mediaEndpoint = json['mediaEndpoint'];
     updatedAt = json['updatedAt'];
+    imageKey = UniqueKey().toString();
   }
 
   Map<String, dynamic> toJson() {

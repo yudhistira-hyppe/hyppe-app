@@ -14,6 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MakeContentScreen extends StatefulWidget {
+  const MakeContentScreen({super.key});
+
   @override
   _MakeContentScreenState createState() => _MakeContentScreenState();
 }

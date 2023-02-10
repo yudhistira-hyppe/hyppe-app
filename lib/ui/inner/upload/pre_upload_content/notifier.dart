@@ -118,6 +118,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String?>? _fileContent;
   String _selectedLocation = '';
   bool _allowComment = true;
+  bool _isShared = true;
   bool _certified = false;
   bool _certifiedTmp = false;
   dynamic _uploadSuccess;
@@ -151,6 +152,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   List<String?>? get fileContent => _fileContent;
   String get selectedLocation => _selectedLocation;
   bool get allowComment => _allowComment;
+  bool get isShared => _isShared;
   bool get certified => _certified;
   bool get certifiedTmp => _certifiedTmp;
   List<String>? get tags => _tags;
@@ -302,6 +304,11 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   set allowComment(bool val) {
     _allowComment = val;
+    notifyListeners();
+  }
+
+  set isShared(bool val) {
+    _isShared = val;
     notifyListeners();
   }
 
@@ -515,6 +522,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     /////////////
     selectedLocation = '';
     allowComment = true;
+    isShared = true;
     certified = false;
     captionController.clear();
     _selectedLocation = '';
@@ -618,6 +626,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         saleAmount: _toSell ? priceController.text.replaceAll(',', '').replaceAll('.', '') : "0",
         saleLike: _includeTotalLikes,
         saleView: _includeTotalViews,
+        isShared: isShared,
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
         onReceiveProgress: (count, total) async {
@@ -687,6 +696,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       saleAmount: _toSell ? price : "0",
       saleLike: _includeTotalLikes,
       saleView: _includeTotalViews,
+      isShared: isShared,
       location: locationName == language.addLocation ? '' : locationName,
     );
     final fetch = notifier.postsFetch;

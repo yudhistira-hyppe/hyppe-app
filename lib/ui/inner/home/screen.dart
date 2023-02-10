@@ -112,7 +112,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     }
     super.initState();
     'ini iniststate home'.logger();
-
   }
 
   @override
@@ -152,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                 // :
                 ListView(
                   controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   children: const [
                     ProcessUploadComponent(),
                     HyppePreviewStories(),

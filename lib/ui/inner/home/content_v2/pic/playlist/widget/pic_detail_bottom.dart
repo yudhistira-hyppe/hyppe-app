@@ -222,7 +222,7 @@ class PicDetailBottom extends StatelessWidget {
             // ),
 
             if (data != null)
-              if (data?.allowComments ?? false)
+              if (data?.allowComments ?? true)
                 _buildButton(
                   context,
                   '${AssetPath.vectorPath}comment.svg',
@@ -232,12 +232,13 @@ class PicDetailBottom extends StatelessWidget {
                   },
                 ),
 
-            _buildButton(
-              context,
-              '${AssetPath.vectorPath}share.svg',
-              value2.translate.share ?? '',
-              data != null ? () => value.createdDynamicLink(context, data: data) : () {},
-            ),
+            if (data?.isShared ?? true)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}share.svg',
+                value2.translate.share ?? '',
+                data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+              ),
             if ((data?.saleAmount ?? 0) > 0 && email != data?.email)
               _buildButton(
                 context,

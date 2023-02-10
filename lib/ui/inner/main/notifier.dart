@@ -85,6 +85,7 @@ class MainNotifier with ChangeNotifier {
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
+      context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
       final _profile = context.read<SelfProfileNotifier>().user.profile;
       System().userVerified(_profile?.statusKyc);

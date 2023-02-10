@@ -161,6 +161,7 @@ class _PicDetailState extends State<PicDetail> {
                                   context,
                                   contentData: widget.arguments ?? ContentData(),
                                   captionTitle: hyppePic,
+                                  isShare: widget.arguments?.isShared ?? true,
                                   // storyController: widget.storyController,
                                   onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
                                 );
@@ -221,11 +222,12 @@ class _PicDetailState extends State<PicDetail> {
                                   function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
                                 ),
                         ),
-                        _buildButtonV2(
-                          context: context,
-                          iconData: '${AssetPath.vectorPath}share.svg',
-                          function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
-                        ),
+                        if (widget.arguments?.isShared ?? true)
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}share.svg',
+                            function: widget.arguments != null ? () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.arguments) : () {},
+                          ),
                         if ((widget.arguments?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.arguments?.email)
                           _buildButtonV2(
                             context: context,

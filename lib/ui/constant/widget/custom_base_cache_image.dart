@@ -7,7 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class CustomCacheManager {
   static const key = customCacheKey;
-  static CacheManager instance = CacheManager(Config(key, stalePeriod: const Duration(minutes: 1)));
+  static CacheManager instance = CacheManager(Config(key, stalePeriod: const Duration(seconds: 1)));
 }
 
 class CustomBaseCacheImage extends StatelessWidget {
@@ -43,7 +43,7 @@ class CustomBaseCacheImage extends StatelessWidget {
     SizeConfig().init(context);
     return (imageUrl ?? '').isNotEmpty
         ? CachedNetworkImage(
-            // cacheKey: cacheKey,
+            cacheKey: cacheKey, // "$imageUrl${DateTime.now().minute}",
             imageUrl: "$imageUrl",
             httpHeaders: headers,
             errorWidget: errorWidget,
@@ -51,7 +51,7 @@ class CustomBaseCacheImage extends StatelessWidget {
             memCacheWidth: memCacheWidth,
             memCacheHeight: memCacheHeight,
             filterQuality: FilterQuality.none,
-            cacheManager: CustomCacheManager.instance,
+            // cacheManager: CustomCacheManager.instance,
             placeholder: (context, url) =>
                 placeHolderWidget ??
                 UnconstrainedBox(

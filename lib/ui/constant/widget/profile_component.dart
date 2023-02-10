@@ -29,6 +29,7 @@ class ProfileComponent extends StatelessWidget {
   final Function onFollow;
   final bool haveStory;
   final FeatureType featureType;
+  final String? cacheKey;
 
   const ProfileComponent(
       {Key? key,
@@ -47,6 +48,7 @@ class ProfileComponent extends StatelessWidget {
       this.heightCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
       required this.onFollow,
       this.textColor,
+      this.cacheKey,
       this.haveStory = false,
       required this.featureType})
       : super(key: key);
@@ -67,6 +69,7 @@ class ProfileComponent extends StatelessWidget {
                 haveStory: haveStory,
                 featureType: featureType,
                 child: CustomProfileImage(
+                  cacheKey: cacheKey,
                   width: widthCircle,
                   height: heightCircle,
                   onTap: onTapOnProfileImage,

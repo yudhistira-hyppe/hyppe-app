@@ -15,11 +15,17 @@ class PickitemTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Chip(
       deleteIcon: button
-          ? const Icon(
-              Icons.clear_rounded,
-              color: Color(0xff717171),
-              size: 15,
-            )
+          ? select
+              ? const Icon(
+                  Icons.check,
+                  color: kHyppeLightButtonText,
+                  size: 15,
+                )
+              : const Icon(
+                  Icons.add_rounded,
+                  color: kHyppePrimary,
+                  size: 15,
+                )
           : SizedBox(),
       onDeleted: button ? function as void Function()? : null,
       label: Row(
@@ -28,8 +34,9 @@ class PickitemTitle extends StatelessWidget {
           CustomTextWidget(textAlign: TextAlign.left, textOverflow: TextOverflow.clip, textToDisplay: title, textStyle: textStyle),
         ],
       ),
+      shape: StadiumBorder(side: BorderSide(color: select ? kHyppePrimary : kHyppeDisabled)),
       padding: const EdgeInsets.all(8),
-      backgroundColor: !select ? Theme.of(context).colorScheme.secondary : kHyppePrimary,
+      backgroundColor: !select ? kHyppeLightButtonText : kHyppePrimary,
     );
   }
 }

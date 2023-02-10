@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
 import 'package:hyppe/core/arguments/progress_upload_argument.dart';
@@ -222,7 +223,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
     _dioCancelToken = null;
   }
 
-  Future onClickChangeImageProfile(BuildContext context) async {
+  Future onClickChangeImageProfile(BuildContext context, String imageUrl) async {
     bool connect = await System().checkConnections();
     if (connect) {
       // bool _isPermissionGranted = await System().requestPermission(context, permissions: [
@@ -238,6 +239,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
         if (_file.values.single != null) {
           progress = "0%";
+          print("dari gambar $imageUrl");
 
           Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
@@ -256,6 +258,8 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
           final fetch = notifier.userFetch;
           if (fetch.userState == UserState.uploadProfilePictureSuccess) {
+            notifyListeners();
+
             hold = true;
             progress = "${language.finishingUp}...";
 

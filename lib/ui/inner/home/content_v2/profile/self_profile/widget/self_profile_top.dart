@@ -29,13 +29,14 @@ class SelfProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SelectableText("${notifier.displayPhotoProfile()}"),
+            // Text("${notifier.user.profile?.avatar?.mediaEndpoint}"),
             Row(
               children: <Widget>[
                 StoryColorValidator(
                   haveStory: notifier.checkHaveStory(context),
                   featureType: FeatureType.other,
                   child: CustomProfileImage(
+                    cacheKey: notifier.user.profile?.avatar?.imageKey,
                     following: true,
                     width: 80 * SizeConfig.scaleDiagonal,
                     height: 80 * SizeConfig.scaleDiagonal,

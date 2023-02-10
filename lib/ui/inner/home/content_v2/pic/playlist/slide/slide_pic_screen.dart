@@ -141,6 +141,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 color: Colors.white,
                               ),
                             ),
+                            Text("${widget.data.isShared}"),
                             ProfileComponent(
                               isDetail: true,
                               show: true,
@@ -181,11 +182,10 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
                                   contentData: widget.data,
-                                  captionTitle: hyppePic,
+                                  captionTitle: hyppePic, isShare: widget.data.isShared,
                                   // storyController: widget.storyController,
                                   onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
                                 );
-
                                 notifier.preventMusic = false;
                                 SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                               },
@@ -318,11 +318,12 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           },
                         ),
                         eightPx,
-                        _buildButtonV2(
-                          context: context,
-                          iconData: '${AssetPath.vectorPath}share.svg',
-                          function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
-                        ),
+                        if (widget.data.isShared ?? true)
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}share.svg',
+                            function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
+                          ),
                         eightPx,
                         if ((widget.data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.data.email)
                           _buildButtonV2(

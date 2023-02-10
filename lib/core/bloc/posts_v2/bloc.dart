@@ -193,6 +193,7 @@ class PostsBloc {
       String? saleAmount,
       bool? saleLike,
       bool? saleView,
+      bool? isShared,
       String? idMusic,
       int? width,
       int? height}) async {
@@ -220,10 +221,10 @@ class PostsBloc {
       formData.fields.add(MapEntry('musicId', idMusic));
     }
 
-    if(width != null){
+    if (width != null) {
       formData.fields.add(MapEntry('width', width.toString()));
     }
-    if(height != null){
+    if (height != null) {
       formData.fields.add(MapEntry('height', height.toString()));
     }
 
@@ -235,7 +236,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
-
+    formData.fields.add(MapEntry('isShared', isShared.toString()));
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 
@@ -322,6 +323,7 @@ class PostsBloc {
       String? location,
       String? saleAmount,
       bool? saleLike,
+      bool? isShared,
       bool? saleView}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
@@ -340,6 +342,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+    formData.fields.add(MapEntry('isShared', isShared.toString()));
 
     print('hahahahahahahaha');
     print(type);
