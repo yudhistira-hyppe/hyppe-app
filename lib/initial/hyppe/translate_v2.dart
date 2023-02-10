@@ -196,63 +196,71 @@ class TranslateNotifierV2 with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initTranslate(BuildContext context, {int? index}) async {
-    print('kesini translate');
-    await loadLanguage(index: index);
+  Future initTranslate(BuildContext context, {int? index, Function(dynamic)? onError}) async {
+    try{
+      print('kesini translate');
+      await loadLanguage(index: index);
 
-    /// Outer
-    // Login
-    context.read<LoginNotifier>().translate(translate);
-    context.read<WelcomeLoginNotifier>().translate(translate);
-    // Forgot Password
-    context.read<ForgotPasswordNotifier>().translate(translate);
-    context.read<UserOtpNotifier>().translate(translate);
-    // Sign-Up
-    context.read<RegisterNotifier>().translate(translate);
-    context.read<SignUpPinNotifier>().translate(translate);
-    context.read<UserAgreementNotifier>().translate(translate);
-    context.read<UserInterestNotifier>().translate(translate);
-    context.read<SignUpWelcomeNotifier>().translate(translate);
-    context.read<UserCompleteProfileNotifier>().translate(translate);
+      /// Outer
+      // Login
+      context.read<LoginNotifier>().translate(translate);
+      context.read<WelcomeLoginNotifier>().translate(translate);
+      // Forgot Password
+      context.read<ForgotPasswordNotifier>().translate(translate);
+      context.read<UserOtpNotifier>().translate(translate);
+      // Sign-Up
+      context.read<RegisterNotifier>().translate(translate);
+      context.read<SignUpPinNotifier>().translate(translate);
+      context.read<UserAgreementNotifier>().translate(translate);
+      context.read<UserInterestNotifier>().translate(translate);
+      context.read<SignUpWelcomeNotifier>().translate(translate);
+      context.read<UserCompleteProfileNotifier>().translate(translate);
 
-    /// Inner
-    context.read<HomeNotifier>().translate(translate);
-    context.read<PreviewPicNotifier>().translate(translate);
-    context.read<AccountPreferencesNotifier>().translate(translate);
-    context.read<MakeContentNotifier>().translate(translate);
-    context.read<PreviewContentNotifier>().translate(translate);
-    context.read<DiariesPlaylistNotifier>().translate(translate);
-    context.read<PreUploadContentNotifier>().translate(translate);
-    context.read<SelfProfileNotifier>().translate(translate);
-    context.read<OtherProfileNotifier>().translate(translate);
-    context.read<ChangePasswordNotifier>().translate(translate);
-    context.read<SearchNotifier>().translate(translate);
-    context.read<HashtagNotifier>().translate(translate);
-    context.read<InterestNotifier>().translate(translate);
-    context.read<NotificationNotifier>().translate(translate);
-    context.read<ProfileCompletionNotifier>().translate(translate);
-    context.read<ReferralNotifier>().translate(translate);
-    context.read<ReviewBuyNotifier>().translate(translate);
-    context.read<PaymentMethodNotifier>().translate(translate);
-    context.read<PaymentNotifier>().translate(translate);
-    context.read<PaymentSummaryNotifier>().translate(translate);
-    context.read<CommentNotifierV2>().translate(translate);
-    context.read<TicketHistoryNotifier>().translate(translate);
-    context.read<DetailTicketNotifier>().translate(translate);
-    // await context.read<TransactionNotifier>().translate(translate);
-    // await context.read<PinAccountNotifier>().translate(translate);
+      /// Inner
+      context.read<HomeNotifier>().translate(translate);
+      context.read<PreviewPicNotifier>().translate(translate);
+      context.read<AccountPreferencesNotifier>().translate(translate);
+      context.read<MakeContentNotifier>().translate(translate);
+      context.read<PreviewContentNotifier>().translate(translate);
+      context.read<DiariesPlaylistNotifier>().translate(translate);
+      context.read<PreUploadContentNotifier>().translate(translate);
+      context.read<SelfProfileNotifier>().translate(translate);
+      context.read<OtherProfileNotifier>().translate(translate);
+      context.read<ChangePasswordNotifier>().translate(translate);
+      context.read<SearchNotifier>().translate(translate);
+      context.read<HashtagNotifier>().translate(translate);
+      context.read<InterestNotifier>().translate(translate);
+      context.read<NotificationNotifier>().translate(translate);
+      context.read<ProfileCompletionNotifier>().translate(translate);
+      context.read<ReferralNotifier>().translate(translate);
+      context.read<ReviewBuyNotifier>().translate(translate);
+      context.read<PaymentMethodNotifier>().translate(translate);
+      context.read<PaymentNotifier>().translate(translate);
+      context.read<PaymentSummaryNotifier>().translate(translate);
+      context.read<CommentNotifierV2>().translate(translate);
+      context.read<TicketHistoryNotifier>().translate(translate);
+      context.read<DetailTicketNotifier>().translate(translate);
+      // await context.read<TransactionNotifier>().translate(translate);
+      // await context.read<PinAccountNotifier>().translate(translate);
 
-    context.read<VerificationIDNotifier>().translate(translate);
+      context.read<VerificationIDNotifier>().translate(translate);
 
-    notifyListeners();
-    if (index != null && _listLanguage.isNotEmpty) {
-      _listIndex = 0;
-      Routing().moveBack();
+      notifyListeners();
+      if (index != null && _listLanguage.isNotEmpty) {
+        _listIndex = 0;
+        Routing().moveBack();
+      }
+      var lang = SharedPreference().readStorage(SpKeys.isoCode);
+      final notifier = UtilsBlocV2();
+      await notifier.updateLanguages(context, lang: lang);
+      final fetch = notifier.utilsFetch;
+      if (fetch.utilsState == UtilsState.updateLangSuccess) {}
+    }catch(e){
+      'initTranslate error: $e'.logger();
+      if(onError != null){
+       onError(e);
+      }
     }
-    var lang = SharedPreference().readStorage(SpKeys.isoCode);
-    final notifier = UtilsBlocV2();
-    await notifier.updateLanguages(context, lang: lang);
-    final fetch = notifier.utilsFetch;
-    if (fetch.utilsState == UtilsState.updateLangSuccess) {}
+
   }
 }

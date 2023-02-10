@@ -161,12 +161,15 @@ class CameraDevicesNotifier extends LoadingNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> prepareCameraPage() async {
+  Future<void> prepareCameraPage({Function(dynamic)? onError}) async {
     try {
       await availableCameras().then((value) => camera = value);
       if (Platform.isIOS) await _system.getIosInfo().then((value) => _iOSVersion = value.systemVersion);
     } catch (e) {
-      e.logger();
+      'prepareCameraPage error: $e'.logger();
+      if(onError != null){
+        onError(e);
+      }
     }
   }
 

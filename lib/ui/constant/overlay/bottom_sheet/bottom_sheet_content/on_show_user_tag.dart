@@ -8,7 +8,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/follow/notifier.dart';
-import 'package:hyppe/ui/constant/entities/general_mixin/general_mixin.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -78,7 +77,7 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                       itemCount: notifierTag.listTagPeople.length,
                       itemBuilder: (context, index) {
                         // print(System().showUserPicture(value[index].avatar));
-                        notifierTag.listTagPeople[index].status == 'UNLINK' ? '' : notifier.statusFollow = notifier.label(notifierTag.listTagPeople[index].status);
+                        notifierTag.listTagPeople[index].status == 'UNLINK' ? '' : notifier.setStatusFollow(System().getEnumFollowStatus(notifierTag.listTagPeople[index].status ?? '')) ;
                         return Column(
                           children: [
                             ListTile(
@@ -108,24 +107,36 @@ class _OnShowUserTagBottomSheetState extends State<OnShowUserTagBottomSheet> wit
                                         )
                                       : SizedBox(
                                           width: 100,
-                                          child: CustomTextButton(
-                                            child: Text(
-                                              notifier.statusFollow ?? '',
-                                              style: TextStyle(color: notifierTag.listTagPeople[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
-                                            ),
-                                            onPressed: notifierTag.listTagPeople[index].status != 'TOFOLLOW'
-                                                ? null
-                                                : () {
-                                                    notifier.followUser(context, email: notifierTag.listTagPeople[index].email, index: index).then((value) {
-                                                      if (value) {
-                                                        notifierTag.listTagPeople[index].status = 'FOLLOWING';
-                                                        setState(() {});
-                                                      }
-                                                    });
-                                                  },
-                                            style: notifierTag.listTagPeople[index].status == 'TOFOLLOW'
-                                                ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
-                                                : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
+                                          child: Builder(
+
+                                            builder: (context) {
+                                              final actionFollowOfUn = notifierTag.listTagPeople[index].status == 'FOLLOWING'
+                                                  ? () {
+                                                notifier.followUser(context, email: notifierTag.listTagPeople[index].email, index: index, isUnFollow: true).then((value) {
+                                                  if (value) {
+                                                    notifierTag.listTagPeople[index].status = 'TOFOLLOW';
+                                                    setState(() {});
+                                                  }
+                                                });
+                                              }
+                                                  : notifierTag.listTagPeople[index].status == 'TOFOLLOW' ?() {
+                                                notifier.followUser(context, email: notifierTag.listTagPeople[index].email, index: index).then((value) {
+                                                  if (value) {
+                                                    notifierTag.listTagPeople[index].status = 'FOLLOWING';
+                                                    setState(() {});
+                                                  }
+                                                });
+                                              }: null;
+                                              return CustomTextButton(
+                                                child: Text( System().getValueStringFollow(notifier.statusFollow, context.read<TranslateNotifierV2>().translate),
+                                                  style: TextStyle(color: notifierTag.listTagPeople[index].status == 'TOFOLLOW' ? kHyppeTextPrimary : kHyppeLightSecondary),
+                                                ),
+                                                onPressed: actionFollowOfUn,
+                                                style: notifierTag.listTagPeople[index].status == 'TOFOLLOW'
+                                                    ? ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary))
+                                                    : ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppeLightInactive1)),
+                                              );
+                                            }
                                           ),
                                         ),
 

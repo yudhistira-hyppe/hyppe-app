@@ -40,9 +40,13 @@ class HyppeNotifier with ChangeNotifier {
   Future handleStartUp(BuildContext context) async {
     try{
       _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-      await context.read<CameraDevicesNotifier>().prepareCameraPage();
+      await context.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e){
+        throw '$e';
+      });
 
-      await context.read<TranslateNotifierV2>().initTranslate(context);
+      await context.read<TranslateNotifierV2>().initTranslate(context, onError: (e){
+        throw '$e';
+      });
 
       String? token = SharedPreference().readStorage(SpKeys.userToken);
       String? email = SharedPreference().readStorage(SpKeys.email);
@@ -98,6 +102,7 @@ class HyppeNotifier with ChangeNotifier {
         // _routing.moveReplacement(Routes.login);
       }
     }catch(e){
+      'handleStartUp error: $e'.logger();
       Future.delayed(const Duration(milliseconds: 700), (){
         _routing.moveReplacement(Routes.welcomeLogin);
       });

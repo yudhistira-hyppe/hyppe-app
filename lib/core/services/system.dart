@@ -307,6 +307,33 @@ class System {
     }
   }
 
+  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale){
+    switch (state){
+      case StatusFollowing.none:
+        return locale.follow ?? 'Follow';
+      case StatusFollowing.following:
+        return locale.following ?? 'Following';
+      case StatusFollowing.requested:
+        return locale.requested ?? 'Requested';
+      default:
+        return locale.unverified ?? 'Follow';
+    }
+  }
+
+  StatusFollowing getEnumFollowStatus(String status){
+    switch(status){
+      case 'TOFOLLOW':
+        return StatusFollowing.none;
+      case 'FOLLOWING':
+        return StatusFollowing.following;
+      case 'UNLINK':
+        return StatusFollowing.requested;
+      default:
+        return StatusFollowing.rejected;
+    }
+  }
+
+
   StatusFollowing getStatusFollow(String? sts) {
     switch (sts) {
       case P_FOLLOW:

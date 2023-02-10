@@ -170,19 +170,21 @@ class OtherProfileTop extends StatelessWidget {
                                     ? notifier.language.requested ?? 'requested'
                                     : notifier.language.follow ?? 'follow',
                             textStyle: Theme.of(context).textTheme.button?.copyWith(
-                                  color: notifier.statusFollowing == StatusFollowing.requested ? null : kHyppeLightButtonText,
+                                  color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
                                 ),
                           ),
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
-                      backgroundColor: notifier.statusFollowing == StatusFollowing.requested ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                     ),
                     function: notifier.isCheckLoading
                         ? null
                         : () {
                             if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
                               notifier.followUser(context);
+                            }else if(notifier.statusFollowing == StatusFollowing.following){
+                              notifier.followUser(context, isUnFollow: true);
                             }
                           },
                   ),
