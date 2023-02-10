@@ -17,7 +17,6 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import '../../../../../notifier_v2.dart';
 
 class MyFrameStory extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -35,6 +34,7 @@ class MyFrameStory extends StatelessWidget {
             context.read<ErrorService>().isInitialError(error, notifier.myStoryGroup) || notifier.myStoryGroup != null
                 ? BuildCircleProfile(
                     listStory: notifier.myStoryGroup[email],
+                    imageUrlKey: home.profileImageKey,
                     imageUrl: System().showUserPicture(home.profileImage),
                   )
                 : const CustomShimmer(

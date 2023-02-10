@@ -105,6 +105,7 @@ class VideoThumbnail extends StatelessWidget {
                         contentData: videoData ?? ContentData(),
                         captionTitle: hyppeVid,
                         onDetail: onDetail,
+                        isShare: videoData?.isShared,
                         onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
                       ),
                       child: const CustomIconWidget(

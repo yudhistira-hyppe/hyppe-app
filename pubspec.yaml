@@ -22,7 +22,7 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_crashlytics: ^3.0.10
 
-  cached_network_image: ^3.2.0 # Untuk keperluan cache image
+  cached_network_image: ^3.2.3 # Untuk keperluan cache image
   # camera: ^0.9.4+21 # Accessing camera feature
   camera: ^0.10.0 # Accessing camera feature
   carousel_slider: ^4.0.0 # Untuk kebutuhan Carousel Slider

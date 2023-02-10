@@ -63,6 +63,9 @@ class HomeNotifier with ChangeNotifier {
   String _profileImage = '';
   String get profileImage => _profileImage;
 
+  String _profileImageKey = '';
+  String get profileImageKey => _profileImageKey;
+
   String _select = 'PUBLIC';
   String get select => _select;
 
@@ -70,6 +73,11 @@ class HomeNotifier with ChangeNotifier {
 
   set profileImage(String url) {
     _profileImage = url;
+    notifyListeners();
+  }
+
+  set profileImageKey(String val) {
+    _profileImageKey = val;
     notifyListeners();
   }
 

@@ -122,22 +122,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                   );
                 },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    _language.translate.turnOffCommenting ?? '',
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                          color: const Color.fromRGBO(63, 63, 63, 1),
-                        ),
-                  ),
-                  CustomSwitchButton(
-                    value: !notifier.allowComment,
-                    onChanged: (value) => notifier.allowComment = !value,
-                  ),
-                ],
-              ),
+
               //-===== Allow Comment =========--
               const Divider(color: kHyppeBgNotSolve, height: 20),
 
@@ -148,28 +133,33 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _language.translate.allowComment ?? '',
-                          style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                color: const Color.fromRGBO(63, 63, 63, 1),
-                              ),
-                        ),
-                        fourPx,
-                        Text(
-                          _language.translate.descAllowComment ?? '',
-                          style: Theme.of(context).textTheme.caption?.copyWith(
-                                color: kHyppeSecondary,
-                              ),
-                        ),
-                      ],
+                    child: GestureDetector(
+                      onTap: () {
+                        notifier.allowComment = !notifier.allowComment;
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _language.translate.allowComment ?? '',
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                  color: const Color.fromRGBO(63, 63, 63, 1),
+                                ),
+                          ),
+                          fourPx,
+                          Text(
+                            _language.translate.descAllowComment ?? '',
+                            style: Theme.of(context).textTheme.caption?.copyWith(
+                                  color: kHyppeSecondary,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   CustomSwitchButton(
-                    value: !notifier.allowComment,
-                    onChanged: (value) => notifier.allowComment = !value,
+                    value: notifier.allowComment,
+                    onChanged: (value) => notifier.allowComment = value,
                   ),
                 ],
               ),
@@ -182,28 +172,33 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _language.translate.allowSharing ?? '',
-                          style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                color: const Color.fromRGBO(63, 63, 63, 1),
-                              ),
-                        ),
-                        fourPx,
-                        Text(
-                          _language.translate.descAllowSharing ?? '',
-                          style: Theme.of(context).textTheme.caption?.copyWith(
-                                color: kHyppeSecondary,
-                              ),
-                        ),
-                      ],
+                    child: GestureDetector(
+                      onTap: () {
+                        notifier.isShared = !notifier.isShared;
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _language.translate.allowSharing ?? '',
+                            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                  color: const Color.fromRGBO(63, 63, 63, 1),
+                                ),
+                          ),
+                          fourPx,
+                          Text(
+                            _language.translate.descAllowSharing ?? '',
+                            style: Theme.of(context).textTheme.caption?.copyWith(
+                                  color: kHyppeSecondary,
+                                ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   CustomSwitchButton(
-                    value: !notifier.allowComment,
-                    onChanged: (value) => notifier.allowComment = !value,
+                    value: notifier.isShared,
+                    onChanged: (value) => notifier.isShared = value,
                   ),
                 ],
               ),

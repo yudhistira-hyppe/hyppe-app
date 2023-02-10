@@ -179,24 +179,22 @@ class VidDetailBottom extends StatelessWidget {
                           colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
                   : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
-            data != null
-                ? (data?.allowComments ?? false)
-                    ? _buildButton(
-                        context,
-                        '${AssetPath.vectorPath}comment.svg',
-                        value2.translate.comment ?? '',
-                        () {
-                          ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
-                        },
-                      )
-                    : const SizedBox.shrink()
-                : const SizedBox.shrink(),
-            _buildButton(
-              context,
-              '${AssetPath.vectorPath}share.svg',
-              value2.translate.share ?? '',
-              data != null ? () => value.createdDynamicLink(context, data: data) : () {},
-            ),
+            if (data?.allowComments ?? true)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}comment.svg',
+                value2.translate.comment ?? '',
+                () {
+                  ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                },
+              ),
+            if (data?.isShared ?? true)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}share.svg',
+                value2.translate.share ?? '',
+                data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+              ),
             if (data != null)
               if ((data?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data?.email)
                 _buildButton(

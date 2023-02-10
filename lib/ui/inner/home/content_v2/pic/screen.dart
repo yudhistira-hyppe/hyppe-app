@@ -33,10 +33,10 @@ class _HyppePreviewPicState extends State<HyppePreviewPic> {
 
   @override
   void dispose() {
-    try{
+    try {
       final notifier = context.read<PreviewPicNotifier>();
       notifier.scrollController.dispose();
-    }catch(e){
+    } catch (e) {
       e.logger();
     }
 

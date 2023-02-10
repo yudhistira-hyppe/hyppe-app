@@ -100,7 +100,13 @@ class PicDetailSlider extends StatelessWidget {
                                   ? SizedBox(
                                       width: 50,
                                       child: CustomTextButton(
-                                        onPressed: () => ShowBottomSheet.onReportContent(context, postData: picData, type: hyppePic, adsData: null, onUpdate: () => notifier.onUpdate()),
+                                        onPressed: () => ShowBottomSheet.onReportContent(
+                                          context,
+                                          postData: picData,
+                                          type: hyppePic,
+                                          adsData: null,
+                                          onUpdate: () => notifier.onUpdate(),
+                                        ),
                                         child: const CustomIconWidget(
                                           defaultColor: false,
                                           iconData: '${AssetPath.vectorPath}more.svg',
@@ -113,8 +119,8 @@ class PicDetailSlider extends StatelessWidget {
                                   ? SizedBox(
                                       width: 50,
                                       child: CustomTextButton(
-                                        onPressed: ()async{
-                                          if(globalAudioPlayer != null){
+                                        onPressed: () async {
+                                          if (globalAudioPlayer != null) {
                                             globalAudioPlayer!.pause();
                                           }
                                           await ShowBottomSheet().onShowOptionContent(
@@ -123,8 +129,9 @@ class PicDetailSlider extends StatelessWidget {
                                             contentData: picData ?? ContentData(),
                                             captionTitle: hyppePic,
                                             onUpdate: () => notifier.onUpdate(),
+                                            isShare: picData?.isShared,
                                           );
-                                          if(globalAudioPlayer != null){
+                                          if (globalAudioPlayer != null) {
                                             globalAudioPlayer!.seek(Duration.zero);
                                             globalAudioPlayer!.resume();
                                           }

@@ -128,6 +128,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                                     contentData: widget.data!,
                                     captionTitle: hyppeDiary,
                                     storyController: widget.storyController,
+                                    isShare: widget.data?.isShared,
                                     onUpdate: () => context.read<DiariesPlaylistNotifier>().onUpdate(),
                                   );
                                   SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
