@@ -122,7 +122,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
             context,
             data: FollowUserArgument(
               receiverParty: _data?.email ?? '',
-              eventType: InteractiveEventType.following,
+              eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
             ),
           );
           final fetch = notifier.followFetch;
