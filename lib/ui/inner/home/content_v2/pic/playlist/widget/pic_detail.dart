@@ -220,7 +220,7 @@ class _PicDetailState extends State<PicDetail> {
                                   function: () => notifier.likePost(context, widget.arguments ?? ContentData()),
                                 ),
                         ),
-                        if (widget.arguments?.isShared ?? true)
+                        if ((widget.arguments?.isShared ?? true) && widget.arguments?.visibility == 'PUBLIC')
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}share.svg',

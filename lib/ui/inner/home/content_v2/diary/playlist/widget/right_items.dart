@@ -105,7 +105,7 @@ class RightItems extends StatelessWidget {
                             },
                           )
                         : const SizedBox.shrink(),
-                    if (data.isShared ?? true)
+                    if ((data.isShared ?? true) && data.visibility == 'PUBLIC')
                       _customIcon2(
                         context,
                         "${AssetPath.vectorPath}share.svg",
