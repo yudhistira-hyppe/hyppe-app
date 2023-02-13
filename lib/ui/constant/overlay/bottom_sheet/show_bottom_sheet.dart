@@ -14,7 +14,6 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_b
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_category_support_ticket.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/on_choose_music.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_interest_list.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_internal_server_error.dart';
@@ -700,33 +699,6 @@ class ShowBottomSheet {
       },
     );
     return _result ?? false;
-  }
-
-  static onComingSoonDoku(_) {
-    showModalBottomSheet(
-      context: _,
-      isScrollControlled: true,
-      enableDrag: true,
-      isDismissible: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-          child: Container(
-            height: SizeConfig.screenHeight ?? 0 / 1.78,
-            decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-            ),
-            padding: const EdgeInsets.all(8),
-            child: const OnComingSoonDoku(),
-          ),
-        );
-      },
-    );
   }
 
   static onReportContent(

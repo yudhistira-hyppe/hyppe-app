@@ -539,19 +539,6 @@ class HomeNotifier with ChangeNotifier {
     whenComplete ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete) : Routing().move(Routes.selfProfile);
   }
 
-  Future navigateToWallet(BuildContext context) async {
-    if (context.read<SelfProfileNotifier>().user.profile != null) {
-      if (context.read<SelfProfileNotifier>().user.profile?.isComplete ?? false) {
-        // context.read<WalletNotifier>().syncToDana(fromHome: true);
-        ShowBottomSheet.onComingSoonDoku(context);
-      } else {
-        ShowBottomSheet.onShowIDVerification(context);
-      }
-    } else {
-      ShowBottomSheet.onShowSomethingWhenWrong(context);
-    }
-  }
-
   //untuk test aliplayer
   Future navigateToTestAliPlayer(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);

@@ -151,7 +151,7 @@ class OtherProfileTop extends StatelessWidget {
                         ? const CustomLoading()
                         : CustomTextWidget(
                             textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                                ? notifier.language.following ?? 'following'
+                                ? notifier.language.following ?? 'following '
                                 : notifier.statusFollowing == StatusFollowing.requested
                                     ? notifier.language.requested ?? 'requested'
                                     : notifier.language.follow ?? 'follow',
