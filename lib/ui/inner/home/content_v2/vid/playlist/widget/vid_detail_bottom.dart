@@ -24,13 +24,9 @@ import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
-
 import 'package:hyppe/core/services/system.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class VidDetailBottom extends StatelessWidget {
@@ -188,7 +184,7 @@ class VidDetailBottom extends StatelessWidget {
                   ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
                 },
               ),
-            if (data?.isShared ?? true)
+            if ((data?.isShared ?? true) && data?.visibility == 'PUBLIC')
               _buildButton(
                 context,
                 '${AssetPath.vectorPath}share.svg',

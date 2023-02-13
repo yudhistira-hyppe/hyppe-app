@@ -141,7 +141,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 color: Colors.white,
                               ),
                             ),
-                            Text("${widget.data.isShared}"),
+                            // Text("${widget.data.isShared}"),
                             ProfileComponent(
                               isDetail: true,
                               show: true,
@@ -318,7 +318,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           },
                         ),
                         eightPx,
-                        if (widget.data.isShared ?? true)
+                        if ((widget.data.isShared ?? true) && widget.data.visibility == 'PUBLIC')
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}share.svg',

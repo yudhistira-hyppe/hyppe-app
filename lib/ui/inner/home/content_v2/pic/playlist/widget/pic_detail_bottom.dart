@@ -220,7 +220,7 @@ class PicDetailBottom extends StatelessWidget {
                   },
                 ),
 
-            if (data?.isShared ?? true)
+            if ((data?.isShared ?? true) && data?.visibility == 'PUBLIC')
               _buildButton(
                 context,
                 '${AssetPath.vectorPath}share.svg',
