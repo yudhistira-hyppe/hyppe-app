@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/music_status_page_widget.dart';
@@ -37,7 +38,7 @@ class DiaryPage extends StatefulWidget {
   _DiaryPageState createState() => _DiaryPageState();
 }
 
-class _DiaryPageState extends State<DiaryPage> {
+class _DiaryPageState extends State<DiaryPage>{
   // bool _postViewAdded = false;
   List<StoryItem> _storyItems = [];
   final StoryController _storyController = StoryController();
@@ -57,26 +58,23 @@ class _DiaryPageState extends State<DiaryPage> {
     isLoading = true;
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      notifier.initializeData(context, _storyController, widget.data ?? ContentData());
-      _storyItems = notifier.result;
-      isLoading = false;
-      if (widget.data?.certified ?? false) {
-        print('pindah screen2 ${widget.data?.certified ?? false}');
-        System().block(context);
-      } else {
-        System().disposeBlock();
+      if(mounted){
+        notifier.initializeData(context, _storyController, widget.data ?? ContentData());
+        _storyItems = notifier.result;
+        isLoading = false;
+        if (widget.data?.certified ?? false) {
+          print('pindah screen2 ${widget.data?.certified ?? false}');
+          System().block(context);
+        } else {
+          System().disposeBlock();
+        }
       }
+
     });
 
     super.initState();
   }
 
-  // @override
-  // void afterFirstLayout(BuildContext context) {
-  //   final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
-  //   notifier.checkFollowingToUser(context);
-  //   notifier.determineUserLogIn(context);
-  // }
 
   @override
   void dispose() {

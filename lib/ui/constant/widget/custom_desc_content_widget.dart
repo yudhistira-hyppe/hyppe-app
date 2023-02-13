@@ -204,16 +204,19 @@ class _CustomDescContentState extends State<CustomDescContent> {
             : widget.desc
         : widget.desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
+
     var splitDesc = fixDesc.split(' ');
     splitDesc.removeWhere((e) => e == '');
-
+    for(final desc in splitDesc){
+      'Fix Desc: $desc'.logger();
+    }
     final List<ItemDesc> descItems = [];
     var tempDesc = '';
 
     // print('check descItems3 ${fixDesc}');
     for(var i = 0; splitDesc.length > i; i++){
       if (splitDesc[i].isNotEmpty) {
-        final firstChar = splitDesc[i];
+        final firstChar = splitDesc[i].substring(0,1);
         if (firstChar == '@') {
           if (tempDesc.isNotEmpty) {
             descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
