@@ -30,7 +30,7 @@ class _CameraViewState extends State<CameraView> {
   int _filterIndex = 0;
   int effected = -1;
 
-  final String _assetEffectsPath = 'assets/effect/';
+  final String _assetEffectsPath = 'effects/';
 
   @override
   void initState() {
