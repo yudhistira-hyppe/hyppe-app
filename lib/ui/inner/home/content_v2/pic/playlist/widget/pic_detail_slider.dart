@@ -66,97 +66,121 @@ class PicDetailSlider extends StatelessWidget {
             ),
 
             /// Back Button & More Options
-            Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Visibility(
-                      visible: onDetail,
-                      child: CustomTextButton(
-                        onPressed: () => notifier.onPop(),
-                        child: const DecoratedIconWidget(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                        ),
+            ///
+            (picData?.saleAmount ?? 0) > 0
+                ? const Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}sale.svg",
+                        defaultColor: false,
                       ),
                     ),
-                    picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
-                        ? SizedBox()
-                        : Row(
-                            children: [
-                              (picData?.saleAmount ?? 0) > 0
-                                  ? const Padding(
-                                      padding: EdgeInsets.all(2.0),
-                                      child: CustomIconWidget(
-                                        iconData: "${AssetPath.vectorPath}sale.svg",
-                                        defaultColor: false,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              picData?.email != SharedPreference().readStorage(SpKeys.email)
-                                  ? SizedBox(
-                                      width: 50,
-                                      child: CustomTextButton(
-                                        onPressed: () => ShowBottomSheet.onReportContent(
-                                          context,
-                                          postData: picData,
-                                          type: hyppePic,
-                                          adsData: null,
-                                          onUpdate: () => notifier.onUpdate(),
-                                        ),
-                                        child: const CustomIconWidget(
-                                          defaultColor: false,
-                                          iconData: '${AssetPath.vectorPath}more.svg',
-                                          color: kHyppeLightButtonText,
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              picData?.email == SharedPreference().readStorage(SpKeys.email)
-                                  ? SizedBox(
-                                      width: 50,
-                                      child: CustomTextButton(
-                                        onPressed: () async {
-                                          if (globalAudioPlayer != null) {
-                                            globalAudioPlayer!.pause();
-                                          }
-                                          await ShowBottomSheet().onShowOptionContent(
-                                            context,
-                                            onDetail: onDetail,
-                                            contentData: picData ?? ContentData(),
-                                            captionTitle: hyppePic,
-                                            onUpdate: () => notifier.onUpdate(),
-                                            isShare: picData?.isShared,
-                                          );
-                                          if (globalAudioPlayer != null) {
-                                            globalAudioPlayer!.seek(Duration.zero);
-                                            globalAudioPlayer!.resume();
-                                          }
-                                        },
-                                        child: const CustomIconWidget(
-                                          defaultColor: false,
-                                          iconData: '${AssetPath.vectorPath}more.svg',
-                                          color: kHyppeLightButtonText,
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              Visibility(
-                                visible: (picData?.saleAmount == 0 && (picData?.certified ?? false)),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: IconOwnership(correct: true),
-                                ),
-                              ),
-                            ],
-                          ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : const SizedBox(),
+
+            (picData?.saleAmount == 0) && (picData?.certified ?? false)
+                ? const Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: IconOwnership(correct: true),
+                    ),
+                  )
+                : const SizedBox(),
+
+            // Align(
+            //   alignment: Alignment.topRight,
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 0),
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         Visibility(
+            //           visible: onDetail,
+            //           child: CustomTextButton(
+            //             onPressed: () => notifier.onPop(),
+            //             child: const DecoratedIconWidget(
+            //               Icons.arrow_back_ios,
+            //               color: Colors.white,
+            //             ),
+            //           ),
+            //         ),
+            //         picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
+            //             ? SizedBox()
+            //             : Row(
+            //                 children: [
+            //                   (picData?.saleAmount ?? 0) > 0
+            //                       ? const Padding(
+            //                           padding: EdgeInsets.all(2.0),
+            //                           child: CustomIconWidget(
+            //                             iconData: "${AssetPath.vectorPath}sale.svg",
+            //                             defaultColor: false,
+            //                           ),
+            //                         )
+            //                       : const SizedBox(),
+            //                   picData?.email != SharedPreference().readStorage(SpKeys.email)
+            //                       ? SizedBox(
+            //                           width: 50,
+            //                           child: CustomTextButton(
+            //                             onPressed: () => ShowBottomSheet.onReportContent(
+            //                               context,
+            //                               postData: picData,
+            //                               type: hyppePic,
+            //                               adsData: null,
+            //                               onUpdate: () => notifier.onUpdate(),
+            //                             ),
+            //                             child: const CustomIconWidget(
+            //                               defaultColor: false,
+            //                               iconData: '${AssetPath.vectorPath}more.svg',
+            //                               color: kHyppeLightButtonText,
+            //                             ),
+            //                           ),
+            //                         )
+            //                       : const SizedBox(),
+            //                   picData?.email == SharedPreference().readStorage(SpKeys.email)
+            //                       ? SizedBox(
+            //                           width: 50,
+            //                           child: CustomTextButton(
+            //                             onPressed: () async {
+            //                               if (globalAudioPlayer != null) {
+            //                                 globalAudioPlayer!.pause();
+            //                               }
+            //                               await ShowBottomSheet().onShowOptionContent(
+            //                                 context,
+            //                                 onDetail: onDetail,
+            //                                 contentData: picData ?? ContentData(),
+            //                                 captionTitle: hyppePic,
+            //                                 onUpdate: () => notifier.onUpdate(),
+            //                                 isShare: picData?.isShared,
+            //                               );
+            //                               if (globalAudioPlayer != null) {
+            //                                 globalAudioPlayer!.seek(Duration.zero);
+            //                                 globalAudioPlayer!.resume();
+            //                               }
+            //                             },
+            //                             child: const CustomIconWidget(
+            //                               defaultColor: false,
+            //                               iconData: '${AssetPath.vectorPath}more.svg',
+            //                               color: kHyppeLightButtonText,
+            //                             ),
+            //                           ),
+            //                         )
+            //                       : const SizedBox(),
+            //                   Visibility(
+            //                     visible: (picData?.saleAmount == 0 && (picData?.certified ?? false)),
+            //                     child: const Padding(
+            //                       padding: EdgeInsets.all(8.0),
+            //                       child: IconOwnership(correct: true),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
                 ? Container()

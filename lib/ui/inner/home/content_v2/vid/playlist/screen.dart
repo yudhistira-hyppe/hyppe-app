@@ -4,6 +4,7 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_top.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -63,6 +64,7 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      VidDetailTop(data: notifier.data),
                       _notifier.data != null
                           ? Stack(
                               children: [
@@ -76,22 +78,22 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                                     ),
                                   ),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Visibility(
-                                      visible: true,
-                                      child: CustomTextButton(
-                                        onPressed: () => notifier.onPop(),
-                                        child: const DecoratedIconWidget(
-                                          Icons.arrow_back_ios,
-                                          size: 48 * 0.4,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Visibility(
+                                //       visible: true,
+                                //       child: CustomTextButton(
+                                //         onPressed: () => notifier.onPop(),
+                                //         child: const DecoratedIconWidget(
+                                //           Icons.arrow_back_ios,
+                                //           size: 48 * 0.4,
+                                //           color: Colors.white,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             )
                           : VidDetailShimmer(),

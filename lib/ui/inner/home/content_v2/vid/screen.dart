@@ -1,11 +1,13 @@
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -165,11 +167,22 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 },
                                               ),
                                               GestureDetector(
-                                                  onTap: () => vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData()),
-                                                  child: Visibility(
-                                                    visible: vidData?.email != SharedPreference().readStorage(SpKeys.email),
-                                                    child: const Icon(Icons.more_vert),
-                                                  )),
+                                                onTap: () {
+                                                  if (vidData?.email != SharedPreference().readStorage(SpKeys.email)) {
+                                                    vidNotifier.reportContent(context, vidNotifier.vidData?[index] ?? ContentData());
+                                                  } else {
+                                                    ShowBottomSheet().onShowOptionContent(
+                                                      context,
+                                                      contentData: vidData ?? ContentData(),
+                                                      captionTitle: hyppeVid,
+                                                      onDetail: false,
+                                                      isShare: vidData?.isShared,
+                                                      onUpdate: () => context.read<HomeNotifier>().onUpdate(),
+                                                    );
+                                                  }
+                                                },
+                                                child: const Icon(Icons.more_vert),
+                                              ),
                                             ],
                                           ),
                                         ),

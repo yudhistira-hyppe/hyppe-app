@@ -92,46 +92,46 @@ class VideoThumbnail extends StatelessWidget {
                 //           iconData: '${AssetPath.vectorPath}ownership.svg',
                 //           defaultColor: false,
                 //         ))),
-                Visibility(
-                  visible: videoData?.email == SharedPreference().readStorage(SpKeys.email),
-                  child: SizedBox(
-                    width: 30,
-                    child: CustomTextButton(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(right: 10)),
-                      ),
-                      onPressed: () => ShowBottomSheet().onShowOptionContent(
-                        context,
-                        contentData: videoData ?? ContentData(),
-                        captionTitle: hyppeVid,
-                        onDetail: onDetail,
-                        isShare: videoData?.isShared,
-                        onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
-                      ),
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
-                  child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet.onReportContent(
-                      context,
-                      postData: videoData,
-                      type: hyppeVid,
-                      onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
-                    ),
-                    child: const CustomIconWidget(
-                      defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}more.svg',
-                      color: kHyppeLightButtonText,
-                    ),
-                  ),
-                ),
+                // Visibility(
+                //   visible: videoData?.email == SharedPreference().readStorage(SpKeys.email),
+                //   child: SizedBox(
+                //     width: 30,
+                //     child: CustomTextButton(
+                //       style: ButtonStyle(
+                //         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(right: 10)),
+                //       ),
+                //       onPressed: () => ShowBottomSheet().onShowOptionContent(
+                //         context,
+                //         contentData: videoData ?? ContentData(),
+                //         captionTitle: hyppeVid,
+                //         onDetail: onDetail,
+                //         isShare: videoData?.isShared,
+                //         onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                //       ),
+                //       child: const CustomIconWidget(
+                //         defaultColor: false,
+                //         iconData: '${AssetPath.vectorPath}more.svg',
+                //         color: kHyppeLightButtonText,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Visibility(
+                //   visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
+                //   child: CustomTextButton(
+                //     onPressed: () => ShowBottomSheet.onReportContent(
+                //       context,
+                //       postData: videoData,
+                //       type: hyppeVid,
+                //       onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                //     ),
+                //     child: const CustomIconWidget(
+                //       defaultColor: false,
+                //       iconData: '${AssetPath.vectorPath}more.svg',
+                //       color: kHyppeLightButtonText,
+                //     ),
+                //   ),
+                // ),
                 Visibility(
                   visible: (videoData?.saleAmount == 0 && (videoData?.certified ?? false)),
                   child: const Padding(
