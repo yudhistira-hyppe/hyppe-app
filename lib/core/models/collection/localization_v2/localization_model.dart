@@ -8,6 +8,7 @@ class LocalizationModelV2 {
   String? dontHaveAnAccount;
   String? registerHere;
   String? or;
+  String? inWord;
   String? continueUsingGoogle;
   String? notAValidEmailAddress;
   String? incorrectPassword;
@@ -24,18 +25,30 @@ class LocalizationModelV2 {
   String? resendNewCode;
   String? yourIdentityHasBeenVerified;
   String? incorrectCode;
+  String? titleSuccessPin;
+  String? messageSuccessPin;
   String? sessionExpired;
   String? yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest;
   String? backToRegisterPage;
   String? tooManyFailedAttempts;
   String? unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes;
   String? createNewPassword;
+  String? newPassword;
+  String? rewriteNewPassword;
+  String? enterPassword;
+  String? messageNewPassword;
+  String? messageTimeoutPin;
   String? yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword;
   String? reTypePassword;
+  String? yourPasswordMustBeAtLeast;
   String? mustNotContainYourNameOrEmail;
   String? atLeast8Characters;
+  String? atLeast8til20Chars;
   String? atLeastContain1CharacterAnd1Number;
+  String? oneSpecialCharacter;
+  String? labelExampleSpecialChar;
   String? next;
+  String? resetPassword;
   String? submit;
   String? rotate;
   String? passwordDoesntMatch;
@@ -440,7 +453,8 @@ class LocalizationModelV2 {
   String? likeB;
   String? likeM;
   String? likeK;
-  String? pinTopText;
+  String? pinTopText1;
+  String? pinTopText2;
   String? yourEmailHasBeenVerified;
   String? hiYouHaveNewContentPleasePullDownToRefresh;
   String? sorryUnexpectedError;
@@ -844,6 +858,21 @@ class LocalizationModelV2 {
   String? pleaseVerifyYourEmailFrst;
   String? fileMayBeInErrorChooseAnotherFile;
   String? blockThisAccount;
+  String? confirmPasswordCorrect;
+  String? confirmPasswordWrong;
+  String? allowedSpecialCharacters;
+  String? newPasswordCreatedSuccessfully;
+  String? messageInvalidEmail;
+  String? titleEmailIsGmail;
+  String? messageEmailIsGmail;
+  String? pleaseEnterRegisteredEmail;
+  String? contentPreferences;
+  String? customization;
+  String? bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect;
+  String? descAllowComment;
+  String? allowSharing;
+  String? descAllowSharing;
+  String? sharePost;
 
   LocalizationModelV2({
     this.login,
@@ -855,6 +884,7 @@ class LocalizationModelV2 {
     this.dontHaveAnAccount,
     this.registerHere,
     this.or,
+    this.inWord,
     this.continueUsingGoogle,
     this.notAValidEmailAddress,
     this.incorrectPassword,
@@ -871,18 +901,30 @@ class LocalizationModelV2 {
     this.resendNewCode,
     this.yourIdentityHasBeenVerified,
     this.incorrectCode,
+    this.titleSuccessPin,
+    this.messageSuccessPin,
     this.sessionExpired,
     this.yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest,
     this.backToRegisterPage,
     this.tooManyFailedAttempts,
     this.unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes,
     this.createNewPassword,
+    this.newPassword,
+    this.rewriteNewPassword,
+    this.enterPassword,
+    this.messageNewPassword,
+    this.messageTimeoutPin,
     this.yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword,
     this.reTypePassword,
+    this.yourPasswordMustBeAtLeast,
     this.mustNotContainYourNameOrEmail,
     this.atLeast8Characters,
+    this.atLeast8til20Chars,
     this.atLeastContain1CharacterAnd1Number,
+    this.oneSpecialCharacter,
+    this.labelExampleSpecialChar,
     this.next,
+    this.resetPassword,
     this.rotate,
     this.submit,
     this.passwordDoesntMatch,
@@ -1287,7 +1329,8 @@ class LocalizationModelV2 {
     this.likeB,
     this.likeM,
     this.likeK,
-    this.pinTopText,
+    this.pinTopText1,
+    this.pinTopText2,
     this.yourEmailHasBeenVerified,
     this.hiYouHaveNewContentPleasePullDownToRefresh,
     this.sorryUnexpectedError,
@@ -1691,6 +1734,21 @@ class LocalizationModelV2 {
     this.pleaseVerifyYourEmailFrst,
     this.fileMayBeInErrorChooseAnotherFile,
     this.blockThisAccount,
+    this.confirmPasswordCorrect,
+    this.confirmPasswordWrong,
+    this.allowedSpecialCharacters,
+    this.newPasswordCreatedSuccessfully,
+    this.messageInvalidEmail,
+    this.titleEmailIsGmail,
+    this.messageEmailIsGmail,
+    this.pleaseEnterRegisteredEmail,
+    this.contentPreferences,
+    this.customization,
+    this.bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect,
+    this.descAllowComment,
+    this.allowSharing,
+    this.descAllowSharing,
+    this.sharePost,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -1703,6 +1761,7 @@ class LocalizationModelV2 {
     dontHaveAnAccount = json['dontHaveAnAccount'];
     registerHere = json['registerHere'];
     or = json['or'];
+    inWord = json['in'];
     continueUsingGoogle = json['continueUsingGoogle'];
     notAValidEmailAddress = json['notAValidEmailAddress'];
     incorrectPassword = json['incorrectPassword'];
@@ -1719,19 +1778,31 @@ class LocalizationModelV2 {
     resendNewCode = json['resendNewCode'];
     yourIdentityHasBeenVerified = json['yourIdentityHasBeenVerified'];
     incorrectCode = json['incorrectCode'];
+    titleSuccessPin = json['titleSuccessPin'];
+    messageSuccessPin = json['messageSuccessPin'];
     sessionExpired = json['sessionExpired'];
     yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest = json['yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest'];
     backToRegisterPage = json['backToRegisterPage'];
     tooManyFailedAttempts = json['tooManyFailedAttempts'];
     unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes = json['unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes'];
     createNewPassword = json['createNewPassword'];
+    newPassword = json["newPassword"];
+    rewriteNewPassword = json["rewriteNewPassword"];
+    enterPassword = json["enterPassword"];
+    messageNewPassword = json['messageNewPassword'];
+    messageTimeoutPin = json['messageTimeoutPin'];
     yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword = json['yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword'];
     reTypePassword = json['reTypePassword'];
+    yourPasswordMustBeAtLeast = json['yourPasswordMustBeAtLeast'];
     mustNotContainYourNameOrEmail = json['mustNotContainYourNameOrEmail'];
     atLeast8Characters = json['atLeast8Characters'];
+    atLeast8til20Chars = json['atLeast8til20Chars'];
     atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
+    labelExampleSpecialChar = json['labelExampleSpecialChar'];
+    oneSpecialCharacter = json['oneSpecialCharacter'];
     next = json['next'];
     rotate = json['rotate'];
+    resetPassword = json['resetPassword'];
     submit = json['submit'];
     passwordDoesntMatch = json['passwordDoesntMatch'];
     register = json['register'];
@@ -2136,7 +2207,8 @@ class LocalizationModelV2 {
     likeB = json['likeB'];
     likeM = json['likeM'];
     likeK = json['likeK'];
-    pinTopText = json['pinTopText'];
+    pinTopText1 = json['pinTopText1'];
+    pinTopText2 = json['pinTopText2'];
     yourEmailHasBeenVerified = json['yourEmailHasBeenVerified'];
     hiYouHaveNewContentPleasePullDownToRefresh = json['hiYouHaveNewContentPleasePullDownToRefresh'];
     sorryUnexpectedError = json['sorryUnexpectedError'];
@@ -2557,5 +2629,20 @@ class LocalizationModelV2 {
     pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
     fileMayBeInErrorChooseAnotherFile = json['fileMayBeInErrorChooseAnotherFile'];
     blockThisAccount = json['blockThisAccount'];
+    confirmPasswordCorrect = json['confirmPasswordCorrect'];
+    confirmPasswordWrong = json['confirmPasswordWrong'];
+    allowedSpecialCharacters = json['allowedSpecialCharacters'];
+    newPasswordCreatedSuccessfully = json['newPasswordCreatedSuccessfully'];
+    messageInvalidEmail = json['messageInvalidEmail'];
+    titleEmailIsGmail = json['titleEmailIsGmail'];
+    messageEmailIsGmail = json['messageEmailIsGmail'];
+    pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
+    contentPreferences = json['contentPreferences'];
+    customization = json['customization'];
+    bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect = json['bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect'];
+    descAllowComment = json['descAllowComment'];
+    allowSharing = json['allowSharing'];
+    descAllowSharing = json['descAllowSharing'];
+    sharePost = json['sharePost'];
   }
 }

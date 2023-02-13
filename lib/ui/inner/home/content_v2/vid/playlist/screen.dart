@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
@@ -33,6 +34,17 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
   @override
   void afterFirstLayout(BuildContext context) {
     _notifier.initState(context, widget.arguments);
+    if (widget.arguments.vidData?.certified ?? false) {
+      System().block(context);
+    } else {
+      System().disposeBlock();
+    }
+  }
+
+  @override
+  void dispose() {
+    System().disposeBlock();
+    super.dispose();
   }
 
   @override

@@ -1,6 +1,6 @@
 import 'dart:async';
-
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/slide_pic_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class SlidedPicDetail extends StatefulWidget {
   State<SlidedPicDetail> createState() => _SlidedPicDetailState();
 }
 
-class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayoutMixin {
+class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayoutMixin, WidgetsBindingObserver {
   final _notifier = SlidedPicDetailNotifier();
   late PageController _pageController;
   late PageController _mainPageController;
@@ -37,12 +37,21 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+
     _notifier.setMainIndex(0);
     _pageController = PageController(initialPage: widget.arguments.index.toInt());
     _pageController.addListener(() => _notifier.currentPage = _pageController.page);
     _mainPageController = PageController(initialPage: 0);
     super.initState();
+  }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Show custom alert message when the app is resumed
+      print("capture ter capture");
+    }
   }
 
   @override
@@ -64,6 +73,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
       create: (context) => _notifier,
       child: WillPopScope(
         onWillPop: () {
+          System().disposeBlock();
           resetZooming();
           return Future.value(true);
         },
@@ -103,7 +113,6 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                             //   detailNotifier.isLoadMusic = true;
                             //
                             // }
-
                           },
                           itemBuilder: (context, indexPage) {
                             final data = notifier.listData?[indexRoot];

@@ -47,6 +47,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:story_view/story_view.dart';
 import 'package:uuid/uuid.dart';
@@ -79,7 +80,12 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      if(url.isNotEmpty){
+        return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
+      }else{
+        return '';
+      }
+
 
       // return Env.data.baseUrl + url +
       //     "?x-auth-token=" +
@@ -300,6 +306,33 @@ class System {
         return '';
     }
   }
+
+  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale){
+    switch (state){
+      case StatusFollowing.none:
+        return locale.follow ?? 'Follow';
+      case StatusFollowing.following:
+        return locale.following ?? 'Following';
+      case StatusFollowing.requested:
+        return locale.requested ?? 'Requested';
+      default:
+        return locale.unverified ?? 'Follow';
+    }
+  }
+
+  StatusFollowing getEnumFollowStatus(String status){
+    switch(status){
+      case 'TOFOLLOW':
+        return StatusFollowing.none;
+      case 'FOLLOWING':
+        return StatusFollowing.following;
+      case 'UNLINK':
+        return StatusFollowing.requested;
+      default:
+        return StatusFollowing.rejected;
+    }
+  }
+
 
   StatusFollowing getStatusFollow(String? sts) {
     switch (sts) {
@@ -998,6 +1031,10 @@ class System {
     return text.contains(name) || text.contains(email);
   }
 
+  bool atLeastEightUntilTwentyCharacter({required String text}) {
+    return text.length >= 8 && text.length <= 20;
+  }
+
   bool atLeastEightCharacter({required String text}) {
     return text.length >= 8;
   }
@@ -1008,6 +1045,16 @@ class System {
 
   bool canOnlyContainLettersNumbersDotAndUnderscores(String text) {
     return text.contains(RegExp(r'^[a-zA-Z0-9._]+$'));
+  }
+
+  bool specialCharPass(String text) {
+    final result = text.contains(RegExp(r'[!@#$%^&*_]'));
+    'specialCharPass:  $result'.logger();
+    return result;
+  }
+
+  bool canSpecialCharPass(String text) {
+    return text.contains(RegExp(r'[a-zA-Z0-9!@#$%^&*_]+$'));
   }
 
   bool atLeastContainOneCharacterAndOneNumber({required String text}) {
@@ -1232,5 +1279,38 @@ class System {
       'isPhysicalDevice': build.isPhysicalDevice,
       'systemFeatures': build.systemFeatures,
     };
+  }
+
+  Future block(BuildContext context) async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOn();
+    await ScreenProtector.protectDataLeakageOn();
+    // }
+  }
+
+  Future disposeBlock() async {
+    // if (!kDebugMode) {
+    await ScreenProtector.preventScreenshotOff();
+    // }
+  }
+
+  void _addListenerPreventScreenshot(BuildContext context) async {
+    bool isrecord = await ScreenProtector.isRecording();
+
+    print("isrecord $isrecord");
+  }
+
+  String getFullTime(int seconds) {
+    return '${getFormatMinutes(seconds)}:${getFormatSeconds(seconds)}';
+  }
+
+  String getFormatSeconds(int values) {
+    int stateSeconds = values % 60;
+    return stateSeconds < 10 ? '0$stateSeconds' : '$stateSeconds';
+  }
+
+  String getFormatMinutes(int values) {
+    int stateMinutes = Duration(seconds: values).inMinutes;
+    return stateMinutes < 10 ? '0$stateMinutes' : '$stateMinutes';
   }
 }

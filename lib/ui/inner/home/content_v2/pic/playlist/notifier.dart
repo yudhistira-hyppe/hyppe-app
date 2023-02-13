@@ -167,7 +167,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  Future followUser(BuildContext context, {bool checkIdCard = true}) async {
+  Future followUser(BuildContext context, {bool checkIdCard = true, isUnFollow = false}) async {
     try {
       checkIsLoading = true;
       if (checkIdCard) {
@@ -180,13 +180,18 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
           context,
           data: FollowUserArgument(
             receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
+            eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
           ),
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.following;
-        } else {
+          if(isUnFollow){
+            statusFollowing = StatusFollowing.none;
+          }else{
+            statusFollowing = StatusFollowing.following;
+          }
+
+        }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
           statusFollowing = StatusFollowing.none;
         }
         //   },
@@ -199,13 +204,17 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
           context,
           data: FollowUserArgument(
             receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
+            eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
           ),
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.following;
-        } else {
+          if(isUnFollow){
+            statusFollowing = StatusFollowing.none;
+          }else{
+            statusFollowing = StatusFollowing.following;
+          }
+        }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
           statusFollowing = StatusFollowing.none;
         }
       }

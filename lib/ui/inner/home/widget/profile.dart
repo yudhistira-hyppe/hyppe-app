@@ -23,6 +23,7 @@ class Profile extends StatelessWidget {
         style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0.0))),
         onPressed: () => context.read<HomeNotifier>().navigateToProfilePage(context),
         child: CustomProfileImage(
+          cacheKey: notifier.profileImageKey,
           width: 26,
           height: 26,
           following: true,

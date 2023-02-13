@@ -107,9 +107,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                         categoryWidget(textTheme, notifier),
                         _buildDivider(context),
                         eightPx,
-                        musicTitle(context, notifier),
                         tagPeopleWidget(textTheme, notifier),
                         _buildDivider(context),
+                        musicTitle(context, notifier),
                         tagLocationWidget(textTheme, notifier),
                         _buildDivider(context),
                         eightPx,
@@ -447,7 +447,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   child: PickitemTitle(
                     title: notifier.interest[index].interestName ?? '',
                     select: notifier.pickedInterest(notifier.interest[index].interestName) ? true : false,
-                    button: false,
+                    button: true,
+                    function: () {
+                      FocusScope.of(context).unfocus();
+                      notifier.insertInterest(context, index);
+                    },
                     textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: notifier.pickedInterest(notifier.interest[index].interestName) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
                         ),
@@ -551,10 +555,16 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   child: Container(
                     width: double.infinity,
                     padding: const EdgeInsets.only(top: 10, bottom: 10),
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.language.addMusic ?? 'Add music',
-                      textAlign: TextAlign.start,
-                      textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomTextWidget(
+                          textToDisplay: notifier.language.addMusic ?? 'Add music',
+                          textAlign: TextAlign.start,
+                          textStyle: const TextStyle(fontSize: 12, color: kHyppeLightSecondary, fontWeight: FontWeight.w400),
+                        ),
+                        const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
+                      ],
                     ),
                   ),
                 ),
@@ -637,7 +647,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
       ),
       trailing: notifier.locationName == notifier.language.addLocation
-          ? const Icon(Icons.arrow_forward_ios_rounded)
+          ? const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary)
           : GestureDetector(
               onTap: () {
                 notifier.locationName = notifier.language.addLocation ?? '';
@@ -665,11 +675,12 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextWidget(
-            textToDisplay: notifier.privacyTitle,
-            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+            textToDisplay:
+                "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}, ${notifier.language.share} ${notifier.isShared ? notifier.language.yes : notifier.language.no}",
+            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
           ),
           twentyPx,
-          const Icon(Icons.arrow_forward_ios_rounded),
+          const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
         ],
       ),
     );
@@ -704,10 +715,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                 : notifier.boostContent != null
                     ? System().capitalizeFirstLetter(notifier.boostContent?.typeBoost ?? '')
                     : notifier.language.no ?? 'no',
-            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
           ),
           twentyPx,
-          const Icon(Icons.arrow_forward_ios_rounded),
+          const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
         ],
       ),
     );
@@ -735,10 +746,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         children: [
           CustomTextWidget(
             textToDisplay: notifier.certified ? notifier.language.yes ?? 'yes' : notifier.language.no ?? 'no',
-            textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+            textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
           ),
           twentyPx,
-          const Icon(Icons.arrow_forward_ios_rounded),
+          const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary),
         ],
       ),
     );

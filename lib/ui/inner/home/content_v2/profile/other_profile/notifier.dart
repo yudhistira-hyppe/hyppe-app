@@ -292,7 +292,7 @@ class OtherProfileNotifier with ChangeNotifier {
     }
   }
 
-  Future followUser(BuildContext context) async {
+  Future followUser(BuildContext context, {isUnFollow = false}) async {
     try {
       // _system.actionReqiredIdCard(
       //   context,
@@ -304,23 +304,30 @@ class OtherProfileNotifier with ChangeNotifier {
         context,
         data: FollowUserArgument(
           receiverParty: _userEmail ?? '',
-          eventType: InteractiveEventType.following,
+          eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
         ),
       );
       final fetch = notifier.followFetch;
       if (fetch.followState == FollowState.followUserSuccess) {
-        statusFollowing = StatusFollowing.following;
-      } else {
+        if(isUnFollow){
+          statusFollowing = StatusFollowing.none;
+        }else{
+          statusFollowing = StatusFollowing.following;
+        }
+      }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
         statusFollowing = StatusFollowing.none;
       }
+      // else {
+      //   statusFollowing = StatusFollowing.none;
+      // }
       //   },
       //   uploadContentAction: false,
       // );
       isCheckLoading = false;
       notifyListeners();
     } catch (e) {
-      print(e);
-      statusFollowing = StatusFollowing.none;
+      'followUser error: $e'.logger();
+      // statusFollowing = StatusFollowing.none;
       ShowBottomSheet.onShowSomethingWhenWrong(context);
     }
   }

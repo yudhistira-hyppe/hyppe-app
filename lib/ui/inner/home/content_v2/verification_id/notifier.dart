@@ -25,6 +25,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
+import '../../../../../app.dart';
+
 class UploadVerificationIDResult {
   UploadVerificationIDResult({
     required this.idMediaproofpicts,
@@ -471,8 +473,9 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
 
   void onPickSupportedDocument(BuildContext context, mounted) async {
     isLoading = true;
-    print('isOnHomeScreen false');
-    SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+    isHomeScreen = false;
+    print('isOnHomeScreen $isHomeScreen');
+    // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
     try {
       await System().getLocalMedia(featureType: FeatureType.other, context: context).then((value) async {
         debugPrint('Pick => ' + value.toString());
@@ -691,8 +694,9 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
 
     if (error == 0) {
-      print('isOnHomeScreen false');
-      SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
+      isHomeScreen = false;
+      print('isOnHomeScreen $isHomeScreen');
+      // SharedPreference().writeStorage(SpKeys.isOnHomeScreen, false);
       Routing().moveAndPop(Routes.verificationIDStep6);
     }
   }

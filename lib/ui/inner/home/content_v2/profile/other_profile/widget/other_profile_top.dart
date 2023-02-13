@@ -14,7 +14,6 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/other_profile/notifier.da
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:readmore/readmore.dart';
 
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
@@ -120,19 +119,6 @@ class OtherProfileTop extends StatelessWidget {
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                           expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                         ),
-                        // ReadMoreText(
-                        //   notifier.displayBio(),
-                        //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                        //   trimLines: 5,
-                        //   trimMode: TrimMode.Line,
-                        //   textAlign: TextAlign.start,
-                        //   trimExpandedText: 'Show less',
-                        //   trimCollapsedText: 'Show more',
-                        //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                        //   style: Theme.of(context).textTheme.bodyText2!.copyWith(),
-                        //   moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        //   lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        // ),
                       ],
                     )),
                   )
@@ -165,24 +151,26 @@ class OtherProfileTop extends StatelessWidget {
                         ? const CustomLoading()
                         : CustomTextWidget(
                             textToDisplay: notifier.statusFollowing == StatusFollowing.following
-                                ? notifier.language.following ?? 'following'
+                                ? notifier.language.following ?? 'following '
                                 : notifier.statusFollowing == StatusFollowing.requested
                                     ? notifier.language.requested ?? 'requested'
                                     : notifier.language.follow ?? 'follow',
                             textStyle: Theme.of(context).textTheme.button?.copyWith(
-                                  color: notifier.statusFollowing == StatusFollowing.requested ? null : kHyppeLightButtonText,
+                                  color: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? kHyppeGrey : kHyppeLightButtonText,
                                 ),
                           ),
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
-                      backgroundColor: notifier.statusFollowing == StatusFollowing.requested ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
                     ),
                     function: notifier.isCheckLoading
                         ? null
                         : () {
                             if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
                               notifier.followUser(context);
+                            }else if(notifier.statusFollowing == StatusFollowing.following){
+                              notifier.followUser(context, isUnFollow: true);
                             }
                           },
                   ),

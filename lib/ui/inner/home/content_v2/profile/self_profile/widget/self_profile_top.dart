@@ -29,13 +29,14 @@ class SelfProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // SelectableText("${notifier.displayPhotoProfile()}"),
+            // Text("${notifier.user.profile?.avatar?.mediaEndpoint}"),
             Row(
               children: <Widget>[
                 StoryColorValidator(
                   haveStory: notifier.checkHaveStory(context),
                   featureType: FeatureType.other,
                   child: CustomProfileImage(
+                    cacheKey: notifier.user.profile?.avatar?.imageKey,
                     following: true,
                     width: 80 * SizeConfig.scaleDiagonal,
                     height: 80 * SizeConfig.scaleDiagonal,
@@ -253,19 +254,6 @@ class SelfProfileTop extends StatelessWidget {
                             expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                                   color: Theme.of(context).colorScheme.primaryVariant,
                                 )),
-                        // ReadMoreText(
-                        //   notifier.displayBio(),
-                        //   // "${widget.arguments?.description} ${widget.arguments?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                        //   trimLines: 5,
-                        //   trimMode: TrimMode.Line,
-                        //   textAlign: TextAlign.left,
-                        //   trimExpandedText: 'Show less',
-                        //   trimCollapsedText: 'Show more',
-                        //   colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                        //   style: Theme.of(context).textTheme.bodyText2!.copyWith(),
-                        //   moreStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        //   lessStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                        // ),
                       ],
                     )),
                   )

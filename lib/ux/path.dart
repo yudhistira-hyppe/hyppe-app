@@ -25,6 +25,7 @@ class Routes {
   static const String listReferral = '/list-referral';
   static const String insertReferral = '/insert-referral';
   static const String showAds = '/show-ads';
+  static const String contentPreferences = '/content-preferences';
 
 // Sign up
   static const String signUpPin = '/sign-up-pin';
@@ -34,6 +35,7 @@ class Routes {
 // ------------------------------------------------------------- //
 
   static const String forgotPassword = '/forgot-password';
+  static const String newPassword = '/new-password';
   static const String register = '/register';
   static const String userInterest = '/user-interest';
   static const String userAgreement = '/user-agreement';

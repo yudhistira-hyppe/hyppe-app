@@ -12,6 +12,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 class BuildCircleProfile extends StatelessWidget {
   final List? listStory;
   final String? imageUrl;
+  final String? imageUrlKey;
   final Map<String, String>? headers;
 
   const BuildCircleProfile({
@@ -19,6 +20,7 @@ class BuildCircleProfile extends StatelessWidget {
     this.headers,
     this.imageUrl,
     this.listStory,
+    this.imageUrlKey,
   }) : super(key: key);
 
   @override
@@ -35,6 +37,7 @@ class BuildCircleProfile extends StatelessWidget {
               featureType: FeatureType.other,
               haveStory: listStory?.isNotEmpty ?? false,
               child: CustomProfileImage(
+                cacheKey: imageUrlKey,
                 following: true,
                 imageUrl: imageUrl,
                 headers: headers,

@@ -15,20 +15,31 @@ import 'package:flutter/material.dart';
 // TODO(Hendi Noviansyah): check if this class is still needed
 class FollowRequestUnfollowNotifier with ChangeNotifier {
 
-  String? _statusFollow;
-  String? get statusFollow => _statusFollow;
+  StatusFollowing _statusFollow = StatusFollowing.none;
+  StatusFollowing get statusFollow => _statusFollow;
 
   List<dynamic> _listFollow = [];
   List<dynamic> get listFollow => _listFollow;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool state){
+    _isLoading = state;
+    notifyListeners();
+  }
 
   set listFollow(List<dynamic> val) {
     _listFollow = val;
     notifyListeners();
   }
 
-  set statusFollow(String? val) {
+  set statusFollow(StatusFollowing val) {
     _statusFollow = val;
     notifyListeners();
+  }
+
+  setStatusFollow(StatusFollowing val){
+    _statusFollow = val;
   }
 
   Future<StatusFollowing> followRequestUnfollowUser(
@@ -90,8 +101,9 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
     return label;
   }
 
-  Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index}) async {
+  Future<bool> followUser(BuildContext context, {bool checkIdCard = true, String? email, int? index, isUnFollow = false}) async {
     try {
+      isLoading = true;
       final notifier = FollowBloc();
       await notifier.followUserBlocV2(
         context,
@@ -101,12 +113,14 @@ class FollowRequestUnfollowNotifier with ChangeNotifier {
         ),
       );
       final fetch = notifier.followFetch;
+      isLoading = false;
       if (fetch.followState == FollowState.followUserSuccess) {
         return true;
       } else {
         return false;
       }
     } catch (e) {
+      isLoading = false;
       return false;
     }
   }

@@ -24,6 +24,7 @@ import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -85,6 +86,7 @@ import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
 import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
+import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
 import 'package:hyppe/ui/outer/login/screen.dart';
 import 'package:hyppe/ui/outer/opening_logo/screen.dart';
@@ -173,6 +175,8 @@ class Generate {
       // ------------------------------------------------------------ //
       case Routes.forgotPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
+      case Routes.newPassword:
+        return MaterialPageRoute(builder: (_) => const SetNewPassword());
       case Routes.register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case Routes.userInterest:
@@ -222,6 +226,9 @@ class Generate {
 
       case Routes.completeProfile:
         return MaterialPageRoute(builder: (_) => ProfileCompletion(argument: AccountPreferenceScreenArgument(fromSignUpFlow: false)));
+
+      case Routes.contentPreferences:
+        return MaterialPageRoute(builder: (_) => const ContentPreferencesScreen());
 
       case Routes.referralScreen:
         return MaterialPageRoute(builder: (_) => const Referral());
@@ -328,7 +335,10 @@ class Generate {
       case Routes.help:
         return MaterialPageRoute(builder: (_) => const HelpScreen());
       case Routes.faqDetail:
-        return MaterialPageRoute(builder: (_) => FAQDetailScreen(data: settings.arguments as FAQArgument,));
+        return MaterialPageRoute(
+            builder: (_) => FAQDetailScreen(
+                  data: settings.arguments as FAQArgument,
+                ));
       case Routes.supportTicket:
         return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
       case Routes.appeal:

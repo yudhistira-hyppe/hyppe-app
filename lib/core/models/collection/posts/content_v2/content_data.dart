@@ -153,6 +153,7 @@ class ContentData {
   int? reportedUserCount;
   MediaModel? media;
   bool? apsara;
+  bool? isShared;
 
   ContentData({
     this.metadata,
@@ -203,6 +204,7 @@ class ContentData {
     this.reportedUserCount,
     this.media,
     this.apsara,
+    this.isShared,
   });
 
   ContentData.fromJson(Map<String, dynamic> json) {
@@ -269,6 +271,7 @@ class ContentData {
     reportedStatus2 = json['reportedStatus'] ?? 'ALL';
     reportedUserCount = json['reportedUserCount'] ?? 0;
     apsara = json['apsara'] ?? false;
+    isShared = json['isShared'] ?? true;
     media = json['media'] == null
         ? null
         : json['media'] is List
@@ -327,14 +330,21 @@ class ContentData {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl +
-        "/${Env.data.versionApi}/" +
-        (mediaThumbEndPoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    final fixMedia = mediaThumbEndPoint ?? mediaEndpoint ?? '';
+    if (fixMedia.isNotEmpty) {
+      return Env.data.baseUrl + "/${Env.data.versionApi}/" + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    } else {
+      return fixMedia;
+    }
   }
 
   String? concatContentUri() {
-    return Env.data.baseUrl + "/${Env.data.versionApi}/" + (mediaEndpoint ?? '');
+    final fixMedia = mediaEndpoint ?? '';
+    if (fixMedia.isNotEmpty) {
+      return Env.data.baseUrl + "/${Env.data.versionApi}/" + (mediaEndpoint ?? '');
+    } else {
+      return '';
+    }
   }
 }
 

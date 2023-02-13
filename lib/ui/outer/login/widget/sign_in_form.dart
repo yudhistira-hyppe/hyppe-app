@@ -14,7 +14,7 @@ import 'package:hyppe/ui/outer/login/notifier.dart';
 import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 
-class  SignInForm extends StatefulWidget {
+class SignInForm extends StatefulWidget {
   @override
   _SignInFormState createState() => _SignInFormState();
 }
@@ -169,11 +169,15 @@ class _SignInFormState extends State<SignInForm> {
           // ),
           notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
               ? const CustomLoading(size: 6.3)
-              : CustomTextButton(
-                  onPressed: () => notifier.onClickForgotPassword(context),
-                  child: CustomTextWidget(
-                    textToDisplay: "${notifier.language.forgotPassword}?",
-                    textStyle: Theme.of(context).primaryTextTheme.button?.copyWith(color: kHyppePrimary),
+              : Container(
+                  width: double.infinity,
+                  alignment: Alignment.centerRight,
+                  child: CustomTextButton(
+                    onPressed: () => notifier.onClickForgotPassword(context),
+                    child: CustomTextWidget(
+                      textToDisplay: "${notifier.language.forgotPassword}?",
+                      textStyle: Theme.of(context).primaryTextTheme.button?.copyWith(color: kHyppePrimary),
+                    ),
                   ),
                 ),
           fourPx,

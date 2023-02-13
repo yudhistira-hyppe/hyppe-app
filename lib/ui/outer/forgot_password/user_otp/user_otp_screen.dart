@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/widget/sign_up_pin_top.dart';
-import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
 
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/size_config.dart';
@@ -10,6 +8,9 @@ import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 
 import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
+
+import '../../../../core/constants/asset_path.dart';
+import '../../../constant/widget/icon_button_widget.dart';
 
 class UserOtpScreen extends StatefulWidget {
   final UserOtpScreenArgument argument;
@@ -35,7 +36,6 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
 
   @override
   void dispose() {
-    _notifier.resetTimer();
     super.dispose();
   }
 
@@ -51,7 +51,11 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
           child: KeyboardDisposal(
             child: Scaffold(
               appBar: AppBar(
-                centerTitle: true,
+                leading: CustomIconButtonWidget(
+                  color: Theme.of(context).iconTheme.color,
+                  onPressed: () => Navigator.pop(context),
+                  iconData: '${AssetPath.vectorPath}back-arrow.svg',
+                ),
                 automaticallyImplyLeading: false,
                 title: CustomTextWidget(
                   textStyle: Theme.of(context).textTheme.headline6,
@@ -68,17 +72,18 @@ class _UserOtpScreenState extends State<UserOtpScreen> {
                       alignment: const Alignment(0.0, -0.4),
                       padding: const EdgeInsets.only(left: 16, right: 16),
                     ),
-                    SizedBox(
-                      width: SizeConfig.screenWidth,
-                      child: SignUpButton(
-                        withSkipButton: false,
-                        loading: notifier.isLoading,
-                        onTap: notifier.onVerifyButton(context),
-                        caption: notifier.language.verify ?? '',
-                        textStyle: notifier.verifyTextColor(context),
-                        buttonColor: notifier.verifyButtonColor(context),
-                      ),
-                    )
+
+                    // SizedBox(
+                    //   width: SizeConfig.screenWidth,
+                    //   child: SignUpButton(
+                    //     withSkipButton: false,
+                    //     loading: notifier.isLoading,
+                    //     onTap: notifier.onVerifyButton(context),
+                    //     caption: notifier.language.verify ?? '',
+                    //     textStyle: notifier.verifyTextColor(context),
+                    //     buttonColor: notifier.verifyButtonColor(context),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

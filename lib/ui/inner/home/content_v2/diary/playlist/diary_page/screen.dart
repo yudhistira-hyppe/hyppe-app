@@ -54,14 +54,18 @@ class _DiaryPageState extends State<DiaryPage> {
 
   @override
   void initState() {
-    setState(() {
-      isLoading = true;
-    });
+    isLoading = true;
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       notifier.initializeData(context, _storyController, widget.data ?? ContentData());
       _storyItems = notifier.result;
       isLoading = false;
+      if (widget.data?.certified ?? false) {
+        print('pindah screen2 ${widget.data?.certified ?? false}');
+        System().block(context);
+      } else {
+        System().disposeBlock();
+      }
     });
 
     super.initState();

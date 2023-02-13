@@ -105,13 +105,14 @@ class RightItems extends StatelessWidget {
                             },
                           )
                         : const SizedBox.shrink(),
-                    _customIcon2(
-                      context,
-                      "${AssetPath.vectorPath}share.svg",
-                      value2.translate.share ?? 'share',
-                      colorIcon: kHyppeLightButtonText,
-                      onTap: () => value.createdDynamicLink(context, data: data),
-                    ),
+                    if ((data.isShared ?? true) && data.visibility == 'PUBLIC')
+                      _customIcon2(
+                        context,
+                        "${AssetPath.vectorPath}share.svg",
+                        value2.translate.share ?? 'share',
+                        colorIcon: kHyppeLightButtonText,
+                        onTap: () => value.createdDynamicLink(context, data: data),
+                      ),
                     if ((data.saleAmount ?? 0) > 0 && data.email != SharedPreference().readStorage(SpKeys.email))
                       _customIcon2(
                         context,

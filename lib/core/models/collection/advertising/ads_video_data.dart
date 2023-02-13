@@ -128,8 +128,15 @@ class AdsAvatar {
   }
 
   String? concatThumbUri() {
-    'fullLinkURL : ${Env.data.baseUrl}/${Env.data.versionApi}$mediaEndpoint?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}'
-        .logger();
-    return '${Env.data.baseUrl}/${Env.data.versionApi}$mediaEndpoint?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    if(mediaEndpoint != null){
+      if(mediaEndpoint!.isNotEmpty){
+        return '${Env.data.baseUrl}/${Env.data.versionApi}$mediaEndpoint?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+      }else{
+        return '';
+      }
+    }else{
+      return '';
+    }
+
   }
 }

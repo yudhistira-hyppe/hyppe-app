@@ -30,6 +30,7 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
+import 'package:screen_protector/screen_protector.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
@@ -89,7 +90,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       if (_betterPlayerController != null) {
         if (_eventType != BetterPlayerEventType.showingAds) {
           if (_betterPlayerController?.isFullScreen ?? false) {
-            _betterPlayerController?.exitFullScreen();
+            // _betterPlayerController?.exitFullScreen();
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
@@ -285,12 +286,19 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         result = 0;
         break;
     }
+    print('secondOfAds: $result');
     return result;
   }
 
   void _userVideo(bool autoPlay) async {
     print('test iklan data');
     print(widget.videoData?.postID);
+
+    if (widget.videoData?.certified ?? false) {
+      _preventScreenShootOn();
+    } else {
+      _preventScreenShootOff();
+    }
     // print(_clipsData.ads[0].rollDuration);
     // print(_clipsData.ads[1].rollUri);
     // print(_clipsData.ads[1].playingAt);
@@ -623,20 +631,20 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
   void _handleClosingAdsEvent(BetterPlayerRoll? roll) async {
     _removeAdsBetterPlayerControllerMap();
-    if (_isStartFullScreen) {
-      Future.delayed(Duration.zero, () {
-        setState(() {
-          _betterPlayerController?.enterFullScreen();
-          _isStartFullScreen = false;
-        });
-      });
-    }
 
     // resume user video
     setStateIfMounted(() {
       _eventType = null;
       // _userVideo(_eventType == null);
       _betterPlayerController?.play();
+      if (_isStartFullScreen) {
+        Future.delayed(Duration(milliseconds: 500), () {
+          _betterPlayerController?.enterFullScreen();
+          setState(() {
+            _isStartFullScreen = false;
+          });
+        });
+      }
       print('play video after ads');
     });
   }
@@ -679,6 +687,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void dispose() {
     _dispose();
     CustomRouteObserver.routeObserver.unsubscribe(this);
+    _preventScreenShootOff();
     super.dispose();
   }
 
@@ -702,6 +711,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   void setStateIfMounted(f) {
     if (mounted) setState(f);
   }
+
+  bool preventScreenShoot = false;
+  void _preventScreenShootOn() async => await ScreenProtector.preventScreenshotOn();
+  void _preventScreenShootOff() async => await ScreenProtector.preventScreenshotOff();
 
   @override
   Widget build(BuildContext context) {

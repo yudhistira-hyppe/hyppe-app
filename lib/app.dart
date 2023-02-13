@@ -23,6 +23,7 @@ import 'core/services/api_action.dart';
 final InAppLocalhostServer localhostServer = InAppLocalhostServer();
 final GlobalKey<ScaffoldState> materialAppKey = GlobalKey<ScaffoldState>();
 AudioPlayer? globalAudioPlayer;
+bool isHomeScreen = false;
 
 void disposeGlobalAudio() async {
   try {

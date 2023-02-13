@@ -294,9 +294,15 @@ class Content {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl +
-        (mediaThumbEndpoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    final fixMedia = mediaThumbEndpoint ?? mediaEndpoint ?? '';
+    if(fixMedia.isNotEmpty){
+      return Env.data.baseUrl +
+          fixMedia +
+          '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    }else{
+      return fixMedia;
+    }
+
   }
 }
 

@@ -111,8 +111,9 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
             }
           }
 
-          final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
-          if (isOnHomeScreen) {
+          // final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
+          print('isOnHomeScreen: $isHomeScreen');
+          if (isHomeScreen) {
             print("isOnHomeScreen hit ads");
             await getAdsApsara();
           }
@@ -123,6 +124,11 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         }
       }
       _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
+    }
+
+    if (state == AppLifecycleState.paused) {
+      // Show custom alert message or perform action
+      print('capture capture');
     }
   }
 

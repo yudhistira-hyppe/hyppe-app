@@ -40,6 +40,7 @@ const KHyppeButtonAds = Color(0xffB70F90);
 
 const kHyppeTextWarning = Color(0xfffa8c16);
 const kHyppeDanger = Color(0xfff5222d);
+const kHyppeBorderDanger = Color(0xFFE6094B);
 const kHyppeTextSuccess = Color(0xff237804);
 const kHyppeTextIcon = Color(0xff7d8389);
 const kHyppeDividerColor = Color(0xff2c3236);
@@ -70,6 +71,7 @@ const kHyppeBgReceiver = Color(0xffD3D3D3);
 
 ///basic colors
 const kHyppeCyan = Color(0xff00A3FF);
+const kHyppeBlue = Color(0xff096AEA);
 const kHyppeCyanLight = Color(0xffD6EFFD);
 const kHyppeRed = Color(0xffDD0000);
 const kHyppeRedLight = Color(0xffFDE2D6);

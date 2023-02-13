@@ -211,20 +211,19 @@ class _CustomDescContentState extends State<CustomDescContent> {
     var tempDesc = '';
 
     // print('check descItems3 ${fixDesc}');
-    for (var item in splitDesc) {
-      if (item.isNotEmpty) {
-        final firstChar = item[0];
+    for(var i = 0; splitDesc.length > i; i++){
+      if (splitDesc[i].isNotEmpty) {
+        final firstChar = splitDesc[i];
         if (firstChar == '@') {
           if (tempDesc.isNotEmpty) {
             descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
             tempDesc = '';
           }
-          print('hit prepare username: ${item.substring(0, 1)} , ${item.substring(1, item.length)}');
-          descItems.add(ItemDesc(desc: '$item ', type: CaptionType.mention));
+          print('hit prepare username: ${splitDesc[i].substring(0, 1)} , ${splitDesc[i].substring(1, splitDesc[i].length)}');
+          descItems.add(ItemDesc(desc: '${splitDesc[i]} ', type: CaptionType.mention));
         } else {
-          tempDesc = '$tempDesc $item';
-          final index = splitDesc.indexOf(item);
-          if (index == (splitDesc.length - 1)) {
+          tempDesc = '$tempDesc ${splitDesc[i]}';
+          if (i == (splitDesc.length - 1)) {
             descItems.add(ItemDesc(desc: tempDesc, type: CaptionType.normal));
           }
         }

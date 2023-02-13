@@ -27,12 +27,16 @@ class OnShowOptionContent extends StatefulWidget {
   final String captionTitle;
   final bool onDetail;
   final ContentData contentData;
+  final bool isShare;
+  final bool visibility;
 
   const OnShowOptionContent({
     Key? key,
     required this.contentData,
     required this.captionTitle,
     this.onDetail = true,
+    this.isShare = true,
+    this.visibility = true,
   }) : super(key: key);
 
   @override
@@ -147,7 +151,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                 icon: 'copy-link.svg',
                 onTap: () => _handleLink(context, copiedToClipboard: true, description: widget.captionTitle, data: widget.contentData),
               ),
-            if (widget.contentData.reportedStatus != 'OWNED')
+            if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
               _tileComponent(
                 moveBack: false,
                 caption: '${TranslateNotifierV2().translate.share}',

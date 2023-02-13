@@ -38,8 +38,10 @@ class HyppePreviewVid extends StatefulWidget {
 }
 
 class _HyppePreviewVidState extends State<HyppePreviewVid> {
+  String email = '';
   @override
   void initState() {
+    email = SharedPreference().readStorage(SpKeys.email);
     final notifier = Provider.of<PreviewVidNotifier>(context, listen: false);
     // notifier.initialVid(context, reload: true);
     notifier.pageController.addListener(() => notifier.scrollListener(context));
@@ -145,6 +147,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                 builder: (context, value, child) {
                                                   return ProfileComponent(
                                                     show: true,
+                                                    cacheKey: vidData?.email == email ? homeNotifier.profileImageKey : null,
                                                     onFollow: () {},
                                                     following: true,
                                                     haveStory: false,

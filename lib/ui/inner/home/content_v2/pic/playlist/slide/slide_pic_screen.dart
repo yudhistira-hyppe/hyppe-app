@@ -47,6 +47,27 @@ class SlidePicScreen extends StatefulWidget {
 
 class _SlidePicScreenState extends State<SlidePicScreen> {
   @override
+  void initState() {
+    print('pindah screen ${widget.data.certified ?? false}');
+    if (widget.data.certified ?? false) {
+      print('pindah screen2 ${widget.data.certified ?? false}');
+      System().block(context);
+    } else {
+      System().disposeBlock();
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (widget.data.certified ?? false) {
+      print('close dispose ${widget.data.certified ?? false}');
+      // disposeBlock();
+    }
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
@@ -78,6 +99,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                     child: CustomTextButton(
                       onPressed: () {
                         widget.resetZooming();
+                        System().disposeBlock();
                         Routing().moveBack();
                       },
                       style: ButtonStyle(
@@ -107,6 +129,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                             CustomTextButton(
                               onPressed: () {
                                 widget.resetZooming();
+                                System().disposeBlock();
                                 Routing().moveBack();
                               },
                               style: ButtonStyle(
@@ -118,6 +141,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 color: Colors.white,
                               ),
                             ),
+                            // Text("${widget.data.isShared}"),
                             ProfileComponent(
                               isDetail: true,
                               show: true,
@@ -158,11 +182,10 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
                                   contentData: widget.data,
-                                  captionTitle: hyppePic,
+                                  captionTitle: hyppePic, isShare: widget.data.isShared,
                                   // storyController: widget.storyController,
                                   onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
                                 );
-
                                 notifier.preventMusic = false;
                                 SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                               },
@@ -295,11 +318,12 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                           },
                         ),
                         eightPx,
-                        _buildButtonV2(
-                          context: context,
-                          iconData: '${AssetPath.vectorPath}share.svg',
-                          function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
-                        ),
+                        if ((widget.data.isShared ?? true) && widget.data.visibility == 'PUBLIC')
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}share.svg',
+                            function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
+                          ),
                         eightPx,
                         if ((widget.data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.data.email)
                           _buildButtonV2(
@@ -447,15 +471,5 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

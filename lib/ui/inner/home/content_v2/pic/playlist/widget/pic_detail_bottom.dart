@@ -131,18 +131,6 @@ class PicDetailBottom extends StatelessWidget {
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),
-                          // ReadMoreText(
-                          //   "${data?.description}",
-                          //   trimLines: 2,
-                          //   trimMode: TrimMode.Line,
-                          //   textAlign: TextAlign.left,
-                          //   trimExpandedText: 'Show less',
-                          //   trimCollapsedText: 'Show more',
-                          //   colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                          //   style: Theme.of(context).textTheme.subtitle2,
-                          //   moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          //   lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          // ),
                         ],
                       ),
                     )
@@ -222,7 +210,7 @@ class PicDetailBottom extends StatelessWidget {
             // ),
 
             if (data != null)
-              if (data?.allowComments ?? false)
+              if (data?.allowComments ?? true)
                 _buildButton(
                   context,
                   '${AssetPath.vectorPath}comment.svg',
@@ -232,12 +220,13 @@ class PicDetailBottom extends StatelessWidget {
                   },
                 ),
 
-            _buildButton(
-              context,
-              '${AssetPath.vectorPath}share.svg',
-              value2.translate.share ?? '',
-              data != null ? () => value.createdDynamicLink(context, data: data) : () {},
-            ),
+            if ((data?.isShared ?? true) && data?.visibility == 'PUBLIC')
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}share.svg',
+                value2.translate.share ?? '',
+                data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+              ),
             if ((data?.saleAmount ?? 0) > 0 && email != data?.email)
               _buildButton(
                 context,
@@ -309,11 +298,10 @@ class PicDetailBottom extends StatelessWidget {
                         value.checkIsLoading
                             ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                             : CustomFollowButton(
-                                caption: value3.translate.follow ?? '',
                                 checkIsLoading: value.checkIsLoading,
                                 onPressed: () async {
                                   try {
-                                    await value.followUser(context);
+                                    await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
                                   } catch (e) {
                                     e.logger();
                                   }

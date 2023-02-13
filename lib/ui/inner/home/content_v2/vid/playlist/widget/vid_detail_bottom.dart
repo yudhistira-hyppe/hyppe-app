@@ -24,13 +24,9 @@ import 'package:hyppe/ui/constant/widget/profile_component.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_follow_button.dart';
-
 import 'package:hyppe/core/services/system.dart';
-
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-
 import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class VidDetailBottom extends StatelessWidget {
@@ -131,18 +127,6 @@ class VidDetailBottom extends StatelessWidget {
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
                           ),
-                          // ReadMoreText(
-                          //   "${data?.description}",
-                          //   trimLines: 2,
-                          //   trimMode: TrimMode.Line,
-                          //   textAlign: TextAlign.left,
-                          //   trimExpandedText: 'Show less',
-                          //   trimCollapsedText: 'Show more',
-                          //   colorClickableText: Theme.of(context).colorScheme.primaryContainer,
-                          //   style: Theme.of(context).textTheme.subtitle2,
-                          //   moreStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          //   lessStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                          // ),
                         ],
                       ),
                     )
@@ -191,24 +175,22 @@ class VidDetailBottom extends StatelessWidget {
                           colorIcon: (data?.insight?.isPostLiked ?? false) ? kHyppePrimary : Theme.of(context).iconTheme.color)
                   : _buildButton(context, '${AssetPath.vectorPath}none-like.svg', "0", () {}),
             ),
-            data != null
-                ? (data?.allowComments ?? false)
-                    ? _buildButton(
-                        context,
-                        '${AssetPath.vectorPath}comment.svg',
-                        value2.translate.comment ?? '',
-                        () {
-                          ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
-                        },
-                      )
-                    : const SizedBox.shrink()
-                : const SizedBox.shrink(),
-            _buildButton(
-              context,
-              '${AssetPath.vectorPath}share.svg',
-              value2.translate.share ?? '',
-              data != null ? () => value.createdDynamicLink(context, data: data) : () {},
-            ),
+            if (data?.allowComments ?? true)
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}comment.svg',
+                value2.translate.comment ?? '',
+                () {
+                  ShowBottomSheet.onShowCommentV2(context, postID: data?.postID);
+                },
+              ),
+            if ((data?.isShared ?? true) && data?.visibility == 'PUBLIC')
+              _buildButton(
+                context,
+                '${AssetPath.vectorPath}share.svg',
+                value2.translate.share ?? '',
+                data != null ? () => value.createdDynamicLink(context, data: data) : () {},
+              ),
             if (data != null)
               if ((data?.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data?.email)
                 _buildButton(
@@ -259,10 +241,9 @@ class VidDetailBottom extends StatelessWidget {
                     return value.checkIsLoading
                         ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
                         : CustomFollowButton(
-                            caption: value3.translate.follow ?? 'follow',
                             onPressed: () async {
                               try {
-                                await value.followUser(context);
+                                await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
                               } catch (e) {
                                 'follow error $e'.logger();
                               }

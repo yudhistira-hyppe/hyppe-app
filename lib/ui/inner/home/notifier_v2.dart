@@ -63,6 +63,9 @@ class HomeNotifier with ChangeNotifier {
   String _profileImage = '';
   String get profileImage => _profileImage;
 
+  String _profileImageKey = '';
+  String get profileImageKey => _profileImageKey;
+
   String _select = 'PUBLIC';
   String get select => _select;
 
@@ -70,6 +73,11 @@ class HomeNotifier with ChangeNotifier {
 
   set profileImage(String url) {
     _profileImage = url;
+    notifyListeners();
+  }
+
+  set profileImageKey(String val) {
+    _profileImageKey = val;
     notifyListeners();
   }
 
@@ -529,19 +537,6 @@ class HomeNotifier with ChangeNotifier {
   Future navigateToProfilePage(BuildContext context, {bool whenComplete = false, Function? onWhenComplete}) async {
     if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
     whenComplete ? Routing().move(Routes.selfProfile).whenComplete(() => onWhenComplete) : Routing().move(Routes.selfProfile);
-  }
-
-  Future navigateToWallet(BuildContext context) async {
-    if (context.read<SelfProfileNotifier>().user.profile != null) {
-      if (context.read<SelfProfileNotifier>().user.profile?.isComplete ?? false) {
-        // context.read<WalletNotifier>().syncToDana(fromHome: true);
-        ShowBottomSheet.onComingSoonDoku(context);
-      } else {
-        ShowBottomSheet.onShowIDVerification(context);
-      }
-    } else {
-      ShowBottomSheet.onShowSomethingWhenWrong(context);
-    }
   }
 
   //untuk test aliplayer

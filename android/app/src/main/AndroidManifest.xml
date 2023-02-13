@@ -42,7 +42,8 @@
     <application
         android:name="${applicationName}"
         android:label="Hyppe"
-        android:hardwareAccelerated="false"
+        android:allowBackup="false"
+        android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:showOnLockScreen="true"
         android:networkSecurityConfig="@xml/network_security_config"
