@@ -96,7 +96,7 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setPageIndex(int val){
+  setPageIndex(int val) {
     _pageIndex = val;
   }
 
@@ -349,6 +349,7 @@ class SelfProfileNotifier with ChangeNotifier {
       List<TagPeople>? tagPeople,
       String? location,
       String? saleAmount,
+      bool? isShared,
       bool? saleLike,
       bool? saleView}) {
     ContentData? _updatedData;
@@ -386,6 +387,7 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.saleLike = saleView;
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
+      _updatedData.isShared = isShared;
       // _updatedData.tagPeople = tagPeople;
       _updatedData.tagPeople?.addAll(tagPeople ?? []);
 

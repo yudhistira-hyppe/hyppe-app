@@ -352,6 +352,7 @@ class HomeNotifier with ChangeNotifier {
     List<TagPeople>? tagPeople,
     String? location,
     String? saleAmount,
+    bool? isShared,
     bool? saleLike,
     bool? saleView,
   }) {
@@ -397,6 +398,7 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.saleView = saleView;
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
+      _updatedData.isShared = isShared;
       // _updatedData.tagPeople = tagPeople;
       _updatedData.tagPeople?.addAll(tagPeople ?? []);
       if (cats != null) {

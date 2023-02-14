@@ -65,8 +65,7 @@ class VidDetailBottom extends StatelessWidget {
           _buildTopRightControl(context),
           fourPx,
           _buildDivider(context),
-          _buildBottom(context),
-          twelvePx,
+          // _buildBottom(context),
         ],
       ),
     );

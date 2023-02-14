@@ -665,16 +665,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     updateContent = true;
     certifiedTmp = false;
 
-    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
-    final _tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
 
     List userTagCaption = [];
     List hastagCaption = [];
-    _tagRegex.allMatches(captionController.text).map((z) {
+    tagRegex.allMatches(captionController.text).map((z) {
       userTagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
-    _tagHastagRegex.allMatches(captionController.text).map((z) {
+    tagHastagRegex.allMatches(captionController.text).map((z) {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
@@ -717,6 +717,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleAmount: _toSell ? price : "0",
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
+            isShared: isShared,
           );
 
       context.read<SelfProfileNotifier>().onUpdate();
@@ -736,6 +737,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleAmount: _toSell ? price : "0",
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
+            isShared: isShared,
           );
 
       updateContent = false;
