@@ -115,25 +115,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     'ini iniststate home'.logger();
   }
 
-  Ping? ping;
-  void startPing() {
-    try {
-      ping = Ping(
-        's1.hyppe.cloud',
-        timeout: 1,
-        interval: 10,
-        ipv6: false,
-        ttl: 40,
-      );
-      ping!.stream.listen((event) {
-        debugPrint(event.toString());
-        print(event.response?.time?.inMilliseconds);
-      });
-    } catch (e) {
-      debugPrint('error $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeNotifier>(

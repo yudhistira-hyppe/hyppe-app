@@ -5,10 +5,12 @@ import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -66,18 +68,42 @@ class System {
     return _instance;
   }
 
-  Future testSpeed() async {
-    Dio dio = Dio();
-    String url = 'https://hyppe.id/wp-content/uploads/2022/08/Tumbnail-Hyppe-Apps.png';
-    var startTime = DateTime.now();
-    var response = await dio.get(url);
-    var endTime = DateTime.now();
-    var elapsedTime = endTime.difference(startTime).inMilliseconds;
-    var bytesReceived = response.data.length;
-    var speed = (bytesReceived * 8) / (elapsedTime / 1000);
-    var speedMbps = speed / 1000000;
+  Ping? ping;
+  Future<SpeedInternet> startPing() async {
+    int index = 0;
+    double milliseconds = 0;
+    int totalmilliseconds = 0;
+    SpeedInternet result = SpeedInternet.medium;
 
-    print(speedMbps);
+    try {
+      ping = Ping(
+        UrlConstants.urlPing,
+        count: 2,
+        timeout: 1,
+        interval: 1,
+        ipv6: false,
+        ttl: 40,
+      );
+      ping!.stream.listen((event) {
+        index++;
+        debugPrint(event.toString());
+        totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
+        milliseconds = totalmilliseconds / index;
+        print('ini index $index');
+        print('ini totalmilliseconds $totalmilliseconds');
+        print('ini milliseconds $milliseconds');
+        if (milliseconds < 100) {
+          result = SpeedInternet.fast;
+        } else if (milliseconds >= 100 && milliseconds <= 170) {
+          result = SpeedInternet.medium;
+        } else {
+          result = SpeedInternet.slow;
+        }
+      });
+    } catch (e) {
+      debugPrint('error $e');
+    }
+    return result;
   }
 
   Future<bool> checkConnections() async {
