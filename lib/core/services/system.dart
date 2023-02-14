@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
@@ -65,6 +66,20 @@ class System {
     return _instance;
   }
 
+  Future testSpeed() async {
+    Dio dio = Dio();
+    String url = 'https://hyppe.id/wp-content/uploads/2022/08/Tumbnail-Hyppe-Apps.png';
+    var startTime = DateTime.now();
+    var response = await dio.get(url);
+    var endTime = DateTime.now();
+    var elapsedTime = endTime.difference(startTime).inMilliseconds;
+    var bytesReceived = response.data.length;
+    var speed = (bytesReceived * 8) / (elapsedTime / 1000);
+    var speedMbps = speed / 1000000;
+
+    print(speedMbps);
+  }
+
   Future<bool> checkConnections() async {
     bool connection = false;
     try {
@@ -80,12 +95,17 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      if(url.isNotEmpty){
-        return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
-      }else{
+      if (url.isNotEmpty) {
+        return Env.data.baseUrl +
+            "/${Env.data.versionApi}/" +
+            url +
+            "?x-auth-token=" +
+            SharedPreference().readStorage(SpKeys.userToken) +
+            "&x-auth-user=" +
+            SharedPreference().readStorage(SpKeys.email);
+      } else {
         return '';
       }
-
 
       // return Env.data.baseUrl + url +
       //     "?x-auth-token=" +
@@ -307,8 +327,8 @@ class System {
     }
   }
 
-  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale){
-    switch (state){
+  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale) {
+    switch (state) {
       case StatusFollowing.none:
         return locale.follow ?? 'Follow';
       case StatusFollowing.following:
@@ -320,8 +340,8 @@ class System {
     }
   }
 
-  StatusFollowing getEnumFollowStatus(String status){
-    switch(status){
+  StatusFollowing getEnumFollowStatus(String status) {
+    switch (status) {
       case 'TOFOLLOW':
         return StatusFollowing.none;
       case 'FOLLOWING':
@@ -332,7 +352,6 @@ class System {
         return StatusFollowing.rejected;
     }
   }
-
 
   StatusFollowing getStatusFollow(String? sts) {
     switch (sts) {

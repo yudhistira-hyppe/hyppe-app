@@ -165,43 +165,50 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
               ),
               //-===== Allow Sharing =========--
               const Divider(color: kHyppeBgNotSolve, height: 20),
-              CustomTextWidget(textToDisplay: notifier.language.sharePost ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
-              sixteenPx,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        notifier.isShared = !notifier.isShared;
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _language.translate.allowSharing ?? '',
-                            style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                  color: const Color.fromRGBO(63, 63, 63, 1),
+              _currentPrivacy != "PRIVATE"
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextWidget(textToDisplay: notifier.language.sharePost ?? '', textStyle: const TextStyle(color: kHyppeTextLightPrimary, fontSize: 14, fontWeight: FontWeight.bold)),
+                        sixteenPx,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  notifier.isShared = !notifier.isShared;
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _language.translate.allowSharing ?? '',
+                                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                                            color: const Color.fromRGBO(63, 63, 63, 1),
+                                          ),
+                                    ),
+                                    fourPx,
+                                    Text(
+                                      _language.translate.descAllowSharing ?? '',
+                                      style: Theme.of(context).textTheme.caption?.copyWith(
+                                            color: kHyppeSecondary,
+                                          ),
+                                    ),
+                                  ],
                                 ),
-                          ),
-                          fourPx,
-                          Text(
-                            _language.translate.descAllowSharing ?? '',
-                            style: Theme.of(context).textTheme.caption?.copyWith(
-                                  color: kHyppeSecondary,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  CustomSwitchButton(
-                    value: notifier.isShared,
-                    onChanged: (value) => notifier.isShared = value,
-                  ),
-                ],
-              ),
+                              ),
+                            ),
+                            CustomSwitchButton(
+                              value: notifier.isShared,
+                              onChanged: (value) => notifier.isShared = value,
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
         ),

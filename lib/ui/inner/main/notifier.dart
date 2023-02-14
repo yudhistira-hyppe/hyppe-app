@@ -32,6 +32,7 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 
 class MainNotifier with ChangeNotifier {
   final _eventService = EventService();
@@ -63,6 +64,23 @@ class MainNotifier with ChangeNotifier {
     if (isInitSocket) {
       _connectAndListenToSocket();
       _connectAndListenToSocketAds();
+    }
+
+    try {
+      final ping = Ping(
+        's1.hyppe.cloud',
+        count: 3,
+        timeout: 1,
+        interval: 1,
+        ipv6: false,
+        ttl: 1000,
+      );
+
+      ping.stream.listen((event) {
+        print('ping $event');
+      });
+    } catch (e) {
+      print('error $e');
     }
 
     // Auto follow user if app is install from a dynamic link

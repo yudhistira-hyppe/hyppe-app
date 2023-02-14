@@ -337,7 +337,7 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onUpdateSelfPostContent(BuildContext context,
+  Future onUpdateSelfPostContent(BuildContext context,
       {required String postID,
       required String content,
       String? description,
@@ -351,9 +351,9 @@ class SelfProfileNotifier with ChangeNotifier {
       String? saleAmount,
       bool? isShared,
       bool? saleLike,
-      bool? saleView}) {
+      bool? saleView}) async {
     ContentData? _updatedData;
-
+    print("ini kontennya $content");
     switch (content) {
       case hyppeVid:
         if (user.vids != null) {
@@ -385,6 +385,8 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.saleAmount = num.parse(saleAmount ?? '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleLike = saleView;
+      print('location nih $location');
+      print('location nih ${_updatedData.location}');
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
       _updatedData.isShared = isShared;

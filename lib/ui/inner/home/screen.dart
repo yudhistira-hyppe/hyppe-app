@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -112,6 +113,25 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
     }
     super.initState();
     'ini iniststate home'.logger();
+  }
+
+  Ping? ping;
+  void startPing() {
+    try {
+      ping = Ping(
+        's1.hyppe.cloud',
+        timeout: 1,
+        interval: 10,
+        ipv6: false,
+        ttl: 40,
+      );
+      ping!.stream.listen((event) {
+        debugPrint(event.toString());
+        print(event.response?.time?.inMilliseconds);
+      });
+    } catch (e) {
+      debugPrint('error $e');
+    }
   }
 
   @override

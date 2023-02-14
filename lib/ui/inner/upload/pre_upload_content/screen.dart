@@ -97,6 +97,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Text('${widget.arguments.content}'),
                         loadingCompress(notifier.progressCompress),
                         // Text("${notifier.progressCompress}"),
                         // Text("${notifier.videoSize / 1000000} mb"),
