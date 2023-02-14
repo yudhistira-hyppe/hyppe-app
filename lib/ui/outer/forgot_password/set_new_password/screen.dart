@@ -36,7 +36,12 @@ class _SetNewPasswordState extends State<SetNewPassword> {
           appBar: AppBar(
             leading: CustomIconButtonWidget(
               color: Theme.of(context).iconTheme.color,
-              onPressed: () => Navigator.pop(context),
+              onPressed: (){
+                notifier.passwordConfirmController.text = '';
+                notifier.passwordController.text = '';
+                Navigator.pop(context);
+
+              },
               iconData: '${AssetPath.vectorPath}close.svg',
             ),
             title: CustomTextWidget(

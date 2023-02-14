@@ -89,7 +89,7 @@ class RegisterForm extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        notifier.checkBoxSuffix(false),
+                        notifier.checkBoxSuffix(System().atLeastContainOneCharacterAndOneNumber(text: notifier.password)),
                         CustomTextWidget(
                           textToDisplay: notifier.language.atLeastContain1CharacterAnd1Number ?? '',
                           textStyle: Theme.of(context).textTheme.caption,
