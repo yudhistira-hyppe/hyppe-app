@@ -67,44 +67,6 @@ class System {
     return _instance;
   }
 
-  Ping? ping;
-  Future<SpeedInternet> startPing() async {
-    int index = 0;
-    double milliseconds = 0;
-    int totalmilliseconds = 0;
-    SpeedInternet result = SpeedInternet.medium;
-
-    try {
-      ping = Ping(
-        UrlConstants.urlPing,
-        count: 2,
-        timeout: 1,
-        interval: 1,
-        ipv6: false,
-        ttl: 40,
-      );
-      ping!.stream.listen((event) {
-        index++;
-        debugPrint(event.toString());
-        totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
-        milliseconds = totalmilliseconds / index;
-        print('ini index $index');
-        print('ini totalmilliseconds $totalmilliseconds');
-        print('ini milliseconds $milliseconds');
-        if (milliseconds < 100) {
-          result = SpeedInternet.fast;
-        } else if (milliseconds >= 100 && milliseconds <= 170) {
-          result = SpeedInternet.medium;
-        } else {
-          result = SpeedInternet.slow;
-        }
-      });
-    } catch (e) {
-      debugPrint('error $e');
-    }
-    return result;
-  }
-
   Future<bool> checkConnections() async {
     bool connection = false;
     try {

@@ -159,7 +159,12 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                   ),
                   CustomSwitchButton(
                     value: notifier.allowComment,
-                    onChanged: (value) => notifier.allowComment = value,
+                    onChanged: (value) {
+                      if(_currentPrivacy != "PRIVATE"){
+                        notifier.allowComment = value;
+                      }
+                    }
+                    
                   ),
                 ],
               ),
