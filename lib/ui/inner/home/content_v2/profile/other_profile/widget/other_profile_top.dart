@@ -117,7 +117,7 @@ class OtherProfileTop extends StatelessWidget {
                           seeMore: ' ${notifier.language.seeMoreContent}',
                           normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightButtonText),
                           hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     )),
@@ -162,7 +162,7 @@ class OtherProfileTop extends StatelessWidget {
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
-                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                     ),
                     function: notifier.isCheckLoading
                         ? null

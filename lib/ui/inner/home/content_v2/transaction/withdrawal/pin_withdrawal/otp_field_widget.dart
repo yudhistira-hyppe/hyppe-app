@@ -33,9 +33,9 @@ class PinWithdrawal extends StatelessWidget {
           animationType: AnimationType.scale,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.underline,
-            activeColor: msgError == '' ? theme.colorScheme.primaryVariant : theme.colorScheme.error,
-            inactiveColor: msgError == '' ? theme.colorScheme.primaryVariant : theme.colorScheme.error,
-            selectedColor: msgError == '' ? theme.colorScheme.primaryVariant : theme.colorScheme.error,
+            activeColor: msgError == '' ? theme.colorScheme.primary : theme.colorScheme.error,
+            inactiveColor: msgError == '' ? theme.colorScheme.primary : theme.colorScheme.error,
+            selectedColor: msgError == '' ? theme.colorScheme.primary : theme.colorScheme.error,
           ),
           textStyle: theme.textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
           keyboardType: TextInputType.number,

@@ -94,7 +94,7 @@ class HyppeConfirmDeleteAccount extends StatelessWidget {
                     function: notifier.confirmDeleteAccount ? () => notifier.onClickDeleteAccount(context) : null,
                     buttonStyle: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        notifier.confirmDeleteAccount ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary,
+                        notifier.confirmDeleteAccount ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface,
                       ),
                       overlayColor: MaterialStateProperty.all(Colors.transparent),
                     ),

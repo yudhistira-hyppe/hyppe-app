@@ -63,7 +63,7 @@ class OnDeleteMessageBottomSheet extends StatelessWidget {
                               text: data?.senderOrReceiverInfo?.fullName,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Theme.of(context).colorScheme.secondaryVariant,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
                             )
                           ],

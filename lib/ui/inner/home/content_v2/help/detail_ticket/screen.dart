@@ -1042,7 +1042,7 @@ class _DetailTicketScreenState extends State<DetailTicketScreen> with AfterFirst
               autofocus: true,
               decoration: InputDecoration(
                   filled: true,
-                  fillColor: Theme.of(context).colorScheme.primary,
+                  fillColor: Theme.of(context).colorScheme.background,
                   hintText: "${notifier.language.typeAMessage}...",
                   hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),

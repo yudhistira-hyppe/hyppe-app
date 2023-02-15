@@ -114,10 +114,10 @@ class PaymentMethodNotifier extends ChangeNotifier {
   }
 
   Color colorButton(context) {
-    Color _color = Theme.of(context).colorScheme.primaryVariant;
+    Color _color = Theme.of(context).colorScheme.primary;
     final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
     if (cek ?? false) {
-      _color = Theme.of(context).colorScheme.primaryVariant;
+      _color = Theme.of(context).colorScheme.primary;
     } else {
       _color = Theme.of(context).colorScheme.surface;
     }

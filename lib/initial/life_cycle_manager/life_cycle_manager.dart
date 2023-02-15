@@ -38,13 +38,13 @@ class LifeCycleManager extends StatefulWidget {
 class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBindingObserver {
   Timer? _timerLink;
   final _socketService = SocketService();
-  final _isolateService = IsolateService();
+  // final _isolateService = IsolateService();
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     _timerLink = Timer(const Duration(seconds: 2), () => DynamicLinkService.handleDynamicLinks());
-    _isolateService.turnOnWorkers();
+    // _isolateService.turnOnWorkers();
     super.initState();
   }
 
@@ -54,7 +54,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     super.dispose();
     _timerLink?.cancel();
     if (_socketService.isRunning) _socketService.closeSocket();
-    if (_isolateService.workerActive()) _isolateService.turnOffWorkers();
+    // if (_isolateService.workerActive()) _isolateService.turnOffWorkers();
   }
 
   @override

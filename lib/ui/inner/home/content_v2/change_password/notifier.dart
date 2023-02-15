@@ -70,7 +70,7 @@ class ChangePasswordNotifier with ChangeNotifier {
 
   Color saveButtonColor(BuildContext context) {
     if (_buttonValidation()) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }

@@ -120,7 +120,7 @@ class _OnReportAccountBottomSheetState extends State<OnReportAccountBottomSheet>
                                       maxLines: 2,
                                     ),
                                     controlAffinity: ListTileControlAffinity.trailing,
-                                    activeColor: Theme.of(context).colorScheme.primaryVariant,
+                                    activeColor: Theme.of(context).colorScheme.primary,
                                   );
                                 },
                               ),

@@ -210,7 +210,7 @@ class SignUpPinNotifier with ChangeNotifier {
 
   Color verifyButtonColor(BuildContext context) {
     if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty && !loading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
@@ -265,9 +265,9 @@ class SignUpPinNotifier with ChangeNotifier {
 
   TextStyle resendStyle(BuildContext context) {
     if (_timer != "00:00") {
-      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant) ?? const TextStyle();
+      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary) ?? const TextStyle();
     } else {
-      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primaryVariant) ?? const TextStyle();
+      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary) ?? const TextStyle();
     }
   }
 

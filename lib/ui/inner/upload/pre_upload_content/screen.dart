@@ -171,10 +171,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                               textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                             ),
                             buttonStyle: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                              foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                             ),
                           ),
                         ],
@@ -220,10 +220,10 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                 ),
                           buttonStyle: ButtonStyle(
-                            foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                            shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                            overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                            foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                            shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                            overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                            backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -245,7 +245,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           children: [
             CustomTextWidget(
               textToDisplay: notifier.language.caption ?? '',
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
             Container(
               width: 10,
@@ -357,7 +357,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             CustomElevatedButton(
                 child: CustomTextWidget(
                   textToDisplay: '#Hastag',
-                  textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                  textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                 ),
                 width: 90,
                 height: 30,
@@ -372,7 +372,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   );
                 },
                 buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
                   shadowColor: MaterialStateProperty.all(Colors.white),
                   elevation: MaterialStateProperty.all(0),
                   side: MaterialStateProperty.all(
@@ -383,7 +383,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             CustomElevatedButton(
                 child: CustomTextWidget(
                   textToDisplay: '@Friends',
-                  textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                  textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                 ),
                 width: 90,
                 height: 30,
@@ -398,7 +398,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   );
                 },
                 buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
                   shadowColor: MaterialStateProperty.all(Colors.white),
                   elevation: MaterialStateProperty.all(0),
                   side: MaterialStateProperty.all(
@@ -419,7 +419,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
           children: [
             CustomTextWidget(
               textToDisplay: notifier.language.categories ?? '',
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
             Container(
               width: 10,
@@ -586,7 +586,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             title: CustomTextWidget(
               textToDisplay: notifier.language.tagPeople ?? '',
               textAlign: TextAlign.start,
-              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+              textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
             minLeadingWidth: 0,
           )
@@ -640,11 +640,11 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         notifier.showLocation(context);
       },
       contentPadding: EdgeInsets.zero,
-      leading: Icon(Icons.location_on_outlined, color: Theme.of(context).colorScheme.secondaryVariant),
+      leading: Icon(Icons.location_on_outlined, color: Theme.of(context).colorScheme.secondary),
       title: CustomTextWidget(
         textToDisplay: notifier.locationName,
         textAlign: TextAlign.start,
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
       ),
       trailing: notifier.locationName == notifier.language.addLocation
           ? const Icon(Icons.arrow_forward_ios_rounded, color: kHyppeTextLightPrimary)
@@ -667,7 +667,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             },
       title: CustomTextWidget(
         textToDisplay: notifier.language.privacy ?? 'privacy',
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -702,7 +702,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
             },
       title: CustomTextWidget(
         textToDisplay: notifier.language.postBoost ?? 'Post Boost',
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -737,7 +737,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       },
       title: CustomTextWidget(
         textToDisplay: notifier.language.ownershipSelling ?? '',
-        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+        textStyle: textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
         textAlign: TextAlign.start,
       ),
       contentPadding: EdgeInsets.zero,
@@ -762,7 +762,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.surface,
       ),
       child: Column(
         children: [
@@ -801,7 +801,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
       margin: const EdgeInsets.only(bottom: 60),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.surface,
       ),
       child: Column(
         children: [
@@ -849,7 +849,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   value: progressCompress / 100,
                   minHeight: 5,
                   backgroundColor: Theme.of(context).textTheme.button?.color?.withOpacity(0.4),
-                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
+                  valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
                 ),
               ),
               sixPx,

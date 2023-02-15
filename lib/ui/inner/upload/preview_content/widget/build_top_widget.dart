@@ -37,7 +37,7 @@ class BuildTopWidget extends StatelessWidget {
                               textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                             ),
                             style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                              backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                               padding: MaterialStateProperty.all(const EdgeInsets.only(top: 0.0, bottom: 0.0)),
                             ),
                             onPressed: (){

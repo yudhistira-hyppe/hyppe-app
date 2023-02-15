@@ -60,7 +60,7 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
                   textAlign: TextAlign.right,
                   textStyle: _themes.textTheme.subtitle2?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: _themes.colorScheme.primaryVariant,
+                    color: _themes.colorScheme.primary,
                   ),
                 ),
               ),

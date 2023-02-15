@@ -21,7 +21,7 @@ class _PageBottomState extends State<PageBottom> {
     return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.background,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),

@@ -72,7 +72,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Theme.of(context).colorScheme.primary.withOpacity(0.44),
+                              Theme.of(context).colorScheme.background.withOpacity(0.44),
                               Colors.transparent,
                             ],
                           ),
@@ -155,7 +155,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                             colors: [
-                              Theme.of(context).colorScheme.primary.withOpacity(0.44),
+                              Theme.of(context).colorScheme.background.withOpacity(0.44),
                               Colors.transparent,
                             ],
                           ),

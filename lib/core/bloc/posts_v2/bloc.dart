@@ -236,7 +236,12 @@ class PostsBloc {
     formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
-    formData.fields.add(MapEntry('isShared', isShared.toString()));
+    if(isShared != null){
+      formData.fields.add(MapEntry('isShared', isShared.toString()));
+    }else{
+      formData.fields.add(MapEntry('isShared', 'false'));
+    }
+
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 

@@ -182,7 +182,7 @@ class _MessageScreenState extends State<MessageScreen> with RouteAware {
                                             subtitle: CustomTextWidget(
                                               textToDisplay: discussData?.lastestMessage ?? '',
                                               textAlign: TextAlign.start,
-                                              textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
+                                              textStyle: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
                                             ),
                                             trailing: Column(
                                               mainAxisAlignment: MainAxisAlignment.center,

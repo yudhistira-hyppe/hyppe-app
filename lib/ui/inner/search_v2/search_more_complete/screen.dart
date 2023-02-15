@@ -113,7 +113,7 @@ class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> wit
                         // labelColor: Theme.of(context).tabBarTheme.labelColor,
                         // unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
                         // labelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
-                        indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primaryVariant, width: 2.0)),
+                        indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
                         // unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
 
                         tabs: _list.map((e) {

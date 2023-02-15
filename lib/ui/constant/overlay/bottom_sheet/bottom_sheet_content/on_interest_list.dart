@@ -104,8 +104,8 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
                           textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                         buttonStyle: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                           overlayColor: MaterialStateProperty.all(kHyppeLightExtended4),
                           backgroundColor: MaterialStateProperty.all(kHyppePrimary),
                         ),

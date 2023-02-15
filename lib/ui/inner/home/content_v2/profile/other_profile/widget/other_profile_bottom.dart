@@ -29,14 +29,14 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
-                      color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                      color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
                       textToDisplay: "Vids",
                       textStyle: TextStyle(
                         fontSize: 14,
-                        color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                        color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
                       ),
                     ),
                   ],
@@ -49,7 +49,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.pageIndex == 0 ? Theme.of(context).colorScheme.primary : null),
               ),
             ],
           ),
@@ -63,14 +63,14 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
-                      color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                      color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
                       textToDisplay: "Diaries",
                       textStyle: TextStyle(
                         fontSize: 14,
-                        color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                        color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
                       ),
                     ),
                   ],
@@ -83,7 +83,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.pageIndex == 1 ? Theme.of(context).colorScheme.primary : null),
               ),
             ],
           ),
@@ -97,14 +97,14 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
                       width: 20 * SizeConfig.scaleDiagonal,
                       height: 20 * SizeConfig.scaleDiagonal,
                       defaultColor: false,
-                      color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                      color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
                     ),
                     SizedBox(width: 8 * SizeConfig.scaleDiagonal),
                     CustomTextWidget(
                       textToDisplay: "Pics",
                       textStyle: TextStyle(
                         fontSize: 14,
-                        color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                        color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor,
                       ),
                     ),
                   ],
@@ -117,7 +117,7 @@ class _OtherProfileBottomState extends State<OtherProfileBottom> {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.pageIndex == 2 ? Theme.of(context).colorScheme.primary : null),
               )
             ],
           ),

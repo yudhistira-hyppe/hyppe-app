@@ -91,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         labelStyle: Theme.of(context)
                             .textTheme
                             .bodyText1
-                            ?.copyWith(color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primaryVariant : null),
+                            ?.copyWith(color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primary : null),
                         prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                         prefixIcon: Transform.translate(
                           offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
@@ -103,8 +103,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty
-                                    ? Theme.of(context).colorScheme.primaryVariant
-                                    : Theme.of(context).colorScheme.secondaryVariant)),
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.secondary)),
                         suffixIcon: notifier.emailSuffixIcon(),
                         errorText: notifier.invalidEmail,
                       ),

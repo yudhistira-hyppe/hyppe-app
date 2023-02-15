@@ -84,7 +84,7 @@ class _ReferralState extends State<Referral> {
                                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: kHyppeLightSurface),
                                     child: Text(
                                       '${notifier.modelReferral?.parent}',
-                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primaryVariant),
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.primary),
                                     ),
                                   ),
                                 ],
@@ -103,13 +103,13 @@ class _ReferralState extends State<Referral> {
                     //   ),
                     //   buttonStyle: ButtonStyle(
                     //     foregroundColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primaryVariant),
+                    //         Theme.of(context).colorScheme.primary),
                     //     shadowColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primaryVariant),
+                    //         Theme.of(context).colorScheme.primary),
                     //     overlayColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primaryVariant),
+                    //         Theme.of(context).colorScheme.primary),
                     //     backgroundColor: MaterialStateProperty.all(
-                    //         Theme.of(context).colorScheme.primaryVariant),
+                    //         Theme.of(context).colorScheme.primary),
                     //   ),
                     // ),
                   ],

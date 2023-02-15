@@ -76,7 +76,7 @@ class _DeleteTagUserContentDialogState extends State<DeleteTagUserContentDialog>
                 const CustomLoading(),
               _buildButton(
                 caption: _language.cancel ?? 'cancel',
-                color: theme.colorScheme.primaryVariant,
+                color: theme.colorScheme.primary,
                 textColor: kHyppeLightButtonText,
                 function: () => _routing.moveBack(),
                 theme: theme,

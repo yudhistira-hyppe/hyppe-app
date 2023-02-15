@@ -54,7 +54,7 @@ class OnCategorySupportTicket extends StatelessWidget {
                         textStyle: Theme.of(context).primaryTextTheme.bodyText2,
                       ),
                       controlAffinity: ListTileControlAffinity.trailing,
-                      activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      activeColor: Theme.of(context).colorScheme.primary,
                     );
                   },
                 ),

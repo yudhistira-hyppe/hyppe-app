@@ -139,7 +139,7 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
-                                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryVariant, borderRadius: const BorderRadius.all(Radius.circular(50))),
+                                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: const BorderRadius.all(Radius.circular(50))),
                                     child: CustomTextWidget(textToDisplay: translate.copy ?? 'copy', textStyle: textTheme.titleSmall?.copyWith(color: Colors.white)),
                                   ),
                                 ),
@@ -177,10 +177,10 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                                   textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                 ),
                                 buttonStyle: ButtonStyle(
-                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                                  foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -192,7 +192,7 @@ class _PaymentBoostSummaryScreenState extends State<PaymentBoostSummaryScreen> {
                                   },
                                   child: Text(
                                     translate.checkPaymentStatus ?? '',
-                                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                                   ),
                                 ),
                               )

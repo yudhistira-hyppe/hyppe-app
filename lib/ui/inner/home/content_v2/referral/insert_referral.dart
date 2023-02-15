@@ -68,10 +68,10 @@ class _InsertReferralState extends State<InsertReferral> {
                 buttonStyle: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
                     notifier.isLoading
-                        ? Theme.of(context).colorScheme.secondary
+                        ? Theme.of(context).colorScheme.surface
                         : notifier.buttonReferralDisable()
-                            ? Theme.of(context).colorScheme.primaryVariant
-                            : Theme.of(context).colorScheme.secondary,
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.surface,
                   ),
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                 ),

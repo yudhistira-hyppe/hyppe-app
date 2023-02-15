@@ -90,7 +90,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                                   text: notifier.argument.fullnameReceiver,
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Theme.of(context).colorScheme.secondaryVariant,
+                                    color: Theme.of(context).colorScheme.secondary,
                                   ),
                                 )
                               ],
@@ -150,7 +150,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                     ),
             ),
             resizeToAvoidBottomInset: true,
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme.of(context).colorScheme.background,
           ),
           onTap: () => notifier.closeKeyboard(context),
         ),

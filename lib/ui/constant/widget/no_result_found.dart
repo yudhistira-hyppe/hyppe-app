@@ -12,7 +12,7 @@ class NoResultFound extends StatelessWidget {
       builder: (_, value, __) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.secondary),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Theme.of(context).colorScheme.surface),
           height: 350,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

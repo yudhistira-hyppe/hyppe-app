@@ -71,7 +71,7 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                             context,
                             fullCaption: true,
                           ),
-                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
+                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
                         )
                       ],
                     ),

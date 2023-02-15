@@ -93,7 +93,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                         });
                       },
                       toggleable: true,
-                      activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      activeColor: Theme.of(context).colorScheme.primary,
                       title: CustomTextWidget(
                         textAlign: TextAlign.left,
                         textToDisplay: System().capitalizeFirstLetter(_genders[index]),
@@ -111,7 +111,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                   width: SizeConfig.screenWidth,
                   buttonStyle: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.primaryVariant,
+                      Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   // function: () => Routing().moveBack(),
@@ -186,7 +186,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //               notifier.genderListSelected(index);
     //             },
     //             toggleable: true,
-    //             activeColor: Theme.of(context).colorScheme.primaryVariant,
+    //             activeColor: Theme.of(context).colorScheme.primary,
     //             title: CustomTextWidget(
     //               textAlign: TextAlign.left,
     //               textToDisplay: notifier.genders[index],
@@ -203,7 +203,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         height: 50,
     //         width: SizeConfig.screenWidth,
     //         buttonStyle: ButtonStyle(
-    //           backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primaryVariant),
+    //           backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
     //         ),
     //         function: () => Routing().moveBack(),
     //         child: CustomTextWidget(

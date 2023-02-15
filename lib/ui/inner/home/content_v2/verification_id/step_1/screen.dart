@@ -118,10 +118,10 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                       textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                     buttonStyle: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                      overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -129,7 +129,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                     onTap: () => Routing().moveBack(),
                     child: Text(
                       notifier.language.cancel ?? 'cancel',
-                      style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                      style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                   const SizedBox(height: 16),

@@ -93,7 +93,7 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                   onTap: () => notifier.retrySelfie(context),
                   child: Text(
                     notifier.language.retakeSelfie ?? '',
-                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                    style: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -106,10 +106,10 @@ class _VerificationIDFailedState extends State<VerificationIDFailed> {
                     textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                   buttonStyle: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                    foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                    shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 const SizedBox(height: 16),

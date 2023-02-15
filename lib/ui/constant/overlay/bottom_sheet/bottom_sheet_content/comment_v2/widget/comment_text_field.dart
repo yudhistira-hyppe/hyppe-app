@@ -74,7 +74,7 @@ class CommentTextField extends StatelessWidget {
             autofocus: true,
             decoration: InputDecoration(
               filled: true,
-              fillColor: Theme.of(context).colorScheme.primary,
+              fillColor: Theme.of(context).colorScheme.background,
               hintText: "${language.translate.typeAMessage}...",
               hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
@@ -88,7 +88,7 @@ class CommentTextField extends StatelessWidget {
                           child: CustomTextWidget(
                             textToDisplay: language.translate.send ?? '',
                             textStyle: TextStyle(
-                              color: Theme.of(context).colorScheme.primaryVariant,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),

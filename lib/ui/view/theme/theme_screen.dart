@@ -70,7 +70,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   textStyle: Theme.of(context).primaryTextTheme.bodyText1,
                 ),
                 controlAffinity: ListTileControlAffinity.trailing,
-                activeColor: Theme.of(context).colorScheme.primaryVariant,
+                activeColor: Theme.of(context).colorScheme.primary,
               );
             },
           );

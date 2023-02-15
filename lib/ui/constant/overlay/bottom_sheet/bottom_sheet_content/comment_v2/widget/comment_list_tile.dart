@@ -77,7 +77,7 @@ class _CommentListTileState extends State<CommentListTile> {
                             context,
                             fullCaption: true,
                           ),
-                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
+                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
                         )
                       ],
                     ),
@@ -93,7 +93,7 @@ class _CommentListTileState extends State<CommentListTile> {
                       textOverflow: TextOverflow.visible,
                       normStyle: Theme.of(context).textTheme.bodyText2,
                       hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
-                      expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant)),
+                      expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.primary)),
                   SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                   Row(
                     children: [
@@ -142,7 +142,7 @@ class _CommentListTileState extends State<CommentListTile> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 5),
                             child: CustomTextWidget(
-                              textStyle: TextStyle(color: Theme.of(context).colorScheme.primaryVariant),
+                              textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                               textToDisplay: notifier.repliesComments.containsKey(widget.data?.comment?.lineID)
                                   ? '${_language.hideReplies}'
                                   : "${_language.see} $repliesCount ${repliesCount > 1 ? _language.replies : _language.reply2}",

@@ -35,7 +35,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
 
   Color interestNextButtonColor(BuildContext context, List<String> userInterested) {
     if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty && !isLoading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }

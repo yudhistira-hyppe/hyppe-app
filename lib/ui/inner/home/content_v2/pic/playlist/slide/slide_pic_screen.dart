@@ -384,7 +384,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               seeMore: ' ${translate.seeMoreContent}',
                               normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
                               hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
                             ),
                             if (widget.data.music?.musicTitle != null && (widget.data.apsaraId ?? '').isNotEmpty)
                               notifier.preventMusic

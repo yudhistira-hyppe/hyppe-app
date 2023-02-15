@@ -45,7 +45,7 @@ class _BuildSwitchButtonState extends State<BuildSwitchButton> {
                           value: notifier.progressDev,
                           onChanged: (double value) {},
                           inactiveColor: kHyppeTextPrimary.withOpacity(0.5),
-                          activeColor: Theme.of(context).colorScheme.primaryVariant,
+                          activeColor: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ),

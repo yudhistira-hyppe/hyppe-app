@@ -39,7 +39,7 @@ class UserAgreementNotifier extends ChangeNotifier with LoadingNotifier {
 
   Color nextButtonColor(BuildContext context, bool state) {
     if (state) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
@@ -49,7 +49,7 @@ class UserAgreementNotifier extends ChangeNotifier with LoadingNotifier {
     if (state) {
       return Theme.of(context).textTheme.button ?? const TextStyle();
     } else {
-      return Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant) ?? const TextStyle();
+      return Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.secondary) ?? const TextStyle();
     }
   }
 

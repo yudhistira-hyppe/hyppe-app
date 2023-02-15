@@ -27,7 +27,7 @@ class BuildTimer extends StatelessWidget {
                   child: Container(
                     height: 22 * SizeConfig.scaleDiagonal,
                     width: 47 * SizeConfig.scaleDiagonal,
-                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryVariant, borderRadius: BorderRadius.circular(25)),
+                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: BorderRadius.circular(25)),
                   ),
                 ),
                 CarouselSlider(

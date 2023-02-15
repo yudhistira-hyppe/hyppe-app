@@ -135,7 +135,7 @@ class _AppealScreenState extends State<AppealScreen> {
                         textStyle: Theme.of(context).textTheme.caption,
                         maxLines: 5,
                       ),
-                      activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      activeColor: Theme.of(context).colorScheme.primary,
                     );
                   },
                 ),

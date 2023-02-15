@@ -102,7 +102,7 @@ class _OnReportContentFormBottomSheetState extends State<OnReportContentFormBott
                           textStyle: Theme.of(context).primaryTextTheme.titleSmall,
                         ),
                         controlAffinity: ListTileControlAffinity.trailing,
-                        activeColor: Theme.of(context).colorScheme.primaryVariant,
+                        activeColor: Theme.of(context).colorScheme.primary,
                       );
                     },
                   ),

@@ -123,7 +123,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                   : Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2.0,
-                        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                       ),
                     );
             },

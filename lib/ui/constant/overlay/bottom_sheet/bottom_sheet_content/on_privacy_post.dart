@@ -118,7 +118,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                       ),
                     ),
                     controlAffinity: ListTileControlAffinity.trailing,
-                    activeColor: Theme.of(context).colorScheme.primaryVariant,
+                    activeColor: Theme.of(context).colorScheme.primary,
                   );
                 },
               ),

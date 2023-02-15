@@ -52,7 +52,7 @@ class _SignInFormState extends State<SignInForm> {
                       color: notifier.emailValidator(notifier.emailController.text) != ''
                           ? Theme.of(context).colorScheme.error
                           : notifier.emailFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primaryVariant
+                              ? Theme.of(context).colorScheme.primary
                               : null),
                   prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   prefixIcon: Transform.translate(
@@ -62,10 +62,10 @@ class _SignInFormState extends State<SignInForm> {
                       child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
                     ),
                   ),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   focusedBorder:
-                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary)),
+                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                   errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
@@ -106,7 +106,7 @@ class _SignInFormState extends State<SignInForm> {
                       color: notifier.incorrect
                           ? Theme.of(context).colorScheme.error
                           : notifier.passwordFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primaryVariant
+                              ? Theme.of(context).colorScheme.primary
                               : null),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
@@ -135,10 +135,10 @@ class _SignInFormState extends State<SignInForm> {
                       onPressed: () => notifier.hide = !notifier.hide,
                     ),
                   ),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                   focusedBorder:
-                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary)),
+                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
@@ -192,10 +192,10 @@ class _SignInFormState extends State<SignInForm> {
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
                 notifier.isLoading
-                    ? Theme.of(context).colorScheme.secondary
+                    ? Theme.of(context).colorScheme.surface
                     : notifier.buttonDisable()
-                        ? Theme.of(context).colorScheme.primaryVariant
-                        : Theme.of(context).colorScheme.secondary,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surface,
               ),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),

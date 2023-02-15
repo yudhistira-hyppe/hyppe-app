@@ -112,7 +112,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(5),
                                 boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                               ),
@@ -128,7 +128,7 @@ class MiddleBuySellDetailWidget extends StatelessWidget {
                           ? Container(
                               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.surface,
                                 borderRadius: BorderRadius.circular(5),
                                 boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, 0.06), blurRadius: 2)],
                               ),

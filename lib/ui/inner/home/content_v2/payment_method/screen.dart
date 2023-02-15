@@ -69,7 +69,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                               : notifier.reviewBuyNotifier.data != null
                                   ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount?.toInt())
                                   : '',
-                          textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
                         const SizedBox(height: 24),
                         CustomTextWidget(textToDisplay: "Virtual Account", textStyle: textTheme.bodyMedium),

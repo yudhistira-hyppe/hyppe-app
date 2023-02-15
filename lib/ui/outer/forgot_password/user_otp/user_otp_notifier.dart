@@ -60,7 +60,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
 
   // Color verifyButtonColor(BuildContext context) {
   //   if (isOTPCodeFullFilled && !isLoading) {
-  //     return Theme.of(context).colorScheme.primaryVariant;
+  //     return Theme.of(context).colorScheme.primary;
   //   } else {
   //     return Theme.of(context).colorScheme.surface;
   //   }
@@ -106,7 +106,7 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
   String resendString() => language.resendNewCode ?? '';
 
   TextStyle? resendStyle(BuildContext context) {
-    return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primaryVariant);
+    return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary);
   }
 
   // Function? onVerifyButton(BuildContext context) {

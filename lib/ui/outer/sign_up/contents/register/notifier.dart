@@ -139,7 +139,7 @@ class RegisterNotifier with ChangeNotifier {
 
   Color nextButtonColor(BuildContext context) {
     if (_validationRegister() && !loading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }

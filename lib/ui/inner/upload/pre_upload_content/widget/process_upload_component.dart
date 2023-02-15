@@ -145,7 +145,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
                 //           textToDisplay: value.isLoading ? value.language.cancelPost : 'Ok',
                 //           textStyle: Theme.of(context).textTheme.button.apply(
                 //                 color: value.progressDev == 1.0
-                //                     ? Theme.of(context).colorScheme.secondaryVariant
+                //                     ? Theme.of(context).colorScheme.secondary
                 //                     : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
                 //               ),
                 //         ),
@@ -161,7 +161,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               child: LinearProgressIndicator(
                 value: notifier.progress,
                 backgroundColor: Theme.of(context).textTheme.button?.color?.withOpacity(0.4),
-                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
               ),
             )
           ],

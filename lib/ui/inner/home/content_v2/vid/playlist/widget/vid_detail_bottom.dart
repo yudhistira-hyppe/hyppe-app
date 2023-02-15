@@ -124,7 +124,7 @@ class VidDetailBottom extends StatelessWidget {
                             seeMore: ' ${notifier2.translate.seeMoreContent}',
                             normStyle: Theme.of(context).textTheme.subtitle2,
                             hrefStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: kHyppePrimary),
-                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                            expandStyle: Theme.of(context).textTheme.subtitle2?.copyWith(color: Theme.of(context).colorScheme.primary),
                           ),
                         ],
                       ),
@@ -140,7 +140,7 @@ class VidDetailBottom extends StatelessWidget {
                     child: CustomTextWidget(
                       maxLines: 2,
                       textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondary),
                       textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
                     ),
                   )

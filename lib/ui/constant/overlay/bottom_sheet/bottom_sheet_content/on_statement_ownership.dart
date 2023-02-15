@@ -63,7 +63,7 @@ class OnStatementOwnershipBottomSheet extends StatelessWidget {
                   textToDisplay: notifier.translate.yesPostAnyway ?? '',
                 ),
                 buttonStyle: ButtonStyle(
-                  // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                  // backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
                   backgroundColor: MaterialStateProperty.all(kHyppePrimary),
                   shadowColor: MaterialStateProperty.all(Colors.white),
                   elevation: MaterialStateProperty.all(0),

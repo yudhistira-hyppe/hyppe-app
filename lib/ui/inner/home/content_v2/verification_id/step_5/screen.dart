@@ -318,16 +318,16 @@ class _VerificationIDStep5State extends State<VerificationIDStep5> with AfterFir
                         ),
                         buttonStyle: notifier.step5CanNext
                             ? ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                               )
                             : ButtonStyle(
-                                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
-                                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
-                                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
-                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.secondary),
+                                foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
+                                shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
+                                overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
+                                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
                               ),
                       ),
                       const SizedBox(height: 20),

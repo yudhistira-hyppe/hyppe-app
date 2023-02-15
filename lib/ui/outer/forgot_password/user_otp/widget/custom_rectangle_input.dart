@@ -38,7 +38,7 @@ class CustomRectangleInput extends StatelessWidget {
                     width: 15,
                     height: 15,
                     child: CircularProgressIndicator(
-                      color: theme.colorScheme.primaryVariant,
+                      color: theme.colorScheme.primary,
                       strokeWidth: 1,
                     ))
                 : notifier.inCorrectCode

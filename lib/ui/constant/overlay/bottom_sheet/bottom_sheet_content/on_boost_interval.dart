@@ -53,7 +53,7 @@ class OnBoostIntervalContent extends StatelessWidget {
                           textToDisplay: "${notifier.boostMasterData?.interval?[index].value} ${System().capitalizeFirstLetter(notifier.boostMasterData?.interval?[index].remark ?? '')}",
                           textStyle: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.w700),
                         ),
-                        activeColor: Theme.of(context).colorScheme.primaryVariant,
+                        activeColor: Theme.of(context).colorScheme.primary,
                       );
                     }),
                 twentyFourPx,

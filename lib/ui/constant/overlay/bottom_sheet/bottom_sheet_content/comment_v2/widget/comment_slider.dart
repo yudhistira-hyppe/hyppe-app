@@ -25,7 +25,7 @@ class CommentSlider extends StatelessWidget {
               children: [
                 TextSpan(
                   text: " (${length ?? "0"})",
-                  style: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 14),
+                  style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 14),
                 )
               ],
             ),

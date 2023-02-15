@@ -72,7 +72,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
     final textDirection = Directionality.of(context);
     final textScaleFactor = MediaQuery.textScaleFactorOf(context);
 
-    final colorClickableText = Theme.of(context).colorScheme.secondary;
+    final colorClickableText = Theme.of(context).colorScheme.surface;
     final _defaultMoreLessStyle = widget.expandStyle ?? effectiveTextStyle?.copyWith(color: colorClickableText);
     final _defaultDelimiterStyle = widget.normStyle ?? effectiveTextStyle;
 
@@ -182,7 +182,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         results.add(TextSpan(
             text: item.desc,
             style: item.type == CaptionType.mention
-                ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant))
+                ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primary))
                 : (widget.normStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith()),
             recognizer: item.type == CaptionType.normal
                 ? null
