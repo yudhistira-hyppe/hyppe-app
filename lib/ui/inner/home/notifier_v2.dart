@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
@@ -148,6 +150,44 @@ class HomeNotifier with ChangeNotifier {
     _sessionID = null;
   }
 
+  Ping? ping;
+  Future startPing(BuildContext context) async {
+    int index = 0;
+    double milliseconds = 0;
+    int totalmilliseconds = 0;
+    
+    var result = context.read<HomeNotifier>().internetSpeed;
+
+    try {
+      ping = Ping(
+        UrlConstants.urlPing,
+        count: 2,
+        timeout: 1,
+        interval: 1,
+        ipv6: false,
+        ttl: 40,
+      );
+      ping!.stream.listen((event) {
+        index++;
+        debugPrint(event.toString());
+        totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
+        milliseconds = totalmilliseconds / index;
+       
+        if (milliseconds < 100) {
+          internetSpeed = SpeedInternet.fast;
+        } else if (milliseconds >= 100 && milliseconds <= 170) {
+          internetSpeed = SpeedInternet.medium;
+        } else {
+          internetSpeed = SpeedInternet.slow;
+        }
+
+        notifyListeners();
+      });
+    } catch (e) {
+      debugPrint('error $e');
+    }
+  }
+
   void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context) async {
@@ -157,10 +197,9 @@ class HomeNotifier with ChangeNotifier {
     // await db.getFilterCamera();
 
     'init Home'.logger();
-    internetSpeed = await System().startPing();
-    Timer.periodic(const Duration(seconds: 20), (timer) async {
-      internetSpeed = await System().startPing();
-      print('internetSpeed $internetSpeed');
+    startPing(context);
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
+      startPing(context);
     });
 
     context.read<ReportNotifier>().inPosition = contentPosition.home;

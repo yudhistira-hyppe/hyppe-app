@@ -390,15 +390,16 @@ class PostsBloc {
     setPostsFetch(PostsFetch(PostsState.loading));
     String speed = 'SD';
     speedInternet = context.read<HomeNotifier>().internetSpeed;
+    print("hasil dari home $speedInternet");
     switch (speedInternet) {
       case SpeedInternet.fast:
-        speed = 'HD';
-        break;
-      case SpeedInternet.medium:
         speed = 'SD';
         break;
-      default:
+      case SpeedInternet.medium:
         speed = 'LD';
+        break;
+      default:
+        speed = 'FD';
     }
 
     await _repos.reposPost(

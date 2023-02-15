@@ -885,6 +885,11 @@ class PreUploadContentNotifier with ChangeNotifier {
       onChange: (value, code) {
         _privacyTitle = value;
         privacyValue = code;
+        if(code == 'PRIVATE'){
+          allowComment = false;
+        }else{
+          allowComment = true;
+        }
         // Routing().moveBack();
         checkKeyboardFocus(context);
         notifyListeners();

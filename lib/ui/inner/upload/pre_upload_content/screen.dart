@@ -677,7 +677,9 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         children: [
           CustomTextWidget(
             textToDisplay:
-                "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}, ${notifier.language.share} ${notifier.isShared ? notifier.language.yes : notifier.language.no}",
+                notifier.privacyValue == 'PRIVATE' ?
+                 "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}"
+                : "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}, ${notifier.language.share} ${notifier.isShared ? notifier.language.yes : notifier.language.no}",
             textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
           ),
           twentyPx,

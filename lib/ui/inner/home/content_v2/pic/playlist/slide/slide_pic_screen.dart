@@ -310,7 +310,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 ),
                         ),
                         eightPx,
-                        _buildButtonV2(
+                        if ((widget.data.allowComments ?? true) )_buildButtonV2(
                           context: context,
                           iconData: '${AssetPath.vectorPath}comment.svg',
                           function: () {
