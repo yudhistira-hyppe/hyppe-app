@@ -124,6 +124,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                           sixteenPx,
                           CustomTextFormField(
                             // focusNode: notifier.passwordFocus,
+                            isEnabled: notifier.validationRegister(),
                             obscuringCharacter: '*',
                             inputAreaHeight: (isMatch ? 55 : 70) * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,

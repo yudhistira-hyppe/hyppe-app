@@ -57,32 +57,37 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void _resetData(BuildContext context) async {
-    _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.lobby);
+    try{
+      _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.lobby);
 
-    await _googleSignInService.handleSignOut();
-    await SharedPreference().logOutStorage();
+      await _googleSignInService.handleSignOut();
+      await SharedPreference().logOutStorage();
 
-    context.read<SelfProfileNotifier>().user = UserInfoModel();
-    context.read<OtherProfileNotifier>().user = UserInfoModel();
-    context.read<SearchNotifier>().allContents = UserInfoModel();
+      context.read<SelfProfileNotifier>().user = UserInfoModel();
+      context.read<OtherProfileNotifier>().user = UserInfoModel();
+      context.read<SearchNotifier>().allContents = UserInfoModel();
 
-    context.read<PreviewStoriesNotifier>().myStoriesData = null;
-    context.read<PreviewStoriesNotifier>().peopleStoriesData = null;
-    context.read<PreviewStoriesNotifier>().myStoryGroup = {};
-    context.read<PreviewDiaryNotifier>().diaryData = null;
-    context.read<PreviewVidNotifier>().vidData = null;
-    context.read<PreviewPicNotifier>().pic = null;
+      context.read<PreviewStoriesNotifier>().myStoriesData = null;
+      context.read<PreviewStoriesNotifier>().peopleStoriesData = null;
+      context.read<PreviewStoriesNotifier>().myStoryGroup = {};
+      context.read<PreviewDiaryNotifier>().diaryData = null;
+      context.read<PreviewVidNotifier>().vidData = null;
+      context.read<PreviewPicNotifier>().pic = null;
 
-    context.read<UserInterestNotifier>().interestData = [];
-    context.read<NotificationNotifier>().resetNotificationData();
-    context.read<ErrorService>().clearErrorData();
-    context.read<HomeNotifier>().resetSessionID();
-    context.read<TransactionNotifier>().dataTransaction = [];
-    context.read<TransactionNotifier>().dataAllTransaction = [];
-    context.read<TransactionNotifier>().dataAcccount = [];
-    _eventService.cleanUp();
-    _streamService.reset();
-    context.read<WelcomeLoginNotifier>().signOutGoogle.handleSignOut();
+      context.read<UserInterestNotifier>().interestData = [];
+      context.read<NotificationNotifier>().resetNotificationData();
+      context.read<ErrorService>().clearErrorData();
+      context.read<HomeNotifier>().resetSessionID();
+      context.read<TransactionNotifier>().dataTransaction = [];
+      context.read<TransactionNotifier>().dataAllTransaction = [];
+      context.read<TransactionNotifier>().dataAcccount = [];
+      _eventService.cleanUp();
+      _streamService.reset();
+      context.read<WelcomeLoginNotifier>().signOutGoogle.handleSignOut();
+    }catch(e){
+      'Reset Data Error: $e'.logger();
+    }
+
   }
 
   @override

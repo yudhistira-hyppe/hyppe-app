@@ -38,9 +38,9 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   String get password => _password;
   String _confirmPassword = "";
   String get confirmPassword => _confirmPassword;
-  bool _hidePassword = false;
+  bool _hidePassword = true;
   bool get hidePassword => _hidePassword;
-  bool _hideConfirmPassword = false;
+  bool _hideConfirmPassword = true;
   bool get hideConfirmPassword => _hideConfirmPassword;
   String? _invalidEmail = null;
   String? get invalidEmail => _invalidEmail;
@@ -239,17 +239,17 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
     }
   }
 
-  bool _validationRegister() {
+  bool validationRegister() {
     bool state1 = password.isNotEmpty;
-    bool state2 = _system.atLeastEightCharacter(text: password);
+    bool state2 = _system.atLeastEightUntilTwentyCharacter(text: password);
     bool state3 = _system.atLeastContainOneCharacterAndOneNumber(text: password);
-    bool state4 = checkConfirmPassword();
+    bool state4 = _system.specialCharPass(password);
     // bool state5 = System().specialCharPass(password);
     return state1 && state2 && state3 && state4;
   }
 
   Color nextButtonColor(BuildContext context) {
-    if (_validationRegister() && !loading) {
+    if (validationRegister() && !loading) {
       return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
@@ -257,7 +257,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   TextStyle nextTextColor(BuildContext context) {
-    if (_validationRegister()) {
+    if (validationRegister()) {
       return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
       return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
@@ -265,7 +265,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void nextButton(BuildContext context, bool mounted) {
-    if (_validationRegister()) {
+    if (validationRegister()) {
       String subCaption = '';
       if (!_system.canSpecialCharPass(password)) {
         ShowBottomSheet().onShowColouredSheet(

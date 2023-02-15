@@ -25,7 +25,7 @@ class _WelcomeLoginScreenState extends State<WelcomeLoginScreen> {
           body: SafeArea(
             child: SingleChildScrollView(
               child: Container(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.surface,
                 width: SizeConfig.screenWidth,
                 child: Column(
                   children: [
