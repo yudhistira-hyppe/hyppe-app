@@ -12,7 +12,9 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:provider/provider.dart';
 
 class PostsBloc {
   final _repos = Repos();
@@ -381,11 +383,24 @@ class PostsBloc {
   Future getVideoApsaraBlocV2(
     BuildContext context, {
     required String apsaraId,
+    SpeedInternet? speedInternet,
   }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
-
     setPostsFetch(PostsFetch(PostsState.loading));
+    String speed = 'SD';
+    speedInternet = context.read<HomeNotifier>().internetSpeed;
+    switch (speedInternet) {
+      case SpeedInternet.fast:
+        speed = 'HD';
+        break;
+      case SpeedInternet.medium:
+        speed = 'SD';
+        break;
+      default:
+        speed = 'LD';
+    }
+
     await _repos.reposPost(
       context,
       (onResult) {
@@ -400,7 +415,7 @@ class PostsBloc {
       (errorData) {
         setPostsFetch(PostsFetch(PostsState.videoApsaraError));
       },
-      data: {"apsaraId": apsaraId},
+      data: {"apsaraId": apsaraId, "definition": speed},
       headers: {
         'x-auth-user': email,
         'x-auth-token': token,

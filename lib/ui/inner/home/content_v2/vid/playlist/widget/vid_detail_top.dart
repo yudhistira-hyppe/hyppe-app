@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -115,8 +116,8 @@ class VidDetailTop extends StatelessWidget {
                         context,
                         onDetail: onDetail,
                         contentData: data ?? ContentData(),
-                        captionTitle: hyppePic,
-                        onUpdate: () => context.read<PicDetailNotifier>().onUpdate(),
+                        captionTitle: hyppeVid,
+                        onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
                         isShare: data?.isShared,
                       );
                       if (globalAudioPlayer != null) {
@@ -132,43 +133,6 @@ class VidDetailTop extends StatelessWidget {
                   ),
                 )
               : const SizedBox(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBottom(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          data != null
-              ? Consumer3<PicDetailNotifier, FollowRequestUnfollowNotifier, TranslateNotifierV2>(
-                  builder: (context, value, value2, value3, child) {
-                    if (data?.email == email) {
-                      return const SizedBox.shrink();
-                    }
-                    return Column(
-                      children: [
-                        value.checkIsLoading
-                            ? const Center(child: SizedBox(height: 40, child: CustomLoading()))
-                            : CustomFollowButton(
-                                checkIsLoading: value.checkIsLoading,
-                                onPressed: () async {
-                                  try {
-                                    await value.followUser(context, isUnFollow: value.statusFollowing == StatusFollowing.following);
-                                  } catch (e) {
-                                    e.logger();
-                                  }
-                                },
-                                isFollowing: value.statusFollowing,
-                              ),
-                      ],
-                    );
-                  },
-                )
-              : const Center(child: SizedBox(height: 40, child: CustomLoading())),
         ],
       ),
     );

@@ -4,10 +4,12 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -65,6 +67,44 @@ class System {
     return _instance;
   }
 
+  Ping? ping;
+  Future<SpeedInternet> startPing() async {
+    int index = 0;
+    double milliseconds = 0;
+    int totalmilliseconds = 0;
+    SpeedInternet result = SpeedInternet.medium;
+
+    try {
+      ping = Ping(
+        UrlConstants.urlPing,
+        count: 2,
+        timeout: 1,
+        interval: 1,
+        ipv6: false,
+        ttl: 40,
+      );
+      ping!.stream.listen((event) {
+        index++;
+        debugPrint(event.toString());
+        totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
+        milliseconds = totalmilliseconds / index;
+        print('ini index $index');
+        print('ini totalmilliseconds $totalmilliseconds');
+        print('ini milliseconds $milliseconds');
+        if (milliseconds < 100) {
+          result = SpeedInternet.fast;
+        } else if (milliseconds >= 100 && milliseconds <= 170) {
+          result = SpeedInternet.medium;
+        } else {
+          result = SpeedInternet.slow;
+        }
+      });
+    } catch (e) {
+      debugPrint('error $e');
+    }
+    return result;
+  }
+
   Future<bool> checkConnections() async {
     bool connection = false;
     try {
@@ -80,12 +120,17 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      if(url.isNotEmpty){
-        return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
-      }else{
+      if (url.isNotEmpty) {
+        return Env.data.baseUrl +
+            "/${Env.data.versionApi}/" +
+            url +
+            "?x-auth-token=" +
+            SharedPreference().readStorage(SpKeys.userToken) +
+            "&x-auth-user=" +
+            SharedPreference().readStorage(SpKeys.email);
+      } else {
         return '';
       }
-
 
       // return Env.data.baseUrl + url +
       //     "?x-auth-token=" +
@@ -307,8 +352,8 @@ class System {
     }
   }
 
-  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale){
-    switch (state){
+  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale) {
+    switch (state) {
       case StatusFollowing.none:
         return locale.follow ?? 'Follow';
       case StatusFollowing.following:
@@ -320,8 +365,8 @@ class System {
     }
   }
 
-  StatusFollowing getEnumFollowStatus(String status){
-    switch(status){
+  StatusFollowing getEnumFollowStatus(String status) {
+    switch (status) {
       case 'TOFOLLOW':
         return StatusFollowing.none;
       case 'FOLLOWING':
@@ -332,7 +377,6 @@ class System {
         return StatusFollowing.rejected;
     }
   }
-
 
   StatusFollowing getStatusFollow(String? sts) {
     switch (sts) {

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_widget.dart';

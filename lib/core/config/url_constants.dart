@@ -36,6 +36,8 @@ class UrlConstants {
   /// Staging Deeplink Base url
   static const String devDeeplinkUrl = "https://share.hyppe.app";
 
+  static const String urlPing = "s1.hyppe.cloud";
+
   /// APIs end point
   /* User route */
   static const String userRoute = "/api/user";

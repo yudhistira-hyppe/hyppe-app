@@ -1,11 +1,12 @@
 // import 'dart:js';
 
+import 'dart:async';
+
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/SqliteData.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -16,7 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
@@ -69,6 +69,9 @@ class HomeNotifier with ChangeNotifier {
   String _select = 'PUBLIC';
   String get select => _select;
 
+  SpeedInternet _internetSpeed = SpeedInternet.medium;
+  SpeedInternet get internetSpeed => _internetSpeed;
+
   var db = DatabaseHelper();
 
   set profileImage(String url) {
@@ -92,6 +95,11 @@ class HomeNotifier with ChangeNotifier {
   //   _isHaveSomethingNew = val;
   //   notifyListeners();
   // }
+
+  set internetSpeed(SpeedInternet val) {
+    _internetSpeed = val;
+    notifyListeners();
+  }
 
   set isLoadingVid(bool val) {
     _isLoadingVid = val;
@@ -149,6 +157,12 @@ class HomeNotifier with ChangeNotifier {
     // await db.getFilterCamera();
 
     'init Home'.logger();
+    internetSpeed = await System().startPing();
+    Timer.periodic(const Duration(seconds: 20), (timer) async {
+      internetSpeed = await System().startPing();
+      print('internetSpeed $internetSpeed');
+    });
+
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     if (isConnected) {

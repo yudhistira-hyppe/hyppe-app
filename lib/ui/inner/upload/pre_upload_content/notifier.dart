@@ -701,8 +701,10 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
     final fetch = notifier.postsFetch;
 
+    print('update dong ${fetch.postsState}');
+
     if (fetch.postsState == PostsState.updateContentsSuccess) {
-      context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
+      await context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
             content: content,
@@ -719,6 +721,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleView: _includeTotalViews,
             isShared: isShared,
           );
+      notifyListeners();
 
       context.read<SelfProfileNotifier>().onUpdate();
 
