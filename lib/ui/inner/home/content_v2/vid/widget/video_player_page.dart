@@ -105,7 +105,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       if (_betterPlayerController != null) {
         if (_eventType != BetterPlayerEventType.showingAds) {
           if (_betterPlayerController?.isFullScreen == false) {
-            _betterPlayerController?.enterFullScreen();
+            print("here's my problem");
+            // _betterPlayerController?.enterFullScreen();
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
@@ -374,6 +375,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     _betterPlayerController?.addEventsListener(
       (event) {
+        'betterPlay event: ${event.betterPlayerEventType}'.logger();
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           print('event ads : ${event.parameters}');
           _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
