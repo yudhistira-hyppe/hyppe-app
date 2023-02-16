@@ -2,7 +2,6 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
-import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_content.dart';
@@ -28,15 +27,24 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
 
   @override
   void initState() {
+    print('initState make content');
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
   }
 
   @override
   void dispose() {
+    print('dispose make content');
     CustomRouteObserver.routeObserver.unsubscribe(this);
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
     super.dispose();
+  }
+
+
+  @override
+  void deactivate() {
+    print('deactivate make content');
+    super.deactivate();
   }
 
   @override
@@ -47,11 +55,19 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
 
   @override
   void didPopNext() {
+    print('didPopNext make content');
     final notifier = Provider.of<MakeContentNotifier>(context, listen: false);
     if (notifier.isVideo || notifier.featureType != FeatureType.pic) {
       notifier.resetVariable(dispose: false);
     }
     super.didPopNext();
+  }
+
+
+  @override
+  void didPushNext() {
+    print('didPushNext make content');
+    super.didPushNext();
   }
 
   @override
