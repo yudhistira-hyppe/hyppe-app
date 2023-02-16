@@ -407,46 +407,50 @@ class _AdsScreenState extends State<AdsScreen> {
   Widget bottomAdsLayout(AdsData data) {
     return Material(
       color: Colors.transparent,
-      child: Container(
-        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
-        child: InkWell(
-          onTap: () async {
-            final uri = Uri.parse(data.adsUrlLink ?? '');
-            if (await canLaunchUrl(uri)) {
-              adsView(context, widget.argument.data, secondsVideo, isClick: true);
-              Navigator.pop(context);
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
-            } else {
-              throw "Could not launch $uri";
-            }
-            // can't launch url, there is some error
-          },
-          child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.only(top: 10, bottom: 10),
-              decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-              child: const CustomTextWidget(
-                textToDisplay: 'Learn more',
-                textStyle: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
-              )
+      child: Consumer<TranslateNotifierV2>(
+        builder: (context, notifier, _){
+          return Container(
+            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
+            child: InkWell(
+              onTap: () async {
+                final uri = Uri.parse(data.adsUrlLink ?? '');
+                if (await canLaunchUrl(uri)) {
+                  adsView(context, widget.argument.data, secondsVideo, isClick: true);
+                  Navigator.pop(context);
+                  await launchUrl(
+                    uri,
+                    mode: LaunchMode.externalApplication,
+                  );
+                } else {
+                  throw "Could not launch $uri";
+                }
+                // can't launch url, there is some error
+              },
+              child: Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                  child: CustomTextWidget(
+                    textToDisplay: notifier.translate.learnMore ?? 'Learn more',
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  )
 
-              //  Text(
-              //   'Learn more',
-              //   style: TextStyle(
-              //     color: Colors.white,
-              //     fontSize: 14,
-              //     fontWeight: FontWeight.w700,
-              //   ),
-              // ),
+                //  Text(
+                //   'Learn more',
+                //   style: TextStyle(
+                //     color: Colors.white,
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w700,
+                //   ),
+                // ),
               ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

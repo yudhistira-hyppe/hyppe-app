@@ -35,6 +35,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
@@ -408,112 +409,116 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                     Positioned(
                       left: 10,
                       bottom: 20,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Container(
-                          //   width: context.getWidth() * 0.4,
-                          //   child: const Text(
-                          //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
-                          //     style: TextStyle(color: Colors.white, fontSize: 10),
-                          //   ),
-                          // ),
-                          eightPx,
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CustomBaseCacheImage(
-                                  imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
-                                  memCacheWidth: 200,
-                                  memCacheHeight: 200,
-                                  imageBuilder: (_, imageProvider) {
-                                    return Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: imageProvider,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  errorWidget: (_, __, ___) {
-                                    return Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  emptyWidget: Container(
-                                    width: 27,
-                                    height: 27,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                sixteenPx,
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Consumer<TranslateNotifierV2>(
+                        builder: (context, notifier, _){
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Container(
+                              //   width: context.getWidth() * 0.4,
+                              //   child: const Text(
+                              //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
+                              //     style: TextStyle(color: Colors.white, fontSize: 10),
+                              //   ),
+                              // ),
+                              eightPx,
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                color: Colors.white,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      _newClipData?.data?.adsDescription ?? '',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                    CustomBaseCacheImage(
+                                      imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
+                                      memCacheWidth: 200,
+                                      memCacheHeight: 200,
+                                      imageBuilder: (_, imageProvider) {
+                                        return Container(
+                                          width: 27,
+                                          height: 27,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: imageProvider,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      errorWidget: (_, __, ___) {
+                                        return Container(
+                                          width: 27,
+                                          height: 27,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      emptyWidget: Container(
+                                        width: 27,
+                                        height: 27,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    fourPx,
-                                    Text(
-                                      _newClipData?.data?.adsUrlLink ?? '',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                    sixteenPx,
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _newClipData?.data?.adsDescription ?? '',
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                        ),
+                                        fourPx,
+                                        Text(
+                                          _newClipData?.data?.adsUrlLink ?? '',
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                    twelvePx,
+                                    InkWell(
+                                      onTap: () async {
+                                        final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                        final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                        if (await canLaunchUrl(uri)) {
+                                          print('adsView part 1');
+                                          adsView(_newClipData?.data ?? AdsData(), second);
+                                          await launchUrl(
+                                            uri,
+                                            mode: LaunchMode.externalApplication,
+                                          );
+                                        } else
+                                          // can't launch url, there is some error
+                                          throw "Could not launch $uri";
+                                      },
+                                      child: Container(
+                                        child: Text(
+                                          notifier.translate.learnMore ?? 'Learn More',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 7,
+                                          ),
+                                        ),
+                                        padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                                      ),
                                     )
                                   ],
                                 ),
-                                twelvePx,
-                                InkWell(
-                                  onTap: () async {
-                                    final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                    final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                    if (await canLaunchUrl(uri)) {
-                                      print('adsView part 1');
-                                      adsView(_newClipData?.data ?? AdsData(), second);
-                                      await launchUrl(
-                                        uri,
-                                        mode: LaunchMode.externalApplication,
-                                      );
-                                    } else
-                                      // can't launch url, there is some error
-                                      throw "Could not launch $uri";
-                                  },
-                                  child: Container(
-                                    child: Text(
-                                      'Learn more',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 7,
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                              )
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],

@@ -156,7 +156,7 @@ class HomeNotifier with ChangeNotifier {
     double milliseconds = 0;
     int totalmilliseconds = 0;
     
-    var result = context.read<HomeNotifier>().internetSpeed;
+    // var result = context.read<HomeNotifier>().internetSpeed;
 
     try {
       ping = Ping(
@@ -181,7 +181,6 @@ class HomeNotifier with ChangeNotifier {
           internetSpeed = SpeedInternet.slow;
         }
 
-        notifyListeners();
       });
     } catch (e) {
       debugPrint('error $e');

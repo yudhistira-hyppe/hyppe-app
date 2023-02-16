@@ -249,7 +249,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   Color nextButtonColor(BuildContext context) {
-    if (validationRegister() && !loading) {
+    if (validationRegister() && !loading && confirmPassword == password) {
       return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
@@ -257,7 +257,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   TextStyle nextTextColor(BuildContext context) {
-    if (validationRegister()) {
+    if (validationRegister() && confirmPassword == password) {
       return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
       return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
@@ -265,19 +265,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void nextButton(BuildContext context, bool mounted) {
-    if (validationRegister()) {
-      String subCaption = '';
-      if (!_system.canSpecialCharPass(password)) {
-        ShowBottomSheet().onShowColouredSheet(
-          context,
-          language.incorrectPassword ?? 'Incorrect Password',
-          subCaption: language.allowedSpecialCharacters,
-          color: Theme.of(context).colorScheme.error,
-          iconSvg: "${AssetPath.vectorPath}close.svg",
-          sizeIcon: 15,
-        );
-        return;
-      }
+    if (validationRegister() && !loading && confirmPassword == password) {
       _createNewPassword(context, mounted);
     }
   }
@@ -304,17 +292,7 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
       print('ini hasil ${fetch.userState}');
       if (fetch.userState == UserState.RecoverSuccess) {
         if (!mounted) return false;
-        ShowBottomSheet()
-            .onShowColouredSheet(
-          context,
-          language.newPasswordCreatedSuccessfully ?? '',
-          sizeIcon: 15,
-          milisecond: 1000,
-        )
-            .whenComplete(() {
-          _handleSignIn(context, mounted);
-          // Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.welcomeLogin);
-        });
+        _handleSignIn(context, mounted);
       } else {}
     } else {
       _loading = false;
@@ -327,6 +305,8 @@ class ForgotPasswordNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   Future _handleSignIn(BuildContext context, bool mounted) async {
+    passwordController.clear();
+    passwordConfirmController.clear();
     try {
       ShowGeneralDialog.loadingDialog(context);
       await FcmService().initializeFcmIfNot();

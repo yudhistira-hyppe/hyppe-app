@@ -236,9 +236,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                         foregroundColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
                         shadowColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context))),
                     function: () {
-                      if (!notifier.loading) {
                         notifier.nextButton(context, mounted);
-                      }
                     },
                     child: notifier.loading
                         ? const CustomLoading()

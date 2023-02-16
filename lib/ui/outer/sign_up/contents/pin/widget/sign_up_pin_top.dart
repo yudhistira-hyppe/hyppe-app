@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
@@ -8,66 +10,155 @@ import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/widget/custom_rectangle_input.dart';
 import 'package:provider/provider.dart';
 
-class SignUpPinTop extends StatelessWidget {
+import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../core/services/system.dart';
+
+class SignUpPinTop extends StatefulWidget {
+  const SignUpPinTop({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpPinTop> createState() => _SignUpPinTopState();
+}
+
+class _SignUpPinTopState extends State<SignUpPinTop> {
+
+  var timeout = 600;
+
+  var pleaseWait = 0;
+
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    pleaseWait = 60;
+    timeout = 600;
+    startTime();
+  }
+
+  void resetTime() {
+    setState((){
+      timeout = 600;
+    });
+  }
+
+  void startTime({bool isReset = false}) {
+    if (isReset) {
+      resetTime();
+    }
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        if(pleaseWait > 0){
+          pleaseWait--;
+        }
+        if (timeout > 0) {
+          timeout--;
+        } else {
+          stopTime(isReset: true);
+          Navigator.pop(context);
+        }
+      });
+    });
+  }
+
+  stopTime({isReset = false}){
+    if(isReset){
+      resetTime();
+    }
+    setState(() {
+      timer.cancel();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Consumer<SignUpPinNotifier>(
       builder: (_, notifier, __) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const CustomIconWidget(
             defaultColor: false,
-            iconData: "${AssetPath.vectorPath}verification-email.svg",
-          ),
-          twentyPx,
-          CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: "${notifier.language.pinTopText2} ${notifier.email}",
+            iconData: "${AssetPath.vectorPath}forgot_password.svg",
           ),
           fortyTwoPx,
-          CustomRectangleInput(),
-          twelvePx,
-          notifier.resendPilih
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          CustomTextWidget(
+            textStyle: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.w700),
+            textToDisplay: "${notifier.language.pinTopText1} ${notifier.email}",
+          ),
+          eightPx,
+          CustomTextWidget(
+            textStyle: Theme.of(context).textTheme.bodyText2,
+            maxLines: 3,
+            textToDisplay: "${notifier.language.pinTopText2} ${notifier.argument.email}",
+          ),
+          twentyFourPx,
+          CustomRectangleInput(afterSuccess: (){
+            stopTime(isReset: true);
+          }),
+          (!notifier.loadingForObject(notifier.resendLoadKey)) ? Column(children: [
+            fortyPx,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomTextWidget(
+                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                  textToDisplay: notifier.language.didntReceiveTheCode ?? '',
+                ),
+                fourPx,
+                pleaseWait == 0 ?
+                InkWell(
+                  onTap: (){
+
+                    notifier.resend(context, (){
+                      setState((){
+                        pleaseWait = 60;
+                        timeout = 600;
+                      });
+                    });
+                  },
+                  child: CustomTextWidget(
+                    textOverflow: TextOverflow.visible,
+                    textToDisplay: notifier.resendString(),
+                    textStyle: notifier.resendStyle(context),
+                  ),
+                ): Row(
                   children: [
-                    CustomTextWidget(
-                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
-                      textToDisplay: notifier.language.didntReceiveTheCode ?? '',
-                    ),
-                    fourPx,
-                    // notifier.startTimers
-                    //     ? TweenAnimationBuilder<Duration>(
-                    //         duration: Duration(seconds: 10),
-                    //         tween: Tween(begin: Duration(seconds: 10), end: Duration.zero),
-                    //         onEnd: () {
-                    //           notifier.startTimers = false;
-                    //           print('notifier.startTimers ${notifier.startTimers}');
-                    //           // Routing().moveBack();
-                    //           // notifier.initTransactionHistory(context);
-                    //         },
-                    //         builder: (BuildContext context, Duration value, Widget? child) {
-                    //           final minutes = value.inMinutes;
-                    //           final seconds = value.inSeconds % 60;
-                    //           return CustomTextWidget(
-                    //             textToDisplay: ' 00 : ${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
-                    //             textStyle: notifier.resendStyle(context),
-                    //           );
-                    //         })
-                    //     : Container(),
-                    InkWell(
-                      onTap: notifier.resendCode(context, withStartTimer: true),
-                      child: CustomTextWidget(
-                        textOverflow: TextOverflow.visible,
-                        textToDisplay: notifier.resendString(),
-                        textStyle: notifier.resendStyle(context),
-                      ),
-                    )
+                    CustomTextWidget(textToDisplay: '${notifier.language.pleaseWaitFor} ', textStyle: theme.textTheme.caption,),
+                    CustomTextWidget(textToDisplay: System().getFullTime(pleaseWait), textStyle: theme.textTheme.caption?.copyWith(color:  context.isDarkMode() ? Colors.white : Colors.black))
                   ],
-                )
-              : SizedBox(),
+                ),
+              ],
+            )
+          ],): const SizedBox(width: 15, height: 15, child: CircularProgressIndicator(strokeWidth: 1, color: kHyppePrimary,)),
+          twentyFourPx,
+          CustomTextWidget(textToDisplay: notifier.language.messageTimeoutPin ?? '', textStyle: theme.textTheme.caption,),
+          onePx,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomTextWidget(textToDisplay: '${notifier.language.inWord?.toLowerCase()} ', textStyle: theme.textTheme.caption,),
+              CustomTextWidget(textToDisplay: '${System().getFullTime(timeout)} ', textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.primary),),
+              CustomTextWidget(textToDisplay: '${notifier.language.minutes?.toLowerCase()}', textStyle: theme.textTheme.caption,)
+            ],
+          )
         ],
       ),
     );
   }
 }
+
+
+// class SignUpPinTop extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
