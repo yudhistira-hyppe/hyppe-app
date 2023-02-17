@@ -14,14 +14,15 @@ class LikeNotification extends StatelessWidget {
           data: notifier.likeData() ?? [],
           itemCount: notifier.likeItemCount,
           builder: (context, index) {
-            if (notifier.likeData() == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(
               data: notifier.likeData()?[index],
               rightWidget: ImageComponent(
                 borderRadiusGeometry: BorderRadius.circular(4.0),
-                data: notifier.likeData()?[index].content.firstOrNull(),
+                // data: notifier.likeData()?[index].content.firstOrNull(),
+                data: notifier.likeData()?[index].content,
               ),
             );
           },

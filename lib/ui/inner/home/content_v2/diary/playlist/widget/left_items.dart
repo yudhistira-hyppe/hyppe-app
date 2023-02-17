@@ -1,21 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:readmore/readmore.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/widget/button_boost.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/jangakauan_status.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_tag_label.dart';
 
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:story_view/controller/story_controller.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../../../../core/models/collection/music/music.dart';
+import '../../../../../../constant/widget/custom_desc_content_widget.dart';
 
 class LeftItems extends StatefulWidget {
   final String? userName;
   final String? description;
-  final String? musicName;
+  final String? tags;
+  final Music? music;
   final String? authorName;
+  final StoryController? storyController;
+  final String? postID;
+  final String? location;
+  final List<TagPeople>? tagPeople;
+  final ContentData? data;
 
   const LeftItems({
     Key? key,
     this.userName,
     this.description,
-    this.musicName,
+    this.tags,
+    this.music,
     this.authorName,
+    this.storyController,
+    this.postID,
+    this.location,
+    this.tagPeople,
+    this.data,
   }) : super(key: key);
 
   @override
@@ -48,31 +73,97 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    print('lokasi is ${widget.location}');
+
+    final notifier = context.read<TranslateNotifierV2>();
     return Container(
-      width: SizeConfig.screenWidth! / 1.5,
-      alignment: const Alignment(-1.0, 0.75),
-      padding: const EdgeInsets.only(left: 15.0),
+      width: widget.music != null ? double.infinity : SizeConfig.screenWidth! / 1.3,
+      // alignment: Alignment(widget.music != null ? 0 : -1.0, 0.75),
+      alignment: Alignment.bottomRight,
+      padding: const EdgeInsets.only(left: 15.0, right: 20, bottom: 80.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
+          (widget.tagPeople?.isNotEmpty ?? false) || widget.location != ''
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Row(
+                    children: [
+                      (widget.tagPeople?.isNotEmpty ?? false)
+                          ? PicTagLabel(
+                              icon: 'user',
+                              label: '${widget.tagPeople?.length} people',
+                              function: () {
+                                widget.storyController?.pause();
+                                context.read<PicDetailNotifier>().showUserTag(context, widget.tagPeople, widget.postID, storyController: widget.storyController);
+                              },
+                            )
+                          : const SizedBox(),
+                      widget.location == '' || widget.location == null
+                          ? const SizedBox()
+                          : PicTagLabel(
+                              icon: 'maptag',
+                              label: "${widget.location}",
+                              function: () {},
+                            ),
+                    ],
+                  ),
+                )
+              : const SizedBox(),
           Container(
+            width: SizeConfig.screenWidth! / 1.3,
+            padding: const EdgeInsets.all(2),
             constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
+            // color: Theme.of(context).colorScheme.onBackground.withOpacity(0.6),
             child: SingleChildScrollView(
-              child: ReadMoreText(
-                "${widget.description}",
-                trimLines: 5,
-                trimMode: TrimMode.Line,
-                textAlign: TextAlign.left,
-                trimExpandedText: 'Show less',
-                trimCollapsedText: 'Show more',
-                colorClickableText: Theme.of(context).colorScheme.primaryVariant,
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText),
-                moreStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
-                lessStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDescContent(
+                    desc: "${widget.description}",
+                    trimLines: 5,
+                    textAlign: TextAlign.start,
+                    seeLess: ' ${notifier.translate.seeLess}',
+                    seeMore: ' ${notifier.translate.seeMoreContent}',
+                    normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
+                    hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
+                    expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
               ),
             ),
           ),
+
+          twelvePx,
+          (widget.data?.reportedStatus != 'OWNED' && widget.data?.reportedStatus != 'BLURRED' && widget.data?.reportedStatus2 != 'BLURRED') &&
+                  (widget.data?.boosted.isEmpty ?? [].isEmpty) &&
+                  widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              ? Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: ButtonBoost(
+                    marginBool: true,
+                    contentData: widget.data,
+                    startState: (){
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
+                    },
+                    afterState: (){
+                      SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
+                    },
+                  ),
+                )
+              : Container(),
+          (widget.data?.boosted.isNotEmpty ?? [].isNotEmpty) && widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: JangkaunStatus(
+                    jangkauan: widget.data?.boostJangkauan ?? 0,
+                    isDiary: true,
+                  ),
+                )
+              : Container(),
+
           // SizedBox(height: 40.0 * SizeConfig.scaleDiagonal),
           // _musicInfo(),
         ],

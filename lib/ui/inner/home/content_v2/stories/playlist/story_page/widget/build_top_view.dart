@@ -5,7 +5,6 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/widget/custom_balloon_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
@@ -51,50 +50,76 @@ class _BuildTopViewState extends State<BuildTopView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Selector<SelfProfileNotifier, UserProfileModel?>(
-              selector: (_, select) => select.user.profile,
-              builder: (_, valueNotifier, __) {
-                return ProfileComponent(
-                  isDetail: true,
-                  show: true,
-                  onFollow: () {},
-                  following: true,
-                  createdAt: widget.when,
-                  isCelebrity: false,
-                  onTapOnProfileImage: () => System().navigateToProfile(context, widget.data!.email!, storyController: widget.storyController),
-                  featureType: FeatureType.story,
-                  username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
-                  imageUrl: notifier.onProfilePicShow(
-                    "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data!.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
+            widget.data?.isReport ?? false
+                ? Container()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Selector<SelfProfileNotifier, UserProfileModel?>(
+                        selector: (_, select) => select.user.profile,
+                        builder: (_, valueNotifier, __) {
+                          return ProfileComponent(
+                            isDetail: true,
+                            show: true,
+                            onFollow: () {},
+                            following: true,
+                            createdAt: widget.when,
+                            isCelebrity: false,
+                            onTapOnProfileImage: () => System().navigateToProfile(context, widget.data?.email ?? '', storyController: widget.storyController),
+                            featureType: FeatureType.pic,
+                            username: "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.username : valueNotifier?.username ?? ''}",
+                            imageUrl: notifier.onProfilePicShow(
+                              "${!notifier.isUserLoggedIn(widget.data?.email) ? widget.data?.avatar?.mediaEndpoint : valueNotifier?.avatar?.mediaEndpoint ?? ''}",
+                            ),
+                            // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                  // onTapOnProfileImage: () => System().navigateToProfileScreen(context, null, storyData: data, userIdStory: userID),
-                );
-              },
-            ),
             Row(
               children: [
-                CustomBalloonWidget(
-                  child: Visibility(
-                    visible: widget.data?.email == SharedPreference().readStorage(SpKeys.email),
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.storyController.pause();
-                        ShowBottomSheet.onShowOptionContent(
-                          context,
-                          contentData: widget.data!,
-                          captionTitle: hyppeStory,
-                          onDetail: widget.onDetail,
-                          storyController: widget.storyController,
-                        );
-                      },
-                      child: const CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: kHyppeLightButtonText,
-                      ),
-                    ),
-                  ),
-                ),
+                widget.data?.email == SharedPreference().readStorage(SpKeys.email)
+                    ? GestureDetector(
+                        onTap: () {
+                          widget.storyController.pause();
+                          ShowBottomSheet().onShowOptionContent(
+                            context,
+                            contentData: widget.data!,
+                            captionTitle: hyppeStory,
+                            onDetail: widget.onDetail,
+                            storyController: widget.storyController,
+                          );
+                        },
+                        child: const CustomIconWidget(
+                          defaultColor: false,
+                          iconData: '${AssetPath.vectorPath}more.svg',
+                          color: kHyppeLightButtonText,
+                        ),
+                      )
+                    : const SizedBox(),
+                // (widget.data?.isReport != true) && widget.data?.email != SharedPreference().readStorage(SpKeys.email)
+                //     ? GestureDetector(
+                //         onTap: () {
+                //           widget.storyController.pause();
+                //           ShowBottomSheet.onReportContent(
+                //             context,
+                //             postData: widget.data,
+                //             adsData: null,
+                //             type: hyppeStory,
+                //             onUpdate: () {
+                //               widget.storyController.pause();
+                //               context.read<StoriesPlaylistNotifier>().onUpdate();
+                //             },
+                //           );
+                //         },
+                //         child: const CustomIconWidget(
+                //           defaultColor: false,
+                //           iconData: '${AssetPath.vectorPath}more.svg',
+                //           color: kHyppeLightButtonText,
+                //         ),
+                //       )
+                //     : SizedBox(),
                 SizedBox(
                   width: 40,
                   height: 40,

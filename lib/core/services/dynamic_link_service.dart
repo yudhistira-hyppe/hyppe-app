@@ -1,8 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
+import 'package:hyppe/core/arguments/referral_argument.dart';
+import 'package:hyppe/core/bloc/referral/bloc.dart';
+import 'package:hyppe/core/bloc/referral/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/services/system.dart';
 
 import 'shared_preference.dart';
 import 'package:hyppe/ux/path.dart';
@@ -32,7 +40,6 @@ class DynamicLinkService {
 
   // To prevent dynamic link from being called multiple times
   static bool _linkProcessed = false;
-
   static PendingDynamicLinkData? _pendingDynamicLinkData;
 
   static Future handleDynamicLinks() async {
@@ -65,44 +72,70 @@ class DynamicLinkService {
 
   static void _handleDeepLink(PendingDynamicLinkData? data) async {
     Uri? deepLink = data?.link;
+    deepLink.logger();
     if (deepLink != null) {
-      // Set [_pendingDynamicLinkData] to the initial dynamic link
+      // Set [pendingDynamicLinkData] to the initial dynamic link
       _pendingDynamicLinkData ??= data;
-
+      _sharedPrefs.writeStorage(SpKeys.referralFrom, _pendingDynamicLinkData?.link.queryParameters['sender_email']);
       final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
       if (_userToken != null) {
-        
         // Auto follow user if app is install from a dynamic link
-        try {
-          followSender(Routing.navigatorKey.currentContext!);
-        } catch (e) {
-          'Error in followSender $e'.logger();
+        if (deepLink.queryParameters['referral'] != '1') {
+          try {
+            print('masuk sini dynamic');
+            followSender(Routing.navigatorKey.currentContext!);
+          } catch (e) {
+            'Error in followSender $e'.logger();
+          }
         }
-
+        deepLink.path.logger();
         final _path = deepLink.path;
         switch (_path) {
           case Routes.storyDetail:
             _routing.moveReplacement(
               _path,
-              argument: StoryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: StoryDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           case Routes.vidDetail:
             _routing.moveReplacement(
               _path,
-              argument: VidDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: VidDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           case Routes.diaryDetail:
             _routing.moveReplacement(
               _path,
-              argument: DiaryDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
             );
             break;
           case Routes.picDetail:
             _routing.moveReplacement(
               _path,
-              argument: PicDetailScreenArgument()..postID = deepLink.queryParameters['postID'],
+              argument: PicDetailScreenArgument()
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
+            );
+            break;
+          case Routes.picSlideDetailPreview:
+            _routing.moveReplacement(
+              _path,
+              argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
+                ..postID = deepLink.queryParameters['postID']
+                ..backPage = false,
+            );
+            break;
+          // TO DO: If register from referral link, then hit to backend
+          case Routes.otherProfile:
+            _routing.moveReplacement(
+              _path,
+              argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
             );
             break;
         }
@@ -112,6 +145,7 @@ class DynamicLinkService {
         '_handleDeepLink | deeplink: $deepLink'.logger();
       } else {
         '_handleDeepLink | userToken is null'.logger();
+        '_handleDeepLink | deeplink: $deepLink'.logger();
       }
     } else {
       'App open not from dynamic link'.logger();
@@ -119,34 +153,96 @@ class DynamicLinkService {
   }
 
   static Future followSender(BuildContext context) async {
+    final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+    if (_sharedPrefs.readStorage(SpKeys.email) != _receiverParty) {
+      try {
+        if (_pendingDynamicLinkData?.link.queryParameters['referral'] == '1') {
+          return;
+        }
+
+        'Link | followSender | receiverParty: $_receiverParty'.logger();
+
+        if (_receiverParty != null) {
+          final notifier = FollowBloc();
+          await notifier.followUserBlocV2(
+            context,
+            withAlertConnection: false,
+            data: FollowUserArgument(
+              receiverParty: _receiverParty,
+              eventType: InteractiveEventType.following,
+            ),
+          );
+          final fetch = notifier.followFetch;
+          if (fetch.followState == FollowState.followUserSuccess) {
+            'followUser | followUserSuccess'.logger();
+          } else {
+            'followUser | followUserFailed'.logger();
+          }
+          _pendingDynamicLinkData = null;
+        } else {
+          'followUser | _receiverParty is null'.logger();
+        }
+      } catch (e) {
+        'follow user: ERROR: $e'.logger();
+      }
+    }
+  }
+
+  static Future hitReferralBackend(BuildContext context) async {
     try {
-      final _receiverParty = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      if (_pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
+        return;
+      }
 
-      'Link | followSender | receiverParty: $_receiverParty'.logger();
+      final _referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      print('ini apa ya $_referralEmail');
 
-      if (_receiverParty != null) {
-        final notifier = FollowBloc();
-        await notifier.followUserBlocV2(
+      'Link | referralSender | receiverParty: $_referralEmail'.logger();
+      String realDeviceID = await System().getDeviceIdentifier();
+
+      if (_referralEmail != null) {
+        final notifier = ReferralBloc();
+        await notifier.referralUserBloc(
           context,
           withAlertConnection: false,
-          data: FollowUserArgument(
-            receiverParty: _receiverParty,
-            eventType: InteractiveEventType.following,
-          ),
+          data: ReferralUserArgument(email: _referralEmail, imei: realDeviceID != "" ? realDeviceID : _sharedPrefs.readStorage(SpKeys.fcmToken)),
         );
-        final fetch = notifier.followFetch;
-        if (fetch.followState == FollowState.followUserSuccess) {
-          'followUser | followUserSuccess'.logger();
+        final fetch = notifier.referralFetch;
+        if (fetch.referralState == ReferralState.referralUserSuccess) {
+          'referralUser | referralUserSuccess'.logger();
         } else {
-          'followUser | followUserFailed'.logger();
+          'referralUser | referralUserFailed'.logger();
         }
         _pendingDynamicLinkData = null;
       } else {
-        'followUser | _receiverParty is null'.logger();
+        'referralUser | _receiverParty is null'.logger();
+      }
+    } catch (e) {
+      'referral user: ERROR: $e'.logger();
+    }
+  }
+
+  static String getPendingReferralEmailDynamicLinks() {
+    try {
+      if (_pendingDynamicLinkData?.link.queryParameters['referral'] != '1') {
+        return "";
+      }
+
+      // final _referralEmail = _pendingDynamicLinkData?.link.queryParameters['sender_email'];
+      final _referralEmail = SharedPreference().readStorage(SpKeys.referralFrom);
+
+      'Link | referralSender | _referralEmail: $_referralEmail'.logger();
+
+      if (_referralEmail != null) {
+        _pendingDynamicLinkData = null;
+        return _referralEmail;
+      } else {
+        'referralUser | _referralEmail is null'.logger();
       }
     } catch (e) {
       'follow user: ERROR: $e'.logger();
     }
+    return "";
   }
 }
 

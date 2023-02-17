@@ -1,7 +1,17 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_formatter/dio_http_formatter.dart';
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/status_code.dart';
 import 'package:flutter/foundation.dart' show kReleaseMode;
+import 'dart:io';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 class ApiAction {
   late Dio _dio;
@@ -9,8 +19,8 @@ class ApiAction {
   ApiAction() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: Env.data.apiBaseUrl,
-        validateStatus: (status) => status! < 500,
+        baseUrl: Env.data.apiBaseUrl + '/${Env.data.versionApi}',
+        validateStatus: (status) => (status ?? 0) < 500,
       ),
     );
 
@@ -23,6 +33,8 @@ class ApiAction {
         requestHeader: true,
         responseHeader: true,
       ));
+      // _dio.interceptors.add(CurlLoggerDioInte?rceptor(printOnSuccess: true));
+      _dio.interceptors.add(HttpFormatter());
     }
   }
 
@@ -39,6 +51,12 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+
+    // if (Env.dataUrlv4.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
     try {
       final _response = await _dio.post(
         url,
@@ -70,6 +88,23 @@ class ApiAction {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+
+    if (url == UrlConstants.createuserposts) {
+      if (Env.data.debug == true) {
+        url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
+      } else {
+        url = UrlConstants.productionUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
+      }
+    }
+
+    // url = "${UrlConstants.stagingBaseApi}/api/posts/v2/createpost";
+
+    // if (Env.dataUrlv4.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
+
     try {
       final _response = await _dio.post(
         url,
@@ -96,12 +131,20 @@ class ApiAction {
     responseType = ResponseType.json,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    CancelToken? cancelToken,
     String contentType = 'application/json',
   }) async {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
+
+    // if (Env.dataUrlv4.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
+
     try {
       final _response = await _dio
           .post(
@@ -113,6 +156,7 @@ class ApiAction {
             ),
             onSendProgress: onSendProgress,
             onReceiveProgress: onReceiveProgress,
+            cancelToken: cancelToken,
           )
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),
@@ -135,9 +179,15 @@ class ApiAction {
     ProgressCallback? onReceiveProgress,
   }) async {
     Map<String, dynamic> _headers = <String, dynamic>{};
-
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+
+    // var newurl = url.split('?');
+    // if (Env.dataUrlv4.contains(newurl[0])) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
 
     try {
       final _response = await _dio
@@ -177,6 +227,12 @@ class ApiAction {
     if (token != null) _headers['x-auth-token'] = token;
     _headers['Content-Type'] = contentType;
 
+    // if (Env.dataUrlv4.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
+
     try {
       final _response = await _dio
           .delete(
@@ -212,6 +268,12 @@ class ApiAction {
 
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
     if (token != null) _headers['x-auth-token'] = token;
+
+    // if (Env.dataUrlv4.contains(url)) {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV3}';
+    // } else {
+    //   _dio.options.baseUrl = Env.data.apiBaseUrl + '/${UrlConstants.apiV2}';
+    // }
 
     try {
       final _response = await _dio

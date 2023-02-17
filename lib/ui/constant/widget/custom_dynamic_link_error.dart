@@ -34,11 +34,11 @@ class CustomDynamicLinkErrorWidget extends StatelessWidget {
                   defaultColor: false,
                 ),
                 eightPx,
-                CustomTextWidget(textToDisplay: _language.sorryTheresNothingHere!, textStyle: theme.textTheme.subtitle1),
+                CustomTextWidget(textToDisplay: _language.sorryTheresNothingHere ?? '', textStyle: theme.textTheme.subtitle1),
                 fourPx,
                 CustomTextWidget(
-                    textToDisplay: _language.theContentMayHaveBeenRemovedOrTheLinkMayBeBroken!,
-                    textStyle: theme.textTheme.caption!.copyWith(color: theme.colorScheme.secondaryVariant))
+                    textToDisplay: _language.theContentMayHaveBeenRemovedOrTheLinkMayBeBroken ?? '',
+                    textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
               ],
             ),
           )

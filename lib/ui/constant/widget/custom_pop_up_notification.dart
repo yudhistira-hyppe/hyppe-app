@@ -31,7 +31,7 @@ class CustomPopUpNotification extends StatelessWidget {
         //             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
         //               CustomTextWidget(
         //                   textToDisplay: "${context.read<HomeNotifier>().language.hiYouHaveNewContentPleasePullDownToRefresh}",
-        //                   textStyle: Theme.of(context).textTheme.caption!.copyWith(fontWeight: FontWeight.bold)),
+        //                   textStyle: Theme.of(context).textTheme.caption.copyWith(fontWeight: FontWeight.bold)),
         //               eightPx,
         //               CustomIconWidget(iconData: "${AssetPath.vectorPath}palm.svg", defaultColor: false, width: 26, height: 26)
         //             ])))

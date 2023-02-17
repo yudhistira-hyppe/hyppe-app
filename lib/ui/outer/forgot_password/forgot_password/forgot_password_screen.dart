@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/notifier.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/widget/forgot_password_title.dart';
@@ -50,7 +52,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 iconData: '${AssetPath.vectorPath}back-arrow.svg',
               ),
               title: CustomTextWidget(
-                textToDisplay: notifier.language.reset!,
+                textToDisplay: notifier.language.forgotPassword  ?? '',
                 textStyle: style.bodyText1?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
@@ -59,30 +61,40 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: Stack(
                 children: [
                   ForgotPasswordTitle(
-                    title: notifier.language.forgotPassword!,
-                    subtitle: notifier.language.wellEmailYourCodeToResetYourPassword!,
+                    title: notifier.language.forgotPassword ?? '',
+                    subtitle: notifier.language.wellEmailYourCodeToResetYourPassword ?? '',
                   ),
                   Align(
                     alignment: const Alignment(0, -0.3),
                     child: CustomTextFormField(
                       focusNode: notifier.focusNode,
-                      inputAreaHeight: 55 * SizeConfig.scaleDiagonal,
+                      inputAreaHeight: (notifier.invalidEmail != null ? 70 : 55) * SizeConfig.scaleDiagonal,
                       inputAreaWidth: SizeConfig.screenWidth!,
                       textEditingController: notifier.emailController,
                       style: Theme.of(context).textTheme.bodyText1,
                       textInputType: TextInputType.emailAddress,
-                      onChanged: (v) => notifier.text = v,
+                      onChanged: (v){
+                        notifier.text = v;
+                        if(System().validateEmail(v)){
+                          notifier.invalidEmail = null;
+                        }else{
+                          if(v.isNotEmpty){
+                            notifier.invalidEmail = notifier.language.messageInvalidEmail;
+                          }else{
+                            notifier.invalidEmail = null;
+                          }
+                        }
+                      },
                       inputDecoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-                        labelText: notifier.language.email!,
-                        labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty
-                                ? Theme.of(context).colorScheme.primaryVariant
-                                : null),
-                        prefixIconConstraints:
-                            BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
+                        contentPadding: EdgeInsets.only(left: 16, bottom: (notifier.invalidEmail != null) ? 0 : 16, right: 16),
+                        labelText: notifier.language.email ?? 'Email',
+                        labelStyle: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            ?.copyWith(color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty ? Theme.of(context).colorScheme.primary : null),
+                        prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth())),
                         prefixIcon: Transform.translate(
-                          offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
+                          offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()), 0.0),
                           child: Transform.scale(
                             scale: SizeWidget().calculateSize(1.2, SizeWidget.baseHeightXD, SizeConfig.screenHeight!),
                             child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
@@ -91,9 +103,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 color: notifier.focusNode.hasFocus || notifier.emailController.text.isNotEmpty
-                                    ? Theme.of(context).colorScheme.primaryVariant
-                                    : Theme.of(context).colorScheme.secondaryVariant)),
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context).colorScheme.secondary)),
                         suffixIcon: notifier.emailSuffixIcon(),
+                        errorText: notifier.invalidEmail,
                       ),
                     ),
                   ),
@@ -113,7 +126,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         child: notifier.isLoading
                             ? const CustomLoading()
                             : CustomTextWidget(
-                                textToDisplay: notifier.language.reset!,
+                                textToDisplay: notifier.language.next ?? 'Next',
                                 textStyle: notifier.emailNextTextColor(context),
                               ),
                       ),

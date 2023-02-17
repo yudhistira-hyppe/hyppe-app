@@ -29,7 +29,7 @@ class SignUpPinBottom extends StatelessWidget {
           child: notifier.loading
               ? const CustomLoading()
               : CustomTextWidget(
-                  textToDisplay: notifier.language.verify!,
+                  textToDisplay: notifier.language.verify ?? '',
                   textStyle: notifier.verifyTextColor(context),
                 ),
         ),

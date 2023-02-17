@@ -29,7 +29,7 @@ class AcceptButton extends StatelessWidget {
             argument = FollowUserArgument(
               receiverParty: data?.mate ?? '',
               replyEvent: InteractiveEvent.accept,
-              eventType: System().convertEventType(data!.eventType!),
+              eventType: System().convertEventType(data?.eventType),
             );
 
             context.read<NotificationNotifier>().acceptUser(context, data: data, argument: argument);
@@ -52,7 +52,7 @@ class AcceptButton extends StatelessWidget {
             context.read<NotificationNotifier>().acceptUser(context, data: data, argument: argument);
           }
         },
-        style: theme.textButtonTheme.style!.copyWith(
+        style: theme.textButtonTheme.style?.copyWith(
           backgroundColor: MaterialStateProperty.all(buttonColor(theme)),
           padding: MaterialStateProperty.all(EdgeInsets.zero),
         ),
@@ -67,8 +67,10 @@ class AcceptButton extends StatelessWidget {
   }
 
   Color buttonColor(ThemeData theme) {
+    print('warna');
+    print(System().convertEvent(data?.event));
     if (System().convertEvent(data?.event) != InteractiveEvent.accept) {
-      return theme.colorScheme.primaryVariant;
+      return theme.colorScheme.primary;
     } else {
       return theme.colorScheme.surface;
     }
@@ -77,15 +79,13 @@ class AcceptButton extends StatelessWidget {
   String? buttonText(BuildContext context) {
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false);
     if (System().convertEvent(data?.event) == InteractiveEvent.accept || System().convertEvent(data?.event) == InteractiveEvent.done) {
-      return _language.translate.following!;
-    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.follower &&
-        System().convertEvent(data?.event) == InteractiveEvent.request) {
-      return _language.translate.accept!;
-    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.following &&
-        System().convertEvent(data?.event) == InteractiveEvent.initial) {
+      return _language.translate.following ?? 'following';
+    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.follower && System().convertEvent(data?.event) == InteractiveEvent.request) {
+      return _language.translate.accept ?? 'accept';
+    } else if (System().convertEventType(data?.eventType) == InteractiveEventType.following && System().convertEvent(data?.event) == InteractiveEvent.initial) {
       return 'Requested';
     } else {
-      return _language.translate.follow!;
+      return _language.translate.follow;
     }
   }
 }

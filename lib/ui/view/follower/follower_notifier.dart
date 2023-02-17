@@ -76,32 +76,40 @@ class FollowerNotifier extends ChangeNotifier {
     required FollowUserArgument argument,
   }) async {
     try {
-      System().actionReqiredIdCard(
-        context,
-        action: () async {
+      // System().actionReqiredIdCard(
+      //   context,
+      //   action: () async {
           final notifier = FollowBloc();
           await notifier.followUserBlocV2(context, data: argument);
           final fetch = notifier.followFetch;
           if (fetch.followState == FollowState.followUserSuccess) {
-            if (data?.eventType == InteractiveEventType.follower) {
-              final _followersDataIndex = _followersData?.indexOf(data!);
+            if(data != null){
+              if (data.eventType == InteractiveEventType.follower) {
+                final _followersDataIndex = _followersData?.indexOf(data);
+                if(_followersDataIndex != null){
+                  _followersData?[_followersDataIndex] = (_followersData ?? [])[_followersDataIndex].copyWith(
+                    event: data.event == InteractiveEvent.request ? InteractiveEvent.accept : InteractiveEvent.none,
+                  );
+                }
 
-              _followersData?[_followersDataIndex!] = _followersData![_followersDataIndex].copyWith(
-                event: data?.event == InteractiveEvent.request ? InteractiveEvent.accept : InteractiveEvent.none,
-              );
-            } else if (data?.eventType == InteractiveEventType.following) {
-              final _followingDataIndex = _followingData?.indexOf(data!);
+              } else if (data.eventType == InteractiveEventType.following) {
+                final _followingDataIndex = _followingData?.indexOf(data);
+                if(_followingDataIndex != null){
+                  _followingData?[_followingDataIndex] = (_followingData ?? [])[_followingDataIndex].copyWith(
+                    event: InteractiveEvent.none,
+                  );
+                }
 
-              _followingData?[_followingDataIndex!] = _followingData![_followingDataIndex].copyWith(
-                event: InteractiveEvent.none,
-              );
+              }
             }
+
+
 
             notifyListeners();
           }
-        },
-        uploadContentAction: false,
-      );
+      //   },
+      //   uploadContentAction: false,
+      // );
     } catch (e) {
       print(e);
     }
@@ -117,6 +125,7 @@ class FollowerNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
+        print('reload contentsQuery : 24');
         _resFuture = _usersFollowersQuery.reload(context);
       } else {
         _resFuture = _usersFollowersQuery.loadNext(context);
@@ -152,6 +161,7 @@ class FollowerNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
+        print('reload contentsQuery : 25');
         _resFuture = _usersFollowingQuery.reload(context);
       } else {
         _resFuture = _usersFollowingQuery.loadNext(context);

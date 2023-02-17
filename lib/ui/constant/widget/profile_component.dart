@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_stroke_text_widget.dart';
 
 import 'custom_profile_image.dart';
@@ -28,6 +29,7 @@ class ProfileComponent extends StatelessWidget {
   final Function onFollow;
   final bool haveStory;
   final FeatureType featureType;
+  final String? cacheKey;
 
   const ProfileComponent(
       {Key? key,
@@ -46,6 +48,7 @@ class ProfileComponent extends StatelessWidget {
       this.heightCircle = SizeWidget.circleDiameterImageProfileInLongVideoView,
       required this.onFollow,
       this.textColor,
+      this.cacheKey,
       this.haveStory = false,
       required this.featureType})
       : super(key: key);
@@ -53,72 +56,80 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    print('ProfileComponent: $createdAt');
     return Visibility(
       visible: show,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          StoryColorValidator(
-            haveStory: haveStory,
-            featureType: featureType,
-            child: CustomProfileImage(
-              width: widthCircle,
-              height: heightCircle,
-              onTap: onTapOnProfileImage,
-              imageUrl: imageUrl,
-              following: following,
-              onFollow: onFollow,
-            ),
-          ),
-          Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),
-          Visibility(
-            visible: showNameAndTimeStamp,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
-                  child: Row(
-                    children: [
-                      Flexible(
-                        child: isDetail
-                            ? CustomStrokeTextWidget(
-                                textToDisplay: username!,
-                                maxLines: 1,
-                                textStyle: Theme.of(context).textTheme.button,
-                                textAlign: TextAlign.left,
-                              )
-                            : CustomTextWidget(
-                                textToDisplay: username!,
-                                maxLines: 1,
-                                textStyle: Theme.of(context).textTheme.button!.copyWith(color: textColor),
-                                textAlign: TextAlign.left,
-                              ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              StoryColorValidator(
+                haveStory: haveStory,
+                featureType: featureType,
+                child: CustomProfileImage(
+                  cacheKey: cacheKey,
+                  width: widthCircle,
+                  height: heightCircle,
+                  onTap: onTapOnProfileImage,
+                  imageUrl: imageUrl,
+                  following: following,
+                  onFollow: onFollow,
+                ),
+              ),
+              Visibility(visible: showNameAndTimeStamp, child: spaceProfileAndId),
+              Visibility(
+                visible: showNameAndTimeStamp,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: isDetail
+                                ? CustomStrokeTextWidget(
+                                    textToDisplay: username ?? '',
+                                    maxLines: 1,
+                                    textStyle: Theme.of(context).textTheme.button,
+                                    textAlign: TextAlign.left,
+                                  )
+                                : CustomTextWidget(
+                                    textToDisplay: username ?? '',
+                                    maxLines: 1,
+                                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: textColor),
+                                    textAlign: TextAlign.left,
+                                  ),
+                          ),
+                          tenPx,
+                          CustomVerifiedWidget(verified: isCelebrity)
+                        ],
                       ),
-                      tenPx,
-                      CustomVerifiedWidget(verified: isCelebrity)
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
+                      child: isDetail
+                          ? CustomStrokeTextWidget(
+                              maxLines: 1,
+                              textToDisplay: createdAt,
+                              textAlign: TextAlign.left,
+                              textStyle: Theme.of(context).textTheme.caption,
+                            )
+                          : CustomTextWidget(
+                              maxLines: 1,
+                              textToDisplay: createdAt,
+                              textAlign: TextAlign.left,
+                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: textColor),
+                            ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  width: SizeWidget().calculateSize(widthText, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
-                  child: isDetail
-                      ? CustomStrokeTextWidget(
-                          maxLines: 1,
-                          textToDisplay: createdAt,
-                          textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.caption!,
-                        )
-                      : CustomTextWidget(
-                          maxLines: 1,
-                          textToDisplay: createdAt,
-                          textAlign: TextAlign.left,
-                          textStyle: Theme.of(context).textTheme.caption!.copyWith(color: textColor),
-                        ),
-                ),
-              ],
-            ),
-          )
+              )
+            ],
+          ),
+          // GestureDetector(onTap: () => onReport, child: const Icon(Icons.more_vert)),
         ],
       ),
     );

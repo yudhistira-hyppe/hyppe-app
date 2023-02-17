@@ -27,7 +27,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setFollowFetch(FollowFetch(FollowState.checkFollowingToUserError));
         } else {
           IsFollowing _result = IsFollowing.fromJson(onResult.data);
@@ -50,7 +50,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setFollowFetch(FollowFetch(FollowState.followUserError));
         } else {
           setFollowFetch(FollowFetch(FollowState.followUserSuccess, data: onResult.data));
@@ -77,7 +77,7 @@ class FollowBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setFollowFetch(FollowFetch(FollowState.followUserError));
         } else {
           setFollowFetch(FollowFetch(FollowState.followUserSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -115,11 +115,12 @@ class FollowBloc {
     formData.fields.add(MapEntry('pageNumber', '${data.pageNumber}'));
     formData.fields.add(MapEntry('senderOrReceiver', data.senderOrReceiver));
     formData.fields.add(MapEntry('search', data.searchText));
-
+    print('ini getinteractive');
+    print(formData.fields);
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setFollowFetch(FollowFetch(FollowState.getFollowersUsersError));
         } else {
           setFollowFetch(FollowFetch(FollowState.getFollowersUsersSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -131,10 +132,42 @@ class FollowBloc {
       data: formData,
       headers: {
         'x-auth-user': SharedPreference().readStorage(SpKeys.email),
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
+      },
+      withAlertMessage: false,
+      withCheckConnection: false,
+      host: UrlConstants.getInnteractives,
+      methodType: MethodType.post,
+    );
+  }
+
+  Future deleteTagUsersBloc(BuildContext context, {String? postId}) async {
+    print('asdasd');
+    final _repos = Repos();
+
+    print(postId);
+    final email = SharedPreference().readStorage(SpKeys.email);
+    print(email);
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setFollowFetch(FollowFetch(FollowState.deleteUserTagError));
+        } else {
+          setFollowFetch(FollowFetch(FollowState.deleteUserTagSuccess));
+        }
+      },
+      (errorData) {
+        setFollowFetch(FollowFetch(FollowState.deleteUserTagError));
+      },
+      data: {'postID': postId, 'email': email},
+      headers: {
+        'x-auth-token': SharedPreference().readStorage(SpKeys.userToken),
       },
       withAlertMessage: true,
       withCheckConnection: false,
-      host: UrlConstants.getInnteractives,
+      host: UrlConstants.deletTagUser,
       methodType: MethodType.post,
     );
   }

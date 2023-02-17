@@ -52,6 +52,9 @@ class StoryVideo extends StatefulWidget {
   final StoryController? storyController;
   final VideoLoader videoLoader;
 
+  double? videoWidth;
+  double? videoHeight;
+
   /// Xulu Developer Code:
   final Color? backgroundColor;
 
@@ -60,6 +63,8 @@ class StoryVideo extends StatefulWidget {
     Key? key,
     this.backgroundColor,
     this.storyController,
+    this.videoWidth,
+    this.videoHeight
   }) : super(key: key ?? UniqueKey());
 
   static StoryVideo url(
@@ -67,6 +72,8 @@ class StoryVideo extends StatefulWidget {
     Key? key,
     Color? backgroundColor,
     StoryController? controller,
+    double? width,
+    double? height,
     Map<String, String>? requestHeaders,
   }) {
     return StoryVideo(
@@ -76,7 +83,8 @@ class StoryVideo extends StatefulWidget {
       ),
       key: key,
       storyController: controller,
-
+      videoWidth: width,
+      videoHeight: height,
       /// Xulu Developer Code:
       backgroundColor: backgroundColor,
     );
@@ -105,6 +113,7 @@ class StoryVideoState extends State<StoryVideo> {
       fit: BoxFit.fill,
       autoPlay: false,
       showPlaceholderUntilPlay: true,
+      looping: true,
       controlsConfiguration: BetterPlayerControlsConfiguration(
         showControls: false,
         enableFullscreen: false,
@@ -113,7 +122,7 @@ class StoryVideoState extends State<StoryVideo> {
     );
     BetterPlayerDataSource dataSource = BetterPlayerDataSource(
       isHlsVideo ? BetterPlayerDataSourceType.network : BetterPlayerDataSourceType.file,
-      isHlsVideo ? widget.videoLoader.url : widget.videoLoader.videoFile!.path,
+      isHlsVideo ? widget.videoLoader.url : widget.videoLoader.videoFile?.path ?? '',
       headers: widget.videoLoader.requestHeaders ?? {},
       bufferingConfiguration: const BetterPlayerBufferingConfiguration(
         minBufferMs: BetterPlayerBufferingConfiguration.defaultMinBufferMs,
@@ -131,22 +140,23 @@ class StoryVideoState extends State<StoryVideo> {
   @override
   void initState() {
     super.initState();
-    widget.storyController!.pause();
+    widget.storyController?.pause();
 
     widget.videoLoader.loadVideo(() {
       if (widget.videoLoader.state == LoadState.success) {
         _setupPlayerController(
           callback: (dataSource) {
             playerController?.setupDataSource(dataSource).then((_) {
-              overridenAspectRatio =
-                  playerController!.videoPlayerController!.value.size!.height / playerController!.videoPlayerController!.value.size!.width;
-
-              _width = playerController?.videoPlayerController?.value.size?.width ?? 0;
-              _height = playerController?.videoPlayerController?.value.size?.height ?? 0;
+              overridenAspectRatio = playerController?.videoPlayerController?.value.size?.height ?? 0 / (playerController?.videoPlayerController?.value.size?.width ?? 0);
+              print('width: ${widget.videoWidth}, height: ${widget.videoHeight}');
+              final checkWidth = playerController?.videoPlayerController?.value.size?.width ?? 0.0;
+              final checkHeight = playerController?.videoPlayerController?.value.size?.height ?? 0.0;
+              _width = ((widget.videoWidth != null) ? (widget.videoWidth != 0.0) ? widget.videoWidth : checkWidth : checkWidth) ;
+              _height = ((widget.videoHeight != null) ? (widget.videoHeight != 0.0) ? widget.videoHeight : checkHeight : checkHeight) ;
 
               if (mounted) {
                 /// Xulu code
-                playerController?.setOverriddenAspectRatio(overridenAspectRatio!);
+                playerController?.setOverriddenAspectRatio(overridenAspectRatio ?? 0);
                 setState(() {});
                 widget.storyController?.play();
               }
@@ -160,11 +170,13 @@ class StoryVideoState extends State<StoryVideo> {
         );
 
         if (widget.storyController != null && mounted) {
-          _streamSubscription = widget.storyController!.playbackNotifier.listen((playbackState) {
+          _streamSubscription = widget.storyController?.playbackNotifier.listen((playbackState) {
             if (playbackState == PlaybackState.pause) {
-              playerController!.pause();
+              playerController?.pause();
+            }else if(playbackState == PlaybackState.replay){
+              playerController?.seekTo(Duration.zero);
             } else {
-              playerController!.play();
+              playerController?.play();
             }
           });
         }
@@ -186,8 +198,8 @@ class StoryVideoState extends State<StoryVideo> {
       // return Center(
       //   child: Platform.isAndroid
       //       ? AspectRatio(
-      //           aspectRatio: overridenAspectRatio!,
-      //           child: BetterPlayer(controller: playerController!),
+      //           aspectRatio: overridenAspectRatio,
+      //           child: BetterPlayer(controller: playerController),
       //         )
       //       : SizedBox.expand(
       //           child: FittedBox(
@@ -195,24 +207,29 @@ class StoryVideoState extends State<StoryVideo> {
       //             child: SizedBox(
       //               width: _width,
       //               height: _height,
-      //               child: BetterPlayer(controller: playerController!),
+      //               child: BetterPlayer(controller: playerController),
       //             ),
       //           ),
       //         ),
       // );
-
-      return Center(
-        child: SizedBox.expand(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: SizedBox(
-              width: _width,
-              height: _height,
-              child: BetterPlayer(controller: playerController!),
+      print('width: $_width, height: $_height');
+      if(playerController != null){
+        return Center(
+          child: SizedBox.expand(
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: SizedBox(
+                width: _width,
+                height: _height,
+                child: BetterPlayer(controller: playerController!),
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }else{
+        return Container();
+      }
+
     }
 
     return const Center(

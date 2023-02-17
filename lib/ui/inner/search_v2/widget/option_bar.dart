@@ -30,15 +30,17 @@ class OptionBar extends StatelessWidget {
             width: 20 * SizeConfig.scaleDiagonal,
             height: 20 * SizeConfig.scaleDiagonal,
             defaultColor: false,
-            color: notifier.pageIndex == pageIndex ? Theme.of(context).tabBarTheme.labelColor : Theme.of(context).tabBarTheme.unselectedLabelColor,
+            // color: notifier.pageIndex == pageIndex
+            //     ? Theme.of(context).tabBarTheme.labelColor
+            //     : Theme.of(context).tabBarTheme.unselectedLabelColor,
           ),
           SizedBox(width: 8 * SizeConfig.scaleDiagonal),
           CustomTextWidget(
             textToDisplay: title,
             textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(
-              color: notifier.pageIndex == pageIndex ? Theme.of(context).tabBarTheme.labelColor : Theme.of(context).tabBarTheme.unselectedLabelColor,
-              fontWeight: notifier.pageIndex == pageIndex ? FontWeight.bold : FontWeight.normal,
-            ),
+                  color: notifier.pageIndex == pageIndex ? Theme.of(context).tabBarTheme.labelColor : Theme.of(context).tabBarTheme.unselectedLabelColor,
+                  fontWeight: notifier.pageIndex == pageIndex ? FontWeight.bold : FontWeight.normal,
+                ),
           ),
         ],
       ),

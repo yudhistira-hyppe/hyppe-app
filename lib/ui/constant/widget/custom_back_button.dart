@@ -13,6 +13,6 @@ class CustomBackButton extends StatelessWidget {
     return CustomIconButtonWidget(
         onPressed: onBack ?? () => Routing().moveBack(),
         iconData: "${AssetPath.vectorPath}back-arrow.svg",
-        color: Theme.of(context).colorScheme.primaryVariant);
+        color: Theme.of(context).colorScheme.primary);
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/entities/camera/screen.dart';
 import 'package:hyppe/ui/constant/entities/camera/widgets/camera_flash_button.dart';
 // import 'package:hyppe/ui/constant/entities/camera/widgets/camera_switch_button.dart';
@@ -25,7 +26,8 @@ class UploadIDVerification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CameraPage(
-      onCameraNotifierUpdate: (cameraNotifier) => notifier?.cameraNotifier = cameraNotifier,
+      onCameraNotifierUpdate: (cameraNotifier) =>
+          notifier?.cameraNotifier = cameraNotifier,
       additionalViews: <Widget>[
         Align(
           alignment: Alignment.topCenter,
@@ -37,7 +39,7 @@ class UploadIDVerification extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Theme.of(context).colorScheme.primary.withOpacity(0.44),
+                  Theme.of(context).colorScheme.background.withOpacity(0.44),
                   Colors.transparent,
                 ],
               ),
@@ -56,16 +58,22 @@ class UploadIDVerification extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 CustomTextButton(
-                    onPressed: !notifier!.isRecordingVideo
+                    onPressed: !(notifier?.isRecordingVideo ?? true)
                         ? () async {
-                            notifier!.isVideo = false;
+                            debugPrint("DONE_BACK");
+                            notifier?.isVideo = false;
                             Routing().moveBack();
                           }
                         : null,
-                    child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg", defaultColor: false)),
+                    child: const CustomIconWidget(
+                        iconData: "${AssetPath.vectorPath}close.svg",
+                        defaultColor: false)),
                 CustomTextWidget(
                   textToDisplay: "ID Card",
-                  textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(color: Colors.white),
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .subtitle1
+                      ?.copyWith(color: Colors.white),
                 ),
               ],
             ),
@@ -77,7 +85,7 @@ class UploadIDVerification extends StatelessWidget {
             width: double.infinity,
             height: SizeConfig.screenHeight! / 5,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              color: Theme.of(context).colorScheme.background.withOpacity(0.8),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),

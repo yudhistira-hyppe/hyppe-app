@@ -22,8 +22,8 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
   void initState() {
     super.initState();
     // final notifier = Provider.of<PreviewDiaryNotifier>(context, listen: false);
-    // WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-    //   // final _box = _key.currentContext!.findRenderObject() as RenderBox;
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   // final _box = _key.currentContext.findRenderObject() as RenderBox;
     //   // notifier.heightTitleFeature = _box.size.height;
     // });
   }
@@ -43,7 +43,7 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
               maxLines: 1,
               textAlign: TextAlign.left,
               textToDisplay: "${widget.title}!",
-              textStyle: _themes.textTheme.button!.apply(
+              textStyle: _themes.textTheme.button?.apply(
                 color: _themes.bottomNavigationBarTheme.unselectedItemColor,
               ),
             ),
@@ -56,11 +56,11 @@ class _CustomHeaderFeatureState extends State<CustomHeaderFeature> {
                 onTap: widget.onPressed,
                 child: CustomTextWidget(
                   maxLines: 1,
-                  textToDisplay: context.watch<TranslateNotifierV2>().translate.seeAll!,
+                  textToDisplay: context.watch<TranslateNotifierV2>().translate.seeAll ?? 'See All',
                   textAlign: TextAlign.right,
                   textStyle: _themes.textTheme.subtitle2?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: _themes.colorScheme.primaryVariant,
+                    color: _themes.colorScheme.primary,
                   ),
                 ),
               ),

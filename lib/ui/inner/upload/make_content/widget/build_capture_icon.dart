@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
@@ -15,25 +16,28 @@ class BuildCaptureIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<MakeContentNotifier>(
       builder: (context, notifier, child) => SizedBox(
-        height: 100 * SizeConfig.scaleDiagonal,
+        height: 105 * SizeConfig.scaleDiagonal,
         child: CustomIconButtonWidget(
           onPressed: () {
+            // context.read<CameraNotifier>().showEffect(isClose: true);
             if (notifier.isRecordingVideo) {
               if (notifier.featureType != FeatureType.pic && notifier.selectedDuration != 0) {
                 if (notifier.progressHuman < notifier.selectedDuration) {
-                  if (!notifier.isRecordingPaused) {
-                    notifier.onPauseRecordedVideo(context);
-                  } else {
-                    notifier.onResumeRecordedVideo(context);
-                  }
+                  context.read<MakeContentNotifier>().onStopRecordedVideo(context);
+                  // if (!notifier.isRecordingPaused) {
+                  //   notifier.onPauseRecordedVideo(context);
+                  // } else {
+                  //   notifier.onResumeRecordedVideo(context);
+                  // }
                 } else {
-                  ShowBottomSheet().onShowColouredSheet(context, notifier.language.isThisOkayClickOkToContinue!).then((value) {
+                  ShowBottomSheet().onShowColouredSheet(context, notifier.language.isThisOkayClickOkToContinue ?? '').then((value) {
                     if (value) notifier.onStopRecordedVideo(context);
                   });
                 }
               } else {
                 if (!notifier.isRecordingPaused) {
-                  notifier.onPauseRecordedVideo(context);
+                  context.read<MakeContentNotifier>().onStopRecordedVideo(context);
+                  // notifier.onPauseRecordedVideo(context);
                 } else {
                   notifier.onResumeRecordedVideo(context);
                 }

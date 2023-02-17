@@ -12,17 +12,31 @@ class UrlConstants {
 
   static const String apiV2 = 'v2';
 
+  static const String apiV3 = 'v3';
+
+  static const String apiV4 = 'v4';
+
+  static const String apiV5 = 'v5';
+
   /// Production Base url
+  // static const String productionBaseApi = "https://prod.hyppe.app";
   static const String productionBaseApi = "https://prod.hyppe.app";
+  static const String productionUploadBaseApi = "https://upload.hyppe.app/";
 
   /// Staging v2 Base url
-  static const String stagingBaseApi = "https://staging.hyppe.id";
+  // static const String stagingBaseApi = "https://prod.hyppe.app";
+  static const String stagingBaseApi = "https://staging.hyppe.app";
+  static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app/";
+
+  // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 
   /// Prod Deeplink Base url
   static const String prodDeeplinkUrl = "https://share.hyppe.app";
 
   /// Staging Deeplink Base url
   static const String devDeeplinkUrl = "https://share.hyppe.app";
+
+  static const String urlPing = "s1.hyppe.cloud";
 
   /// APIs end point
   /* User route */
@@ -58,23 +72,28 @@ class UrlConstants {
   /* Wallet route */
   static const String bizRoute = "/api/biz";
 
+  /* v3 user profile */
+  static const String profileRoute = "/api/getuserprofiles";
+
+  /* User Content route */
+  static const String userContentRoute = "/api/getusercontents";
+
+  /* User Content route */
+  static const String bankRoute = "/api/banks";
+
+  /* v3 user ads */
+  static const String adsRoute = "/api/ads";
+
+  static const String transactionRoute = "/api/transactions";
+
+  static const String userbankaccountsRoute = "/api/userbankaccounts";
+
+  static const String accountBalancesRoutes = "/api/accountbalances";
+
+  /* Post route */
+  static const String contentRouteV3 = "/api/getusercontents";
+
   ///---------------------------------------------------------------------------------------------------------///
-
-  /* APIs Wallet */
-  /// event.
-  static const String eventBus = "$walletRoute/eventbus";
-
-  ///---------------------------------------------------------------------------------------------------------///
-
-  /* APIs In App Notification */
-  /// get => Get Users notification.
-  static const String getUsersNotification = "$notificationRoute/getAllUsersnotification";
-
-  /// post => Read notification.
-  static const String readNotification = "$notificationRoute/readNotification";
-
-  ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Bookmark */
   /// get => Get bookmark.
   static const String getBookmark = "$postRoute/getBookmark";
@@ -83,40 +102,14 @@ class UrlConstants {
   static const String addBookmark = "$postRoute/addBookmark";
 
   ///---------------------------------------------------------------------------------------------------------///
-
-  /* APIs Chat */
-  /// all user chat
-  static const String allUserChat = "$chatRoute/getAllUserChats";
-
-  /// history chat
-  static const String historyChat = "$chatRoute/getChatHistoryByrecipientId";
-
-  ///---------------------------------------------------------------------------------------------------------///
-
-  /* APIs Comment */
-  /// post => Add Post Comment.
-  static const String addPostComment = "$postRoute/comments/commentOnPost";
-
-  /// post => Add Post Comment On Comment.
-  static const String addPostCommentOnComment = "$postRoute/comments/commentOnComment";
-
-  /// get => Get More Comments.
-  static const String getMoreComments = "$postRoute/comments/viewMoreComments";
-
-  ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Follow */
   /// post Add Story View.
   static const String followUser = "$followRoute/follow";
-
-  /// get => Get Follow Count.
-  static const String followCounts = "$followRoute/counts";
 
   /// get Check Following to user.
   static const String isFollowing = "$followRoute/isFollowing";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Users */
   /// post sign_up => Send data user to server.
   static const String signUp = "$userRoute/signup";
@@ -125,19 +118,10 @@ class UrlConstants {
   static const String login = "$userRoute/login";
 
   /// post login with google
-  static const String loginGoogle = "$userRoute/login-google";
+  static const String loginGoogle = "$userRoute/signup/socmed";
 
   /// post change_password => To change password.
   static const String changePassword = "$userRoute/changepassword";
-
-  /// get => Get User Profile Overview.
-  static const String userOverview = "$userRoute/overview";
-
-  /// get => Get User Profile Details.
-  static const String details = "$userRoute/userProfile";
-
-  /// post complete_profile
-  static const String completeProfile = "$userRoute/userProfile";
 
   /// post update_profile
   static const String updateProfile = "$userRoute/updateprofile";
@@ -146,40 +130,30 @@ class UrlConstants {
   static const String recoverPassword = "$userRoute/recoverpassword";
 
   /// post register interest => To register interests of user.
-  static const String registerInterest = "$userRoute/userInterest";
-
-  /// post register interest => To register interests of user.
   static const String updateInterest = "$userRoute/profileinterest";
-
-  /// post and get => Id proof.
-  static const String idProof = "$userRoute/idProof";
-
-  /// post => Upload Profile picture.
-  static const String uploadProfilePicture = "$userRoute/uploadProfilePicture";
 
   /// post => Upload Profile picture V2.
   static const String uploadProfilePictureV2 = "$postsRoute/profilepicture";
-
-  /// User Bio.
-  static const String bio = "$userRoute/bio";
-
-  /// get => Add Profile Report.
-  static const String addProfileReport = "$userRoute/report/addProfileReport";
-
-  /// get => Log Out From Other Devices.
-  static const String logOutFromOtherDevices = "$userRoute/logout/otherDevices";
 
   /// post => Verify Account
   static const String verifyAccount = "$userRoute/verifyaccount";
 
   /// post => Resend OTP
-  static const String resendOTP = "$userRoute/resendOTP";
+  static const String resendOTP = "$userRoute/resendotp";
 
-  /// get => Get user profile picture
-  static const String profilePic = "$userRoute/profilePic";
+  /// user => Referral
+  static const String referral = "$userRoute/referral";
+
+  /// user => Referral Count
+  static const String referralCount = "$userRoute/referral-count";
+
+  /// user => Change Language
+  static const String updateLanguage = "$userRoute/updatelang";
+
+  /// user => Change Language
+  static const String userPin = "$userRoute/pin";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Playlist */
   /// post => Create new playlist.
   static const String createNewPlaylist = "$postRoute/createPlaylist";
@@ -188,49 +162,20 @@ class UrlConstants {
   static const String getAllPlaylist = "$postRoute/getAllPlaylist";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Posts */
-  /// post Content.
-  static const String createPost = "$postRoute/createPost";
-
-  /// get one post.
-  static const String getPost = "$postRoute/getPost";
-
-  /// get => Get Post Count.
-  static const String postCounts = "$postRoute/counts";
-
-  /// get list_pic.
-  static const String getPicPostsFeeds = "$postRoute/getPicPostsFeeds";
-
-  /// get list_diary.
-  static const String getDiaryPostsFeeds = "$postRoute/getDiaryPostsFeeds";
-
-  /// get list_vid.
-  static const String getVidPostsFeeds = "$postRoute/getVidPostsFeeds";
 
   /// get => Get User Post.
-  static const String getUserPosts = "$postRoute/getUserPosts";
+  static const String getUserPostsLandingPage = "$postsRoute/getuserposts/landing-page";
 
-  /// get => Add Post Report.
-  static const String reportOnPost = "$postRoute/report/reportOnPost";
+  /// post => View Like and View.
+  static const String viewLike = "$postRoute/viewlike";
 
-  /// get => Add Comment Report.
-  static const String reportOnComment = "$postRoute/report/reportOnComment";
-
-  /// post => Add View Post.
-  static const String addPostView = "$postRoute/view";
-
-  /// delete => Delete Post.
-  static const String deletePostByID = "$postRoute/deletePostByID";
+  static const String getListMyBoost = "$postsRoute/getboost";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Reaction */
   /// post Add Reaction to content.
   static const String addPostReaction = "$postRoute/reactions/reactOnPost";
-
-  /// get => Get Post Reactions Count.
-  static const String getPostReactionsCount = "$postRoute/reactions/getPostReactionsCounts";
 
   /// post Add Reaction to comment.
   static const String addReactOnComment = "$postRoute/reactions/reactOnComment";
@@ -239,49 +184,12 @@ class UrlConstants {
   static const String getCommentReactions = "$postRoute/reactions/getCommentReactions";
 
   ///---------------------------------------------------------------------------------------------------------///
-
-  /* APIs Search */
-  /// post => Search.
-  static const String searchMedia = "$searchRoute/media/search";
-
-  /// post => Search General.
-  static const String searchGeneral = "$searchRoute/search";
-
-  /// post => Add to trending.
-  static const String addToTrending = "$searchRoute/search/trending";
-
-  ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Stories */
-  /// get list_story.
-  static const String myUserStories = "$storiesRoute/myUserStories";
-
-  /// post Add Story View.
-  static const String addStoryView = "$storiesRoute/viewStory";
-
-  /// post Add Reaction to story.
-  static const String addStoryReaction = "$storiesRoute/reaction";
-
-  /// get => Get My Stories.
-  static const String myStories = "$storiesRoute/myStories";
-
-  /// get Stories by user.
-  static const String stories = "$storiesRoute/stories";
-
-  /// post Story.
-  static const String createStory = "$storiesRoute/createStory";
-
-  /// get => Add Story Report.
-  static const String reportOnStory = "$storiesRoute/report/reportOnStory";
 
   /// get => Get viewer story.
   static const String views = "$storiesRoute/views";
 
-  /// delete => Delete Story.
-  static const String deleteStoryByID = "$storiesRoute/deleteStoryByID";
-
   ///---------------------------------------------------------------------------------------------------------///
-
   /* APIs Utils */
   /// get list of Area
   static const String area = "$utilsRoute/area";
@@ -298,14 +206,8 @@ class UrlConstants {
   /// get Welcome notes.
   static const String welcomeNotes = "$utilsRoute/welcomenotes";
 
-  /// get list of Document
-  static const String document = "$utilsRoute/document";
-
   /// get list of Gender
   static const String gender = "$utilsRoute/gender";
-
-  /// get list of Martial Status
-  static const String martialstatus = "$utilsRoute/martialstatus";
 
   /// get reactions.
   static const String reaction = "$utilsRoute/reaction";
@@ -317,10 +219,9 @@ class UrlConstants {
   static const String country = "$utilsRoute/country";
 
   /// get => Get Report Options.
-  static const String getReportOptions = "$utilsRoute/getReportOption";
+  static const String postLogDevice = "$utilsRoute/logdevice";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   // V2
 
   /// APIs end point
@@ -328,12 +229,17 @@ class UrlConstants {
   static const String postRouteV2 = "/api/posts";
 
   ///---------------------------------------------------------------------------------------------------------///
-
   /// post => Get Contents
   static const String getuserposts = "$postRouteV2/getuserposts";
 
-  /// post => Get Contents Qmatic
-  static const String qmatic = "$postRouteV2/qmatic";
+  /// get => Get My Contents.
+  static const String getMyUserPosts = "$postRouteV2/getuserposts/my";
+
+  /// get => Get My Contents.
+  static const String getOtherUserPosts = "$postRouteV2/getuserposts/byprofile";
+
+  /// post => Get Apsara Video.
+  static const String getVideoApsara = "$postRouteV2/getvideo";
 
   /// post => Post Contents
   static const String createuserposts = "$postRouteV2/createpost";
@@ -341,11 +247,20 @@ class UrlConstants {
   /// post => Update Contents
   static const String updatepost = "$postRouteV2/updatepost";
 
+  /// post => post to change value key isViewed
+  static const String postViewer = "$postRouteV2/postviewer";
+
+  /// post lineID to delete comment
+  static const String removeComment = "$postRouteV2/removecomment";
+
   /// post => Post Device Activity
   static const String deviceactivity = "$userRoute/deviceactivity";
 
   /// post => Get User Profiles
   static const String getuserprofile = "$userRoute/getuserprofile";
+
+  /// post => Get User Profiles by username
+  static const String getProfileByUser = "$getuserprofile/byusername";
 
   /// post => Log out
   static const String logout = "$userRoute/logout";
@@ -359,9 +274,134 @@ class UrlConstants {
   /// post => Get/Create Discussion
   static const String discuss = "$postRouteV2/disqus";
 
+  /// post => Delete Discuss
+  static const String deleteDiscuss = "$postRouteV2/disqus/deletedicuss";
+
+  /// post => Delete Chat
+  static const String deleteChat = "$postRouteV2/disqus/deletedicusslog";
+
   /// post => Get Notification
   static const String getNotification = "$postRouteV2/getnotification";
 
-  /// post => Get Ads Roster
-  static const String getAdsRoster = "$bizRoute/adsroster";
+  /// post => Get Notification
+  static const String getBoostMaster = "$postRoute/boostmaster";
+
+  //apis goole plcae
+  static const String getGoogleMapApis = "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+
+  //get search people
+  static const String getSearchPeople = "$profileRoute/search";
+
+  ///---------------------------------------------------------------------------------------------------------///
+  /* v3 search data content dan user */
+  static const String getSearchContentV3 = "$contentRouteV3/searchdata";
+  // v3 delete tag
+  static const String deletTagUser = "$postRouteV2/deletetag";
+
+  // verification ID
+  static const String verificationID = "$postsRoute/verificationid";
+
+  //delete Account
+  static const String deleteAccount = "$userRoute/noneactive";
+
+  /// post => Get Buy Content
+  static const String getBuyContent = "$userContentRoute/buy/details";
+
+  /// post => Get Buy Content
+  static const String postBuyContent = "$transactionRoute/";
+
+  /// post => Get History Transaction
+  static const String transactionHistorys = "$transactionRoute/historys";
+
+  /// post => Get History Transaction
+  static const String detailTransactionHistorys = "$transactionRoute/historys/details";
+
+  /// post => Get Withdraw Detail
+  static const String detailWithdrawal = "$transactionRoute/withdraw/listdetail";
+
+  /// post => Get Withdraw Detail
+  static const String withdraw = "$transactionRoute/withdraw";
+
+  /// post => Get Withdraw Detail
+  static const String boostContent = "$transactionRoute/boostcontent";
+
+  /// post => Check Panding
+  static const String pandingTransaction = "$transactionRoute/pending/";
+
+  /// get => Get All Bank
+  static const String getAllBank = "$bankRoute/all";
+
+  /// get => Get All Bank
+  static const String getBankByCode = "$bankRoute/search";
+
+  /// post => Create account Bank
+  static const String userBankAccounts = "$userbankaccountsRoute/";
+
+  /// post => Get List bank account
+  static const String myUserBankAccounts = "$userbankaccountsRoute/byuser";
+
+  /// post => Get List bank account
+  static const String deleteUserBankAccounts = "$userbankaccountsRoute/delete";
+
+  /// post => Get Account Balance
+  static const String accountBalances = "$accountBalancesRoutes/";
+
+  /// post => Get Account Balance
+  static const String detailRewards = "$accountBalancesRoutes/detailrewards";
+
+  //old upload support file
+  static const String verificationIDSupportingDocs = "$postsRoute/supportfile";
+
+  // new verification ID Upload
+  static const String verificationIDWithSupportDocs = "$postsRoute/upload";
+
+  // get tag people in content
+  static const String tagPeople = "$postsRoute/tagpeople";
+
+  /// get => Get Ads User
+  static const String getAdsVideo = "$adsRoute/getAds/user?type=Content%20Ads";
+
+  /// get => Get Sponsored Ads
+  static const String getSponsoredAds = "$adsRoute/getAds/user?type=Sponsor%20Ads";
+
+  /// get => Get In App Ads
+  static const String getInAppAds = "$adsRoute/getAds/user?type=In%20App%20Ads";
+
+  /// post => View Ads User
+  static const String viewAds = "$adsRoute/viewads";
+
+  //setting
+  static const String settingApps = "$utilsRoute/getSetting";
+
+  /// post => Click Learn More Ads
+  static const String clickAds = "$adsRoute/clickads";
+
+  /// get => categorytickets
+  static const String categoryTickets = "/api/categorytickets/all";
+
+  /// get => categorytickets
+  static const String levelTickets = "/api/leveltickets/all";
+
+  //==========report============
+  static const String getOptionReport = "/api/reportreasons/all";
+  static const String insertReport = "/api/reportuser/create";
+  static const String detailTypeAppeal = "/api/reportuser/detailreason";
+
+  static const String appealPost = "/api/reportuser/appeal";
+  static const String createTicket = "/api/usertickets/createticket";
+
+  /// ===music===
+  static const String getMusicGenre = "/api/genre/";
+  static const String getMusicTheme = "/api/theme/";
+  static const String getMusicMood = "/api/mood/";
+  static const String getMusics = "/api/music";
+
+  /// FAQ
+  static const String faqList = "/api/faqs/allfaqs";
+
+  /// Tiket Histories
+  static const String ticketHistories = "/api/usertickets/filter";
+  static const String ticketComments = "/api/usertickets/comment";
+  static const String replyComment = "/api/usertickets/reply";
+  static const String reportHistories = "/api/reportuser/listreport";
 }

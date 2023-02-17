@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/widget/sign_up_pin_top.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_button.dart';
 import 'package:provider/provider.dart';
-// import 'package:hyppe/core/constants/asset_path.dart';
+
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/ui/constant/widget/keyboard_disposal.dart';
-// import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 
@@ -26,7 +28,9 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
   @override
   void initState() {
     final notifier = Provider.of<SignUpPinNotifier>(context, listen: false);
+    notifier.startTimers = true;
     notifier.startTimer();
+    print(notifier.email);
     super.initState();
   }
 
@@ -50,13 +54,13 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
         child: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
-            // leading: GestureDetector(
-            //   onTap: () => notifier.onBackVerifiedEmail(),
-            //   child: CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
-            // ),
+            leading: GestureDetector(
+              onTap: () => notifier.onBackVerifiedEmail(),
+              child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}back-arrow.svg"),
+            ),
             automaticallyImplyLeading: false,
             title: CustomTextWidget(
-              textToDisplay: notifier.language.verificationCode!,
+              textToDisplay: notifier.language.verificationCode ?? '',
               textStyle: Theme.of(context).textTheme.headline6,
             ),
           ),
@@ -64,25 +68,25 @@ class _SignUpPinState extends State<SignUpPin> with AfterFirstLayoutMixin {
             child: Stack(
               children: [
                 Container(
-                  height: SizeConfig.screenHeight,
+                  height: (SizeConfig.screenHeight! + kToolbarHeight),
                   width: SizeConfig.screenWidth,
-                  alignment: const Alignment(0.0, -0.4),
+                  alignment: const Alignment(0.0, -0.3),
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: SignUpPinTop(),
                 ),
-                Container(
-                  height: SizeConfig.screenHeight,
-                  width: SizeConfig.screenWidth,
-                  alignment: Alignment.bottomCenter,
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  left: 0,
                   child: SignUpButton(
                     withSkipButton: true,
                     loading: notifier.loading,
-                    caption: notifier.language.verify!,
+                    caption: notifier.language.verify,
                     buttonColor: notifier.verifyButtonColor(context),
                     textStyle: notifier.verifyTextColor(context),
                     onTap: notifier.onVerifyButton(context, argument: widget.arguments),
                   ),
-                )
+                ),
               ],
             ),
           ),

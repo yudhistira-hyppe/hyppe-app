@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
@@ -15,7 +18,8 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_c
 
 class ProcessUploadComponent extends StatefulWidget {
   final double topMargin;
-  const ProcessUploadComponent({Key? key, this.topMargin = 10.0}) : super(key: key);
+  final bool showAlert;
+  const ProcessUploadComponent({Key? key, this.topMargin = 10.0, this.showAlert = true}) : super(key: key);
 
   @override
   State<ProcessUploadComponent> createState() => _ProcessUploadComponentState();
@@ -27,10 +31,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   final TranslateNotifierV2 _language = TranslateNotifierV2();
 
   late UploadNotifier _uploadNotifier;
+  late PreUploadContentNotifier _preUploadContentNotifier;
 
   @override
   void initState() {
-    _uploadNotifier = Provider.of<UploadNotifier>(context, listen: false);
+    _uploadNotifier = Provider.of<UploadNotifier>(materialAppKey.currentContext ?? context, listen: false);
+    _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(materialAppKey.currentContext ?? context, listen: false);
     _eventService.addUploadHandler(EventKey.uploadEventKey, this);
     super.initState();
   }
@@ -63,8 +69,20 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Success with message ${response.statusMessage}'.logger();
     _uploadNotifier.message = "${_language.translate.contentCreatedSuccessfully}";
-    _showSnackBar(color: kHyppeTextSuccess, message: _uploadNotifier.message);
-    _uploadNotifier.reset();
+    if (widget.showAlert) {
+      _uploadNotifier.reset();
+
+      //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
+      bool isCheckedOwnership = _preUploadContentNotifier.certifiedTmp; // get certified status
+
+      'Upload Success with certified checked $isCheckedOwnership'.logger();
+
+      if (isCheckedOwnership) {
+        ShowBottomSheet.onShowSuccessPostContentOwnership(context);
+      } else {
+        ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
+      }
+    }
   }
 
   @override
@@ -72,8 +90,15 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier.isUploading = false;
     'Upload Failed with message ${message.message}'.logger();
     _uploadNotifier.message = '${_language.translate.contentCreatedFailedWithMessage} ${message.message}';
-    _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
+    ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeDanger, maxLines: 2, iconSvg: 'close.svg');
+    // _showSnackBar(color: kHyppeDanger, message: _uploadNotifier.message, icon: 'close.svg');
     _uploadNotifier.reset();
+  }
+
+  @override
+  void dispose() {
+    _uploadNotifier.reset(isNotify: false);
+    super.dispose();
   }
 
   @override
@@ -93,60 +118,6 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               children: [
                 Row(
                   children: [
-                    // System().extensionFiles(context.read<PreUploadContentNotifier>().fileContent![0]!) != '.$MP4' &&
-                    //         System().extensionFiles(context.read<PreUploadContentNotifier>().fileContent![0]!) != '.$MOV'
-                    //     ? Container(
-                    //         width: 27,
-                    //         height: 27,
-                    //         alignment: Alignment.center,
-                    //         child: CustomIconWidget(
-                    //           width: 10.8,
-                    //           height: 10.8,
-                    //           defaultColor: false,
-                    //           color: Colors.white.withOpacity(0.4),
-                    //           iconData: iconData(context.read<PreUploadContentNotifier>().featureType),
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //           image: DecorationImage(
-                    //             fit: BoxFit.cover,
-                    //             image: FileImage(
-                    //               File(context.read<PreUploadContentNotifier>().fileContent![0]!),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       )
-                    //     : FutureBuilder<Uint8List?>(
-                    //         future: context.read<PreUploadContentNotifier>().makeThumbnail(),
-                    //         builder: (context, snapshot) {
-                    //           if (snapshot.data != null) {
-                    //             return Image.memory(
-                    //               snapshot.data!,
-                    //               width: 27,
-                    //               height: 27,
-                    //               fit: BoxFit.cover,
-                    //               frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                    //                 if (wasSynchronouslyLoaded) {
-                    //                   return child;
-                    //                 }
-                    //                 return AnimatedOpacity(
-                    //                   child: child,
-                    //                   curve: Curves.easeOut,
-                    //                   opacity: frame == null ? 0 : 1,
-                    //                   duration: const Duration(seconds: 1),
-                    //                 );
-                    //               },
-                    //               filterQuality: FilterQuality.high,
-                    //             );
-                    //           } else {
-                    //             return Container(
-                    //               width: 27,
-                    //               height: 27,
-                    //               child: CustomLoading(),
-                    //             );
-                    //           }
-                    //         },
-                    //       ),
-                    // eightPx,
                     CustomTextWidget(
                       textToDisplay: notifier.message,
                       textStyle: Theme.of(context).textTheme.caption,
@@ -169,12 +140,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
                 //             }
                 //           }
                 //         },
-                //         style: Theme.of(context).textButtonTheme.style!.copyWith(padding: MaterialStateProperty.all(EdgeInsets.zero)),
+                //         style: Theme.of(context).textButtonTheme.style.copyWith(padding: MaterialStateProperty.all(EdgeInsets.zero)),
                 //         child: CustomTextWidget(
-                //           textToDisplay: value.isLoading ? value.language.cancelPost! : 'Ok',
-                //           textStyle: Theme.of(context).textTheme.button!.apply(
+                //           textToDisplay: value.isLoading ? value.language.cancelPost : 'Ok',
+                //           textStyle: Theme.of(context).textTheme.button.apply(
                 //                 color: value.progressDev == 1.0
-                //                     ? Theme.of(context).colorScheme.secondaryVariant
+                //                     ? Theme.of(context).colorScheme.secondary
                 //                     : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
                 //               ),
                 //         ),
@@ -189,8 +160,8 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
               borderRadius: BorderRadius.circular(40.0),
               child: LinearProgressIndicator(
                 value: notifier.progress,
-                backgroundColor: Theme.of(context).textTheme.button!.color!.withOpacity(0.4),
-                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primaryVariant),
+                backgroundColor: Theme.of(context).textTheme.button?.color?.withOpacity(0.4),
+                valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
               ),
             )
           ],
@@ -267,10 +238,12 @@ class UploadNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void reset() {
+  void reset({isNotify = true}) {
     _progress = 0.0;
     _isUploading = false;
-    _message = _language.translate.processUpload ?? '';
-    notifyListeners();
+    _message = _language.translate.contentUploaded ?? '';
+    if(isNotify){
+      notifyListeners();
+    }
   }
 }

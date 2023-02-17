@@ -33,13 +33,13 @@ class PageNoInternetConnection extends StatelessWidget {
               ),
               SizedBox(height: 35 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.noInternetConnection!,
+                textToDisplay: notifier.translate.noInternetConnection ?? 'No Internet Connection',
                 textAlign: TextAlign.center,
                 textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 14 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.pleaseCheckYourInternetConnectionAgain!,
+                textToDisplay: notifier.translate.pleaseCheckYourInternetConnectionAgain ?? '',
                 textAlign: TextAlign.center,
                 textStyle: Theme.of(context).textTheme.bodyText2,
                 textOverflow: TextOverflow.clip,
@@ -52,7 +52,7 @@ class PageNoInternetConnection extends StatelessWidget {
                   
                   return CustomElevatedButton(
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.tryAgain!,
+                      textToDisplay: notifier.translate.tryAgain ?? 'Try Again',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                     width: 164 * SizeConfig.scaleDiagonal,
@@ -61,7 +61,7 @@ class PageNoInternetConnection extends StatelessWidget {
                     buttonStyle: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(0.0),
                         visualDensity: VisualDensity.adaptivePlatformDensity,
-                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primaryVariant),
+                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
                         shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
                   );
                 },

@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -50,10 +51,10 @@ class SignUpForm extends StatelessWidget {
           inputDecorationTheme: InputDecorationTheme(
             enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                color: (onChangeValue ?? "") != "" ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondaryVariant,
+                color: (onChangeValue ?? "") != "" ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
               ),
             ),
-            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primaryVariant)),
+            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)),
           ),
         ),
         child: CustomTextFormField(
@@ -72,7 +73,7 @@ class SignUpForm extends StatelessWidget {
             labelText: labelText,
             labelStyle: Theme.of(context).primaryTextTheme.bodyText1!.copyWith(
                   color:
-                      (focusNode?.hasPrimaryFocus ?? false) || (onChangeValue ?? "").isNotEmpty ? Theme.of(context).colorScheme.primaryVariant : null,
+                      (focusNode?.hasPrimaryFocus ?? false) || (onChangeValue ?? "").isNotEmpty ? Theme.of(context).colorScheme.primary : null,
                 ),
             prefixIconConstraints:
                 BoxConstraints(minWidth: prefixIcon != null ? SizeWidget().calculateSize(30, SizeWidget.baseWidthXD, SizeConfig.screenWidth!) : 0),

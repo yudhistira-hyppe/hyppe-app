@@ -42,7 +42,7 @@ class _UserItemState extends State<UserItem> {
               height: 50,
               following: true,
               imageUrl: System().showUserPicture(widget.data?.senderOrReceiverInfo?.avatar?.mediaEndpoint),
-              onTap: () => System().navigateToProfile(context, widget.data?.senderOrReceiverInfo?.email ?? ''),
+              onTap: () => System().navigateToProfile(context, widget.data?.senderOrReceiverInfo?.email ?? '', isReplaced: false),
             ),
             sixteenPx,
             Expanded(
@@ -55,7 +55,7 @@ class _UserItemState extends State<UserItem> {
                     children: [
                       CustomTextWidget(
                         textToDisplay: widget.data?.senderOrReceiverInfo?.username ?? '',
-                        textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                        textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
                       CustomTextWidget(
@@ -67,9 +67,9 @@ class _UserItemState extends State<UserItem> {
                   ),
 
                   // button
-                  ButtonWidget(
-                    data: widget.data,
-                  ),
+                  // ButtonWidget(
+                  //   data: widget.data,
+                  // ),
                 ],
               ),
             )

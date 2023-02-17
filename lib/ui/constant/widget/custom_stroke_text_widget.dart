@@ -26,7 +26,7 @@ class CustomStrokeTextWidget extends StatelessWidget {
               foreground: Paint()
                 ..style = PaintingStyle.stroke
                 ..color = kHyppeBackground
-                ..strokeWidth = stroke!,
+                ..strokeWidth = stroke ?? 0,
             ),
           ),
           CustomTextWidget(

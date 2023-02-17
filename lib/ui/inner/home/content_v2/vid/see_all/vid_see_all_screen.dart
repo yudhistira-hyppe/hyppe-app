@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -23,6 +25,7 @@ class _VidSeeAllScreenState extends State<VidSeeAllScreen> with SingleTickerProv
   void initState() {
     _tabController = TabController(length: 1, vsync: this);
     notifier.initState(context);
+    context.read<ReportNotifier>().inPosition = contentPosition.seeAllVid;
     super.initState();
   }
 
@@ -47,7 +50,7 @@ class _VidSeeAllScreenState extends State<VidSeeAllScreen> with SingleTickerProv
               children: [
                 CustomTextWidget(
                   textAlign: TextAlign.left,
-                  textToDisplay: _language.vidsForYou!,
+                  textToDisplay: _language.vidsForYou ?? '',
                   textStyle: theme.textTheme.bodyText1,
                 ),
                 eightPx,
@@ -57,9 +60,9 @@ class _VidSeeAllScreenState extends State<VidSeeAllScreen> with SingleTickerProv
             // bottom: TabBar(
             //   controller: _tabController,
             //   tabs: [
-            //     Tab(text: _language.trends!),
-            //     Tab(text: _language.news!),
-            //     Tab(text: _language.following!),
+            //     Tab(text: _language.trends),
+            //     Tab(text: _language.news),
+            //     Tab(text: _language.following),
             //     // FiltersButton(),
             //   ],
             //   onTap: (value) {

@@ -52,7 +52,7 @@ class _PageComponentState extends State<PageComponent> {
     SizeConfig().init(context);
     return RefreshIndicator(
       key: _key,
-      color: Theme.of(context).colorScheme.primaryVariant,
+      color: Theme.of(context).colorScheme.primary,
       onRefresh: () => context.read<NotificationNotifier>().getNotifications(context, reload: true),
       child: _buildWidget(),
     );
@@ -61,8 +61,7 @@ class _PageComponentState extends State<PageComponent> {
   Widget _buildWidget() {
     final mediaQuery = MediaQuery.of(context);
 
-    // if (context.read<NotificationNotifier>().data != null && widget.data!.falsy) {
-    if (context.read<NotificationNotifier>().data != null && widget.data!.isEmpty) {
+    if (context.read<NotificationNotifier>().data != null && (widget.data?.isEmpty ?? true)) {
       return SingleChildScrollView(
         child: Container(
           color: Colors.transparent,
@@ -84,7 +83,7 @@ class _PageComponentState extends State<PageComponent> {
               eightPx,
               CustomTextWidget(
                 textToDisplay: "${context.read<NotificationNotifier>().language.whenThereIsNewNotificationItWillGoesHere}",
-                textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
               )
             ],
           ),

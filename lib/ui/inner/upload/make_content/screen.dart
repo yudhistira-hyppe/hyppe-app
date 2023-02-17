@@ -2,6 +2,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
+import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/upload/make_content/content/upload_content.dart';
@@ -13,6 +14,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class MakeContentScreen extends StatefulWidget {
+  const MakeContentScreen({super.key});
+
   @override
   _MakeContentScreenState createState() => _MakeContentScreenState();
 }
@@ -58,11 +61,12 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
       builder: (_, notifier, __) => WillPopScope(
         onWillPop: () async {
           if (notifier.conditionalOnClose()) {
+            // context.read<CameraNotifier>().showEffect(isClose: true);
             bool? _sheetResponse;
             if (notifier.isRecordingVideo) {
               _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
                 context,
-                notifier.language.cancelRecording!,
+                notifier.language.cancelRecording ?? 'Cancel Recording',
                 color: kHyppeTextWarning,
               );
             }
@@ -77,9 +81,7 @@ class _MakeContentScreenState extends State<MakeContentScreen> with AfterFirstLa
           }
         },
         child: Scaffold(
-          body: notifier.featureType != null
-              ? UploadContent(notifier: notifier, mounted: mounted)
-              : UploadIDVerification(notifier: notifier, mounted: mounted),
+          body: notifier.featureType != null ? UploadContent(notifier: notifier, mounted: mounted) : UploadIDVerification(notifier: notifier, mounted: mounted),
         ),
       ),
     );

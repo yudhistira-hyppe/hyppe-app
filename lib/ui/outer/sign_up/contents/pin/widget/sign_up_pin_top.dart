@@ -1,4 +1,5 @@
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -21,29 +22,50 @@ class SignUpPinTop extends StatelessWidget {
           twentyPx,
           CustomTextWidget(
             textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: notifier.language.pinTopText! + " ${notifier.email}",
+            textToDisplay: "${notifier.language.pinTopText2} ${notifier.email}",
           ),
           fortyTwoPx,
           CustomRectangleInput(),
-          // twelvePx,
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     CustomTextWidget(
-          //       textStyle: Theme.of(context).textTheme.caption,
-          //       textToDisplay: notifier.language.didntReceiveTheCode ?? '',
-          //     ),
-          //     fourPx,
-          //     InkWell(
-          //       onTap: notifier.resendCode(context),
-          //       child: CustomTextWidget(
-          //         textOverflow: TextOverflow.visible,
-          //         textToDisplay: notifier.resendString(),
-          //         textStyle: notifier.resendStyle(context),
-          //       ),
-          //     ),
-          //   ],
-          // )
+          twelvePx,
+          notifier.resendPilih
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomTextWidget(
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: context.isDarkMode() ? Colors.white : Colors.black),
+                      textToDisplay: notifier.language.didntReceiveTheCode ?? '',
+                    ),
+                    fourPx,
+                    // notifier.startTimers
+                    //     ? TweenAnimationBuilder<Duration>(
+                    //         duration: Duration(seconds: 10),
+                    //         tween: Tween(begin: Duration(seconds: 10), end: Duration.zero),
+                    //         onEnd: () {
+                    //           notifier.startTimers = false;
+                    //           print('notifier.startTimers ${notifier.startTimers}');
+                    //           // Routing().moveBack();
+                    //           // notifier.initTransactionHistory(context);
+                    //         },
+                    //         builder: (BuildContext context, Duration value, Widget? child) {
+                    //           final minutes = value.inMinutes;
+                    //           final seconds = value.inSeconds % 60;
+                    //           return CustomTextWidget(
+                    //             textToDisplay: ' 00 : ${minutes < 10 ? '0' : ''}$minutes : ${seconds < 10 ? '0' : ''}$seconds',
+                    //             textStyle: notifier.resendStyle(context),
+                    //           );
+                    //         })
+                    //     : Container(),
+                    InkWell(
+                      onTap: notifier.resendCode(context, withStartTimer: true),
+                      child: CustomTextWidget(
+                        textOverflow: TextOverflow.visible,
+                        textToDisplay: notifier.resendString(),
+                        textStyle: notifier.resendStyle(context),
+                      ),
+                    )
+                  ],
+                )
+              : SizedBox(),
         ],
       ),
     );

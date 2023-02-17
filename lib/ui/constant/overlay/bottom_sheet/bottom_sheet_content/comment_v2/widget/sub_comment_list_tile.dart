@@ -67,11 +67,11 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                       children: [
                         TextSpan(
                           text: System().readTimestamp(
-                            DateTime.parse(widget.data?.createdAt ?? DateTime.now().toString()).millisecondsSinceEpoch,
+                            DateTime.parse(System().dateTimeRemoveT(widget.data?.createdAt ?? DateTime.now().toString())).millisecondsSinceEpoch,
                             context,
                             fullCaption: true,
                           ),
-                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondaryVariant),
+                          style: TextStyle(fontSize: 12, color: Theme.of(context).colorScheme.secondary),
                         )
                       ],
                     ),
@@ -87,23 +87,6 @@ class _SubCommentListTileState extends State<SubCommentListTile> {
                   SizedBox(height: 9 * SizeConfig.scaleDiagonal),
                   Row(
                     children: [
-                      // TODO: show reactions
-                      // widget.data!.reactions!.length > 0
-                      //     ? Row(
-                      //         children: [
-                      //           CustomIconWidget(
-                      //             iconData: "${AssetPath.vectorPath}unlike.svg",
-                      //             height: 15 * SizeConfig.scaleDiagonal,
-                      //             width: 15 * SizeConfig.scaleDiagonal,
-                      //           ),
-                      //           CustomTextWidget(
-                      //             textToDisplay: " ${System().formatterNumber(widget.data!.reactions!.length)}",
-                      //             textStyle: Theme.of(context).textTheme.button,
-                      //           ),
-                      //         ],
-                      //       )
-                      //     : SizedBox.shrink(),
-                      // widget.data!.reactions!.length > 0 ? SizedBox(width: 51.5 * SizeConfig.scaleDiagonal) : SizedBox.shrink(),
                       InkWell(
                         onTap: () {
                           if (widget.fromFront) {

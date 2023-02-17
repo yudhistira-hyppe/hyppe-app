@@ -32,6 +32,7 @@ class SignUpCompleteProfiles {
   Map<String, dynamic> toUpdateProfileJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["email"] = email;
+    data["fullName"] = fullName;
     data["country"] = country;
     data["area"] = area;
     data["city"] = city;
@@ -41,9 +42,9 @@ class SignUpCompleteProfiles {
     data["dob"] = dateOfBirth;
     data["langIso"] = langIso;
     data["interest"] = interests;
-    if (username != null) {
-      data["username"] = username;
-    }
+    // if (username != null) {
+    //   data["username"] = username;
+    // }
     data["event"] = "UPDATE_PROFILE";
     data["status"] = "COMPLETE_BIO";
     return data;

@@ -15,18 +15,15 @@ class LikeBloc {
 
   final _repos = Repos();
 
-  Future likePostUserBloc(BuildContext context, {required String postId, required String emailOwner}) async {
+  Future likePostUserBloc(BuildContext context, {required String postId, required String emailOwner, required bool isLike}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
-    final Map<String, String> _data = {
-      "eventType" : "LIKE",
-      "postID": postId,
-      "receiverParty": emailOwner
-    };
+
+    final Map<String, String> _data = {"eventType": !isLike ? "LIKE" : "UNLIKE", "postID": postId, "receiverParty": emailOwner};
 
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setLikeFetch(LikeFetch(LikeState.likeUserPostFailed));
         } else {
           setLikeFetch(LikeFetch(LikeState.likeUserPostSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
@@ -41,7 +38,7 @@ class LikeBloc {
       data: _data,
       host: UrlConstants.interactive,
       methodType: MethodType.post,
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
     );
   }

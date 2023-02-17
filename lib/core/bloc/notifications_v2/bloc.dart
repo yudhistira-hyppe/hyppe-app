@@ -30,16 +30,23 @@ class NotificationBloc {
 
     final FormData formData = FormData();
 
-    formData.fields.add(MapEntry("senderOrReceiver", argument.senderOrReceiver));
-    formData.fields.add(MapEntry("postID", argument.postID));
-    formData.fields.add(MapEntry("eventType", eventType));
+    if (argument.senderOrReceiver != '') formData.fields.add(MapEntry("senderOrReceiver", argument.senderOrReceiver));
+    if (argument.postID != '') formData.fields.add(MapEntry("postID", argument.postID));
+    if (eventType != '') formData.fields.add(MapEntry("eventType", eventType));
     formData.fields.add(MapEntry("pageRow", argument.pageRow.toString()));
     formData.fields.add(MapEntry("pageNumber", argument.pageNumber.toString()));
+
+    print('asdasd');
+    print(formData.fields);
+    print(eventType);
+    formData.fields.map(
+      (e) => print(e),
+    );
 
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setNotificationsFetch(NotificationFetch(NotificationState.getUsersNotificationBlocError));
         } else {
           setNotificationsFetch(NotificationFetch(
@@ -49,6 +56,7 @@ class NotificationBloc {
         }
       },
       (errorData) {
+        print('error get Notification : ${errorData.message}');
         setNotificationsFetch(NotificationFetch(NotificationState.getUsersNotificationBlocError));
       },
       data: formData,

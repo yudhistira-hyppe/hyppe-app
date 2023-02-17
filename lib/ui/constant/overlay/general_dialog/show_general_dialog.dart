@@ -1,10 +1,17 @@
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_popup_dialog..dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_reward_popup.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_tag_user_content.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/general_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/loading_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/new_account_language_content.dart';
 import 'package:hyppe/core/models/collection/comment/comments.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/account_preferences_birth_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_content_dialog.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/old_version_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/permanently_denied_permisson_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/pick_file_error_alert.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/reaction_comment_content.dart';
+import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/remark_withdrawal_dialog.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_city_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_country_content.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_complete_profile_location_province_content.dart';
@@ -12,6 +19,9 @@ import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/
 // import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/routing.dart';
+
+import '../../../../core/models/collection/advertising/ads_video_data.dart';
 
 class ShowGeneralDialog {
   ShowGeneralDialog._private();
@@ -29,7 +39,7 @@ class ShowGeneralDialog {
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 500),
       context: _,
-      pageBuilder: (context, animation, secondaryAnimation) => ReactionCommentContent(comment: comment!),
+      pageBuilder: (context, animation, secondaryAnimation) => ReactionCommentContent(comment: comment ?? Comments()),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
@@ -38,16 +48,48 @@ class ShowGeneralDialog {
   }
 
   static permanentlyDeniedPermission(_, {String permissions = 'Permission Camera, Microphone and Storage'}) {
-    showCupertinoDialog(
-        context: _,
-        barrierLabel: 'Barrier',
-        barrierDismissible: true,
-        builder: (context) => PermanentlyDeniedPermissionContent(permissions: permissions));
+    showCupertinoDialog(context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PermanentlyDeniedPermissionContent(permissions: permissions));
+  }
+
+  static generalDialog(_,
+      {String? titleText,
+      String? bodyText,
+      int? maxLineTitle,
+      int? maxLineBody,
+      required Function functionPrimary,
+      Function? functionSecondary,
+      String? titleButtonPrimary,
+      String? titleButtonSecondary,
+      bool? barrierDismissible = false}) {
+    showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: barrierDismissible ?? false,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => AlertDialog(
+        // insetPadding: EdgeInsets.only(top: 30),
+        alignment: Alignment.center,
+        content: GeneralAlertDialog(
+          titleText: titleText,
+          bodyText: bodyText,
+          maxLineTitle: maxLineTitle,
+          maxLineBody: maxLineBody,
+          functionPrimary: functionPrimary,
+          functionSecondary: functionSecondary,
+          titleButtonPrimary: titleButtonPrimary,
+          titleButtonSecondary: titleButtonSecondary,
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
   }
 
   static pickFileErrorAlert(_, String message) {
-    showCupertinoDialog(
-        context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PickFileErrorAlertContent(message: message));
+    showCupertinoDialog(context: _, barrierLabel: 'Barrier', barrierDismissible: true, builder: (context) => PickFileErrorAlertContent(message: message));
   }
 
   static newAccountLanguageDropDown(_) {
@@ -85,7 +127,8 @@ class ShowGeneralDialog {
   //   );
   // }
 
-  static userCompleteProfileLocationCountryDropDown(_, {
+  static userCompleteProfileLocationCountryDropDown(
+    _, {
     required Function(String) onSelected,
   }) {
     showGeneralDialog(
@@ -102,7 +145,8 @@ class ShowGeneralDialog {
     );
   }
 
-  static userCompleteProfileLocationProvinceDropDown(_, {
+  static userCompleteProfileLocationProvinceDropDown(
+    _, {
     required String country,
     required Function(String) onSelected,
   }) {
@@ -122,7 +166,8 @@ class ShowGeneralDialog {
     );
   }
 
-  static userCompleteProfileLocationCityDropDown(_, {
+  static userCompleteProfileLocationCityDropDown(
+    _, {
     required String province,
     required Function(String) onSelected,
   }) {
@@ -204,5 +249,126 @@ class ShowGeneralDialog {
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
       },
     );
+  }
+
+  static Future deleteTagUserContentDialog(BuildContext context, String contentTitle, Function function, String postId) async {
+    await showGeneralDialog(
+      context: context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => AlertDialog(
+        content: DeleteTagUserContentDialog(
+          contentTitle: contentTitle,
+          function: function,
+          postId: postId,
+        ),
+        contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future oldVersion(BuildContext context) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: OldVersionDialog(),
+          contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => AdsPopUpDialog(
+        data: data,
+        urlAds: url,
+        isSponsored: isSponsored,
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future remarkWidthdrawal(BuildContext context) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      pageBuilder: (context, animation, secondAnimation) => const AlertDialog(
+        content: RemarkWithdrawalDialog(),
+        backgroundColor: Color.fromARGB(255, 50, 50, 50),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future loadingDialog(BuildContext context, {bool? uploadProses}) async {
+    await showGeneralDialog(
+      //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: false,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (context, animation, secondAnimation) => WillPopScope(
+        onWillPop: () async => false,
+        child: AlertDialog(
+          content: LoadingDialog(uploadProses: uploadProses ?? false),
+          contentPadding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    );
+  }
+
+  static Future adsRewardPop(BuildContext context) async {
+    print("masuk ke pop up");
+    showGeneralDialog(
+      context: Routing.navigatorKey.currentState!.overlay!.context,
+      barrierLabel: 'Barrier',
+      barrierDismissible: true,
+      pageBuilder: (context, animation, secondAnimation_) => Dialog(
+        backgroundColor: Colors.transparent,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            AdsRewardPopupDialog(),
+          ],
+        ),
+      ),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+        return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+      },
+    ).then((value) => true);
   }
 }

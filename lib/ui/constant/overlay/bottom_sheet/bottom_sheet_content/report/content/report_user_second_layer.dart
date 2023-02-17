@@ -37,15 +37,15 @@ class ReportUserSecondLayer extends StatelessWidget {
               BuildListTile(
                 onTap: () => _navigateToHyppeBlock(context),
                 icon: "${AssetPath.vectorPath}block.svg",
-                // title: "${notifier.translate.block} ${notifier.peopleProfile!.profileOverviewData!.userOverviewData.username!}",
+                // title: "${notifier.translate.block} ${notifier.peopleProfile.profileOverviewData.userOverviewData.username}",
                 title: "${notifier.translate.block} dummy_user",
-                subtitle: notifier.translate.blockCaption!,
+                subtitle: notifier.translate.blockCaption ?? '',
               ),
               BuildListTile(
                 onTap: () => _navigateToHyppeReportProfile(context),
                 icon: "${AssetPath.vectorPath}report.svg",
-                title: notifier.translate.reportThisProfile!,
-                subtitle: notifier.translate.reportCaption!,
+                title: notifier.translate.reportThisProfile ?? '',
+                subtitle: notifier.translate.reportCaption ?? '',
               ),
             ],
           ),
@@ -58,7 +58,7 @@ class ReportUserSecondLayer extends StatelessWidget {
     final notifier = Provider.of<ReportNotifier>(context, listen: false);
     Routing().moveBack();
     notifier.data = {'userID': userID, 'ruserID': SharedPreference().readStorage(SpKeys.userID), 'reportType': 'profile'};
-    notifier.appBar = notifier.language.reportThisProfile;
+    // notifier.appBar = notifier.language.reportThisProfile;
     notifier.reportType = ReportType.profile;
     notifier.reportAction = ReportAction.report;
     Routing().move(Routes.report);
@@ -68,8 +68,8 @@ class ReportUserSecondLayer extends StatelessWidget {
     final notifier = Provider.of<ReportNotifier>(context, listen: false);
     Routing().moveBack();
     notifier.data = {'userID': userID, 'ruserID': SharedPreference().readStorage(SpKeys.userID), 'reportType': 'profile'};
-    notifier.appBar = notifier.language.blockHeader;
-    notifier.fABCaption = notifier.language.block!;
+    // notifier.appBar = notifier.language.blockHeader;
+    // notifier.fABCaption = notifier.language.block ?? '';
     notifier.reportType = ReportType.profile;
     notifier.reportAction = ReportAction.block;
     Routing().move(Routes.report);

@@ -11,6 +11,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_form_field.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/outer/login/notifier.dart';
+import 'package:hyppe/ui/outer/welcome_login/notifier.dart';
 import 'package:provider/provider.dart';
 
 class SignInForm extends StatefulWidget {
@@ -20,11 +21,19 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   @override
+  void initState() {
+    // var notif = Provider.of<WelcomeLoginNotifier>(context, listen: false);
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Consumer<LoginNotifier>(
+    return Consumer<WelcomeLoginNotifier>(
       builder: (_, notifier, __) => Column(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomTextFormField(
                 focusNode: notifier.emailFocus,
@@ -33,15 +42,18 @@ class _SignInFormState extends State<SignInForm> {
                 textEditingController: notifier.emailController,
                 style: Theme.of(context).textTheme.bodyText1,
                 textInputType: TextInputType.emailAddress,
-                onChanged: (v) => notifier.email = v,
+                onChanged: (v) {
+                  notifier.email = v;
+                },
                 inputDecoration: InputDecoration(
                   contentPadding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
                   labelText: notifier.incorrect ? notifier.language.notAValidEmailAddress : notifier.language.email,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: notifier.incorrect
-                      ? Theme.of(context).colorScheme.error
-                      : notifier.emailFocus.hasFocus
-                      ? Theme.of(context).colorScheme.primaryVariant
-                      : null),
+                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: notifier.emailValidator(notifier.emailController.text) != ''
+                          ? Theme.of(context).colorScheme.error
+                          : notifier.emailFocus.hasFocus
+                              ? Theme.of(context).colorScheme.primary
+                              : null),
                   prefixIconConstraints: BoxConstraints(minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!)),
                   prefixIcon: Transform.translate(
                     offset: Offset(SizeWidget().calculateSize(-5.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!), 0.0),
@@ -50,19 +62,30 @@ class _SignInFormState extends State<SignInForm> {
                       child: Icon(Icons.email_outlined, color: Theme.of(context).iconTheme.color),
                     ),
                   ),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondaryVariant)),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondaryVariant)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: notifier.emailFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primaryVariant
-                              : Theme.of(context).colorScheme.secondaryVariant)),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                  focusedBorder:
+                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.emailFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
+                  errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.error)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
                     : notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
                         ? true
                         : false,
+                // validator: (v) {
+                //   if (notifier.emailValidator(v!) == '') {
+                //     return 'asdasd';
+                //   } else {
+                //     return null;
+                //   }
+                // },
+              ),
+              fourPx,
+              CustomTextWidget(
+                textToDisplay: "${notifier.emailValidator(notifier.emailController.text)}",
+                textAlign: TextAlign.start,
+                textStyle: const TextStyle(color: Colors.red),
               ),
               twentyFourPx,
               CustomTextFormField(
@@ -79,11 +102,12 @@ class _SignInFormState extends State<SignInForm> {
                   isDense: true,
                   contentPadding: const EdgeInsets.only(right: 16, bottom: 16),
                   labelText: notifier.incorrect ? notifier.language.incorrectPassword : notifier.language.password,
-                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: notifier.incorrect
-                      ? Theme.of(context).colorScheme.error
-                      : notifier.passwordFocus.hasFocus
-                      ? Theme.of(context).colorScheme.primaryVariant
-                      : null),
+                  labelStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: notifier.incorrect
+                          ? Theme.of(context).colorScheme.error
+                          : notifier.passwordFocus.hasFocus
+                              ? Theme.of(context).colorScheme.primary
+                              : null),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
                   ),
@@ -111,13 +135,10 @@ class _SignInFormState extends State<SignInForm> {
                       onPressed: () => notifier.hide = !notifier.hide,
                     ),
                   ),
-                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondaryVariant)),
-                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondaryVariant)),
-                  focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: notifier.passwordFocus.hasFocus
-                              ? Theme.of(context).colorScheme.primaryVariant
-                              : Theme.of(context).colorScheme.secondaryVariant)),
+                  border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                  focusedBorder:
+                      UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                 ),
                 readOnly: notifier.isLoading
                     ? true
@@ -128,20 +149,42 @@ class _SignInFormState extends State<SignInForm> {
             ],
           ),
           twentyPx,
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     CustomTextWidget(
+          //       textToDisplay: "${notifier.language.forgotPassword}?",
+          //       textStyle: Theme.of(context).primaryTextTheme.button,
+          //     ),
+          //     notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
+          //         ? const CustomLoading(size: 6.3)
+          //         : CustomTextButton(
+          //             onPressed: () => notifier.onClickForgotPassword(context),
+          //             child: CustomTextWidget(
+          //               textToDisplay: "${notifier.language.forgotPassword}?",
+          //               textStyle: Theme.of(context).primaryTextTheme.button.copyWith(color: kHyppePrimary),
+          //             ),
+          //           ),
+          //   ],
+          // ),
           notifier.loadingForObject(LoginNotifier.loadingForgotPasswordKey)
               ? const CustomLoading(size: 6.3)
-              : CustomTextButton(
-                  onPressed: () => notifier.onClickForgotPassword(context),
-                  child: CustomTextWidget(
-                    textToDisplay: "${notifier.language.forgotPassword!}?",
-                    textStyle: Theme.of(context).primaryTextTheme.button,
+              : Container(
+                  width: double.infinity,
+                  alignment: Alignment.centerRight,
+                  child: CustomTextButton(
+                    onPressed: () => notifier.onClickForgotPassword(context),
+                    child: CustomTextWidget(
+                      textToDisplay: "${notifier.language.forgotPassword}?",
+                      textStyle: Theme.of(context).primaryTextTheme.button?.copyWith(color: kHyppePrimary),
+                    ),
                   ),
                 ),
           fourPx,
           CustomElevatedButton(
             function: () {
               if (!notifier.isLoading) {
-                if (notifier.email.isNotEmpty && notifier.password.isNotEmpty) {
+                if (notifier.email.isNotEmpty && notifier.password.isNotEmpty && notifier.emailValidator(notifier.emailController.text) == '') {
                   notifier.onClickLogin(context);
                 }
               }
@@ -149,20 +192,18 @@ class _SignInFormState extends State<SignInForm> {
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
                 notifier.isLoading
-                    ? Theme.of(context).colorScheme.secondary
+                    ? Theme.of(context).colorScheme.surface
                     : notifier.buttonDisable()
-                        ? Theme.of(context).colorScheme.primaryVariant
-                        : Theme.of(context).colorScheme.secondary,
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surface,
               ),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
             child: notifier.isLoading
                 ? const CustomLoading()
                 : CustomTextWidget(
-                    textToDisplay: notifier.language.logIn!,
-                    textStyle: notifier.buttonDisable()
-                        ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText)
-                        : Theme.of(context).primaryTextTheme.button,
+                    textToDisplay: notifier.language.logIn ?? 'Log In',
+                    textStyle: notifier.buttonDisable() ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
                   ),
             width: SizeConfig.screenWidth,
             height: 49 * SizeConfig.scaleDiagonal,

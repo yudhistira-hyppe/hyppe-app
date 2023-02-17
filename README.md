@@ -1,6 +1,6 @@
 # Hyppe
 
-## Getting Started
+## Getting Started Test
 
 ## Android
 
@@ -64,7 +64,7 @@ Test flavor (APK):
 
 Prod flavor (APK):
 
-    flutter build apk -t lib/main_prod.dart --obfuscate --split-debug-info=<path-to-store-debug-info> --release
+    flutter build apk -t lib/main_prod.dart --obfuscate --split-debug-info=<path-to-store-debug-info> --release --no-shrink
 
 Prod flavor (App Bundle):
 
@@ -85,41 +85,41 @@ Prod flavor:
     flutter build ipa -t lib/main_prod.dart --release
 
 ## Contribution Rules
- 1. create branch always from develop
- 2. naming sub folder branch
+
+1.  create branch always from develop
+2.  naming sub folder branch
     ```
     a. feature for creating new feature
     b. bugfix for fixing issue
     c. refactor for refactoring code
-    d. hotfix for fixing quikly for deploy the library 
+    d. hotfix for fixing quikly for deploy the library
     ```
     ```
-    example: 
+    example:
         - feature/branchNaming
         - bugfix/branchNaming
         - hotfix/branchNaming
         - refactor/branchNaming
     ```
- 3. give the prefix for commit message header and always give sub message for the changes commit
+3.  give the prefix for commit message header and always give sub message for the changes commit
     ```
     a. feat for new feature
-    b. fix for fixing any issue 
-    c. refactor for refactoring code 
+    b. fix for fixing any issue
+    c. refactor for refactoring code
     d. deploy for deploy new version
     ```
     ```
-    example: 
+    example:
         - feat: backend integration
           - Integration API Backend
           - Create logic for sign up
           - Create ui home
         - fix: backend integration
-          - fixing null pointer 
+          - fixing null pointer
         - refactor: backend integration
-          - cleaning code 
+          - cleaning code
         - deploy: backend integration
           - increase version
     ```
- 4. for version please follow for semantic version 
- 5. for merge to production or staging please request merge request to maintain our quality code 
-
+4.  for version please follow for semantic version
+5.  for merge to production or staging please request merge request to maintain our quality code

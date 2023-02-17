@@ -17,7 +17,7 @@ class CustomTabPageSelector extends StatelessWidget {
   }) : super(key: key);
 
   double _indexChangeProgress(TabController controller) {
-    final double controllerValue = controller.animation!.value;
+    final double controllerValue = controller.animation?.value ?? 0.0;
     final double previousIndex = controller.previousIndex.toDouble();
     final double currentIndex = controller.index.toDouble();
     if (!controller.indexIsChanging) return (currentIndex - controllerValue).abs().clamp(0.0, 1.0);
@@ -29,22 +29,22 @@ class CustomTabPageSelector extends StatelessWidget {
     if (tabController.indexIsChanging) {
       final double t = 1.0 - _indexChangeProgress(tabController);
       if (tabController.index == tabIndex) {
-        background = selectedColorTween.lerp(t)!;
+        background = selectedColorTween.lerp(t) ?? Colors.white;
       } else if (tabController.previousIndex == tabIndex) {
-        background = previousColorTween.lerp(t)!;
+        background = previousColorTween.lerp(t) ?? Colors.white;
       } else {
-        background = selectedColorTween.begin!;
+        background = selectedColorTween.begin ?? Colors.white;
       }
     } else {
       final double offset = tabController.offset;
       if (tabController.index == tabIndex) {
-        background = selectedColorTween.lerp(1.0 - offset.abs())!;
+        background = selectedColorTween.lerp(1.0 - offset.abs()) ?? Colors.white;
       } else if (tabController.index == tabIndex - 1 && offset > 0.0) {
-        background = selectedColorTween.lerp(offset)!;
+        background = selectedColorTween.lerp(offset) ?? Colors.white;
       } else if (tabController.index == tabIndex + 1 && offset < 0.0) {
-        background = selectedColorTween.lerp(-offset)!;
+        background = selectedColorTween.lerp(-offset) ?? Colors.white;
       } else {
-        background = selectedColorTween.begin!;
+        background = selectedColorTween.begin ?? Colors.white;
       }
     }
     return Container(

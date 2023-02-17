@@ -52,9 +52,11 @@ class DiarySeeAllNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
-        _resFuture = contentsQuery.reload(context);
+        'reload contentsQuery : 5'.logger();
+        // _resFuture = contentsQuery.reload(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       } else {
-        _resFuture = contentsQuery.loadNext(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       }
 
       final res = await _resFuture;
@@ -69,10 +71,7 @@ class DiarySeeAllNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialDiary(context);
     }
   }
@@ -82,10 +81,7 @@ class DiarySeeAllNotifier extends ChangeNotifier {
     if (connect) {
       _routing.move(
         Routes.diaryDetail,
-        argument: DiaryDetailScreenArgument(
-          diaryData: diaryData,
-          index: index.toDouble(),
-        ),
+        argument: DiaryDetailScreenArgument(diaryData: diaryData, index: index.toDouble(), page: contentsQuery.page, limit: contentsQuery.limit, type: TypePlaylist.landingpage),
       );
     } else {
       ShowBottomSheet.onNoInternetConnection(context);

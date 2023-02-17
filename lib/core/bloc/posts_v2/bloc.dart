@@ -12,7 +12,9 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:provider/provider.dart';
 
 class PostsBloc {
   final _repos = Repos();
@@ -28,18 +30,28 @@ class PostsBloc {
     String? postID,
     required int pageNumber,
     required FeatureType type,
+    String? visibility,
     bool onlyMyData = false,
+    bool myContent = false,
+    bool otherContent = false,
   }) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
+    String url = '';
 
     if (onlyMyData) {
-      formData.fields.add(MapEntry('search', email));
+      if (myContent != true) {
+        formData.fields.add(MapEntry('search', email));
+      }
       formData.fields.add(const MapEntry('withExp', 'true'));
       formData.fields.add(const MapEntry('withActive', 'true'));
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
+
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+      if (type == FeatureType.story) {
+        formData.fields.add(const MapEntry('visibility', 'PRIVATE'));
+      }
     } else {
       if (type == FeatureType.story) {
         if (postID == null) formData.fields.add(MapEntry('exclude', email));
@@ -48,23 +60,51 @@ class PostsBloc {
       if (postID != null) {
         formData.fields.add(MapEntry('postID', postID));
       }
-      formData.fields.add(MapEntry('search', searchText));
+
+      if (searchText == '') {
+        formData.fields.add(MapEntry('visibility', '$visibility'));
+      }
+
+      // if (type == FeatureType.diary && postID != null) {
+      //   // _objTable.removeWhere((key, value) => key == "propertyName");
+      //   formData.fields.removeWhere((element) => element.key == 'visibility');
+      // }
+
+      if (myContent != true) {
+        formData.fields.add(MapEntry('search', searchText));
+      }
       formData.fields.add(const MapEntry('withActive', 'true'));
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('pageRow', '$pageRows'));
+      print('ZT $pageRows, $pageNumber, $visibility, ${System().validatePostTypeV2(type)}');
       formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
       formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     }
+    url = UrlConstants.getuserposts;
+    if (otherContent) {
+      formData.fields.add(MapEntry('email', searchText));
+      url = UrlConstants.getOtherUserPosts;
+    }
 
+    if (myContent) {
+      url = UrlConstants.getMyUserPosts;
+    }
+
+    print('hahahahahahahaha');
+    print(myContent);
+    print(onlyMyData);
+    print(postID);
+    print(formData.fields.map((e) => e).join(','));
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        print(onResult);
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -74,7 +114,7 @@ class PostsBloc {
       headers: {
         'x-auth-user': email,
       },
-      host: UrlConstants.getuserposts,
+      host: url,
       withAlertMessage: false,
       withCheckConnection: false,
       methodType: MethodType.post,
@@ -82,50 +122,151 @@ class PostsBloc {
     );
   }
 
-  Future postContentsBlocV2(
+  Future getAllContentsBlocV2(
     BuildContext context, {
-    String? tags,
-    required FeatureType type,
-    required bool allowComment,
-    required String description,
+    int pageRows = 5,
+    bool myContent = false,
+    bool otherContent = false,
+    String? postType,
     required String visibility,
-    String location = "Indonesia",
-    ProgressCallback? onSendProgress,
-    ProgressCallback? onReceiveProgress,
-    required List<String?> fileContents,
-    required NativeDeviceOrientation rotate,
+    required int pageNumber,
   }) async {
+    final formData = FormData();
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final fcmToken = SharedPreference().readStorage(SpKeys.fcmToken);
+    print('my fcm token : $fcmToken');
+    // final currentDate = context.getCurrentDate();
+
+    formData.fields.add(const MapEntry('withActive', 'true'));
+    formData.fields.add(const MapEntry('withDetail', 'true'));
+    formData.fields.add(const MapEntry('withInsight', 'true'));
+    if (postType != null) {
+      formData.fields.add(MapEntry('postType', postType));
+      if (postType == 'story') {
+        formData.fields.add(const MapEntry('withExp', 'true'));
+      }
+    }
+    formData.fields.add(MapEntry('visibility', visibility));
+    // formData.fields.add(MapEntry('endDate', currentDate));
+    formData.fields.add(MapEntry('pageRow', '$pageRows'));
+    formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
+
+    print('getAllContentsBlocV2 paging : ${formData.fields.map((e) => e).join(',')}');
+    setPostsFetch(PostsFetch(PostsState.loading));
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        print("test $onResult");
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+      },
+      data: formData,
+      headers: {
+        'x-auth-user': email,
+      },
+      host: UrlConstants.getUserPostsLandingPage,
+      withAlertMessage: false,
+      withCheckConnection: false,
+      methodType: MethodType.post,
+    );
+  }
+
+  Future postContentsBlocV2(BuildContext context,
+      {List<String>? tags,
+      List<String>? cats,
+      List<String>? tagPeople,
+      required FeatureType type,
+      required bool allowComment,
+      required bool certified,
+      required String description,
+      required String visibility,
+      String? location,
+      ProgressCallback? onSendProgress,
+      ProgressCallback? onReceiveProgress,
+      required List<String?> fileContents,
+      required NativeDeviceOrientation rotate,
+      List<String>? tagDescription,
+      String? saleAmount,
+      bool? saleLike,
+      bool? saleView,
+      bool? isShared,
+      String? idMusic,
+      int? width,
+      int? height}) async {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
     formData.files.add(MapEntry(
         "postContent",
-        await MultipartFile.fromFile(File(fileContents[0]!).path,
-            filename: System().basenameFiles(File(fileContents[0]!).path),
+        await MultipartFile.fromFile(File(fileContents[0] ?? '').path,
+            filename: "${System().basenameFiles(File(fileContents[0] ?? '').path)}.${System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "")}",
             contentType: MediaType(
-              System().lookupContentMimeType(File(fileContents[0]!).path)?.split('/')[0] ?? '',
-              System().extensionFiles(File(fileContents[0]!).path)?.replaceAll(".", "") ?? "",
+              System().lookupContentMimeType(File(fileContents[0] ?? '').path)?.split('/')[0] ?? '',
+              System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "") ?? "",
             ))));
     formData.fields.add(MapEntry('email', email));
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('description', description));
-    formData.fields.add(MapEntry('tags', tags ?? ""));
+    formData.fields.add(MapEntry('tags', tags?.join(',') ?? ''));
+    formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
-    formData.fields.add(MapEntry('location', location));
+    formData.fields.add(MapEntry('certified', certified.toString()));
+    if (idMusic != null) {
+      formData.fields.add(MapEntry('musicId', idMusic));
+    }
+
+    if (width != null) {
+      formData.fields.add(MapEntry('width', width.toString()));
+    }
+    if (height != null) {
+      formData.fields.add(MapEntry('height', height.toString()));
+    }
+
+    formData.fields.add(MapEntry('location', location ?? ''));
+    formData.fields.add(MapEntry('tagDescription', tagDescription?.join(',') ?? ''));
+    // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
+
     formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
+    formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+    if(isShared != null){
+      formData.fields.add(MapEntry('isShared', isShared.toString()));
+    }else{
+      formData.fields.add(MapEntry('isShared', 'false'));
+    }
+
+    debugPrint("FORM_POST => " + allowComment.toString());
+    debugPrint(formData.fields.join(" - "));
+
+    print('createPost : ');
+    print(formData.fields.map((e) => e).join(','));
+    print('file upload: ${formData.files.toString()}');
+
+    print(System().basenameFiles(File(fileContents[0] ?? '').path));
+    print(System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", ""));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        print('Error Create Post ${onResult.statusCode}');
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
         }
       },
       (errorData) {
+        print('Error Create Post $errorData');
         setPostsFetch(PostsFetch(PostsState.postContentsError));
       },
       data: formData,
@@ -155,7 +296,7 @@ class PostsBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.deleteContentsError));
         } else {
           setPostsFetch(PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
@@ -176,15 +317,21 @@ class PostsBloc {
     );
   }
 
-  Future updateContentBlocV2(
-    BuildContext context, {
-    required String postId,
-    required String description,
-    String? tags,
-    String visibility = "PUBLIC",
-    required bool allowComment,
-    required FeatureType type,
-  }) async {
+  Future updateContentBlocV2(BuildContext context,
+      {required String postId,
+      required String description,
+      String? tags,
+      String visibility = "PUBLIC",
+      required bool allowComment,
+      required bool certified,
+      required FeatureType type,
+      List<String>? cats,
+      List<String>? tagPeople,
+      String? location,
+      String? saleAmount,
+      bool? saleLike,
+      bool? isShared,
+      bool? saleView}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     final formData = FormData();
@@ -193,15 +340,27 @@ class PostsBloc {
     formData.fields.add(MapEntry('tags', tags ?? ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
+    formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(const MapEntry('active', 'true'));
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+    formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('location', location ?? ''));
+    formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+    formData.fields.add(MapEntry('isShared', isShared.toString()));
+
+    print('hahahahahahahaha');
+    print(type);
+    print(formData.fields.map((e) => e).join(','));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
-          setPostsFetch(PostsFetch(PostsState.updateContentsError));
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.updateContentsError, data: onResult));
         } else {
           setPostsFetch(PostsFetch(PostsState.updateContentsSuccess, data: onResult));
         }
@@ -213,11 +372,59 @@ class PostsBloc {
       headers: {
         'x-auth-user': email,
       },
-      withAlertMessage: true,
+      withAlertMessage: false,
       withCheckConnection: true,
       host: UrlConstants.updatepost,
       methodType: MethodType.post,
       errorServiceType: System().getErrorTypeV2(type),
+    );
+  }
+
+  Future getVideoApsaraBlocV2(
+    BuildContext context, {
+    required String apsaraId,
+    SpeedInternet? speedInternet,
+  }) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
+    final token = SharedPreference().readStorage(SpKeys.userToken);
+    setPostsFetch(PostsFetch(PostsState.loading));
+    String speed = 'SD';
+    speedInternet = context.read<HomeNotifier>().internetSpeed;
+    print("hasil dari home $speedInternet");
+    switch (speedInternet) {
+      case SpeedInternet.fast:
+        speed = 'SD';
+        break;
+      case SpeedInternet.medium:
+        speed = 'LD';
+        break;
+      default:
+        speed = 'FD';
+    }
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+        } else {
+          print('onResult');
+          print(onResult);
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+      },
+      data: {"apsaraId": apsaraId, "definition": speed},
+      headers: {
+        'x-auth-user': email,
+        'x-auth-token': token,
+      },
+      withAlertMessage: false,
+      withCheckConnection: true,
+      host: UrlConstants.getVideoApsara,
+      methodType: MethodType.post,
     );
   }
 }

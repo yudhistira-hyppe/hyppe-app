@@ -1,4 +1,6 @@
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
+import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
@@ -14,6 +16,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/core/services/system.dart';
 
 class MessageNotifier extends ChangeNotifier {
+  bool _muteMessage = false;
+  bool get muteMessage => _muteMessage;
+
   DiscussDataQuery discussQuery = DiscussDataQuery()
     ..withDetail = false
     ..limit = 25;
@@ -30,8 +35,29 @@ class MessageNotifier extends ChangeNotifier {
 
   List<MessageDataV2>? get discussData => _discussData;
 
+  String? _choosedisqusID;
+  String? get choosedisqusID => _choosedisqusID;
+
+  String? _choosePhotoReceiver;
+  String? get choosePhotoReceiver => _choosePhotoReceiver;
+
   set discussData(List<MessageDataV2>? val) {
     _discussData = val;
+    notifyListeners();
+  }
+
+  set muteMessage(bool val) {
+    _muteMessage = val;
+    notifyListeners();
+  }
+
+  set choosedisqusID(String? val) {
+    _choosedisqusID = val;
+    notifyListeners();
+  }
+
+  set choosePhotoReceiver(String? val) {
+    _choosePhotoReceiver = val;
     notifyListeners();
   }
 
@@ -43,6 +69,7 @@ class MessageNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
+        print('reload contentsQuery : 21');
         _resFuture = discussQuery.reload(context);
       } else {
         _resFuture = discussQuery.loadNext(context);
@@ -60,10 +87,7 @@ class MessageNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context, ScrollController scrollController) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !discussQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !discussQuery.loading && hasNext) {
       getDiscussion(context);
     }
   }
@@ -74,26 +98,47 @@ class MessageNotifier extends ChangeNotifier {
 
     // get self profile data
     final _selfProfile = Provider.of<SelfProfileNotifier>(context, listen: false);
+    final List<MessageDataV2> messageData = [];
+    messageData.add(data ?? MessageDataV2());
 
     Routing().move(
       Routes.messageDetail,
       argument: MessageDetailArgument(
-        mate: Mate(
-          email: emailSender,
-          fullName: _selfProfile.user.profile?.fullName,
-          username: _selfProfile.user.profile?.username,
-          avatar: Avatar(
-            mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
-            mediaType: _selfProfile.user.profile?.avatar?.mediaType,
-            mediaEndpoint: _selfProfile.user.profile?.avatar?.mediaEndpoint,
-            mediaBasePath: _selfProfile.user.profile?.avatar?.mediaBasePath,
+          mate: Mate(
+            email: emailSender,
+            fullName: _selfProfile.user.profile?.fullName,
+            username: _selfProfile.user.profile?.username,
+            avatar: Avatar(
+              mediaUri: _selfProfile.user.profile?.avatar?.mediaUri,
+              mediaType: _selfProfile.user.profile?.avatar?.mediaType,
+              mediaEndpoint: _selfProfile.user.profile?.avatar?.mediaEndpoint,
+              mediaBasePath: _selfProfile.user.profile?.avatar?.mediaBasePath,
+            ),
           ),
-        ),
-        emailReceiver: data?.senderOrReceiverInfo?.email ?? '',
-        usernameReceiver: data?.senderOrReceiverInfo?.username ?? '',
-        fullnameReceiver: data?.senderOrReceiverInfo?.fullName ?? '',
-        photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
-      ),
+          emailReceiver: data?.senderOrReceiverInfo?.email ?? '',
+          usernameReceiver: data?.senderOrReceiverInfo?.username ?? '',
+          fullnameReceiver: data?.senderOrReceiverInfo?.fullName ?? '',
+          photoReceiver: System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '',
+          disqusID: data?.disqusID ?? '',
+          discussData: messageData),
     );
+  }
+
+  // Future<void> onLongPressUser(BuildContext context, MessageDataV2? data) async {
+  //   choosedisqusID = data?.disqusID;
+  //   choosePhotoReceiver = System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint) ?? '';
+  //   ShowBottomSheet.onLongPressDeleteMessage(context);
+  //   notifyListeners();
+  // }
+
+  Future<void> deletetConversation(BuildContext context, String email, String postId) async {
+    final notifier = MessageBlocV2();
+    await notifier.deleteDiscussionBloc(context, postEmail: email, id: postId);
+    final fetch = notifier.messageFetch;
+    if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
+      getDiscussion(context, reload: true);
+      Routing().moveBack();
+    }
+    notifyListeners();
   }
 }

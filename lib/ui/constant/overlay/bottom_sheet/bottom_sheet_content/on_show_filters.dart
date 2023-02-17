@@ -39,7 +39,7 @@ class OnShowFilters extends StatelessWidget {
                       children: [
                         CustomTextWidget(
                             textToDisplay: FILTERS.keys.toList()[index],
-                            textStyle: Theme.of(context).textTheme.caption!.copyWith(fontWeight: FontWeight.w600)),
+                            textStyle: Theme.of(context).textTheme.caption?.copyWith(fontWeight: FontWeight.w600)),
                         eightPx,
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4.0),
@@ -76,12 +76,12 @@ class OnShowFilters extends StatelessWidget {
             width: 81,
             height: 30,
             function: () => context.read<PreviewContentNotifier>().applyFilters(globalKey: globalKey),
-            buttonStyle: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+            buttonStyle: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)))),
             child: Consumer<PreviewContentNotifier>(
               builder: (_, notifier, __) => CustomTextWidget(
-                textToDisplay: notifier.language.done!,
+                textToDisplay: notifier.language.done ?? 'done',
                 textStyle: Theme.of(context).textTheme.button,
               ),
             ),

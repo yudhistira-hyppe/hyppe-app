@@ -35,28 +35,31 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
 
   Color interestNextButtonColor(BuildContext context, List<String> userInterested) {
     if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty && !isLoading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
   }
 
-  TextStyle interestNextTextColor(BuildContext context, List<String> userInterested) {
+  TextStyle? interestNextTextColor(BuildContext context, List<String> userInterested) {
     if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText);
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button;
     }
   }
 
   Future onTapInterestButton(BuildContext context, bool fromSetting, List<String> userInterested) async {
+    print('simpan kesuakan');
     if (_interestData.isNotEmpty) {
+      print('dari setting');
       if (fromSetting) {
         if (!listEquals(_interestData, userInterested)) {
           final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
           await notifier.onClickSaveInterests(context, _interestData);
         }
       } else {
+        print('bukan dari setting');
         final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
         await notifier.onClickSaveInterests(context, _interestData);
         _routing.move(Routes.signUpWelcome);
@@ -75,14 +78,18 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   Function? insertInterest(int index) {
+    print(index);
+    print(interest.isNotEmpty);
     if (interest.isNotEmpty) {
-      String tile = interest[index].interestName!;
+      String tile = interest[index].interestName ?? '';
+      print(tile);
       return () {
         if (_interestData.contains(tile)) {
           _interestData.removeWhere((v) => v == tile);
         } else {
           _interestData.add(tile);
         }
+        print(_interestData);
         notifyListeners();
       };
     } else {

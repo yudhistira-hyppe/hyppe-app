@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/services/system.dart';
@@ -42,71 +45,124 @@ class ContentItem extends StatelessWidget {
 
               return true;
             },
-            child: GridView.builder(
-              itemCount: notifier.itemCount,
-              scrollDirection: Axis.vertical,
-              controller: notifier.scrollController,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.79,
-              ),
-              padding: const EdgeInsets.all(16.0),
-              itemBuilder: (context, index) {
-                if (notifier.diaryData == null) {
-                  return const CustomLoading();
-                } else if (index == notifier.diaryData?.length && notifier.hasNext) {
-                  return const CustomLoading();
-                }
+            child: notifier.itemCount == 0
+                ? const NoResultFound()
+                : GridView.builder(
+                    itemCount: notifier.itemCount,
+                    scrollDirection: Axis.vertical,
+                    controller: notifier.scrollController,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 0.79,
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    itemBuilder: (context, index) {
+                      if (notifier.diaryData == null) {
+                        return const CustomLoading();
+                      } else if (index == notifier.diaryData?.length && notifier.hasNext) {
+                        return const CustomLoading();
+                      }
 
-                final data = notifier.diaryData?[index];
-                return InkWell(
-                  onTap: () => notifier.navigateToShortVideoPlayer(context, index),
-                  child: CustomBaseCacheImage(
-                    imageUrl: "${data?.fullThumbPath}",
-                    imageBuilder: (context, imageProvider) => Container(
-                      alignment: Alignment.bottomLeft,
-                      child: CustomBalloonWidget(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      final data = notifier.diaryData?[index];
+                      return InkWell(
+                        onTap: () => notifier.navigateToShortVideoPlayer(context, index),
+                        child: Stack(
                           children: [
-                            const CustomIconWidget(
-                              defaultColor: false,
-                              color: kHyppeLightButtonText,
-                              iconData: '${AssetPath.vectorPath}like.svg',
+                            CustomBaseCacheImage(
+                              imageUrl: (data?.isApsara ?? false) ? (data?.mediaThumbEndPoint ?? '') : "${data?.fullThumbPath}",
+                              imageBuilder: (context, imageProvider) => Container(
+                                alignment: Alignment.bottomLeft,
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: data?.reportedStatus == 'BLURRED'
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: BackdropFilter(
+                                          filter: ImageFilter.blur(
+                                            sigmaX: 30.0,
+                                            sigmaY: 30.0,
+                                          ),
+                                          child: Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: const [
+                                                CustomIconWidget(
+                                                  iconData: "${AssetPath.vectorPath}eye-off.svg",
+                                                  defaultColor: false,
+                                                  height: 40,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : CustomBalloonWidget(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            const CustomIconWidget(
+                                              defaultColor: false,
+                                              color: kHyppeLightButtonText,
+                                              iconData: '${AssetPath.vectorPath}like.svg',
+                                            ),
+                                            fourPx,
+                                            CustomTextWidget(
+                                              textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
+                                              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              emptyWidget: Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                                decoration: BoxDecoration(
+                                  image: const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
                             ),
-                            fourPx,
-                            CustomTextWidget(
-                              textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-                            )
+                            (data?.saleAmount ?? 0) > 0
+                                ? const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 3, right: 6.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        height: 20,
+                                        defaultColor: false,
+                                      ),
+                                    ))
+                                : Container(),
                           ],
                         ),
-                      ),
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           );
   }
 }

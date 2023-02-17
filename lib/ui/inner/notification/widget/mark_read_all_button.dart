@@ -17,10 +17,10 @@
 
 //     return CustomTextButton(
 //         onPressed: () => context.read<NotificationNotifier>().markAllAsRead(context),
-//         style: Theme.of(context).textButtonTheme.style!.copyWith(
+//         style: Theme.of(context).textButtonTheme.style.copyWith(
 //             backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
 //             shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)))),
 //         child: CustomTextWidget(
-//             textToDisplay: context.read<TranslateNotifier>().translate.markAllAsRead!, textStyle: Theme.of(context).textTheme.button));
+//             textToDisplay: context.read<TranslateNotifier>().translate.markAllAsRead, textStyle: Theme.of(context).textTheme.button));
 //   }
 // }

@@ -46,7 +46,7 @@ class AdvanceTextWidget extends StatelessWidget {
         text: mentionText,
         style: textStyle ??
             theme.textTheme.bodyText1?.copyWith(
-              color: clickColor ?? theme.colorScheme.primaryVariant,
+              color: clickColor ?? theme.colorScheme.primary,
             ),
         recognizer: TapGestureRecognizer()
           ..onTap = () {

@@ -13,10 +13,10 @@ import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/notification_service.dart';
 
-// import 'package:hyppe/core/models/collection/notifications/notifications_data.dart';
-
 // handling background message
 Future<void> onBackgroundMessage(RemoteMessage message) async {
+  final _notificationService = NotificationService();
+
   await Firebase.initializeApp();
   """ 
             Background incoming message data => ${message.data},
@@ -29,6 +29,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
             Background incoming message threadId => ${message.threadId},
             Background incoming message ttl => ${message.ttl},
             Background incoming message notification => ${message.notification?.title} ${message.notification?.body}
+            Background incoming message tag => ${message.notification?.android?.tag}
             """
       .logger();
 
@@ -39,7 +40,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   //     timestamp: message.sentTime?.millisecondsSinceEpoch.toString() ?? null,
   //     message: '${message.notification?.title ?? ''} ${message.notification?.body ?? ''}');
 
-  // NotificationService().showNotification(message);
+  _notificationService.showNotification(message, idNotif: message.notification?.android?.tag);
 }
 
 // listenable value
@@ -67,10 +68,13 @@ class FcmService {
   Future firebaseCloudMessagingListeners() async {
     try {
       // initialize firebase
+      print('ini kesini ga yah1');
       await Firebase.initializeApp().then((value) {
+        print('ini kesini ga yah');
         'Name ${value.name}'.logger();
         'option ${value.options.asMap}'.logger();
       });
+      print('ini kesini ga yah2');
 
       // request notification listener
       if (Platform.isIOS) requestNotificationPermission();
@@ -136,7 +140,8 @@ class FcmService {
             When app opened from tapping message threadId => ${message.threadId},
             When app opened from tapping message ttl => ${message.ttl},
             When app opened from tapping message notification => ${message.notification?.title} ${message.notification?.body}
-            """.logger();
+            """
+              .logger();
 
           // notificationData.value = NotificationsData(
           //     type: 'user',
@@ -166,8 +171,7 @@ class FcmService {
   Future<void> requestNotificationPermission() async {
     await firebaseMessaging.requestPermission(sound: true, badge: true, alert: true).then(
       (value) {
-        'Notification settings ${value.alert}, ${value.announcement}, ${value.authorizationStatus}, ${value.badge}, ${value.sound}, ${value.lockScreen}'
-            .logger();
+        'Notification settings ${value.alert}, ${value.announcement}, ${value.authorizationStatus}, ${value.badge}, ${value.sound}, ${value.lockScreen}'.logger();
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
+
 import 'custom_icon_widget.dart';
 import 'custom_base_cache_image.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ class CustomProfileImage extends StatelessWidget {
   final Function? onTap;
   final bool following;
   final String? imageUrl;
+  final String? cacheKey;
   final Function? onFollow;
   final Map<String, String>? headers;
 
@@ -21,6 +24,7 @@ class CustomProfileImage extends StatelessWidget {
     required this.width,
     required this.height,
     required this.imageUrl,
+    this.cacheKey,
     this.following = false,
   }) : super(key: key);
 
@@ -30,6 +34,7 @@ class CustomProfileImage extends StatelessWidget {
     return GestureDetector(
       onTap: onTap as void Function()?,
       child: CustomBaseCacheImage(
+        cacheKey: cacheKey,
         imageUrl: imageUrl,
         headers: headers,
         imageBuilder: (context, imageProvider) => Container(
@@ -43,6 +48,19 @@ class CustomProfileImage extends StatelessWidget {
           ),
         ),
         errorWidget: (context, url, error) => Container(
+          width: width,
+          height: height,
+          child: _buildBody(),
+          alignment: Alignment.bottomCenter,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('${AssetPath.pngPath}profile-error.png'),
+            ),
+            shape: BoxShape.circle,
+          ),
+        ),
+        emptyWidget: Container(
           width: width,
           height: height,
           child: _buildBody(),

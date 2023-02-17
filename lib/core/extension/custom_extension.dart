@@ -8,8 +8,7 @@ extension CustomDateTimeExtentision on DateTime {
 
   DateTime get firstDateOfLastMonth => subtract(
         Duration(
-          days: DateUtils.getDaysInMonth(DateTime.now().isFirstMonth ? DateTime.now().year - 1 : DateTime.now().year,
-                  DateTime.now().isFirstMonth ? DateTime.december : DateTime.now().month - 1) +
+          days: DateUtils.getDaysInMonth(DateTime.now().isFirstMonth ? DateTime.now().year - 1 : DateTime.now().year, DateTime.now().isFirstMonth ? DateTime.december : DateTime.now().month - 1) +
               DateTime.now().day -
               1,
         ),
@@ -26,60 +25,15 @@ extension MarkAllNotificationAsRead on List<NotificationModel> {
     });
   }
 
-  // void removeLoadMoreFlag() => this.removeWhere((element) => element.loadMore == true);
-
-  // void setLoadMoreFlag() {
-  //   if (this.isNotEmpty) this.add(NotificationsData.setLoadMore());
-  // }
-
-  // void determineCategoryData() {
-  //   int? _var1;
-  //   String? _var2;
-
-  //   bool _condition(int? value) => ((DateTime.now().millisecondsSinceEpoch - (value ?? DateTime.now().millisecondsSinceEpoch)) ~/ 1000) ~/ 3600 <= 24;
-
-  //   if (this.isNotEmpty) {
-  //     if (this[0].isNew == null) {
-  //       for (NotificationsData data in this) {
-  //         if (_var1 != null) break;
-  //         if (_condition(int.tryParse(data.timestamp!))) {
-  //           _var1 = int.tryParse(data.timestamp!);
-  //         }
-  //       }
-
-  //       if (_var1 != null) this.insert(0, NotificationsData.setNew(_var1.toString()));
-  //     }
-
-  //     if (this.any((element) => element.isEarlier == null)) {
-  //       for (NotificationsData data in this) {
-  //         if (_var2 != null) break;
-  //         if (!_condition(int.tryParse(data.timestamp!))) {
-  //           _var2 = data.timestamp!;
-  //         }
-  //       }
-
-  //       if (_var2 != null) this.insert(this.indexWhere((element) => element.timestamp == _var2), NotificationsData.setEarlier(_var2));
-  //     }
-  //   }
-  // }
-
-  // void filteredAddAll(List<NotificationsData> data) {
-  //   for (int index = 0; index < data.length; index++) {
-  //     if (this[index].notificationId != data[index].notificationId) this.add(data[index]);
-  //   }
-  // }
-
   List<NotificationModel> filterNotification(List<NotificationCategory> notificationCategory) {
     List<NotificationModel> _result = [];
     for (var element1 in this) {
-      if (notificationCategory.contains(System().getNotificationCategory(element1.eventType ?? ''))) {
-        _result.add(element1);
-      }
+      // if (notificationCategory.contains(System().getNotificationCategory(element1.eventType ?? ''))) {
+      _result.add(element1);
+      // }
     }
     return _result;
   }
-
-  // bool get falsy => this.isEmpty || this.length == 1 && this.single.loadMore == true;
 }
 
 extension CustomIterableExtension<T> on Iterable<T> {

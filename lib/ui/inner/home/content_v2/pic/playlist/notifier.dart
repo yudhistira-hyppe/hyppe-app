@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -22,6 +27,10 @@ import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
+import 'package:story_view/controller/story_controller.dart';
+
+import '../../../../../../core/bloc/posts_v2/bloc.dart';
+import '../../../../../../core/bloc/posts_v2/state.dart';
 
 class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.pic;
@@ -33,30 +42,107 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   ContentData? _data;
   int contentIndex = 0;
   StatusFollowing _statusFollowing = StatusFollowing.none;
+  bool _isLoadMusic = true;
+  bool get isLoadMusic => _isLoadMusic;
+  bool _preventMusic = false;
+  bool get preventMusic => _preventMusic;
+  String _urlMusic = '';
+  String get urlMusic => _urlMusic;
 
   PicDetailScreenArgument? _routeArgument;
 
-  ContentData? get data => _data;
   StatusFollowing get statusFollowing => _statusFollowing;
+  bool _checkIsLoading = false;
+  bool get checkIsLoading => _checkIsLoading;
+
+  set isLoadMusic(bool state) {
+    _isLoadMusic = state;
+    notifyListeners();
+  }
+
+  setLoadMusic(bool state){
+    _isLoadMusic = state;
+  }
+
+  set preventMusic(bool state){
+    _preventMusic = state;
+    notifyListeners();
+  }
+
+  set urlMusic(String val) {
+    _urlMusic = val;
+  }
+
+  set checkIsLoading(bool val) {
+    _checkIsLoading = val;
+    notifyListeners();
+  }
 
   set statusFollowing(StatusFollowing statusFollowing) {
     _statusFollowing = statusFollowing;
     notifyListeners();
   }
 
+  ContentData? get data => _data;
+  set data(ContentData? value) {
+    _data = value;
+    notifyListeners();
+  }
+
   void onUpdate() => notifyListeners();
 
-  void initState(BuildContext context, PicDetailScreenArgument routeArgument) {
+  void initState(BuildContext context, PicDetailScreenArgument routeArgument) async {
     _routeArgument = routeArgument;
-
     if (_routeArgument?.postID != null) {
-      _initialPic(context);
+      'pic playlist'.logger();
+      await _initialPic(context);
     } else {
       _data = _routeArgument?.picData;
+      data?.isLiked.logger();
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
     }
+  }
+
+  void initMusic(BuildContext context, String apsaraId) async {
+    try {
+      if (apsaraId.isNotEmpty) {
+        final url = await _getAdsVideoApsara(context, apsaraId);
+        if (url != null) {
+          _urlMusic = url;
+          notifyListeners();
+        } else {
+          throw 'url music is null';
+        }
+      } else {
+        throw 'apsaramusic is empty';
+      }
+    } catch (e) {
+      "Error Init Video $e".logger();
+    } finally {
+      Future.delayed(const Duration(milliseconds: 400), () {
+        isLoadMusic = false;
+      });
+    }
+  }
+
+  Future<String?> _getAdsVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        'jsonMap video Apsara : $jsonMap'.logger();
+        return jsonMap['PlayUrl'];
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+    }
+    return null;
   }
 
   Future<void> _initialPic(
@@ -67,6 +153,7 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     contentsQuery.postID = _routeArgument?.postID;
 
     try {
+      'reload contentsQuery : 6'.logger();
       _resFuture = contentsQuery.reload(context);
 
       final res = await _resFuture;
@@ -74,52 +161,65 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       notifyListeners();
       _checkFollowingToUser(context, autoFollow: true);
       _increaseViewCount(context);
+      notifyListeners();
     } catch (e) {
       'load pic: ERROR: $e'.logger();
     }
   }
 
-  Future followUser(BuildContext context, {bool checkIdCard = true}) async {
+  Future followUser(BuildContext context, {bool checkIdCard = true, isUnFollow = false}) async {
     try {
+      checkIsLoading = true;
       if (checkIdCard) {
-        System().actionReqiredIdCard(
-          context,
-          action: () async {
-            statusFollowing = StatusFollowing.requested;
-            final notifier = FollowBloc();
-            await notifier.followUserBlocV2(
-              context,
-              data: FollowUserArgument(
-                receiverParty: _data?.email ?? '',
-                eventType: InteractiveEventType.following,
-              ),
-            );
-            final fetch = notifier.followFetch;
-            if (fetch.followState == FollowState.followUserSuccess) {
-              statusFollowing = StatusFollowing.requested;
-            } else {
-              statusFollowing = StatusFollowing.none;
-            }
-          },
-          uploadContentAction: false,
-        );
-      } else {
-        statusFollowing = StatusFollowing.requested;
+        // System().actionReqiredIdCard(
+        //   context,
+        //   action: () async {
+        // statusFollowing = StatusFollowing.requested;
         final notifier = FollowBloc();
         await notifier.followUserBlocV2(
           context,
           data: FollowUserArgument(
             receiverParty: _data?.email ?? '',
-            eventType: InteractiveEventType.following,
+            eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
           ),
         );
         final fetch = notifier.followFetch;
         if (fetch.followState == FollowState.followUserSuccess) {
-          statusFollowing = StatusFollowing.requested;
-        } else {
+          if(isUnFollow){
+            statusFollowing = StatusFollowing.none;
+          }else{
+            statusFollowing = StatusFollowing.following;
+          }
+
+        }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+          statusFollowing = StatusFollowing.none;
+        }
+        //   },
+        //   uploadContentAction: false,
+        // );
+      } else {
+        // statusFollowing = StatusFollowing.requested;
+        final notifier = FollowBloc();
+        await notifier.followUserBlocV2(
+          context,
+          data: FollowUserArgument(
+            receiverParty: _data?.email ?? '',
+            eventType: isUnFollow ? InteractiveEventType.unfollow : InteractiveEventType.following,
+          ),
+        );
+        final fetch = notifier.followFetch;
+        if (fetch.followState == FollowState.followUserSuccess) {
+          if(isUnFollow){
+            statusFollowing = StatusFollowing.none;
+          }else{
+            statusFollowing = StatusFollowing.following;
+          }
+        }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
           statusFollowing = StatusFollowing.none;
         }
       }
+      checkIsLoading = false;
+      notifyListeners();
     } catch (e) {
       'follow user: ERROR: $e'.logger();
     }
@@ -127,30 +227,38 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
 
   Future<void> _increaseViewCount(BuildContext context) async {
     try {
-      System().increaseViewCount(context, _data!).whenComplete(() => notifyListeners());
+      System().increaseViewCount(context, _data ?? ContentData()).whenComplete(() => notifyListeners());
     } catch (e) {
       'post view request: ERROR: $e'.logger();
     }
   }
 
   Future<void> _checkFollowingToUser(BuildContext context, {required bool autoFollow}) async {
-    try {
-      _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
-      final _resFuture = _usersFollowingQuery.reload(context);
-      final _resRequest = await _resFuture;
-      if (_resRequest.isNotEmpty) {
-        if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
-          statusFollowing = StatusFollowing.following;
-        } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
-          statusFollowing = StatusFollowing.requested;
-        } else {
-          if (autoFollow) {
-            followUser(context, checkIdCard: false);
+    final _sharedPrefs = SharedPreference();
+
+    if (_sharedPrefs.readStorage(SpKeys.email) != _data?.email) {
+      try {
+        checkIsLoading = true;
+        _usersFollowingQuery.senderOrReceiver = _data?.email ?? '';
+        'reload contentsQuery : dua'.logger();
+        final _resFuture = _usersFollowingQuery.reload(context);
+        final _resRequest = await _resFuture;
+        if (_resRequest.isNotEmpty) {
+          if (_resRequest.any((element) => element.event == InteractiveEvent.accept)) {
+            statusFollowing = StatusFollowing.following;
+          } else if (_resRequest.any((element) => element.event == InteractiveEvent.initial)) {
+            statusFollowing = StatusFollowing.requested;
+          } else {
+            if (autoFollow) {
+              followUser(context, checkIdCard: false);
+            }
           }
         }
+        checkIsLoading = false;
+        notifyListeners();
+      } catch (e) {
+        'load following request list: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'load following request list: ERROR: $e'.logger();
     }
   }
 
@@ -176,12 +284,21 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
   }
 
   Future<bool> onPop() async {
-    if (_routeArgument?.postID != null) {
+    if (_routeArgument?.postID != null && _routeArgument?.backPage == false) {
       Routing().moveAndPop(Routes.lobby);
     } else {
       Routing().moveBack();
     }
 
     return true;
+  }
+
+  void showUserTag(BuildContext context, data, postId, {final StoryController? storyController}) {
+    ShowBottomSheet.onShowUserTag(context, value: data, function: () {}, postId: postId, storyController: storyController);
+  }
+
+  void showContentSensitive() {
+    _data?.reportedStatus = '';
+    notifyListeners();
   }
 }

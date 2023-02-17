@@ -1,9 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:provider/provider.dart';
 
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
@@ -22,7 +21,6 @@ import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/error/error_model.dart';
 
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coloured_sheet.dart';
 
 class Repos {
   Repos._private();
@@ -33,7 +31,7 @@ class Repos {
     return _instance;
   }
 
-  static final _routing = Routing();
+  // static final _routing = Routing();
   static final _apiAction = ApiAction();
 
   static Future<Response> _communicate(
@@ -61,13 +59,14 @@ class Repos {
           data: data,
           token: token,
           headers: headers,
+          cancelToken: cancelToken,
           onSendProgress: onSendProgress,
           onReceiveProgress: onReceiveProgress,
         );
       case MethodType.download:
         return _apiAction.download(
           host,
-          savePath!,
+          savePath ?? '',
           headers: headers,
           onReceiveProgress: onReceiveProgress,
         );
@@ -118,11 +117,16 @@ class Repos {
     required bool withCheckConnection,
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
+    bool? postLogsError = false,
   }) async {
+    // print('kkkkkk');
     final _language = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    // print(_language);
     bool? connection;
     String? token = SharedPreference().readStorage(SpKeys.userToken);
+    dynamic dataError = {"type": "ERROR"};
     'User Token = $token'.logger();
+    'Send data ${data}'.logger();
     if (withCheckConnection) connection = await System().checkConnections();
 
     try {
@@ -130,7 +134,7 @@ class Repos {
       if (connection != null && !connection) {
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType, _language.noInternetConnection!);
+          context.read<ErrorService>().addErrorObject(errorServiceType, _language.noInternetConnection ?? '');
         }
         return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
       }
@@ -157,8 +161,8 @@ class Repos {
 
       /// check if token is valid or not, if not, force logOut
       if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
-        await SharedPreference().logOutStorage();
-        _routing.moveAndRemoveUntil(Routes.login, Routes.root);
+        // await SharedPreference().logOutStorage();
+        // _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
         return;
       }
 
@@ -166,24 +170,44 @@ class Repos {
       logic(_response);
 
       /// show message if any error
-      if (_response.statusCode! > HTTP_CODE) {
+      if ((_response.statusCode ?? 0) > HTTP_CODE && !(postLogsError ?? true)) {
         'Error communicate with host $host'.logger();
 
         /// serialize error data from backend
         final _errorData = ErrorModel.fromJson(_response.data);
+        'Error data ${_errorData.message}'.logger();
 
         /// connect with ErrorService if property [errorService] not null
         if (errorServiceType != null) {
-          context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong!);
-        }
+          context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong ?? '');
 
-        if (withAlertMessage) {
-          _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+          if (withAlertMessage) {
+            print('alert message show');
+            // TO DO : Nunggu backend support multi language, sementara di hardcode
+            final _isoCodeCache = SharedPreference().readStorage(SpKeys.isoCode);
+            String alertMessage = _errorData.message ?? _language.somethingWentWrong ?? '';
+            if (_isoCodeCache == "id") {
+              if (alertMessage == "Sorry! This email already registered") {
+                alertMessage = _language.alreadyRegistered ?? '';
+              }
+            }
+            _showSnackBar(context, kHyppeDanger, alertMessage, "");
+          }
+        } else {
+          print('dadasdasd');
+          if (withAlertMessage) {
+            // _showSnackBar(context, kHyppeDanger, _language.unfortunately, "${_errorData.message}");
+            _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+          }
+
+          dataError['log'] = 'Error detail with no alertMessage ${_errorData.message.toString()} and host $host and paramdata $data';
+          'Error data ddddd' + dataError.logger();
+
+          // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+          // 'Actual response error data ${responError.data}'.logger();
         }
       } else {
-        final _statusCodeFromBackend = methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty
-            ? _response.data['statusCode'] ?? _response.data['status']
-            : null;
+        final _statusCodeFromBackend = methodType != MethodType.download && _response.data != null && _response.data.isNotEmpty ? _response.data['statusCode'] ?? _response.data['status'] : null;
         if (_statusCodeFromBackend != null && _statusCodeFromBackend > HTTP_CODE) {
           'Error communicate with host $host'.logger();
 
@@ -192,25 +216,37 @@ class Repos {
 
           /// connect with ErrorService if property [errorService] not null
           if (errorServiceType != null) {
-            context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong!);
+            context.read<ErrorService>().addErrorObject(errorServiceType, _errorData.message ?? _language.somethingWentWrong ?? '');
           }
 
           if (withAlertMessage) {
-            _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+            _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
           }
         } else {
           'Success with message in host $host with status code ${_response.statusCode}'.logger();
         }
       }
+      // final responError = await postLogError(dataError, headers, onReceiveProgress);
+      // 'Actual response error data ${responError.data}'.logger();
     } on DioError catch (e) {
       /// connect with ErrorService if property [errorService] not null
       if (errorServiceType != null) {
         context.read<ErrorService>().addErrorObject(errorServiceType, e.message);
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        // EventService().notifyUploadFailed(
+        //   DioError(
+        //     requestOptions: RequestOptions(
+        //       path: UrlConstants.createuserposts,
+        //     ),
+        //     error: e,
+        //   ),
+        // );
+        // _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       }
-      'Error detail ${e.toString()} with status code ${e.response?.statusCode}, message ${e.message} and host $host'.logger();
+      dataError['log'] = 'Error detail in DioError catch ${e.message.toString()} with status code ${e.response?.statusCode}, and host $host and paramdata $data';
+      // final responError = await postLogError(context, dataError, headers, onReceiveProgress);
+      // 'Actual response error data ${responError.data}'.logger();
       onDioError(e);
     } catch (e) {
       e.toString().logger();
@@ -223,33 +259,41 @@ class Repos {
         eIn.toString().logger();
       }
       if (withAlertMessage) {
-        _showSnackBar(kHyppeDanger, _language.unfortunately!, "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
+        _showSnackBar(context, kHyppeDanger, _language.unfortunately ?? '', "${_language.somethingWentWrong}, ${_language.pleaseTryAgain}");
       } else {
         'Error detail with no alertMessage ${e.toString()}'.logger();
       }
+      dataError['log'] = 'Error detail in catch ${e.toString()}, and host $host and paramdata $data';
+      // await postLogError(context, dataError, headers, onReceiveProgress);
     }
   }
 
-  void _showSnackBar(Color color, String message, String desc) {
-    _routing.showSnackBar(
-      snackBar: SnackBar(
-        margin: EdgeInsets.zero,
-        padding: EdgeInsets.zero,
-        behavior: SnackBarBehavior.floating,
-        content: SafeArea(
-          child: SizedBox(
-            height: 56,
-            child: OnColouredSheet(
-              maxLines: 2,
-              caption: message,
-              subCaption: desc,
-              fromSnackBar: true,
-              iconSvg: "${AssetPath.vectorPath}remove.svg",
-            ),
-          ),
-        ),
-        backgroundColor: color,
-      ),
+  Future postLogError(context, data, headers, onReceiveProgress) async {
+    // String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? realDeviceId = await System().getDeviceIdentifier();
+    data['imei'] = realDeviceId;
+    return reposPost(
+      context,
+      (onResult) {},
+      (errorData) {},
+      data: data,
+      headers: {"x-auth-user": SharedPreference().readStorage(SpKeys.email)},
+      withAlertMessage: false,
+      withCheckConnection: false,
+      host: UrlConstants.postLogDevice,
+      methodType: MethodType.post,
+      postLogsError: true,
+    );
+  }
+
+  void _showSnackBar(BuildContext context, Color color, String message, String desc) {
+    ShowBottomSheet().onShowColouredSheet(
+      context,
+      message,
+      subCaption: desc,
+      iconSvg: "${AssetPath.vectorPath}remove.svg",
+      maxLines: 2,
+      color: color,
     );
   }
 }

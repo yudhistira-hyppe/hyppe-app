@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
@@ -47,9 +48,9 @@ class BuildReplayCaption extends StatelessWidget {
               width: 10 * SizeConfig.scaleDiagonal,
             ),
             CustomTextWidget(
-              textToDisplay: "Hanya Balas ke ${data!.username}",
-              textStyle: Theme.of(context).textTheme.bodyText1!.apply(
-                    color: Theme.of(context).colorScheme.secondaryVariant,
+              textToDisplay: "Hanya Balas ke ${data?.username}",
+              textStyle: Theme.of(context).textTheme.bodyText1?.apply(
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
             )
           ],

@@ -7,21 +7,22 @@ import 'package:hyppe/ui/inner/home/content_v2/account_preferences/notifier.dart
 import 'package:provider/provider.dart';
 
 class ButtonAccountPreferences extends StatelessWidget {
+  final int? index;
+
+  const ButtonAccountPreferences({Key? key, this.index}) : super(key: key);
   @override
   Widget build(BuildContext context) => Consumer<AccountPreferencesNotifier>(
         builder: (context, notifier, child) => CustomElevatedButton(
           width: SizeConfig.screenWidth,
           height: 49 * SizeConfig.scaleDiagonal,
           child: CustomTextWidget(
-            textToDisplay: notifier.language.save!,
-            textStyle: notifier.somethingChanged(context)
-                ? Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText)
-                : Theme.of(context).primaryTextTheme.button,
+            textToDisplay: " ${notifier.language.save}",
+            textStyle: notifier.somethingChanged(context) ? Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) : Theme.of(context).primaryTextTheme.button,
           ),
           function: () => notifier.onClickSaveProfile(context),
           buttonStyle: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
-              notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary,
+              notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface,
             ),
             overlayColor: MaterialStateProperty.all(Colors.transparent),
           ),

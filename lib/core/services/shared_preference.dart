@@ -13,40 +13,49 @@ class SharedPreference {
   static SharedPreferences? _preferences;
 
   static Future onInitialSharedPreferences() async {
+    // SharedPreferences.setMockInitialValues({});
     _preferences = await SharedPreferences.getInstance();
   }
 
   void writeStorage(String key, value) {
-    if (value is String) {
-      _preferences!.setString(key, value);
-    }
-    if (value is bool) {
-      _preferences!.setBool(key, value);
-    }
-    if (value is int) {
-      _preferences!.setInt(key, value);
-    }
-    if (value is double) {
-      _preferences!.setDouble(key, value);
-    }
-    if (value is List<String>) {
-      _preferences!.setStringList(key, value);
+    if(_preferences != null){
+      if (value is String) {
+        _preferences!.setString(key, value);
+      }
+      if (value is bool) {
+        _preferences!.setBool(key, value);
+      }
+      if (value is int) {
+        _preferences!.setInt(key, value);
+      }
+      if (value is double) {
+        _preferences!.setDouble(key, value);
+      }
+      if (value is List<String>) {
+        _preferences!.setStringList(key, value);
+      }
     }
   }
 
   dynamic readStorage(String k) {
-    final result = _preferences!.get(k);
+    final result = _preferences?.get(k);
     return result;
   }
 
   void removeValue(String k) {
-    _preferences!.remove(k);
+    if(_preferences != null){
+      _preferences!.remove(k);
+    }
   }
 
   Future logOutStorage() async {
-    await _preferences!.remove(SpKeys.userToken);
-    await _preferences!.remove(SpKeys.email);
-    await _preferences!.remove(SpKeys.userID);
-    await _preferences!.remove(SpKeys.fcmToken);
+    if(_preferences != null){
+      await _preferences!.remove(SpKeys.userToken);
+      await _preferences!.remove(SpKeys.email);
+      await _preferences!.remove(SpKeys.userID);
+      await _preferences!.remove(SpKeys.lastHitPost);
+      await _preferences!.remove(SpKeys.fcmToken);
+      await _preferences!.remove(SpKeys.countAds);
+    }
   }
 }

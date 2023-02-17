@@ -1,5 +1,3 @@
-// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
-
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +6,8 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/screen.dart';
 
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
+
+import '../preview/notifier.dart';
 
 class HyppePlaylistStories extends StatefulWidget {
   final StoryDetailScreenArgument argument;
@@ -30,11 +30,12 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
     super.initState();
     _pageController = PageController(initialPage: widget.argument.index.toInt());
     _pageController.addListener(() => notifier.initialCurrentPage(_pageController.page));
+    notifier.initState(context, widget.argument);
   }
 
   @override
   void afterFirstLayout(BuildContext context) {
-    notifier.initState(context, widget.argument);
+    notifier.currentIndex = -1;
   }
 
   @override
@@ -60,9 +61,22 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                   ? PageView.builder(
                       controller: _pageController,
                       itemCount: notifier.dataUserStories.length,
+                      onPageChanged: (index) async {
+                        notifier.currentIndex = index;
+                        if (notifier.dataUserStories.length > 5) {
+                          if (index == (notifier.dataUserStories.length - 1)) {
+                            final values = await notifier.myContentsQuery.loadNext(context, isLandingPage: true);
+                            if (values.isNotEmpty) {
+                              notifier.dataUserStories = [...(notifier.dataUserStories)] + values;
+                            }
+                            final prev = context.read<PreviewStoriesNotifier>();
+                            prev.initialPeopleStories(context, list: values);
+                          }
+                        }
+                      },
                       itemBuilder: (context, index) {
-                        if (notifier.currentPage!.floor() == index) {
-                          double value = notifier.currentPage! - index;
+                        if (notifier.currentPage?.floor() == index) {
+                          double value = (notifier.currentPage ?? 1) - index;
                           double degValue = notifier.degreeToRadian(value * 90);
                           return Transform(
                             transform: Matrix4.identity()
@@ -70,14 +84,16 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               ..rotateY(degValue),
                             alignment: Alignment.centerRight,
                             child: StoryPage(
-                              isScrolling: _pageController.position.activity!.isScrolling,
+                              isScrolling: _pageController.position.activity?.isScrolling,
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
                               onNextPage: () => notifier.nextPage(),
+                              index: index,
+                              controller: _pageController,
                             ),
                           );
-                        } else if (notifier.currentPage!.floor() + 1 == index) {
-                          double value = notifier.currentPage! - index;
+                        } else if ((notifier.currentPage?.floor() ?? 0) + 1 == index) {
+                          double value = (notifier.currentPage ?? 1) - index;
                           double degValue = notifier.degreeToRadian(value * 90);
                           return Transform(
                             transform: Matrix4.identity()
@@ -85,25 +101,29 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                               ..rotateY(degValue),
                             alignment: Alignment.centerLeft,
                             child: StoryPage(
-                              isScrolling: _pageController.position.activity!.isScrolling,
+                              isScrolling: _pageController.position.activity?.isScrolling,
                               storyParentIndex: notifier.storyParentIndex,
                               data: notifier.dataUserStories[index],
+                              index: index,
                               onNextPage: () => notifier.nextPage(),
+                              controller: _pageController,
                             ),
                           );
                         }
                         return StoryPage(
-                          isScrolling: _pageController.position.activity!.isScrolling,
+                          isScrolling: _pageController.position.activity?.isScrolling,
                           storyParentIndex: notifier.storyParentIndex,
                           data: notifier.dataUserStories[index],
+                          index: index,
                           onNextPage: () => notifier.nextPage(),
+                          controller: _pageController,
                         );
                       },
                     )
                   : Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2.0,
-                        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                       ),
                     );
             },

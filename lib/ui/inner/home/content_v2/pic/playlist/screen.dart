@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_detail_top.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
@@ -44,7 +45,8 @@ class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayout
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      _notifier.data != null ? PicDetailSlider(picData: _notifier.data) : PicDetailShimmer(),
+                      PicDetailTop(data: notifier.data),
+                      _notifier.data != null ? PicDetailSlider(picData: notifier.data) : PicDetailShimmer(),
                       PicDetailBottom(data: notifier.data),
                       _notifier.data != null && (_notifier.data?.allowComments ?? false)
                           ? Expanded(

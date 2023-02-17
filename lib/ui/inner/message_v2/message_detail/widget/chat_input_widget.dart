@@ -29,7 +29,7 @@ class ChatInputWidget extends StatelessWidget {
           keyboardAppearance: Brightness.dark,
           decoration: InputDecoration(
             filled: true,
-            fillColor: Theme.of(context).colorScheme.primary,
+            fillColor: Theme.of(context).colorScheme.background,
             hintText: "${notifier2.translate.typeAMessage}...",
             hintStyle: const TextStyle(color: Color(0xffBABABA), fontSize: 14),
             contentPadding: const EdgeInsets.only(top: 10, bottom: 10, left: 16),
@@ -43,9 +43,9 @@ class ChatInputWidget extends StatelessWidget {
             suffixIcon: notifier.messageController.text.isNotEmpty
                 ? CustomTextButton(
                     child: CustomTextWidget(
-                      textToDisplay: notifier2.translate.send!,
+                      textToDisplay: notifier2.translate.send ?? 'Send',
                       textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.primaryVariant,
+                        color: Theme.of(context).colorScheme.primary,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                       ),

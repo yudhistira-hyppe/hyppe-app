@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -30,11 +31,10 @@ class ImageLoader {
       onComplete();
     }
 
-    final fileStream =
-        DefaultCacheManager().getFileStream(url, headers: requestHeaders);
+    final fileStream = DefaultCacheManager().getFileStream(url, headers: requestHeaders);
 
     fileStream.listen(
-      (fileResponse) {
+      (fileResponse) async{
         if (fileResponse is! FileInfo) return;
         // the reason for this is that, when the cache manager fetches
         // the image again from network, the provided `onComplete` should
@@ -45,9 +45,18 @@ class ImageLoader {
 
         final imageBytes = fileResponse.file.readAsBytesSync();
 
-        state = LoadState.success;
 
-        PaintingBinding.instance!.instantiateImageCodec(imageBytes).then((codec) {
+        // final immutableBuffer = await ImmutableBuffer.fromUint8List(imageBytes);
+
+        state = LoadState.success;
+        // PaintingBinding.instance.instantiateImageCodecFromBuffer(immutableBuffer).then((codec){
+        //     frames = codec;
+        //     onComplete();
+        //   }, onError: (error) {
+        //     state = LoadState.failure;
+        //     onComplete();
+        // });
+        PaintingBinding.instance?.instantiateImageCodec(imageBytes).then((codec) {
           frames = codec;
           onComplete();
         }, onError: (error) {
@@ -116,7 +125,7 @@ class StoryImageState extends State<StoryImage> {
     super.initState();
 
     if (widget.controller != null) {
-      _streamSubscription = widget.controller!.playbackNotifier.listen((playbackState) {
+      _streamSubscription = widget.controller?.playbackNotifier.listen((playbackState) {
         // for the case of gifs we need to pause/play
         if (widget.imageLoader.frames == null) {
           return;
@@ -163,16 +172,18 @@ class StoryImageState extends State<StoryImage> {
   void forward() async {
     _timer?.cancel();
 
-    if (widget.controller != null && widget.controller!.playbackNotifier.valueOrNull == PlaybackState.pause) {
+    if (widget.controller != null && widget.controller?.playbackNotifier.valueOrNull == PlaybackState.pause) {
       return;
     }
 
-    final nextFrame = await widget.imageLoader.frames!.getNextFrame();
+    final nextFrame = await widget.imageLoader.frames?.getNextFrame();
 
-    currentFrame = nextFrame.image;
+    if (nextFrame != null) {
+      currentFrame = nextFrame.image;
 
-    if (nextFrame.duration > const Duration(milliseconds: 0)) {
-      _timer = Timer(nextFrame.duration, forward);
+      if (nextFrame.duration > const Duration(milliseconds: 0)) {
+        _timer = Timer(nextFrame.duration, forward);
+      }
     }
 
     setState(() {});

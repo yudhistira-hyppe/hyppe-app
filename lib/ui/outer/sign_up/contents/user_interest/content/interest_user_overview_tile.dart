@@ -40,7 +40,7 @@ class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
                 width: 1,
                 color: notifier.interest.isNotEmpty
                     ? notifier.pickedInterest(notifier.interest[index].interestName)
-                        ? Theme.of(context).colorScheme.primaryVariant
+                        ? Theme.of(context).colorScheme.primary
                         : Colors.transparent
                     : Colors.transparent,
               ),
@@ -74,20 +74,16 @@ class _InterestUserOverviewTileState extends State<InterestUserOverviewTile> {
                               CustomIconNetworkWidget(
                                 defaultColor: false,
                                 width: 55 * SizeConfig.scaleDiagonal,
-                                iconData: notifier.interest[index].icon!,
-                                color: notifier.pickedInterest(notifier.interest[index].interestName)
-                                    ? Theme.of(context).colorScheme.primaryVariant
-                                    : Theme.of(context).iconTheme.color,
+                                iconData: notifier.interest[index].icon ?? '',
+                                color: notifier.pickedInterest(notifier.interest[index].interestName) ? Theme.of(context).colorScheme.primary : Theme.of(context).iconTheme.color,
                               ),
                               CustomTextWidget(
                                 textAlign: TextAlign.left,
                                 textOverflow: TextOverflow.clip,
-                                textToDisplay: notifier.interest[index].interestName!,
+                                textToDisplay: notifier.interest[index].interestName ?? '',
                                 textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                                       fontWeight: FontWeight.w700,
-                                      color: notifier.pickedInterest(notifier.interest[index].interestName)
-                                          ? Theme.of(context).colorScheme.primaryVariant
-                                          : null,
+                                      color: notifier.pickedInterest(notifier.interest[index].interestName) ? Theme.of(context).colorScheme.primary : null,
                                     ),
                               ),
                             ],

@@ -1,13 +1,24 @@
 class ContentDataInsight {
   int? shares;
+
   int? follower;
+
   int? comments;
+
   int? following;
+
   int? reactions;
+
   int? views;
+
   int? likes;
+
   bool isPostLiked = false;
+
+  bool isView = false;
+
   List<InsightLogs>? insightLogs;
+  bool? isloading;
 
   ContentDataInsight({
     this.shares,
@@ -18,9 +29,10 @@ class ContentDataInsight {
     this.reactions,
     this.views,
     this.likes,
+    this.isloading,
   });
 
-  ContentDataInsight.fromJson(Map<String, dynamic> json) {
+  ContentDataInsight.fromJson(Map<String, dynamic> json, {bool isLike = false}) {
     shares = json['shares'];
     if (json['insightLogs'] != null) {
       insightLogs = [];
@@ -32,7 +44,9 @@ class ContentDataInsight {
     reactions = json['reactions'];
     views = json['views'];
     likes = json['likes'];
-    isPostLiked = insightLogs != null && insightLogs!.where((element) => element.eventInsight?.toLowerCase() == 'like').isNotEmpty;
+    isPostLiked = isLike;
+    isView = (json['isView'] != null) ? json['isView'] : false;
+    isloading = false;
   }
 
   Map<String, dynamic> toJson() {
@@ -47,18 +61,27 @@ class ContentDataInsight {
     data['reactions'] = reactions;
     data['views'] = views;
     data['likes'] = likes;
+    data['isView'] = isView;
+    data['isloading'] = isloading;
     return data;
   }
 }
 
 class InsightLogs {
   String? sId;
+
   String? insightID;
+
   bool? active;
+
   String? createdAt;
+
   String? updatedAt;
+
   String? mate;
+
   String? postID;
+
   String? eventInsight;
 
   InsightLogs({

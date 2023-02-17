@@ -2,7 +2,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/bloc/message_v2/bloc.dart';
-// import 'package:hyppe/core/constants/api.dart';
+import 'package:hyppe/core/bloc/message_v2/state.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/event/discuss_event_handler.dart';
 import 'package:hyppe/core/event/event_key.dart';
@@ -11,15 +11,9 @@ import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/core/query_request/discuss_data_query.dart';
 import 'package:hyppe/core/services/event_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-// import 'package:hyppe/core/services/socket_service.dart';
-// import 'package:hyppe/core/services/system.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-// import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:provider/provider.dart';
-// import 'package:socket_io_client/socket_io_client.dart';
 
 class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   final _eventService = EventService();
@@ -47,29 +41,51 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
   List<MessageDataV2>? get discussData => _discussData;
 
+  int _selectData = 0;
+
+  int get selectData => _selectData;
+
   set discussData(List<MessageDataV2>? val) {
     _discussData = val;
     notifyListeners();
   }
 
+  set selectData(int val) {
+    _selectData = val;
+    notifyListeners();
+  }
+
   void initState(BuildContext context, MessageDetailArgument argument) {
     _argument = argument;
+
     // _connectAndListenToSocket(context);
+    _selectData = -1;
 
     _eventService.addDiscussHandler(EventKey.messageReceivedKey, this);
-    getMessageDiscussion(context, reload: true);
+    print(argument.discussData);
+    _discussData = argument.discussData;
+    try {
+      discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
+    } catch (e) {
+      '$e'.logger();
+    }
+
+    if (argument.discussData == null) {
+      newGetMessageDiscussion(context, reload: true);
+    }
   }
 
   void disposeNotifier() {
     // _socketService.closeSocket();
+    _selectData = -1;
     _eventService.removeDiscussHandler(EventKey.messageReceivedKey);
   }
 
   @override
   void onMessageReceived(MessageDataV2 message) {
     try {
-      // addMessage(logs: message.disqusLogs.firstOrNull!, context: context);
-      addMessage(logs: message.disqusLogs.firstOrNull!);
+      // addMessage(logs: message.disqusLogs.firstOrNull, context: context);
+      addMessage(logs: message.disqusLogs.firstOrNull ?? DisqusLogs());
     } catch (e) {
       '$e'.logger();
     }
@@ -87,7 +103,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //         try {
   //           final msgData = MessageDataV2.fromJson(result);
   //           msgData.toJson().logger();
-  //           addMessage(logs: msgData.disqusLogs.firstOrNull!, context: context);
+  //           addMessage(logs: msgData.disqusLogs.firstOrNull, context: context);
   //         } catch (e) {
   //           '$e'.logger();
   //         }
@@ -107,6 +123,47 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //   );
   // }
 
+  Future<void> newGetMessageDiscussion(
+    BuildContext context, {
+    bool reload = false,
+  }) async {
+    Future<List<MessageDataV2>> _resFuture;
+
+    discussQuery.receiverParty = _argument.emailReceiver;
+
+    try {
+      if (reload) {
+        print('reload contentsQuery : 20');
+        _resFuture = discussQuery.reload(context);
+      } else {
+        _resFuture = discussQuery.loadNext(context);
+      }
+
+      final res = await _resFuture;
+      if (reload) {
+        List<MessageDataV2> resData = [];
+        final data = res.firstWhereOrNull((element) {
+          return element.senderOrReceiverInfo?.username == argument.usernameReceiver.replaceAll("@", '');
+        });
+        if (data != null) {
+          resData.add(data);
+        }
+        discussData = resData;
+      } else {
+        discussData = [...(discussData ?? [] as List<MessageDataV2>)] + res;
+      }
+
+      // sort descending
+      try {
+        discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
+      } catch (e) {
+        '$e'.logger();
+      }
+    } catch (e) {
+      'load discuss list: ERROR: $e'.logger();
+    }
+  }
+
   Future<void> getMessageDiscussion(
     BuildContext context, {
     bool reload = false,
@@ -117,6 +174,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
     try {
       if (reload) {
+        print('reload contentsQuery : 20');
         _resFuture = discussQuery.reload(context);
       } else {
         _resFuture = discussQuery.loadNext(context);
@@ -131,7 +189,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
       // sort descending
       try {
-        discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt!).compareTo(DateTime.parse(a.createdAt!)));
+        discussData?.firstOrNull?.disqusLogs.sort((a, b) => DateTime.parse(b.createdAt ?? '').compareTo(DateTime.parse(a.createdAt ?? '')));
       } catch (e) {
         '$e'.logger();
       }
@@ -141,10 +199,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !discussQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !discussQuery.loading && hasNext) {
       getMessageDiscussion(context);
     }
   }
@@ -166,10 +221,11 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
       )..txtMessages = message;
 
       messageController.clear();
-
+      var uniquKey = UniqueKey().toString();
       addMessage(
         // context: context,
         logs: DisqusLogs(
+          id: uniquKey,
           active: true,
           updatedAt: ts,
           createdAt: ts,
@@ -183,6 +239,15 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
 
       final notifier = MessageBlocV2();
       await notifier.createDiscussionBloc(context, disqusArgument: param);
+
+      final fetch = notifier.messageFetch;
+
+      if (fetch.chatState == MessageState.createDiscussionBlocSuccess) {
+        DisqusLogs? _updatedData;
+        _updatedData = discussData?.first.disqusLogs.firstWhere((element) => element.id == uniquKey);
+        _updatedData?.id = fetch.data[0]['disqusLogs'][0]['_id'];
+      }
+      if (fetch.chatState == MessageState.createDiscussionBlocError) {}
     } catch (e) {
       e.toString().logger();
     }
@@ -338,7 +403,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   // }
 
   // Future syncDetailChatFromServer(context, {int? rows, String? lCts}) async {
-  //   if (_limitChat! > _listChatData.length || _listChatData.isEmpty) {
+  //   if (_limitChat > _listChatData.length || _listChatData.isEmpty) {
   //     final notifier = Provider.of<MessageBloc>(context, listen: false);
   //     await notifier.syncMessageDetailFromServerBloc(context,
   //         function: () => syncDetailChatFromServer(context, rows: rows, lCts: lCts), receiverId: receiverUid, rows: rows, lCts: lCts);
@@ -359,7 +424,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //   if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
   //     bool connection = await System().checkConnections();
   //     if (connection) {
-  //       _lCts = (int.parse(_lCts!) - 1).toString();
+  //       _lCts = (int.parse(_lCts) - 1).toString();
   //       syncDetailChatFromServer(context, lCts: _lCts);
   //     } else {
   //       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -371,10 +436,12 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   // }
 
   void closeKeyboard(context) {
+    _selectData = -1;
     FocusScopeNode currentFocus = FocusScope.of(context);
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+    notifyListeners();
   }
 
   void onBack() {
@@ -393,7 +460,7 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //   try {
   //     await System().getLocalMedia(context: context).then((value) async {
   //       if (value.values.single != null) {
-  //         print(value.values.single!.paths);
+  //         print(value.values.single.paths);
   //       } else {
   //         print("Canceled pick data");
   //       }
@@ -414,4 +481,27 @@ class MessageDetailNotifier with ChangeNotifier, DiscussEventHandler {
   //     );
   //   }
   // }
+
+  Future<void> deleteChat(
+    context,
+  ) async {
+    final _routing = Routing();
+    final notifier = MessageBlocV2();
+    String? _id = _discussData?.first.disqusLogs[_selectData].id;
+    _discussData?.first.disqusLogs.removeWhere((item) => item.id == _id);
+
+    try {
+      await notifier.deleteDiscussionBloc(context, postEmail: '', id: _id ?? '');
+      final fetch = notifier.messageFetch;
+      if (fetch.chatState == MessageState.deleteDiscussionBlocSuccess) {
+        _selectData = -1;
+        // getMessageDiscussion(context, reload: true);
+        // context.read<MessageNotifier>().getDiscussion();
+      }
+    } catch (e) {
+      _routing.moveBack();
+      e.logger();
+    }
+    notifyListeners();
+  }
 }

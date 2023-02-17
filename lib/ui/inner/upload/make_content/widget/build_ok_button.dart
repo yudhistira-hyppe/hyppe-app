@@ -26,12 +26,12 @@ class BuildOkButton extends StatelessWidget {
           fivePx,
           CustomTextWidget(
               textToDisplay: 'Ok',
-              textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText, fontWeight: FontWeight.bold),
+              textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText, fontWeight: FontWeight.bold),
           ),
         ],
       ),
       buttonStyle: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)))),
       function: () => context.read<MakeContentNotifier>().onStopRecordedVideo(context),
     );

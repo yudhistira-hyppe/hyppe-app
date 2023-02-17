@@ -31,7 +31,7 @@ class ReactionBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocError));
         } else {
           setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocSuccess, data: onResult.data));
@@ -66,7 +66,7 @@ class ReactionBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocErrorV2));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -93,7 +93,7 @@ class ReactionBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setReactionFetch(ReactionFetch(ReactionState.addReactOnCommentBlocError));
         } else {
           setReactionFetch(ReactionFetch(ReactionState.addReactOnCommentBlocSuccess));
@@ -123,7 +123,7 @@ class ReactionBloc {
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode != HTTP_OK) {
+        if ((onResult.statusCode ?? 300) != HTTP_OK) {
           setReactionFetch(ReactionFetch(ReactionState.getCommentReactionsBlocError));
         } else {
           UpdateCommentReaction _result = UpdateCommentReaction.fromJson(onResult.data);

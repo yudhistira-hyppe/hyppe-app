@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/file_extension.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/create_post_response.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/entities/camera/camera_interface.dart';
 import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
@@ -17,6 +20,8 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../app.dart';
 
 class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements CameraInterface {
   static final _routing = Routing();
@@ -28,6 +33,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   CameraNotifier cameraNotifier = CameraNotifier();
+  CameraDevicesNotifier cameraDevicesNotifier = CameraDevicesNotifier();
 
   FeatureType? _featureType;
   String? _thumbnailImageLocal;
@@ -83,21 +89,16 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   onInitialUploadContent() {
     _selectedDuration = 15;
     if (_featureType == FeatureType.vid) {
-      _durationOptions = {
-        15: "15${language.timerSecond!}",
-        30: "30${language.timerSecond!}",
-        60: "60${language.timerSecond!}",
-        0: "1m>"
-      }; // ignore this
+      _durationOptions = {15: "15${language.timerSecond}", 30: "30${language.timerSecond}", 60: "60${language.timerSecond}", 0: "1m>"}; // ignore this
     } else if (_featureType == FeatureType.diary) {
       _durationOptions = {
-        15: "15${language.timerSecond!}",
-        30: "30${language.timerSecond!}",
-        60: "60${language.timerSecond!}",
+        15: "15${language.timerSecond}",
+        30: "30${language.timerSecond}",
+        60: "60${language.timerSecond}",
       };
     } else {
       _durationOptions = {
-        15: "15${language.timerSecond!}",
+        15: "15${language.timerSecond}",
       };
     }
     notifyListeners();
@@ -105,8 +106,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   onActionChange(BuildContext context, bool photo) {
     isVideo = !photo;
-    final notifier = Provider.of<CameraNotifier>(context, listen: false);
-    notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
+    dynamic notifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      notifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      notifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
+    // notifier.setLoading(true, loadingObject: CameraNotifier.loadingForSwitching);
     Future.delayed(const Duration(milliseconds: 250), () => notifier.onStoryPhotoVideo(photo));
   }
 
@@ -120,7 +127,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   bool conditionalCaptureVideoIcon() {
     if (featureType != FeatureType.pic) {
-      return isRecordingVideo && !isRecordingPaused && (progressHuman < selectedDuration || selectedDuration == 0);
+      // return isRecordingVideo && !isRecordingPaused && (progressHuman < selectedDuration || selectedDuration == 0);
+      return isRecordingVideo && (progressHuman < selectedDuration || selectedDuration == 0);
     } else {
       return isRecordingPaused;
     }
@@ -159,18 +167,18 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     _timer = null;
   }
 
-  void _startTimer() {
+  void _startTimer(BuildContext context) {
     _validateTimerWithFeature();
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (Timer timerIn) {
         // check if user paused recording and then update the state
-        if (isRecordingPaused) {
-          timerIn.cancel();
-          cancelTimer();
-        }
+        // if (isRecordingPaused) {
+        //   timerIn.cancel();
+        //   cancelTimer();
+        // }
 
-        if (_timer != null && _timer!.isActive && timerIn.isActive) {
+        if (_timer != null && (_timer?.isActive ?? false) && timerIn.isActive) {
           _elapsedProgress++;
           if (featureType != FeatureType.pic && selectedDuration != 0) {
             _progressDev = _elapsedProgress / _selectedDuration;
@@ -181,10 +189,16 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
         }
 
         if (_progressHuman >= _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
+          // onPauseRecordedVideo(context);
           timerIn.cancel();
           cancelTimer();
         }
         notifyListeners();
+        if (_progressHuman == _selectedDuration && (featureType != FeatureType.vid || _selectedDuration != 0)) {
+          Future.delayed(Duration(milliseconds: _selectedDuration == 15 ? 1000 : 1300), () {
+            onStopRecordedVideo(materialAppKey.currentContext ?? context);
+          });
+        }
       },
     );
   }
@@ -202,7 +216,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     if (isRecordingVideo) {
       _sheetResponse = await ShowBottomSheet().onShowColouredSheet(
         context,
-        language.cancelRecording!,
+        language.cancelRecording ?? '',
         color: kHyppeTextWarning,
       );
     }
@@ -229,17 +243,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   void thumbnailLocalMedia() async {
     String? _dir;
-    List<String> _folderToSearch = [
-      '/Pictures/',
-      '/pictures/',
-      '/DCIM/Camera/',
-      '/Download/',
-      '/download/',
-      '/DCIM/',
-      '/Camera/',
-      '/Picture/',
-      '/picture/'
-    ];
+    List<String> _folderToSearch = ['/Pictures/', '/pictures/', '/DCIM/Camera/', '/Download/', '/download/', '/DCIM/', '/Camera/', '/Picture/', '/picture/'];
     if (Platform.isAndroid) {
       _thumbnailImageLocal = null;
 
@@ -255,7 +259,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
       // loop for move back to root
       for (int count = 0; count < 4; count++) {
-        _dir = Directory(_dir ?? _directory!.absolute.path).parent.absolute.path;
+        _dir = Directory(_dir ?? (_directory?.absolute.path ?? '')).parent.absolute.path;
       }
 
       // loop for get first file picture
@@ -268,16 +272,23 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
   }
 
-  void onTapOnFrameLocalMedia(BuildContext context, mounted) async {
+  void onTapOnFrameLocalMedia(BuildContext context) async {
     setLoading(true);
     try {
-      await System().getLocalMedia(featureType: featureType, context: context).then((value) async {
+      print('isVideo $isVideo');
+      await System().getLocalMedia(featureType: featureType, context: context, isVideo: isVideo).then((value) async {
         Future.delayed(const Duration(milliseconds: 1000), () async {
           if (value.values.single != null) {
             Future.delayed(const Duration(milliseconds: 1000), () => setLoading(false));
             final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-            notifier.fileContent = value.values.single!.map((e) => e.path).toList();
-            notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
+            notifier.fileContent = value.values.single?.map((e) => e.path).toList();
+
+            final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+            if (canDeppAr == 'true') {
+              notifier.aspectRation = context.read<CameraDevicesNotifier>().cameraAspectRatio;
+            } else {
+              notifier.aspectRation = context.read<CameraNotifier>().cameraAspectRatio;
+            }
             notifier.featureType = featureType;
             notifier.showNext = false;
             await _routing.move(Routes.previewContent);
@@ -289,7 +300,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       });
     } catch (e) {
       setLoading(false);
-      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred!);
+      ShowGeneralDialog.pickFileErrorAlert(context, language.sorryUnexpectedErrorHasOccurred ?? '');
     }
   }
 
@@ -310,7 +321,14 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onStopRecordedVideo(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
+
     cancelTimer();
     _progressDev = 0.0;
     _progressHuman = 0;
@@ -318,38 +336,67 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
     cameraNotifier.stopVideoRecording().then((file) async {
       final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
-      notifier.fileContent = [file!.path];
+      notifier.fileContent = [file?.path ?? ''];
       notifier.featureType = featureType;
       notifier.aspectRation = cameraNotifier.cameraAspectRatio;
+
+      notifyListeners();
       await _routing.move(Routes.previewContent);
     });
   }
 
   @override
   void onRecordedVideo(BuildContext context) {
-    _startTimer();
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    print('start recors');
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
+    _startTimer(context);
     cameraNotifier.startVideoRecording();
   }
 
   @override
   void onPauseRecordedVideo(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
+
+    print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
 
   @override
   void onResumeRecordedVideo(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     cameraNotifier.resumeVideoRecording().then((_) {
       cancelTimer();
-      _startTimer();
+      _startTimer(context);
     });
   }
 
   @override
   void onTakePicture(BuildContext context) {
-    final cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    dynamic cameraNotifier;
+    final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
+    if (canDeppAr == 'true') {
+      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    } else {
+      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    }
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         final notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
@@ -361,18 +408,20 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     });
   }
 
-  @override
-  bool get hasError => cameraNotifier.hasError;
+  final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
 
   @override
-  bool get isInitialized => cameraNotifier.isInitialized;
+  bool get hasError => canDeppAr == 'true' ? cameraDevicesNotifier.hasError : cameraNotifier.hasError;
 
   @override
-  bool get isRecordingPaused => cameraNotifier.isRecordingPaused;
+  bool get isInitialized => canDeppAr == 'true' ? cameraDevicesNotifier.isInitialized : cameraNotifier.isInitialized;
 
   @override
-  bool get isRecordingVideo => cameraNotifier.isRecordingVideo;
+  bool get isRecordingPaused => canDeppAr == 'true' ? cameraDevicesNotifier.isRecordingPaused : cameraNotifier.isRecordingPaused;
 
   @override
-  bool get isTakingPicture => cameraNotifier.isTakingPicture;
+  bool get isRecordingVideo => canDeppAr == 'true' ? cameraDevicesNotifier.isRecordingVideo : cameraNotifier.isRecordingVideo;
+
+  @override
+  bool get isTakingPicture => canDeppAr == 'true' ? cameraDevicesNotifier.isTakingPicture : cameraNotifier.isTakingPicture;
 }

@@ -1,6 +1,9 @@
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +14,8 @@ import 'package:hyppe/ui/inner/home/content_v2/profile/widget/both_profile_top_s
 import 'package:provider/provider.dart';
 
 class OtherProfileScreen extends StatefulWidget {
-  const OtherProfileScreen({Key? key}) : super(key: key);
+  final OtherProfileArgument arguments;
+  const OtherProfileScreen({Key? key, required this.arguments}) : super(key: key);
 
   @override
   _OtherProfileScreenState createState() => _OtherProfileScreenState();
@@ -23,9 +27,11 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
 
   @override
   void initState() {
+    print('other profile');
     final notifier = Provider.of<OtherProfileNotifier>(context, listen: false);
-    Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context));
+    Future.delayed(Duration.zero, () => notifier.initialOtherProfile(context, argument: widget.arguments));
     _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    System().disposeBlock();
     super.initState();
   }
 
@@ -65,10 +71,10 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
                       ),
                     ],
                   ),
-                  // IconButton(
-                  //   icon: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
-                  //   onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
-                  // ),
+                  IconButton(
+                    icon: const CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg"),
+                    onPressed: () => ShowBottomSheet.onShowReportProfile(context, userID: notifier.userID),
+                  ),
                 ],
               ),
             ),
@@ -78,24 +84,33 @@ class _OtherProfileScreenState extends State<OtherProfileScreen> {
             strokeWidth: 2.0,
             color: Colors.purple,
             onRefresh: () async {
-              await notifier.initialOtherProfile(context);
+              await notifier.initialOtherProfile(context, refresh: true);
             },
             child: CustomScrollView(
               controller: _scrollController,
               scrollDirection: Axis.vertical,
               physics: const AlwaysScrollableScrollPhysics(),
               slivers: [
-                SliverAppBar(
-                  pinned: false,
-                  stretch: false,
-                  elevation: 0.0,
-                  floating: false,
-                  automaticallyImplyLeading: false,
-                  expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: EdgeInsets.zero,
-                    background: notifier.user.profile != null
+                // SliverAppBar(
+                //   pinned: false,
+                //   stretch: false,
+                //   elevation: 0.0,
+                //   floating: false,
+                //   automaticallyImplyLeading: false,
+                //   expandedHeight: (200 * SizeConfig.scaleDiagonal) + 46,
+                //   backgroundColor: Theme.of(context).colorScheme.background,
+                //   flexibleSpace: FlexibleSpaceBar(
+                //     titlePadding: EdgeInsets.zero,
+                //     background: notifier.user.profile != null
+                //         ? notifier.statusFollowing == StatusFollowing.following
+                //             ? const OtherProfileTop()
+                //             : const OtherProfileTop()
+                //         : BothProfileTopShimmer(),
+                //   ),
+                // ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    child: notifier.user.profile != null
                         ? notifier.statusFollowing == StatusFollowing.following
                             ? const OtherProfileTop()
                             : const OtherProfileTop()

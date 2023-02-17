@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -12,18 +13,17 @@ import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
-import 'package:tuple/tuple.dart';
+
+import '../../../../../notifier_v2.dart';
 
 class MyFrameStory extends StatelessWidget {
-  static final _system = System();
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final myStoriesData = context.select((PreviewStoriesNotifier value) => Tuple2(value.myStoriesData, value.totalViews));
-    final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
+    final notifier = Provider.of<PreviewStoriesNotifier>(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.peopleStory));
-
+    final home = Provider.of<HomeNotifier>(context);
+    final email = SharedPreference().readStorage(SpKeys.email);
     return Row(
       children: [
         sixteenPx,
@@ -31,10 +31,11 @@ class MyFrameStory extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            context.read<ErrorService>().isInitialError(error, myStoriesData.item1) || myStoriesData.item1 != null
+            context.read<ErrorService>().isInitialError(error, notifier.myStoryGroup) || notifier.myStoryGroup != null
                 ? BuildCircleProfile(
-                    listStory: myStoriesData.item1 ?? [],
-                    imageUrl: System().showUserPicture(myPicture),
+                    listStory: notifier.myStoryGroup[email],
+                    imageUrlKey: home.profileImageKey,
+                    imageUrl: System().showUserPicture(home.profileImage),
                   )
                 : const CustomShimmer(
                     radius: 50,
@@ -42,16 +43,13 @@ class MyFrameStory extends StatelessWidget {
                     height: SizeWidget.circleDiameterOutside,
                   ),
             fourPx,
-            context.read<ErrorService>().isInitialError(error, myStoriesData.item1) || myStoriesData.item1 != null
+            context.read<ErrorService>().isInitialError(error, notifier.myStoryGroup) || notifier.myStoryGroup != null
                 ? SizedBox(
                     width: 43,
                     child: CustomTextWidget(
                       maxLines: 1,
-                      textToDisplay: myStoriesData.item1?.isEmpty ?? [].isEmpty
-                          ? context.read<TranslateNotifierV2>().translate.yourStory!
-                          : "${_system.formatterNumber(myStoriesData.item2)} / ${_system.formatterNumber(myStoriesData.item1?.length)}",
-                      textStyle:
-                          Theme.of(context).textTheme.overline!.copyWith(letterSpacing: myStoriesData.item1?.isEmpty ?? [].isEmpty ? null : 1.0),
+                      textToDisplay: context.read<TranslateNotifierV2>().translate.yourStory ?? '',
+                      textStyle: Theme.of(context).textTheme.overline?.copyWith(letterSpacing: notifier.myStoryGroup.isEmpty ? null : 1.0),
                     ),
                   )
                 : const CustomShimmer(

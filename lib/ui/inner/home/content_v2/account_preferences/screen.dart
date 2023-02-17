@@ -26,12 +26,21 @@ class HyppeAccountPreferences extends StatefulWidget {
 
 class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with TickerProviderStateMixin {
   TabController? _tabController;
+  int _currentIndex = 0;
 
   @override
   void initState() {
     final notifier = Provider.of<AccountPreferencesNotifier>(context, listen: false);
     Future.delayed(Duration.zero, () => notifier.onInitial(context, widget.argument));
     _tabController = TabController(initialIndex: notifier.initialIndex, length: 2, vsync: this);
+    _tabController?.addListener(
+      () {
+        setState(() {
+          _currentIndex = _tabController?.index ?? 0;
+        });
+      },
+    );
+
     super.initState();
   }
 
@@ -55,8 +64,8 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 title: CustomTextWidget(
-                  textToDisplay: notifier.language.accountPreferences!,
-                  textStyle: Theme.of(context).textTheme.headline6!.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                  textToDisplay: notifier.language.accountPreferences ?? '',
+                  textStyle: Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 centerTitle: false,
                 bottom: PreferredSize(
@@ -67,7 +76,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
                     child: TabBar(
                       controller: _tabController,
                       indicatorSize: TabBarIndicatorSize.tab,
-                      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).tabBarTheme.labelColor!, width: 2.0)),
+                      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).tabBarTheme.labelColor ?? Colors.black, width: 2.0)),
                       labelColor: Theme.of(context).tabBarTheme.labelColor,
                       labelPadding: const EdgeInsets.only(bottom: 10.0),
                       unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
@@ -75,8 +84,8 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
                       physics: const BouncingScrollPhysics(),
                       unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
                       tabs: [
-                        Text(notifier.language.profile!),
-                        Text(notifier.language.personalInformation!),
+                        Text(notifier.language.profile ?? ''),
+                        Text(notifier.language.personalInformation ?? ''),
                       ],
                     ),
                   ),
@@ -94,8 +103,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
               body: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: SizedBox(
-                  height:
-                      SizeConfig.screenHeight! - ((kToolbarHeight + ((kToolbarHeight - 10) * SizeConfig.scaleDiagonal)) * SizeConfig.scaleDiagonal),
+                  height: SizeConfig.screenHeight! - ((kToolbarHeight + ((kToolbarHeight - 10) * SizeConfig.scaleDiagonal)) * SizeConfig.scaleDiagonal),
                   child: TabBarView(
                     controller: _tabController,
                     physics: const BouncingScrollPhysics(),
@@ -108,7 +116,7 @@ class _HyppeAccountPreferencesState extends State<HyppeAccountPreferences> with 
               ),
               bottomNavigationBar: Padding(
                 padding: const EdgeInsets.only(left: 25.0, right: 25.0, bottom: 10),
-                child: ButtonAccountPreferences(),
+                child: ButtonAccountPreferences(index: _currentIndex),
               ),
             ),
           ),

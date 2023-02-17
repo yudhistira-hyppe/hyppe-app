@@ -53,7 +53,7 @@ class _InformationDetailState extends State<InformationDetail> {
               CustomTextWidget(
                 textAlign: TextAlign.left,
                 textToDisplay: 'Visibility',
-                textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w600),
+                textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600),
               )
             ],
           ),
@@ -75,13 +75,13 @@ class _InformationDetailState extends State<InformationDetail> {
       height: 50,
       function: () => Routing().moveBack(),
       width: MediaQuery.of(context).size.width,
-      buttonStyle: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+      buttonStyle: Theme.of(context).elevatedButtonTheme.style?.copyWith(
           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
           overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
-          side: MaterialStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primaryVariant))),
+          side: MaterialStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary))),
       child: CustomTextWidget(
-        textToDisplay: context.read<TranslateNotifierV2>().translate.back!,
-        textStyle: Theme.of(context).textTheme.button!.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+        textToDisplay: context.read<TranslateNotifierV2>().translate.back ?? "",
+        textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary),
       ),
     );
   }
@@ -108,7 +108,7 @@ class _InformationDetailState extends State<InformationDetail> {
           )
         ],
       ),
-      style: Theme.of(context).textTheme.bodyText2!.copyWith(fontWeight: FontWeight.w600),
+      style: Theme.of(context).textTheme.bodyText2?.copyWith(fontWeight: FontWeight.w600),
     );
   }
 }

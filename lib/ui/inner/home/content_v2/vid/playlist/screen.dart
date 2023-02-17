@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/decorated_icon_widget.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_top.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -31,6 +35,17 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
   @override
   void afterFirstLayout(BuildContext context) {
     _notifier.initState(context, widget.arguments);
+    if (widget.arguments.vidData?.certified ?? false) {
+      System().block(context);
+    } else {
+      System().disposeBlock();
+    }
+  }
+
+  @override
+  void dispose() {
+    System().disposeBlock();
+    super.dispose();
   }
 
   @override
@@ -49,32 +64,36 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      VidDetailTop(data: notifier.data),
                       _notifier.data != null
                           ? Stack(
                               children: [
                                 AspectRatio(
                                   aspectRatio: 16 / 9,
-                                  child: VideoPlayerPage(
-                                    videoData: notifier.data,
-                                    afterView: () => notifier.updateView(context),
-                                  ),
-                                ),
-                                Visibility(
-                                  visible: true,
-                                  child: CustomTextButton(
-                                    onPressed: () => notifier.onPop(),
-                                    child: const DecoratedIconWidget(
-                                      Icons.arrow_back_ios,
-                                      size: 48 * 0.4,
-                                      shadows: [
-                                        BoxShadow(
-                                          blurRadius: 12.0,
-                                          color: Colors.black,
-                                        ),
-                                      ],
+                                  child: Container(
+                                    color: Colors.black,
+                                    child: VideoPlayerPage(
+                                      videoData: notifier.data,
+                                      afterView: () => notifier.updateView(context),
                                     ),
                                   ),
                                 ),
+                                // Row(
+                                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Visibility(
+                                //       visible: true,
+                                //       child: CustomTextButton(
+                                //         onPressed: () => notifier.onPop(),
+                                //         child: const DecoratedIconWidget(
+                                //           Icons.arrow_back_ios,
+                                //           size: 48 * 0.4,
+                                //           color: Colors.white,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             )
                           : VidDetailShimmer(),

@@ -23,18 +23,18 @@ class OnShowCompleteProfileBottomSheet extends StatelessWidget {
           children: [
             const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
             CustomTextWidget(
-              textToDisplay: notifier.translate.completeProfiles!,
+              textToDisplay: notifier.translate.completeProfiles ?? '',
               textStyle: Theme.of(context).textTheme.headline6,
             ),
             CustomTextWidget(
-              textToDisplay: notifier.translate.pleaseCompleteProfileToContinue!,
+              textToDisplay: notifier.translate.pleaseCompleteProfileToContinue ?? '',
               textStyle: Theme.of(context).textTheme.bodyText1,
               textOverflow: TextOverflow.clip,
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.yesCompleteProfile!,
-                textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                textToDisplay: notifier.translate.yesCompleteProfile ?? '',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
@@ -43,12 +43,12 @@ class OnShowCompleteProfileBottomSheet extends StatelessWidget {
                 Routing().moveAndPop(Routes.accountPreferences);
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                  overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(
-                textToDisplay: notifier.translate.noLater!,
+                textToDisplay: notifier.translate.noLater ?? '',
                 textStyle: Theme.of(context).textTheme.button,
               ),
               width: double.infinity,

@@ -20,7 +20,7 @@ class StoryBloc {
     await _repos.reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode == HTTP_OK) {
+        if ((onResult.statusCode ?? 300) == HTTP_OK) {
           ViewerStories _result = ViewerStories.fromJson(onResult.data);
           setStoriesFetch(StoryFetch(StoryState.getViewerStoriesSuccess, data: _result));
         } else {

@@ -5,6 +5,13 @@ class StoryViewsData {
   String? username;
   bool? isLoading;
 
+  StoryViewsData(
+      {this.profilePicture,
+      this.userID,
+      this.fullName,
+      this.username,
+      this.isLoading});
+
   StoryViewsData.setLoading() {
     isLoading = true;
   }

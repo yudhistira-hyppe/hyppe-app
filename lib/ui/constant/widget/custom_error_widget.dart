@@ -55,13 +55,13 @@ class CustomErrorWidget extends StatelessWidget {
                       ),
                       eightPx,
                       value.refreshing(this)
-                          ? UnconstrainedBox(child: CircularProgressIndicator(color: theme.colorScheme.primaryVariant, strokeWidth: 2.0))
+                          ? UnconstrainedBox(child: CircularProgressIndicator(color: theme.colorScheme.primary, strokeWidth: 2.0))
                           : CustomTextWidget(textToDisplay: "${value2.translate.sorryUnexpectedError}", textStyle: theme.textTheme.subtitle1),
                       if (errorType != ErrorType.peopleStory) fourPx,
                       if (errorType != ErrorType.peopleStory)
                         CustomTextWidget(
                             textToDisplay: "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
-                            textStyle: theme.textTheme.caption!.copyWith(color: theme.colorScheme.secondaryVariant))
+                            textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
                     ],
                   ),
                 )

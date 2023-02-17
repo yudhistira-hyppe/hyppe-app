@@ -1,6 +1,5 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/inner/notification/widget/accept_button.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:hyppe/ui/inner/notification/widget/component.dart';
 import 'package:hyppe/ui/inner/notification/widget/component_shimmer.dart';
@@ -17,20 +16,25 @@ class AllNotification extends StatelessWidget {
           data: notifier.data ?? [],
           itemCount: notifier.itemCount,
           builder: (context, index) {
-            if (notifier.data == null) {
+            if (notifier.isLoading) {
               return ComponentShimmer();
             }
             return Component(
-              data: notifier.data![index],
-              rightWidget: notifier.data![index].flowIsDone!
-                  ? const SizedBox.shrink()
-                  : System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
-                          System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
-                      ? AcceptButton(data: notifier.data?[index])
-                      : ImageComponent(
-                          borderRadiusGeometry: BorderRadius.circular(4.0),
-                          data: notifier.data?[index].content.firstOrNull,
-                        ),
+              data: notifier.data?[index],
+              rightWidget: System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.follower ||
+                      System().convertEventType(notifier.data?[index].eventType) == InteractiveEventType.following
+                  // notifier.data?[index].event == 'REQUEST_APPEAL'
+                  // notifier.data?[index].event == 'ADMIN_FLAGING' ||
+                  // notifier.data?[index].event == 'NOTSUSPENDED_APPEAL'
+                  ? Container()
+                  // ? AcceptButton(data: notifier.data?[index])
+                  : ImageComponent(
+                      borderRadiusGeometry: BorderRadius.circular(4.0),
+                      // data: notifier.data?[index].content.firstOrNull,
+                      data: notifier.data?[index].content,
+                      postType: notifier.data?[index].postType,
+                      postID: notifier.data?[index].postID,
+                    ),
             );
           },
         ),

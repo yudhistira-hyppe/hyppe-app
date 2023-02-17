@@ -17,7 +17,7 @@ class BuildStorage extends StatelessWidget {
         child: Center(
           child: GestureDetector(
             onTap: () {
-              if (!notifier.isRecordingVideo) notifier.onTapOnFrameLocalMedia(context, mounted);
+              if (!notifier.isRecordingVideo) notifier.onTapOnFrameLocalMedia(context);
             },
             child: Container(
               decoration: BoxDecoration(
@@ -42,7 +42,7 @@ class BuildStorage extends StatelessWidget {
         height: 41 * SizeConfig.scaleDiagonal,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2.0),
-            border: Border.all(width: 1.0, color: Theme.of(context).textTheme.caption!.color!),
-            image: DecorationImage(fit: BoxFit.fill, image: FileImage(File(context.read<MakeContentNotifier>().thumbnailImageLocal!)))));
+            border: Border.all(width: 1.0, color: Theme.of(context).textTheme.caption?.color ?? Colors.white),
+            image: DecorationImage(fit: BoxFit.fill, image: FileImage(File(context.read<MakeContentNotifier>().thumbnailImageLocal ?? '')))));
   }
 }

@@ -1,13 +1,23 @@
 enum PostsState {
-  init, loading,
-  getContentsSuccess, getContentsError,
-  postContentsSuccess, postContentsError,
-  deleteContentsSuccess, deleteContentsError,
-  updateContentsSuccess, updateContentsError,
+  init,
+  loading,
+  getAllContentsSuccess,
+  getAllContentsError,
+  getContentsSuccess,
+  getContentsError,
+  postContentsSuccess,
+  postContentsError,
+  deleteContentsSuccess,
+  deleteContentsError,
+  updateContentsSuccess,
+  updateContentsError,
+  videoApsaraSuccess,
+  videoApsaraError,
 }
 
 class PostsFetch {
   final data;
   final PostsState postsState;
-  PostsFetch(this.postsState, {this.data});
+  final version;
+  PostsFetch(this.postsState, {this.data, this.version});
 }

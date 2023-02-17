@@ -35,25 +35,25 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
             children: [
               const CustomIconWidget(iconData: "${AssetPath.vectorPath}handler.svg"),
               CustomTextWidget(
-                textToDisplay: notifier.translate.keepSignIn!,
+                textToDisplay: notifier.translate.keepSignIn ?? '',
                 textStyle: Theme.of(context).textTheme.headline6,
               ),
               CustomElevatedButton(
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.yesSure!,
-                  textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                  textToDisplay: notifier.translate.yesSure ?? '',
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
                 width: double.infinity,
                 height: 50,
                 function: () => Routing().moveBack(),
                 buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
-                    overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
               ),
+              // Text("${isLoading}"),
               CustomElevatedButton(
                 child: !isLoading
                     ? CustomTextWidget(
-                        textToDisplay: notifier.translate.noLogout!,
+                        textToDisplay: notifier.translate.noLogout ?? '',
                         textStyle: Theme.of(context).textTheme.button,
                       )
                     : const CustomLoading(),
@@ -62,14 +62,15 @@ class _OnSignOutSheetState extends State<OnSignOutSheet> with LoadingNotifier {
                 function: () async {
                   if (isLoading) return;
                   try {
-                    setState(() => setLoading(true));
+                    print('asdasd');
                     await widget.onSignOut();
+                    setState(() => setLoading(true));
                   } finally {
+                    print('asdasd2');
                     setState(() => setLoading(false));
                   }
                 },
-                buttonStyle: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
+                buttonStyle: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.transparent), overlayColor: MaterialStateProperty.all(Colors.transparent)),
               )
             ],
           ),

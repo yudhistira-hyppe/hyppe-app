@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
-
 import 'package:hyppe/core/constants/size_config.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
-
 import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/content_message_layout.dart';
 
 class ReceiverLayout extends StatelessWidget {
   final DisqusLogs? chatData;
+  final String? created;
 
-  const ReceiverLayout({Key? key, this.chatData}) : super(key: key);
+  const ReceiverLayout({Key? key, this.chatData, this.created}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class ReceiverLayout extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            if ((chatData?.content.isNotEmpty ?? false))
+            if ((chatData?.medias.isNotEmpty ?? false))
               ContentMessageLayout(
                 message: chatData,
               ),
@@ -49,8 +47,9 @@ class ReceiverLayout extends StatelessWidget {
             ),
             CustomTextWidget(
               textAlign: TextAlign.end,
-              textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
-              textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData!.createdAt!, 1),
+              textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
+              textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
+              // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
             ),
           ],
         ),

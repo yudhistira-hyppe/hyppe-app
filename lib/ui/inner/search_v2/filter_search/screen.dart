@@ -20,7 +20,7 @@ class FilterSearchScreen extends StatelessWidget {
           child: const CustomIconWidget(iconData: "${AssetPath.vectorPath}close.svg"),
         ),
         title: CustomTextWidget(
-          textToDisplay: notifier.language.filters!,
+          textToDisplay: notifier.language.filters ?? 'filters',
           textStyle: Theme.of(context).primaryTextTheme.headline6!.copyWith(fontWeight: FontWeight.bold),
         ),
         actions: [
@@ -50,7 +50,7 @@ class FilterSearchScreen extends StatelessWidget {
                   // });
                 },
                 toggleable: true,
-                activeColor: Theme.of(context).colorScheme.primaryVariant,
+                activeColor: Theme.of(context).colorScheme.primary,
                 title: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: "", //_genders[index],

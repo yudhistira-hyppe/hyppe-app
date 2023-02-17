@@ -27,8 +27,12 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
   @override
   void initState() {
     final notifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-    notifier.initialStories(context);
-    notifier.scrollController.addListener(() => notifier.scrollListener(context));
+    // notifier.initialStories(context);
+    notifier.scrollController.addListener((){
+      if(mounted){
+        notifier.scrollListener(context);
+      }
+    });
     super.initState();
   }
 
@@ -44,6 +48,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo is ScrollStartNotification) {
             Future.delayed(const Duration(milliseconds: 100), () {
+              print('hariyanto1');
               notifier.initialPeopleStories(context);
             });
           }
@@ -53,16 +58,11 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
         child: ListView.builder(
           controller: notifier.scrollController,
           scrollDirection: Axis.horizontal,
+          physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(left: 4.5, right: 16.0),
-          // itemCount: notifier.peopleStoriesData != null
-          //     ? notifier.peopleStoriesData!.data.length == 0
-          //         ? 1
-          //         : notifier.peopleStoriesData!.data.length + 1
-          //     : context.read<ErrorService>().isInitialError(error, notifier.peopleStoriesData)
-          //         ? 1
-          //         : 10,
           itemCount: notifier.peopleItemCount(error),
           itemBuilder: (context, index) {
+            print('ini story orang ${notifier.peopleStoriesData?.length}');
             int itemIndex = index - 1;
 
             if (notifier.peopleStoriesData != null) {
@@ -91,7 +91,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                         errorType: ErrorType.peopleStory,
                         axis: Axis.horizontal,
                         iconSize: 40,
-                        function: () => notifier.initialPeopleStories(context, reload: true),
+                        function: () => notifier.initialPeopleStories(context),
                       ),
                     ),
                   ],

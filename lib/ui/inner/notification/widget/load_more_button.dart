@@ -14,7 +14,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final color = Theme.of(context).colorScheme.secondaryVariant;
+//     final color = Theme.of(context).colorScheme.secondary;
 //     final notifier = context.select((NotificationNotifier value) => value.loadingForObject(NotificationNotifier.loadMoreKey));
 
 //     return Padding(
@@ -35,7 +35,7 @@
 //               onPressed: () => context.read<NotificationNotifier>().getNotification(context, notificationCategory),
 //               child: CustomTextWidget(
 //                 textToDisplay: 'Load more',
-//                 textStyle: Theme.of(context).textTheme.button!.copyWith(color: color),
+//                 textStyle: Theme.of(context).textTheme.button.copyWith(color: color),
 //               ),
 //             )
 //           else

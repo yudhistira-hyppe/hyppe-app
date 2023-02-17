@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -9,7 +9,7 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/constants/themes/hyppe_theme.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/entities/camera/notifier.dart';
+import 'package:hyppe/ui/constant/entities/camera_devices/notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/pin/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -39,55 +39,77 @@ class HyppeNotifier with ChangeNotifier {
   }
 
   Future handleStartUp(BuildContext context) async {
-    _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-    await context.read<CameraNotifier>().prepareCameraPage();
-    await context.read<TranslateNotifierV2>().initTranslate(context);
+    try{
+      _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
+      await context.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e){
+        throw '$e';
+      });
 
-    String? token = SharedPreference().readStorage(SpKeys.userToken);
-    String? email = SharedPreference().readStorage(SpKeys.email);
-    bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
-    bool isUserRequestRecoverPassword = SharedPreference().readStorage(SpKeys.isUserRequestRecoverPassword) ?? false;
+      await context.read<TranslateNotifierV2>().initTranslate(context, onError: (e){
+        throw '$e';
+      });
 
-    if (isUserRequestRecoverPassword) {
-      _routing.moveReplacement(Routes.userOtpScreen, argument: UserOtpScreenArgument(email: email));
-      return;
-    } else if (isUserInOTP) {
-      context.read<SignUpPinNotifier>().email = email ?? "";
-      _routing.moveReplacement(
-        Routes.signUpPin,
-        argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2),
-      );
-      return;
-    } else if (token != null) {
-      final formData = FormData();
-      formData.fields.add(const MapEntry('pageRow', '10'));
-      formData.fields.add(const MapEntry('pageNumber', '0'));
+      String? token = SharedPreference().readStorage(SpKeys.userToken);
+      String? email = SharedPreference().readStorage(SpKeys.email);
+      bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
 
-      await _repos.reposPost(
-        context,
-        (onResult) async {
-          if (onResult.statusCode == HTTP_UNAUTHORIZED) {
-            await SharedPreference().logOutStorage();
-            _routing.moveReplacement(Routes.login);
-          } else {
+      //set light theme
+      context.read<HyppeNotifier>().themeData = hyppeLightTheme();
+      SharedPreference().writeStorage(SpKeys.themeData, false); //set light theme
+      System().systemUIOverlayTheme();
+
+      if (isUserInOTP) {
+        // print('pasti kesini');
+        // print(isUserInOTP);
+        context.read<SignUpPinNotifier>().email = email ?? "";
+        _routing.moveReplacement(
+          Routes.signUpPin,
+          argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2),
+        );
+      } else if (token != null) {
+        final formData = FormData();
+        formData.fields.add(const MapEntry('pageRow', '1'));
+        formData.fields.add(const MapEntry('pageNumber', '0'));
+
+        print('getInnteractives');
+        print(formData.fields);
+
+        await _repos.reposPost(
+          context,
+              (onResult) async {
+            if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
+              await SharedPreference().logOutStorage();
+              _routing.moveReplacement(Routes.welcomeLogin);
+            } else {
+              _routing.moveReplacement(Routes.lobby);
+            }
+          },
+              (errorData) {
+            'Exception on authCheck with error ${errorData.toString()}'.logger();
             _routing.moveReplacement(Routes.lobby);
-          }
-        },
-        (errorData) {
-          'Exception on authCheck with error ${errorData.toString()}'.logger();
-          _routing.moveReplacement(Routes.lobby);
-        },
-        data: formData,
-        headers: {
-          'x-auth-user': email,
-        },
-        host: UrlConstants.getInnteractives,
-        withAlertMessage: false,
-        withCheckConnection: false,
-        methodType: MethodType.post,
-      );
-    } else {
-      _routing.moveReplacement(Routes.login);
+          },
+          data: formData,
+          headers: {
+            'x-auth-user': email,
+            'x-auth-token': token,
+          },
+          host: UrlConstants.getInnteractives,
+          withAlertMessage: false,
+          withCheckConnection: false,
+          methodType: MethodType.post,
+        );
+      } else {
+        _routing.moveReplacement(Routes.welcomeLogin);
+        // _routing.moveReplacement(Routes.login);
+      }
+    }catch(e){
+      'handleStartUp error: $e'.logger();
+      FirebaseCrashlytics.instance
+          .log('Hyppe Error: $e');
+      Future.delayed(const Duration(milliseconds: 700), (){
+        _routing.moveReplacement(Routes.welcomeLogin);
+      });
     }
+
   }
 }

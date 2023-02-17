@@ -1,31 +1,92 @@
 import 'package:hyppe/core/arguments/account_preference_screen_argument.dart';
+import 'package:hyppe/core/arguments/ads_argument.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
+import 'package:hyppe/core/arguments/referral_list_user.dart';
+import 'package:hyppe/core/arguments/ticket_argument.dart';
+import 'package:hyppe/core/arguments/transaction_argument.dart';
 import 'package:hyppe/core/arguments/update_contents_argument.dart';
 import 'package:hyppe/core/arguments/user_otp_screen_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
+import 'package:hyppe/ui/constant/entities/appeal/screen.dart';
+import 'package:hyppe/ui/constant/entities/appeal/success_appeal.dart';
 import 'package:hyppe/ui/constant/entities/web_view/screen.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/screen.dart';
 import 'package:hyppe/ui/constant/page_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/page_not_found.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/help/support_ticket/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment/payment_summary/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/payment_method/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/pic_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/confirm_pin/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/forgot_pin/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pin/verification/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/list_boost/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile_completion/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/insert_referral.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
+import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
+
+import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_group/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/bank_account/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/detail_transaction/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/transaction_inprogress/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/pin_withdrawal/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/success_withdraw/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/withdrawal/summary_withdrawal/screen.dart';
+
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/failed_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_1/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_2/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_3/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_4/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_5/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_6/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/step_7/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/success_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/eula.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/preview.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/supporting_document/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_loading.dart';
+
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
+import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
+import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
+import 'package:hyppe/ui/inner/upload/payment/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/ownerhip_selling/screen.dart';
+import 'package:hyppe/ui/inner/upload/pre_upload_content/payment_summary/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/screen.dart';
+import 'package:hyppe/ui/outer/ads/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/forgot_password/forgot_password_screen.dart';
+import 'package:hyppe/ui/outer/forgot_password/set_new_password/screen.dart';
 import 'package:hyppe/ui/outer/forgot_password/user_otp/user_otp_screen.dart';
 import 'package:hyppe/ui/outer/login/screen.dart';
 import 'package:hyppe/ui/outer/opening_logo/screen.dart';
@@ -34,6 +95,7 @@ import 'package:hyppe/ui/outer/sign_up/contents/register/register_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_agreement/user_agreement_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_interest/user_interest_screen.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/welcome/screen.dart';
+import 'package:hyppe/ui/outer/welcome_login/screen.dart';
 import 'package:hyppe/ui/view/follower/follower_screen.dart';
 import 'package:hyppe/ui/view/theme/theme_screen.dart';
 import 'package:hyppe/ux/path.dart';
@@ -53,6 +115,11 @@ import 'package:hyppe/ui/inner/home/content_v2/change_password/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/screen.dart';
 
+import '../core/arguments/detail_ticket_argument.dart';
+import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
+import '../ui/inner/home/content_v2/help/ticket_history/screen.dart';
+import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
+
 class Generate {
   static List<Route<dynamic>> initialRoute(_) {
     return [MaterialPageRoute(builder: (_) => OpeningLogo())];
@@ -62,6 +129,8 @@ class Generate {
     switch (settings.name) {
       case Routes.root:
         return MaterialPageRoute(builder: (_) => OpeningLogo());
+      case Routes.welcomeLogin:
+        return MaterialPageRoute(builder: (_) => WelcomeLoginScreen());
       case Routes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case Routes.lobby:
@@ -69,7 +138,7 @@ class Generate {
       case Routes.selfProfile:
         return MaterialPageRoute(builder: (_) => SelfProfileScreen());
       case Routes.otherProfile:
-        return MaterialPageRoute(builder: (_) => const OtherProfileScreen());
+        return MaterialPageRoute(builder: (_) => OtherProfileScreen(arguments: settings.arguments as OtherProfileArgument));
       case Routes.homePageSignInSecurity:
         return MaterialPageRoute(builder: (_) => HyppeHomeSignAndSecurity());
       case Routes.makeContent:
@@ -78,14 +147,14 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PreviewContentScreen());
       case Routes.preUploadContent:
         return MaterialPageRoute(builder: (_) => PreUploadContentScreen(arguments: settings.arguments as UpdateContentsArgument));
+      case Routes.ownershipSelling:
+        return MaterialPageRoute(builder: (_) => const OwnershipSellingScreen());
       case Routes.changePassword:
         return MaterialPageRoute(builder: (_) => HyppeChangePassword());
       case Routes.accountPreferences:
         return MaterialPageRoute(
-            builder: (_) => HyppeAccountPreferences(
-                argument: settings.arguments == null
-                    ? AccountPreferenceScreenArgument(fromSignUpFlow: false)
-                    : settings.arguments as AccountPreferenceScreenArgument));
+            builder: (_) =>
+                HyppeAccountPreferences(argument: settings.arguments == null ? AccountPreferenceScreenArgument(fromSignUpFlow: false) : settings.arguments as AccountPreferenceScreenArgument));
       case Routes.signUpPin:
         return MaterialPageRoute(builder: (_) => SignUpPin(arguments: settings.arguments as VerifyPageArgument));
       case Routes.signUpWelcome:
@@ -93,7 +162,7 @@ class Generate {
       case Routes.messageDetail:
         return MaterialPageRoute(builder: (_) => message_detail_v2.MessageDetailScreen(argument: settings.arguments as MessageDetailArgument));
       case Routes.report:
-        return MaterialPageRoute(builder: (_) => HyppeReport());
+      // return MaterialPageRoute(builder: (_) => HyppeReport());
       case Routes.noInternetConnection:
         return MaterialPageRoute(builder: (_) => const PageNoInternetConnection());
       case Routes.moderatedContent:
@@ -106,6 +175,8 @@ class Generate {
       // ------------------------------------------------------------ //
       case Routes.forgotPassword:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordScreen());
+      case Routes.newPassword:
+        return MaterialPageRoute(builder: (_) => const SetNewPassword());
       case Routes.register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case Routes.userInterest:
@@ -117,13 +188,16 @@ class Generate {
         return MaterialPageRoute(builder: (_) => PicDetailScreen(arguments: settings.arguments as PicDetailScreenArgument));
       case Routes.picDetailPreview:
         return MaterialPageRoute(builder: (_) => PicDetail(arguments: settings.arguments as ContentData));
+      case Routes.picSlideDetailPreview:
+        return MaterialPageRoute(builder: (_) => SlidedPicDetail(arguments: settings.arguments as SlidedPicDetailScreenArgument));
 
       case Routes.diaryDetail:
         return MaterialPageRoute(builder: (_) => HyppePlaylistDiaries(argument: settings.arguments as DiaryDetailScreenArgument));
 
       case Routes.storyDetail:
         return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
-
+      case Routes.showStories:
+        return MaterialPageRoute(builder: (_) => StoryGroupScreen(argument: settings.arguments as StoryDetailScreenArgument));
       case Routes.appSettings:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
 
@@ -149,6 +223,140 @@ class Generate {
 
       case Routes.imagePreviewScreen:
         return MaterialPageRoute(builder: (_) => ImagePreviewView(argument: settings.arguments as ImagePreviewArgument));
+
+      case Routes.completeProfile:
+        return MaterialPageRoute(builder: (_) => ProfileCompletion(argument: AccountPreferenceScreenArgument(fromSignUpFlow: false)));
+
+      case Routes.contentPreferences:
+        return MaterialPageRoute(builder: (_) => const ContentPreferencesScreen());
+
+      case Routes.referralScreen:
+        return MaterialPageRoute(builder: (_) => const Referral());
+
+      case Routes.listReferral:
+        return MaterialPageRoute(builder: (_) => ListReferralUser(arguments: settings.arguments as ReferralListUserArgument));
+      case Routes.insertReferral:
+        return MaterialPageRoute(builder: (_) => InsertReferral());
+      case Routes.showAds:
+        return MaterialPageRoute(
+            builder: (_) => AdsScreen(
+                  argument: settings.arguments as AdsArgument,
+                ));
+
+      case Routes.searcMore:
+        return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
+      case Routes.searcMoreComplete:
+        return MaterialPageRoute(builder: (_) => const SearchMoreCompleteScreen());
+      case Routes.verificationIDStep1:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep1());
+      case Routes.verificationIDStep2:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep2());
+      case Routes.verificationIDStep3:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep3());
+      case Routes.verificationIDStep4:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep4());
+      case Routes.verificationIDStep5:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep5());
+      case Routes.verificationIDStep6:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep6());
+      case Routes.verificationIDStep7:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStep7());
+      case Routes.verificationIDFailed:
+        return MaterialPageRoute(builder: (_) => const VerificationIDFailed());
+      case Routes.verificationIDSuccess:
+        return MaterialPageRoute(builder: (_) => const VerificationIDSuccess());
+      case Routes.verificationIDLoading:
+        return MaterialPageRoute(builder: (_) => const VerificationIDLoading());
+      case Routes.deleteAccount:
+        return MaterialPageRoute(builder: (_) => const HyppeDeleteAccoount());
+      case Routes.confirmDeleteAccount:
+        return MaterialPageRoute(builder: (_) => const HyppeConfirmDeleteAccount());
+
+      case Routes.reviewBuyContent:
+        return MaterialPageRoute(builder: (_) => ReviewBuyContentScreen(arguments: settings.arguments as ContentData));
+
+      case Routes.paymentScreen:
+        return MaterialPageRoute(builder: (_) => const PaymentScreen());
+
+      case Routes.paymentMethodScreen:
+        return MaterialPageRoute(builder: (_) => PaymentMethodScreen(argument: settings.arguments as TransactionArgument));
+
+      case Routes.paymentSummaryScreen:
+        return MaterialPageRoute(builder: (_) => const PaymentSummaryScreen());
+
+      case Routes.transaction:
+        return MaterialPageRoute(builder: (_) => const Transaction());
+
+      case Routes.transactionInProgress:
+        return MaterialPageRoute(builder: (_) => const TransactionHistoryInProgress());
+
+      case Routes.allTransaction:
+        return MaterialPageRoute(builder: (_) => const AllTransaction());
+
+      case Routes.bankAccount:
+        return MaterialPageRoute(builder: (_) => const BankAccount());
+
+      case Routes.addBankAccount:
+        return MaterialPageRoute(builder: (_) => const AddBankAccount());
+
+      case Routes.detailTransaction:
+        return MaterialPageRoute(builder: (_) => const DetailTransaction());
+
+      case Routes.withdrawal:
+        return MaterialPageRoute(builder: (_) => const WithdrawalScreen());
+
+      case Routes.withdrawalSummary:
+        return MaterialPageRoute(builder: (_) => const SummaryWithdrawalScreen());
+
+      case Routes.pinWithdrawal:
+        return MaterialPageRoute(builder: (_) => const PinWithdrawalScreen());
+
+      case Routes.successWithdrawal:
+        return MaterialPageRoute(builder: (_) => const SuccessWithdrawScreen());
+
+      case Routes.pinScreen:
+        return MaterialPageRoute(builder: (_) => const PinScreen());
+
+      case Routes.verificationPinScreen:
+        return MaterialPageRoute(builder: (_) => const VerificationPin());
+
+      case Routes.confirmPinScreen:
+        return MaterialPageRoute(builder: (_) => const ConfirmPin());
+
+      case Routes.forgotPinScreen:
+        return MaterialPageRoute(builder: (_) => const ForgotPinScreen());
+
+      case Routes.verificationIDStepSupportingDocs:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportingDocs());
+      case Routes.verificationIDStepSupportingDocsPreview:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportingDocsPreview());
+      case Routes.verificationIDStepSupportDocsEula:
+        return MaterialPageRoute(builder: (_) => const VerificationIDStepSupportDocsEula());
+      case Routes.help:
+        return MaterialPageRoute(builder: (_) => const HelpScreen());
+      case Routes.faqDetail:
+        return MaterialPageRoute(
+            builder: (_) => FAQDetailScreen(
+                  data: settings.arguments as FAQArgument,
+                ));
+      case Routes.supportTicket:
+        return MaterialPageRoute(builder: (_) => const SupportTicketScreen());
+      case Routes.appeal:
+        return MaterialPageRoute(builder: (_) => AppealScreen(data: settings.arguments as ContentData));
+      case Routes.appealSuccess:
+        return MaterialPageRoute(builder: (_) => SuccessAppeal(data: settings.arguments as ContentData));
+      case Routes.ticketHistory:
+        return MaterialPageRoute(builder: (_) => TicketHistoryScreen(data: settings.arguments as TicketArgument));
+      case Routes.detailTAHistory:
+        return MaterialPageRoute(builder: (_) => DetailTicketScreen(data: settings.arguments as DetailTicketArgument));
+
+      //------boost
+      case Routes.boostUpload:
+        return MaterialPageRoute(builder: (_) => const BoostUploadScreen());
+      case Routes.boostPaymentSummary:
+        return MaterialPageRoute(builder: (_) => const PaymentBoostSummaryScreen());
+      case Routes.boostList:
+        return MaterialPageRoute(builder: (_) => const ListBoostScreen());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

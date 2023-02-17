@@ -64,7 +64,7 @@ class CommentDataV2 {
     data['postID'] = postID;
     data['eventType'] = eventType;
     if (avatar != null) {
-      data['avatar'] = avatar!.toJson();
+      data['avatar'] = avatar?.toJson();
     }
     data['disqusID'] = disqusID;
     data['email'] = email;
@@ -168,7 +168,7 @@ class DisqusLogs {
     data['createdAt'] = createdAt;
     data['txtMessages'] = txtMessages;
     if (senderInfo != null) {
-      data['senderInfo'] = senderInfo!.toJson();
+      data['senderInfo'] = senderInfo?.toJson();
     }
     data['receiver'] = receiver;
     data['sender'] = sender;
@@ -200,7 +200,7 @@ class SenderInfo {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['fullName'] = fullName;
     if (avatar != null) {
-      data['avatar'] = avatar!.toJson();
+      data['avatar'] = avatar?.toJson();
     }
     data['username'] = username;
     return data;
@@ -209,8 +209,11 @@ class SenderInfo {
 
 class Avatar {
   String? mediaBasePath;
+
   String? mediaUri;
+
   String? mediaType;
+
   String? mediaEndpoint;
 
   Avatar({

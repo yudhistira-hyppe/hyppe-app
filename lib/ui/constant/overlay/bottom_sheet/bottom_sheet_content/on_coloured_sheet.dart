@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -18,11 +20,17 @@ class OnColouredSheet extends StatefulWidget {
   final bool fromSnackBar;
   final Color? iconColor;
   final Function? function;
+  final Function()? functionSubCaption;
+  final String? subCaptionButton;
   final TextOverflow? textOverflow;
+  final int? milisecond;
+  final bool isArrow;
+  final bool isMargin;
   const OnColouredSheet({
     Key? key,
     required this.caption,
     this.subCaption,
+    this.subCaptionButton,
     this.iconSvg,
     this.sizeIcon,
     this.maxLines,
@@ -30,6 +38,10 @@ class OnColouredSheet extends StatefulWidget {
     this.iconColor,
     this.function,
     this.textOverflow,
+    this.functionSubCaption,
+    this.milisecond,
+    this.isArrow = false,
+    this.isMargin = false
   }) : super(key: key);
 
   @override
@@ -38,6 +50,7 @@ class OnColouredSheet extends StatefulWidget {
 
 class _OnColouredSheetState extends State<OnColouredSheet> {
   final ValueNotifier<bool> _loading = ValueNotifier(false);
+  bool close = false;
 
   void _conditionalFunction() async {
     if (widget.function == null) {
@@ -45,7 +58,9 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
     } else {
       try {
         _loading.value = true;
-        await widget.function!();
+        if (widget.function != null) {
+          await widget.function!();
+        }
         _loading.value = false;
       } catch (_) {
       } finally {
@@ -57,9 +72,28 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
   }
 
   @override
+  void initState() {
+    if (widget.milisecond != null) {
+      Timer(Duration(milliseconds: widget.milisecond ?? 0), () {
+        if (!close) {
+          Routing().moveBack();
+        }
+      });
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // close = true;
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Row(
+    return widget.isMargin ? _withMargin() :Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,20 +129,42 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
               ],
             ),
             widget.subCaption != null
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 40),
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width - (16 + 8 + 14 + 60),
-                      child: CustomTextWidget(
-                        maxLines: widget.maxLines,
-                        textToDisplay: widget.subCaption!,
-                        textOverflow: TextOverflow.visible,
-                        textAlign: TextAlign.left,
-                        textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                ? Row(
+                    children: [
+                      GestureDetector(
+                        onTap: widget.functionSubCaption,
+                        child: Container(
+                            width: SizeConfig.screenWidth,
+                            padding: const EdgeInsets.only(left: 40, bottom: 10, top: 6),
+                            child: Text.rich(
+                              TextSpan(
+                                text: "${widget.subCaption} ",
+                                style: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                                children: [
+                                  widget.subCaptionButton != null
+                                      ? TextSpan(
+                                          text: '${widget.subCaptionButton}',
+                                          style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                                color: kHyppeLightButtonText,
+                                                decoration: TextDecoration.underline,
+                                              ),
+                                        )
+                                      : const TextSpan()
+                                ],
+                              ),
+                            )
+                            //        CustomTextWidget(
+                            //         maxLines: widget.maxLines,
+                            //         textToDisplay: widget.subCaption ?? '',
+                            //         textOverflow: TextOverflow.visible,
+                            //         textAlign: TextAlign.left,
+                            //         textStyle: Theme.of(context).textTheme.bodyText2!.copyWith(color: kHyppeLightButtonText),
+                            //       ),
+                            ),
                       ),
-                    ),
+                    ],
                   )
-                : const SizedBox.shrink(),
+                : Container()
           ],
         ),
         widget.subCaption != null
@@ -138,4 +194,64 @@ class _OnColouredSheetState extends State<OnColouredSheet> {
       ],
     );
   }
+
+  Widget _withMargin(){
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        if(widget.iconSvg != null)
+        CustomIconWidget(
+          iconData: widget.iconSvg!,
+          defaultColor: false,
+          height: widget.sizeIcon,
+          width: widget.sizeIcon,
+          color: widget.iconColor,
+        ),
+        if(widget.iconSvg != null)
+        fourteenPx,
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomTextWidget(
+                maxLines: widget.maxLines,
+                textOverflow: widget.textOverflow,
+                textToDisplay: widget.caption,
+                textAlign: TextAlign.left,
+                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 10, fontWeight: FontWeight.w700),
+              ),
+              if(widget.subCaption != null)
+              CustomTextWidget(
+                maxLines: widget.maxLines,
+                textOverflow: widget.textOverflow,
+                textToDisplay: widget.subCaption!,
+                textAlign: TextAlign.left,
+                textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(color: kHyppeLightButtonText, fontSize: 12, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+        ),
+        if(widget.isArrow)
+        InkWell(
+          onTap: (){
+            if(widget.function != null){
+              widget.function!();
+            }
+          },
+          child: const CustomIconWidget(
+            iconData: "${AssetPath.vectorPath}arrow_right.svg",
+            defaultColor: false,
+            height: 20,
+            width: 20,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
 }
+
+

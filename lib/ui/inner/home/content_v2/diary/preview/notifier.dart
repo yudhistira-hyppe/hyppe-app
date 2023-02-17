@@ -9,6 +9,7 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 
 import 'package:hyppe/ux/path.dart';
 
@@ -18,12 +19,19 @@ import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 
+import 'package:provider/provider.dart';
+
+import '../../../../../../app.dart';
+import '../../../notifier_v2.dart';
+
 class PreviewDiaryNotifier with ChangeNotifier {
   final _system = System();
   final _routing = Routing();
   ScrollController scrollController = ScrollController();
 
-  ContentsDataQuery contentsQuery = ContentsDataQuery()..featureType = FeatureType.diary;
+  ContentsDataQuery contentsQuery = ContentsDataQuery()
+    ..limit = 5
+    ..featureType = FeatureType.diary;
 
   List<ContentData>? _diaryData;
 
@@ -68,22 +76,30 @@ class PreviewDiaryNotifier with ChangeNotifier {
     return _result;
   }
 
-  Future<void> initialDiary(
-    BuildContext context, {
-    bool reload = false,
-  }) async {
-    Future<List<ContentData>> _resFuture;
+  Future<void> initialDiary(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
+    List<ContentData> res = [];
 
     try {
-      if (reload) {
-        _resFuture = contentsQuery.reload(context);
+      if (list != null) {
+        if (reload) {
+          contentsQuery.page = 1;
+          contentsQuery.hasNext = true;
+        }
+        res.addAll(list);
+        contentsQuery.hasNext = list.length == contentsQuery.limit;
+        if (list.isNotEmpty) contentsQuery.page++;
       } else {
-        _resFuture = contentsQuery.loadNext(context);
+        if (reload) {
+          'reload contentsQuery : 4'.logger();
+          res = await contentsQuery.reload(context);
+        } else {
+          res = await contentsQuery.loadNext(context, isLandingPage: true);
+        }
       }
 
-      final res = await _resFuture;
       if (reload) {
         diaryData = res;
+
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -94,16 +110,40 @@ class PreviewDiaryNotifier with ChangeNotifier {
       } else {
         diaryData = [...(diaryData ?? [] as List<ContentData>)] + res;
       }
+      // final _searchData = context.read<SearchNotifier>();
+      // if (_searchData.initDataDiary == null) {
+      //   // _searchData.diaryContentsQuery.featureType = FeatureType.diary;
+      //   print('initDataDiary is null');
+      //   if(visibility == 'PUBLIC'){
+      //     try{
+      //       _searchData.initDataDiary = diaryData?.sublist(0, 18);
+      //       print('initDataDiary is ${_searchData.initDataDiary?.length}');
+      //     }catch(e){
+      //       _searchData.initDataDiary = diaryData;
+      //       print('initDataDiary is ${_searchData.initDataDiary?.length}');
+      //     }
+      //
+      //   }else{
+      //     if(_searchData.initDataDiary?.isEmpty ?? true){
+      //       if (visibility == 'PUBLIC') {
+      //         try {
+      //           _searchData.initDataDiary = diaryData?.sublist(0, 18);
+      //           print('initDataVid is ${_searchData.initDataDiary?.length}');
+      //         } catch (e) {
+      //           _searchData.initDataDiary = diaryData;
+      //           print('initDataVid is ${_searchData.initDataDiary?.length}');
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     } catch (e) {
       'load diary list: ERROR: $e'.logger();
     }
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialDiary(context);
     }
   }
@@ -116,6 +156,9 @@ class PreviewDiaryNotifier with ChangeNotifier {
         argument: DiaryDetailScreenArgument(
           diaryData: diaryData,
           index: index.toDouble(),
+          page: contentsQuery.page,
+          limit: contentsQuery.limit,
+          type: TypePlaylist.landingpage,
         ),
       );
     } else {

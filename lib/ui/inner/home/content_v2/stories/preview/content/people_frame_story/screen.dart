@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/entities/stories/notifier.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -39,13 +40,17 @@ class PeopleFrameStory extends StatelessWidget {
           child: StoryColorValidator(
             // haveStory: data[index].story.map((e) => e.isView).contains(0),
             haveStory: index.isEven,
+            contentData: data,
             child: CustomProfileImage(
               following: true,
               width: SizeWidget.circleDiameterOutside,
               height: SizeWidget.circleDiameterOutside,
               onTap: () {
+                context.read<PreviewStoriesNotifier>().changeBorderColor(data ?? ContentData());
+                context.read<ViewerStoriesNotifier>().postViewer(context, data?.postID ?? '');
                 // if (context.read<OverlayHandlerProvider>().overlayActive) context.read<OverlayHandlerProvider>().removeOverlay(context);
                 context.read<PreviewStoriesNotifier>().navigateToShortVideoPlayer(context, index);
+                // context.read<PreviewStoriesNotifier>().navigateToPeopleStoryGroup(context, index);
               },
               // imageUrl: context.read<PreviewStoriesNotifier>().onProfilePicShow(data[index].profilePicture),
               imageUrl: System().showUserPicture(data?.avatar?.mediaEndpoint),
@@ -58,7 +63,7 @@ class PeopleFrameStory extends StatelessWidget {
           child: CustomTextWidget(
             maxLines: 1,
             textAlign: TextAlign.center,
-            // textToDisplay: data[index].username!,
+            // textToDisplay: data[index].username,
             textToDisplay: '${data?.username}',
             textStyle: _themes.textTheme.overline,
           ),

@@ -5,6 +5,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_thumb_image.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class VideoThumbnail extends StatelessWidget {
   const VideoThumbnail({Key? key, this.videoData, required this.fn, required this.onDetail}) : super(key: key);
 
   static final _system = System();
+  static String email = SharedPreference().readStorage(SpKeys.email);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,8 @@ class VideoThumbnail extends StatelessWidget {
             child: CustomThumbImage(
               onTap: () {},
               postId: videoData?.postID,
-              imageUrl: '${videoData?.fullThumbPath}',
+              // imageUrl: 'https://vod.hyppe.cloud/00f120afbe2741be938a93053643c7a2/snapshots/11d8097848ff457b833e5bb0b8bfb482-00004.jpg',
+              imageUrl: (videoData?.isApsara ?? false) ? (videoData?.mediaThumbEndPoint ?? '') : '${videoData?.fullThumbPath}',
             ),
           ),
         ),
@@ -66,22 +69,74 @@ class VideoThumbnail extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
+
                 Visibility(
-                  visible: videoData?.email == SharedPreference().readStorage(SpKeys.email),
-                  child: CustomTextButton(
-                    onPressed: () => ShowBottomSheet.onShowOptionContent(context,
-                      contentData: videoData!,
-                      captionTitle: hyppeVid,
-                      onDetail: onDetail,
-                      onUpdate: () => onDetail
-                          ? context.read<VidDetailNotifier>().onUpdate()
-                          : context.read<HomeNotifier>().onUpdate(),
-                    ),
+                  visible: (videoData?.saleAmount ?? 0) > 0,
+                  child: Padding(
+                    padding: EdgeInsets.all(videoData?.email == SharedPreference().readStorage(SpKeys.email) ? 2.0 : 13),
                     child: const CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}sale.svg",
                       defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}more.svg',
-                      color: kHyppeLightButtonText,
                     ),
+                  ),
+                ),
+                // Visibility(
+                //     visible: (videoData?.certified ?? false) && (videoData?.saleAmount ?? 0) == 0,
+                //     child: Container(
+                //         padding: const EdgeInsets.all(8),
+                //         decoration: BoxDecoration(
+                //           borderRadius: BorderRadius.circular(4),
+                //           color: Colors.black.withOpacity(0.3),
+                //         ),
+                //         child: const CustomIconWidget(
+                //           iconData: '${AssetPath.vectorPath}ownership.svg',
+                //           defaultColor: false,
+                //         ))),
+                // Visibility(
+                //   visible: videoData?.email == SharedPreference().readStorage(SpKeys.email),
+                //   child: SizedBox(
+                //     width: 30,
+                //     child: CustomTextButton(
+                //       style: ButtonStyle(
+                //         padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.only(right: 10)),
+                //       ),
+                //       onPressed: () => ShowBottomSheet().onShowOptionContent(
+                //         context,
+                //         contentData: videoData ?? ContentData(),
+                //         captionTitle: hyppeVid,
+                //         onDetail: onDetail,
+                //         isShare: videoData?.isShared,
+                //         onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                //       ),
+                //       child: const CustomIconWidget(
+                //         defaultColor: false,
+                //         iconData: '${AssetPath.vectorPath}more.svg',
+                //         color: kHyppeLightButtonText,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Visibility(
+                //   visible: onDetail && videoData?.email != SharedPreference().readStorage(SpKeys.email),
+                //   child: CustomTextButton(
+                //     onPressed: () => ShowBottomSheet.onReportContent(
+                //       context,
+                //       postData: videoData,
+                //       type: hyppeVid,
+                //       onUpdate: () => onDetail ? context.read<VidDetailNotifier>().onUpdate() : context.read<HomeNotifier>().onUpdate(),
+                //     ),
+                //     child: const CustomIconWidget(
+                //       defaultColor: false,
+                //       iconData: '${AssetPath.vectorPath}more.svg',
+                //       color: kHyppeLightButtonText,
+                //     ),
+                //   ),
+                // ),
+                Visibility(
+                  visible: (videoData?.saleAmount == 0 && (videoData?.certified ?? false)),
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: IconOwnership(correct: true),
                   ),
                 ),
               ],
@@ -111,28 +166,35 @@ class VideoThumbnail extends StatelessWidget {
               children: [
                 Consumer<LikeNotifier>(
                   builder: (context, value, child) {
-                    return CustomBalloonWidget(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const CustomIconWidget(
-                            defaultColor: false,
-                            iconData: '${AssetPath.vectorPath}like.svg',
-                            color: kHyppeLightButtonText,
-                          ),
-                          fourPx,
-                          CustomTextWidget(
-                            textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
-                            textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
-                          )
-                        ],
+                    return GestureDetector(
+                      onTap: () {
+                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, videoData?.postID ?? '', 'LIKE', 'Like', videoData?.email);
+                      },
+                      child: CustomBalloonWidget(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const CustomIconWidget(
+                              width: 20,
+                              height: 20,
+                              defaultColor: false,
+                              iconData: '${AssetPath.vectorPath}like.svg',
+                              color: kHyppeLightButtonText,
+                            ),
+                            fourPx,
+                            CustomTextWidget(
+                              textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                              textToDisplay: _system.formatterNumber(videoData?.insight?.likes),
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
                 CustomBalloonWidget(
                   child: CustomTextWidget(
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                     textToDisplay: System().formatDuration(Duration(seconds: videoData?.metadata?.duration ?? 0).inMilliseconds),
                   ),
                 ),

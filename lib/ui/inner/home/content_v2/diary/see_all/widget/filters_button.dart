@@ -15,13 +15,13 @@ class FiltersButton extends StatelessWidget {
       width: 81,
       height: 30,
       decoration: BoxDecoration(
-        color: theme.colorScheme.primaryVariant,
+        color: theme.colorScheme.primary,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       alignment: Alignment.center,
       child: CustomTextWidget(
-        textToDisplay: context.watch<TranslateNotifierV2>().translate.filters!,
-        textStyle: theme.textTheme.button!.copyWith(color: kHyppeLightButtonText),
+        textToDisplay: context.watch<TranslateNotifierV2>().translate.filters ?? 'filters',
+        textStyle: theme.textTheme.button?.copyWith(color: kHyppeLightButtonText),
       ),
     );
   }

@@ -29,13 +29,13 @@ class PageNotFoundScreen extends StatelessWidget {
               ),
               SizedBox(height: 35 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.pageNotFound!,
+                textToDisplay: notifier.translate.pageNotFound ?? '',
                 textAlign: TextAlign.center,
                 textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 14 * SizeConfig.scaleDiagonal),
               CustomTextWidget(
-                textToDisplay: notifier.translate.sorryThePageWasNotFoundPleaseReturnToTheHomePage!,
+                textToDisplay: notifier.translate.sorryThePageWasNotFoundPleaseReturnToTheHomePage ?? '',
                 textAlign: TextAlign.center,
                 textStyle: Theme.of(context).textTheme.bodyText2,
                 textOverflow: TextOverflow.clip,
@@ -43,7 +43,7 @@ class PageNotFoundScreen extends StatelessWidget {
               SizedBox(height: 37 * SizeConfig.scaleDiagonal),
               CustomElevatedButton(
                 child: CustomTextWidget(
-                  textToDisplay: notifier.translate.backToHome!,
+                  textToDisplay: notifier.translate.backToHome ?? '',
                   textStyle: Theme.of(context).textTheme.button,
                 ),
                 width: 164 * SizeConfig.scaleDiagonal,
@@ -52,7 +52,7 @@ class PageNotFoundScreen extends StatelessWidget {
                 buttonStyle: ButtonStyle(
                     elevation: MaterialStateProperty.all<double>(0.0),
                     visualDensity: VisualDensity.adaptivePlatformDensity,
-                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primaryVariant),
+                    backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
               ),
             ],

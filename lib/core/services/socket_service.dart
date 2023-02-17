@@ -25,9 +25,13 @@ class SocketService {
   //-------------------------------- Version 2 --------------------------------------//
   static const String eventNotif = 'event_notif';
   static const String eventDiscuss = 'event_disqus';
+  static const String eventAds = 'ads_test';
 
   /// connect to socket
   void connectToSocket(VoidCallback onEvent, {required String host, required Map<String, dynamic> options}) {
+    print('host socket io');
+    print(host);
+    print(options);
     _socket = io(host, options);
 
     _socket?.connect();
@@ -38,13 +42,21 @@ class SocketService {
     });
 
     _socket?.onDisconnect((message) {
+      print(host);
       'Your disconnected from socket'.logger();
       _eventService.notifyRootSocketDisconnected(message);
     });
 
-    _socket!.onConnectError((message) {
+    _socket?.onConnectError((message) {
       'Your connection error from socket'.logger();
       _eventService.notifyRootSocketError(message);
+    });
+
+    var startTime = DateTime.now();
+    _socket?.emit("ping", (_) {
+      var endTime = DateTime.now();
+      var duration = endTime.difference(startTime).inMilliseconds;
+      print("Ping duration: $duration ms");
     });
 
     onEvent();
@@ -53,7 +65,7 @@ class SocketService {
   /// emit something
   emit(String event, [dynamic data]) {
     'Emit data $data'.logger();
-    _socket!.emit(event, data);
+    _socket?.emit(event, data);
   }
 
   /// check socket is running or not

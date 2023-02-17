@@ -31,7 +31,7 @@ class CreatePostResponse {
     message = json["message"];
     postID = json["data"]["postID"];
     json["data"]["postContent"].forEach((v) {
-      postContentR!.add(v);
+      postContentR?.add(v);
     });
     postType = json["data"]["postType"];
     userID = json["data"]["userID"];

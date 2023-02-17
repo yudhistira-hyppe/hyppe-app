@@ -1,14 +1,33 @@
 enum FeatureType { vid, diary, pic, story, txtMsg, other }
+
+enum MusicEnum { genre, theme, mood }
+
 enum ContentType { image, video, text }
+
 enum StatusFollowing { rejected, requested, following, none }
+
 enum ReportType { profile, comment, story, post }
+
 enum ReportAction { report, hide, block }
+
 enum SourceFile { internet, local }
+
 enum SearchCategory { vid, diary, pic, account, htags }
-enum PostView { viewed, notViewed }
-enum NotificationCategory { all, like, comment, follower, following, mention, general }
+
+enum NotificationCategory { all, like, comment, follower, following, mention, general, transactions, verificationid, adsClick, adsView }
+
 enum UserType { verified, notVerified }
+
 enum MethodType { get, post, download, postUploadProfile, postUploadContent, delete }
+
+enum TypePlaylist { landingpage, mine, other, search, none }
+
+enum TicketType { accountVerification, content, transaction, owner, problemBugs, ads }
+
+enum TicketStatus { newest, inProgress, solved, notSolved }
+
+enum AppealStatus { newest, flaging, notSuspended, suspend, removed }
+
 enum ErrorType {
   myStory,
   peopleStory,
@@ -40,14 +59,28 @@ enum ErrorType {
   getWelcomeNotes,
   getLanguage,
   unknown,
+  register,
+  login,
+  otpVerifyAccount,
+  updateProfile,
 }
-enum VideoOrientation { landscape, portrait }
-enum WalletEventEnum { miniDana, acquiring }
-enum WalletResourceType { maskDanaId, balance, userKYC, transactionUrl, topUpUrl, oauthUrl }
-enum NotificationActionType { read, hidden }
+
+enum TransactionType { sell, buy, withdrawal, boost, reward, none }
+
 enum VerifyPageRedirection { toLogin, toHome, toSignUpV2, none }
-enum InteractiveEventType { unfollow, following, follower, view, reaction, none }
+
+enum InteractiveEventType { unfollow, following, follower, view, reaction, transactions, verificationid, supportfile, none }
+
 enum InteractiveEvent { initial, accept, request, done, revoke, none }
+
 enum DiscussEventType { directMsg, comment }
+
 enum IdProofStatus { initial, inProgress, complete, revoke }
+
 enum EnvType { development, production }
+
+enum contentPosition { home, myprofile, otherprofile, search, searchFirst, seeAllVid, seeAllDiary, seeAllPict }
+
+enum CaptionType { normal, mention, seeMore, seeLess }
+
+enum SpeedInternet { fast, medium, slow }

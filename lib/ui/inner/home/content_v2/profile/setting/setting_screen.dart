@@ -3,11 +3,11 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/show_general_dialog.dart';
 import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/profile/setting/widget/my_balance.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -38,6 +38,20 @@ class SettingScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SettingTile(
+                icon: 'transaction-icon.svg',
+                onTap: () => context.read<SettingNotifier>().validateUser(context, notifier),
+                caption: '${notifier.translate.transaction}',
+              ),
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: MyBalance(),
+              ),
+              Divider(
+                thickness: 1,
+                color: theme.colorScheme.surface,
+              ),
+              sixteenPx,
               SettingComponent(
                 headerCaption: '${notifier.translate.account}',
                 tiles: [
@@ -52,23 +66,34 @@ class SettingScreen extends StatelessWidget {
                     caption: '${notifier.translate.signInAndSecurity}',
                   ),
                   SettingTile(
-                    onTap: () => Routing().move(Routes.userInterest, argument: UserInterestScreenArgument(
-                      fromSetting: true,
-                      userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
-                    )),
+                    onTap: () => Routing().move(Routes.userInterest,
+                        argument: UserInterestScreenArgument(
+                          fromSetting: true,
+                          userInterested: Provider.of<SelfProfileNotifier>(context, listen: false).user.profile?.interest ?? [],
+                        )),
                     caption: '${notifier.translate.interest}',
                     icon: 'heart-icon.svg',
                   ),
-                  SettingTile(
-                    caption: '${notifier.translate.theme}',
-                    icon: 'theme-icon.svg',
-                    onTap: () => Routing().move(Routes.themeScreen),
-                  ),
+                  // SettingTile(
+                  //   caption: '${notifier.translate.theme}',
+                  //   icon: 'theme-icon.svg',
+                  //   onTap: () => Routing().move(Routes.themeScreen),
+                  // ),
                   SettingTile(
                     onTap: () => ShowGeneralDialog.newAccountLanguageDropDown(context),
                     icon: 'language-icon.svg',
                     caption: '${notifier.translate.language}',
                   ),
+                  SettingTile(
+                    onTap: () => Routing().move(Routes.referralScreen),
+                    icon: 'person-plus.svg',
+                    caption: '${notifier.translate.referralID}',
+                  ),
+                  // SettingTile(
+                  //   onTap: () => Routing().move(Routes.contentPreferences),
+                  //   icon: 'person-plus.svg',
+                  //   caption: '${notifier.translate.referralID}',
+                  // ),
                 ],
               ),
               sixteenPx,
@@ -80,11 +105,11 @@ class SettingScreen extends StatelessWidget {
               SettingComponent(
                 headerCaption: '${notifier.translate.support}',
                 tiles: [
-                  // SettingTile(
-                  //   onTap: () {},
-                  //   caption: 'Help',
-                  //   icon: 'help-icon.svg',
-                  // ),
+                  SettingTile(
+                    caption: System().capitalizeFirstLetter(notifier.translate.help ?? ""),
+                    icon: 'help-icon.svg',
+                    onTap: () => Routing().move(Routes.help),
+                  ),
                   SettingTile(
                     caption: System().capitalizeFirstLetter(notifier.translate.privacyPolicy ?? ""),
                     icon: 'privacy-police-icon.svg',

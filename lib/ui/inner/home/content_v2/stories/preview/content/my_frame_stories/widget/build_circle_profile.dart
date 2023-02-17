@@ -12,6 +12,7 @@ import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 class BuildCircleProfile extends StatelessWidget {
   final List? listStory;
   final String? imageUrl;
+  final String? imageUrlKey;
   final Map<String, String>? headers;
 
   const BuildCircleProfile({
@@ -19,21 +20,24 @@ class BuildCircleProfile extends StatelessWidget {
     this.headers,
     this.imageUrl,
     this.listStory,
+    this.imageUrlKey,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return InkWell(
-      onTap: () => context.read<PreviewStoriesNotifier>().onTapHandler(context),
+      // onTap: () => context.read<PreviewStoriesNotifier>().onTapHandler(context),
+      onTap: () => context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, listStory ?? []),
       child: Container(
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
             StoryColorValidator(
               featureType: FeatureType.other,
-              haveStory: listStory!.isNotEmpty,
+              haveStory: listStory?.isNotEmpty ?? false,
               child: CustomProfileImage(
+                cacheKey: imageUrlKey,
                 following: true,
                 imageUrl: imageUrl,
                 headers: headers,
@@ -42,7 +46,7 @@ class BuildCircleProfile extends StatelessWidget {
               ),
             ),
             Visibility(
-              visible: (listStory != null && listStory!.isNotEmpty) ? false : true,
+              visible: (listStory != null && (listStory?.isNotEmpty ?? false)) ? false : true,
               child: const CustomIconWidget(
                 defaultColor: false,
                 iconData: '${AssetPath.vectorPath}add-story.svg',

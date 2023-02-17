@@ -38,9 +38,9 @@ class PicBottomItem extends StatelessWidget {
                   ),
                   fourPx,
                   CustomTextWidget(
-                    // textToDisplay: '${data!.lCount}',
+                    // textToDisplay: '${data.lCount}',
                     textToDisplay: System().formatterNumber(data?.insight?.likes ?? 0),
-                    textStyle: Theme.of(context).textTheme.caption!.copyWith(color: kHyppeLightButtonText),
+                    textStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppeLightButtonText),
                   )
                 ],
               ),
@@ -52,9 +52,9 @@ class PicBottomItem extends StatelessWidget {
         //     return CustomIconButtonWidget(
         //       padding: EdgeInsets.zero,
         //       alignment: Alignment.centerRight,
-        //       iconData: '${AssetPath.vectorPath}${data!.isReacted == 0 ? 'none-like.svg' : 'liked.svg'}',
+        //       iconData: '${AssetPath.vectorPath}${data.isReacted == 0 ? 'none-like.svg' : 'liked.svg'}',
         //       onPressed: () {
-        //         data!.isReacted == 0 ? notifier.showReactionList(context, data) : notifier.onLikeContent(context, data: data!);
+        //         data.isReacted == 0 ? notifier.showReactionList(context, data) : notifier.onLikeContent(context, data: data);
         //       },
         //     );
         //   },

@@ -10,6 +10,7 @@ class MessageDataV2 {
   String? disqusID;
   String? room;
   String? createdAt;
+  String? fcmMessage;
   SenderOrReceiverInfo? senderOrReceiverInfo;
   Mate? mate;
   List<DisqusLogs> disqusLogs = [];
@@ -20,6 +21,7 @@ class MessageDataV2 {
 
   MessageDataV2({
     this.createdAt,
+    this.fcmMessage,
     this.mate,
     this.disqusLogs = const [],
     this.active,
@@ -54,6 +56,11 @@ class MessageDataV2 {
     username = json['username'];
     lastestMessage = json["lastestMessage"];
     senderOrReceiverInfo = json['senderOrReceiverInfo'] != null ? SenderOrReceiverInfo.fromJson(json['senderOrReceiverInfo']) : null;
+    if (json['fcmMessage'] != null) {
+      fcmMessage = json['fcmMessage'];
+    } else {
+      fcmMessage = lastestMessage;
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -155,6 +162,10 @@ class DisqusLogs {
   List<Content> content = [];
   String? updatedAt;
   String? reactionIcon;
+  String? lineID;
+  Mate? senderInfo;
+  String? id;
+  List<Medias> medias = [];
 
   DisqusLogs({
     this.createdAt,
@@ -167,9 +178,14 @@ class DisqusLogs {
     this.content = const [],
     this.updatedAt,
     this.reactionIcon,
+    this.lineID,
+    this.senderInfo,
+    this.id,
+    this.medias = const [],
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
+    id = json['_id'];
     createdAt = json['createdAt'];
     txtMessages = json['txtMessages'];
     receiver = json['receiver'];
@@ -184,6 +200,13 @@ class DisqusLogs {
     }
     updatedAt = json['updatedAt'];
     reactionIcon = json['reaction_icon'];
+    lineID = json['lineID'];
+    senderInfo = json['senderInfo'] != null ? Mate.fromJson(json['senderInfo']) : null;
+    if (json['medias'] != null) {
+      json['medias'].forEach((v) {
+        medias.add(Medias.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -198,8 +221,14 @@ class DisqusLogs {
     data['content'] = content.map((v) => v.toJson()).toList();
     data['updatedAt'] = updatedAt;
     data['reaction_icon'] = reactionIcon;
+    data['lineID'] = lineID;
+    if (senderInfo != null) {
+      data['senderInfo'] = senderInfo?.toJson();
+    }
     return data;
   }
+
+  void removeWhere(bool Function(dynamic item) param0) {}
 }
 
 class Content {
@@ -215,6 +244,7 @@ class Content {
   String? fullThumbPath;
   String? mediaThumbUri;
   String? mediaThumbEndpoint;
+  bool? apsara;
 
   Content({
     this.createdAt,
@@ -228,6 +258,7 @@ class Content {
     this.mediaThumbEndpoint,
     this.postID,
     this.mediaEndpoint,
+    this.apsara,
   });
 
   Content.fromJson(Map<String, dynamic> json) {
@@ -242,6 +273,7 @@ class Content {
     mediaThumbEndpoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     mediaEndpoint = json['mediaEndpoint'];
+    apsara = json['apsara'] ?? false;
     fullThumbPath = concatThumbUri();
   }
 
@@ -262,9 +294,15 @@ class Content {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl +
-        (mediaThumbEndpoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    final fixMedia = mediaThumbEndpoint ?? mediaEndpoint ?? '';
+    if(fixMedia.isNotEmpty){
+      return Env.data.baseUrl +
+          fixMedia +
+          '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    }else{
+      return fixMedia;
+    }
+
   }
 }
 
@@ -297,5 +335,31 @@ class SenderOrReceiverInfo {
     data['email'] = email;
     data['username'] = username;
     return data;
+  }
+}
+
+class Medias {
+  String? createdAt;
+  String? postType;
+  String? description;
+  bool? active;
+  String? mediaType;
+  String? mediaThumbEndpoint;
+  String? postID;
+  bool? apsara;
+  String? apsaraId;
+
+  Medias({this.createdAt, this.postType, this.description, this.active, this.mediaType, this.mediaThumbEndpoint, this.postID, this.apsara, this.apsaraId});
+
+  Medias.fromJson(Map<String, dynamic> json) {
+    createdAt = json['createdAt'];
+    postType = json['postType'];
+    description = json['description'];
+    active = json['active'];
+    mediaType = json['mediaType'];
+    mediaThumbEndpoint = json['mediaThumbEndpoint'];
+    postID = json['postID'];
+    apsara = json['apsara'];
+    apsaraId = json['apsaraId'];
   }
 }

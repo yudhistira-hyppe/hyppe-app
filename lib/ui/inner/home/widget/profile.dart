@@ -1,3 +1,4 @@
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
@@ -12,18 +13,21 @@ class Profile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var notifier = context.select((SelfProfileNotifier value) => Tuple2(value.user, value.user.profile?.avatar?.mediaEndpoint));
-
+    // var notifier = context.select((SelfProfileNotifier value) => Tuple2(value.user, value.user.profile?.avatar?.mediaEndpoint));
+    // final myPicture = context.select((SelfProfileNotifier value) => value.user.profile?.avatar?.mediaEndpoint);
+    final notifier = Provider.of<HomeNotifier>(context);
+    // 'showUserPicture 1 : ${notifier.profileImage}'.logger();
     return SizedBox(
       width: 50,
       child: CustomTextButton(
         style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0.0))),
         onPressed: () => context.read<HomeNotifier>().navigateToProfilePage(context),
         child: CustomProfileImage(
+          cacheKey: notifier.profileImageKey,
           width: 26,
           height: 26,
           following: true,
-          imageUrl: System().showUserPicture(notifier.item2 ?? ''),
+          imageUrl: System().showUserPicture(notifier.profileImage) ?? '',
         ),
       ),
     );

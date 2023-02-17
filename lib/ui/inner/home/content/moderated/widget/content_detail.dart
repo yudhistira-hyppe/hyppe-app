@@ -34,6 +34,7 @@ class ContentDetail extends StatelessWidget {
             child: Stack(
               children: [
                 CustomContentModeratedWidget(
+                  isSale: (data.saleAmount ?? 0) > 0,
                     isSafe: true,
                     boxFitError: BoxFit.fill,
                     boxFitContent: BoxFit.contain,
@@ -52,7 +53,7 @@ class ContentDetail extends StatelessWidget {
             child: CustomTextWidget(
                 maxLines: null,
                 textAlign: TextAlign.left,
-                textToDisplay: data.description!,
+                textToDisplay: data.description ?? '',
                 textOverflow: TextOverflow.visible,
                 textStyle: Theme.of(context).textTheme.bodyText2),
           )

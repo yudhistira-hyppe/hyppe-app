@@ -24,6 +24,8 @@ class CustomThumbImage extends StatelessWidget {
       onTap: onTap as void Function()?,
       child: CustomBaseCacheImage(
         imageUrl: "$imageUrl",
+        memCacheHeight: 100,
+        memCacheWidth: 100,
         widthPlaceHolder: 100,
         heightPlaceHolder: 100,
         imageBuilder: (context, imageProvider) {
@@ -40,6 +42,17 @@ class CustomThumbImage extends StatelessWidget {
           );
         },
         errorWidget: (context, url, error) => AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.contain,
+                image: AssetImage('${AssetPath.pngPath}content-error.png'),
+              ),
+            ),
+          ),
+        ),
+        emptyWidget: AspectRatio(
           aspectRatio: 16 / 9,
           child: Container(
             decoration: const BoxDecoration(

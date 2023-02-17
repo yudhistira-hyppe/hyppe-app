@@ -10,7 +10,9 @@ class NotificationModel {
   String? eventType;
   String? title;
   String? body;
-  List<Content> content = [];
+  String? bodyId;
+  // List<Content> content = [];
+  Content? content;
   String? createdAt;
   NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo;
   String? mate;
@@ -19,6 +21,8 @@ class NotificationModel {
   String? email;
   String? updatedAt;
   bool? isRead;
+  String? postID;
+  String? postType;
 
   NotificationModel({
     this.active,
@@ -27,7 +31,9 @@ class NotificationModel {
     this.eventType,
     this.title,
     this.body,
-    this.content = const [],
+    this.bodyId,
+    // this.content = const [],
+    this.content,
     this.createdAt,
     this.senderOrReceiverInfo,
     this.mate,
@@ -36,6 +42,8 @@ class NotificationModel {
     this.email,
     this.updatedAt,
     this.isRead,
+    this.postID,
+    this.postType,
   });
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -45,10 +53,12 @@ class NotificationModel {
     eventType = json['eventType'];
     title = json['title'];
     body = json['body'];
+    bodyId = json['bodyId'];
     if (json['content'] != null) {
-      json['content'].forEach((v) {
-        content.add(Content.fromJson(v));
-      });
+      content = Content.fromJson(json['content']);
+      // json['content'].forEach((v) {
+      //   content.add(Content.fromJson(v));
+      // });
     }
     createdAt = json['createdAt'];
     senderOrReceiverInfo = json['senderOrReceiverInfo'] != null ? NotificationSenderOrReceiverInfoModel.fromJson(json['senderOrReceiverInfo']) : null;
@@ -57,7 +67,9 @@ class NotificationModel {
     event = json['event'];
     email = json['email'];
     updatedAt = json['updatedAt'];
+    postID = json['postID'];
     isRead = json['isRead'] ?? false;
+    postType = json['postType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,7 +80,8 @@ class NotificationModel {
     data['eventType'] = eventType;
     data['title'] = title;
     data['body'] = body;
-    data['content'] = content.map((v) => v.toJson()).toList();
+    data['bodyId'] = bodyId;
+    data['content'] = content?.toJson();
     data['createdAt'] = createdAt;
     if (senderOrReceiverInfo != null) {
       data['senderOrReceiverInfo'] = senderOrReceiverInfo?.toJson();
@@ -89,7 +102,9 @@ class NotificationModel {
     String? eventType,
     String? title,
     String? body,
-    List<Content>? content,
+    String? bodyId,
+    // List<Content>? content,
+    Content? content,
     String? createdAt,
     NotificationSenderOrReceiverInfoModel? senderOrReceiverInfo,
     String? mate,
@@ -106,6 +121,7 @@ class NotificationModel {
       eventType: eventType ?? this.eventType,
       title: title ?? this.title,
       body: body ?? this.body,
+      bodyId: bodyId ?? this.bodyId,
       content: content ?? this.content,
       createdAt: createdAt ?? this.createdAt,
       senderOrReceiverInfo: senderOrReceiverInfo ?? this.senderOrReceiverInfo,
@@ -132,6 +148,7 @@ class Content {
   String? postID;
   String? mediaEndpoint;
   String? fullThumbPath;
+  bool? isApsara;
 
   Content({
     this.createdAt,
@@ -145,6 +162,7 @@ class Content {
     this.mediaThumbEndpoint,
     this.postID,
     this.mediaEndpoint,
+    this.isApsara,
   });
 
   Content.fromJson(Map<String, dynamic> json) {
@@ -159,6 +177,7 @@ class Content {
     mediaThumbEndpoint = json['mediaThumbEndpoint'];
     postID = json['postID'];
     mediaEndpoint = json['mediaEndpoint'];
+    isApsara = json['isApsara'] ?? false;
     fullThumbPath = concatThumbUri();
   }
 
@@ -179,8 +198,14 @@ class Content {
   }
 
   String? concatThumbUri() {
-    return Env.data.baseUrl +
-        (mediaThumbEndpoint ?? mediaEndpoint ?? '') +
-        '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    final fixMedia = mediaThumbEndpoint ?? mediaEndpoint ?? '';
+    if(fixMedia.isNotEmpty){
+      return Env.data.baseUrl +
+          (mediaThumbEndpoint ?? mediaEndpoint ?? '') +
+          '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    }else{
+      return fixMedia;
+    }
+
   }
 }

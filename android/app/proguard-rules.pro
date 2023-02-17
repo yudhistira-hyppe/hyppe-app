@@ -1,3 +1,10 @@
+ 
+
+-keepclassmembers class ai.deepar.ar.DeepAR { *; }
+-keepclassmembers class ai.deepar.ar.core.videotexture.VideoTextureAndroidJava { *; }
+-keep class ai.deepar.ar.core.videotexture.VideoTextureAndroidJava
+-dontwarn android.**
+
 ## Flutter wrapper
 -keep class io.flutter.app.** { *; }
 -keep class io.flutter.plugin.**  { *; }
@@ -6,6 +13,12 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 -dontwarn io.flutter.embedding.**
+
+# GooglePlay Services
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.android.gms.**
+-keep class com.google.common.** { *; }
+-dontwarn com.google.common.**
 
 ## Gson rules
 # Gson uses generic type information stored in a class file when working with fields. Proguard

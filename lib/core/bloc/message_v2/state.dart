@@ -5,6 +5,8 @@ enum MessageState {
   getDiscussionBlocError,
   createDiscussionBlocSuccess,
   createDiscussionBlocError,
+  deleteDiscussionBlocSuccess,
+  deleteDiscussionBlocError,
 }
 
 class MessageFetch {

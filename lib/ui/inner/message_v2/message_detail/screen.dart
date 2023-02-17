@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
-// import 'package:hyppe/core/constants/file_extension.dart';
-// import 'package:hyppe/core/constants/thumb/profile_image.dart';
 
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 
@@ -22,6 +22,7 @@ import 'package:hyppe/ui/inner/message_v2/message_detail/widget/chat_messages_li
 class MessageDetailScreen extends StatefulWidget {
   final MessageDetailArgument argument;
 
+  // ignore: use_key_in_widget_constructors
   const MessageDetailScreen({required this.argument});
 
   @override
@@ -37,6 +38,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
     // Provider.of<MessageDetailNotifier>(context, listen: false).initialData(context, _scrollController);
     _notifier.initState(context, widget.argument);
     // _scrollController.addListener(() => _notifier.scrollListener(context, _scrollController));
+
     super.initState();
   }
 
@@ -54,58 +56,69 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
       child: Consumer<MessageDetailNotifier>(
         builder: (_, notifier, __) => GestureDetector(
           child: Scaffold(
-            appBar: AppBar(
-              centerTitle: false,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              leading: BackButton(
-                onPressed: () => notifier.onBack(),
-              ),
-              title: InkWell(
-                onTap: () => System().navigateToProfile(context, notifier.argument.emailReceiver),
-                child: Row(
-                  children: [
-                    StoryColorValidator(
-                      featureType: FeatureType.other,
-                      // haveStory: notifier.isHaveStory,
-                      haveStory: false,
-                      child: CustomProfileImage(
-                        width: 35,
-                        height: 35,
-                        following: true,
-                        imageUrl: notifier.argument.photoReceiver,
-                        // imageUrl:
-                        //     notifier.photoUrl!.endsWith(JPG) || notifier.photoUrl!.endsWith(JPEG) ? notifier.photoUrl! : notifier.photoUrl! + SMALL,
-                      ),
+            appBar: notifier.selectData < 0
+                ? AppBar(
+                    centerTitle: false,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    leading: BackButton(
+                      onPressed: () => notifier.onBack(),
                     ),
-                    sixteenPx,
-                    CustomRichTextWidget(
-                      textSpan: TextSpan(
-                        style: Theme.of(context).textTheme.subtitle2,
-                        text: "${notifier.argument.usernameReceiver}\n",
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: notifier.argument.fullnameReceiver,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).colorScheme.secondaryVariant,
+                    title: InkWell(
+                      onTap: () => System().navigateToProfile(context, notifier.argument.emailReceiver),
+                      child: Row(
+                        children: [
+                          StoryColorValidator(
+                            featureType: FeatureType.other,
+                            // haveStory: notifier.isHaveStory,
+                            haveStory: false,
+                            child: CustomProfileImage(
+                              width: 35,
+                              height: 35,
+                              following: true,
+                              imageUrl: notifier.argument.photoReceiver,
+                              // imageUrl:
+                              //     notifier.photoUrl.endsWith(JPG) || notifier.photoUrl.endsWith(JPEG) ? notifier.photoUrl : notifier.photoUrl + SMALL,
                             ),
-                          )
+                          ),
+                          sixteenPx,
+                          CustomRichTextWidget(
+                            textSpan: TextSpan(
+                              style: Theme.of(context).textTheme.subtitle2,
+                              text: "${notifier.argument.usernameReceiver}\n",
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: notifier.argument.fullnameReceiver,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context).colorScheme.secondary,
+                                  ),
+                                )
+                              ],
+                            ),
+                            textAlign: TextAlign.start,
+                            textStyle: Theme.of(context).textTheme.overline,
+                          ),
                         ],
                       ),
-                      textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.overline,
                     ),
-                  ],
-                ),
-              ),
-              // actions: [
-              //   IconButton(
-              //     splashColor: Colors.transparent,
-              //     icon: CustomIconWidget(iconData: "${AssetPath.vectorPath}more.svg", defaultColor: false),
-              //     onPressed: () => print("User Menu"),
-              //   ),
-              // ],
-            ),
+                  )
+                : AppBar(
+                    centerTitle: false,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    leading: BackButton(
+                      onPressed: () => notifier.selectData = -1,
+                    ),
+                    actions: [
+                        InkWell(
+                          onTap: () {
+                            notifier.deleteChat(context);
+                          },
+                          child: const CustomIconWidget(
+                            iconData: "${AssetPath.vectorPath}delete.svg",
+                          ),
+                        ),
+                        fifteenPx
+                      ]),
             body: Form(
               key: _formKey,
               onWillPop: () async {
@@ -123,11 +136,12 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
               //         ],
               //       ),
               child: notifier.discussData == null
-                  ? Container(child: const CustomLoading())
+                  ? const Center(child: CustomLoading())
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.max,
                       children: const <Widget>[
-                        SizedBox.shrink(),
+                        // SizedBox.shrink(),
                         // ChatMessageList(scrollController: _scrollController),
                         // ChatInputWidget(_scrollController),
                         ChatMessageList(),
@@ -136,7 +150,7 @@ class _MessageDetailScreenState extends State<MessageDetailScreen> {
                     ),
             ),
             resizeToAvoidBottomInset: true,
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme.of(context).colorScheme.background,
           ),
           onTap: () => notifier.closeKeyboard(context),
         ),

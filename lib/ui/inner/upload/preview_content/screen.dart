@@ -1,9 +1,13 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_content.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/content/preview_id_verification.dart';
 import 'package:hyppe/ui/inner/upload/preview_content/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../app.dart';
 
 class PreviewContentScreen extends StatefulWidget {
   const PreviewContentScreen({Key? key}) : super(key: key);
@@ -21,7 +25,30 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
   void initState() {
     final _notifier = Provider.of<PreviewContentNotifier>(context, listen: false);
     _notifier.initialMatrixColor();
+    _notifier.scrollController = ScrollController();
+    _notifier.scrollExpController = ScrollController();
+    _notifier.audioPlayer = AudioPlayer();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    print('dispose PreviewContentScreen');
+    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+    notifier.audioPlayer.stop();
+    notifier.audioPlayer.dispose();
+    try {
+      notifier.scrollController.dispose();
+    } catch (e) {
+      e.logger();
+    }
+    try {
+      notifier.scrollExpController.dispose();
+    } catch (e) {
+      e.logger();
+    }
+    super.dispose();
   }
 
   @override
@@ -45,7 +72,7 @@ class _PreviewContentScreenState extends State<PreviewContentScreen> {
               onWillPop: () async => notifier.onWillPop(context),
               child: Scaffold(
                 body: PreviewIDVerification(
-                  pageController: _pageController,  
+                  pageController: _pageController,
                   picture: notifier.fileContent?[0],
                 ),
               ),

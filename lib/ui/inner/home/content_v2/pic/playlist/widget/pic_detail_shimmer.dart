@@ -22,19 +22,13 @@ class PicDetailShimmer extends StatelessWidget {
                 CustomIconWidget(
                   defaultColor: false,
                   iconData: '${AssetPath.vectorPath}back-arrow.svg',
-                  color: Theme.of(context).appBarTheme.iconTheme!.color,
+                  color: Theme.of(context).appBarTheme.iconTheme?.color,
                 ),
                 Row(
                   children: [
-                    CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}bookmark.svg',
-                        color: Theme.of(context).appBarTheme.iconTheme!.color),
+                    CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}bookmark.svg', color: Theme.of(context).appBarTheme.iconTheme?.color),
                     twelvePx,
-                    CustomIconWidget(
-                        defaultColor: false,
-                        iconData: '${AssetPath.vectorPath}more.svg',
-                        color: Theme.of(context).appBarTheme.iconTheme!.color),
+                    CustomIconWidget(defaultColor: false, iconData: '${AssetPath.vectorPath}more.svg', color: Theme.of(context).appBarTheme.iconTheme?.color),
                   ],
                 ),
               ],

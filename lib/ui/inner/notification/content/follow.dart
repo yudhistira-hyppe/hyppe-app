@@ -23,6 +23,9 @@ class FollowNotification extends StatelessWidget {
           data: _data ?? [],
           itemCount: _itemCount,
           builder: (context, index) {
+            if (notifier.isLoading) {
+              return ComponentShimmer();
+            }
             if (_data == null) {
               return ComponentShimmer();
             }
@@ -30,9 +33,11 @@ class FollowNotification extends StatelessWidget {
               data: _data[index],
               rightWidget: (_data[index].flowIsDone ?? true)
                   ? const SizedBox.shrink()
-                  : AcceptButton(
-                      data: _data[index],
-                    ),
+                  // : const SizedBox.shrink()
+                  : Container(),
+              // AcceptButton(
+              //   data: _data[index],
+              // ),
             );
           },
         );

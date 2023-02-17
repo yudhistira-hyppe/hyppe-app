@@ -32,13 +32,13 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
             ),
             SizedBox(height: 35 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
-              textToDisplay: notifier.translate.internalServerError!,
+              textToDisplay: notifier.translate.internalServerError ?? '',
               textAlign: TextAlign.center,
               textStyle: TextStyle(fontSize: 18 * SizeConfig.scaleDiagonal, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 14 * SizeConfig.scaleDiagonal),
             CustomTextWidget(
-              textToDisplay: notifier.translate.ourSystemIsCurrentlyExperiencingTechnicalIssues!+" "+notifier.translate.pleaseTryAgain!,
+              textToDisplay: "${notifier.translate.ourSystemIsCurrentlyExperiencingTechnicalIssues} ${notifier.translate.pleaseTryAgain}",
               textAlign: TextAlign.center,
               textStyle: Theme.of(context).textTheme.bodyText2,
               textOverflow: TextOverflow.clip,
@@ -51,7 +51,7 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
                   child: CustomTextButton(
                     onPressed: backButton ?? () => Routing().moveBack(),
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.back!,
+                      textToDisplay: notifier.translate.back ?? 'back',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                   ),
@@ -60,8 +60,8 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
                   flex: 1,
                   child: CustomElevatedButton(
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.tryAgain!,
-                      textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                      textToDisplay: notifier.translate.tryAgain ?? 'try again',
+                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                     width: 164 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
@@ -69,7 +69,7 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
                     buttonStyle: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(0.0),
                         visualDensity: VisualDensity.adaptivePlatformDensity,
-                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primaryVariant),
+                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
                         shape:
                             MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
                   ),

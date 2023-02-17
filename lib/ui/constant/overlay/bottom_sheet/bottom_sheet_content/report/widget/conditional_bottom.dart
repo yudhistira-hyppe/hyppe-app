@@ -22,28 +22,28 @@ Widget conditionalBottom(context) {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomTextWidget(
-                maxLines: 2,
-                textAlign: TextAlign.left,
-                textStyle: Theme.of(context).textTheme.subtitle2!.apply(color: kHyppeSecondary),
-                textToDisplay: notifier.language.ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies!),
-            GestureDetector(
-                onTap: () {
-                  notifier.appBar = notifier.language.whyAreYouReportingThis!;
-                  notifier.reportType = ReportType.post;
-                  notifier.data = {'userID': notifier.data!['userID'], 'postID': notifier.data!['postID']};
-                  notifier.reportAction = ReportAction.report;
-                  notifier.initData = Report();
-                  Routing().moveAndPop(Routes.report);
-                },
-                child: Container(
-                  alignment: Alignment.bottomLeft,
-                  height: 50 * SizeConfig.scaleDiagonal,
-                  child: CustomTextWidget(
-                      textAlign: TextAlign.left,
-                      textToDisplay: notifier.language.reportThisPost!,
-                      textStyle: Theme.of(context).textTheme.button!.apply(color: kHyppeUploadIcon)),
-                )),
+            // CustomTextWidget(
+            //     maxLines: 2,
+            //     textAlign: TextAlign.left,
+            //     textStyle: Theme.of(context).textTheme.subtitle2?.apply(color: kHyppeSecondary),
+            //     textToDisplay: notifier.language.ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies ?? ''),
+            // GestureDetector(
+            //     onTap: () {
+            //       notifier.appBar = notifier.language.whyAreYouReportingThis ?? '';
+            //       notifier.reportType = ReportType.post;
+            //       notifier.data = {'userID': notifier.data?['userID'], 'postID': notifier.data?['postID']};
+            //       notifier.reportAction = ReportAction.report;
+            //       notifier.initData = Report();
+            //       Routing().moveAndPop(Routes.report);
+            //     },
+            //     child: Container(
+            //       alignment: Alignment.bottomLeft,
+            //       height: 50 * SizeConfig.scaleDiagonal,
+            //       child: CustomTextWidget(
+            //           textAlign: TextAlign.left,
+            //           textToDisplay: notifier.language.reportThisPost ?? '',
+            //           textStyle: Theme.of(context).textTheme.button?.apply(color: kHyppeUploadIcon)),
+            //     )),
           ],
         ));
   }

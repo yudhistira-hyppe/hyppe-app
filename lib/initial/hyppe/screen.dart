@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/initial/hyppe/multi_provider.dart';
 import 'package:hyppe/initial/hyppe/notifier.dart';
@@ -6,6 +7,9 @@ import 'package:hyppe/ux/generate.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:screen_protector/screen_protector.dart';
+
+import '../../app.dart';
 
 class Hyppe extends StatefulWidget {
   @override
@@ -18,7 +22,13 @@ class _HyppeState extends State<Hyppe> {
   @override
   void initState() {
     hyppeNotifier.setInitialTheme();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -30,6 +40,7 @@ class _HyppeState extends State<Hyppe> {
           selector: (_, select) => select.themeData,
           builder: (_, theme, __) {
             return MaterialApp(
+              key: materialAppKey,
               title: "Hyppe",
               theme: theme,
               navigatorObservers: [
@@ -42,7 +53,7 @@ class _HyppeState extends State<Hyppe> {
               navigatorKey: Routing.navigatorKey,
               scaffoldMessengerKey: Routing.scaffoldMessengerKey,
               builder: (context, child) => MediaQuery(
-                child: child!,
+                child: child ?? Container(),
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
               ),
             );

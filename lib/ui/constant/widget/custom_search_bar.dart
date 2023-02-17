@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hyppe/core/constants/asset_path.dart';
+import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 
@@ -8,6 +9,7 @@ class CustomSearchBar extends StatelessWidget {
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String>? onChanged;
   final Function? onPressedIcon;
+  final Function? onPressedRightIcon;
   final TextEditingController? controller;
   final Function()? onTap;
   final FocusNode? focusNode;
@@ -18,7 +20,8 @@ class CustomSearchBar extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final EdgeInsetsGeometry? contentPadding;
   final bool readOnly;
-  
+  final bool autoFocus;
+
   const CustomSearchBar({
     Key? key,
     this.onSubmitted,
@@ -28,12 +31,14 @@ class CustomSearchBar extends StatelessWidget {
     this.hintText,
     this.contentPadding,
     this.onPressedIcon,
+    this.onPressedRightIcon,
     this.heightText,
     this.focusNode,
     this.inputDecoration,
     this.textInputType = TextInputType.text,
     this.textAlign = TextAlign.start,
     this.readOnly = false,
+    this.autoFocus = false,
   }) : super(key: key);
 
   @override
@@ -45,21 +50,31 @@ class CustomSearchBar extends StatelessWidget {
         readOnly: readOnly,
         focusNode: focusNode,
         controller: controller,
-        decoration: inputDecoration ?? InputDecoration(
-            prefixIcon: CustomIconButtonWidget(
-              defaultColor: false,
-              onPressed: onPressedIcon,
-              iconData: "${AssetPath.vectorPath}search.svg",
-            ),
-            hintStyle: Theme.of(context).textTheme.subtitle2,
-            hintText: hintText,
-            contentPadding: contentPadding,
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            errorBorder: InputBorder.none,
-            disabledBorder: InputBorder.none,
-            counterText: ''),
+        autofocus: autoFocus,
+        decoration: inputDecoration ??
+            InputDecoration(
+              suffixIcon: onPressedRightIcon != null ? CustomIconButtonWidget(
+                defaultColor: false,
+                onPressed: onPressedRightIcon,
+                iconData: "${AssetPath.vectorPath}filter.svg",
+              ) : null,
+                prefixIcon: CustomIconButtonWidget(
+                  defaultColor: false,
+                  onPressed: onPressedIcon,
+                  iconData: "${AssetPath.vectorPath}search.svg",
+                ),
+                hintStyle: Theme.of(context).textTheme.subtitle2,
+                hintText: hintText,
+                contentPadding: contentPadding,
+                border: InputBorder.none,
+                // focusedBorder: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: kHyppePrimary),
+                ),
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                counterText: ''),
         textInputAction: TextInputAction.search,
         maxLines: 1,
         textAlign: textAlign,

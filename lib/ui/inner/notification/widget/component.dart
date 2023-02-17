@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/notification_v2/notification.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 // import 'package:hyppe/core/models/collection/notifications/notifications_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
@@ -9,6 +11,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -22,13 +26,28 @@ class Component extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return InkWell(
-      onTap: () => context.read<NotificationNotifier>().markAsRead(context, data),
+      onTap: () {
+        context.read<NotificationNotifier>().markAsRead(context, data ?? NotificationModel());
+        final eventType = System().getNotificationCategory(data?.eventType ?? '');
+        var listTransacation = [
+          NotificationCategory.transactions,
+          NotificationCategory.adsClick,
+          NotificationCategory.adsView,
+        ];
+
+        if (listTransacation.contains(eventType)) {
+          Routing().move(Routes.transaction);
+        } else {
+          context.read<NotificationNotifier>().navigateToContent(context, data?.postType, data?.postID);
+        }
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // profile picture
+
             StoryColorValidator(
               featureType: FeatureType.other,
               haveStory: false,
@@ -36,7 +55,7 @@ class Component extends StatelessWidget {
                 following: true,
                 width: 50 * SizeConfig.scaleDiagonal,
                 height: 50 * SizeConfig.scaleDiagonal,
-                onTap: () => System().navigateToProfile(context, data?.mate ?? ''),
+                onTap: () => System().navigateToProfile(context, data?.mate ?? '', isReplaced: false),
                 imageUrl: '${System().showUserPicture(data?.senderOrReceiverInfo?.avatar?.mediaEndpoint)}',
               ),
             ),
@@ -50,23 +69,33 @@ class Component extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomTextWidget(
-                        textToDisplay: data?.senderOrReceiverInfo?.fullName ?? '',
-                        textStyle: Theme.of(context).textTheme.subtitle2!.copyWith(fontWeight: FontWeight.bold),
+                        textToDisplay: data?.senderOrReceiverInfo?.username ?? '',
+                        textAlign: TextAlign.start,
+                        textStyle: Theme.of(context).textTheme.subtitle2?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       fourPx,
-                      CustomTextWidget(
-                        textToDisplay: data?.body ?? '',
-                        textStyle: Theme.of(context).textTheme.caption,
+                      SizedBox(
+                        width: (SizeConfig.screenWidth ?? 0) / 1.8,
+                        // data?.content != null
+                        //     ? (SizeConfig.screenWidth ?? 0) / 1.8
+                        //     : data?.body != null
+                        //         ? (data?.body?.length ?? 0) < 34
+                        //             ? null
+                        //             : (SizeConfig.screenWidth ?? 0) / 1.5
+                        //         : null,
+                        child: CustomTextWidget(
+                          //textToDisplay: data?.body ?? '',
+                          textToDisplay: System().bodyMultiLang(bodyEn: data?.body ?? data?.bodyId, bodyId: data?.bodyId) ?? '',
+                          textStyle: Theme.of(context).textTheme.caption,
+                          maxLines: 4,
+                          textAlign: TextAlign.start,
+                        ),
                       ),
                       sixPx,
                       CustomTextWidget(
-                        textToDisplay: data?.createdAt != null
-                            ? System().readTimestamp(
-                                DateFormat("yyyy-MM-dd hh:mm:ss").parse(data!.createdAt!).millisecondsSinceEpoch,
-                                context,
-                                fullCaption: true)
-                            : '',
-                        textStyle: Theme.of(context).textTheme.caption!.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                        textToDisplay:
+                            data?.createdAt != null ? System().readTimestamp(DateFormat("yyyy-MM-dd hh:mm:ss").parse(data?.createdAt ?? '').millisecondsSinceEpoch, context, fullCaption: true) : '',
+                        textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                       ),
                     ],
                   ),

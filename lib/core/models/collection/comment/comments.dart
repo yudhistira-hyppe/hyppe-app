@@ -47,7 +47,7 @@ class Comments {
     commentID = json["commentID"] as String?;
     if (json["reactions"].isNotEmpty) {
       json["reactions"].forEach((v) {
-        reactions!.add(v);
+        reactions?.add(v);
       });
     }
   }

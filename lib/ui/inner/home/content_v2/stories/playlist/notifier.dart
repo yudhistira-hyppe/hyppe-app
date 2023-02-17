@@ -1,19 +1,26 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:hyppe/core/arguments/discuss_argument.dart';
 import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/follow_user_argument.dart';
+import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/arguments/post_reaction_argument.dart';
 import 'package:hyppe/core/bloc/follow/bloc.dart';
 import 'package:hyppe/core/bloc/follow/state.dart';
 
 import 'package:hyppe/core/bloc/message_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/bloc/reaction/bloc.dart';
 
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/models/collection/music/music.dart';
 
 import 'package:hyppe/core/models/collection/utils/reaction/reaction.dart';
 import 'package:hyppe/core/models/collection/utils/reaction/reaction_interactive.dart';
@@ -25,6 +32,7 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/models/collection/utils/dynamic_link/dynamic_link.dart';
 
 import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -45,6 +53,8 @@ import 'package:story_view/story_view.dart';
 
 class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   ContentsDataQuery myContentsQuery = ContentsDataQuery()
+    ..page = 2
+    ..limit = 5
     ..onlyMyData = true
     ..featureType = FeatureType.story;
 
@@ -57,6 +67,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _fadeReaction = false;
   String? _reaction;
   final List<Item> _items = <Item>[];
+  List<StoryItem> _result = [];
+  List<StoryItem> get result => _result;
 
   int _currentStory = 0;
   int _storyParentIndex = 0;
@@ -64,11 +76,14 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool _isKeyboardActive = false;
   bool _linkCopied = false;
   bool _forceStop = false;
+  bool _isLoadMusic = true;
+  MusicUrl? _urlMusic;
   double? _currentPage = 0;
   Timer? _searchOnStoppedTyping;
   Color? _sendButtonColor;
-  PageController? _pageController;
+  PageController? _pageController = PageController(initialPage: 0);
   List<ContentData> _dataUserStories = [];
+  Map<String, List<ContentData>> _groupUserStories = {};
   final TextEditingController _textEditingController = TextEditingController();
 
   bool get isReactAction => _isReactAction;
@@ -82,11 +97,26 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   bool get isKeyboardActive => _isKeyboardActive;
   bool get linkCopied => _linkCopied;
   bool get forceStop => _forceStop;
+  bool get isLoadMusic => _isLoadMusic;
+  MusicUrl? get urlMusic => _urlMusic;
   double? get currentPage => _currentPage;
   Color? get buttonColor => _sendButtonColor;
   PageController? get pageController => _pageController;
   List<ContentData> get dataUserStories => _dataUserStories;
+  Map<String, List<ContentData>> get groupUserStories => _groupUserStories;
   TextEditingController get textEditingController => _textEditingController;
+
+  int _currentIndex = -1;
+  int get currentIndex => _currentIndex;
+  int _pageIndex = -1;
+  int get pageIndex => _pageIndex;
+  bool _hitApiMusic = false;
+  bool get hitApiMusic => _hitApiMusic;
+
+  set result(List<StoryItem> val) {
+    _result = val;
+    notifyListeners();
+  }
 
   set reaction(String? val) {
     _reaction = val;
@@ -113,6 +143,15 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  set isLoadMusic(bool state) {
+    _isLoadMusic = state;
+  }
+
+  set urlMusic(MusicUrl? val) {
+    _urlMusic = val;
+    notifyListeners();
+  }
+
   set currentPage(double? val) {
     _currentPage = val;
     notifyListeners();
@@ -128,6 +167,26 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
+  set groupUserStories(Map<String, List<ContentData>> maps) {
+    _groupUserStories = maps;
+    notifyListeners();
+  }
+
+  set currentIndex(int index) {
+    _currentIndex = index;
+    notifyListeners();
+  }
+
+  set pageIndex(int index){
+    _pageIndex = index;
+    notifyListeners();
+  }
+
+  set hitApiMusic(bool state) {
+    _hitApiMusic = state;
+    notifyListeners();
+  }
+
   setCurrentStory(int val) => _currentStory = val;
 
   set isShareAction(bool val) {
@@ -138,10 +197,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   setIsKeyboardActive(bool val) => _isKeyboardActive = val;
 
   nextPage() {
-    if (pageController!.page == dataUserStories.length - 1) {
+    if (_pageController?.page == dataUserStories.length - 1) {
       return;
     }
-    pageController!.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
+    _pageController?.nextPage(duration: const Duration(seconds: 1), curve: Curves.easeInOut);
   }
 
   degreeToRadian(double deg) {
@@ -152,6 +211,8 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _currentPage = page;
     notifyListeners();
   }
+
+  void onUpdate() => notifyListeners();
 
   onChangeHandler(BuildContext context, String value) {
     if (_searchOnStoppedTyping != null) {
@@ -184,44 +245,195 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     animationController.forward();
   }
 
-  List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
-    List<StoryItem> _result = [];
-    if (data.contentType == ContentType.image) {
-      _result.add(
-        StoryItem.pageImage(
-          url: data.fullThumbPath ?? '',
-          controller: storyController,
-          imageFit: BoxFit.contain,
-          requestHeaders: {
-            'post-id': data.postID ?? '',
-            'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
-            'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
-          },
-        ),
-      );
+  Future<MusicUrl?> getMusicApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        print('jsonMap video Apsara : $jsonMap');
+        final String dur = jsonMap['Duration'];
+        final duration = double.parse(dur);
+        return MusicUrl(playUrl: jsonMap['PlayUrl'], duration: duration);
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
     }
-    if (data.contentType == ContentType.video) {
+    return null;
+  }
+
+  Future initializeUserStories(BuildContext context, StoryController storyController, List<ContentData> stories) async {
+    _result = [];
+    for (final story in stories) {
+      if (story.mediaType?.translateType() == ContentType.image) {
+        if (story.music?.apsaraMusic != null) {
+          story.music?.apsaraMusicUrl = await getMusicApsara(context, story.music!.apsaraMusic!);
+          final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
+          _result.add(
+            StoryItem.pageImage(
+              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              controller: storyController,
+              imageFit: BoxFit.contain,
+              isImages: true,
+              id: story.postID ?? '',
+              duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+              requestHeaders: {
+                'post-id': story.postID ?? '',
+                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+              },
+            ),
+          );
+        } else {
+          _result.add(
+            StoryItem.pageImage(
+              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              controller: storyController,
+              imageFit: BoxFit.contain,
+              isImages: true,
+              id: story.postID ?? '',
+              requestHeaders: {
+                'post-id': story.postID ?? '',
+                'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+                'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+              },
+            ),
+          );
+        }
+      }
+      if (story.mediaType?.translateType() == ContentType.video) {
+        String urlApsara = '';
+        if (story.isApsara ?? false) {
+          await getVideoApsara(context, story.apsaraId ?? '').then((value) {
+            urlApsara = value;
+          });
+        }
+        Size? videoSize;
+        final width = story.metadata?.width?.toDouble();
+        final height = story.metadata?.height?.toDouble();
+        if(width != null && height != null){
+          videoSize = Size(width, height);
+          videoSize = videoSize.getFixSize(context);
+        }
+        print('StoryItem.pageVideo ${story.postID} : $urlApsara, ${story.fullContentPath}, ${story.metadata?.duration}');
+        _result.add(
+          StoryItem.pageVideo(
+            urlApsara != '' ? urlApsara : story.fullContentPath ?? '',
+            controller: storyController,
+            id: story.postID ?? '',
+            size: videoSize,
+            requestHeaders: {
+              'post-id': story.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+            duration: Duration(seconds: story.metadata?.duration ?? 15),
+          ),
+        );
+      }
+    }
+
+    notifyListeners();
+  }
+
+  // List<StoryItem> initializeData(BuildContext context, StoryController storyController, ContentData data) {
+  Future initializeData(BuildContext context, StoryController storyController, ContentData data) async {
+    // List<StoryItem> _result = [];
+    print('pageImage ${data.postID} : ${data.isApsara}, ${data.mediaEndpoint}, ${data.fullThumbPath}');
+    _result = [];
+    if (data.mediaType?.translateType() == ContentType.image) {
+      if (data.music?.apsaraMusic != null) {
+        data.music?.apsaraMusicUrl = await getMusicApsara(context, data.music!.apsaraMusic!);
+        final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
+        _result.add(
+          StoryItem.pageImage(
+            url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
+            controller: storyController,
+            imageFit: BoxFit.contain,
+            isImages: true,
+            id: data.postID ?? '',
+            duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
+            requestHeaders: {
+              'post-id': data.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+          ),
+        );
+      } else {
+        _result.add(
+          StoryItem.pageImage(
+            url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
+            controller: storyController,
+            imageFit: BoxFit.contain,
+            isImages: true,
+            id: data.postID ?? '',
+            requestHeaders: {
+              'post-id': data.postID ?? '',
+              'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+              'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
+            },
+          ),
+        );
+      }
+    }
+    if (data.mediaType?.translateType() == ContentType.video) {
+      String urlApsara = '';
+      if (data.isApsara ?? false) {
+        await getVideoApsara(context, data.apsaraId ?? '').then((value) {
+          urlApsara = value;
+        });
+      }
+      Size? videoSize;
+      final width = data.metadata?.width?.toDouble();
+      final height = data.metadata?.height?.toDouble();
+      if(width != null && height != null){
+        videoSize = Size(width, height);
+        videoSize = videoSize.getFixSize(context);
+      }
+      print('StoryItem.pageVideo ${data.postID} : $urlApsara, ${data.fullContentPath}, ${data.metadata?.duration}');
       _result.add(
         StoryItem.pageVideo(
-          data.fullContentPath ?? '',
+          urlApsara != '' ? urlApsara : data.fullContentPath ?? '',
           controller: storyController,
+          id: data.postID ?? '',
           requestHeaders: {
             'post-id': data.postID ?? '',
             'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
             'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
           },
+          size: videoSize,
           duration: Duration(seconds: data.metadata?.duration ?? 15),
         ),
       );
     }
     notifyListeners();
-    return _result;
+  }
+
+  Future getVideoApsara(BuildContext context, String apsaraId) async {
+    try {
+      final notifier = PostsBloc();
+      await notifier.getVideoApsaraBlocV2(context, apsaraId: apsaraId);
+
+      final fetch = notifier.postsFetch;
+
+      if (fetch.postsState == PostsState.videoApsaraSuccess) {
+        Map jsonMap = json.decode(fetch.data.toString());
+        return jsonMap['PlayUrl'].toString();
+      }
+    } catch (e) {
+      'Failed to fetch ads data ${e}'.logger();
+      return '';
+    }
   }
 
   void navigateToOtherProfile(BuildContext context, ContentData data, StoryController storyController) {
-    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email!;
+    Provider.of<OtherProfileNotifier>(context, listen: false).userEmail = data.email;
     storyController.pause();
-    _routing.move(Routes.otherProfile).whenComplete(() => storyController.play());
+    _routing.move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: data.email)).whenComplete(() => storyController.play());
   }
 
   void initState(BuildContext context, StoryDetailScreenArgument routeArgument) {
@@ -236,14 +448,27 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
+  void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
+    // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
+    _routeArgument = _routeArgument;
+    _currentPage = routeArgument.peopleIndex.toDouble();
+    _currentIndex = routeArgument.peopleIndex;
+    final groups = routeArgument.groupStories;
+    if (groups != null) {
+      _groupUserStories = groups;
+    }
+  }
+
   Future<void> _initialStory(
     BuildContext context,
   ) async {
     Future<List<ContentData>> _resFuture;
 
     myContentsQuery.postID = _routeArgument?.postID;
+    myContentsQuery.onlyMyData = false;
 
     try {
+      print('reload contentsQuery : 12');
       _resFuture = myContentsQuery.reload(context);
 
       final res = await _resFuture;
@@ -262,82 +487,86 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     AnimationController? animationController,
   ) async {
     storyController.pause();
-    _system.actionReqiredIdCard(
-      context,
-      action: () async {
-        checkIfKeyboardIsFocus(context);
-        Reaction? _data;
-        _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
+    // _system.actionReqiredIdCard(
+    //   context,
+    //   action: () async {
+    checkIfKeyboardIsFocus(context);
+    Reaction? _data;
+    _data = Provider.of<MainNotifier>(context, listen: false).reactionData;
 
-        if (_data == null) {
-          var _popupDialog = _system.createPopupDialog(
-            Container(
-              alignment: Alignment.center,
-              color: const Color(0xff1D2124).withOpacity(0.8),
-              child: const UnconstrainedBox(child: CustomLoading()),
-            ),
-          );
-          Overlay.of(context)!.insert(_popupDialog);
-          await context.read<MainNotifier>().getReaction(context).whenComplete(() {
-            _data = context.read<MainNotifier>().reactionData;
-            _popupDialog.remove();
-          });
-        }
+    if (_data == null) {
+      var _popupDialog = _system.createPopupDialog(
+        Container(
+          alignment: Alignment.center,
+          color: const Color(0xff1D2124).withOpacity(0.8),
+          child: const UnconstrainedBox(child: CustomLoading()),
+        ),
+      );
+      Overlay.of(context)?.insert(_popupDialog);
+      await context.read<MainNotifier>().getReaction(context).whenComplete(() {
+        _data = context.read<MainNotifier>().reactionData;
+        _popupDialog.remove();
+      });
+    }
 
-        // flag reaction action
-        _isReactAction = true;
+    // flag reaction action
+    _isReactAction = true;
 
-        if (_data != null) {
-          storyController.pause();
-          showGeneralDialog(
-            barrierLabel: "Barrier",
-            barrierDismissible: false,
-            barrierColor: Colors.black.withOpacity(0.5),
-            transitionDuration: const Duration(milliseconds: 500),
-            context: context,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return ShowReactionsIcon(
-                  onTap: () => _routing.moveBack(),
-                  crossAxisCount: 3,
-                  data: _data!.data,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () async {
-                        reaction = _data?.data[index].icon;
-                        _routing.moveBack();
-                        makeItems(animationController!);
-                        Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
-                        Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
-                        try {
-                          await sendMessageReaction(
-                            context,
-                            contentData: data,
-                            reaction: _data?.data[index],
-                          );
-                        } catch (e) {
-                          print(e);
-                        }
-                      },
-                      child: Material(
-                        color: Colors.transparent,
-                        child: CustomTextWidget(
-                          textToDisplay: _data!.data[index].icon!,
-                          textStyle: Theme.of(context).textTheme.headline4!.apply(color: null),
-                        ),
+    if (_data != null) {
+      storyController.pause();
+      showGeneralDialog(
+        barrierLabel: "Barrier",
+        barrierDismissible: false,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: const Duration(milliseconds: 500),
+        context: context,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          if (animationController != null) {
+            return ShowReactionsIcon(
+                onTap: () => _routing.moveBack(),
+                crossAxisCount: 3,
+                data: _data?.data ?? [],
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () async {
+                      reaction = _data?.data[index].icon;
+                      _routing.moveBack();
+                      makeItems(animationController);
+                      Future.delayed(const Duration(seconds: 3), () => fadeReaction = true);
+                      Future.delayed(const Duration(seconds: 7), () => fadeReaction = false);
+                      try {
+                        await sendMessageReaction(
+                          context,
+                          contentData: data,
+                          reaction: _data?.data[index],
+                        );
+                      } catch (e) {
+                        print(e);
+                      }
+                    },
+                    child: Material(
+                      color: Colors.transparent,
+                      child: CustomTextWidget(
+                        textToDisplay: _data?.data[index].icon ?? '',
+                        textStyle: Theme.of(context).textTheme.headline4?.apply(color: null),
                       ),
-                    );
-                  });
-            },
-            transitionBuilder: (context, animation, secondaryAnimation, child) {
-              animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
+                    ),
+                  );
+                });
+          } else {
+            return Container();
+          }
+        },
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          animation = CurvedAnimation(curve: Curves.elasticOut, parent: animation);
 
-              return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
-            },
-          ).whenComplete(() => Future.delayed(const Duration(seconds: 6), () => isReactAction = false));
-        }
-      },
-      uploadContentAction: false,
-    );
+          return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
+        },
+      ).whenComplete(() => Future.delayed(const Duration(seconds: 6), () => isReactAction = false));
+    }
+    //   },
+    //   uploadContentAction: false,
+    // );
   }
 
   Future<void> createdDynamicLink(
@@ -362,47 +591,48 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void sendMessage(BuildContext context, ContentData? data) async {
-    _system.actionReqiredIdCard(
-      context,
-      action: () async {
-        if (_textEditingController.text.isNotEmpty) {
-          try {
-            textEditingController.text.logger();
+    // _system.actionReqiredIdCard(
+    //   context,
+    //   action: () async {
+    if (_textEditingController.text.isNotEmpty) {
+      try {
+        textEditingController.text.logger();
 
-            final param = DiscussArgument(
-              receiverParty: data?.email ?? '',
-              email: _sharedPrefs.readStorage(SpKeys.email),
-            )
-              ..postID = data?.postID ?? ''
-              ..txtMessages = textEditingController.text;
+        final param = DiscussArgument(
+          receiverParty: data?.email ?? '',
+          email: _sharedPrefs.readStorage(SpKeys.email),
+        )
+          ..postID = data?.postID ?? ''
+          ..txtMessages = textEditingController.text;
 
-            final notifier = MessageBlocV2();
-            await notifier.createDiscussionBloc(context, disqusArgument: param).then((value) {
-              'Your message was sent'.logger();
-            });
-          } finally {
-            _textEditingController.clear();
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          }
+        final notifier = MessageBlocV2();
+        await notifier.createDiscussionBloc(context, disqusArgument: param).then((value) {
+          'Your message was sent'.logger();
+        });
+      } finally {
+        _textEditingController.clear();
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+          _forceStop = false;
         }
-      },
-      uploadContentAction: false,
-    );
+      }
+    }
+    //   },
+    //   uploadContentAction: false,
+    // );
   }
 
   String onProfilePicShow(String? urlPic) => _system.showUserPicture(urlPic) ?? '';
 
-  List<Widget> buildItems(AnimationController? animationController) {
+  List<Widget> buildItems(AnimationController animationController) {
     return items.map((item) {
       var tween = Tween<Offset>(
         begin: Offset(0, Random().nextDouble() * 1 + 1),
         end: Offset(Random().nextDouble() * 0.5, -2),
       ).chain(CurveTween(curve: Curves.linear));
       return SlideTransition(
-        position: animationController!.drive(tween),
+        position: animationController.drive(tween),
         child: AnimatedAlign(
           alignment: item.alignment,
           duration: const Duration(seconds: 10),
@@ -412,7 +642,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
             child: Material(
               color: Colors.transparent,
               child: Text(
-                reaction!,
+                reaction ?? '',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: item.size),
               ),
@@ -447,80 +677,54 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
+  bool _ableClose = true;
   void onCloseStory(bool mounted) {
     if (mounted) {
-      _textEditingController.clear();
-      if (_routeArgument?.postID != null) {
-        _routing.moveAndPop(Routes.lobby);
-      } else {
-        _routing.moveBack();
+      if (_ableClose) {
+        _textEditingController.clear();
+        if (_routeArgument?.postID != null) {
+          print('onCloseStory moveAndPop ');
+          _routing.moveAndPop(Routes.lobby);
+        } else {
+          print('onCloseStory moveBack');
+          _routing.moveBack();
+        }
+        _ableClose = false;
       }
+
+      Future.delayed(const Duration(milliseconds: 700), () {
+        _ableClose = true;
+      });
     }
   }
 
   bool isUserLoggedIn(String? email) => _sharedPrefs.readStorage(SpKeys.email) == email;
 
   Future _followUser(BuildContext context) async {
-    try {
-      final notifier = FollowBloc();
-      await notifier.followUserBlocV2(
-        context,
-        data: FollowUserArgument(
-          eventType: InteractiveEventType.following,
-          receiverParty: _dataUserStories.single.email ?? '',
-        ),
-      );
-      final fetch = notifier.followFetch;
-      if (fetch.followState == FollowState.followUserSuccess) {
-        'follow user success'.logger();
-      } else {
-        'follow user failed'.logger();
+    if (_sharedPrefs.readStorage(SpKeys.email) != _dataUserStories.single.email) {
+      try {
+        final notifier = FollowBloc();
+        await notifier.followUserBlocV2(
+          context,
+          data: FollowUserArgument(
+            eventType: InteractiveEventType.following,
+            receiverParty: _dataUserStories.single.email ?? '',
+          ),
+        );
+        final fetch = notifier.followFetch;
+        if (fetch.followState == FollowState.followUserSuccess) {
+          'follow user success'.logger();
+        } else {
+          'follow user failed'.logger();
+        }
+      } catch (e) {
+        'follow user: ERROR: $e'.logger();
       }
-    } catch (e) {
-      'follow user: ERROR: $e'.logger();
     }
   }
+
+  void reportContent(BuildContext context, ContentData data, {StoryController? storyController}) {
+    storyController?.pause();
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeStory);
+  }
 }
-
-
-// void onCloseStory(BuildContext context, Map? arguments) {
-  //   // final notifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
-  //   // Story? _model;
-  //   // List<StoryData> viewedStories = [];
-
-  //   // validate story
-  //   if (userID == null) {
-  //     // get viewed stories data
-  //     // viewedStories = notifier.peopleStoriesData!.data.where((e1) => !e1.story.map((e2) => e2.isView).contains(0)).toList();
-
-  //     // delete viewed stories data
-  //     // notifier.peopleStoriesData!.data.removeWhere((e1) => !e1.story.map((e2) => e2.isView).contains(0));
-
-  //     // check if any viewed stories data, and then insert to peopleStoriesData object
-  //     // if (viewedStories.isNotEmpty) notifier.peopleStoriesData!.data.insertAll(notifier.peopleStoriesData!.data.length, viewedStories);
-
-  //     // _model = notifier.peopleStoriesData;
-  //     // notifier.peopleStoriesData = Story();
-  //     _textEditingController.clear();
-  //     // notifyListeners();
-  //   }
-  //   // if (arguments != null && !arguments.containsKey('isSearch')) {
-  //   //   Routing().moveAndPop(lobby);
-  //   // } else {
-  //   //   Routing().moveBack();
-  //   // }
-  //   _routing.moveBack();
-  //   // if (userID == null) _socketService.closeSocket();
-  //   // Timer(Duration(milliseconds: 50), () {
-  //   //   if (userID == null) {
-  //   //     notifier.peopleStoriesData = _model;
-  //   //     notifyListeners();
-  //   //   }
-  //   //   Timer(Duration(milliseconds: 50), () {
-  //   //     // _storyItems.clear();
-  //   //     _items.clear();
-  //   //   });
-  //   // });
-
-  //   // context.read<PreviewVidNotifier>().forcePause = false;
-  // }

@@ -1,24 +1,22 @@
 name: story_view
 description: Display stories just like Whatsapp & Instagram. Can be used inline/inside ListView or Column just like Google News app. Comes with gestures to pause, forward & go to previous page.
 version: 0.12.8
-publish_to: 'none'
+publish_to: "none"
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.18.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_cache_manager: ^3.3.0
-  rxdart: ^0.27.0
-  collection: ^1.15.0
+  rxdart: ^0.27.3
+  collection: ^1.16.0
   lottie: ^1.2.1
+#  pausable_timer: ^1.0.0+6
 
   better_player: # Better player
     path: ../../../hyppe-better-player
-    # git:
-    #     url: https://XuluSupport@bitbucket.org/XuluSupport/xulu_better_player.git
-    #     ref: 41d0f95e0a176f50536da4313a1a23fa3b2a2c56
 
 dev_dependencies:
   flutter_test:
@@ -36,7 +34,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   uses-material-design: false
 
   assets:

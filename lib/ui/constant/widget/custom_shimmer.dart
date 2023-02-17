@@ -15,8 +15,8 @@ class CustomShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      highlightColor: kSkeletonHighlightColor,
-      baseColor: kSkeletonBaseColor,
+      highlightColor: kHyppeBottomNavBarIcon,
+      baseColor: kSkeletonHighlightColor,
       period: const Duration(milliseconds: 800),
       child: Container(
         padding: padding,

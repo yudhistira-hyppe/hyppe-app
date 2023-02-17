@@ -8,6 +8,7 @@ class LocalizationModelV2 {
   String? dontHaveAnAccount;
   String? registerHere;
   String? or;
+  String? inWord;
   String? continueUsingGoogle;
   String? notAValidEmailAddress;
   String? incorrectPassword;
@@ -24,19 +25,32 @@ class LocalizationModelV2 {
   String? resendNewCode;
   String? yourIdentityHasBeenVerified;
   String? incorrectCode;
+  String? titleSuccessPin;
+  String? messageSuccessPin;
   String? sessionExpired;
   String? yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest;
   String? backToRegisterPage;
   String? tooManyFailedAttempts;
   String? unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes;
   String? createNewPassword;
+  String? newPassword;
+  String? rewriteNewPassword;
+  String? enterPassword;
+  String? messageNewPassword;
+  String? messageTimeoutPin;
   String? yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword;
   String? reTypePassword;
+  String? yourPasswordMustBeAtLeast;
   String? mustNotContainYourNameOrEmail;
   String? atLeast8Characters;
+  String? atLeast8til20Chars;
   String? atLeastContain1CharacterAnd1Number;
+  String? oneSpecialCharacter;
+  String? labelExampleSpecialChar;
   String? next;
+  String? resetPassword;
   String? submit;
+  String? rotate;
   String? passwordDoesntMatch;
   String? register;
   String? joinTheCommunityCreateOrWatchAndGetMoney;
@@ -90,6 +104,7 @@ class LocalizationModelV2 {
   String? yourStory;
   String? justNow;
   String? seeAll;
+  String? seeSome;
   String? replyTo;
   String? posts;
   String? followers;
@@ -123,6 +138,7 @@ class LocalizationModelV2 {
   String? d;
   String? w;
   String? today;
+  String? yesterday;
   String? deleteThis;
   String? afterThatThis;
   String? willBePermanentlyDeleted;
@@ -143,18 +159,32 @@ class LocalizationModelV2 {
   String? news;
   String? whatAreYouFindOut;
   String? editProfile;
+  String? editImage;
   String? librarys;
   String? post;
   String? music;
+  String? searchMusic;
+  String? addMusic;
+  String? loading;
+  String? popular;
+  String? explore;
+  String? genre;
+  String? mood;
   String? newPost;
   String? writeACaption;
   String? tagPeople;
+  String? category;
   String? selectCategory;
   String? seeMore;
   String? advancedSettings;
   String? allowComment;
+  String? turnOffCommenting;
+  String? turnOffCommentingExplain1;
+  String? turnOffCommentingExplain2;
   String? youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost;
   String? registerContentOwnership;
+  String? registerContentOwnershipExplain1;
+  String? registerContentOwnershipExplain2;
   String? protectYourContent;
   String? processUpload;
   String? cancelPost;
@@ -239,6 +269,7 @@ class LocalizationModelV2 {
   String? signUpHere;
   String? alreadyExist;
   String? alreadyHaveAnAccount;
+  String? alreadyRegistered;
   String? backToLogin;
   String? badConnectionMessage;
   String? badConnectionTitle;
@@ -280,6 +311,8 @@ class LocalizationModelV2 {
   String? startedFollowingYou;
   String? somethingsWrong;
   String? tag;
+  String? popularHashtag;
+  String? findYourInterests;
   String? username;
   String? week;
   String? yourFullName;
@@ -350,6 +383,7 @@ class LocalizationModelV2 {
   String? yesCancelPost;
   String? keepEditing;
   String? descriptionCanOnlyWithMin5Characters;
+  String? categoryCanOnlyWithMin1Characters;
   String? internalServerError;
   String? postCanceled;
   String? postCreatedSuccessfully;
@@ -419,7 +453,8 @@ class LocalizationModelV2 {
   String? likeB;
   String? likeM;
   String? likeK;
-  String? pinTopText;
+  String? pinTopText1;
+  String? pinTopText2;
   String? yourEmailHasBeenVerified;
   String? hiYouHaveNewContentPleasePullDownToRefresh;
   String? sorryUnexpectedError;
@@ -451,460 +486,1270 @@ class LocalizationModelV2 {
   String? pleaseVerifyYourIdToUseHyppeFeatures;
   String? verifyYourAccount;
   String? unfortunately;
+  String? needVerifyId;
+  String? needVerifyIdDescriptions;
+  String? needVerifyIdDescriptions2;
+  String? confirm;
+  String? congrats;
+  String? contentOwnershipSuccessInfo;
+  String? referralID;
+  String? downloadQRCode;
+  String? shareStatus;
+  String? hasUsed;
+  String? linkYourReferral;
+  String? shareYourQR;
+  String? newUpdate;
+  String? contentNewUpdate;
+  String? updateNow;
+  String? deletePost;
+  String? deleteComment;
+  String? commentWillPermanentlyDeletedContinue;
+  String? addPostDescription;
+  String? privacy;
+  String? selectLocation;
+  String? youDontHaveAnyPostsYetCreateOneNow;
+  String? removeMeFromPost;
+  String? noResultsFoundTryAnother;
+  String? afterthatThisTagWillBePermanentlyRemoved;
+  String? caption;
+  String? contentUploaded;
+  String? reportThisAccount;
+  String? signInWithGoogleAccount;
+  String? signInWithApple;
+  String? useAnotherEmailAddress;
+  String? welcomeToHyppe;
+  String? signInToFindSomethingInterestingInTheHyppeApp;
+  String? your;
+  String? successfullySave;
+  String? deleteAccount;
+  String? whyAreYouLeavingHyppe;
+  String? wereSorryToSeeYouGo;
+  String? iHaveAnotherProfileAndIDontNeedThisOne;
+  String? iDontFindItUseful;
+  String? iDontKnowHowToEarnMoneyWithThisApp;
+  String? iHaveSafetyConcern;
+  String? iHavePrivacyConcern;
+  String? iCantFindPeopleToFollow;
+  String? iveSeenTooManyAds;
+  String? anotherReason;
+  String? tappingDeleteAccountWillDelete;
+  String? accountWillBeDeletedProccessAfter24Hours;
+  String? deletingYourAccountIsPermanent;
+  String? notReceivingOTP;
+  String? resendOTP;
+  String? marketContent;
+  String? marketContent1;
+  String? includeTotalViews;
+  String? includeTotalLikes;
+  String? totalViews;
+  String? totalLikes;
+  String? setPrice;
+  String? rp;
+  String? change;
+  String? orderSummary;
+  String? priceIsNotEmpty;
+  String? buy;
+  String? sell;
+  String? purchaseTerms;
+  String? pleaseEnterMessage;
+  String? pleaseSetPrice;
+  String? orderNumber;
+  String? time;
+  String? price;
+  String? total;
+  String? proceedPayment;
+  String? paymentMethods;
+  String? payment;
+  String? totalPayment;
+  String? paymentBefore;
+  String? copy;
+  String? seeOtherBank;
+  String? yes;
+  String? no;
+  String? pay;
+  String? seePaymentInstruction;
+  String? checkPaymentStatus;
+  String? vaCopyToClipboard;
+  String? expired;
+  String? transaction;
+  String? addBankAccount;
+  String? withdrawal;
+  String? noSavedAccountYet;
+  String? addYourBankAccountForAnEasierWithdraw;
+  String? selectBank;
+  String? bankName;
+  String? noBankAccount;
+  String? accountOwnerName;
+  String? keepThisAccount;
+  String? youWillAdd;
+  String? accountWithAccountNumber;
+  String? aboutBankAccount;
+  String? aboutBankAccountContent;
+  String? ownedBy;
+  String? an;
+  String? help;
+  String? bankAccount;
+  String? makeSureTheName;
+  String? min4second;
+  String? youCanAddUpTo;
+  String? youWillDelete;
+  String? deletedBankAccount;
+  String? totalIncome;
+  String? totalExpenditure;
+  String? withdrawalMoney;
+  String? withdrawalAmount;
+  String? fromBalance;
+  String? detailTransaction;
+  String? seeInvoice;
+  String? paymentDetails;
+  String? wtihdrawalTo;
+  String? verificationBankAccount;
+  String? adminFee;
+  String? ballanceAmount;
+  String? contentDetail;
+  String? contentPrice;
+  String? originalContent;
+  String? serviceFee;
+  String? totalPrice;
+  String? youDontHaveAnyTransactionsYet;
+  String? enterThePinThatMatchesThePinYouFilledInEarlier;
+  String? thisPageWillAutomaticallyCloseIn;
+  String? allTransaction;
+  String? setPin;
+  String? changePin;
+  String? forgotPin;
+  String? enterYourCurrentPin;
+  String? enterYour6DigitHyppePin;
+  String? confirmNewPin;
+  String? enterNewPin;
+  String? confirmPin;
+  String? forr;
+  String? from;
+  String? remove;
+  String? transactionInProgress;
+  String? contentOwnershipRegistration;
+  String? byRegisteringYourContent;
+  String? yesIUnderstand;
+  String? ownershipSelling;
+  String? certificateOwnershipFee;
+  String? discount;
+  String? sellContent;
+  String? certificateNumber;
+  String? choosePaymentMethods;
+  String? retakeIdPicture;
+  String? aboutIdVerification;
+  String? realName;
+  String? reaNameNotice;
+  String? continueStep;
+  String? uploadIdCardNotice1;
+  String? uploadIdCardNotice2;
+  String? uploadIdCardNotice3;
+  String? uploadIdCardNotice4;
+  String? uploadIdCardNotice5;
+  String? uploadIdCardNotice6;
+  String? uploadIdCardNotice7;
+  String? uploadIdCardNotice8;
+  String? cameraTakeIdCardInfo;
+  String? eKtpNumber;
+  String? placeBirth;
+  String? placeBirthNote;
+  String? selectGenderInfo;
+  String? selectDateBirthInfo;
+  String? confirmIdGenuine;
+  String? confirmIdNotice;
+  String? uploadSupportDoc;
+  String? continueSelfie;
+  String? supportDoc;
+  String? supportDocNotice1;
+  String? supportDocNotice2;
+  String? supportDocNotice3;
+  String? supportDocNotice4;
+  String? supportDocNotice5;
+  String? supportDocNotice6;
+  String? supportDocNotice7;
+  String? supportDocNotice8;
+  String? supportDocNotice9;
+  String? supportDocNotice10;
+  String? failedIdCardInfoTitle;
+  String? failedIdCardInfoSubTitle;
+  String? failedIdCardInfo1;
+  String? failedIdCardInfo2;
+  String? failedIdCardInfo3;
+  String? failedIdCardInfo4;
+  String? failedIdCardInfo5;
+  String? failedIdCardInfo6;
+  String? successIdCardTitle;
+  String? successIdCard1;
+  String? successIdCard2;
+  String? successIdCard3;
+  String? successIdCard4;
+  String? retry;
+  String? retakeSelfie;
+  String? dataDidntShow;
+  String? tapHere;
+  String? toAppeal;
+  String? unverified;
+  String? addYourHyppePinFirst;
+  String? review;
+  String? verificationYourIDFirst;
+  String? toAccessTransactionPageYouNeedToSetYourPin;
+  String? toAccessTransactionPageYouNeedToVerificationYourID;
+  String? goToSecurityPrivacy;
+  String? youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue;
+  String? yesPostAnyway;
+  String? noIWantToRegister;
+  String? sellingPrice;
+  String? transferTo;
+  String? theBalanceWillBeTransferredToTheDesignatedAccount;
+  String? byClickingWithdrawYouHereby;
+  String? aVerifiedBankDoesNotNeed;
+  String? yourTransactionisBeingProcessedNow;
+  String? backtoTransaction;
+  String? successfullyAdded;
+  String? spam;
+  String? nudityOrSexualActivity;
+  String? hateSpeechOrSymbols;
+  String? violanceOrDangerousOrganizations;
+  String? fakeOrMisleadingInformation;
+  String? selfHarmSuicideOrDangerousActs;
+  String? scamOrFraud;
+  String? illegalActivitiesAndRegulatedGoods;
+  String? intellectualProperty;
+  String? falseorMisleadingInformation;
+  String? extremeViolence;
+  String? other;
+  String? reportThisContent;
+  String? whyareyoureportingthiscontent;
+  String? bullyingOrHarassment;
+  String? reportReceived;
+  String? yourReportWillbeHandledImmediately;
+  String? incorrectPINPleasetryAgain;
+  String? inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave;
+  String? cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn;
+  String? transferredSuccessfully;
+  String? waitingtoTransfer;
+  String? helloCanIhelpyou;
+  String? frequentlyAskedQuestions;
+  String? yourTicketIssue;
+  String? searchtopic;
+  String? stillNeedsHelp;
+  String? submitTicketIssue;
+  String? doesThisHelpsyou;
+  String? newTicketIssue;
+  String? insertAnyAdditionalInfo;
+  String? chooseCategoryIssue;
+  String? thisHyppeVidisSubjectToModeration;
+  String? thisHyppePicisSubjectToModeration;
+  String? thisHyppeDiaryisSubjectToModeration;
+  String? thisHyppeStoryisSubjectToModeration;
+  String? thisMessagecanOnlyBeSeenByYou;
+  String? contentViolation;
+  String? yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere;
+  String? videoDetails;
+  String? postedOn;
+  String? violationType;
+  String? ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal;
+  String? chooseanAppealReason;
+  String? stateYourIssue;
+  String? pleaseprovideadditionaldetails;
+  String? thisContentDoesntHaveSensitiveContent;
+  String? thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols;
+  String? thisContentHasAdditionalContext;
+  String? thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent;
+  String? theReasonDoesntFitIntoTheseCategories;
+  String? ticketIssueSuccessfullySubmitted;
+  String? yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare;
+  String? postBoost;
+  String? startDate;
+  String? autoSelect;
+  String? selectManual;
+  String? boostTime;
+  String? interval;
+  String? contentWillbeBoostedfor30days;
+  String? boostPrice;
+  String? contentType;
+  String? morning;
+  String? afternoon;
+  String? by;
+  String? night;
+  String? boostedPostList;
+  String? reach;
+  String? viewDetails;
+  String? scheduled;
+  String? ongoing;
+  String? postPrivacyisNotAllowed;
+  String? toContinueTheBoostPostProcess;
+  String? otherPostsInProcessOfPayment;
+  String? thePostisintheProcessofPayment;
+  String? viewPaymentStatus;
+  String? appealsReceived;
+  String? weWillSendYouaNotificationasSoonasweHaveanUpdate;
+  String? contentContainsSensitiveMaterial;
+  String? hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails;
+  String? hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails;
+  String? appealThisWarning;
+  String? sensitiveContent;
+  String? minutes;
+  String? appeal;
+  String? communityGuidelines;
+  String? description;
+  String? report;
+  String? itDoesntMatchIdentity;
+  String? noKTPCantBeRead;
+  String? genderMustBeFilled;
+  String? placeOfBirthMustBeFilled;
+  String? dateOfBirthMustBeFilled;
+  String? usernameOnlyContainLetters;
+  String? userIsNotFound;
+  String? reward;
+  String? amountEarned;
+  String? usernameisAlreadyinUse;
+  String? priceChangesSavedSuccessfully;
+  String? maximumPrice;
+  String? minimumPrice;
+  String? noBankAccount2;
+  String? hideReplies;
+  String? reply2;
+  String? purchased;
+  String? soldOut;
+  String? localeDatetime;
+  String? accountVerification;
+  String? content;
+  String? problemBugs;
+  String? ads;
+  String? newLabel;
+  String? inProgress;
+  String? solved;
+  String? notSolved;
+  String? ticket;
+  String? ticketHistory;
+  String? contentAppeal;
+  String? notSuspend;
+  String? suspend;
+  String? flagAsSensitive;
+  String? source;
+  String? submissionTime;
+  String? operationSystem;
+  String? applicationVersion;
+  String? attachment;
+  String? messageTicketHandled;
+  String? sensitiveType;
+  String? reasonOfAppeal;
+  String? issueStatement;
+  String? notDefined;
+  String? dontHaveMessagesYet;
+  String? seeContent;
+  String? pleaseMakeSuretheResidenceNumberMatchestheEKTP;
+  String? theIDCardNumberAndorYourRealNamedidnotMatch;
+  String? pleaseEnterYourFullName;
+  String? addDocument;
+  String? youCanAddupto3SupportingDocuments;
+  String? thankYou;
+  String? thankYouforYourFeedback;
+  String? noResultsFor;
+  String? max3Images;
+  String? max4Images;
+  String? messageMaxTickets;
+  String? seeTicketHistory;
+  String? activeTicketIssue;
+  String? seeMoreContent;
+  String? seeLess;
+  String? pleaseSelectOneortheMaxFileis;
+  String? pleaseVerifyYourEmailFrst;
+  String? fileMayBeInErrorChooseAnotherFile;
+  String? blockThisAccount;
+  String? confirmPasswordCorrect;
+  String? confirmPasswordWrong;
+  String? allowedSpecialCharacters;
+  String? newPasswordCreatedSuccessfully;
+  String? messageInvalidEmail;
+  String? titleEmailIsGmail;
+  String? messageEmailIsGmail;
+  String? pleaseEnterRegisteredEmail;
+  String? contentPreferences;
+  String? customization;
+  String? bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect;
+  String? descAllowComment;
+  String? allowSharing;
+  String? descAllowSharing;
+  String? sharePost;
 
-  LocalizationModelV2(
-      {this.login,
-      this.logIn,
-      this.email,
-      this.emailOrUsername,
-      this.password,
-      this.forgotPassword,
-      this.dontHaveAnAccount,
-      this.registerHere,
-      this.or,
-      this.continueUsingGoogle,
-      this.notAValidEmailAddress,
-      this.incorrectPassword,
-      this.reset,
-      this.wellEmailYourCodeToResetYourPassword,
-      this.checkYourEmail,
-      this.weHaveSentAVerificationCodeToYourEmail,
-      this.verificationCode,
-      this.toConfimYourEmailKindlyInput4DigitsCodeHasBeenSentViaEmailTo,
-      this.didntReceiveTheCode,
-      this.pleaseWaitFor,
-      this.verify,
-      this.verified,
-      this.resendNewCode,
-      this.yourIdentityHasBeenVerified,
-      this.incorrectCode,
-      this.sessionExpired,
-      this.yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest,
-      this.backToRegisterPage,
-      this.tooManyFailedAttempts,
-      this.unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes,
-      this.createNewPassword,
-      this.yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword,
-      this.reTypePassword,
-      this.mustNotContainYourNameOrEmail,
-      this.atLeast8Characters,
-      this.atLeastContain1CharacterAnd1Number,
-      this.next,
-      this.submit,
-      this.passwordDoesntMatch,
-      this.register,
-      this.joinTheCommunityCreateOrWatchAndGetMoney,
-      this.byRegisteringYouAgreeToHyppe,
-      this.privacyPolicy,
-      this.and,
-      this.termsOfService,
-      this.welcome,
-      this.letsMakeYouAnAccount,
-      this.fullName,
-      this.gender,
-      this.year,
-      this.month,
-      this.day,
-      this.january,
-      this.february,
-      this.march,
-      this.april,
-      this.may,
-      this.june,
-      this.july,
-      this.august,
-      this.september,
-      this.october,
-      this.november,
-      this.december,
-      this.male,
-      this.female,
-      this.preferNotToSay,
-      this.save,
-      this.cancel,
-      this.byTappingAgreeAndContinueYouAgreeToOur,
-      this.andAcknowledgeThatYouHaveReadOur,
-      this.toLearnAboutHowWeCollectUseAndShareYourData,
-      this.agreeAndContinue,
-      this.whatIsYourInterest,
-      this.andWeKnowWhatToGive,
-      this.skip,
-      this.completeLater,
-      this.completeNow,
-      this.completeProfiles,
-      this.letsCompleteYourProfileDetails,
-      this.phoneNumber,
-      this.country,
-      this.provinceRegion,
-      this.locationInThisCountryRegion,
-      this.communityRecommend,
-      this.bio,
-      this.complete,
-      this.syncDANA,
-      this.yourStory,
-      this.justNow,
-      this.seeAll,
-      this.replyTo,
-      this.posts,
-      this.followers,
-      this.following,
-      this.message,
-      this.postTo,
-      this.longVideo,
-      this.imageOrVideoMax60seconds,
-      this.imageOrVideoMax60secondsOnlyFor24Hours,
-      this.onlyImage,
-      this.flash,
-      this.filters,
-      this.text,
-      this.stickers,
-      this.timers,
-      this.photo,
-      this.video,
-      this.ok,
-      this.seenBy,
-      this.minuteAgo,
-      this.hourAgo,
-      this.dayAgo,
-      this.weekAgo,
-      this.minutesAgo,
-      this.hoursAgo,
-      this.daysAgo,
-      this.weeksAgo,
-      this.s,
-      this.m,
-      this.h,
-      this.d,
-      this.w,
-      this.today,
-      this.deleteThis,
-      this.afterThatThis,
-      this.willBePermanentlyDeleted,
-      this.delete,
-      this.dontDelete,
-      this.yourContentHadSuccessfullyDeleted,
-      this.views,
-      this.likes,
-      this.share,
-      this.follow,
-      this.comments,
-      this.reply,
-      this.typeAComment,
-      this.send,
-      this.see,
-      this.replies,
-      this.forYou,
-      this.news,
-      this.whatAreYouFindOut,
-      this.editProfile,
-      this.librarys,
-      this.post,
-      this.music,
-      this.newPost,
-      this.writeACaption,
-      this.tagPeople,
-      this.selectCategory,
-      this.seeMore,
-      this.advancedSettings,
-      this.allowComment,
-      this.youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost,
-      this.registerContentOwnership,
-      this.protectYourContent,
-      this.processUpload,
-      this.cancelPost,
-      this.createdSuccessfully,
-      this.newFavorite,
-      this.saveTo,
-      this.name,
-      this.selectPrivacy,
-      this.onlyMe,
-      this.onlyYouCanView,
-      this.friends,
-      this.onlyFriendsCanView,
-      this.public,
-      this.anyoneCanView,
-      this.createNew,
-      this.edit,
-      this.picAddedToFavorite,
-      this.diaryAddedToFavorite,
-      this.vidAddedToFavorite,
-      this.categories,
-      this.beTheFirstToComment,
-      this.selectAMaximumOf10Files,
-      this.adjust,
-      this.brightness,
-      this.contrast,
-      this.flip,
-      this.saturation,
-      this.level,
-      this.exposure,
-      this.addLocation,
-      this.type,
-      this.free,
-      this.ownership,
-      this.forSell,
-      this.uploadDate,
-      this.lastHour,
-      this.thisWeek,
-      this.thisMonth,
-      this.thisYear,
-      this.normal,
-      this.finishingUp,
-      this.permissionStorage,
-      this.failedUpdatedYourProfilePicture,
-      this.successfullyUpdatedYourProfilePicture,
-      this.failedUpdatePersonalInformation,
-      this.successUpdatePersonalInformation,
-      this.loadMore,
-      this.refresh,
-      this.accountPreferences,
-      this.profile,
-      this.personalInformation,
-      this.dateOfBirth,
-      this.userName,
-      this.all,
-      this.signIn,
-      this.notAValidEmailAddressOrUsername,
-      this.emailOrUsernameCannotBeEmpty,
-      this.syncDana,
-      this.latestVidsForYou,
-      this.latestDiariesForYou,
-      this.latestPicsForYou,
-      this.vidsForYou,
-      this.diariesForYou,
-      this.picsForYou,
-      this.hyppeVerificationCode,
-      this.inbox,
-      this.toMe,
-      this.resetYourPassword,
-      this.weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp,
-      this.thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone,
-      this.problemOrQuestion,
-      this.callUsAt,
-      this.orEmail,
-      this.toResetYourPasswordKindlyInput4DigitsCodeHasBeenSentViaEmailTo,
-      this.didntReceiveTheCodePleaseWaitFor,
-      this.didntReceiveTheCodeResendNewCode,
-      this.yourResetCodeHasBeenVerified,
-      this.mustFilledFirst,
-      this.passwordMustMeetAllRequirements,
-      this.passwordDoesNotMatch,
-      this.passwordAreCaseSensitiveAndMustBeAtLeast8Characters,
-      this.signUpHere,
-      this.alreadyExist,
-      this.alreadyHaveAnAccount,
-      this.backToLogin,
-      this.badConnectionMessage,
-      this.badConnectionTitle,
-      this.captionForgotPassword,
-      this.comment,
-      this.commentedOnYourHyppePic,
-      this.chooseCategory,
-      this.completeYourProfile,
-      this.completed,
-      this.city,
-      this.documentLength,
-      this.earlier,
-      this.enter,
-      this.follower,
-      this.finish,
-      this.here,
-      this.hour,
-      this.identityNumber,
-      this.emptyCategory,
-      this.iHaveReadAndAgree,
-      this.language,
-      this.like,
-      this.markAllAsRead,
-      this.mention,
-      this.messages,
-      this.minLength,
-      this.minute,
-      this.now,
-      this.notification,
-      this.general,
-      this.personalInfo,
-      this.pleaseTryAgain,
-      this.recent,
-      this.reEnter,
-      this.select,
-      this.signUp,
-      this.searchName,
-      this.skipTour,
-      this.startedFollowingYou,
-      this.somethingsWrong,
-      this.tag,
-      this.username,
-      this.week,
-      this.yourFullName,
-      this.sync,
-      this.library,
-      this.privateAccount,
-      this.followThisAccountToSeeTheirContents,
-      this.hyppeStoryCaption,
-      this.hyppeVidCaption,
-      this.hyppeDiaryCaption,
-      this.hyppePicCaption,
-      this.filter,
-      this.sticker,
-      this.timerSecond,
-      this.writeCaption,
-      this.search,
-      this.searchFriendsName,
-      this.noPostCaption,
-      this.accountPreference,
-      this.reportOrBlock,
-      this.unfollow,
-      this.block,
-      this.reportThisProfile,
-      this.blockCaption,
-      this.reportCaption,
-      this.blockHeader,
-      this.blockSubject,
-      this.blockBody,
-      this.unblock,
-      this.selfieWithIDCard,
-      this.settings,
-      this.signInAndSecurity,
-      this.version,
-      this.logOut,
-      this.muteMessage,
-      this.deleteMessage,
-      this.bySigningUpYouAgreeToHyppe,
-      this.whatsYourName,
-      this.soWeAndFriendsKnowHowToCallYou,
-      this.hallo,
-      this.areWeSpeakWithTheSameLanguage,
-      this.whenWereYouAreBorn,
-      this.soWeCanCelebrateTogether,
-      this.whereDoYouLive,
-      this.soYouCanConnectEasierWithPeopleNearby,
-      this.whatIsYourPhoneNumber,
-      this.soWeAndFriendsCanContactYou,
-      this.selectYourPreferredLanguage,
-      this.yourPhoneNumber,
-      this.soWeKnowWhatToGive,
-      this.someDataAlreadyRegistered,
-      this.pleaseTryAnotherUsernameOrEmail,
-      this.passwordHasBeenSend,
-      this.pleaseCheckYourEmailToGetAPassword,
-      this.fillInYourPassword,
-      this.passwordVerifiedSuccessfully,
-      this.checkCarefullyPasswordAndReTypePassword,
-      this.completeLaterLoginAsGuest,
-      this.whatIsYourIdNumbers,
-      this.chooseIdentityAndFillTheFormWithYoursIdNumbers,
-      this.whatGenderAreYou,
-      this.soWeAndFriendsKnowAboutYou,
-      this.enjoyAllHyppeFeatures,
-      this.done,
-      this.advanceSettings,
-      this.youCanChangeThisLaterOnTheMenu,
-      this.areYouSure,
-      this.yesCancelPost,
-      this.keepEditing,
-      this.descriptionCanOnlyWithMin5Characters,
-      this.internalServerError,
-      this.postCanceled,
-      this.postCreatedSuccessfully,
-      this.storyCanceled,
-      this.storyCreatedSuccessfully,
-      this.noData,
-      this.iDontWantToSeeThis,
-      this.letUsKnowWhyYouDontWantToSeeThisPost,
-      this.reportThisPost,
-      this.thisPostIsOffensiveOrTheAccountIsHacked,
-      this.dontWantToSeeThis,
-      this.whyAreYouReportingThis,
-      this.tellUsWhyYouDontWantToSeeThis,
-      this.yourFeedbackWillHelpUsToImproveYourExperience,
-      this.reportToContentOnThisProfileOrThatThisAccount,
-      this.noteToReportActivityByThisMemberGoToTheSpecific,
-      this.tellUsALittleMore,
-      this.ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies,
-      this.noInternetConnection,
-      this.pleaseCheckYourInternetConnectionAgain,
-      this.back,
-      this.tryAgain,
-      this.somethingWentWrong,
-      this.ourSystemIsCurrentlyExperiencingTechnicalIssues,
-      this.idVerification,
-      this.pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures,
-      this.yesCompleteProfile,
-      this.noLater,
-      this.keepSignIn,
-      this.yesSure,
-      this.noLogout,
-      this.comingSoon,
-      this.weWillNotifyYouOnceThisFeaturedIsReady,
-      this.hyppeDoesNotHaveAccessToYourPermission,
-      this.pageNotFound,
-      this.sorryThePageWasNotFoundPleaseReturnToTheHomePage,
-      this.backToHome,
-      this.emailNotAvailable,
-      this.formAccountDoesNotContainEmail,
-      this.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
-      this.weHaveSentANewPasswordToYourEmail,
-      this.changePassword,
-      this.currentPassword,
-      this.typeYourCurrentPassword,
-      this.typeYourNewPassword,
-      this.retypeYourNewPassword,
-      this.pleaseEnterYourEmailAddress,
-      this.useThisEmailOrKindlyChangeIfThisEmailNotYourEmail,
-      this.profilePhoto,
-      this.retake,
-      this.close,
-      this.upload,
-      this.typeAMessage,
-      this.successUploadId,
-      this.failedUploadId,
-      this.fullnameCannotBeEmpty,
-      this.cancelRecording,
-      this.sorryUnexpectedErrorHasOccurred,
-      this.filterIsOnlySupportedForImage,
-      this.isThisOkayClickOkToContinue,
-      this.newContentLetsRefresh,
-      this.pleaseCompleteYourProfile,
-      this.pleaseSelectMax10Items,
-      this.weCurrentlySupportOnlyMP4andMOVformat,
-      this.theFileDurationExceedsTheMaximumLimitForThisFeature,
-      this.pleaseWaitUntilTheProcessUploadDone,
-      this.likeB,
-      this.likeM,
-      this.likeK,
-      this.pinTopText,
-      this.yourEmailHasBeenVerified,
-      this.hiYouHaveNewContentPleasePullDownToRefresh,
-      this.sorryUnexpectedError,
-      this.weAreWorkingOnFixingTheProblemBeBackSoon,
-      this.emptyNotification,
-      this.whenThereIsNewNotificationItWillGoesHere,
-      this.createAccount,
-      this.createAccountAndConnect,
-      this.passwordChangedSuccessfully,
-      this.accept,
-      this.account,
-      this.interest,
-      this.theme,
-      this.support,
-      this.about,
-      this.sorryTheresNothingHere,
-      this.theContentMayHaveBeenRemovedOrTheLinkMayBeBroken,
-      this.endUserLicenseAgreement,
-      this.trends,
-      this.contentCreatedSuccessfully,
-      this.contentCreatedFailedWithMessage,
-      this.update,
-      this.successfully,
-      this.copyLink,
-      this.requested,
-      this.dark,
-      this.light,
-      this.pleaseCompleteProfileToContinue,
-      this.pleaseVerifyYourIdToUseHyppeFeatures,
-      this.verifyYourAccount,
-      this.unfortunately});
+  LocalizationModelV2({
+    this.login,
+    this.logIn,
+    this.email,
+    this.emailOrUsername,
+    this.password,
+    this.forgotPassword,
+    this.dontHaveAnAccount,
+    this.registerHere,
+    this.or,
+    this.inWord,
+    this.continueUsingGoogle,
+    this.notAValidEmailAddress,
+    this.incorrectPassword,
+    this.reset,
+    this.wellEmailYourCodeToResetYourPassword,
+    this.checkYourEmail,
+    this.weHaveSentAVerificationCodeToYourEmail,
+    this.verificationCode,
+    this.toConfimYourEmailKindlyInput4DigitsCodeHasBeenSentViaEmailTo,
+    this.didntReceiveTheCode,
+    this.pleaseWaitFor,
+    this.verify,
+    this.verified,
+    this.resendNewCode,
+    this.yourIdentityHasBeenVerified,
+    this.incorrectCode,
+    this.titleSuccessPin,
+    this.messageSuccessPin,
+    this.sessionExpired,
+    this.yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest,
+    this.backToRegisterPage,
+    this.tooManyFailedAttempts,
+    this.unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes,
+    this.createNewPassword,
+    this.newPassword,
+    this.rewriteNewPassword,
+    this.enterPassword,
+    this.messageNewPassword,
+    this.messageTimeoutPin,
+    this.yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword,
+    this.reTypePassword,
+    this.yourPasswordMustBeAtLeast,
+    this.mustNotContainYourNameOrEmail,
+    this.atLeast8Characters,
+    this.atLeast8til20Chars,
+    this.atLeastContain1CharacterAnd1Number,
+    this.oneSpecialCharacter,
+    this.labelExampleSpecialChar,
+    this.next,
+    this.resetPassword,
+    this.rotate,
+    this.submit,
+    this.passwordDoesntMatch,
+    this.register,
+    this.joinTheCommunityCreateOrWatchAndGetMoney,
+    this.byRegisteringYouAgreeToHyppe,
+    this.privacyPolicy,
+    this.and,
+    this.termsOfService,
+    this.welcome,
+    this.letsMakeYouAnAccount,
+    this.fullName,
+    this.gender,
+    this.year,
+    this.month,
+    this.day,
+    this.january,
+    this.february,
+    this.march,
+    this.april,
+    this.may,
+    this.june,
+    this.july,
+    this.august,
+    this.september,
+    this.october,
+    this.november,
+    this.december,
+    this.male,
+    this.female,
+    this.preferNotToSay,
+    this.save,
+    this.cancel,
+    this.byTappingAgreeAndContinueYouAgreeToOur,
+    this.andAcknowledgeThatYouHaveReadOur,
+    this.toLearnAboutHowWeCollectUseAndShareYourData,
+    this.agreeAndContinue,
+    this.whatIsYourInterest,
+    this.andWeKnowWhatToGive,
+    this.skip,
+    this.completeLater,
+    this.completeNow,
+    this.completeProfiles,
+    this.letsCompleteYourProfileDetails,
+    this.phoneNumber,
+    this.country,
+    this.provinceRegion,
+    this.locationInThisCountryRegion,
+    this.communityRecommend,
+    this.bio,
+    this.complete,
+    this.syncDANA,
+    this.yourStory,
+    this.justNow,
+    this.seeAll,
+    this.seeSome,
+    this.replyTo,
+    this.posts,
+    this.followers,
+    this.following,
+    this.message,
+    this.postTo,
+    this.longVideo,
+    this.imageOrVideoMax60seconds,
+    this.imageOrVideoMax60secondsOnlyFor24Hours,
+    this.onlyImage,
+    this.flash,
+    this.filters,
+    this.text,
+    this.stickers,
+    this.timers,
+    this.photo,
+    this.video,
+    this.ok,
+    this.seenBy,
+    this.minuteAgo,
+    this.hourAgo,
+    this.dayAgo,
+    this.weekAgo,
+    this.minutesAgo,
+    this.hoursAgo,
+    this.daysAgo,
+    this.weeksAgo,
+    this.s,
+    this.m,
+    this.h,
+    this.d,
+    this.w,
+    this.today,
+    this.yesterday,
+    this.deleteThis,
+    this.afterThatThis,
+    this.willBePermanentlyDeleted,
+    this.delete,
+    this.dontDelete,
+    this.yourContentHadSuccessfullyDeleted,
+    this.views,
+    this.likes,
+    this.share,
+    this.follow,
+    this.comments,
+    this.reply,
+    this.typeAComment,
+    this.send,
+    this.see,
+    this.replies,
+    this.forYou,
+    this.news,
+    this.whatAreYouFindOut,
+    this.editProfile,
+    this.editImage,
+    this.librarys,
+    this.post,
+    this.music,
+    this.searchMusic,
+    this.addMusic,
+    this.loading,
+    this.popular,
+    this.explore,
+    this.genre,
+    this.mood,
+    this.newPost,
+    this.writeACaption,
+    this.tagPeople,
+    this.category,
+    this.selectCategory,
+    this.seeMore,
+    this.advancedSettings,
+    this.allowComment,
+    this.turnOffCommenting,
+    this.turnOffCommentingExplain1,
+    this.turnOffCommentingExplain2,
+    this.youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost,
+    this.registerContentOwnership,
+    this.registerContentOwnershipExplain1,
+    this.registerContentOwnershipExplain2,
+    this.protectYourContent,
+    this.processUpload,
+    this.cancelPost,
+    this.createdSuccessfully,
+    this.newFavorite,
+    this.saveTo,
+    this.name,
+    this.selectPrivacy,
+    this.onlyMe,
+    this.onlyYouCanView,
+    this.friends,
+    this.onlyFriendsCanView,
+    this.public,
+    this.anyoneCanView,
+    this.createNew,
+    this.edit,
+    this.picAddedToFavorite,
+    this.diaryAddedToFavorite,
+    this.vidAddedToFavorite,
+    this.categories,
+    this.beTheFirstToComment,
+    this.selectAMaximumOf10Files,
+    this.adjust,
+    this.brightness,
+    this.contrast,
+    this.flip,
+    this.saturation,
+    this.level,
+    this.exposure,
+    this.addLocation,
+    this.type,
+    this.free,
+    this.ownership,
+    this.forSell,
+    this.uploadDate,
+    this.lastHour,
+    this.thisWeek,
+    this.thisMonth,
+    this.thisYear,
+    this.normal,
+    this.finishingUp,
+    this.permissionStorage,
+    this.failedUpdatedYourProfilePicture,
+    this.successfullyUpdatedYourProfilePicture,
+    this.failedUpdatePersonalInformation,
+    this.successUpdatePersonalInformation,
+    this.loadMore,
+    this.refresh,
+    this.accountPreferences,
+    this.profile,
+    this.personalInformation,
+    this.dateOfBirth,
+    this.userName,
+    this.all,
+    this.signIn,
+    this.notAValidEmailAddressOrUsername,
+    this.emailOrUsernameCannotBeEmpty,
+    this.syncDana,
+    this.latestVidsForYou,
+    this.latestDiariesForYou,
+    this.latestPicsForYou,
+    this.vidsForYou,
+    this.diariesForYou,
+    this.picsForYou,
+    this.hyppeVerificationCode,
+    this.inbox,
+    this.toMe,
+    this.resetYourPassword,
+    this.weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp,
+    this.thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone,
+    this.problemOrQuestion,
+    this.callUsAt,
+    this.orEmail,
+    this.toResetYourPasswordKindlyInput4DigitsCodeHasBeenSentViaEmailTo,
+    this.didntReceiveTheCodePleaseWaitFor,
+    this.didntReceiveTheCodeResendNewCode,
+    this.yourResetCodeHasBeenVerified,
+    this.mustFilledFirst,
+    this.passwordMustMeetAllRequirements,
+    this.passwordDoesNotMatch,
+    this.passwordAreCaseSensitiveAndMustBeAtLeast8Characters,
+    this.signUpHere,
+    this.alreadyExist,
+    this.alreadyHaveAnAccount,
+    this.alreadyRegistered,
+    this.backToLogin,
+    this.badConnectionMessage,
+    this.badConnectionTitle,
+    this.captionForgotPassword,
+    this.comment,
+    this.commentedOnYourHyppePic,
+    this.chooseCategory,
+    this.completeYourProfile,
+    this.completed,
+    this.city,
+    this.documentLength,
+    this.earlier,
+    this.enter,
+    this.follower,
+    this.finish,
+    this.here,
+    this.hour,
+    this.identityNumber,
+    this.emptyCategory,
+    this.iHaveReadAndAgree,
+    this.language,
+    this.like,
+    this.markAllAsRead,
+    this.mention,
+    this.messages,
+    this.minLength,
+    this.minute,
+    this.now,
+    this.notification,
+    this.general,
+    this.personalInfo,
+    this.pleaseTryAgain,
+    this.recent,
+    this.reEnter,
+    this.select,
+    this.signUp,
+    this.searchName,
+    this.skipTour,
+    this.startedFollowingYou,
+    this.somethingsWrong,
+    this.tag,
+    this.popularHashtag,
+    this.findYourInterests,
+    this.username,
+    this.week,
+    this.yourFullName,
+    this.sync,
+    this.library,
+    this.privateAccount,
+    this.followThisAccountToSeeTheirContents,
+    this.hyppeStoryCaption,
+    this.hyppeVidCaption,
+    this.hyppeDiaryCaption,
+    this.hyppePicCaption,
+    this.filter,
+    this.sticker,
+    this.timerSecond,
+    this.writeCaption,
+    this.search,
+    this.searchFriendsName,
+    this.noPostCaption,
+    this.accountPreference,
+    this.reportOrBlock,
+    this.unfollow,
+    this.block,
+    this.reportThisProfile,
+    this.blockCaption,
+    this.reportCaption,
+    this.blockHeader,
+    this.blockSubject,
+    this.blockBody,
+    this.unblock,
+    this.selfieWithIDCard,
+    this.settings,
+    this.signInAndSecurity,
+    this.version,
+    this.logOut,
+    this.muteMessage,
+    this.deleteMessage,
+    this.bySigningUpYouAgreeToHyppe,
+    this.whatsYourName,
+    this.soWeAndFriendsKnowHowToCallYou,
+    this.hallo,
+    this.areWeSpeakWithTheSameLanguage,
+    this.whenWereYouAreBorn,
+    this.soWeCanCelebrateTogether,
+    this.whereDoYouLive,
+    this.soYouCanConnectEasierWithPeopleNearby,
+    this.whatIsYourPhoneNumber,
+    this.soWeAndFriendsCanContactYou,
+    this.selectYourPreferredLanguage,
+    this.yourPhoneNumber,
+    this.soWeKnowWhatToGive,
+    this.someDataAlreadyRegistered,
+    this.pleaseTryAnotherUsernameOrEmail,
+    this.passwordHasBeenSend,
+    this.pleaseCheckYourEmailToGetAPassword,
+    this.fillInYourPassword,
+    this.passwordVerifiedSuccessfully,
+    this.checkCarefullyPasswordAndReTypePassword,
+    this.completeLaterLoginAsGuest,
+    this.whatIsYourIdNumbers,
+    this.chooseIdentityAndFillTheFormWithYoursIdNumbers,
+    this.whatGenderAreYou,
+    this.soWeAndFriendsKnowAboutYou,
+    this.enjoyAllHyppeFeatures,
+    this.done,
+    this.advanceSettings,
+    this.youCanChangeThisLaterOnTheMenu,
+    this.areYouSure,
+    this.yesCancelPost,
+    this.keepEditing,
+    this.descriptionCanOnlyWithMin5Characters,
+    this.categoryCanOnlyWithMin1Characters,
+    this.internalServerError,
+    this.postCanceled,
+    this.postCreatedSuccessfully,
+    this.storyCanceled,
+    this.storyCreatedSuccessfully,
+    this.noData,
+    this.iDontWantToSeeThis,
+    this.letUsKnowWhyYouDontWantToSeeThisPost,
+    this.reportThisPost,
+    this.thisPostIsOffensiveOrTheAccountIsHacked,
+    this.dontWantToSeeThis,
+    this.whyAreYouReportingThis,
+    this.tellUsWhyYouDontWantToSeeThis,
+    this.yourFeedbackWillHelpUsToImproveYourExperience,
+    this.reportToContentOnThisProfileOrThatThisAccount,
+    this.noteToReportActivityByThisMemberGoToTheSpecific,
+    this.tellUsALittleMore,
+    this.ifYouThinkGoesAgainstOurMediaSocialCommunityPolicies,
+    this.noInternetConnection,
+    this.pleaseCheckYourInternetConnectionAgain,
+    this.back,
+    this.tryAgain,
+    this.somethingWentWrong,
+    this.ourSystemIsCurrentlyExperiencingTechnicalIssues,
+    this.idVerification,
+    this.pleaseCaptureSelfImageWithIdCardToUseHyppeFeatures,
+    this.yesCompleteProfile,
+    this.noLater,
+    this.keepSignIn,
+    this.yesSure,
+    this.noLogout,
+    this.comingSoon,
+    this.weWillNotifyYouOnceThisFeaturedIsReady,
+    this.hyppeDoesNotHaveAccessToYourPermission,
+    this.pageNotFound,
+    this.sorryThePageWasNotFoundPleaseReturnToTheHomePage,
+    this.backToHome,
+    this.emailNotAvailable,
+    this.formAccountDoesNotContainEmail,
+    this.ifYouWantToResetPasswordFillTheFormAccountWithYourEmail,
+    this.weHaveSentANewPasswordToYourEmail,
+    this.changePassword,
+    this.currentPassword,
+    this.typeYourCurrentPassword,
+    this.typeYourNewPassword,
+    this.retypeYourNewPassword,
+    this.pleaseEnterYourEmailAddress,
+    this.useThisEmailOrKindlyChangeIfThisEmailNotYourEmail,
+    this.profilePhoto,
+    this.retake,
+    this.close,
+    this.upload,
+    this.typeAMessage,
+    this.successUploadId,
+    this.failedUploadId,
+    this.fullnameCannotBeEmpty,
+    this.cancelRecording,
+    this.sorryUnexpectedErrorHasOccurred,
+    this.filterIsOnlySupportedForImage,
+    this.isThisOkayClickOkToContinue,
+    this.newContentLetsRefresh,
+    this.pleaseCompleteYourProfile,
+    this.pleaseSelectMax10Items,
+    this.weCurrentlySupportOnlyMP4andMOVformat,
+    this.theFileDurationExceedsTheMaximumLimitForThisFeature,
+    this.pleaseWaitUntilTheProcessUploadDone,
+    this.likeB,
+    this.likeM,
+    this.likeK,
+    this.pinTopText1,
+    this.pinTopText2,
+    this.yourEmailHasBeenVerified,
+    this.hiYouHaveNewContentPleasePullDownToRefresh,
+    this.sorryUnexpectedError,
+    this.weAreWorkingOnFixingTheProblemBeBackSoon,
+    this.emptyNotification,
+    this.whenThereIsNewNotificationItWillGoesHere,
+    this.createAccount,
+    this.createAccountAndConnect,
+    this.passwordChangedSuccessfully,
+    this.accept,
+    this.account,
+    this.interest,
+    this.theme,
+    this.support,
+    this.about,
+    this.sorryTheresNothingHere,
+    this.theContentMayHaveBeenRemovedOrTheLinkMayBeBroken,
+    this.endUserLicenseAgreement,
+    this.trends,
+    this.contentCreatedSuccessfully,
+    this.contentCreatedFailedWithMessage,
+    this.update,
+    this.successfully,
+    this.copyLink,
+    this.requested,
+    this.dark,
+    this.light,
+    this.pleaseCompleteProfileToContinue,
+    this.pleaseVerifyYourIdToUseHyppeFeatures,
+    this.verifyYourAccount,
+    this.unfortunately,
+    this.needVerifyId,
+    this.needVerifyIdDescriptions,
+    this.needVerifyIdDescriptions2,
+    this.confirm,
+    this.congrats,
+    this.contentOwnershipSuccessInfo,
+    this.referralID,
+    this.downloadQRCode,
+    this.shareStatus,
+    this.hasUsed,
+    this.linkYourReferral,
+    this.shareYourQR,
+    this.newUpdate,
+    this.contentNewUpdate,
+    this.updateNow,
+    this.deletePost,
+    this.deleteComment,
+    this.commentWillPermanentlyDeletedContinue,
+    this.addPostDescription,
+    this.privacy,
+    this.selectLocation,
+    this.youDontHaveAnyPostsYetCreateOneNow,
+    this.removeMeFromPost,
+    this.noResultsFoundTryAnother,
+    this.afterthatThisTagWillBePermanentlyRemoved,
+    this.caption,
+    this.contentUploaded,
+    this.reportThisAccount,
+    this.signInWithGoogleAccount,
+    this.signInWithApple,
+    this.useAnotherEmailAddress,
+    this.welcomeToHyppe,
+    this.signInToFindSomethingInterestingInTheHyppeApp,
+    this.your,
+    this.successfullySave,
+    this.deleteAccount,
+    this.whyAreYouLeavingHyppe,
+    this.wereSorryToSeeYouGo,
+    this.iHaveAnotherProfileAndIDontNeedThisOne,
+    this.iDontFindItUseful,
+    this.iDontKnowHowToEarnMoneyWithThisApp,
+    this.iHaveSafetyConcern,
+    this.iHavePrivacyConcern,
+    this.iCantFindPeopleToFollow,
+    this.iveSeenTooManyAds,
+    this.anotherReason,
+    this.tappingDeleteAccountWillDelete,
+    this.accountWillBeDeletedProccessAfter24Hours,
+    this.deletingYourAccountIsPermanent,
+    this.notReceivingOTP,
+    this.resendOTP,
+    this.marketContent,
+    this.marketContent1,
+    this.includeTotalViews,
+    this.includeTotalLikes,
+    this.totalViews,
+    this.totalLikes,
+    this.setPrice,
+    this.rp,
+    this.change,
+    this.orderSummary,
+    this.priceIsNotEmpty,
+    this.buy,
+    this.sell,
+    this.purchaseTerms,
+    this.pleaseEnterMessage,
+    this.pleaseSetPrice,
+    this.orderNumber,
+    this.time,
+    this.price,
+    this.total,
+    this.proceedPayment,
+    this.paymentMethods,
+    this.payment,
+    this.totalPayment,
+    this.paymentBefore,
+    this.copy,
+    this.seeOtherBank,
+    this.yes,
+    this.no,
+    this.pay,
+    this.seePaymentInstruction,
+    this.checkPaymentStatus,
+    this.vaCopyToClipboard,
+    this.expired,
+    this.transaction,
+    this.addBankAccount,
+    this.withdrawal,
+    this.noSavedAccountYet,
+    this.addYourBankAccountForAnEasierWithdraw,
+    this.selectBank,
+    this.bankName,
+    this.noBankAccount,
+    this.accountOwnerName,
+    this.keepThisAccount,
+    this.youWillAdd,
+    this.accountWithAccountNumber,
+    this.aboutBankAccount,
+    this.aboutBankAccountContent,
+    this.ownedBy,
+    this.an,
+    this.help,
+    this.bankAccount,
+    this.makeSureTheName,
+    this.min4second,
+    this.youCanAddUpTo,
+    this.youWillDelete,
+    this.deletedBankAccount,
+    this.totalIncome,
+    this.totalExpenditure,
+    this.withdrawalMoney,
+    this.withdrawalAmount,
+    this.fromBalance,
+    this.detailTransaction,
+    this.seeInvoice,
+    this.paymentDetails,
+    this.wtihdrawalTo,
+    this.verificationBankAccount,
+    this.adminFee,
+    this.ballanceAmount,
+    this.contentDetail,
+    this.contentPrice,
+    this.originalContent,
+    this.serviceFee,
+    this.totalPrice,
+    this.youDontHaveAnyTransactionsYet,
+    this.enterThePinThatMatchesThePinYouFilledInEarlier,
+    this.thisPageWillAutomaticallyCloseIn,
+    this.allTransaction,
+    this.setPin,
+    this.changePin,
+    this.forgotPin,
+    this.enterYourCurrentPin,
+    this.enterYour6DigitHyppePin,
+    this.confirmNewPin,
+    this.enterNewPin,
+    this.confirmPin,
+    this.forr,
+    this.from,
+    this.remove,
+    this.transactionInProgress,
+    this.contentOwnershipRegistration,
+    this.byRegisteringYourContent,
+    this.yesIUnderstand,
+    this.ownershipSelling,
+    this.certificateOwnershipFee,
+    this.discount,
+    this.sellContent,
+    this.certificateNumber,
+    this.choosePaymentMethods,
+    this.retakeIdPicture,
+    this.aboutIdVerification,
+    this.realName,
+    this.reaNameNotice,
+    this.continueStep,
+    this.uploadIdCardNotice1,
+    this.uploadIdCardNotice2,
+    this.uploadIdCardNotice3,
+    this.uploadIdCardNotice4,
+    this.uploadIdCardNotice5,
+    this.uploadIdCardNotice6,
+    this.uploadIdCardNotice7,
+    this.uploadIdCardNotice8,
+    this.cameraTakeIdCardInfo,
+    this.eKtpNumber,
+    this.placeBirth,
+    this.placeBirthNote,
+    this.selectGenderInfo,
+    this.selectDateBirthInfo,
+    this.confirmIdGenuine,
+    this.confirmIdNotice,
+    this.uploadSupportDoc,
+    this.continueSelfie,
+    this.supportDoc,
+    this.supportDocNotice1,
+    this.supportDocNotice2,
+    this.supportDocNotice3,
+    this.supportDocNotice4,
+    this.supportDocNotice5,
+    this.supportDocNotice6,
+    this.supportDocNotice7,
+    this.supportDocNotice8,
+    this.supportDocNotice9,
+    this.supportDocNotice10,
+    this.failedIdCardInfoTitle,
+    this.failedIdCardInfoSubTitle,
+    this.failedIdCardInfo1,
+    this.failedIdCardInfo2,
+    this.failedIdCardInfo3,
+    this.failedIdCardInfo4,
+    this.failedIdCardInfo5,
+    this.failedIdCardInfo6,
+    this.successIdCardTitle,
+    this.successIdCard1,
+    this.successIdCard2,
+    this.successIdCard3,
+    this.successIdCard4,
+    this.retry,
+    this.retakeSelfie,
+    this.dataDidntShow,
+    this.tapHere,
+    this.toAppeal,
+    this.unverified,
+    this.addYourHyppePinFirst,
+    this.review,
+    this.verificationYourIDFirst,
+    this.toAccessTransactionPageYouNeedToSetYourPin,
+    this.toAccessTransactionPageYouNeedToVerificationYourID,
+    this.goToSecurityPrivacy,
+    this.youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue,
+    this.yesPostAnyway,
+    this.noIWantToRegister,
+    this.sellingPrice,
+    this.transferTo,
+    this.theBalanceWillBeTransferredToTheDesignatedAccount,
+    this.byClickingWithdrawYouHereby,
+    this.aVerifiedBankDoesNotNeed,
+    this.yourTransactionisBeingProcessedNow,
+    this.backtoTransaction,
+    this.successfullyAdded,
+    this.spam,
+    this.nudityOrSexualActivity,
+    this.hateSpeechOrSymbols,
+    this.violanceOrDangerousOrganizations,
+    this.fakeOrMisleadingInformation,
+    this.selfHarmSuicideOrDangerousActs,
+    this.scamOrFraud,
+    this.illegalActivitiesAndRegulatedGoods,
+    this.intellectualProperty,
+    this.falseorMisleadingInformation,
+    this.extremeViolence,
+    this.other,
+    this.reportThisContent,
+    this.whyareyoureportingthiscontent,
+    this.bullyingOrHarassment,
+    this.reportReceived,
+    this.yourReportWillbeHandledImmediately,
+    this.incorrectPINPleasetryAgain,
+    this.inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave,
+    this.cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn,
+    this.transferredSuccessfully,
+    this.waitingtoTransfer,
+    this.helloCanIhelpyou,
+    this.frequentlyAskedQuestions,
+    this.yourTicketIssue,
+    this.searchtopic,
+    this.stillNeedsHelp,
+    this.submitTicketIssue,
+    this.doesThisHelpsyou,
+    this.newTicketIssue,
+    this.insertAnyAdditionalInfo,
+    this.chooseCategoryIssue,
+    this.thisHyppeVidisSubjectToModeration,
+    this.thisHyppePicisSubjectToModeration,
+    this.thisHyppeDiaryisSubjectToModeration,
+    this.thisHyppeStoryisSubjectToModeration,
+    this.thisMessagecanOnlyBeSeenByYou,
+    this.contentViolation,
+    this.yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere,
+    this.videoDetails,
+    this.postedOn,
+    this.violationType,
+    this.ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal,
+    this.chooseanAppealReason,
+    this.stateYourIssue,
+    this.pleaseprovideadditionaldetails,
+    this.thisContentDoesntHaveSensitiveContent,
+    this.thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols,
+    this.thisContentHasAdditionalContext,
+    this.thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent,
+    this.theReasonDoesntFitIntoTheseCategories,
+    this.ticketIssueSuccessfullySubmitted,
+    this.yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare,
+    this.postBoost,
+    this.startDate,
+    this.autoSelect,
+    this.selectManual,
+    this.boostTime,
+    this.interval,
+    this.contentWillbeBoostedfor30days,
+    this.boostPrice,
+    this.contentType,
+    this.morning,
+    this.afternoon,
+    this.by,
+    this.night,
+    this.boostedPostList,
+    this.reach,
+    this.viewDetails,
+    this.scheduled,
+    this.ongoing,
+    this.postPrivacyisNotAllowed,
+    this.toContinueTheBoostPostProcess,
+    this.otherPostsInProcessOfPayment,
+    this.thePostisintheProcessofPayment,
+    this.viewPaymentStatus,
+    this.appealsReceived,
+    this.weWillSendYouaNotificationasSoonasweHaveanUpdate,
+    this.contentContainsSensitiveMaterial,
+    this.hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails,
+    this.hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails,
+    this.appealThisWarning,
+    this.sensitiveContent,
+    this.minutes,
+    this.appeal,
+    this.communityGuidelines,
+    this.description,
+    this.report,
+    this.itDoesntMatchIdentity,
+    this.noKTPCantBeRead,
+    this.genderMustBeFilled,
+    this.placeOfBirthMustBeFilled,
+    this.dateOfBirthMustBeFilled,
+    this.usernameOnlyContainLetters,
+    this.userIsNotFound,
+    this.reward,
+    this.amountEarned,
+    this.usernameisAlreadyinUse,
+    this.priceChangesSavedSuccessfully,
+    this.maximumPrice,
+    this.minimumPrice,
+    this.noBankAccount2,
+    this.hideReplies,
+    this.reply2,
+    this.purchased,
+    this.soldOut,
+    this.localeDatetime,
+    this.accountVerification,
+    this.content,
+    this.problemBugs,
+    this.ads,
+    this.newLabel,
+    this.inProgress,
+    this.solved,
+    this.notSolved,
+    this.ticket,
+    this.ticketHistory,
+    this.contentAppeal,
+    this.notSuspend,
+    this.suspend,
+    this.flagAsSensitive,
+    this.source,
+    this.submissionTime,
+    this.operationSystem,
+    this.applicationVersion,
+    this.attachment,
+    this.messageTicketHandled,
+    this.sensitiveType,
+    this.reasonOfAppeal,
+    this.issueStatement,
+    this.notDefined,
+    this.dontHaveMessagesYet,
+    this.seeContent,
+    this.pleaseMakeSuretheResidenceNumberMatchestheEKTP,
+    this.theIDCardNumberAndorYourRealNamedidnotMatch,
+    this.pleaseEnterYourFullName,
+    this.addDocument,
+    this.youCanAddupto3SupportingDocuments,
+    this.thankYou,
+    this.thankYouforYourFeedback,
+    this.noResultsFor,
+    this.max3Images,
+    this.max4Images,
+    this.messageMaxTickets,
+    this.seeTicketHistory,
+    this.activeTicketIssue,
+    this.seeMoreContent,
+    this.seeLess,
+    this.pleaseSelectOneortheMaxFileis,
+    this.pleaseVerifyYourEmailFrst,
+    this.fileMayBeInErrorChooseAnotherFile,
+    this.blockThisAccount,
+    this.confirmPasswordCorrect,
+    this.confirmPasswordWrong,
+    this.allowedSpecialCharacters,
+    this.newPasswordCreatedSuccessfully,
+    this.messageInvalidEmail,
+    this.titleEmailIsGmail,
+    this.messageEmailIsGmail,
+    this.pleaseEnterRegisteredEmail,
+    this.contentPreferences,
+    this.customization,
+    this.bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect,
+    this.descAllowComment,
+    this.allowSharing,
+    this.descAllowSharing,
+    this.sharePost,
+  });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
     login = json['login'];
@@ -916,6 +1761,7 @@ class LocalizationModelV2 {
     dontHaveAnAccount = json['dontHaveAnAccount'];
     registerHere = json['registerHere'];
     or = json['or'];
+    inWord = json['in'];
     continueUsingGoogle = json['continueUsingGoogle'];
     notAValidEmailAddress = json['notAValidEmailAddress'];
     incorrectPassword = json['incorrectPassword'];
@@ -932,18 +1778,31 @@ class LocalizationModelV2 {
     resendNewCode = json['resendNewCode'];
     yourIdentityHasBeenVerified = json['yourIdentityHasBeenVerified'];
     incorrectCode = json['incorrectCode'];
+    titleSuccessPin = json['titleSuccessPin'];
+    messageSuccessPin = json['messageSuccessPin'];
     sessionExpired = json['sessionExpired'];
     yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest = json['yourSessionHasTimedOutPleaseReturnToTheRegisterPageOrLoginAsAGuest'];
     backToRegisterPage = json['backToRegisterPage'];
     tooManyFailedAttempts = json['tooManyFailedAttempts'];
     unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes = json['unavailableBecauseOfTooManyFailedAttemptsPleaseTryAgainIn30Minutes'];
     createNewPassword = json['createNewPassword'];
+    newPassword = json["newPassword"];
+    rewriteNewPassword = json["rewriteNewPassword"];
+    enterPassword = json["enterPassword"];
+    messageNewPassword = json['messageNewPassword'];
+    messageTimeoutPin = json['messageTimeoutPin'];
     yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword = json['yourNewPasswordMustBeDifferentFromPreviousAndUsedPassword'];
     reTypePassword = json['reTypePassword'];
+    yourPasswordMustBeAtLeast = json['yourPasswordMustBeAtLeast'];
     mustNotContainYourNameOrEmail = json['mustNotContainYourNameOrEmail'];
     atLeast8Characters = json['atLeast8Characters'];
+    atLeast8til20Chars = json['atLeast8til20Chars'];
     atLeastContain1CharacterAnd1Number = json['atLeastContain1CharacterAnd1Number'];
+    labelExampleSpecialChar = json['labelExampleSpecialChar'];
+    oneSpecialCharacter = json['oneSpecialCharacter'];
     next = json['next'];
+    rotate = json['rotate'];
+    resetPassword = json['resetPassword'];
     submit = json['submit'];
     passwordDoesntMatch = json['passwordDoesntMatch'];
     register = json['register'];
@@ -998,6 +1857,7 @@ class LocalizationModelV2 {
     yourStory = json['yourStory'];
     justNow = json['justNow'];
     seeAll = json['seeAll'];
+    seeSome = json['seeSome'];
     replyTo = json['replyTo'];
     posts = json['posts'];
     followers = json['followers'];
@@ -1031,6 +1891,7 @@ class LocalizationModelV2 {
     d = json['d'];
     w = json['w'];
     today = json['today'];
+    yesterday = json['yesterday'];
     deleteThis = json['deleteThis'];
     afterThatThis = json['afterThatThis'];
     willBePermanentlyDeleted = json['willBePermanentlyDeleted'];
@@ -1051,18 +1912,32 @@ class LocalizationModelV2 {
     news = json['news'];
     whatAreYouFindOut = json['whatAreYouFindOut'];
     editProfile = json['editProfile'];
+    editImage = json['editImage'];
     librarys = json['librarys'];
     post = json['post'];
     music = json['music'];
+    searchMusic = json['search_music'];
+    addMusic = json['add_music'];
+    loading = json['loading'];
+    popular = json['popular'];
+    explore = json['explore'];
+    genre = json['genre'];
+    mood = json['mood'];
     newPost = json['newPost'];
     writeACaption = json['writeACaption'];
     tagPeople = json['tagPeople'];
+    category = json['category'];
     selectCategory = json['selectCategory'];
     seeMore = json['seeMore'];
     advancedSettings = json['advancedSettings'];
     allowComment = json['allowComment'];
+    turnOffCommenting = json['turnOffCommenting'];
+    turnOffCommentingExplain1 = json['turnOffCommentingExplain1'];
+    turnOffCommentingExplain2 = json['turnOffCommentingExplain2'];
     youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost = json['youCanChangeThisLaterByGoingTheMenuOptionsAtTheTopYourPost'];
     registerContentOwnership = json['registerContentOwnership'];
+    registerContentOwnershipExplain1 = json['registerContentOwnershipExplain1'];
+    registerContentOwnershipExplain2 = json['registerContentOwnershipExplain2'];
     protectYourContent = json['protectYourContent'];
     processUpload = json['processUpload'];
     cancelPost = json['cancelPost'];
@@ -1133,8 +2008,7 @@ class LocalizationModelV2 {
     resetYourPassword = json['resetYourPassword'];
     weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp =
         json['weReceivedARequestToResetThePasswordForYourHyppeAccountToUpdateYourPasswordEnterThisVerificationCodeInYourHyppeApp'];
-    thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone =
-        json['thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone'];
+    thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone = json['thisCodeWillExpireIn8MinutesPleaseDoNotForwardOrGiveThisCodeToAnyone'];
     problemOrQuestion = json['problemOrQuestion'];
     callUsAt = json['callUsAt'];
     orEmail = json['or email'];
@@ -1149,6 +2023,7 @@ class LocalizationModelV2 {
     signUpHere = json['signUpHere'];
     alreadyExist = json['alreadyExist'];
     alreadyHaveAnAccount = json['alreadyHaveAnAccount'];
+    alreadyRegistered = json['alreadyRegistered'];
     backToLogin = json['backToLogin'];
     badConnectionMessage = json['badConnectionMessage'];
     badConnectionTitle = json['badConnectionTitle'];
@@ -1190,6 +2065,8 @@ class LocalizationModelV2 {
     startedFollowingYou = json['startedFollowingYou'];
     somethingsWrong = json['somethingsWrong'];
     tag = json['tag'];
+    popularHashtag = json['popularHashtag'];
+    findYourInterests = json['findYourInterests'];
     username = json['username'];
     week = json['week'];
     yourFullName = json['yourFullName'];
@@ -1260,6 +2137,7 @@ class LocalizationModelV2 {
     yesCancelPost = json['yesCancelPost'];
     keepEditing = json['keepEditing'];
     descriptionCanOnlyWithMin5Characters = json['descriptionCanOnlyWithMin5Characters'];
+    categoryCanOnlyWithMin1Characters = json['categoryCanOnlyWithMin1Characters'];
     internalServerError = json['internalServerError'];
     postCanceled = json['postCanceled'];
     postCreatedSuccessfully = json['postCreatedSuccessfully'];
@@ -1329,7 +2207,8 @@ class LocalizationModelV2 {
     likeB = json['likeB'];
     likeM = json['likeM'];
     likeK = json['likeK'];
-    pinTopText = json['pinTopText'];
+    pinTopText1 = json['pinTopText1'];
+    pinTopText2 = json['pinTopText2'];
     yourEmailHasBeenVerified = json['yourEmailHasBeenVerified'];
     hiYouHaveNewContentPleasePullDownToRefresh = json['hiYouHaveNewContentPleasePullDownToRefresh'];
     sorryUnexpectedError = json['sorryUnexpectedError'];
@@ -1361,5 +2240,409 @@ class LocalizationModelV2 {
     pleaseVerifyYourIdToUseHyppeFeatures = json["pleaseVerifyYourIdToUseHyppeFeatures"];
     verifyYourAccount = json["verifyYourAccount"];
     unfortunately = json['unfortunately'];
+    needVerifyId = json['needVerifyId'];
+    needVerifyIdDescriptions = json['needVerifyIdDescriptions'];
+    needVerifyIdDescriptions2 = json['needVerifyIdDescriptions2'];
+    confirm = json['confirm'];
+    congrats = json['congrats'];
+    contentOwnershipSuccessInfo = json['contentOwnershipSuccessInfo'];
+    referralID = json['referralID'];
+    downloadQRCode = json['downloadQRCode'];
+    shareStatus = json['shareStatus'];
+    hasUsed = json['hasUsed'];
+    linkYourReferral = json['linkYourReferral'];
+    shareYourQR = json['shareYourQR'];
+    newUpdate = json['newUpdate'];
+    contentNewUpdate = json['contentNewUpdate'];
+    updateNow = json['updateNow'];
+    deletePost = json['deletePost'];
+    deleteComment = json['deleteComment'];
+
+    commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
+
+    addPostDescription = json['addPostDescription'];
+    privacy = json['privacy'];
+    selectLocation = json['selectLocation'];
+    youDontHaveAnyPostsYetCreateOneNow = json['youDontHaveAnyPostsYetCreateOneNow'];
+    removeMeFromPost = json['removeMeFromPost'];
+    noResultsFoundTryAnother = json['noResultsFoundTryAnother'];
+    afterthatThisTagWillBePermanentlyRemoved = json['afterthatThisTagWillBePermanentlyRemoved'];
+    caption = json['caption'];
+    contentUploaded = json['contentUploaded'];
+    reportThisAccount = json['reportThisAccount'];
+    signInWithGoogleAccount = json['signInWithGoogleAccount'];
+    signInWithApple = json['signInWithApple'];
+    useAnotherEmailAddress = json['useAnotherEmailAddress'];
+    welcomeToHyppe = json['welcomeToHyppe'];
+    signInToFindSomethingInterestingInTheHyppeApp = json['signInToFindSomethingInterestingInTheHyppeApp'];
+    your = json['your'];
+    successfullySave = json['successfullySave'];
+    deleteAccount = json['deleteAccount'];
+    whyAreYouLeavingHyppe = json['whyAreYouLeavingHyppe'];
+    whyAreYouLeavingHyppe = json['whyAreYouLeavingHyppe'];
+    wereSorryToSeeYouGo = json['wereSorryToSeeYouGo'];
+    wereSorryToSeeYouGo = json['wereSorryToSeeYouGo'];
+    iHaveAnotherProfileAndIDontNeedThisOne = json['iHaveAnotherProfileAndIDontNeedThisOne'];
+    iHaveAnotherProfileAndIDontNeedThisOne = json['iHaveAnotherProfileAndIDontNeedThisOne'];
+    iDontFindItUseful = json['iDontFindItUseful'];
+    iDontFindItUseful = json['iDontFindItUseful'];
+    iDontKnowHowToEarnMoneyWithThisApp = json['iDontKnowHowToEarnMoneyWithThisApp'];
+    iDontKnowHowToEarnMoneyWithThisApp = json['iDontKnowHowToEarnMoneyWithThisApp'];
+    iHaveSafetyConcern = json['iHaveSafetyConcern'];
+    iHaveSafetyConcern = json['iHaveSafetyConcern'];
+    iHavePrivacyConcern = json['iHavePrivacyConcern'];
+    iHavePrivacyConcern = json['iHavePrivacyConcern'];
+    iCantFindPeopleToFollow = json['iCantFindPeopleToFollow'];
+    iCantFindPeopleToFollow = json['iCantFindPeopleToFollow'];
+    iveSeenTooManyAds = json['iveSeenTooManyAds'];
+    iveSeenTooManyAds = json['iveSeenTooManyAds'];
+    anotherReason = json['anotherReason'];
+    anotherReason = json['anotherReason'];
+    tappingDeleteAccountWillDelete = json['tappingDeleteAccountWillDelete'];
+    tappingDeleteAccountWillDelete = json['tappingDeleteAccountWillDelete'];
+    accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
+    accountWillBeDeletedProccessAfter24Hours = json['accountWillBeDeletedProccessAfter24Hours'];
+    deletingYourAccountIsPermanent = json['deletingYourAccountIsPermanent'];
+    commentWillPermanentlyDeletedContinue = json['commentWillPermanentlyDeletedContinue'];
+    notReceivingOTP = json['notReceivingOTP'];
+    resendOTP = json['resendOTP'];
+    marketContent = json['marketContent'];
+    marketContent1 = json['marketContent1'];
+    includeTotalViews = json['includeTotalViews'];
+    includeTotalLikes = json['includeTotalLikes'];
+    totalViews = json['totalViews'];
+    totalLikes = json['totalLikes'];
+    setPrice = json['setPrice'];
+    rp = json['rp'];
+    change = json['change'];
+    orderSummary = json['orderSummary'];
+    priceIsNotEmpty = json['priceIsNotEmpty'];
+    buy = json['buy'];
+    sell = json['sell'];
+    purchaseTerms = json['purchaseTerms'];
+    pleaseEnterMessage = json['pleaseEnterMessage'];
+    pleaseSetPrice = json['pleaseSetPrice'];
+    orderNumber = json['orderNumber'];
+    time = json['time'];
+    price = json['price'];
+    total = json['total'];
+    proceedPayment = json['proceedPayment'];
+    paymentMethods = json['paymentMethods'];
+    payment = json['payment'];
+    totalPayment = json['totalPayment'];
+    paymentBefore = json['paymentBefore'];
+    copy = json['copy'];
+    seeOtherBank = json['seeOtherBank'];
+    yes = json['yes'];
+    no = json['no'];
+    pay = json['pay'];
+    seePaymentInstruction = json['seePaymentInstruction'];
+    checkPaymentStatus = json['checkPaymentStatus'];
+    vaCopyToClipboard = json['vaCopyToClipboard'];
+    expired = json['expired'];
+    transaction = json['transaction'];
+    addBankAccount = json['addBankAccount'];
+    withdrawal = json['withdrawal'];
+    noSavedAccountYet = json['noSavedAccountYet'];
+    addYourBankAccountForAnEasierWithdraw = json['addYourBankAccountForAnEasierWithdraw'];
+    selectBank = json['selectBank'];
+    bankName = json['bankName'];
+    noBankAccount = json['noBankAccount'];
+    accountOwnerName = json['accountOwnerName'];
+    keepThisAccount = json['keepThisAccount'];
+    youWillAdd = json['youWillAdd'];
+    accountWithAccountNumber = json['accountWithAccountNumber'];
+    aboutBankAccount = json['aboutBankAccount'];
+    ownedBy = json['ownedBy'];
+    an = json['an'];
+    aboutBankAccountContent = json['aboutBankAccountContent'];
+    help = json['help'];
+    bankAccount = json['bankAccount'];
+    makeSureTheName = json['makeSureTheName'];
+    min4second = json['min4second'];
+    youCanAddUpTo = json['youCanAddUpTo'];
+    youWillDelete = json['youWillDelete'];
+    deletedBankAccount = json['deletedBankAccount'];
+    totalIncome = json['totalIncome'];
+    totalExpenditure = json['totalExpenditure'];
+    withdrawalMoney = json['withdrawalMoney'];
+    withdrawalAmount = json['withdrawalAmount'];
+    fromBalance = json['fromBalance'];
+    detailTransaction = json['detailTransaction'];
+    seeInvoice = json['seeInvoice'];
+    paymentDetails = json['paymentDetails'];
+    wtihdrawalTo = json['wtihdrawalTo'];
+    verificationBankAccount = json['verificationBankAccount'];
+    adminFee = json['adminFee'];
+    ballanceAmount = json['ballanceAmount'];
+    contentDetail = json['contentDetail'];
+    contentPrice = json['contentPrice'];
+    originalContent = json['originalContent'];
+    serviceFee = json['serviceFee'];
+    totalPrice = json['totalPrice'];
+    youDontHaveAnyTransactionsYet = json['youDontHaveAnyTransactionsYet'];
+    enterThePinThatMatchesThePinYouFilledInEarlier = json['enterThePinThatMatchesThePinYouFilledInEarlier'];
+    thisPageWillAutomaticallyCloseIn = json['thisPageWillAutomaticallyCloseIn'];
+    allTransaction = json['allTransaction'];
+    setPin = json['setPin'];
+    changePin = json['changePin'];
+    forgotPin = json['forgotPin'];
+    enterYourCurrentPin = json['enterYourCurrentPin'];
+    enterYour6DigitHyppePin = json['enterYour6DigitHyppePin'];
+    confirmNewPin = json['confirmNewPin'];
+    enterNewPin = json['enterNewPin'];
+    confirmPin = json['confirmPin'];
+    forr = json['forr'];
+    from = json['from'];
+    remove = json['Remove'];
+    transactionInProgress = json['transactionInProgress'];
+    contentOwnershipRegistration = json['contentOwnershipRegistration'];
+    byRegisteringYourContent = json['byRegisteringYourContent'];
+    yesIUnderstand = json['yesIUnderstand'];
+    ownershipSelling = json['ownershipSelling'];
+    sellContent = json['sellContent'];
+    certificateOwnershipFee = json['certificateOwnershipFee'];
+    discount = json['discount'];
+    certificateNumber = json['certificateNumber'];
+    choosePaymentMethods = json['choosePaymentMethods'];
+    retakeIdPicture = json["retakeIdPicture"];
+    aboutIdVerification = json["aboutIdVerification"];
+    realName = json["realName"];
+    reaNameNotice = json["reaNameNotice"];
+    continueStep = json["continueStep"];
+    uploadIdCardNotice1 = json["uploadIdCardNotice1"];
+    uploadIdCardNotice2 = json["uploadIdCardNotice2"];
+    uploadIdCardNotice3 = json["uploadIdCardNotice3"];
+    uploadIdCardNotice4 = json["uploadIdCardNotice4"];
+    uploadIdCardNotice5 = json["uploadIdCardNotice5"];
+    uploadIdCardNotice6 = json["uploadIdCardNotice6"];
+    uploadIdCardNotice7 = json["uploadIdCardNotice7"];
+    uploadIdCardNotice8 = json["uploadIdCardNotice8"];
+    cameraTakeIdCardInfo = json["cameraTakeIdCardInfo"];
+    eKtpNumber = json["eKtpNumber"];
+    placeBirth = json["placeBirth"];
+    placeBirthNote = json["placeBirthNote"];
+    selectGenderInfo = json["selectGenderInfo"];
+    selectDateBirthInfo = json["selectDateBirthInfo"];
+    confirmIdGenuine = json["confirmIdGenuine"];
+    confirmIdNotice = json["confirmIdNotice"];
+    uploadSupportDoc = json["uploadSupportDoc"];
+    continueSelfie = json["continueSelfie"];
+    supportDoc = json["supportDoc"];
+    supportDocNotice1 = json["supportDocNotice1"];
+    supportDocNotice2 = json["supportDocNotice2"];
+    supportDocNotice3 = json["supportDocNotice3"];
+    supportDocNotice4 = json["supportDocNotice4"];
+    supportDocNotice5 = json["supportDocNotice5"];
+    supportDocNotice6 = json["supportDocNotice6"];
+    supportDocNotice7 = json["supportDocNotice7"];
+    supportDocNotice8 = json["supportDocNotice8"];
+    supportDocNotice9 = json["supportDocNotice9"];
+    supportDocNotice10 = json["supportDocNotice10"];
+    failedIdCardInfoTitle = json["failedIdCardInfoTitle"];
+    failedIdCardInfoSubTitle = json["failedIdCardInfoSubTitle"];
+    failedIdCardInfo1 = json["failedIdCardInfo1"];
+    failedIdCardInfo2 = json["failedIdCardInfo2"];
+    failedIdCardInfo3 = json["failedIdCardInfo3"];
+    failedIdCardInfo4 = json["failedIdCardInfo4"];
+    failedIdCardInfo5 = json["failedIdCardInfo5"];
+    failedIdCardInfo6 = json["failedIdCardInfo6"];
+    successIdCardTitle = json["successIdCardTitle"];
+    successIdCard1 = json["successIdCard1"];
+    successIdCard2 = json["successIdCard2"];
+    successIdCard3 = json["successIdCard3"];
+    successIdCard4 = json["successIdCard4"];
+    help = json["help"];
+    retry = json["retry"];
+    retakeSelfie = json["retakeSelfie"];
+    dataDidntShow = json["dataDidntShow"];
+    tapHere = json["tapHere"];
+    toAppeal = json["toAppeal"];
+    unverified = json["unverified"];
+    review = json["review"];
+    addYourHyppePinFirst = json["addYourHyppePinFirst"];
+    verificationYourIDFirst = json["verificationYourIDFirst"];
+    toAccessTransactionPageYouNeedToSetYourPin = json["toAccessTransactionPageYouNeedToSetYourPin"];
+    toAccessTransactionPageYouNeedToVerificationYourID = json["toAccessTransactionPageYouNeedToVerificationYourID"];
+    goToSecurityPrivacy = json["goToSecurityPrivacy"];
+    youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue = json["youNeedACertificateToMarketYourContentYouCanRegisterItLaterDoYouWantToContinue"];
+    yesPostAnyway = json["yesPostAnyway"];
+    noIWantToRegister = json["noIWantToRegister"];
+    sellingPrice = json["sellingPrice"];
+    transferTo = json["transferTo"];
+    theBalanceWillBeTransferredToTheDesignatedAccount = json["theBalanceWillBeTransferredToTheDesignatedAccount"];
+    byClickingWithdrawYouHereby = json["byClickingWithdrawYouHereby"];
+    aVerifiedBankDoesNotNeed = json["aVerifiedBankDoesNotNeed"];
+    yourTransactionisBeingProcessedNow = json["yourTransactionisBeingProcessedNow"];
+    backtoTransaction = json["backtoTransaction"];
+    successfullyAdded = json["successfullyAdded"];
+    spam = json["spam"];
+    nudityOrSexualActivity = json["nudityOrSexualActivity"];
+    hateSpeechOrSymbols = json["hateSpeechOrSymbols"];
+    violanceOrDangerousOrganizations = json["violanceOrDangerousOrganizations"];
+    fakeOrMisleadingInformation = json["fakeOrMisleadingInformation"];
+    selfHarmSuicideOrDangerousActs = json["selfHarmSuicideOrDangerousActs"];
+    scamOrFraud = json["scamOrFraud"];
+    illegalActivitiesAndRegulatedGoods = json["illegalActivitiesAndRegulatedGoods"];
+    intellectualProperty = json["intellectualProperty"];
+    falseorMisleadingInformation = json["falseorMisleadingInformation"];
+    extremeViolence = json["extremeViolence"];
+    other = json["Other"];
+    reportThisContent = json["reportThisContent"];
+    whyareyoureportingthiscontent = json["whyareyoureportingthiscontent"];
+    bullyingOrHarassment = json["bullyingOrHarassment"];
+    reportReceived = json["reportReceived"];
+    yourReportWillbeHandledImmediately = json["yourReportWillbeHandledImmediately"];
+    incorrectPINPleasetryAgain = json["incorrectPINPleasetryAgain"];
+    inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave = json["inTheWithdrawalProcessYouCannotTakeAllTheBalanceYouHave"];
+    cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn = json["cannotBeUsedAsACurrencyForTransactionThisBalanceCanOnlyBeWithdrawn"];
+    transferredSuccessfully = json["transferredSuccessfully"];
+    waitingtoTransfer = json["waitingtoTransfer"];
+    helloCanIhelpyou = json["helloCanIhelpyou"];
+    frequentlyAskedQuestions = json["frequentlyAskedQuestions"];
+    yourTicketIssue = json["yourTicketIssue"];
+    searchtopic = json["searchtopic"];
+    stillNeedsHelp = json["stillNeedsHelp"];
+    submitTicketIssue = json["submitTicketIssue"];
+    doesThisHelpsyou = json["doesThisHelpsyou"];
+    newTicketIssue = json["newTicketIssue"];
+    insertAnyAdditionalInfo = json["insertAnyAdditionalInfo"];
+    chooseCategoryIssue = json["chooseCategoryIssue"];
+    thisHyppeVidisSubjectToModeration = json["thisHyppeVidisSubjectToModeration"];
+    thisHyppePicisSubjectToModeration = json["thisHyppePicisSubjectToModeration"];
+    thisHyppeDiaryisSubjectToModeration = json["thisHyppeDiaryisSubjectToModeration"];
+    thisHyppeStoryisSubjectToModeration = json["thisHyppeStoryisSubjectToModeration"];
+    thisMessagecanOnlyBeSeenByYou = json["thisMessagecanOnlyBeSeenByYou"];
+    description = json["description"];
+    report = json["report"];
+    contentViolation = json["contentViolation"];
+    yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere = json["yourContentViolatedOurCommunityGuidelinesYouCanFindOurGuidelinesHere"];
+    videoDetails = json["videoDetails"];
+    postedOn = json["postedOn"];
+    violationType = json["violationType"];
+    appeal = json["appeal"];
+    communityGuidelines = json["communityGuidelines"];
+    ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal =
+        json["ifYouReviewedOurCommunityGuidelinesAndBelieveYourContentWasRemovedByMistakeLetUsKnowBySubmittingAnAppeal"];
+    chooseanAppealReason = json["chooseanAppealReason"];
+    stateYourIssue = json["stateYourIssue"];
+    pleaseprovideadditionaldetails = json["pleaseprovideadditionaldetails"];
+    thisContentDoesntHaveSensitiveContent = json["thisContentDoesntHaveSensitiveContent"];
+    thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols = json["thisContentDoesntHaveAnyNuditySexualContentViolenceGoreOrHatefulSymbols"];
+    thisContentHasAdditionalContext = json["thisContentHasAdditionalContext"];
+    thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent = json["thisContentShowsGraphicViolenceForDocumentaryOrEducationalContent"];
+    theReasonDoesntFitIntoTheseCategories = json["theReasonDoesntFitIntoTheseCategories"];
+    ticketIssueSuccessfullySubmitted = json["ticketIssueSuccessfullySubmitted"];
+    yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare = json["yourTicketIssuehasbeensuccessfullysubmittedtoHyppeCustomerCare"];
+    postBoost = json["postBoost"];
+    startDate = json["startDate"];
+    autoSelect = json["autoSelect"];
+    selectManual = json["selectManual"];
+    boostTime = json["boostTime"];
+    interval = json["interval"];
+    minutes = json["minutes"];
+    contentWillbeBoostedfor30days = json["contentWillbeBoostedfor30days"];
+    boostPrice = json["boostPrice"];
+    contentType = json["contentType"];
+    morning = json["morning"];
+    afternoon = json["afternoon"];
+    by = json["by"];
+    night = json["night"];
+    boostedPostList = json["boostedPostList"];
+    reach = json["reach"];
+    viewDetails = json["viewDetails"];
+    scheduled = json["scheduled"];
+    ongoing = json["ongoing"];
+    postPrivacyisNotAllowed = json["postPrivacyisNotAllowed"];
+    toContinueTheBoostPostProcess = json["toContinueTheBoostPostProcess"];
+    otherPostsInProcessOfPayment = json["otherPostsInProcessOfPayment"];
+    thePostisintheProcessofPayment = json["thePostisintheProcessofPayment"];
+    viewPaymentStatus = json["viewPaymentStatus"];
+    appealsReceived = json["appealsReceived"];
+    weWillSendYouaNotificationasSoonasweHaveanUpdate = json["weWillSendYouaNotificationasSoonasweHaveanUpdate"];
+    contentContainsSensitiveMaterial = json["ContentContainsSensitiveMaterial"];
+    hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForOwnershipBoostedCheckYourProfileForDetails"];
+    hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails = json["hasBeenSuccessfullyRegisteredForBoostedCheckYourProfileForDetails"];
+    appealThisWarning = json["appealThisWarning"];
+    sensitiveContent = json["sensitiveContent"];
+    itDoesntMatchIdentity = json["itDoesntMatchIdentity"];
+    noKTPCantBeRead = json["noKTPCantBeRead"];
+    genderMustBeFilled = json["genderMustBeFilled"];
+    placeOfBirthMustBeFilled = json["placeOfBirthMustBeFilled"];
+    dateOfBirthMustBeFilled = json["dateOfBirthMustBeFilled"];
+    usernameOnlyContainLetters = json["usernameOnlyContainLetters"];
+    userIsNotFound = json["userIsNotFound"];
+    reward = json["reward"];
+    amountEarned = json["amountEarned"];
+    usernameisAlreadyinUse = json["usernameisAlreadyinUse"];
+    priceChangesSavedSuccessfully = json["priceChangesSavedSuccessfully"];
+    maximumPrice = json["maximumPrice"];
+    minimumPrice = json["minimumPrice"];
+    noBankAccount2 = json["noBankAccount2"];
+    hideReplies = json["hideReplies"];
+    reply2 = json["reply2"];
+    purchased = json["purchased"];
+    soldOut = json["soldOut"];
+    localeDatetime = json['localeDatetime'];
+    accountVerification = json['accountVerification'];
+    content = json['content'];
+    problemBugs = json['problemBugs'];
+    ads = json['ads'];
+    newLabel = json['new'];
+    inProgress = json['inProgress'];
+    solved = json['solved'];
+    notSolved = json['notSolved'];
+    ticket = json['ticket'];
+    ticketHistory = json['ticketHistory'];
+    contentAppeal = json['contentAppeal'];
+    notSuspend = json['notSuspend'];
+    suspend = json['suspend'];
+    flagAsSensitive = json['flagAsSensitive'];
+    source = json['source'];
+    submissionTime = json['submissionTime'];
+    operationSystem = json['operationSystem'];
+    applicationVersion = json['applicationVersion'];
+    attachment = json['attachment'];
+    messageTicketHandled = json['messageTicketHandled'];
+    sensitiveType = json['sensitiveType'];
+    reasonOfAppeal = json['reasonOfAppeal'];
+    issueStatement = json['issueStatement'];
+    notDefined = json['notDefined'];
+    dontHaveMessagesYet = json['dontHaveMessagesYet'];
+    seeContent = json['seeContent'];
+    pleaseMakeSuretheResidenceNumberMatchestheEKTP = json['pleaseMakeSuretheResidenceNumberMatchestheEKTP'];
+    theIDCardNumberAndorYourRealNamedidnotMatch = json['theIDCardNumberAndorYourRealNamedidnotMatch'];
+    pleaseEnterYourFullName = json['pleaseEnterYourFullName'];
+    addDocument = json['addDocument'];
+    youCanAddupto3SupportingDocuments = json['youCanAddupto3SupportingDocuments'];
+    thankYou = json['thankYou'];
+    thankYouforYourFeedback = json['thankYouforYourFeedback'];
+    noResultsFor = json['noResultsFor'];
+    max3Images = json['max3Images'];
+    max4Images = json['max4Images'];
+    messageMaxTickets = json['messageMaxTickets'];
+    seeTicketHistory = json['seeTicketHistory'];
+    activeTicketIssue = json['activeTicketIssue'];
+    seeMoreContent = json['seeMoreContent'];
+    seeLess = json['seeLess'];
+    pleaseSelectOneortheMaxFileis = json['pleaseSelectOneortheMaxFileis'];
+    pleaseVerifyYourEmailFrst = json['pleaseVerifyYourEmailFrst'];
+    fileMayBeInErrorChooseAnotherFile = json['fileMayBeInErrorChooseAnotherFile'];
+    blockThisAccount = json['blockThisAccount'];
+    confirmPasswordCorrect = json['confirmPasswordCorrect'];
+    confirmPasswordWrong = json['confirmPasswordWrong'];
+    allowedSpecialCharacters = json['allowedSpecialCharacters'];
+    newPasswordCreatedSuccessfully = json['newPasswordCreatedSuccessfully'];
+    messageInvalidEmail = json['messageInvalidEmail'];
+    titleEmailIsGmail = json['titleEmailIsGmail'];
+    messageEmailIsGmail = json['messageEmailIsGmail'];
+    pleaseEnterRegisteredEmail = json['pleaseEnterRegisteredEmail'];
+    contentPreferences = json['contentPreferences'];
+    customization = json['customization'];
+    bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect = json['bySelectingThisSettingTheHomepageViewWillOnlyDisplayPostsBasedOonTheFeaturesYouSelect'];
+    descAllowComment = json['descAllowComment'];
+    allowSharing = json['allowSharing'];
+    descAllowSharing = json['descAllowSharing'];
+    sharePost = json['sharePost'];
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/utils.dart';
 
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
@@ -12,7 +13,7 @@ import 'package:hyppe/core/query_request/contents_data_query.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
-class VidSeeAllNotifier extends ChangeNotifier {
+class VidSeeAllNotifier with ChangeNotifier {
   final _system = System();
   final _routing = Routing();
 
@@ -39,6 +40,8 @@ class VidSeeAllNotifier extends ChangeNotifier {
 
   bool get hasNext => contentsQuery.hasNext;
 
+  void onUpdate() => notifyListeners();
+
   void initState(BuildContext context) {
     initialVid(context, reload: true);
     scrollController.addListener(() => scrollListener(context));
@@ -52,15 +55,20 @@ class VidSeeAllNotifier extends ChangeNotifier {
 
     try {
       if (reload) {
-        _resFuture = contentsQuery.reload(context);
+        'reload contentsQuery : 18'.logger();
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       } else {
-        _resFuture = contentsQuery.loadNext(context);
+        _resFuture = contentsQuery.loadNext(context, isLandingPage: true);
       }
 
       final res = await _resFuture;
       if (reload) {
         vidData = res;
       } else {
+        for (var data in res) {
+          'data vidData : ${data.toJson().toString()}'.logger();
+        }
+
         vidData = [...(vidData ?? [] as List<ContentData>)] + res;
       }
     } catch (e) {
@@ -69,10 +77,7 @@ class VidSeeAllNotifier extends ChangeNotifier {
   }
 
   void scrollListener(BuildContext context) {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange &&
-        !contentsQuery.loading &&
-        hasNext) {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !contentsQuery.loading && hasNext) {
       initialVid(context);
     }
   }
@@ -84,5 +89,27 @@ class VidSeeAllNotifier extends ChangeNotifier {
     } else {
       ShowBottomSheet.onNoInternetConnection(context);
     }
+  }
+
+  void reportContent(BuildContext context, ContentData data) {
+    ShowBottomSheet.onReportContent(context, postData: data, type: hyppeVid);
+  }
+
+  void showUserTag(BuildContext context, index) {
+    ShowBottomSheet.onShowUserTag(context, value: _vidData?[index].tagPeople ?? [], function: () {}, postId: _vidData?[index].postID ?? '');
+  }
+
+  void showContentSensitive(BuildContext context, {required String postID, required String content, bool? isReport}) {
+    print('hahahaha');
+    print(postID);
+    print(_vidData);
+    ContentData? _updatedData;
+    _updatedData = vidData?.firstWhere((element) => element.postID == postID);
+    print(_updatedData?.postID);
+    if (_updatedData != null) {
+      _updatedData.reportedStatus = 'ALL';
+    }
+
+    notifyListeners();
   }
 }

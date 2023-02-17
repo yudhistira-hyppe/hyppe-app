@@ -24,37 +24,48 @@ class UserProfileModel {
   String? email;
   String? username;
   bool? isComplete;
-  bool? isIdVerified;
+  String? isIdVerified;
   String? status;
   String? refreshToken;
   String? idProofNumber;
   IdProofStatus? idProofStatus;
+  bool? pinCreate;
+  bool? pinVerified;
+  String? statusKyc;
+  String? idUser;
+  String? loginSource;
 
-  UserProfileModel(
-      {this.country,
-      this.area,
-      this.city,
-      this.gender,
-      this.mobileNumber,
-      this.roles,
-      this.fullName,
-      this.bio,
-      this.avatar,
-      this.insight,
-      this.isEmailVerified,
-      this.token,
-      this.langIso,
-      this.interest,
-      this.profileID,
-      this.dob,
-      this.event,
-      this.email,
-      this.username,
-      this.isComplete,
-      this.isIdVerified,
-      this.status,
-      this.refreshToken,
-      this.idProofNumber});
+  UserProfileModel({
+    this.country,
+    this.area,
+    this.city,
+    this.gender,
+    this.mobileNumber,
+    this.roles,
+    this.fullName,
+    this.bio,
+    this.avatar,
+    this.insight,
+    this.isEmailVerified,
+    this.token,
+    this.langIso,
+    this.interest,
+    this.profileID,
+    this.dob,
+    this.event,
+    this.email,
+    this.username,
+    this.isComplete,
+    this.isIdVerified,
+    this.status,
+    this.refreshToken,
+    this.idProofNumber,
+    this.pinCreate,
+    this.pinVerified,
+    this.statusKyc,
+    this.idUser,
+    this.loginSource,
+  });
 
   UserProfileModel.fromJson(Map<String, dynamic> json) {
     country = json['country'];
@@ -87,14 +98,20 @@ class UserProfileModel {
         : json['isComplete'] == "true"
             ? true
             : false;
-    isIdVerified = json['isIdVerified'] is bool
+    isIdVerified = json['isIdVerified'] is String
         ? json['isIdVerified']
-        : json['isIdVerified'] == "true"
-            ? true
-            : false;
+        : json["isEmailVerified"] == true
+            ? 'true'
+            : 'false';
+
     status = json['status'];
     refreshToken = json['refreshToken'];
     idProofStatus = _serializeIdProofStatus(json['idProofStatus']);
+    pinVerified = json['pin_verified'] ?? false;
+    pinCreate = json['pin_create'] ?? false;
+    statusKyc = json['statusKyc'] ?? '';
+    idUser = json['iduser'] ?? '';
+    loginSource = json['loginSource'] ?? 'manual';
   }
 
   Map<String, dynamic> toJson() {
@@ -128,6 +145,10 @@ class UserProfileModel {
     data['isIdVerified'] = isIdVerified;
     data['status'] = status;
     data['refreshToken'] = refreshToken;
+    data['pin_verified'] = pinVerified;
+    data['pin_create'] = pinCreate;
+    data['statusKyc'] = statusKyc;
+    data['iduser'] = idUser;
     return data;
   }
 

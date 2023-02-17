@@ -24,10 +24,7 @@ class MessageBlocV2 {
   MessageFetch get messageFetch => _messageFetch;
   setMessageFetch(MessageFetch val) => _messageFetch = val;
 
-  Future getDiscussionBloc(
-    BuildContext context, {
-    required DiscussArgument disqusArgument,
-  }) async {
+  Future getDiscussionBloc(BuildContext context, {required DiscussArgument disqusArgument, String? disqusID}) async {
     setMessageFetch(MessageFetch(MessageState.loading));
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
@@ -45,10 +42,17 @@ class MessageBlocV2 {
     formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(disqusArgument.postType)));
     formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(disqusArgument.discussEventType)));
 
+    if (disqusID != null) {
+      formData.fields.add(MapEntry('disqusID', disqusID));
+    }
+
+    print('formData.fields');
+    print(formData.fields);
+
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setMessageFetch(MessageFetch(MessageState.getDiscussionBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -95,11 +99,13 @@ class MessageBlocV2 {
     formData.fields.add(MapEntry('receiverParty', disqusArgument.receiverParty));
     formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(disqusArgument.postType)));
     formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(disqusArgument.discussEventType)));
+    print('create dm');
+    print(formData.fields);
 
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setMessageFetch(MessageFetch(MessageState.createDiscussionBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;
@@ -119,6 +125,44 @@ class MessageBlocV2 {
       methodType: MethodType.post,
       onNoInternet: () => Routing().moveBack(),
       errorServiceType: ErrorType.createMessage,
+    );
+  }
+
+  Future deleteDiscussionBloc(
+    BuildContext context, {
+    required String postEmail,
+    required String id,
+  }) async {
+    setMessageFetch(MessageFetch(MessageState.loading));
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? email = SharedPreference().readStorage(SpKeys.email);
+    Map data = {};
+
+    postEmail != '' ? data = {"_id": id, "email": postEmail} : data = {"_id": id};
+    await Repos().reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setMessageFetch(MessageFetch(MessageState.deleteDiscussionBlocError));
+        } else {
+          final _response = GenericResponse.fromJson(onResult.data).responseData;
+          setMessageFetch(MessageFetch(MessageState.deleteDiscussionBlocSuccess, data: _response));
+        }
+      },
+      (errorData) {
+        setMessageFetch(MessageFetch(MessageState.deleteDiscussionBlocError));
+      },
+      headers: {
+        'x-auth-user': email,
+        'x-auth-token': token,
+      },
+      data: data,
+      host: postEmail != '' ? UrlConstants.deleteDiscuss : UrlConstants.deleteChat,
+      withAlertMessage: false,
+      withCheckConnection: true,
+      methodType: MethodType.post,
+      errorServiceType: ErrorType.message,
+      onNoInternet: () => Routing().moveBack(),
     );
   }
 }

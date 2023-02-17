@@ -18,7 +18,7 @@ class CustomBackgroundLayer extends StatelessWidget {
             placeHolderWidget: const Center(child: CustomLoading()),
             imageBuilder: (context, imageProvider) =>
                 Container(decoration: BoxDecoration(image: DecorationImage(fit: BoxFit.cover, image: imageProvider))),
-            errorWidget: (context, url, error) => Container(color: Colors.black)),
+            errorWidget: (context, url, error) => Container(color: Colors.black), emptyWidget: Container(color: Colors.black),),
         BackdropFilter(
             filter: ImageFilter.blur(sigmaX: sigmaX, sigmaY: sigmaY),
             child: Container(color: Colors.black.withOpacity(0)))

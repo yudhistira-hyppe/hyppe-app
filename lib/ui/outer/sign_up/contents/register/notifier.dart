@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:hyppe/core/arguments/sign_up_argument.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/user_v2/bloc.dart';
@@ -137,7 +139,7 @@ class RegisterNotifier with ChangeNotifier {
 
   Color nextButtonColor(BuildContext context) {
     if (_validationRegister() && !loading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
@@ -145,9 +147,9 @@ class RegisterNotifier with ChangeNotifier {
 
   TextStyle nextTextColor(BuildContext context) {
     if (_validationRegister()) {
-      return Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText);
+      return Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText) ?? const TextStyle();
     } else {
-      return Theme.of(context).primaryTextTheme.button!;
+      return Theme.of(context).primaryTextTheme.button ?? const TextStyle();
     }
   }
 
@@ -157,7 +159,7 @@ class RegisterNotifier with ChangeNotifier {
         if (!_system.validateEmail(email)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.checkYourEmail!,
+            language.checkYourEmail ?? 'Check Your Email',
             subCaption: language.notAValidEmailAddress,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -167,7 +169,7 @@ class RegisterNotifier with ChangeNotifier {
         } else if (!_system.atLeastEightCharacter(text: password)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.incorrectPassword!,
+            language.incorrectPassword ?? 'Incorrect Password',
             subCaption: language.atLeast8Characters,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -177,7 +179,7 @@ class RegisterNotifier with ChangeNotifier {
         } else if (!_system.atLeastContainOneCharacterAndOneNumber(text: password)) {
           ShowBottomSheet().onShowColouredSheet(
             context,
-            language.incorrectPassword!,
+            language.incorrectPassword ?? 'Incorrect Password',
             sizeIcon: 15,
             color: Theme.of(context).colorScheme.error,
             iconSvg: "${AssetPath.vectorPath}close.svg",
@@ -199,14 +201,15 @@ class RegisterNotifier with ChangeNotifier {
             // update loading state
             loading = true;
 
+            String realDeviceId = await System().getDeviceIdentifier();
+            String platForm = Platform.isAndroid ? "android" : "ios";
+            String deviceId = SharedPreference().readStorage(SpKeys.fcmToken);
+            String lang = SharedPreference().readStorage(SpKeys.isoCode);
+
             final notifier = UserBloc();
             await notifier.signUpBlocV2(
               context,
-              data: SignUpDataArgument(
-                email: email,
-                password: password,
-                deviceId: SharedPreference().readStorage(SpKeys.fcmToken),
-              ),
+              data: SignUpDataArgument(email: email, password: password, deviceId: deviceId, imei: realDeviceId != "" ? realDeviceId : deviceId, platForm: platForm, lang: lang),
             );
             final fetch = notifier.userFetch;
             loading = false;
@@ -216,7 +219,7 @@ class RegisterNotifier with ChangeNotifier {
               SharedPreference().writeStorage(SpKeys.email, _result.email);
               SharedPreference().writeStorage(SpKeys.isUserInOTP, true);
               // signUpPinNotifier.userToken = fetch.data['token'];
-              // signUpPinNotifier.userID = _result.userID!; >>>>> Backend tidak memberikan key userID
+              // signUpPinNotifier.userID = _result.userID; >>>>> Backend tidak memberikan key userID
               signUpPinNotifier.username = _result.userName ?? "";
               signUpPinNotifier.email = _result.email ?? "";
               // signUpEulaNotifier.fullName = _result.fullName ?? "";

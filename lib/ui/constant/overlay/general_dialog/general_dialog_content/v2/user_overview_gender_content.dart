@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/constants/enum.dart';
@@ -39,6 +40,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     if (widget.value.isNotEmpty) {
       _value = widget.value;
     }
+    print('gender');
+    print('gender ${_value}');
     super.initState();
   }
 
@@ -62,6 +65,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
             ),
           );
         } else if (snapshot.connectionState == ConnectionState.done) {
+          print('ini datanya');
+          print(snapshot.data);
           String _gendersResult = '${snapshot.data}'.replaceAll("[", "").replaceAll("]", "");
           final _genders = List<String>.from(_gendersResult.split(','));
 
@@ -69,7 +74,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
             children: [
               CustomTextWidget(
                 textAlign: TextAlign.center,
-                textToDisplay: translateNotifier.translate.gender!,
+                textToDisplay: translateNotifier.translate.gender ?? 'gender',
                 textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
               ),
               Expanded(
@@ -79,19 +84,19 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                   padding: const EdgeInsets.all(0),
                   itemBuilder: (context, index) {
                     return RadioListTile<String>(
-                      groupValue: _genders[index],
+                      groupValue: System().capitalizeFirstLetter(_genders[index]),
                       value: _value,
                       onChanged: (value) {
                         setState(() {
-                          _value = _genders[index];
-                          widget.onChange(_genders[index]);
+                          _value = System().capitalizeFirstLetter(_genders[index]);
+                          widget.onChange(System().capitalizeFirstLetter(_genders[index]));
                         });
                       },
                       toggleable: true,
-                      activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      activeColor: Theme.of(context).colorScheme.primary,
                       title: CustomTextWidget(
                         textAlign: TextAlign.left,
-                        textToDisplay: _genders[index],
+                        textToDisplay: System().capitalizeFirstLetter(_genders[index]),
                         textStyle: Theme.of(context).primaryTextTheme.bodyText1,
                       ),
                       controlAffinity: ListTileControlAffinity.trailing,
@@ -106,7 +111,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                   width: SizeConfig.screenWidth,
                   buttonStyle: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                      Theme.of(context).colorScheme.primaryVariant,
+                      Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   // function: () => Routing().moveBack(),
@@ -114,8 +119,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                     widget.onSave();
                   },
                   child: CustomTextWidget(
-                    textToDisplay: translateNotifier.translate.save!,
-                    textStyle: Theme.of(context).textTheme.button!.copyWith(color: kHyppeLightButtonText),
+                    textToDisplay: translateNotifier.translate.save ?? 'save',
+                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                   ),
                 ),
               ),
@@ -133,8 +138,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
                     overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
                   ),
                   child: CustomTextWidget(
-                    textToDisplay: translateNotifier.translate.cancel!,
-                    textStyle: Theme.of(context).textTheme.button!,
+                    textToDisplay: translateNotifier.translate.cancel ?? '',
+                    textStyle: Theme.of(context).textTheme.button,
                   ),
                 ),
               ),
@@ -165,7 +170,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //   children: [
     //     CustomTextWidget(
     //       textAlign: TextAlign.center,
-    //       textToDisplay: translateNotifier.translate.gender!,
+    //       textToDisplay: translateNotifier.translate.gender,
     //       textStyle: Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
     //     ),
     //     Expanded(
@@ -181,7 +186,7 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //               notifier.genderListSelected(index);
     //             },
     //             toggleable: true,
-    //             activeColor: Theme.of(context).colorScheme.primaryVariant,
+    //             activeColor: Theme.of(context).colorScheme.primary,
     //             title: CustomTextWidget(
     //               textAlign: TextAlign.left,
     //               textToDisplay: notifier.genders[index],
@@ -198,12 +203,12 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         height: 50,
     //         width: SizeConfig.screenWidth,
     //         buttonStyle: ButtonStyle(
-    //           backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primaryVariant),
+    //           backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
     //         ),
     //         function: () => Routing().moveBack(),
     //         child: CustomTextWidget(
-    //           textToDisplay: translateNotifier.translate.save!,
-    //           textStyle: Theme.of(context).textTheme.button!,
+    //           textToDisplay: translateNotifier.translate.save,
+    //           textStyle: Theme.of(context).textTheme.button,
     //         ),
     //       ),
     //     ),
@@ -218,8 +223,8 @@ class _UserOverviewGenderContentState extends State<UserOverviewGenderContent> {
     //         },
     //         buttonStyle: ButtonStyle(overlayColor: MaterialStateProperty.all<Color>(Colors.transparent)),
     //         child: CustomTextWidget(
-    //           textToDisplay: translateNotifier.translate.cancel!,
-    //           textStyle: Theme.of(context).textTheme.button!,
+    //           textToDisplay: translateNotifier.translate.cancel,
+    //           textStyle: Theme.of(context).textTheme.button,
     //         ),
     //       ),
     //     ),

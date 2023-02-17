@@ -19,14 +19,18 @@ class ImageComponent extends StatelessWidget {
   final double width;
   final double height;
   final Content? data;
+  final String? postType;
+  final String? postID;
+
   final BorderRadiusGeometry? borderRadiusGeometry;
 
-  const ImageComponent({Key? key, required this.data, this.width = 50, this.height = 50, this.borderRadiusGeometry}) : super(key: key);
+  const ImageComponent({Key? key, required this.data, this.width = 50, this.height = 50, this.borderRadiusGeometry, this.postType, this.postID}) : super(key: key);
 
   Future onGetContentData(BuildContext context, FeatureType featureType, Function(dynamic) callback) async {
+    print('ini imagecomponen');
     final getStory = PostsBloc();
     final List<ContentData> _listContentData = [];
-    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: data!.postID!);
+    await getStory.getContentsBlocV2(context, pageNumber: 0, type: featureType, postID: postID ?? '');
     final fetch = getStory.postsFetch;
     if (fetch.postsState == PostsState.getContentsSuccess) {
       if (fetch.data.isNotEmpty) {
@@ -42,16 +46,19 @@ class ImageComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    print('notifikasi data ${data}');
     if (data != null) {
       return InkWell(
         onTap: () async {
-          final featureType = System().getFeatureTypeV2(data!.postType!);
+          print('klklklklkl');
+          final featureType = System().getFeatureTypeV2(postType ?? '');
+          print(featureType);
           switch (featureType) {
             case FeatureType.vid:
               onGetContentData(context, featureType, (v) => Routing().move(Routes.vidDetail, argument: VidDetailScreenArgument(vidData: v)));
               break;
             case FeatureType.diary:
-              onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v)));
+              onGetContentData(context, featureType, (v) => Routing().move(Routes.diaryDetail, argument: DiaryDetailScreenArgument(diaryData: v, type: TypePlaylist.none)));
               break;
             case FeatureType.pic:
               onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
@@ -66,14 +73,12 @@ class ImageComponent extends StatelessWidget {
           }
         },
         child: CustomBaseCacheImage(
-          imageUrl: '${data!.fullThumbPath}',
+          imageUrl: (data?.isApsara ?? false) ? '${data?.mediaThumbEndpoint}' : '${data?.fullThumbPath}',
           errorWidget: (_, __, ___) {
             return Container(
                 width: width * SizeConfig.scaleDiagonal,
                 height: height * SizeConfig.scaleDiagonal,
-                decoration: BoxDecoration(
-                    image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover),
-                    borderRadius: borderRadiusGeometry));
+                decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: borderRadiusGeometry));
           },
           imageBuilder: (_, imageProvider) {
             return Container(
@@ -81,6 +86,10 @@ class ImageComponent extends StatelessWidget {
                 height: height * SizeConfig.scaleDiagonal,
                 decoration: BoxDecoration(image: DecorationImage(image: imageProvider, fit: BoxFit.cover), borderRadius: borderRadiusGeometry));
           },
+          emptyWidget: Container(
+              width: width * SizeConfig.scaleDiagonal,
+              height: height * SizeConfig.scaleDiagonal,
+              decoration: BoxDecoration(image: const DecorationImage(image: AssetImage('${AssetPath.pngPath}content-error.png'), fit: BoxFit.cover), borderRadius: borderRadiusGeometry)),
         ),
       );
     }

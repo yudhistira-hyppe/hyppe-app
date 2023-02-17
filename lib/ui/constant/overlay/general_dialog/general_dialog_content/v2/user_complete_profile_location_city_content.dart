@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/outer/sign_up/contents/user_complete_profile/user_complete_profile_notifier.dart';
 import 'package:hyppe/ui/outer/sign_up/widget/sign_up_load_more_list.dart';
@@ -82,9 +83,9 @@ class _UserCompleteProfileLocationCityContentState extends State<UserCompletePro
                         child: CustomElevatedButton(
                           height: 42,
                           width: SizeConfig.screenWidth,
-                          function: () => widget.onSelected(notifier.cityData[index].cityName!),
+                          function: () => widget.onSelected(notifier.cityData[index].cityName ?? ''),
                           child: CustomTextWidget(
-                            textToDisplay: notifier.cityData[index].cityName!,
+                            textToDisplay: notifier.cityData[index].cityName ?? '',
                             textStyle: Theme.of(context).textTheme.bodyText1,
                           ),
                         ),

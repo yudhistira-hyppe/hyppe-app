@@ -1,42 +1,61 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/comment_v2/comment_data_v2.dart';
+import 'package:hyppe/core/models/collection/message_v2/message_data_v2.dart' as messageData;
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/entities/playlist/notifier.dart';
+import 'package:hyppe/ui/constant/entities/comment_v2/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_interval.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_boost_time.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_buy_content.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_cancel_post.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_coming_soon_doku.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_category_support_ticket.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/musics/on_choose_music.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_delete_message.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_interest_list.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_internal_server_error.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_location_search.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_no_internet_connection.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_content.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_option_story.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_ownership_EULA.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_people_search.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_privacy_post.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_account.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_content_form.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_report_spam_form.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_ID_verification.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_all_bank.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_complete_profile_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_filters.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_bank_account.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_help_support_docs.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_id_verification_failed.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_idcard_sheet.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_license_agreement.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_tag.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_show_user_view_content.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_ownership.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_statement_pin.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/add/screen.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/playlist/list/screen.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_warning.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/reportProfile.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_content.dart';
-import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/stories/screen.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/v2/user_overview_gender_content.dart';
 import 'package:flutter/material.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/filter/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
+
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
+import 'bottom_sheet_content/on_show_success_ownership_content.dart';
 import 'bottom_sheet_content/on_sign_out.dart';
 import 'bottom_sheet_content/on_something_when_wrong.dart';
 import 'bottom_sheet_content/on_coloured_sheet.dart';
-
-// import 'package:hyppe/ui/inner/home/content/vid/notifier.dart';
-// import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-// import 'package:hyppe/ui/inner/home/content/profile/notifier.dart';
-// import 'package:hyppe/ui/inner/home/content/diary/playlist/notifier.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_user_first_layer.dart';
-// import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/report/content/report_user_second_layer.dart';
 
 class ShowBottomSheet {
   ShowBottomSheet._private();
@@ -47,36 +66,31 @@ class ShowBottomSheet {
     return _instance;
   }
 
-  // static onLongPressTileUserMessage(BuildContext _) {
-  //   final notifier = Provider.of<MessageNotifier>(_, listen: false);
-  //   showModalBottomSheet(
-  //     context: _,
-  //     isScrollControlled: true,
-  //     enableDrag: true,
-  //     backgroundColor: Colors.transparent,
-  //     builder: (builder) {
-  //       return Padding(
-  //         padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-  //         child: Container(
-  //           height: SizeConfig.screenHeight! / 3.5,
-  //           decoration: BoxDecoration(
-  //             color: Theme.of(_).colorScheme.surface,
-  //             borderRadius: BorderRadius.only(
-  //               topLeft: Radius.circular(8),
-  //               topRight: Radius.circular(8),
-  //             ),
-  //           ),
-  //           padding: const EdgeInsets.all(0),
-  //           child: OnLongPressTileUserMessageBottomSheet(),
-  //         ),
-  //       );
-  //     },
-  //   ).whenComplete(() => notifier.overview = null);
-  // }
+  static onChooseMusic(context, {isPic = false, isInit = true}) async {
+    await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        isDismissible: true,
+        backgroundColor: Colors.transparent,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface, borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
+              height: context.getHeight() * 0.92,
+              child: OnChooseMusicBottomSheet(
+                isPic: isPic,
+                isInit: isInit,
+              ),
+            ),
+          );
+        });
+  }
 
-  static onUploadContent(_) {
-    showModalBottomSheet(
-      context: _,
+  static onUploadContent(context) async {
+    await showModalBottomSheet(
+      context: context,
       isScrollControlled: true,
       enableDrag: true,
       isDismissible: true,
@@ -87,7 +101,7 @@ class ShowBottomSheet {
           child: Container(
             height: SizeConfig.screenHeight! / 1.78,
             decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
@@ -96,6 +110,33 @@ class ShowBottomSheet {
             padding: const EdgeInsets.all(0),
             child: OnUploadContentBottomSheet(),
           ),
+        );
+      },
+    );
+  }
+
+  static onLongPressDeleteMessage(BuildContext _, {messageData.MessageDataV2? data, required Function() function}) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: false,
+
+      // isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Wrap(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.all(0),
+              child: OnDeleteMessageBottomSheet(data: data, function: function),
+            ),
+          ],
         );
       },
     );
@@ -148,17 +189,17 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton!, backButton: backButton),
+            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton ?? () {}, backButton: backButton),
           ),
         );
       },
     );
   }
 
-  static onShowReport(BuildContext _, {ContentData? data, ReportType? reportType, double? height, bool fromLandscapeMode = false}) {
+  static onShowReport(BuildContext context, {ContentData? data, ReportType? reportType, double? height, bool fromLandscapeMode = false}) {
     showModalBottomSheet(
       isScrollControlled: true,
-      context: _,
+      context: context,
       enableDrag: true,
       isDismissible: true,
       backgroundColor: Colors.transparent,
@@ -166,14 +207,14 @@ class ShowBottomSheet {
         return Container(
           height: height ?? SizeConfig.screenHeight! / 4,
           decoration: BoxDecoration(
-            color: Theme.of(_).colorScheme.surface,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(8),
               topRight: Radius.circular(8),
             ),
           ),
           padding: const EdgeInsets.all(0),
-          child: ReportContent(userID: data!.email, postID: data.postID, reportType: reportType, fromLandscapeMode: fromLandscapeMode),
+          child: ReportContent(userID: data?.email, postID: data?.postID, reportType: reportType, fromLandscapeMode: fromLandscapeMode),
         );
       },
     ).whenComplete(() {
@@ -182,10 +223,10 @@ class ShowBottomSheet {
     });
   }
 
-  static onShowReportStory(_, {ContentData? data, int? index, bool? forceStop}) {
+  static onShowReportStory(context, {ContentData? data, int? index, bool? forceStop}) {
     showModalBottomSheet(
       isScrollControlled: true,
-      context: _,
+      context: context,
       enableDrag: true,
       isDismissible: true,
       backgroundColor: Colors.transparent,
@@ -195,97 +236,32 @@ class ShowBottomSheet {
           child: Container(
             height: SizeConfig.screenHeight! / 4,
             decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: ReportContent(userID: data!.email, storyID: data.postID, reportType: ReportType.story),
+            child: ReportContent(userID: data?.email, storyID: data?.postID, reportType: ReportType.story),
           ),
         );
       },
     ).whenComplete(() => forceStop = false);
   }
 
-  // static onShowReportProfile(_, {String? userID}) {
-  //   showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     context: _,
-  //     enableDrag: true,
-  //     isDismissible: true,
-  //     backgroundColor: Colors.transparent,
-  //     builder: (builder) {
-  //       return Selector<ReportNotifier, bool>(
-  //         selector: (_, select) => select.screen,
-  //         builder: (_, screen, __) => Container(
-  //           height: screen
-  //               ? (SizeConfig.screenHeight! / 3.5)
-  //               : Provider.of<ProfileNotifier>(_, listen: false).statusFollowing != StatusFollowing.following
-  //                   ? (SizeConfig.screenHeight! / 6.2)
-  //                   : (SizeConfig.screenHeight! / 4),
-  //           decoration: BoxDecoration(
-  //             color: Theme.of(_).colorScheme.surface,
-  //             borderRadius: BorderRadius.only(
-  //               topLeft: Radius.circular(8),
-  //               topRight: Radius.circular(8),
-  //             ),
-  //           ),
-  //           padding: const EdgeInsets.all(0),
-  //           child: screen ? ReportUserSecondLayer(userID: userID) : ReportUserFirstLayer(userID: userID),
-  //         ),
-  //       );
-  //     },
-  //   ).whenComplete(() => Provider.of<ReportNotifier>(_, listen: false).screen = false);
-  // }
-
   static void onShowCommentV2(
     BuildContext _, {
     required String? postID,
     DisqusLogs? parentComment,
   }) {
-    System().actionReqiredIdCard(
-      _,
-      uploadContentAction: false,
-      action: () {
-        Scaffold.of(_)
-            .showBottomSheet(
-              (context) {
-                return Container(
-                  height: SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
-                  decoration: BoxDecoration(
-                    color: Theme.of(_).colorScheme.background,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(0),
-                  child: OnShowCommentBottomSheetV2(
-                    postID: postID,
-                    fromFront: false,
-                    parentComment: parentComment,
-                  ),
-                );
-              },
-            )
-            .closed
-            .whenComplete(() {
-              try {
-                if (_.read<DiariesPlaylistNotifier>().forcePause) {
-                  _.read<DiariesPlaylistNotifier>().forcePause = false;
-                }
-              } catch (e) {
-                e.logger();
-              }
-              // Provider.of<CommentNotifier>(_, listen: false).onCommentExit();
-            });
-      },
-    );
-  }
+    // System().actionReqiredIdCard(
+    //   _,
+    //   uploadContentAction: false,
+    //   action: () {
 
-  static onShowPlaylist(BuildContext _, {String? feature, ContentData? data, int? index}) {
+    // final _routing = Routing();
+
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -293,29 +269,40 @@ class ShowBottomSheet {
       isDismissible: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
-        return Selector<PlaylistNotifier, bool>(
-          selector: (_, select) => select.screen,
-          builder: (_, screen, __) => Padding(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
-            child: Container(
-              height: MediaQuery.of(_).size.height / 2,
-              decoration: BoxDecoration(
-                color: Theme.of(_).colorScheme.surface,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
+        return ChangeNotifierProvider(
+          create: (context) => CommentNotifierV2(),
+          child: Consumer<CommentNotifierV2>(
+            builder: (context, notifier, child) => WillPopScope(
+              onWillPop: () async {
+                notifier.initState(context, postID, true, parentComment);
+                return false;
+              },
+              child: SafeArea(
+                child: Container(
+                  height: !notifier.isLoading ? SizeConfig.screenHeight! : SizeConfig.screenHeight! - (28 + (SizeConfig.screenWidth! / 1.78)),
+                  decoration: BoxDecoration(
+                    color: Theme.of(_).colorScheme.background,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                  ),
+                  margin: const EdgeInsets.only(top: 200),
+                  child: OnShowCommentBottomSheetV2(
+                    postID: postID,
+                    fromFront: false,
+                    parentComment: parentComment,
+                  ),
                 ),
               ),
-              padding: const EdgeInsets.all(0),
-              child: screen ? AddPlaylist() : ListMyPlaylist(featureType: feature, postID: data!.postID, contentID: data.postID),
             ),
           ),
         );
       },
-    ).whenComplete(() {
-      // if (_.read<DiariesPlaylistNotifier>().forcePause) _.read<DiariesPlaylistNotifier>().forcePause = false;
-      // Provider.of<PlaylistNotifier>(_, listen: false).onExit();
-    });
+    );
+    //    ;
+    //   },
+    // );
   }
 
   static onShowCompleteProfile(_) {
@@ -350,7 +337,7 @@ class ShowBottomSheet {
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-            height: MediaQuery.of(_).size.height / 3,
+            height: 450,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -359,7 +346,109 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnShowIDVerificationBottomSheet());
+            child: const OnShowIDVerificationBottomSheet());
+      },
+    );
+  }
+
+  static onShowIDVerificationFailed(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Consumer<VerificationIDNotifier>(
+          builder: (_, notifier, __) => WillPopScope(
+            onWillPop: () async {
+              notifier.retryTakeIdCard();
+              return false;
+            },
+            child: Container(
+                height: 330,
+                decoration: BoxDecoration(
+                  color: Theme.of(ctx).colorScheme.surface,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                padding: const EdgeInsets.all(0),
+                child: OnShowIDVerificationFailedBottomSheet()),
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowInfoIDCard(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          height: 100,
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: const OnShowInfoIdCardBottomSheet(),
+        );
+      },
+    );
+  }
+
+  static onShowHelpSupportDocs(BuildContext ctx) {
+    showModalBottomSheet(
+      isScrollControlled: false,
+      context: ctx,
+      enableDrag: false,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+          height: 64,
+          decoration: BoxDecoration(
+            color: Theme.of(ctx).colorScheme.surface,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          padding: const EdgeInsets.all(0),
+          child: const OnShowHelpSupportDocsBottomSheet(),
+        );
+      },
+    );
+  }
+
+  static onShowSuccessPostContentOwnership(_) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: _,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+            height: 300,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: const OnShowSuccessPostContentOwnershipBottomSheet());
       },
     );
   }
@@ -400,7 +489,13 @@ class ShowBottomSheet {
     Function? function,
     bool enableDrag = true,
     bool dismissible = true,
+    bool isArrow = false,
     EdgeInsets padding = const EdgeInsets.symmetric(vertical: 10),
+    EdgeInsets? margin,
+    double? borderRadius,
+    final Function()? functionSubCaption,
+    final String? subCaptionButton,
+    final int? milisecond,
   }) async {
     final _result = await showModalBottomSheet<bool>(
       isScrollControlled: enableDrag,
@@ -411,9 +506,12 @@ class ShowBottomSheet {
       builder: (builder) {
         return SafeArea(
           child: Container(
+              margin: margin,
               padding: padding,
-              decoration: BoxDecoration(color: color),
+              decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(borderRadius ?? 0))),
               child: OnColouredSheet(
+                isArrow: isArrow,
+                isMargin: margin != null,
                 caption: caption,
                 maxLines: maxLines,
                 subCaption: subCaption,
@@ -422,6 +520,9 @@ class ShowBottomSheet {
                 iconColor: iconColor,
                 function: function,
                 textOverflow: textOverflow,
+                subCaptionButton: subCaptionButton,
+                functionSubCaption: functionSubCaption,
+                milisecond: milisecond,
               )),
         );
       },
@@ -479,9 +580,8 @@ class ShowBottomSheet {
     );
   }
 
-  PersistentBottomSheetController<T> onShowFilters<T>(
-      BuildContext context, GlobalKey<ScaffoldState> scaffoldState, String file, GlobalKey? globalKey) {
-    return scaffoldState.currentState!.showBottomSheet<T>(
+  PersistentBottomSheetController<T>? onShowFilters<T>(BuildContext context, GlobalKey<ScaffoldState> scaffoldState, String file, GlobalKey? globalKey) {
+    return scaffoldState.currentState?.showBottomSheet<T>(
       (context) => GestureDetector(
         onVerticalDragStart: (_) {},
         child: OnShowFilters(
@@ -493,69 +593,25 @@ class ShowBottomSheet {
     );
   }
 
-  static onShowViewers(BuildContext _, {required String? storyID}) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: _,
-      enableDrag: true,
-      isDismissible: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Container(
-          height: MediaQuery.of(_).size.height * 0.9,
-          decoration: BoxDecoration(
-            color: Theme.of(_).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-          ),
-          child: ViewedStoriesScreen(storyID: storyID!),
-        );
-      },
-    );
-  }
-
-  static onShowOptionStory(BuildContext _, Map<String, dynamic>? arguments) {
-    showModalBottomSheet(
-      context: _,
-      enableDrag: true,
-      isDismissible: true,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (builder) {
-        return Container(
-          height: MediaQuery.of(_).size.height * 0.4,
-          decoration: BoxDecoration(
-            color: Theme.of(_).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-          ),
-          child: OnShowOptionStory(arguments: arguments),
-        );
-      },
-    );
-  }
-
-  static onShowOptionContent(
+  Future onShowOptionContent(
     BuildContext _, {
     required ContentData contentData,
     required String captionTitle,
     bool onDetail = true,
     StoryController? storyController,
     Function? onUpdate,
-  }) {
-    showModalBottomSheet(
+    bool? isShare,
+  }) async {
+    await showModalBottomSheet(
       context: _,
       enableDrag: true,
       isDismissible: true,
-      isScrollControlled: true,
+      // isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (builder) {
         return Container(
-          height: MediaQuery.of(_).size.height * 0.4,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // height: MediaQuery.of(_).size.height * 0.4,
           decoration: BoxDecoration(
             color: Theme.of(_).colorScheme.surface,
             borderRadius: const BorderRadius.only(
@@ -567,6 +623,7 @@ class ShowBottomSheet {
             captionTitle: captionTitle,
             contentData: contentData,
             onDetail: onDetail,
+            isShare: isShare ?? true,
           ),
         );
       },
@@ -592,7 +649,7 @@ class ShowBottomSheet {
       builder: (builder) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 15),
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.35),
+          constraints: const BoxConstraints(maxHeight: 270),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(8),
@@ -644,18 +701,22 @@ class ShowBottomSheet {
     return _result ?? false;
   }
 
-  static onComingSoonDoku(_) {
+  static onReportContent(
+    _, {
+    ContentData? postData,
+    AdsData? adsData,
+    String? type,
+    StoryController? storyController,
+    Function? onUpdate,
+    bool? inDetail,
+  }) {
     showModalBottomSheet(
       context: _,
-      isScrollControlled: true,
-      enableDrag: true,
-      isDismissible: true,
-      backgroundColor: Colors.transparent,
       builder: (builder) {
         return Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
           child: Container(
-            height: SizeConfig.screenHeight! / 1.78,
+            // height: SizeConfig.screenHeight / 1.78,
             decoration: BoxDecoration(
               color: Theme.of(_).colorScheme.surface,
               borderRadius: const BorderRadius.only(
@@ -663,9 +724,659 @@ class ShowBottomSheet {
                 topRight: Radius.circular(8),
               ),
             ),
-            padding: const EdgeInsets.all(8),
-            child: const OnComingSoonDoku(),
+            padding: const EdgeInsets.all(0),
+            child: OnReportContentBottomSheet(
+              postData: postData,
+              type: type,
+              onUpdate: onUpdate,
+              adsData: adsData,
+              inDetail: inDetail,
+            ),
           ),
+        );
+      },
+    ).whenComplete(() {});
+  }
+
+  static onReportFormContent(_, {StoryController? storyController}) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+          child: Container(
+            // height: SizeConfig.screenHeight / 1.78,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: const OnReportContentFormBottomSheet(),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      Routing().moveBack();
+    });
+  }
+
+  static onReportSpamContent(
+    _, {
+    StoryController? storyController,
+    ContentData? postData,
+    AdsData? adsData,
+    String? type,
+    Function? onUpdate,
+    bool? inDetail,
+  }) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      builder: (builder) {
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            child: Container(
+              height: SizeConfig.screenHeight ?? 0 / 1.09,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.all(0),
+              child: OnReportSpamFormBottomSheet(
+                postData: postData,
+                type: type,
+                inDetail: inDetail ?? true,
+              ),
+            ),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      // if (onUpdate != null) onUpdate();
+    });
+  }
+
+  static onReportAccountContent(
+    _, {
+    StoryController? storyController,
+    ContentData? postData,
+    AdsData? adsData,
+    String? type,
+    Function? onUpdate,
+    bool? inDetail,
+  }) {
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      builder: (builder) {
+        return FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(builder).viewInsets.bottom),
+            child: Container(
+              height: SizeConfig.screenHeight ?? 0 / 1.09,
+              decoration: BoxDecoration(
+                color: Theme.of(_).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              padding: const EdgeInsets.all(0),
+              child: OnReportAccountBottomSheet(
+                postData: postData,
+                type: type,
+                inDetail: inDetail ?? true,
+              ),
+            ),
+          ),
+        );
+      },
+    ).whenComplete(() {
+      // if (onUpdate != null) onUpdate();
+    });
+  }
+
+  static onShowOptionPrivacyPost(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value, String code) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnPrivacyPostBottomSheet(
+            value: value,
+            onSave: onSave,
+            onChange: onChange,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowLocation(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnLocationSearchBottomSheet(
+            value: value,
+            onSave: onSave,
+            onChange: onChange,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowInteresList(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnInterestListBottomSheet(
+            value: value,
+            onSave: onSave,
+            onChange: onChange,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowSearchPeople(
+    BuildContext context, {
+    required String value,
+    required Function() onSave,
+    required Function() onCancel,
+    required Function(String value) onChange,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Material(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: OnSearchPeopleBottomSheet(
+              value: value,
+              onSave: onSave,
+              onChange: onChange,
+              onCancel: onCancel,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static void onShowAutoComplate(
+    BuildContext _,
+  ) {
+    // System().actionReqiredIdCard(
+    //   _,
+    //   uploadContentAction: false,
+    //   action: () {
+    String value = '';
+    Function() onSave = () {};
+    Function() onCancel = () {};
+    Function(String value) onChange = (val) {};
+    showModalBottomSheet(
+      context: _,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      builder: (builder) {
+        return Material(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: OnSearchPeopleBottomSheet(
+              value: value,
+              onSave: onSave,
+              onChange: onChange,
+              onCancel: onCancel,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowUserTag(
+    BuildContext _, {
+    required List<TagPeople> value,
+    required Function() function,
+    required postId,
+    StoryController? storyController,
+  }) {
+    showModalBottomSheet<dynamic>(
+        isScrollControlled: true,
+        context: _,
+        builder: (BuildContext bc) {
+          return Wrap(children: <Widget>[
+            WillPopScope(
+              onWillPop: () async {
+                Routing().moveBack();
+                if (storyController != null) {
+                  storyController.play();
+                }
+                return false;
+              },
+              child: Container(
+                decoration: const BoxDecoration(
+                  // color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25.0),
+                    topRight: Radius.circular(25.0),
+                  ),
+                ),
+                child: OnShowUserTagBottomSheet(
+                  value: value,
+                  function: function,
+                  postId: postId,
+                ),
+              ),
+            )
+          ]);
+        });
+  }
+
+  static onShowUserViewContent(
+    BuildContext _, {
+    // required List<ViewContent> value,
+    // required Function() function,
+    required postId,
+    required eventType,
+    required title,
+    StoryController? storyController,
+  }) {
+    showModalBottomSheet<dynamic>(
+        isScrollControlled: true,
+        context: _,
+        builder: (BuildContext bc) {
+          return Container(
+            constraints: BoxConstraints(
+              maxHeight: SizeConfig.screenHeight! / 2,
+              minHeight: 20,
+            ),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(25.0),
+                topRight: Radius.circular(25.0),
+              ),
+            ),
+            child: OnShowUserViewContentBottomSheet(
+              postId: postId,
+              eventType: eventType,
+              title: title,
+            ),
+          );
+        });
+  }
+
+  static onShowReportProfile(BuildContext _, {userID}) {
+    showModalBottomSheet(
+        isScrollControlled: false,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return Container(
+            // height: height ?? SizeConfig.screenHeight / 4,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: ReportProfile(userID: userID),
+          );
+        });
+  }
+
+  static onBuyContent(context, {ContentData? data}) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+            height: 250,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnBuyContentBottomSheet(
+              data: data,
+            ));
+      },
+    );
+  }
+
+  onShowHelpBankAccount(context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (builder) {
+        return Container(
+            margin: EdgeInsets.only(top: 50),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: OnHelpBankAccountBottomSheet());
+      },
+    );
+  }
+
+  onShowAllBank(BuildContext _) {
+    showModalBottomSheet(
+        isScrollControlled: false,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return Container(
+            // height: height ?? SizeConfig.screenHeight / 4,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: onShowAllBankBottomSheet(),
+          );
+        });
+  }
+
+  onShowFilterAllTransaction(BuildContext _) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: _,
+        backgroundColor: Colors.transparent,
+        builder: (builder) {
+          return Container(
+            margin: EdgeInsets.only(top: 30),
+            // height: height ?? SizeConfig.screenHeight / 4,
+            decoration: BoxDecoration(
+              color: Theme.of(_).colorScheme.surface,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            padding: const EdgeInsets.all(0),
+            child: AllTransactionFilter(),
+          );
+        });
+  }
+
+  static onShowOwnerEULA(
+    BuildContext context, {
+    required Function() onSave,
+    required Function() onCancel,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnOwnershipEULABottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowStatementOwnership(
+    BuildContext context, {
+    required Function() onSave,
+    required Function() onCancel,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnStatementOwnershipBottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowStatementPin(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    bodyText = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnStatementPinBottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+            title: title,
+            bodyText: bodyText,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowCategorySupportTicket(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    bodyText = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: const OnCategorySupportTicket(),
+        );
+      },
+    );
+  }
+
+  static onWarningBottom(
+    BuildContext context, {
+    Function()? onSave,
+    Function()? onCancel,
+    title = '',
+    bodyText = '',
+    buttonText = '',
+    icon = '',
+  }) {
+    showModalBottomSheet(
+      context: context,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: OnWarningBottomSheet(
+            onSave: onSave,
+            onCancel: onCancel,
+            title: title,
+            bodyText: bodyText,
+            buttonText: buttonText,
+            icon: icon,
+          ),
+        );
+      },
+    );
+  }
+
+  static onShowBoostTime(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      enableDrag: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: const OnBoostTimeContent(),
+        );
+      },
+    );
+  }
+
+  static onShowBoostInterval(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      enableDrag: true,
+      builder: (builder) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          // constraints: const BoxConstraints(maxHeight: 280),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
+            ),
+          ),
+          child: const OnBoostIntervalContent(),
         );
       },
     );

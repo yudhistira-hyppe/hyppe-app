@@ -44,12 +44,17 @@ class CommentBloc {
       formData.fields.add(MapEntry('isQuery', argument.isQuery.toString()));
       formData.fields.add(MapEntry('postType', _system.validatePostTypeV2(argument.postType)));
       formData.fields.add(MapEntry('eventType', _system.convertMessageEventTypeToString(argument.discussEventType)));
+      formData.fields.add(MapEntry('tagComment[]', argument.tagComment.join(',')));
     }
+    print('hasil form');
+    formData.fields.map((e) {
+      print(e);
+    }).toList();
 
     await Repos().reposPost(
       context,
       (onResult) {
-        if (onResult.statusCode! > HTTP_CODE) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setCommentFetch(CommentFetch(CommentState.commentsBlocError));
         } else {
           final _response = GenericResponse.fromJson(onResult.data).responseData;

@@ -19,7 +19,7 @@ class PickFileErrorAlertContent extends StatelessWidget {
           onPressed: () => Routing().moveBack(),
           child: CustomTextWidget(
             textStyle:
-            Theme.of(context).textTheme.button!.apply(color: Theme.of(context).colorScheme.primaryVariant),
+            Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primary),
             textToDisplay: 'Ok',
           ),
         ),
