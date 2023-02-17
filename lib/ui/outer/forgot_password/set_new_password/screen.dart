@@ -124,6 +124,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                           sixteenPx,
                           CustomTextFormField(
                             // focusNode: notifier.passwordFocus,
+                            isEnabled: notifier.validationRegister(),
                             obscuringCharacter: '*',
                             inputAreaHeight: (isMatch ? 55 : 70) * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,
@@ -235,9 +236,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                         foregroundColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
                         shadowColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context))),
                     function: () {
-                      if (!notifier.loading) {
                         notifier.nextButton(context, mounted);
-                      }
                     },
                     child: notifier.loading
                         ? const CustomLoading()

@@ -229,11 +229,11 @@ class UserOtpNotifier extends ChangeNotifier with WidgetsBindingObserver, Loadin
       if (fetch.userState == UserState.RecoverSuccess) {
         _sharedPrefs.removeValue(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
         afterExecute();
-        ShowBottomSheet().onShowColouredSheet(
-          context,
-          language.checkYourEmail ?? '',
-          subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
-        );
+        // ShowBottomSheet().onShowColouredSheet(
+        //   context,
+        //   language.checkYourEmail ?? '',
+        //   subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
+        // );
       }
     } finally {
       setLoading(false, loadingObject: resendLoadKey);

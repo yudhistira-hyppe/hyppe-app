@@ -273,13 +273,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       signUpPinNotifier.username = signData.username ?? '';
       signUpPinNotifier.email = signData.email ?? '';
-      signUpPinNotifier.resend(context);
+      // signUpPinNotifier.resend(context);
       signUpPinNotifier.resendPilih = true;
       // signUpPinNotifier.timer = '00:00';
 
       signUpPinNotifier.userToken = signData.token ?? '';
       // signUpPinNotifier.userID = signData.profileID;
-      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin)).whenComplete(() {
+      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
         clearTextController();
       });
     }

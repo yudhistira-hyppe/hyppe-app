@@ -25,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
   final int? maxLength;
   final int? minLines;
   final int? maxLines;
+  final bool isEnabled;
 
   const CustomTextFormField(
       {Key? key,
@@ -50,7 +51,7 @@ class CustomTextFormField extends StatelessWidget {
       this.maxLength,
       this.cursorHeight,
       this.minLines,
-      this.maxLines})
+      this.maxLines, this.isEnabled = true})
       : super(key: key);
 
   @override
@@ -59,6 +60,7 @@ class CustomTextFormField extends StatelessWidget {
         width: inputAreaWidth,
         height: inputAreaHeight,
         child: TextFormField(
+          enabled: isEnabled,
           autovalidateMode: autovalidateMode,
           style: style,
           cursorHeight: cursorHeight,

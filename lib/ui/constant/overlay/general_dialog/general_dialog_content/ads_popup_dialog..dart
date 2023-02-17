@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:hyppe/core/bloc/ads_video/state.dart';
-import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/constants/utils.dart';
@@ -387,37 +386,41 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
   Widget bottomAdsLayout(AdsData data) {
     return Material(
       color: Colors.transparent,
-      child: Container(
-        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
-        child: InkWell(
-          onTap: () async {
-            final uri = Uri.parse(data.adsUrlLink ?? '');
-            if (await canLaunchUrl(uri)) {
-              adsView(widget.data, secondsVideo, isClick: true);
-              Navigator.pop(context);
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
-            } else {
-              throw "Could not launch $uri";
-            }
-            // can't launch url, there is some error
-          },
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(top: 10, bottom: 10),
-            child: const Text(
-              'Learn more',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
+      child: Consumer<TranslateNotifierV2>(
+          builder: (context, notifier, child){
+            return Container(
+              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
+              child: InkWell(
+                onTap: () async {
+                  final uri = Uri.parse(data.adsUrlLink ?? '');
+                  if (await canLaunchUrl(uri)) {
+                    adsView(widget.data, secondsVideo, isClick: true);
+                    Navigator.pop(context);
+                    await launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    throw "Could not launch $uri";
+                  }
+                  // can't launch url, there is some error
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    notifier.translate.learnMore ?? 'Learn More',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                ),
               ),
-            ),
-            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-          ),
-        ),
+            );
+          }
       ),
     );
   }
