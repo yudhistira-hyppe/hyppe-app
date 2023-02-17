@@ -42,7 +42,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   }
 
   @override
-  void onUploadReceiveProgress(int count, int total) {
+  void onUploadReceiveProgress(double count, double total) {
     _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
       _uploadNotifier.isUploading = true;
@@ -51,7 +51,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   }
 
   @override
-  void onUploadSendProgress(int count, int total) {
+  void onUploadSendProgress(double count, double total) {
     _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
       _uploadNotifier.isUploading = true;
@@ -242,7 +242,7 @@ class UploadNotifier extends ChangeNotifier {
     _progress = 0.0;
     _isUploading = false;
     _message = _language.translate.contentUploaded ?? '';
-    if(isNotify){
+    if (isNotify) {
       notifyListeners();
     }
   }

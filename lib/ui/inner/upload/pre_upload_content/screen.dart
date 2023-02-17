@@ -98,7 +98,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Text('${widget.arguments.content}'),
-                        loadingCompress(notifier.progressCompress),
+                        // loadingCompress(notifier.progressCompress),
                         // Text("${notifier.progressCompress}"),
                         // Text("${notifier.videoSize / 1000000} mb"),
                         captionWidget(textTheme, notifier),
@@ -192,6 +192,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                             if (SharedPreference().readStorage(SpKeys.statusVerificationId) != VERIFIED || notifier.featureType == FeatureType.story || widget.arguments.onEdit) {
                               notifier.onClickPost(
                                 context,
+                                mounted,
                                 onEdit: widget.arguments.onEdit,
                                 data: widget.arguments.contentData,
                                 content: widget.arguments.content,
@@ -201,6 +202,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                   ? notifier.onShowStatement(context, onCancel: () {
                                       notifier.onClickPost(
                                         context,
+                                        mounted,
                                         onEdit: widget.arguments.onEdit,
                                         data: widget.arguments.contentData,
                                         content: widget.arguments.content,
@@ -208,6 +210,7 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                                     })
                                   : notifier.onClickPost(
                                       context,
+                                      mounted,
                                       onEdit: widget.arguments.onEdit,
                                       data: widget.arguments.contentData,
                                       content: widget.arguments.content,
@@ -447,14 +450,14 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
                   ),
                   child: PickitemTitle(
                     title: notifier.interest[index].interestName ?? '',
-                    select: notifier.pickedInterest(notifier.interest[index].interestName) ? true : false,
+                    select: notifier.pickedInterest(notifier.interest[index].id) ? true : false,
                     button: true,
                     function: () {
                       FocusScope.of(context).unfocus();
                       notifier.insertInterest(context, index);
                     },
                     textStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: notifier.pickedInterest(notifier.interest[index].interestName) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
+                          color: notifier.pickedInterest(notifier.interest[index].id) ? kHyppeLightSurface : Theme.of(context).colorScheme.onBackground,
                         ),
                   ),
                 ),
@@ -676,9 +679,8 @@ class _PreUploadContentScreenState extends State<PreUploadContentScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextWidget(
-            textToDisplay:
-                notifier.privacyValue == 'PRIVATE' ?
-                 "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}"
+            textToDisplay: notifier.privacyValue == 'PRIVATE'
+                ? "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}"
                 : "${notifier.privacyTitle}, ${notifier.language.comment} ${notifier.allowComment ? notifier.language.yes : notifier.language.no}, ${notifier.language.share} ${notifier.isShared ? notifier.language.yes : notifier.language.no}",
             textStyle: textTheme.caption?.copyWith(color: kHyppeTextLightPrimary, fontFamily: "Lato"),
           ),

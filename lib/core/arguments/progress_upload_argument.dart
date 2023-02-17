@@ -1,6 +1,6 @@
 class ProgressUploadArgument {
-  final int count;
-  final int total;
+  final double count;
+  final double total;
 
   ProgressUploadArgument({
     required this.count,

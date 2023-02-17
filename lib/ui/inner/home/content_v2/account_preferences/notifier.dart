@@ -252,7 +252,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             file: _file.values.single?.single.path ?? '',
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
             },
           );
 
@@ -611,7 +611,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           _assignDioCancelToken();
 
           progress = "0%";
-          Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
           final notifier = UserBloc();
           await notifier.uploadProfilePictureBlocV2(
@@ -621,7 +621,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             cancelToken: _dioCancelToken,
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
             },
           );
 

@@ -423,10 +423,10 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         kewarganegaraan: '',
         jenisKelamin: genderController.text,
         onReceiveProgress: (count, total) async {
-          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },
         onSendProgress: (received, total) async {
-          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
         },
       );
       final fetch = bloc.postsFetch;
@@ -724,25 +724,25 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   @override
-  void onPauseRecordedVideo(BuildContext context) async{
-    if(!(await Wakelock.enabled)){
+  void onPauseRecordedVideo(BuildContext context) async {
+    if (!(await Wakelock.enabled)) {
       Wakelock.enable();
     }
     // TODO: implement onPauseRecordedVideo
   }
 
   @override
-  void onRecordedVideo(BuildContext context) async{
+  void onRecordedVideo(BuildContext context) async {
     // TODO: implement onRecordedVideo
-    if(!(await Wakelock.enabled)){
+    if (!(await Wakelock.enabled)) {
       Wakelock.enable();
     }
   }
 
   @override
-  void onResumeRecordedVideo(BuildContext context) async{
+  void onResumeRecordedVideo(BuildContext context) async {
     // TODO: implement onResumeRecordedVideo
-    if(!(await Wakelock.enabled)){
+    if (!(await Wakelock.enabled)) {
       Wakelock.enable();
     }
   }
