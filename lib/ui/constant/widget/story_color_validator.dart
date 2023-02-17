@@ -23,7 +23,7 @@ class StoryColorValidator extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(
           width: width,
-          color: contentData?.isViewed==true ?   theme.colorScheme.secondary: featureType == FeatureType.story ? theme.colorScheme.primary : Colors.transparent,
+          color: (contentData?.isViewed ?? false)  ?   theme.colorScheme.secondary : featureType == FeatureType.story ? theme.colorScheme.primary : Colors.transparent,
         ),
       ),
     );

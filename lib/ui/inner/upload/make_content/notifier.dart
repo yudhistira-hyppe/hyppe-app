@@ -351,7 +351,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
 
   @override
   void onRecordedVideo(BuildContext context) async{
-    print('start recors');
+    print('start recording');
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {

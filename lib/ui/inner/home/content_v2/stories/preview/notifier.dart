@@ -35,7 +35,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   List<ContentData>? _peopleStoriesData;
 
-  Map<String, List<ContentData>> _groupPeopleStory = {};
+  // Map<String, List<ContentData>> _groupPeopleStory = {};
+
+  List<StoriesGroup>? _storiesGroups = null;
 
   List<ContentData>? _myStoriesData;
 
@@ -45,7 +47,9 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   List<ContentData>? get peopleStoriesData => _peopleStoriesData;
 
-  Map<String, List<ContentData>> get groupPeopleStory => _groupPeopleStory;
+  // Map<String, List<ContentData>> get groupPeopleStory => _groupPeopleStory;
+
+  List<StoriesGroup>? get storiesGroups => _storiesGroups;
 
   List<ContentData>? get myStoriesData => _myStoriesData;
 
@@ -65,8 +69,13 @@ class PreviewStoriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set groupPeopleStory(Map<String, List<ContentData>> map) {
-    _groupPeopleStory = map;
+  // set groupPeopleStory(Map<String, List<ContentData>> map) {
+  //   _groupPeopleStory = map;
+  //   notifyListeners();
+  // }
+
+  set storiesGroups(List<StoriesGroup>? values){
+    _storiesGroups = values;
     notifyListeners();
   }
 
@@ -85,25 +94,31 @@ class PreviewStoriesNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  int groupItemCount(dynamic error) => _groupPeopleStory == null && error == null
-      ? 10
-      : peopleContentsQuery.hasNext
-          ? (_groupPeopleStory.length) + 1
-          : (_groupPeopleStory.length) + 1;
+  // int groupItemCount(dynamic error) => _groupPeopleStory == null && error == null
+  //     ? 10
+  //     : peopleContentsQuery.hasNext
+  //         ? (_groupPeopleStory.length) + 1
+  //         : (_groupPeopleStory.length) + 1;
 
-  int peopleItemCount(dynamic error) => _peopleStoriesData == null && error == null
+  // int peopleItemCount(dynamic error) => _peopleStoriesData == null && error == null
+  //     ? 10
+  //     : peopleContentsQuery.hasNext
+  //         ? (_peopleStoriesData?.length ?? 0) + 1
+  //         : (_peopleStoriesData?.length ?? 0) + 1;
+
+
+  int peopleItemCount(dynamic error) => _storiesGroups == null && error == null
       ? 10
-      : peopleContentsQuery.hasNext
-          ? (_peopleStoriesData?.length ?? 0) + 1
-          : (_peopleStoriesData?.length ?? 0) + 1;
+      : (_storiesGroups?.length ?? 0) + 1;
 
   bool get hasNext => peopleContentsQuery.hasNext;
 
-  Future initialStories(BuildContext context, {List<ContentData>? list}) async {
+  Future initialStories(BuildContext context/*, {List<ContentData>? list}*/) async {
     // initialMyStories(context);
     initialMyStoryGroup(context);
     print('initialStories');
-    initialPeopleStories(context, reload: true, list: list);
+    // initialPeopleStories(context, reload: true, list: list);
+    initialStoriesGroup(context);
   }
 
   Future<void> initialMyStories(BuildContext context) async {
@@ -138,6 +153,19 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   Future<void> initialAllPeopleStories(BuildContext context, bool isStart) async {}
 
+  Future<void> initialStoriesGroup(BuildContext context) async{
+    List<StoriesGroup>? res = [];
+    try{
+      final notifier = PostsBloc();
+      await notifier.getStoriesGroup(context);
+      final fetch = notifier.postsFetch;
+      res = (fetch.data as List<dynamic>?)?.map((e) => StoriesGroup.fromJson(e)).toList();
+      storiesGroups = res ?? [];
+    }catch(e){
+      'Story group: ERROR: $e'.logger();
+    }
+  }
+
   Future<void> initialPeopleStories(BuildContext context, {bool reload = false, List<ContentData>? list}) async {
     List<ContentData> res = [];
 
@@ -166,28 +194,28 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
       if (reload) {
         peopleStoriesData = res;
-        groupPeopleStory = {};
-        for (var data in res) {
-          final email = data.email;
-          print('people postID: ${data.postID}');
-          if (email != null) {
-            if (groupPeopleStory[email] == null) {
-              groupPeopleStory[email] = [];
-            }
-            groupPeopleStory[email]?.add(data);
-          }
-        }
-        groupPeopleStory.forEach((key, value) {
-          groupPeopleStory[key]?.sort((a, b) {
-            final aDate = a.createdAt?.getMilliSeconds();
-            final bDate = b.createdAt?.getMilliSeconds();
-            if (aDate != null && bDate != null) {
-              return aDate.compareTo(bDate);
-            } else {
-              return 0;
-            }
-          });
-        });
+        // groupPeopleStory = {};
+        // for (var data in res) {
+        //   final email = data.email;
+        //   print('people postID: ${data.postID}');
+        //   if (email != null) {
+        //     if (groupPeopleStory[email] == null) {
+        //       groupPeopleStory[email] = [];
+        //     }
+        //     groupPeopleStory[email]?.add(data);
+        //   }
+        // }
+        // groupPeopleStory.forEach((key, value) {
+        //   groupPeopleStory[key]?.sort((a, b) {
+        //     final aDate = a.createdAt?.getMilliSeconds();
+        //     final bDate = b.createdAt?.getMilliSeconds();
+        //     if (aDate != null && bDate != null) {
+        //       return aDate.compareTo(bDate);
+        //     } else {
+        //       return 0;
+        //     }
+        //   });
+        // });
         if (scrollController.hasClients) {
           scrollController.animateTo(
             scrollController.initialScrollOffset,
@@ -196,27 +224,28 @@ class PreviewStoriesNotifier with ChangeNotifier {
           );
         }
       } else {
-        for (var data in res) {
-          final email = data.email;
-          if (email != null) {
-            if (groupPeopleStory[email] == null) {
-              groupPeopleStory[email] = [];
-            }
-            groupPeopleStory[email]?.add(data);
-          }
-        }
         peopleStoriesData = [...(peopleStoriesData ?? [] as List<ContentData>)] + res;
-        groupPeopleStory.forEach((key, value) {
-          groupPeopleStory[key]?.sort((a, b) {
-            final aDate = a.createdAt?.getMilliSeconds();
-            final bDate = b.createdAt?.getMilliSeconds();
-            if (aDate != null && bDate != null) {
-              return aDate.compareTo(bDate);
-            } else {
-              return 0;
-            }
-          });
-        });
+        // for (var data in res) {
+        //   final email = data.email;
+        //   if (email != null) {
+        //     if (groupPeopleStory[email] == null) {
+        //       groupPeopleStory[email] = [];
+        //     }
+        //     groupPeopleStory[email]?.add(data);
+        //   }
+        // }
+        //
+        // groupPeopleStory.forEach((key, value) {
+        //   groupPeopleStory[key]?.sort((a, b) {
+        //     final aDate = a.createdAt?.getMilliSeconds();
+        //     final bDate = b.createdAt?.getMilliSeconds();
+        //     if (aDate != null && bDate != null) {
+        //       return aDate.compareTo(bDate);
+        //     } else {
+        //       return 0;
+        //     }
+        //   });
+        // });
       }
 
       if (peopleStoriesData != null) {
@@ -266,7 +295,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
 
   void scrollListener(BuildContext context) {
     if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange && !peopleContentsQuery.loading && hasNext) {
-      initialPeopleStories(context);
+      // initialPeopleStories(context);
     }
   }
 
@@ -290,7 +319,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
       _routing.move(
         Routes.showStories,
         argument: StoryDetailScreenArgument(
-          groupStories: myStoryGroup,
+          myStories: myStoryGroup,
         ),
       );
     } else {
@@ -302,7 +331,7 @@ class PreviewStoriesNotifier with ChangeNotifier {
     print('navigateToStoryGroup: ${myStoryGroup.isNotEmpty} : $myStoryGroup');
     _routing.move(Routes.showStories,
         argument: StoryDetailScreenArgument(
-          groupStories: groupPeopleStory,
+          groupStories: storiesGroups,
           peopleIndex: index,
         ));
   }
