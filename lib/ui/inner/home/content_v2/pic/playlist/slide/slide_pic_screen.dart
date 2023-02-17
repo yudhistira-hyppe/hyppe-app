@@ -310,13 +310,14 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                                 ),
                         ),
                         eightPx,
-                        if ((widget.data.allowComments ?? true) )_buildButtonV2(
-                          context: context,
-                          iconData: '${AssetPath.vectorPath}comment.svg',
-                          function: () {
-                            ShowBottomSheet.onShowCommentV2(context, postID: widget.data.postID);
-                          },
-                        ),
+                        if ((widget.data.allowComments ?? true))
+                          _buildButtonV2(
+                            context: context,
+                            iconData: '${AssetPath.vectorPath}comment.svg',
+                            function: () {
+                              ShowBottomSheet.onShowCommentV2(context, postID: widget.data.postID);
+                            },
+                          ),
                         eightPx,
                         if ((widget.data.isShared ?? true) && widget.data.visibility == 'PUBLIC')
                           _buildButtonV2(
@@ -346,7 +347,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               children: [
                                 widget.data.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
-                                        icon: 'user',
+                                        icon: 'tag_people',
                                         label: '${widget.data.tagPeople?.length} people',
                                         function: () {
                                           context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID);

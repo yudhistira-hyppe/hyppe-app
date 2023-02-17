@@ -207,16 +207,16 @@ class _CustomDescContentState extends State<CustomDescContent> {
 
     var splitDesc = fixDesc.split(' ');
     splitDesc.removeWhere((e) => e == '');
-    for(final desc in splitDesc){
+    for (final desc in splitDesc) {
       'Fix Desc: $desc'.logger();
     }
     final List<ItemDesc> descItems = [];
     var tempDesc = '';
 
     // print('check descItems3 ${fixDesc}');
-    for(var i = 0; splitDesc.length > i; i++){
+    for (var i = 0; splitDesc.length > i; i++) {
       if (splitDesc[i].isNotEmpty) {
-        final firstChar = splitDesc[i].substring(0,1);
+        final firstChar = splitDesc[i].substring(0, 1);
         if (firstChar == '@') {
           if (tempDesc.isNotEmpty) {
             descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
@@ -227,7 +227,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {
-            descItems.add(ItemDesc(desc: tempDesc, type: CaptionType.normal));
+            descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
           }
         }
       }
@@ -242,6 +242,15 @@ class _CustomDescContentState extends State<CustomDescContent> {
       print('check descItems ${check.desc}');
     }
     return descItems;
+  }
+
+  String getWithoutSpaces(String s) {
+    String tmp = s.substring(1, s.length);
+    while (tmp.startsWith(' ')) {
+      tmp = tmp.substring(1);
+    }
+
+    return tmp;
   }
 }
 

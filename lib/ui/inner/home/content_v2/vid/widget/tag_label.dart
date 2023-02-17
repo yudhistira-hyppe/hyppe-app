@@ -20,7 +20,7 @@ class TagLabel extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(5),
           margin: EdgeInsets.only(right: 4),
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Theme.of(context).colorScheme.surface),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color(0xffe8e8e8)),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

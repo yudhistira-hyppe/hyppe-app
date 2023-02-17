@@ -163,13 +163,13 @@ class ContentItem extends StatelessWidget {
                               ],
                             ),
                             (data?.tagPeople?.isNotEmpty ?? false) || data?.location != ''
-                                ? Padding(
+                                ? Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(top: 10.0),
                                     child: Row(
                                       children: [
                                         data?.tagPeople?.isNotEmpty ?? false
                                             ? TagLabel(
-                                                icon: 'user',
+                                                icon: 'tag_people',
                                                 label: '${data?.tagPeople?.length} people',
                                                 function: () {
                                                   notifier.showUserTag(context, index);

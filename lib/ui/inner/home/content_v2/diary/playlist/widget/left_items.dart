@@ -92,7 +92,7 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                     children: [
                       (widget.tagPeople?.isNotEmpty ?? false)
                           ? PicTagLabel(
-                              icon: 'user',
+                              icon: 'tag_people',
                               label: '${widget.tagPeople?.length} people',
                               function: () {
                                 widget.storyController?.pause();
@@ -145,10 +145,10 @@ class _LeftItemsState extends State<LeftItems> with SingleTickerProviderStateMix
                   child: ButtonBoost(
                     marginBool: true,
                     contentData: widget.data,
-                    startState: (){
+                    startState: () {
                       SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                     },
-                    afterState: (){
+                    afterState: () {
                       SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                     },
                   ),

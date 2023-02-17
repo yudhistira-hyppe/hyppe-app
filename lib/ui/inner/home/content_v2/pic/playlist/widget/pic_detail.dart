@@ -256,7 +256,7 @@ class _PicDetailState extends State<PicDetail> {
                               children: [
                                 widget.arguments?.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
-                                        icon: 'user',
+                                        icon: 'tag_people',
                                         label: '${widget.arguments?.tagPeople?.length} people',
                                         function: () {
                                           context.read<PicDetailNotifier>().showUserTag(context, widget.arguments?.tagPeople ?? [], widget.arguments?.postID);

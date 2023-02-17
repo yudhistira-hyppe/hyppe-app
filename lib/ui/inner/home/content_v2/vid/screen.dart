@@ -232,7 +232,7 @@ class _HyppePreviewVidState extends State<HyppePreviewVid> {
                                                   children: [
                                                     vidData?.tagPeople?.isNotEmpty ?? false
                                                         ? TagLabel(
-                                                            icon: 'user',
+                                                            icon: 'tag_people',
                                                             label: '${vidData?.tagPeople?.length} people',
                                                             function: () {
                                                               vidNotifier.showUserTag(context, index, vidData?.postID);

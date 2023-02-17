@@ -127,7 +127,7 @@ class ContentItem extends StatelessWidget {
                                       children: [
                                         (data?.tagPeople?.length ?? 0) != 0
                                             ? TagLabel(
-                                                icon: 'user',
+                                                icon: 'tag_people',
                                                 label: '${data?.tagPeople?.length} people ',
                                                 function: () {
                                                   context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);

@@ -87,32 +87,6 @@ class PicDetailBottom extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (data?.tagPeople?.isNotEmpty ?? false) || data?.location != ''
-                ? Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: Row(
-                      children: [
-                        (data?.tagPeople?.isNotEmpty ?? false)
-                            ? TagLabel(
-                                icon: 'user',
-                                label: '${data?.tagPeople?.length ?? 0} people',
-                                function: () {
-                                  notifier.showUserTag(context, data?.tagPeople, data?.postID);
-                                  // vidNotifier.showUserTag(context, index, data.postID);
-                                },
-                              )
-                            : const SizedBox(),
-                        data?.location == '' || data?.location == null
-                            ? const SizedBox()
-                            : TagLabel(
-                                icon: 'maptag',
-                                label: "${data?.location}",
-                                function: () {},
-                              ),
-                      ],
-                    ),
-                  )
-                : const SizedBox(),
             Container(
               // padding: const EdgeInsets.all(2),
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.5),
@@ -148,19 +122,49 @@ class PicDetailBottom extends StatelessWidget {
                         ),
             if (data?.music?.musicTitle != null) eightPx,
             data != null
-                ? GestureDetector(
-                    onTap: () {
-                      Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
-                    },
-                    child: CustomTextWidget(
-                      maxLines: 2,
-                      textAlign: TextAlign.left,
-                      textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondary),
-                      // textToDisplay: '${_system.formatterNumber(data.totalViews)}x ${notifier.language.views}',
-                      textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
+                ? Container(
+                    margin: EdgeInsets.only(top: 12),
+                    child: GestureDetector(
+                      onTap: () {
+                        Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email);
+                      },
+                      child: CustomTextWidget(
+                        maxLines: 2,
+                        textAlign: TextAlign.left,
+                        textStyle: Theme.of(context).textTheme.caption?.apply(color: Theme.of(context).colorScheme.secondary),
+                        // textToDisplay: '${_system.formatterNumber(data.totalViews)}x ${notifier.language.views}',
+                        textToDisplay: '${_system.formatterNumber(data?.insight?.views)} ${notifier2.translate.views}',
+                      ),
                     ),
                   )
                 : const CustomShimmer(width: 40, height: 6, radius: 4),
+            (data?.tagPeople?.isNotEmpty ?? false) || data?.location != ''
+                ? Container(
+                    margin: EdgeInsets.only(top: 12),
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Row(
+                      children: [
+                        (data?.tagPeople?.isNotEmpty ?? false)
+                            ? TagLabel(
+                                icon: 'tag_people',
+                                label: '${data?.tagPeople?.first.username ?? 0} people',
+                                function: () {
+                                  notifier.showUserTag(context, data?.tagPeople, data?.postID);
+                                  // vidNotifier.showUserTag(context, index, data.postID);
+                                },
+                              )
+                            : const SizedBox(),
+                        data?.location == '' || data?.location == null
+                            ? const SizedBox()
+                            : TagLabel(
+                                icon: 'maptag',
+                                label: "${data?.location}",
+                                function: () {},
+                              ),
+                      ],
+                    ),
+                  )
+                : const SizedBox(),
           ],
         ),
       ),
