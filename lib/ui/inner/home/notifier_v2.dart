@@ -233,7 +233,7 @@ class HomeNotifier with ChangeNotifier {
         final allContents = await allReload(context);
         // Refresh content
         try {
-          await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+          await stories.initialStories(context).then((value) => totLoading += 1);
         } catch (e) {
           "Error Load Story : $e".logger();
         }
@@ -303,7 +303,7 @@ class HomeNotifier with ChangeNotifier {
       final allContents = await allReload(context);
       // Refresh content
       try {
-        await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+        await stories.initialStories(context).then((value) => totLoading += 1);
       } catch (e) {
         "Error Load Story : $e".logger();
       }

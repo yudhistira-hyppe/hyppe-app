@@ -167,6 +167,8 @@ class UrlConstants {
   /// get => Get User Post.
   static const String getUserPostsLandingPage = "$postsRoute/getuserposts/landing-page";
 
+  static const String getStoriesLandingPage = "$postsRoute/landing-page/recentStory";
+
   /// post => View Like and View.
   static const String viewLike = "$postRoute/viewlike";
 
