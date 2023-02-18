@@ -57,7 +57,7 @@ class _VerificationIDStep4State extends State<VerificationIDStep4> with RouteAwa
           return false;
         },
         child: Scaffold(
-          body: canDeppAr == 'true'
+          body: canDeppAr == 'true' || Platform.isIOS
               ? CameraDevicesPage(
                   onCameraNotifierUpdate: (cameraNotifier) => notifier.cameraDevicesNotifier = cameraNotifier,
                   backCamera: true,

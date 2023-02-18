@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
-import 'package:hyppe/core/constants/eula.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -15,7 +14,6 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/shared_preference_keys.dart';
@@ -133,6 +131,7 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  thirtyTwoPx,
                 ],
               ),
             ),
