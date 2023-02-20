@@ -454,8 +454,15 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _currentPage = routeArgument.peopleIndex.toDouble();
     _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
+    final myGroup = routeArgument.myStories;
     if (groups != null) {
       _groupUserStories = groups;
+    }else if(myGroup != null){
+      List<ContentData> data = [];
+      myGroup.forEach((key, value) {
+        data.addAll(value);
+      });
+      _groupUserStories.add(StoriesGroup(email: data[0].email, username: data[0].username, story: data));
     }
   }
 
