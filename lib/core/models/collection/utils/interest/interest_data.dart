@@ -1,12 +1,12 @@
 import 'package:hyppe/core/services/system.dart';
 
 class InterestData {
+  String? id;
   String? cts;
   String? interestName;
   String? interestNameId;
   String? langID;
   String? icon;
-  String? id;
 
   InterestData({
     this.cts,
@@ -18,8 +18,8 @@ class InterestData {
   });
 
   InterestData.fromJson(Map<String, dynamic> json) {
+    id = json["_id"];
     cts = json["cts"];
-    id = json['_id'];
     interestName = System().bodyMultiLang(
       bodyEn: json["interestName"],
       bodyId: json["interestNameId"],
