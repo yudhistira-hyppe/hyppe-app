@@ -652,7 +652,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           if (_isCompress) {
             var progress = 50 + ((received / 2) / 1000000);
             _progressCompress = progress;
-            print("ini loading upload $_progressCompress}");
+            // print("ini loading upload $_progressCompress}");
             var total2 = 100.0;
             // var total2 = (total / 2) / 100000;
             // var total2 = 50 + ((total / 2) / 100000);
