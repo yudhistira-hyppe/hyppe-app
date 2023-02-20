@@ -652,7 +652,10 @@ class PreUploadContentNotifier with ChangeNotifier {
           if (_isCompress) {
             var progress = 50 + ((received / 2) / 100000);
             _progressCompress = progress;
-            var total2 = 50 + ((total / 2) / 100000);
+            print("ini loading upload $_progressCompress}");
+            var total2 = 100.0;
+            // var total2 = (total / 2) / 100000;
+            // var total2 = 50 + ((total / 2) / 100000);
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: total2));
           } else {
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
