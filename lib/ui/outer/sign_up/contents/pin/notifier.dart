@@ -302,7 +302,7 @@ class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, Load
 
       await notifier.recoverPasswordBloc(
         context,
-        email: argument.email ?? '',
+        email: argument.email,
         event: "RECOVER_PASS",
         status: "INITIAL",
       );

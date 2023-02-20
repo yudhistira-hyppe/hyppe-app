@@ -611,7 +611,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
           _assignDioCancelToken();
 
           progress = "0%";
-          Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+          Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
 
           final notifier = UserBloc();
           await notifier.uploadProfilePictureBlocV2(

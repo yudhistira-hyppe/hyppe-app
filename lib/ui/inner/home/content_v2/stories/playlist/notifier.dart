@@ -274,11 +274,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
           _result.add(
             StoryItem.pageImage(
-              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? '') : story.fullThumbPath ?? '',
+              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
               controller: storyController,
               imageFit: BoxFit.contain,
               isImages: true,
-              id: story.postID ?? '',
+              id: story.postID ?? ' ',
               duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
               requestHeaders: {
                 'post-id': story.postID ?? '',
@@ -290,7 +290,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         } else {
           _result.add(
             StoryItem.pageImage(
-              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? '') : story.fullThumbPath ?? '',
+              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
               controller: storyController,
               imageFit: BoxFit.contain,
               isImages: true,
@@ -350,7 +350,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
         _result.add(
           StoryItem.pageImage(
-            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? '') : data.fullThumbPath ?? '',
+            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
@@ -366,7 +366,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       } else {
         _result.add(
           StoryItem.pageImage(
-            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? '') : data.fullThumbPath ?? '',
+            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
@@ -451,6 +451,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
     _routeArgument = _routeArgument;
+    final _email = SharedPreference().readStorage(SpKeys.email);
     _currentPage = routeArgument.peopleIndex.toDouble();
     _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
@@ -458,11 +459,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     if (groups != null) {
       _groupUserStories = groups;
     }else if(myGroup != null){
-      List<ContentData> data = [];
-      myGroup.forEach((key, value) {
-        data.addAll(value);
-      });
-      _groupUserStories.add(StoriesGroup(email: data[0].email, username: data[0].username, story: data));
+      _groupUserStories.add(StoriesGroup(email: myGroup[_email]?[0].email, username: myGroup[_email]?[0].username, story: myGroup[_email]));
     }
   }
 
