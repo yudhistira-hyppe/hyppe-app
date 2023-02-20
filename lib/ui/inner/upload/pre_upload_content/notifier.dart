@@ -553,7 +553,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoostTime = '';
     tmpBoostInterval = '';
     editData = null;
-    _isCompress = false;
+    // _isCompress = false;
 
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
@@ -650,7 +650,7 @@ class PreUploadContentNotifier with ChangeNotifier {
         },
         onSendProgress: (received, total) async {
           if (_isCompress) {
-            var progress = 50 + ((received / 2) / 100000);
+            var progress = 50 + ((received / 2) / 1000000);
             _progressCompress = progress;
             print("ini loading upload $_progressCompress}");
             var total2 = 100.0;

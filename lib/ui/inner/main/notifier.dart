@@ -66,23 +66,6 @@ class MainNotifier with ChangeNotifier {
       _connectAndListenToSocketAds();
     }
 
-    try {
-      final ping = Ping(
-        's1.hyppe.cloud',
-        count: 3,
-        timeout: 1,
-        interval: 1,
-        ipv6: false,
-        ttl: 1000,
-      );
-
-      ping.stream.listen((event) {
-        print('ping $event');
-      });
-    } catch (e) {
-      print('error $e');
-    }
-
     // Auto follow user if app is install from a dynamic link
     DynamicLinkService.followSender(context);
 
