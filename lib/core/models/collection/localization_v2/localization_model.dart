@@ -874,6 +874,9 @@ class LocalizationModelV2 {
   String? allowSharing;
   String? descAllowSharing;
   String? sharePost;
+  String? privacyPost;
+  String? prepareYourContent;
+  String? pleaseWaitThisProcessWillTakeSomeTime;
 
   LocalizationModelV2({
     this.login,
@@ -1751,6 +1754,9 @@ class LocalizationModelV2 {
     this.allowSharing,
     this.descAllowSharing,
     this.sharePost,
+    this.privacyPost,
+    this.prepareYourContent,
+    this.pleaseWaitThisProcessWillTakeSomeTime,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2647,5 +2653,8 @@ class LocalizationModelV2 {
     allowSharing = json['allowSharing'];
     descAllowSharing = json['descAllowSharing'];
     sharePost = json['sharePost'];
+    privacyPost = json['privacyPost'];
+    prepareYourContent = json['prepareYourContent'];
+    pleaseWaitThisProcessWillTakeSomeTime = json['pleaseWaitThisProcessWillTakeSomeTime'];
   }
 }

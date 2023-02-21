@@ -130,7 +130,7 @@ class VidDetailBottom extends StatelessWidget {
                         data?.tagPeople?.isNotEmpty ?? false
                             ? TagLabel(
                                 icon: 'tag_people',
-                                label: '${data?.tagPeople?.length} people',
+                                label: '${data?.tagPeople?.first.username}',
                                 function: () {
                                   notifier.showUserTag(context, data?.tagPeople, data?.postID);
                                   // vidNotifier.showUserTag(context, index, data.postID);

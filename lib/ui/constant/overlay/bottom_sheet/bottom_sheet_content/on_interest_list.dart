@@ -67,54 +67,48 @@ class _OnInterestListBottomSheetState extends State<OnInterestListBottomSheet> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: notifier.interestList.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () => notifier.insertInterestList(context, index),
-                            title: CustomTextWidget(
-                              textAlign: TextAlign.left,
-                              textToDisplay: notifier.interestList[index].interestName ?? '',
-                              // textStyle: Theme.of(context).primaryTextTheme.titleMedium,
-                            ),
-                            trailing: notifier.pickedInterest(notifier.interestList[index].interestName)
-                                ? Icon(
-                                    Icons.check_box,
-                                    color: kHyppePrimary,
-                                  )
-                                : Icon(
-                                    Icons.check_box_outline_blank,
-                                    color: kHyppePrimary,
-                                  ),
-                          );
-                        },
-                      ),
-                      CustomElevatedButton(
-                        width: 375.0 * SizeConfig.scaleDiagonal,
-                        height: 44.0 * SizeConfig.scaleDiagonal,
-                        function: widget.onSave,
-                        child: CustomTextWidget(
-                          textToDisplay: notifier.language.save ?? 'save',
-                          textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                  ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: notifier.interestList.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        onTap: () => notifier.insertInterestList(context, index),
+                        title: CustomTextWidget(
+                          textAlign: TextAlign.left,
+                          textToDisplay: notifier.interestList[index].interestName ?? '',
+                          // textStyle: Theme.of(context).primaryTextTheme.titleMedium,
                         ),
-                        buttonStyle: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
-                          overlayColor: MaterialStateProperty.all(kHyppeLightExtended4),
-                          backgroundColor: MaterialStateProperty.all(kHyppePrimary),
-                        ),
-                      ),
-                    ],
+                        trailing: notifier.pickedInterest(notifier.interestList[index].id)
+                            ? const Icon(
+                                Icons.check_box,
+                                color: kHyppePrimary,
+                              )
+                            : const Icon(
+                                Icons.check_box_outline_blank,
+                                color: kHyppePrimary,
+                              ),
+                      );
+                    },
+                  ),
+                  CustomElevatedButton(
+                    width: 375.0 * SizeConfig.scaleDiagonal,
+                    height: 44.0 * SizeConfig.scaleDiagonal,
+                    function: widget.onSave,
+                    buttonStyle: ButtonStyle(
+                      foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      overlayColor: MaterialStateProperty.all(kHyppeLightExtended4),
+                      backgroundColor: MaterialStateProperty.all(kHyppePrimary),
+                    ),
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.language.save ?? 'save',
+                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
+                    ),
                   ),
                 ],
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
               ),
             ),
           ),

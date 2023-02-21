@@ -226,7 +226,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       print("ini hasil iklan ${fetch.adsDataState}");
 
       // final fetch = notifier.adsVideoFetch;
-
     } catch (e) {
       'Failed hit view ads ${e}'.logger();
     }
@@ -410,7 +409,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                       left: 10,
                       bottom: 20,
                       child: Consumer<TranslateNotifierV2>(
-                        builder: (context, notifier, _){
+                        builder: (context, notifier, _) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

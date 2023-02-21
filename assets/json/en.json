@@ -873,5 +873,8 @@
   "descAllowComment": "To increase interaction with your audience.",
   "allowSharing": "Allow Sharing.",
   "descAllowSharing": "To increase reach and introduce your content to new audiences.",
-  "sharePost": "Share Post"
+  "sharePost": "Share Post",
+  "privacyPost": "Privacy Post",
+  "prepareYourContent": "Prepare your content",
+  "pleaseWaitThisProcessWillTakeSomeTime": "Please wait, this process will take some time."
 }

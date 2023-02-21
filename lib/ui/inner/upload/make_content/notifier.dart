@@ -350,7 +350,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   @override
-  void onRecordedVideo(BuildContext context) async{
+  void onRecordedVideo(BuildContext context) async {
     print('start recording');
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
@@ -361,13 +361,13 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
     _startTimer(context);
     cameraNotifier.startVideoRecording();
-    if(!(await Wakelock.enabled)){
+    if (!(await Wakelock.enabled)) {
       Wakelock.enable();
     }
   }
 
   @override
-  void onPauseRecordedVideo(BuildContext context){
+  void onPauseRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
 
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
@@ -382,8 +382,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   @override
-  void onResumeRecordedVideo(BuildContext context) async{
-
+  void onResumeRecordedVideo(BuildContext context) async {
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {
@@ -395,7 +394,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       cancelTimer();
       _startTimer(context);
     });
-    if(!(await Wakelock.enabled)){
+    if (!(await Wakelock.enabled)) {
       Wakelock.enable();
     }
   }

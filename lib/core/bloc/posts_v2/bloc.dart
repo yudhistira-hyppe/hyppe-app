@@ -48,8 +48,7 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
 
-      formData.fields
-          .add(MapEntry('postType', System().validatePostTypeV2(type)));
+      formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
       if (type == FeatureType.story) {
         formData.fields.add(const MapEntry('visibility', 'PRIVATE'));
       }
@@ -78,11 +77,9 @@ class PostsBloc {
       formData.fields.add(const MapEntry('withDetail', 'true'));
       formData.fields.add(const MapEntry('withInsight', 'true'));
       formData.fields.add(MapEntry('pageRow', '$pageRows'));
-      print(
-          'ZT $pageRows, $pageNumber, $visibility, ${System().validatePostTypeV2(type)}');
+      print('ZT $pageRows, $pageNumber, $visibility, ${System().validatePostTypeV2(type)}');
       formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
-      formData.fields
-          .add(MapEntry('postType', System().validatePostTypeV2(type)));
+      formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     }
     url = UrlConstants.getuserposts;
     if (otherContent) {
@@ -107,9 +104,7 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getContentsSuccess,
-              version: onResult.data['version'],
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(PostsFetch(PostsState.getContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -134,17 +129,11 @@ class PostsBloc {
       if ((onResult.statusCode ?? 300) > HTTP_CODE) {
         setPostsFetch(PostsFetch(PostsState.getAllContentsError));
       } else {
-        setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess,
-            data: GenericResponse.fromJson(onResult.data).responseData));
+        setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
       }
     }, (errorData) {
       setPostsFetch(PostsFetch(PostsState.getAllContentsError));
-    },
-        data: {'email': email},
-        host: UrlConstants.getStoriesLandingPage,
-        withAlertMessage: false,
-        methodType: MethodType.post,
-        withCheckConnection: false);
+    }, data: {'email': email}, host: UrlConstants.getStoriesLandingPage, withAlertMessage: false, methodType: MethodType.post, withCheckConnection: false);
   }
 
   Future getAllContentsBlocV2(
@@ -176,8 +165,7 @@ class PostsBloc {
     formData.fields.add(MapEntry('pageRow', '$pageRows'));
     formData.fields.add(MapEntry('pageNumber', '$pageNumber'));
 
-    print(
-        'getAllContentsBlocV2 paging : ${formData.fields.map((e) => e).join(',')}');
+    print('getAllContentsBlocV2 paging : ${formData.fields.map((e) => e).join(',')}');
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
@@ -186,8 +174,7 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess,
-              data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -229,33 +216,25 @@ class PostsBloc {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
+    File x = File(fileContents[0] ?? '');
+    if (Platform.isIOS && type == FeatureType.pic) {
+      x = await System().rotateAndCompressAndSaveImage(File(fileContents[0] ?? ''));
+    }
+
     formData.files.add(MapEntry(
         "postContent",
-        await MultipartFile.fromFile(File(fileContents[0] ?? '').path,
-            filename:
-                "${System().basenameFiles(File(fileContents[0] ?? '').path)}.${System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "")}",
+        await MultipartFile.fromFile(x.path,
+            filename: "${System().basenameFiles(x.path)}.${System().extensionFiles(x.path)?.replaceAll(".", "")}",
             contentType: MediaType(
-              System()
-                      .lookupContentMimeType(File(fileContents[0] ?? '').path)
-                      ?.split('/')[0] ??
-                  '',
-              System()
-                      .extensionFiles(File(fileContents[0] ?? '').path)
-                      ?.replaceAll(".", "") ??
-                  "",
+              System().lookupContentMimeType(x.path)?.split('/')[0] ?? '',
+              System().extensionFiles(x.path)?.replaceAll(".", "") ?? "",
             ))));
     formData.fields.add(MapEntry('email', email));
-    formData.fields
-        .add(MapEntry('postType', System().validatePostTypeV2(type)));
+    formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
     formData.fields.add(MapEntry('description', description));
     formData.fields.add(MapEntry('tags', tags?.join(',') ?? ''));
-    formData.fields.add(MapEntry('cats',
-        cats != null ? cats.map((item) => item).toList().join(",") : ""));
-    formData.fields.add(MapEntry(
-        'tagPeople',
-        tagPeople != null
-            ? tagPeople.map((item) => item).toList().join(",")
-            : ""));
+    formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('visibility', visibility));
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
@@ -271,18 +250,13 @@ class PostsBloc {
     }
 
     formData.fields.add(MapEntry('location', location ?? ''));
-    formData.fields
-        .add(MapEntry('tagDescription', tagDescription?.join(',') ?? ''));
+    formData.fields.add(MapEntry('tagDescription', tagDescription?.join(',') ?? ''));
     // formData.fields.add(MapEntry('tagDescription', jsonEncode(tagDescription)));
 
-    formData.fields
-        .add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
-    formData.fields.add(MapEntry(
-        'saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
-    formData.fields.add(
-        MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
-    formData.fields.add(
-        MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+    formData.fields.add(MapEntry('rotate', '${System().convertOrientation(rotate)}'));
+    formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
     if (isShared != null) {
       formData.fields.add(MapEntry('isShared', isShared.toString()));
     } else {
@@ -293,13 +267,12 @@ class PostsBloc {
     debugPrint(formData.fields.join(" - "));
 
     print('createPost : ');
+    print("name file ${"${System().basenameFiles(File(fileContents[0] ?? '').path)}.${System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "")}"}");
     print(formData.fields.map((e) => e).join(','));
     print('file upload: ${formData.files.toString()}');
 
     print(System().basenameFiles(File(fileContents[0] ?? '').path));
-    print(System()
-        .extensionFiles(File(fileContents[0] ?? '').path)
-        ?.replaceAll(".", ""));
+    print(System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", ""));
 
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
@@ -309,8 +282,7 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.postContentsError));
         } else {
-          setPostsFetch(
-              PostsFetch(PostsState.postContentsSuccess, data: onResult));
+          setPostsFetch(PostsFetch(PostsState.postContentsSuccess, data: onResult));
         }
       },
       (errorData) {
@@ -333,8 +305,7 @@ class PostsBloc {
     return _postsFetch.data;
   }
 
-  Future deleteContentBlocV2(BuildContext context,
-      {required String postId, required FeatureType type}) async {
+  Future deleteContentBlocV2(BuildContext context, {required String postId, required FeatureType type}) async {
     final email = SharedPreference().readStorage(SpKeys.email);
 
     final formData = FormData();
@@ -348,8 +319,7 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.deleteContentsError));
         } else {
-          setPostsFetch(
-              PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
+          setPostsFetch(PostsFetch(PostsState.deleteContentsSuccess, data: onResult));
         }
       },
       (errorData) {
@@ -392,22 +362,13 @@ class PostsBloc {
     formData.fields.add(MapEntry('allowComments', allowComment.toString()));
     formData.fields.add(MapEntry('certified', certified.toString()));
     formData.fields.add(const MapEntry('active', 'true'));
-    formData.fields
-        .add(MapEntry('postType', System().validatePostTypeV2(type)));
-    formData.fields.add(MapEntry('cats',
-        cats != null ? cats.map((item) => item).toList().join(",") : ""));
-    formData.fields.add(MapEntry(
-        'tagPeople',
-        tagPeople != null
-            ? tagPeople.map((item) => item).toList().join(",")
-            : ""));
+    formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
+    formData.fields.add(MapEntry('cats', cats != null ? cats.map((item) => item).toList().join(",") : ""));
+    formData.fields.add(MapEntry('tagPeople', tagPeople != null ? tagPeople.map((item) => item).toList().join(",") : ""));
     formData.fields.add(MapEntry('location', location ?? ''));
-    formData.fields.add(MapEntry(
-        'saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
-    formData.fields.add(
-        MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
-    formData.fields.add(
-        MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
+    formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
+    formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
+    formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
     formData.fields.add(MapEntry('isShared', isShared.toString()));
 
     print('hahahahahahahaha');
@@ -419,11 +380,9 @@ class PostsBloc {
       context,
       (onResult) {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
-          setPostsFetch(
-              PostsFetch(PostsState.updateContentsError, data: onResult));
+          setPostsFetch(PostsFetch(PostsState.updateContentsError, data: onResult));
         } else {
-          setPostsFetch(
-              PostsFetch(PostsState.updateContentsSuccess, data: onResult));
+          setPostsFetch(PostsFetch(PostsState.updateContentsSuccess, data: onResult));
         }
       },
       (errorData) {
@@ -471,8 +430,7 @@ class PostsBloc {
         } else {
           print('onResult');
           print(onResult);
-          setPostsFetch(
-              PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
         }
       },
       (errorData) {

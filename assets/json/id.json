@@ -873,5 +873,8 @@
   "descAllowComment": "Untuk meningkatkan interaksi dengan audiens kamu.",
   "allowSharing": "Izinkan Berbagi.",
   "descAllowSharing": "Untuk meningkatkan jangkauan dan meperkenalkan konten kamu ke audiens baru.",
-  "sharePost": "Bagikan Postingan"
+  "sharePost": "Bagikan Postingan",
+  "privacyPost": "Privacy Postingan",
+  "prepareYourContent": "Menyiapkan Kontenmu",
+  "pleaseWaitThisProcessWillTakeSomeTime": "Silahkan tunggu, proses ini akan memakan waktu."
 }

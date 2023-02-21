@@ -38,11 +38,13 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
     _uploadNotifier = Provider.of<UploadNotifier>(materialAppKey.currentContext ?? context, listen: false);
     _preUploadContentNotifier = Provider.of<PreUploadContentNotifier>(materialAppKey.currentContext ?? context, listen: false);
     _eventService.addUploadHandler(EventKey.uploadEventKey, this);
+    print("================initState");
     super.initState();
   }
 
   @override
   void onUploadReceiveProgress(double count, double total) {
+    print("================onUploadReceiveProgress");
     _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
       _uploadNotifier.isUploading = true;
@@ -52,6 +54,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void onUploadSendProgress(double count, double total) {
+    print("================onUploadSendProgress");
     _uploadNotifier.message = "${_language.translate.processUpload}";
     if (!_uploadNotifier.isUploading) {
       _uploadNotifier.isUploading = true;
@@ -66,12 +69,12 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void onUploadSuccess(dio.Response response) {
+    print("================onUploadSuccess");
     _uploadNotifier.isUploading = false;
     'Upload Success with message ${response.statusMessage}'.logger();
     _uploadNotifier.message = "${_language.translate.contentCreatedSuccessfully}";
     if (widget.showAlert) {
       _uploadNotifier.reset();
-
       //bool isCheckedOwnership = _eventService.streamService.uploadContentWithOwnership as bool;
       bool isCheckedOwnership = _preUploadContentNotifier.certifiedTmp; // get certified status
 
@@ -97,6 +100,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
 
   @override
   void dispose() {
+    print("========dispose");
     _uploadNotifier.reset(isNotify: false);
     super.dispose();
   }
@@ -104,6 +108,7 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UploadNotifier>(context);
+    print("========isuploading ${notifier.isUploading}");
 
     if (notifier.isUploading) {
       return Container(

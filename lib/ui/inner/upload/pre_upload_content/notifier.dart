@@ -576,10 +576,11 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future _createPostContentV2(bool mounted) async {
+  Future _createPostContentV2(BuildContext context, bool mounted) async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
     final orientation = context.read<CameraNotifier>().orientation;
     certifiedTmp = _certified;
+    double progress = 0;
 
     final tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
     final tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
@@ -619,6 +620,16 @@ class PreUploadContentNotifier with ChangeNotifier {
       print('featureType : $featureType');
       if (_boostContent == null) clearUpAndBackToHome(context);
       // await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
+      if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.prepareYourContent ?? '',
+          subCaption: language.pleaseWaitThisProcessWillTakeSomeTime,
+          color: kHyppeTextLightPrimary,
+          iconSvg: "${AssetPath.vectorPath}info_white.svg",
+          milisecond: 2000,
+        );
+      }
       if (_isCompress) {
         await compressVideo();
       }
@@ -651,14 +662,22 @@ class PreUploadContentNotifier with ChangeNotifier {
         onSendProgress: (received, total) async {
           if (_isCompress) {
             var progress = 50 + ((received / 2) / 1000000);
-            _progressCompress = progress;
-            // print("ini loading upload $_progressCompress}");
+            if (progress < 80) {
+              _progressCompress = progress;
+            } else {
+              progress + 2;
+            }
+            print("ini loading upload $_progressCompress}");
             var total2 = 100.0;
             // var total2 = (total / 2) / 100000;
             // var total2 = 50 + ((total / 2) / 100000);
             await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: total2));
           } else {
-            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
+            if (received < total - total * 5 / 100) {
+              progress = received.toDouble();
+            }
+            print('progress $progress');
+            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
           }
         },
       ).then((value) {
@@ -920,7 +939,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             content: content ?? '',
           );
         } else {
-          await _createPostContentV2(mounted);
+          await _createPostContentV2(context, mounted);
         }
       } else {
         if (!mounted) return;
@@ -1010,6 +1029,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   void showInterest(BuildContext context) {
+    print('kesini');
     ShowBottomSheet.onShowInteresList(
       context,
       onSave: () {
@@ -1107,7 +1127,17 @@ class PreUploadContentNotifier with ChangeNotifier {
       await notifier.getInterestBloc(context);
       final fetch = notifier.utilsFetch;
 
-      final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
+      final InterestData seeMore = InterestData(
+        id: '11111',
+        interestName: 'See More',
+      );
+      // {
+      //   "id": "11111",
+      //   "langIso": "alice",
+      //   "cts": '2021-12-16 12:45:36',
+      //   "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg',
+      //   'interestName': 'See More'
+      // };
       if (fetch.utilsState == UtilsState.getInterestsSuccess) {
         _interest = [];
         fetch.data.forEach((v) {
@@ -1115,7 +1145,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             _interest.add(InterestData.fromJson(v));
           }
           if (_interest.length == 6) {
-            _interest.add(InterestData.fromJson(seeMore));
+            _interest.add(seeMore);
           }
           _interestList.add(InterestData.fromJson(v));
         });
@@ -1138,7 +1168,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   void insertInterest(BuildContext context, int index) {
     if (interest.isNotEmpty) {
       String tile = interest[index].id ?? '';
-      if (tile == 'See More') {
+      if (tile == '11111') {
         showInterest(context);
       } else {
         if (_interestData.contains(tile)) {
@@ -1153,9 +1183,13 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   void insertInterestList(BuildContext context, int index) {
+    print(index);
     if (interestList.isNotEmpty) {
-      String tile = interestList[index].interestName ?? '';
-      if (tile == 'See More') {
+      String tile = interestList[index].id ?? '';
+      print('tile $tile');
+      print(_interestData);
+
+      if (tile == '11111') {
         showLocation(context);
       } else {
         if (_interestData.contains(tile)) {
@@ -1540,7 +1574,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       _boostContentBuy(context);
     } else {
       ShowGeneralDialog.loadingDialog(context, uploadProses: true);
-      _createPostContentV2(mounted);
+      _createPostContentV2(context, mounted);
     }
   }
 
