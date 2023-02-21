@@ -317,11 +317,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     //   }
     //   SharedPreference().writeStorage(SpKeys.countAds, countAds.toString());
     // });
-
+    final height = widget.videoData?.metadata?.height ?? 0.0;
+    final width = widget.videoData?.metadata?.width ?? 0.0;
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
+      videoSize: (height != 0.0 && width != 0.0) ? Size(width.toDouble(), height.toDouble()) : null,
+      aspectRatio: 1.0,
         autoDispose: true,
         autoPlay: autoPlay,
-        fit: BoxFit.contain,
+        fit: BoxFit.fitHeight,
         showPlaceholderUntilPlay: true,
         deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
         autoDetectFullscreenAspectRatio: true,
@@ -369,7 +372,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     try {
       await _betterPlayerController?.setupDataSource(dataSource);
-      _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
+      // final height = widget.videoData?.metadata?.height ?? 0.0;
+      // final width = widget.videoData?.metadata?.width ?? 0.0;
+      if(height != 0.0 && width != 0.0){
+        final fixRatio = height/width;
+        _betterPlayerController?.setOverriddenAspectRatio(fixRatio);
+      }else{
+        _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
+      }
+
+
     } catch (e) {
       'Setup user data source error: $e'.logger();
     }
@@ -566,7 +578,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       // final height = _betterPlayerControllerMap?.videoPlayerController?.value.size?.height;
       // final width = _betterPlayerControllerMap?.videoPlayerController?.value.size?.width;
       if (ratio != null) {
-        _betterPlayerControllerMap?.setOverriddenAspectRatio(ratio);
+        final height = widget.videoData?.metadata?.height ?? 0.0;
+        final width = widget.videoData?.metadata?.width ?? 0.0;
+        if(height != 0.0 && width != 0.0){
+          final fixRatio = height/width;
+          _betterPlayerController?.setOverriddenAspectRatio(fixRatio);
+        }else{
+          _betterPlayerController?.setOverriddenAspectRatio(ratio);
+        }
       }
       setStateIfMounted(() {
         _eventType = BetterPlayerEventType.showingAds;
@@ -592,7 +611,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
             });
           } else {
             print('play iklan');
-            _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio ?? 0);
+            final height = widget.videoData?.metadata?.height ?? 0.0;
+            final width = widget.videoData?.metadata?.width ?? 0.0;
+            if(height != 0.0 && width != 0.0){
+              final fixRatio = height/width;
+              _betterPlayerController?.setOverriddenAspectRatio(fixRatio);
+            }else{
+              _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
+            }
+            // _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio ?? 0);
             _betterPlayerControllerMap?.play();
           }
         });
@@ -772,6 +799,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                       return BetterPlayer(
                         controller: _betterPlayerController!,
                       );
+
+
                     }
                   },
                 ),
