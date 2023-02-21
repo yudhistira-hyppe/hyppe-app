@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
@@ -100,9 +101,14 @@ class _PreviewVideoContentState extends State<PreviewVideoContent> with RouteAwa
     return Consumer<PreviewContentNotifier>(
       builder: (_, notifier, __) {
         Future.delayed(Duration.zero, () {
-          if (notifier.isForcePaused) {
-            notifier.betterPlayerController?.pause();
+          try{
+            if (notifier.isForcePaused) {
+              notifier.betterPlayerController?.pause();
+            }
+          }catch(e){
+            e.logger();
           }
+
         });
 
         // if (notifier.betterPlayerController == null) {

@@ -24,6 +24,10 @@ extension ContextScreen on BuildContext {
     return Theme.of(this).textTheme;
   }
 
+  ColorScheme getColorScheme(){
+    return Theme.of(this).colorScheme;
+  }
+
   bool isDarkMode() {
     return SharedPreference().readStorage(SpKeys.themeData) ?? false;
   }

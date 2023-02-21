@@ -145,7 +145,7 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  setSkip(int val){
+  setSkip(int val) {
     _skip = val;
   }
 
@@ -164,7 +164,7 @@ class TransactionNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  setIsLoading(bool val){
+  setIsLoading(bool val) {
     _isLoading = val;
   }
 
@@ -231,12 +231,13 @@ class TransactionNotifier extends ChangeNotifier {
   }
 
   Future initTransactionHistory(BuildContext context) async {
+    print('dataTransaction?.isEmpty ${dataTransaction?.isEmpty}');
     if (dataTransaction?.isEmpty ?? false) isLoading = true;
 
     bool connect = await System().checkConnections();
     if (connect) {
       try {
-        getAccountBalance(context);
+        await getAccountBalance(context);
         DateTime dateToday = DateTime.now();
         String date = dateToday.toString().substring(0, 10);
         // String email = 'freeman27@getnada.com';
@@ -268,7 +269,7 @@ class TransactionNotifier extends ChangeNotifier {
         print(e);
       }
       _isLoading = false;
-      Future.delayed(const Duration(milliseconds: 250), (){
+      Future.delayed(const Duration(milliseconds: 250), () {
         notifyListeners();
       });
     } else {

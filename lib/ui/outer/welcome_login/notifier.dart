@@ -134,6 +134,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool buttonDisable() => email.isNotEmpty && password.isNotEmpty && emailValidator(emailController.text) == '' ? true : false;
 
   Future onClickForgotPassword(BuildContext context) async {
+    emailController.clear();
+    passwordController.clear();
     _routing.move(Routes.forgotPassword);
   }
 
