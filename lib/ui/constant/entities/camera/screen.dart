@@ -29,13 +29,15 @@ class _CameraPageState extends State<CameraPage> with WidgetsBindingObserver, Af
 
   @override
   void initState() {
-    notifier = Provider.of<CameraNotifier>(context, listen: false);
-    notifier.initCamera(context, mounted, backCamera: widget.backCamera);
+
     super.initState();
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {}
+  void afterFirstLayout(BuildContext context) {
+    notifier = Provider.of<CameraNotifier>(context, listen: false);
+    notifier.initCamera(context, mounted, backCamera: widget.backCamera);
+  }
 
   @override
   void dispose() {

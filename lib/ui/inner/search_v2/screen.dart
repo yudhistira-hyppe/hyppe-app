@@ -11,13 +11,12 @@ import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/hashtag/detail_screen.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
-import 'package:hyppe/ui/inner/search_v2/widget/option_bar.dart';
-import 'package:hyppe/ui/inner/search_v2/widget/search_content.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
@@ -103,6 +102,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   @override
   void didPush() {
     'didPush searfc false'.logger();
+    super.didPush();
   }
 
   final interests = [
@@ -171,46 +171,57 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     );
   }
 
+  Widget _firstLayout(SearchNotifier notifier){
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+        child: HomeAppBar(),
+      ),
+      // endDrawerEnableOpenDragGesture: true,
+      // endDrawer: FilterSearchScreen(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: CustomSearchBar(
+                hintText: notifier.language.whatAreYouFindOut,
+                contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                focusNode: notifier.focusNode1,
+                controller: notifier.searchController1,
+                // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
+                // onPressedIcon: () => notifier.onSearchPost(context),
+                // onTap: () => notifier.moveSearchMore(),
+                // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
+                onTap: (){
+                  notifier.layout = SearchLayout.search;
+                },
+              ),
+            ),
+            const HashtagScreen(),
+            InterestScreen(data: interests,),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _searchLayout(SearchLayout state, SearchNotifier notifier){
     switch(state){
       case SearchLayout.first:
-        return Scaffold(
-          key: _scaffoldKey,
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-            child: HomeAppBar(),
-          ),
-          // endDrawerEnableOpenDragGesture: true,
-          // endDrawer: FilterSearchScreen(),
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: CustomSearchBar(
-                    hintText: notifier.language.whatAreYouFindOut,
-                    contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                    focusNode: notifier.focusNode1,
-                    controller: notifier.searchController1,
-                    // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-                    // onPressedIcon: () => notifier.onSearchPost(context),
-                    // onTap: () => notifier.moveSearchMore(),
-                    // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
-                    onTap: (){
-                      notifier.layout = SearchLayout.search;
-                    },
-                  ),
-                ),
-                const HashtagScreen(),
-                InterestScreen(data: interests,),
-              ],
-            ),
-          ),
-        );
+        return _firstLayout(notifier);
       case SearchLayout.search:
         return const SearchMoreScreen();
       case SearchLayout.searchMore:
         return const SearchMoreCompleteScreenV2();
+      case SearchLayout.hashtagDetail:
+        if(notifier.selectedHashtag != null){
+          return DetailHashtagScreen(hashtag: notifier.selectedHashtag!);
+        }else{
+          return _firstLayout(notifier);
+        }
+
     }
   }
 }

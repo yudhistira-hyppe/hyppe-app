@@ -27,7 +27,6 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
 import 'package:hyppe/ui/inner/notification/notifier.dart';
-import 'package:hyppe/ui/inner/search_v2/hashtag/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/notifier.dart';
 import 'package:hyppe/ui/inner/upload/make_content/notifier.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/notifier.dart';
@@ -97,7 +96,6 @@ class AppDependencies {
         ChangeNotifierProvider(create: (context) => PreviewContentNotifier()),
         ChangeNotifierProvider(create: (context) => DiariesPlaylistNotifier()),
         ChangeNotifierProvider(create: (context) => PreUploadContentNotifier()),
-        ChangeNotifierProvider(create: (context) => HashtagNotifier()),
         ChangeNotifierProvider(create: (context) => InterestNotifier()),
 
         ChangeNotifierProvider(create: (context) => cpV2.ChangePasswordNotifier()),

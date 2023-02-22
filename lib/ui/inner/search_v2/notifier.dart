@@ -1,5 +1,4 @@
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/search_content/bloc.dart';
@@ -29,6 +28,7 @@ import 'package:story_view/controller/story_controller.dart';
 
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../core/bloc/posts_v2/bloc.dart';
+import '../../../core/models/collection/search/hashtag.dart';
 
 class SearchNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -99,6 +99,42 @@ class SearchNotifier with ChangeNotifier {
   int get skip2 => _skip2;
   int get skip3 => _skip3;
   int get skip4 => _skip4;
+
+  void getHashtag() async{
+    listHashtag = [];
+    loadHashtag = true;
+    Future.delayed(const Duration(seconds: 2), (){
+      loadHashtag = false;
+      listHashtag = [Hashtag("#WisataIndonesia", 600), Hashtag('#WisataJakarta', 700), Hashtag('#WisataBandung', 300)];
+    });
+    notifyListeners();
+  }
+
+  List<Hashtag>? _listHashtag;
+  bool _loadHashtag = true;
+  bool get loadHashtag => _loadHashtag;
+  set loadHashtag(bool state){
+    _loadHashtag = state;
+    notifyListeners();
+  }
+
+  List<Hashtag>? get listHashtag => _listHashtag;
+
+  set listHashtag(List<Hashtag>? val) {
+    _listHashtag = val;
+    notifyListeners();
+  }
+
+  initHashTag(BuildContext context){
+    getHashtag();
+  }
+
+  Hashtag? _selectedHashtag;
+  Hashtag? get selectedHashtag => _selectedHashtag;
+  set selectedHashtag(Hashtag? data){
+    _selectedHashtag = data;
+    notifyListeners();
+  }
 
   // List<ContentData>? _initDataVid = null;
   // List<ContentData>? get initDataVid => _initDataVid;
@@ -234,7 +270,7 @@ class SearchNotifier with ChangeNotifier {
 
   Future onInitialSearchNew(BuildContext context, FeatureType featureType, {bool reload = false}) async {
     focusNode.unfocus();
-
+    _layout = SearchLayout.first;
     print('reload search');
     print(reload);
     print(reload == false);
@@ -599,13 +635,15 @@ class SearchNotifier with ChangeNotifier {
 
   void backPage() {
     searchController1.clear();
-    _routing.moveBack();
+    layout = SearchLayout.first;
+    // _routing.moveBack();
   }
 
   void backFromSearchMore() {
     searchController1.text = '';
     searchController.clear();
-    _routing.moveBack();
+    layout = SearchLayout.first;
+    // _routing.moveBack();
     notifyListeners();
   }
 
