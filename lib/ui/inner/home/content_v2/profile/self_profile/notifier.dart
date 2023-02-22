@@ -228,6 +228,7 @@ class SelfProfileNotifier with ChangeNotifier {
       user.profile = null;
       user.profile = usersFetch.data;
       // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
+      SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
       notifyListeners();
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);

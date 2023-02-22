@@ -17,14 +17,11 @@ class PicTopItem extends StatelessWidget {
           const CustomIconWidget(
             iconData: '${AssetPath.vectorPath}sale.svg',
             defaultColor: false,
+            height: 22,
           ),
         if ((data?.certified ?? false) && (data?.saleAmount ?? 0) == 0)
           Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: Colors.black.withOpacity(0.3),
-              ),
+              padding: const EdgeInsets.all(3),
               child: const CustomIconWidget(
                 iconData: '${AssetPath.vectorPath}ownership.svg',
                 defaultColor: false,

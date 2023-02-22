@@ -55,12 +55,14 @@ class DynamicLinkService {
     _pendingDynamicLinkData ??= data;
 
     // handle link that has been retrieved
+    print("ini event handledeeplink");
     _handleDeepLink(data);
 
     // Register a link callback to fire if the app is opened up from the background
     // using a dynamic link.
     FirebaseDynamicLinks.instance.onLink.listen(
       (event) {
+        print("ini event $event");
         // handle link that has been retrieved
         _handleDeepLink(event);
       },
@@ -78,8 +80,10 @@ class DynamicLinkService {
       _pendingDynamicLinkData ??= data;
       _sharedPrefs.writeStorage(SpKeys.referralFrom, _pendingDynamicLinkData?.link.queryParameters['sender_email']);
       final _userToken = _sharedPrefs.readStorage(SpKeys.userToken);
+      final email = _sharedPrefs.readStorage(SpKeys.email);
       if (_userToken != null) {
         // Auto follow user if app is install from a dynamic link
+
         if (deepLink.queryParameters['referral'] != '1') {
           try {
             print('masuk sini dynamic');
@@ -89,43 +93,43 @@ class DynamicLinkService {
           }
         }
         deepLink.path.logger();
-        final _path = deepLink.path;
-        switch (_path) {
+        final path = deepLink.path;
+        switch (path) {
           case Routes.storyDetail:
-            _routing.moveReplacement(
-              _path,
+            _routing.move(
+              path,
               argument: StoryDetailScreenArgument()
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );
             break;
           case Routes.vidDetail:
-            _routing.moveReplacement(
-              _path,
+            _routing.move(
+              path,
               argument: VidDetailScreenArgument()
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );
             break;
           case Routes.diaryDetail:
-            _routing.moveReplacement(
-              _path,
+            _routing.move(
+              path,
               argument: DiaryDetailScreenArgument(type: TypePlaylist.none)
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );
             break;
           case Routes.picDetail:
-            _routing.moveReplacement(
-              _path,
+            _routing.move(
+              path,
               argument: PicDetailScreenArgument()
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
             );
             break;
           case Routes.picSlideDetailPreview:
-            _routing.moveReplacement(
-              _path,
+            _routing.move(
+              path,
               argument: SlidedPicDetailScreenArgument(type: TypePlaylist.none)
                 ..postID = deepLink.queryParameters['postID']
                 ..backPage = false,
@@ -133,8 +137,8 @@ class DynamicLinkService {
             break;
           // TO DO: If register from referral link, then hit to backend
           case Routes.otherProfile:
-            _routing.moveReplacement(
-              _path,
+            _routing.move(
+              path,
               argument: OtherProfileArgument()..senderEmail = deepLink.queryParameters['sender_email'],
             );
             break;

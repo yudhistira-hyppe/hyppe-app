@@ -9,6 +9,7 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/SqliteData.dart';
+import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -358,6 +359,8 @@ class HomeNotifier with ChangeNotifier {
       final fetch = notifier.postsFetch;
       'AllContents : ${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);
+      await CheckVersion().check(context, fetch.version);
+
       return res;
     } catch (e) {
       'landing page error : $e'.logger();

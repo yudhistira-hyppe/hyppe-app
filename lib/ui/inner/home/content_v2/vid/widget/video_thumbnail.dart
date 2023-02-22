@@ -77,6 +77,7 @@ class VideoThumbnail extends StatelessWidget {
                     child: const CustomIconWidget(
                       iconData: "${AssetPath.vectorPath}sale.svg",
                       defaultColor: false,
+                      height: 22,
                     ),
                   ),
                 ),
