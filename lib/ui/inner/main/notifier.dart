@@ -32,7 +32,6 @@ import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 
 class MainNotifier with ChangeNotifier {
   final _eventService = EventService();

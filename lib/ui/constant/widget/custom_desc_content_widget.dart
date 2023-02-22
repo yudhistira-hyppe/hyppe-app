@@ -238,8 +238,8 @@ class _CustomDescContentState extends State<CustomDescContent> {
     }
 
     for (var check in descItems) {
-      print('CaptionType.seeMore ${check.type}');
-      print('check descItems ${check.desc}');
+      // print('CaptionType.seeMore ${check.type}');
+      // print('check descItems ${check.desc}');
     }
     return descItems;
   }

@@ -5,8 +5,10 @@ import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
+import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/constant/widget/music_status_detail_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
@@ -36,6 +38,7 @@ class ContentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final notifier = context.watch<VidSeeAllNotifier>();
+    final transnot = context.read<TranslateNotifierV2>().translate;
     final error = context.select((ErrorService value) => value.getError(ErrorType.vid));
 
     return context.read<ErrorService>().isInitialError(error, notifier.vidData)
@@ -192,14 +195,24 @@ class ContentItem extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(
-                                    child: CustomTextWidget(
-                                      maxLines: 2,
-                                      textAlign: TextAlign.left,
-                                      textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                      textStyle: Theme.of(context).textTheme.caption,
+                                  SizedBox(
+                                    width: 240,
+                                    child: CustomDescContent(
+                                      desc: "${data?.description}",
+                                      trimLines: 2,
+                                      textAlign: TextAlign.start,
+                                      normStyle: Theme.of(context).textTheme.caption,
+                                      hrefStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary),
                                     ),
                                   ),
+                                  // Expanded(
+                                  //   child: CustomTextWidget(
+                                  //     maxLines: 2,
+                                  //     textAlign: TextAlign.left,
+                                  //     textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                  //     textStyle: Theme.of(context).textTheme.caption,
+                                  //   ),
+                                  // ),
                                   eightPx,
                                   Align(
                                     alignment: Alignment.bottomRight,

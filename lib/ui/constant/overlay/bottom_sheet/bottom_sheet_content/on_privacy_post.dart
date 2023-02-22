@@ -65,7 +65,7 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                 color: Theme.of(context).colorScheme.onSurface,
               )),
           title: CustomTextWidget(
-            textToDisplay: 'Privacy',
+            textToDisplay: notifier.language.privacyPost ?? 'Privacy Post',
             textStyle: textTheme.headline6?.copyWith(fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.transparent,
@@ -158,14 +158,12 @@ class _OnPrivacyPostBottomSheetState extends State<OnPrivacyPostBottomSheet> {
                     ),
                   ),
                   CustomSwitchButton(
-                    value: notifier.allowComment,
-                    onChanged: (value) {
-                      if(_currentPrivacy != "PRIVATE"){
-                        notifier.allowComment = value;
-                      }
-                    }
-                    
-                  ),
+                      value: notifier.allowComment,
+                      onChanged: (value) {
+                        if (_currentPrivacy != "PRIVATE") {
+                          notifier.allowComment = value;
+                        }
+                      }),
                 ],
               ),
               //-===== Allow Sharing =========--

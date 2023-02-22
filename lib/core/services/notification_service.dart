@@ -88,7 +88,7 @@ class NotificationService {
           if (map['postID'] != null) {
             final data = NotificationBody.fromJson(map);
             if (data.postType == 'TRANSACTION') {
-              Routing().move(Routes.allTransaction);
+              Routing().move(Routes.transaction);
             } else if (data.postType == 'FOLLOWER' || data.postType == 'FOLLOWING') {
               materialAppKey.currentContext!.read<NotificationNotifier>().checkAndNavigateToProfile(materialAppKey.currentContext!, data.postId);
             } else {

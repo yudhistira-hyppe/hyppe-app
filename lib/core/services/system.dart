@@ -57,6 +57,8 @@ import 'package:intl/intl.dart' as intl;
 
 import '../arguments/ads_argument.dart';
 import '../models/collection/advertising/ads_video_data.dart';
+import 'package:exif/exif.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class System {
   System._private();
@@ -99,7 +101,6 @@ class System {
       //     SharedPreference().readStorage(SpKeys.userToken) +
       //     "&x-auth-user=" +
       //     SharedPreference().readStorage(SpKeys.email);
-
     } else {
       return null;
     }
@@ -595,11 +596,16 @@ class System {
       }
 
       if (featureType == FeatureType.pic) {
-        final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+        // await FilePicker.platform.pickFiles(type: FileType.image, allowCompression: false).then((result) {
+        //   if (result != null) {
+        //     _filePickerResult = [File(result.files.single.path ?? '')];
+        //   }
+        // });
 
-        if (_pickerResult != null) {
-          // TODO: Future implementation, user will be able to select multiple images
-          _filePickerResult = [File(_pickerResult.path)];
+        final pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+
+        if (pickerResult != null) {
+          _filePickerResult = [File(pickerResult.path)];
         }
       }
 
@@ -682,11 +688,46 @@ class System {
         }
 
         // validasi durasi
-
       }
     }
 
     return {_errorMsg: _filePickerResult};
+  }
+
+  Future<File> rotateAndCompressAndSaveImage(File image) async {
+    int rotate = 0;
+    // List<int> imageBytes = await image.readAsBytes();
+
+    Uint8List imageBytes = await image.readAsBytes();
+    Map<String, IfdTag> exifData = await readExifFromBytes(imageBytes);
+
+    if (exifData != null && exifData.isNotEmpty && exifData.containsKey("Image Orientation")) {
+      IfdTag orientation = exifData["Image Orientation"]!;
+      int orientationValue = orientation.tag;
+
+      if (orientationValue == 3) {
+        print("dirotate 180");
+        rotate = 180;
+      }
+
+      if (orientationValue == 6) {
+        print("dirotate -90");
+
+        rotate = -90;
+      }
+
+      if (orientationValue == 8) {
+        print("dirotate 90");
+
+        rotate = 90;
+      }
+    }
+
+    List<int> result = await FlutterImageCompress.compressWithList(imageBytes, quality: 100, rotate: rotate);
+
+    await image.writeAsBytes(result);
+
+    return image;
   }
 
   void actionReqiredIdCard(
@@ -864,6 +905,12 @@ class System {
       default:
         return translate.finish ?? '';
     }
+  }
+
+  double menghitungJumlahHari(DateTime from, DateTime to) {
+    Duration diff = to.difference(from);
+
+    return (diff.inHours / 24);
   }
 
   readTimestamp(int timestamp, BuildContext context, {required bool fullCaption}) {

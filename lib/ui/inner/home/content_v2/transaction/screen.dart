@@ -36,6 +36,7 @@ class _TransactionState extends State<Transaction> {
   void initState() {
     final _notifier = context.read<TransactionNotifier>();
     _notifier.setSkip(0);
+    print('initstate');
     _notifier.initTransactionHistory(context);
     _scrollController.addListener(() => _notifier.scrollList(context, _scrollController));
     super.initState();

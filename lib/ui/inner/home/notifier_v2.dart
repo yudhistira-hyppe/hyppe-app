@@ -155,7 +155,7 @@ class HomeNotifier with ChangeNotifier {
     int index = 0;
     double milliseconds = 0;
     int totalmilliseconds = 0;
-    
+
     // var result = context.read<HomeNotifier>().internetSpeed;
 
     try {
@@ -169,10 +169,10 @@ class HomeNotifier with ChangeNotifier {
       );
       ping!.stream.listen((event) {
         index++;
-        debugPrint(event.toString());
+
         totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
         milliseconds = totalmilliseconds / index;
-       
+
         if (milliseconds < 100) {
           internetSpeed = SpeedInternet.fast;
         } else if (milliseconds >= 100 && milliseconds <= 170) {
@@ -180,7 +180,6 @@ class HomeNotifier with ChangeNotifier {
         } else {
           internetSpeed = SpeedInternet.slow;
         }
-
       });
     } catch (e) {
       debugPrint('error $e');
