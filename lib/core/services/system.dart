@@ -105,6 +105,17 @@ class System {
     }
   }
 
+  String getTitleHyppe(HyppeType type){
+    switch(type){
+      case HyppeType.HyppeVid:
+        return 'HyppeVid';
+      case HyppeType.HyppeDiary:
+        return 'HyppeDiary';
+      case HyppeType.HyppePic:
+        return 'HyppePic';
+    }
+  }
+
   String capitalizeFirstLetter(String letter) => letter[0].toUpperCase() + letter.substring(1).toLowerCase();
 
   bool validateUrl(String url) {

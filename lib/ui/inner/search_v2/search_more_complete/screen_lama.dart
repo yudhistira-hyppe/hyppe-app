@@ -10,17 +10,16 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/account_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/content_search.dart';
-import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/search_contents_tab.dart';
 import 'package:provider/provider.dart';
 
-class SearchMoreCompleteScreenV2 extends StatefulWidget {
-  const SearchMoreCompleteScreenV2({Key? key}) : super(key: key);
+class SearchMoreCompleteScreen extends StatefulWidget {
+  const SearchMoreCompleteScreen({Key? key}) : super(key: key);
 
   @override
-  _SearchMoreCompleteScreenV2 createState() => _SearchMoreCompleteScreenV2();
+  _SearchMoreCompleteScreenState createState() => _SearchMoreCompleteScreenState();
 }
 
-class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with SingleTickerProviderStateMixin {
+class _SearchMoreCompleteScreenState extends State<SearchMoreCompleteScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
@@ -29,7 +28,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
   void initState() {
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
     // Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabController.addListener(() {
       setState(() {
         notifier.tabIndex = _tabController.index;
@@ -53,7 +52,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(builder: (context, notifier, child) {
-      final List _list = [notifier.language.recommended, notifier.language.account, notifier.language.contents, notifier.language.hashtags];
+      final List _list = [notifier.language.all, notifier.language.account, 'HyppeVid', 'HyppeDiary', 'HyppePic'];
       return Scaffold(
         key: _scaffoldKey,
         // endDrawerEnableOpenDragGesture: true,
@@ -131,29 +130,30 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                       ),
                       context.read<ErrorService>().isInitialError(error, notifier.allContents)
                           ? Center(
-                        child: SizedBox(
-                          height: 198,
-                          child: CustomErrorWidget(
-                            errorType: ErrorType.getPost,
-                            function: () => notifier.onInitialSearch(context),
-                          ),
-                        ),
-                      )
-                          : Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: TabBarView(
-                            // physics: const NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: [
-                              AllSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
-                              AccountSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
-                              SearchContentsTab(),
-                              ContentSearch(content: notifier.searchContent?.diary, featureType: notifier.diaryContentsQuery.featureType, selectIndex: _selectedIndex),
-                            ],
-                          ),
-                        ),
-                      ),
+                              child: SizedBox(
+                                height: 198,
+                                child: CustomErrorWidget(
+                                  errorType: ErrorType.getPost,
+                                  function: () => notifier.onInitialSearch(context),
+                                ),
+                              ),
+                            )
+                          : Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 0.0),
+                                child: TabBarView(
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  controller: _tabController,
+                                  children: [
+                                    AllSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
+                                    AccountSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
+                                    ContentSearch(content: notifier.searchContent?.vid, featureType: notifier.vidContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.diary, featureType: notifier.diaryContentsQuery.featureType, selectIndex: _selectedIndex),
+                                    ContentSearch(content: notifier.searchContent?.pict, featureType: notifier.picContentsQuery.featureType, selectIndex: _selectedIndex),
+                                  ],
+                                ),
+                              ),
+                            ),
                     ],
                   ),
                 ),

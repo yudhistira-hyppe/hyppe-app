@@ -41,73 +41,63 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
     SizeConfig().init(context);
     final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(builder: (context, notifier, child) {
-      return WillPopScope(
-        onWillPop: () async {
-          notifier.backFromSearchMore();
-
-          return false;
-        },
-        child: Scaffold(
-          key: _scaffoldKey,
-          // endDrawerEnableOpenDragGesture: true,
-          // endDrawer: FilterSearchMoreScreen(),
-          body: SafeArea(
-            child: Column(
-              children: [
-                // const ProcessUploadComponent(topMargin: 0.0),
-                Flexible(
-                  child: DefaultTabController(
-                    length: 4,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CustomIconButtonWidget(
-                              onPressed: () => notifier.backFromSearchMore(),
-                              defaultColor: false,
-                              iconData: "${AssetPath.vectorPath}back-arrow.svg",
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                child: CustomSearchBar(
-                                    hintText: notifier.language.whatAreYouFindOut,
-                                    contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                                    focusNode: notifier.focusNode,
-                                    controller: notifier.searchController,
-                                    onSubmitted: (v) {
-                                      notifier.limit = 5;
-                                      notifier.tabIndex = 0;
-                                      notifier.onSearchPost(context, isMove: true);
-                                    },
-                                    onPressedIcon: () {
-                                      notifier.tabIndex = 0;
-                                      notifier.limit = 5;
-                                      notifier.onSearchPost(context, isMove: true);
-                                    },
-                                    autoFocus: true,
-                                    onChanged: (e) {
-                                      if (e.length > 2) {
-                                        if (lastInputValue != e) {
-                                          lastInputValue = e;
-                                          notifier.searchPeople(context, input: e);
-                                        }
+      return Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              // const ProcessUploadComponent(topMargin: 0.0),
+              Flexible(
+                child: DefaultTabController(
+                  length: 4,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CustomIconButtonWidget(
+                            onPressed: () => notifier.backFromSearchMore(),
+                            defaultColor: false,
+                            iconData: "${AssetPath.vectorPath}back-arrow.svg",
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: CustomSearchBar(
+                                  hintText: notifier.language.whatAreYouFindOut,
+                                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                                  focusNode: notifier.focusNode,
+                                  controller: notifier.searchController,
+                                  onSubmitted: (v) {
+                                    notifier.limit = 5;
+                                    notifier.tabIndex = 0;
+                                    notifier.onSearchPost(context, isMove: true);
+                                  },
+                                  onPressedIcon: () {
+                                    notifier.tabIndex = 0;
+                                    notifier.limit = 5;
+                                    notifier.onSearchPost(context, isMove: true);
+                                  },
+                                  autoFocus: true,
+                                  onChanged: (e) {
+                                    if (e.length > 2) {
+                                      if (lastInputValue != e) {
+                                        lastInputValue = e;
+                                        notifier.searchPeople(context, input: e);
                                       }
-                                    }),
-                              ),
+                                    }
+                                  }),
                             ),
-                          ],
-                        ),
-                        Expanded(child: AutoCompleteSearch()),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                      Expanded(child: AutoCompleteSearch()),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );

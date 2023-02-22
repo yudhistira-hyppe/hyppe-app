@@ -28,6 +28,10 @@ enum TicketStatus { newest, inProgress, solved, notSolved }
 
 enum AppealStatus { newest, flaging, notSuspended, suspend, removed }
 
+enum SearchLayout { first, search, searchMore }
+
+enum HyppeType {HyppeVid, HyppeDiary, HyppePic}
+
 enum ErrorType {
   myStory,
   peopleStory,

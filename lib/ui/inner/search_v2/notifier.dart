@@ -121,6 +121,20 @@ class SearchNotifier with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  SearchLayout _layout = SearchLayout.first;
+  SearchLayout get layout => _layout;
+  set layout(SearchLayout val){
+    _layout = val;
+    notifyListeners();
+  }
+
+  HyppeType _contentTab = HyppeType.HyppeVid;
+  HyppeType get contentTab => _contentTab;
+  set contentTab(HyppeType type){
+    _contentTab = type;
+    notifyListeners();
+  }
+
   int get vidCount => _searchContentFirstPage?.video == null
       ? 18
       : _vidHasNext
@@ -442,7 +456,8 @@ class SearchNotifier with ChangeNotifier {
     bool isMove = false,
   }) async {
     if (isMove) {
-      _routing.moveReplacement(Routes.searcMoreComplete);
+      // _routing.moveReplacement(Routes.searcMoreComplete);
+      layout = SearchLayout.searchMore;
       _tab1 = 0;
       _tab2 = 0;
       _tab3 = 0;

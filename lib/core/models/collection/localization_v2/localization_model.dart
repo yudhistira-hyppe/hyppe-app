@@ -239,6 +239,9 @@ class LocalizationModelV2 {
   String? dateOfBirth;
   String? userName;
   String? all;
+  String? recommended;
+  String? contents;
+  String? hashtags;
   String? signIn;
   String? notAValidEmailAddressOrUsername;
   String? emailOrUsernameCannotBeEmpty;
@@ -1116,6 +1119,9 @@ class LocalizationModelV2 {
     this.dateOfBirth,
     this.userName,
     this.all,
+    this.recommended,
+    this.contents,
+    this.hashtags,
     this.signIn,
     this.notAValidEmailAddressOrUsername,
     this.emailOrUsernameCannotBeEmpty,
@@ -1994,6 +2000,9 @@ class LocalizationModelV2 {
     dateOfBirth = json['dateOfBirth'];
     userName = json['userName'];
     all = json['all'];
+    recommended = json['recommended'];
+    contents = json['contents'];
+    hashtags = json['hashtags'];
     signIn = json['signIn'];
     notAValidEmailAddressOrUsername = json['notAValidEmailAddressOrUsername'];
     emailOrUsernameCannotBeEmpty = json['emailOrUsernameCannotBeEmpty'];
