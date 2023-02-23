@@ -164,10 +164,21 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  startLayout(){
+    _layout = SearchLayout.first;
+  }
+
   HyppeType _contentTab = HyppeType.HyppeVid;
   HyppeType get contentTab => _contentTab;
   set contentTab(HyppeType type){
     _contentTab = type;
+    notifyListeners();
+  }
+
+  HyppeType _hashtagTab = HyppeType.HyppeVid;
+  HyppeType get hashtagTab => _hashtagTab;
+  set hashtagTab(HyppeType type){
+    _hashtagTab = type;
     notifyListeners();
   }
 

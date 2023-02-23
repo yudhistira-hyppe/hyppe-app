@@ -7,7 +7,6 @@ import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
-import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -42,6 +41,7 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    notifier.startLayout();
     _tabController.addListener(
       () {
         setState(() {
@@ -215,9 +215,15 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         return const SearchMoreScreen();
       case SearchLayout.searchMore:
         return const SearchMoreCompleteScreenV2();
+      case SearchLayout.mainHashtagDetail:
+        if(notifier.selectedHashtag != null){
+          return DetailHashtagScreen(isTitle: true, hashtag: notifier.selectedHashtag!);
+        }else{
+          return _firstLayout(notifier);
+        }
       case SearchLayout.hashtagDetail:
         if(notifier.selectedHashtag != null){
-          return DetailHashtagScreen(hashtag: notifier.selectedHashtag!);
+          return DetailHashtagScreen(isTitle: false, hashtag: notifier.selectedHashtag!);
         }else{
           return _firstLayout(notifier);
         }

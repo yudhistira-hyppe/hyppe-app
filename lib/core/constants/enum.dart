@@ -28,7 +28,7 @@ enum TicketStatus { newest, inProgress, solved, notSolved }
 
 enum AppealStatus { newest, flaging, notSuspended, suspend, removed }
 
-enum SearchLayout { first, search, searchMore, hashtagDetail }
+enum SearchLayout { first, search, searchMore, mainHashtagDetail, hashtagDetail, }
 
 enum HyppeType {HyppeVid, HyppeDiary, HyppePic}
 

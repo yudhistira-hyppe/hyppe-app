@@ -68,38 +68,9 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
                   countContainer: notifier.language.posts ?? 'Posts',
                   onTap: () {
                     notifier.selectedHashtag = notifier.listHashtag?[index];
-                    notifier.layout = SearchLayout.hashtagDetail;
+                    notifier.layout = SearchLayout.mainHashtagDetail;
                   },
                 );})
-          //       // return ListTile(
-          //       //   onTap: () {},
-          //       //   leading: Container(
-          //       //     height: 48,
-          //       //     width: 30,
-          //       //     alignment: Alignment.center,
-          //       //     child: const CustomIconWidget(
-          //       //       iconData:
-          //       //           "${AssetPath.vectorPath}hashtag_icon.svg",
-          //       //       height: 20,
-          //       //       width: 20,
-          //       //       defaultColor: false,
-          //       //     ),
-          //       //   ),
-          //       //   title: CustomTextWidget(
-          //       //     textToDisplay:
-          //       //         notifier.listHashtag?[index].name ?? "",
-          //       //     textStyle: context.getTextTheme().bodyMedium,
-          //       //     textAlign: TextAlign.start,
-          //       //   ),
-          //       //   subtitle: Text(
-          //       //     (notifier.listHashtag?[index].count ?? 0) > 500
-          //       //         ? "500+ ${notifier.language.posts}"
-          //       //         : "${notifier.listHashtag?[index].count} ${notifier.language.posts}",
-          //       //     style: const TextStyle(
-          //       //         fontSize: 12, color: kHyppeGrey),
-          //       //   ),
-          //       // );
-          //     })
         ],
       );
     });
