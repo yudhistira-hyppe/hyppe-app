@@ -72,7 +72,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
     final textDirection = Directionality.of(context);
     final textScaleFactor = MediaQuery.textScaleFactorOf(context);
 
-    final colorClickableText = Theme.of(context).colorScheme.secondary;
+    final colorClickableText = Theme.of(context).colorScheme.surface;
     final _defaultMoreLessStyle = widget.expandStyle ?? effectiveTextStyle?.copyWith(color: colorClickableText);
     final _defaultDelimiterStyle = widget.normStyle ?? effectiveTextStyle;
 
@@ -182,7 +182,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         results.add(TextSpan(
             text: item.desc,
             style: item.type == CaptionType.mention
-                ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primaryVariant))
+                ? (widget.hrefStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith(color: Theme.of(context).colorScheme.primary))
                 : (widget.normStyle ?? Theme.of(context).textTheme.bodyText2!.copyWith()),
             recognizer: item.type == CaptionType.normal
                 ? null
@@ -204,16 +204,19 @@ class _CustomDescContentState extends State<CustomDescContent> {
             : widget.desc
         : widget.desc;
     fixDesc = fixDesc.replaceAll('\n@', '\n @');
+
     var splitDesc = fixDesc.split(' ');
     splitDesc.removeWhere((e) => e == '');
-
+    for (final desc in splitDesc) {
+      'Fix Desc: $desc'.logger();
+    }
     final List<ItemDesc> descItems = [];
     var tempDesc = '';
 
     // print('check descItems3 ${fixDesc}');
-    for(var i = 0; splitDesc.length > i; i++){
+    for (var i = 0; splitDesc.length > i; i++) {
       if (splitDesc[i].isNotEmpty) {
-        final firstChar = splitDesc[i];
+        final firstChar = splitDesc[i].substring(0, 1);
         if (firstChar == '@') {
           if (tempDesc.isNotEmpty) {
             descItems.add(ItemDesc(desc: '$tempDesc ', type: CaptionType.normal));
@@ -224,7 +227,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {
-            descItems.add(ItemDesc(desc: tempDesc, type: CaptionType.normal));
+            descItems.add(ItemDesc(desc: getWithoutSpaces(tempDesc), type: CaptionType.normal));
           }
         }
       }
@@ -235,10 +238,19 @@ class _CustomDescContentState extends State<CustomDescContent> {
     }
 
     for (var check in descItems) {
-      print('CaptionType.seeMore ${check.type}');
-      print('check descItems ${check.desc}');
+      // print('CaptionType.seeMore ${check.type}');
+      // print('check descItems ${check.desc}');
     }
     return descItems;
+  }
+
+  String getWithoutSpaces(String s) {
+    String tmp = s.substring(1, s.length);
+    while (tmp.startsWith(' ')) {
+      tmp = tmp.substring(1);
+    }
+
+    return tmp;
   }
 }
 

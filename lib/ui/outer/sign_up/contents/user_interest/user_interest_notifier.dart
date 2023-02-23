@@ -35,7 +35,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
 
   Color interestNextButtonColor(BuildContext context, List<String> userInterested) {
     if (!listEquals(_interestData, userInterested) && _interestData.isNotEmpty && !isLoading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
@@ -81,7 +81,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     print(index);
     print(interest.isNotEmpty);
     if (interest.isNotEmpty) {
-      String tile = interest[index].interestName ?? '';
+      String tile = interest[index].id ?? '';
       print(tile);
       return () {
         if (_interestData.contains(tile)) {
@@ -133,3 +133,5 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
 
   void goToEula() => _routing.move(Routes.userAgreement);
 }
+
+

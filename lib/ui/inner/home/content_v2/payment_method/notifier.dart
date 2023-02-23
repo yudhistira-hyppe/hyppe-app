@@ -103,21 +103,21 @@ class PaymentMethodNotifier extends ChangeNotifier {
     );
   }
 
-  void submitPay(BuildContext context, {num? price}) async {
+  void submitPay(BuildContext context, bool mounted, {num? price}) async {
     final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
     if (price != null) {
       final notifier = context.read<PreUploadContentNotifier>();
-      await notifier.uploadPanding(context);
+      await notifier.uploadPanding(context, mounted);
     } else {
       if (cek ?? false) _postSubmitBuy(context);
     }
   }
 
   Color colorButton(context) {
-    Color _color = Theme.of(context).colorScheme.primaryVariant;
+    Color _color = Theme.of(context).colorScheme.primary;
     final cek = data?.where((element) => element.bankcode?.toLowerCase() == _bankSelected).isNotEmpty;
     if (cek ?? false) {
-      _color = Theme.of(context).colorScheme.primaryVariant;
+      _color = Theme.of(context).colorScheme.primary;
     } else {
       _color = Theme.of(context).colorScheme.surface;
     }
@@ -149,7 +149,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
       if (fetch.postsState == BuyState.postContentsError) {
         isLoading = false;
         var errorData = ErrorModel.fromJson(fetch.data);
-      
+
         ShowBottomSheet().onShowColouredSheet(
           context,
           errorData.message ?? '',

@@ -39,7 +39,7 @@ class UploadIDVerification extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Theme.of(context).colorScheme.primary.withOpacity(0.44),
+                  Theme.of(context).colorScheme.background.withOpacity(0.44),
                   Colors.transparent,
                 ],
               ),
@@ -85,7 +85,7 @@ class UploadIDVerification extends StatelessWidget {
             width: double.infinity,
             height: SizeConfig.screenHeight! / 5,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              color: Theme.of(context).colorScheme.background.withOpacity(0.8),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),

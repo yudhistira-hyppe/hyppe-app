@@ -77,7 +77,7 @@ class _SearchScreenLamaState extends State<SearchScreenLama> with SingleTickerPr
                       labelColor: Theme.of(context).tabBarTheme.labelColor,
                       unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
                       labelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
-                      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primaryVariant, width: 2.0)),
+                      indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
                       unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
                       tabs: const [
                         OptionBar(title: "Vid", icon: "", pageIndex: 0),

@@ -55,7 +55,7 @@ class OnBoostTimeContent extends StatelessWidget {
                             "${System().capitalizeFirstLetter(notifier.boostMasterData?.session?[index].name ?? '')} (${notifier.boostMasterData?.session?[index].start?.substring(0, 5)} - ${notifier.boostMasterData?.session?[index].end?.substring(0, 5)} WIB)",
                         textStyle: Theme.of(context).primaryTextTheme.subtitle1?.copyWith(fontWeight: FontWeight.w700),
                       ),
-                      activeColor: Theme.of(context).colorScheme.primaryVariant,
+                      activeColor: Theme.of(context).colorScheme.primary,
                     );
                   },
                 ),

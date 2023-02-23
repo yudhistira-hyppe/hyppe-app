@@ -4,10 +4,12 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/view/bloc.dart';
 import 'package:hyppe/core/bloc/view/state.dart';
 import 'package:hyppe/core/config/env.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -55,6 +57,8 @@ import 'package:intl/intl.dart' as intl;
 
 import '../arguments/ads_argument.dart';
 import '../models/collection/advertising/ads_video_data.dart';
+import 'package:exif/exif.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class System {
   System._private();
@@ -80,19 +84,23 @@ class System {
 
   String? showUserPicture(String? url) {
     if (url != null) {
-      if(url.isNotEmpty){
-        return Env.data.baseUrl + "/${Env.data.versionApi}/" + url + "?x-auth-token=" + SharedPreference().readStorage(SpKeys.userToken) + "&x-auth-user=" + SharedPreference().readStorage(SpKeys.email);
-      }else{
+      if (url.isNotEmpty) {
+        return Env.data.baseUrl +
+            "/${Env.data.versionApi}/" +
+            url +
+            "?x-auth-token=" +
+            SharedPreference().readStorage(SpKeys.userToken) +
+            "&x-auth-user=" +
+            SharedPreference().readStorage(SpKeys.email);
+      } else {
         return '';
       }
-
 
       // return Env.data.baseUrl + url +
       //     "?x-auth-token=" +
       //     SharedPreference().readStorage(SpKeys.userToken) +
       //     "&x-auth-user=" +
       //     SharedPreference().readStorage(SpKeys.email);
-
     } else {
       return null;
     }
@@ -307,8 +315,8 @@ class System {
     }
   }
 
-  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale){
-    switch (state){
+  String getValueStringFollow(StatusFollowing state, LocalizationModelV2 locale) {
+    switch (state) {
       case StatusFollowing.none:
         return locale.follow ?? 'Follow';
       case StatusFollowing.following:
@@ -320,8 +328,8 @@ class System {
     }
   }
 
-  StatusFollowing getEnumFollowStatus(String status){
-    switch(status){
+  StatusFollowing getEnumFollowStatus(String status) {
+    switch (status) {
       case 'TOFOLLOW':
         return StatusFollowing.none;
       case 'FOLLOWING':
@@ -332,7 +340,6 @@ class System {
         return StatusFollowing.rejected;
     }
   }
-
 
   StatusFollowing getStatusFollow(String? sts) {
     switch (sts) {
@@ -578,11 +585,16 @@ class System {
       }
 
       if (featureType == FeatureType.pic) {
-        final _pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+        // await FilePicker.platform.pickFiles(type: FileType.image, allowCompression: false).then((result) {
+        //   if (result != null) {
+        //     _filePickerResult = [File(result.files.single.path ?? '')];
+        //   }
+        // });
 
-        if (_pickerResult != null) {
-          // TODO: Future implementation, user will be able to select multiple images
-          _filePickerResult = [File(_pickerResult.path)];
+        final pickerResult = await _imagePicker.pickImage(source: ImageSource.gallery);
+
+        if (pickerResult != null) {
+          _filePickerResult = [File(pickerResult.path)];
         }
       }
 
@@ -665,11 +677,46 @@ class System {
         }
 
         // validasi durasi
-
       }
     }
 
     return {_errorMsg: _filePickerResult};
+  }
+
+  Future<File> rotateAndCompressAndSaveImage(File image) async {
+    int rotate = 0;
+    // List<int> imageBytes = await image.readAsBytes();
+
+    Uint8List imageBytes = await image.readAsBytes();
+    Map<String, IfdTag> exifData = await readExifFromBytes(imageBytes);
+
+    if (exifData != null && exifData.isNotEmpty && exifData.containsKey("Image Orientation")) {
+      IfdTag orientation = exifData["Image Orientation"]!;
+      int orientationValue = orientation.tag;
+
+      if (orientationValue == 3) {
+        print("dirotate 180");
+        rotate = 180;
+      }
+
+      if (orientationValue == 6) {
+        print("dirotate -90");
+
+        rotate = -90;
+      }
+
+      if (orientationValue == 8) {
+        print("dirotate 90");
+
+        rotate = 90;
+      }
+    }
+
+    List<int> result = await FlutterImageCompress.compressWithList(imageBytes, quality: 100, rotate: rotate);
+
+    await image.writeAsBytes(result);
+
+    return image;
   }
 
   void actionReqiredIdCard(
@@ -847,6 +894,12 @@ class System {
       default:
         return translate.finish ?? '';
     }
+  }
+
+  double menghitungJumlahHari(DateTime from, DateTime to) {
+    Duration diff = to.difference(from);
+
+    return (diff.inHours / 24);
   }
 
   readTimestamp(int timestamp, BuildContext context, {required bool fullCaption}) {
@@ -1048,7 +1101,7 @@ class System {
   }
 
   bool specialCharPass(String text) {
-    final result = text.contains(RegExp(r'[!@#$%^&*_]'));
+    final result = text.contains(RegExp(r'[!@#$%^&*_()-]'));
     'specialCharPass:  $result'.logger();
     return result;
   }

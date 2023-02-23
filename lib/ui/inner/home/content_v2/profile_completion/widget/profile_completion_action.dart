@@ -38,8 +38,8 @@ class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
                 notifier.somethingChanged(context)
-                    ? Theme.of(context).colorScheme.primaryVariant
-                    : Theme.of(context).colorScheme.secondary,
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).colorScheme.surface,
               ),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
@@ -55,7 +55,7 @@ class _ProfileCompletionActionState extends State<ProfileCompletionAction> {
             function: () => {Routing().moveBack()},
             buttonStyle: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.secondary),
+                  Theme.of(context).colorScheme.surface),
               overlayColor: MaterialStateProperty.all(Colors.transparent),
             ),
           )

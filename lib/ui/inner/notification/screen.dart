@@ -82,7 +82,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         border: Border(
                           bottom: BorderSide(
                             width: 2,
-                            color: notifier.listScreen.keys.elementAt(index) == notifier.screen ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.primary,
+                            color: notifier.listScreen.keys.elementAt(index) == notifier.screen ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.background,
                           ),
                         ),
                       ),
@@ -90,7 +90,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),
                 ),
               ),
-              if (notifier.loadingForObject(NotificationNotifier.refreshKey)) LinearProgressIndicator(color: Theme.of(context).colorScheme.primaryVariant, backgroundColor: Colors.grey),
+              if (notifier.loadingForObject(NotificationNotifier.refreshKey)) LinearProgressIndicator(color: Theme.of(context).colorScheme.primary, backgroundColor: Colors.grey),
               context.read<ErrorService>().isInitialError(error, notifier.data)
                   ? CustomErrorWidget(
                       errorType: ErrorType.notification,

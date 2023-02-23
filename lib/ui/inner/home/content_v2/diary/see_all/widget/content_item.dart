@@ -153,7 +153,7 @@ class ContentItem extends StatelessWidget {
                                       padding: EdgeInsets.only(top: 3, right: 6.0),
                                       child: CustomIconWidget(
                                         iconData: "${AssetPath.vectorPath}sale.svg",
-                                        height: 20,
+                                        height: 22,
                                         defaultColor: false,
                                       ),
                                     ))

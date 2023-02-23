@@ -31,7 +31,7 @@ class BuildOkButton extends StatelessWidget {
         ],
       ),
       buttonStyle: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)))),
       function: () => context.read<MakeContentNotifier>().onStopRecordedVideo(context),
     );

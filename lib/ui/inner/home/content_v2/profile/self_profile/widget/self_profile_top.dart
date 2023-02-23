@@ -252,7 +252,7 @@ class SelfProfileTop extends StatelessWidget {
                             normStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppeLightSecondary),
                             hrefStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: kHyppePrimary),
                             expandStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                                  color: Theme.of(context).colorScheme.primaryVariant,
+                                  color: Theme.of(context).colorScheme.primary,
                                 )),
                       ],
                     )),

@@ -21,13 +21,22 @@ class ContentMessageLayout extends StatelessWidget {
       tag: message.hashCode,
       child: InkWell(
         onTap: () {
-          Routing().move(
-            Routes.imagePreviewScreen,
-            argument: ImagePreviewArgument(
-              heroTag: message.hashCode,
-              sourceImage: message?.medias.first.mediaThumbEndpoint ?? '',
-            ),
-          );
+          DateTime now = DateTime.now();
+          // DateTime now = DateTime.parse('2023-02-21 15:11:14');
+          DateTime imageDate = DateTime.parse(message?.medias.first.createdAt ?? '2020-01-01');
+          var jumlahHari = System().menghitungJumlahHari(imageDate, now);
+          print(imageDate);
+          print(now);
+          print('jumlah hari $jumlahHari');
+          if (jumlahHari < 1) {
+            Routing().move(
+              Routes.imagePreviewScreen,
+              argument: ImagePreviewArgument(
+                heroTag: message.hashCode,
+                sourceImage: message?.medias.first.mediaThumbEndpoint ?? '',
+              ),
+            );
+          }
         },
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),

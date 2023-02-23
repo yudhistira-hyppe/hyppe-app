@@ -256,7 +256,7 @@ class _PicDetailState extends State<PicDetail> {
                               children: [
                                 widget.arguments?.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
-                                        icon: 'user',
+                                        icon: 'tag_people',
                                         label: '${widget.arguments?.tagPeople?.length} people',
                                         function: () {
                                           context.read<PicDetailNotifier>().showUserTag(context, widget.arguments?.tagPeople ?? [], widget.arguments?.postID);
@@ -294,7 +294,7 @@ class _PicDetailState extends State<PicDetail> {
                               seeMore: ' ${translate.seeMoreContent}',
                               normStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppeLightButtonText),
                               hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
-                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                              expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
                             ),
                           ],
                         )),

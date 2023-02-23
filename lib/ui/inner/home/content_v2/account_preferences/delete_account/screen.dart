@@ -79,7 +79,7 @@ class HyppeDeleteAccoount extends StatelessWidget {
                           maxLines: 3,
                         ),
                         controlAffinity: ListTileControlAffinity.trailing,
-                        activeColor: Theme.of(context).colorScheme.primaryVariant,
+                        activeColor: Theme.of(context).colorScheme.primary,
                       );
                     },
                   ),
@@ -99,7 +99,7 @@ class HyppeDeleteAccoount extends StatelessWidget {
                     function: () => notifier.navigateToConfirmDeleteProfile(),
                     buttonStyle: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primaryVariant,
+                        Theme.of(context).colorScheme.primary,
                       ),
                       overlayColor: MaterialStateProperty.all(Colors.transparent),
                     ),

@@ -18,10 +18,14 @@ class UrlConstants {
 
   static const String apiV5 = 'v5';
 
+  static const String apiV6 = 'v6';
+
   /// Production Base url
   // static const String productionBaseApi = "https://prod.hyppe.app";
-  static const String productionBaseApi = "https://staging.hyppe.app";
-  static const String productionUploadBaseApi = "https://staging.hyppe.app/";
+  static const String productionBaseApi = "https://prod.hyppe.app";
+  static const String productionUploadBaseApi = "https://upload.hyppe.app/";
+  // static const String productionBaseApi = "https://staging.hyppe.app";
+  // static const String productionUploadBaseApi = "https://stagingupload.hyppe.app/";
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
@@ -35,6 +39,8 @@ class UrlConstants {
 
   /// Staging Deeplink Base url
   static const String devDeeplinkUrl = "https://share.hyppe.app";
+
+  static const String urlPing = "s1.hyppe.cloud";
 
   /// APIs end point
   /* User route */
@@ -164,6 +170,8 @@ class UrlConstants {
 
   /// get => Get User Post.
   static const String getUserPostsLandingPage = "$postsRoute/getuserposts/landing-page";
+
+  static const String getStoriesLandingPage = "$postsRoute/landing-page/recentStory";
 
   /// post => View Like and View.
   static const String viewLike = "$postRoute/viewlike";

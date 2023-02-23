@@ -69,8 +69,8 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                             if (values.isNotEmpty) {
                               notifier.dataUserStories = [...(notifier.dataUserStories)] + values;
                             }
-                            final prev = context.read<PreviewStoriesNotifier>();
-                            prev.initialPeopleStories(context, list: values);
+                            // final prev = context.read<PreviewStoriesNotifier>();
+                            // prev.initialPeopleStories(context, list: values);
                           }
                         }
                       },
@@ -123,7 +123,7 @@ class HyppePlaylistStoriesState extends State<HyppePlaylistStories> with AfterFi
                   : Center(
                       child: CircularProgressIndicator(
                         strokeWidth: 2.0,
-                        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                       ),
                     );
             },

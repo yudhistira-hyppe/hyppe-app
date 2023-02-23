@@ -166,6 +166,7 @@ class DisqusLogs {
   Mate? senderInfo;
   String? id;
   List<Medias> medias = [];
+  String? username;
 
   DisqusLogs({
     this.createdAt,
@@ -182,6 +183,7 @@ class DisqusLogs {
     this.senderInfo,
     this.id,
     this.medias = const [],
+    this.username,
   });
 
   DisqusLogs.fromJson(Map<String, dynamic> json) {
@@ -207,6 +209,7 @@ class DisqusLogs {
         medias.add(Medias.fromJson(v));
       });
     }
+    username = json['username'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -295,14 +298,11 @@ class Content {
 
   String? concatThumbUri() {
     final fixMedia = mediaThumbEndpoint ?? mediaEndpoint ?? '';
-    if(fixMedia.isNotEmpty){
-      return Env.data.baseUrl +
-          fixMedia +
-          '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
-    }else{
+    if (fixMedia.isNotEmpty) {
+      return Env.data.baseUrl + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+    } else {
       return fixMedia;
     }
-
   }
 }
 

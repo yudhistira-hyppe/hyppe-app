@@ -34,9 +34,9 @@ class CustomOTPFieldWidget extends StatelessWidget {
           fieldHeight: 50,
           fieldWidth: 50,
           activeColor:
-              isWrong ? kHyppeBorderDanger : theme.colorScheme.primaryVariant,
-          inactiveColor: theme.colorScheme.primaryVariant,
-          selectedColor: theme.colorScheme.primaryVariant,
+              isWrong ? kHyppeBorderDanger : theme.colorScheme.primary,
+          inactiveColor: theme.colorScheme.primary,
+          selectedColor: theme.colorScheme.primary,
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           borderWidth: 1,
           fieldOuterPadding: const EdgeInsets.only(left: 5, right: 5)),

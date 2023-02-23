@@ -40,7 +40,7 @@ class OldVersionDialog extends StatelessWidget {
           ),
           _buildButton(
             caption: '${_language.updateNow} ',
-            color: theme.colorScheme.primaryVariant,
+            color: theme.colorScheme.primary,
             textColor: kHyppeLightButtonText,
             function: () => _routing.moveBack(),
             theme: theme,

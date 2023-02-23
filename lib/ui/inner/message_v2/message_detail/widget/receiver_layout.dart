@@ -47,7 +47,7 @@ class ReceiverLayout extends StatelessWidget {
             ),
             CustomTextWidget(
               textAlign: TextAlign.end,
-              textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
+              textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
               textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
               // textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(created ?? '', 1),
             ),

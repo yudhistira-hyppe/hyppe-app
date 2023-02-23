@@ -96,7 +96,7 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  setPageIndex(int val){
+  setPageIndex(int val) {
     _pageIndex = val;
   }
 
@@ -228,6 +228,7 @@ class SelfProfileNotifier with ChangeNotifier {
       user.profile = null;
       user.profile = usersFetch.data;
       // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
+      SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
       notifyListeners();
     }
     user.vids = await vidContentsQuery.reload(context, myContent: true);
@@ -337,7 +338,7 @@ class SelfProfileNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  void onUpdateSelfPostContent(BuildContext context,
+  Future onUpdateSelfPostContent(BuildContext context,
       {required String postID,
       required String content,
       String? description,
@@ -349,10 +350,11 @@ class SelfProfileNotifier with ChangeNotifier {
       List<TagPeople>? tagPeople,
       String? location,
       String? saleAmount,
+      bool? isShared,
       bool? saleLike,
-      bool? saleView}) {
+      bool? saleView}) async {
     ContentData? _updatedData;
-
+    print("ini kontennya $content");
     switch (content) {
       case hyppeVid:
         if (user.vids != null) {
@@ -384,8 +386,11 @@ class SelfProfileNotifier with ChangeNotifier {
       _updatedData.saleAmount = num.parse(saleAmount ?? '0');
       _updatedData.saleLike = saleLike;
       _updatedData.saleLike = saleView;
+      print('location nih $location');
+      print('location nih ${_updatedData.location}');
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
+      _updatedData.isShared = isShared;
       // _updatedData.tagPeople = tagPeople;
       _updatedData.tagPeople?.addAll(tagPeople ?? []);
 

@@ -70,7 +70,7 @@ class AcceptButton extends StatelessWidget {
     print('warna');
     print(System().convertEvent(data?.event));
     if (System().convertEvent(data?.event) != InteractiveEvent.accept) {
-      return theme.colorScheme.primaryVariant;
+      return theme.colorScheme.primary;
     } else {
       return theme.colorScheme.surface;
     }

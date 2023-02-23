@@ -14,7 +14,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     final color = Theme.of(context).colorScheme.secondaryVariant;
+//     final color = Theme.of(context).colorScheme.secondary;
 //     final notifier = context.select((NotificationNotifier value) => value.loadingForObject(NotificationNotifier.loadMoreKey));
 
 //     return Padding(

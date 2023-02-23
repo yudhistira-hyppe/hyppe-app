@@ -139,7 +139,7 @@ class RegisterNotifier with ChangeNotifier {
 
   Color nextButtonColor(BuildContext context) {
     if (_validationRegister() && !loading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
@@ -227,12 +227,13 @@ class RegisterNotifier with ChangeNotifier {
               // signUpEulaNotifier.email = _result.email ?? "";
 
               _hidePassword = true;
+              final tempEmail = email;
               onReset();
               notifyListeners();
               Routing().moveAndRemoveUntil(
                 Routes.signUpPin,
                 Routes.root,
-                argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2),
+                argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: tempEmail),
               );
             } else {
               // loading = false;

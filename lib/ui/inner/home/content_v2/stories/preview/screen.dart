@@ -28,8 +28,8 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
   void initState() {
     final notifier = Provider.of<PreviewStoriesNotifier>(context, listen: false);
     // notifier.initialStories(context);
-    notifier.scrollController.addListener((){
-      if(mounted){
+    notifier.scrollController.addListener(() {
+      if (mounted) {
         notifier.scrollListener(context);
       }
     });
@@ -49,10 +49,9 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
           if (scrollInfo is ScrollStartNotification) {
             Future.delayed(const Duration(milliseconds: 100), () {
               print('hariyanto1');
-              notifier.initialPeopleStories(context);
+              // notifier.initialPeopleStories(context);
             });
           }
-
           return true;
         },
         child: ListView.builder(
@@ -62,24 +61,24 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
           padding: const EdgeInsets.only(left: 4.5, right: 16.0),
           itemCount: notifier.peopleItemCount(error),
           itemBuilder: (context, index) {
-            print('ini story orang ${notifier.peopleStoriesData?.length}');
+            print('ini story orang ${notifier.storiesGroups?.length}');
             int itemIndex = index - 1;
 
-            if (notifier.peopleStoriesData != null) {
+            if (notifier.storiesGroups != null) {
               if (index == 0) {
                 return MyFrameStory();
               }
 
-              if (itemIndex == notifier.peopleStoriesData?.length && notifier.hasNext) {
+              if (itemIndex == notifier.storiesGroups?.length && notifier.hasNext) {
                 return const CustomLoading(size: 3);
               }
 
               return PeopleFrameStory(
                 index: itemIndex,
-                data: notifier.peopleStoriesData?[itemIndex],
+                data: notifier.storiesGroups?[itemIndex],
               );
             } else {
-              if (context.read<ErrorService>().isInitialError(error, notifier.peopleStoriesData)) {
+              if (context.read<ErrorService>().isInitialError(error, notifier.storiesGroups)) {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -91,7 +90,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                         errorType: ErrorType.peopleStory,
                         axis: Axis.horizontal,
                         iconSize: 40,
-                        function: () => notifier.initialPeopleStories(context),
+                        // function: () => notifier.initialPeopleStories(context),
                       ),
                     ),
                   ],

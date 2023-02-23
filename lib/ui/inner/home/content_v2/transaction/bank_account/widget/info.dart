@@ -13,7 +13,7 @@ class infoMaxAccount extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(11),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Row(

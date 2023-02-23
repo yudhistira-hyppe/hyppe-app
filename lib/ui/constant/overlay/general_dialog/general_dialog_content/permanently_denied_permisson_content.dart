@@ -23,7 +23,7 @@ class PermanentlyDeniedPermissionContent extends StatelessWidget {
           CustomTextButton(
             onPressed: () => Routing().moveBack(),
             child: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primaryVariant),
+              textStyle: Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primary),
               textToDisplay: notifier.translate.cancel ?? 'Cancel',
             ),
           ),
@@ -32,7 +32,7 @@ class PermanentlyDeniedPermissionContent extends StatelessWidget {
               await System().openSetting().whenComplete(() => Routing().moveBack());
             },
             child: CustomTextWidget(
-              textStyle: Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primaryVariant),
+              textStyle: Theme.of(context).textTheme.button?.apply(color: Theme.of(context).colorScheme.primary),
               textToDisplay: notifier.translate.settings ?? 'Settings',
             ),
           )

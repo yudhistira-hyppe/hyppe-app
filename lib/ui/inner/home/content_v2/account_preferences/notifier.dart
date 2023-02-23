@@ -252,7 +252,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             file: _file.values.single?.single.path ?? '',
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
             },
           );
 
@@ -621,7 +621,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
             cancelToken: _dioCancelToken,
             email: SharedPreference().readStorage(SpKeys.email),
             onSendProgress: (received, total) {
-              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+              _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
             },
           );
 

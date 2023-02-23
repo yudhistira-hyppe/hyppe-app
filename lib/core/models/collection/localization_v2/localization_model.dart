@@ -817,6 +817,7 @@ class LocalizationModelV2 {
   String? content;
   String? problemBugs;
   String? ads;
+  String? learnMore;
   String? newLabel;
   String? inProgress;
   String? solved;
@@ -873,6 +874,9 @@ class LocalizationModelV2 {
   String? allowSharing;
   String? descAllowSharing;
   String? sharePost;
+  String? privacyPost;
+  String? prepareYourContent;
+  String? pleaseWaitThisProcessWillTakeSomeTime;
 
   LocalizationModelV2({
     this.login,
@@ -1693,6 +1697,7 @@ class LocalizationModelV2 {
     this.content,
     this.problemBugs,
     this.ads,
+    this.learnMore,
     this.newLabel,
     this.inProgress,
     this.solved,
@@ -1749,6 +1754,9 @@ class LocalizationModelV2 {
     this.allowSharing,
     this.descAllowSharing,
     this.sharePost,
+    this.privacyPost,
+    this.prepareYourContent,
+    this.pleaseWaitThisProcessWillTakeSomeTime,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2588,6 +2596,7 @@ class LocalizationModelV2 {
     content = json['content'];
     problemBugs = json['problemBugs'];
     ads = json['ads'];
+    learnMore = json['learnMore'];
     newLabel = json['new'];
     inProgress = json['inProgress'];
     solved = json['solved'];
@@ -2644,5 +2653,8 @@ class LocalizationModelV2 {
     allowSharing = json['allowSharing'];
     descAllowSharing = json['descAllowSharing'];
     sharePost = json['sharePost'];
+    privacyPost = json['privacyPost'];
+    prepareYourContent = json['prepareYourContent'];
+    pleaseWaitThisProcessWillTakeSomeTime = json['pleaseWaitThisProcessWillTakeSomeTime'];
   }
 }

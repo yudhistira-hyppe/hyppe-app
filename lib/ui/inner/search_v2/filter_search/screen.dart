@@ -50,7 +50,7 @@ class FilterSearchScreen extends StatelessWidget {
                   // });
                 },
                 toggleable: true,
-                activeColor: Theme.of(context).colorScheme.primaryVariant,
+                activeColor: Theme.of(context).colorScheme.primary,
                 title: CustomTextWidget(
                   textAlign: TextAlign.left,
                   textToDisplay: "", //_genders[index],

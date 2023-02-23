@@ -134,6 +134,8 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
   bool buttonDisable() => email.isNotEmpty && password.isNotEmpty && emailValidator(emailController.text) == '' ? true : false;
 
   Future onClickForgotPassword(BuildContext context) async {
+    emailController.clear();
+    passwordController.clear();
     _routing.move(Routes.forgotPassword);
   }
 
@@ -273,13 +275,13 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
 
       signUpPinNotifier.username = signData.username ?? '';
       signUpPinNotifier.email = signData.email ?? '';
-      signUpPinNotifier.resend(context);
+      // signUpPinNotifier.resend(context);
       signUpPinNotifier.resendPilih = true;
       // signUpPinNotifier.timer = '00:00';
 
       signUpPinNotifier.userToken = signData.token ?? '';
       // signUpPinNotifier.userID = signData.profileID;
-      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin)).whenComplete(() {
+      Routing().move(Routes.signUpPin, argument: VerifyPageArgument(redirect: VerifyPageRedirection.toLogin, email: email)).whenComplete(() {
         clearTextController();
       });
     }

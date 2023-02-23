@@ -1,5 +1,6 @@
 import 'dart:async' show Timer;
 import 'dart:convert';
+import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,13 +39,13 @@ class LifeCycleManager extends StatefulWidget {
 class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBindingObserver {
   Timer? _timerLink;
   final _socketService = SocketService();
-  final _isolateService = IsolateService();
+  // final _isolateService = IsolateService();
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     _timerLink = Timer(const Duration(seconds: 2), () => DynamicLinkService.handleDynamicLinks());
-    _isolateService.turnOnWorkers();
+    // _isolateService.turnOnWorkers();
     super.initState();
   }
 
@@ -54,7 +55,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     super.dispose();
     _timerLink?.cancel();
     if (_socketService.isRunning) _socketService.closeSocket();
-    if (_isolateService.workerActive()) _isolateService.turnOffWorkers();
+    // if (_isolateService.workerActive()) _isolateService.turnOffWorkers();
   }
 
   @override
@@ -100,7 +101,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           await activity.activityAwake(context);
           final fetch = activity.deviceFetch;
           if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
-            await getDevice();
+            if (Platform.isAndroid) {
+              await getDevice();
+            }
+
             print('cek version loh ini ${activity.deviceFetch.version.runtimeType}');
             //cek version aplikasi
             await CheckVersion().check(context, activity.deviceFetch.version);

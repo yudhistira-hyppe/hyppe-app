@@ -69,7 +69,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                               : notifier.reviewBuyNotifier.data != null
                                   ? System().currencyFormat(amount: notifier.reviewBuyNotifier.data?.totalAmount?.toInt())
                                   : '',
-                          textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                          textStyle: textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),
                         ),
                         const SizedBox(height: 24),
                         CustomTextWidget(textToDisplay: "Virtual Account", textStyle: textTheme.bodyMedium),
@@ -98,9 +98,15 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
           height: 44.0 * SizeConfig.scaleDiagonal,
           function: () {
             if (!notifier.isLoading) {
-              notifier.submitPay(context, price: widget.argument?.totalAmount);
+              notifier.submitPay(context, mounted, price: widget.argument?.totalAmount);
             }
           },
+          buttonStyle: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            shadowColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            overlayColor: MaterialStateProperty.all(notifier.colorButton(context)),
+            backgroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
+          ),
           // function: () => Routing().move(Routes.paymentSummaryScreen),
           child: notifier.isLoading
               ? const CustomLoading()
@@ -108,12 +114,6 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
                   textToDisplay: widget.argument?.totalAmount != null ? "${notifier.language.upload} & ${notifier.language.pay}" : notifier.language.pay ?? 'pay',
                   textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                 ),
-          buttonStyle: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
-            shadowColor: MaterialStateProperty.all(notifier.colorButton(context)),
-            overlayColor: MaterialStateProperty.all(notifier.colorButton(context)),
-            backgroundColor: MaterialStateProperty.all(notifier.colorButton(context)),
-          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         resizeToAvoidBottomInset: true,

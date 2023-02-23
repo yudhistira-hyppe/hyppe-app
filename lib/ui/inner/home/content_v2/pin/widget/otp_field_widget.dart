@@ -32,9 +32,9 @@ class OtpFieldWidget extends StatelessWidget {
           animationType: AnimationType.scale,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.underline,
-            activeColor: notifier.matchingPin ? theme.colorScheme.primaryVariant : theme.colorScheme.error,
-            inactiveColor: notifier.matchingPin ? theme.colorScheme.primaryVariant : theme.colorScheme.error,
-            selectedColor: notifier.matchingPin ? theme.colorScheme.primaryVariant : theme.colorScheme.error,
+            activeColor: notifier.matchingPin ? theme.colorScheme.primary : theme.colorScheme.error,
+            inactiveColor: notifier.matchingPin ? theme.colorScheme.primary : theme.colorScheme.error,
+            selectedColor: notifier.matchingPin ? theme.colorScheme.primary : theme.colorScheme.error,
           ),
           textStyle: theme.textTheme.headline5!.copyWith(fontWeight: FontWeight.bold),
           keyboardType: TextInputType.number,

@@ -46,7 +46,7 @@ class CustomFollowButton extends StatelessWidget {
               : CustomTextWidget(
                   textToDisplay: title,
                   textStyle: Theme.of(context).textTheme.button?.copyWith(
-                        color: _isNotFollowing ? Theme.of(context).colorScheme.primaryVariant : null,
+                        color: _isNotFollowing ? Theme.of(context).colorScheme.primary : null,
                       ),
                 ),
           // width: 50.0 * SizeConfig.scaleDiagonal,

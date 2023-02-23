@@ -19,6 +19,7 @@ class TopItemView extends StatelessWidget {
           const CustomIconWidget(
             iconData: '${AssetPath.vectorPath}sale.svg',
             defaultColor: false,
+            height: 22,
           ),
       ],
     );

@@ -68,7 +68,7 @@ class OnNoInternetConnectionBottomSheet extends StatelessWidget {
                     buttonStyle: ButtonStyle(
                         elevation: MaterialStateProperty.all<double>(0.0),
                         visualDensity: VisualDensity.adaptivePlatformDensity,
-                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primaryVariant),
+                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
                         shape:
                             MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
                   ),

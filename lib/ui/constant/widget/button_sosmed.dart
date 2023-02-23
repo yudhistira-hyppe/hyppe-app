@@ -24,7 +24,7 @@ class ButtomSosmed extends StatelessWidget {
               side: BorderSide(
                 color: Color(0xFFEDEDED),
               ))),
-          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+          backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
         ),
         child: child,
         //

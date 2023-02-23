@@ -41,7 +41,7 @@ class _ShowOverlayLoadingState extends State<ShowOverlayLoading> with UploadEven
   }
 
   @override
-  void onUploadSendProgress(int count, int total) {
+  void onUploadSendProgress(double count, double total) {
     _uploadNotifier.progress = '${(count / total * 100).toStringAsFixed(0)}%';
   }
 

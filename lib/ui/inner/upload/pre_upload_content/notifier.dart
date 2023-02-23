@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -90,7 +89,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   int get videoSize => _videoSize;
 
   // late Subscription subscription;
-  double _progressCompress = 0.0;
+  double _progressCompress = 100.0;
   double get progressCompress => _progressCompress;
 
   String? _desFile;
@@ -196,6 +195,14 @@ class PreUploadContentNotifier with ChangeNotifier {
 
   BoostResponse? _boostPaymentResponse;
   BoostResponse? get boostPaymentResponse => _boostPaymentResponse;
+
+  bool _isCompress = false;
+  bool get isCompress => _isCompress;
+
+  set isCompress(bool val) {
+    _isCompress = val;
+    notifyListeners();
+  }
 
   set boostPaymentResponse(BoostResponse? value) {
     _boostPaymentResponse = value;
@@ -546,6 +553,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     _tmpBoostTime = '';
     tmpBoostInterval = '';
     editData = null;
+    // _isCompress = false;
 
     final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
     if (isDisposeVid) {
@@ -568,24 +576,25 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future _createPostContentV2() async {
+  Future _createPostContentV2(BuildContext context, bool mounted) async {
     final BuildContext context = Routing.navigatorKey.currentContext!;
-    final _orientation = context.read<CameraNotifier>().orientation;
+    final orientation = context.read<CameraNotifier>().orientation;
     certifiedTmp = _certified;
+    double progress = 0;
 
-    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
-    final _tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
 
     List<String> userTagCaption = [];
     List<String> hastagCaption = [];
-    _tagRegex.allMatches(captionController.text).map((z) {
+    tagRegex.allMatches(captionController.text).map((z) {
       final val = z.group(0)?.substring(1);
       if (val != null) {
         userTagCaption.add(val);
       }
     }).toList();
 
-    _tagHastagRegex.allMatches(captionController.text).map((z) {
+    tagHastagRegex.allMatches(captionController.text).map((z) {
       final val = z.group(0)?.substring(1);
       if (val != null) {
         hastagCaption.add(val);
@@ -607,7 +616,26 @@ class PreUploadContentNotifier with ChangeNotifier {
       final size = context.read<PreviewContentNotifier>();
       final width = size.width;
       final height = size.height;
+
       print('featureType : $featureType');
+      if (_boostContent == null) clearUpAndBackToHome(context);
+      // await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
+      if (featureType == FeatureType.diary || featureType == FeatureType.vid) {
+        ShowBottomSheet().onShowColouredSheet(
+          context,
+          language.prepareYourContent ?? '',
+          subCaption: language.pleaseWaitThisProcessWillTakeSomeTime,
+          color: kHyppeTextLightPrimary,
+          iconSvg: "${AssetPath.vectorPath}info_white.svg",
+          milisecond: 2000,
+          dismissible: false,
+        );
+      }
+      if (_isCompress) {
+        await compressVideo();
+      }
+      if (!mounted) return false;
+
       notifier.postContentsBlocV2(
         context,
         width: width,
@@ -627,13 +655,31 @@ class PreUploadContentNotifier with ChangeNotifier {
         saleLike: _includeTotalLikes,
         saleView: _includeTotalViews,
         isShared: isShared,
-        rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
+        rotate: orientation ?? NativeDeviceOrientation.portraitUp,
         location: locationName == language.addLocation ? '' : locationName,
         onReceiveProgress: (count, total) async {
-          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },
         onSendProgress: (received, total) async {
-          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+          if (_isCompress) {
+            var progress = 50 + ((received / 2) / 1000000);
+            if (progress < 80) {
+              _progressCompress = progress;
+            } else {
+              progress + 2;
+            }
+            print("ini loading upload $_progressCompress}");
+            var total2 = 100.0;
+            // var total2 = (total / 2) / 100000;
+            // var total2 = 50 + ((total / 2) / 100000);
+            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: total2));
+          } else {
+            if (received < total - total * 5 / 100) {
+              progress = received.toDouble();
+            }
+            print('progress $progress');
+            await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: progress, total: total.toDouble()));
+          }
         },
       ).then((value) {
         _uploadSuccess = value;
@@ -644,7 +690,6 @@ class PreUploadContentNotifier with ChangeNotifier {
         // _postIdPanding = decode['data']['postID'];
         if (_boostContent != null) _boostContentBuy(context);
       });
-      if (_boostContent == null) clearUpAndBackToHome(context);
     } catch (e) {
       print('Error create post : $e');
       eventService.notifyUploadFailed(
@@ -665,16 +710,16 @@ class PreUploadContentNotifier with ChangeNotifier {
     updateContent = true;
     certifiedTmp = false;
 
-    final _tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
-    final _tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final tagRegex = RegExp(r"\B@\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
+    final tagHastagRegex = RegExp(r"\B#\w*[a-zA-Z-1-9\.-_!$%^&*()]+\w*", caseSensitive: false);
 
     List userTagCaption = [];
     List hastagCaption = [];
-    _tagRegex.allMatches(captionController.text).map((z) {
+    tagRegex.allMatches(captionController.text).map((z) {
       userTagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
-    _tagHastagRegex.allMatches(captionController.text).map((z) {
+    tagHastagRegex.allMatches(captionController.text).map((z) {
       hastagCaption.add(z.group(0)?.substring(1));
     }).toList();
 
@@ -701,8 +746,10 @@ class PreUploadContentNotifier with ChangeNotifier {
     );
     final fetch = notifier.postsFetch;
 
+    print('update dong ${fetch.postsState}');
+
     if (fetch.postsState == PostsState.updateContentsSuccess) {
-      context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
+      await context.read<SelfProfileNotifier>().onUpdateSelfPostContent(
             context,
             postID: postID,
             content: content,
@@ -717,7 +764,9 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleAmount: _toSell ? price : "0",
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
+            isShared: isShared,
           );
+      notifyListeners();
 
       context.read<SelfProfileNotifier>().onUpdate();
 
@@ -736,6 +785,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             saleAmount: _toSell ? price : "0",
             saleLike: _includeTotalLikes,
             saleView: _includeTotalViews,
+            isShared: isShared,
           );
 
       updateContent = false;
@@ -763,6 +813,69 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (message['messages']['info'][0] != '' || message['messages']['info'][0] != null) {
         return ShowBottomSheet().onShowColouredSheet(context, message['messages']['info'][0], color: kHyppeDanger, iconSvg: "${AssetPath.vectorPath}remove.svg", maxLines: 4);
       }
+    }
+  }
+
+  void checkForCompress() async {
+    if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
+      await getVideoSize();
+      Duration? _duration;
+      int? _size;
+      await System().getVideoMetadata(File(fileContent?[0] ?? '').path).then((value) {
+        _size = value?.filesize ?? 0;
+        print('sebelum di bagi $_size');
+        var inMB = _size! / 1024 / 1024;
+        _size = inMB.toInt();
+        _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
+
+        // _duration.inSeconds
+      });
+
+      print("size video ini $_size");
+      print(_duration?.inSeconds);
+      var normalSize = _duration!.inSeconds * 0.91;
+      if (_size! >= normalSize) {
+        _isCompress = true;
+      } else {
+        _isCompress = false;
+      }
+    }
+  }
+
+  Future<void> compressVideo() async {
+    try {
+      final LightCompressor _lightCompressor = LightCompressor();
+      _desFile = await _destinationFile;
+      _lightCompressor.onProgressUpdated.listen((val) {
+        _progressCompress = val / 2;
+        print("compress : $_progressCompress");
+        eventService.notifyUploadSendProgress(ProgressUploadArgument(count: _progressCompress, total: 100));
+        notifyListeners();
+      });
+
+      final dynamic response = await _lightCompressor.compressVideo(
+        path: File(fileContent?[0] ?? '').path,
+        destinationPath: _desFile ?? '',
+        videoQuality: VideoQuality.high,
+        isMinBitrateCheckEnabled: false,
+        // frameRate: 24, /* or ignore it */
+      );
+
+      if (response is OnSuccess) {
+        _desFile = response.destinationPath;
+        _fileContent = [response.destinationPath];
+        getVideoSize();
+        _progressCompress = 100;
+        notifyListeners();
+      } else if (response is OnFailure) {
+        // print('failed');
+        // print(response.message);
+      } else if (response is OnCancelled) {
+        // print('cancel');
+        // print(response.isCancelled);
+      }
+    } catch (e) {
+      // VideoCompress.cancelCompression();
     }
   }
 
@@ -802,7 +915,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     Routing().moveAndRemoveUntil(Routes.lobby, Routes.root);
   }
 
-  Future<void> onClickPost(BuildContext context, {required bool onEdit, ContentData? data, String? content}) async {
+  Future<void> onClickPost(BuildContext context, bool mounted, {required bool onEdit, ContentData? data, String? content}) async {
     checkKeyboardFocus(context);
     if (_toSell) {
       if (!_validatePrice()) {
@@ -820,21 +933,24 @@ class PreUploadContentNotifier with ChangeNotifier {
       if (connection) {
         checkKeyboardFocus(context);
         if (onEdit) {
+          if (!mounted) return;
           await _updatePostContentV2(
             context,
             postID: data?.postID ?? '',
             content: content ?? '',
           );
         } else {
-          await _createPostContentV2();
+          await _createPostContentV2(context, mounted);
         }
       } else {
+        if (!mounted) return;
         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
           Routing().moveBack();
-          onClickPost(context, onEdit: onEdit, data: data, content: content);
+          onClickPost(context, mounted, onEdit: onEdit, data: data, content: content);
         });
       }
     } else {
+      if (!mounted) return;
       ShowBottomSheet().onShowColouredSheet(
         context,
         _validateDescription() ? language.categoryCanOnlyWithMin1Characters ?? '' : language.descriptionCanOnlyWithMin5Characters ?? '',
@@ -880,6 +996,11 @@ class PreUploadContentNotifier with ChangeNotifier {
       onChange: (value, code) {
         _privacyTitle = value;
         privacyValue = code;
+        if (code == 'PRIVATE') {
+          allowComment = false;
+        } else {
+          allowComment = true;
+        }
         // Routing().moveBack();
         checkKeyboardFocus(context);
         notifyListeners();
@@ -909,6 +1030,7 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   void showInterest(BuildContext context) {
+    print('kesini');
     ShowBottomSheet.onShowInteresList(
       context,
       onSave: () {
@@ -1000,72 +1122,23 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future<void> compressVideo() async {
-    // 1 hd 50/60
-    // 0.83
-    getVideoSize();
-    Duration? _duration;
-    int? _size;
-    await System().getVideoMetadata(File(fileContent?[0] ?? '').path).then((value) {
-      _size = value?.filesize ?? 0;
-      print('sebelum di bagi $_size');
-      var inMB = _size! / 1024 / 1024;
-      _size = inMB.toInt();
-      _duration = Duration(milliseconds: int.parse(value?.duration?.toInt().toString() ?? ''));
-      // _duration.inSeconds
-    });
-
-    print("size video ini $_size");
-    print(_duration?.inSeconds);
-
-    var normalSize = _duration!.inSeconds * 0.91;
-
-    if (_size! >= normalSize) {
-      if (isEdit == false && (featureType == FeatureType.diary || featureType == FeatureType.vid)) {
-        try {
-          final LightCompressor _lightCompressor = LightCompressor();
-          _desFile = await _destinationFile;
-          _lightCompressor.onProgressUpdated.listen((val) {
-            _progressCompress = val;
-            // print("contoh dari value yang di terima : $val");
-            notifyListeners();
-          });
-
-          final dynamic response = await _lightCompressor.compressVideo(
-            path: File(fileContent?[0] ?? '').path,
-            destinationPath: _desFile ?? '',
-            videoQuality: VideoQuality.high,
-            isMinBitrateCheckEnabled: false,
-            // frameRate: 24, /* or ignore it */
-          );
-
-          if (response is OnSuccess) {
-            _desFile = response.destinationPath;
-            _fileContent = [response.destinationPath];
-            getVideoSize();
-            _progressCompress = 100;
-            notifyListeners();
-          } else if (response is OnFailure) {
-            // print('failed');
-            // print(response.message);
-          } else if (response is OnCancelled) {
-            // print('cancel');
-            // print(response.isCancelled);
-          }
-        } catch (e) {
-          // VideoCompress.cancelCompression();
-        }
-      }
-    }
-  }
-
   Future onGetInterest(BuildContext context) async {
     if (_interestList.isEmpty) {
       final notifier = UtilsBlocV2();
       await notifier.getInterestBloc(context);
       final fetch = notifier.utilsFetch;
 
-      final Map<String, dynamic> seeMore = {"langIso": "alice", "cts": '2021-12-16 12:45:36', "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg', 'interestName': 'See More'};
+      final InterestData seeMore = InterestData(
+        id: '11111',
+        interestName: 'See More',
+      );
+      // {
+      //   "id": "11111",
+      //   "langIso": "alice",
+      //   "cts": '2021-12-16 12:45:36',
+      //   "icon": 'https://prod.hyppe.app/images/icon_interest/music.svg',
+      //   'interestName': 'See More'
+      // };
       if (fetch.utilsState == UtilsState.getInterestsSuccess) {
         _interest = [];
         fetch.data.forEach((v) {
@@ -1073,7 +1146,7 @@ class PreUploadContentNotifier with ChangeNotifier {
             _interest.add(InterestData.fromJson(v));
           }
           if (_interest.length == 6) {
-            _interest.add(InterestData.fromJson(seeMore));
+            _interest.add(seeMore);
           }
           _interestList.add(InterestData.fromJson(v));
         });
@@ -1095,8 +1168,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   bool pickedInterest(String? tile) => _interestData.contains(tile) ? true : false;
   void insertInterest(BuildContext context, int index) {
     if (interest.isNotEmpty) {
-      String tile = interest[index].interestName ?? '';
-      if (tile == 'See More') {
+      String tile = interest[index].id ?? '';
+      if (tile == '11111') {
         showInterest(context);
       } else {
         if (_interestData.contains(tile)) {
@@ -1111,9 +1184,13 @@ class PreUploadContentNotifier with ChangeNotifier {
   }
 
   void insertInterestList(BuildContext context, int index) {
+    print(index);
     if (interestList.isNotEmpty) {
-      String tile = interestList[index].interestName ?? '';
-      if (tile == 'See More') {
+      String tile = interestList[index].id ?? '';
+      print('tile $tile');
+      print(_interestData);
+
+      if (tile == '11111') {
         showLocation(context);
       } else {
         if (_interestData.contains(tile)) {
@@ -1492,13 +1569,13 @@ class PreUploadContentNotifier with ChangeNotifier {
     }
   }
 
-  Future uploadPanding(context) async {
+  Future uploadPanding(context, mounted) async {
     if (isEdit) {
       _postIdPanding = editData?.postID ?? '';
       _boostContentBuy(context);
     } else {
       ShowGeneralDialog.loadingDialog(context, uploadProses: true);
-      _createPostContentV2();
+      _createPostContentV2(context, mounted);
     }
   }
 

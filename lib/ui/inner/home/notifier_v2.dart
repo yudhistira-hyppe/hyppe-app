@@ -1,11 +1,15 @@
 // import 'dart:js';
 
+import 'dart:async';
+
+import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
+import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/SqliteData.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
+import 'package:hyppe/core/services/check_version.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -16,7 +20,6 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/overlay_service/overlay_handler.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/preview/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/notifier.dart';
@@ -69,6 +72,9 @@ class HomeNotifier with ChangeNotifier {
   String _select = 'PUBLIC';
   String get select => _select;
 
+  SpeedInternet _internetSpeed = SpeedInternet.medium;
+  SpeedInternet get internetSpeed => _internetSpeed;
+
   var db = DatabaseHelper();
 
   set profileImage(String url) {
@@ -92,6 +98,11 @@ class HomeNotifier with ChangeNotifier {
   //   _isHaveSomethingNew = val;
   //   notifyListeners();
   // }
+
+  set internetSpeed(SpeedInternet val) {
+    _internetSpeed = val;
+    notifyListeners();
+  }
 
   set isLoadingVid(bool val) {
     _isLoadingVid = val;
@@ -140,6 +151,42 @@ class HomeNotifier with ChangeNotifier {
     _sessionID = null;
   }
 
+  Ping? ping;
+  Future startPing(BuildContext context) async {
+    int index = 0;
+    double milliseconds = 0;
+    int totalmilliseconds = 0;
+
+    // var result = context.read<HomeNotifier>().internetSpeed;
+
+    try {
+      ping = Ping(
+        UrlConstants.urlPing,
+        count: 2,
+        timeout: 1,
+        interval: 1,
+        ipv6: false,
+        ttl: 40,
+      );
+      ping!.stream.listen((event) {
+        index++;
+
+        totalmilliseconds += event.response?.time?.inMilliseconds ?? 0;
+        milliseconds = totalmilliseconds / index;
+
+        if (milliseconds < 100) {
+          internetSpeed = SpeedInternet.fast;
+        } else if (milliseconds >= 100 && milliseconds <= 170) {
+          internetSpeed = SpeedInternet.medium;
+        } else {
+          internetSpeed = SpeedInternet.slow;
+        }
+      });
+    } catch (e) {
+      debugPrint('error $e');
+    }
+  }
+
   void onUpdate() => notifyListeners();
 
   Future initHome(BuildContext context) async {
@@ -149,6 +196,11 @@ class HomeNotifier with ChangeNotifier {
     // await db.getFilterCamera();
 
     'init Home'.logger();
+    startPing(context);
+    Timer.periodic(const Duration(minutes: 1), (timer) async {
+      startPing(context);
+    });
+
     context.read<ReportNotifier>().inPosition = contentPosition.home;
     bool isConnected = await System().checkConnections();
     if (isConnected) {
@@ -181,7 +233,7 @@ class HomeNotifier with ChangeNotifier {
         final allContents = await allReload(context);
         // Refresh content
         try {
-          await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+          await stories.initialStories(context).then((value) => totLoading += 1);
         } catch (e) {
           "Error Load Story : $e".logger();
         }
@@ -251,7 +303,7 @@ class HomeNotifier with ChangeNotifier {
       final allContents = await allReload(context);
       // Refresh content
       try {
-        await stories.initialStories(context, list: allContents.story).then((value) => totLoading += 1);
+        await stories.initialStories(context).then((value) => totLoading += 1);
       } catch (e) {
         "Error Load Story : $e".logger();
       }
@@ -307,6 +359,8 @@ class HomeNotifier with ChangeNotifier {
       final fetch = notifier.postsFetch;
       'AllContents : ${AllContents.fromJson(fetch.data).toJson()}'.logger();
       res = AllContents.fromJson(fetch.data);
+      await CheckVersion().check(context, fetch.version);
+
       return res;
     } catch (e) {
       'landing page error : $e'.logger();
@@ -352,6 +406,7 @@ class HomeNotifier with ChangeNotifier {
     List<TagPeople>? tagPeople,
     String? location,
     String? saleAmount,
+    bool? isShared,
     bool? saleLike,
     bool? saleView,
   }) {
@@ -397,6 +452,7 @@ class HomeNotifier with ChangeNotifier {
       _updatedData.saleView = saleView;
       _updatedData.cats = [];
       _updatedData.tagPeople = [];
+      _updatedData.isShared = isShared;
       // _updatedData.tagPeople = tagPeople;
       _updatedData.tagPeople?.addAll(tagPeople ?? []);
       if (cats != null) {

@@ -6,6 +6,7 @@ import 'package:hyppe/core/bloc/user_v2/state.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/user_v2/sign_in/sign_in.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -16,7 +17,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SignUpPinNotifier with ChangeNotifier {
+import '../../../../constant/entities/loading/notifier.dart';
+
+class SignUpPinNotifier extends ChangeNotifier with WidgetsBindingObserver, LoadingNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
   translate(LocalizationModelV2 translate) {
     language = translate;
@@ -61,6 +64,13 @@ class SignUpPinNotifier with ChangeNotifier {
 
   bool _startTimers = true;
   bool get startTimers => _startTimers;
+
+  late VerifyPageArgument argument;
+
+  TextEditingController pinController = TextEditingController();
+
+  final String resendLoadKey = 'resendRegistKey';
+
 
   set startTimers(bool val) {
     _startTimers = val;
@@ -130,6 +140,14 @@ class SignUpPinNotifier with ChangeNotifier {
   set resendPilih(bool val) {
     _resendPilih = val;
     notifyListeners();
+  }
+
+  void initState(VerifyPageArgument argument) {
+    WidgetsBinding.instance.addObserver(this);
+    this.argument = argument;
+    _inCorrectCode = false;
+    pinController = TextEditingController();
+    // startTimer();
   }
 
   unFocusingNode() {
@@ -210,7 +228,7 @@ class SignUpPinNotifier with ChangeNotifier {
 
   Color verifyButtonColor(BuildContext context) {
     if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty && !loading) {
-      return Theme.of(context).colorScheme.primaryVariant;
+      return Theme.of(context).colorScheme.primary;
     } else {
       return Theme.of(context).colorScheme.surface;
     }
@@ -255,98 +273,201 @@ class SignUpPinNotifier with ChangeNotifier {
     _myTimer?.cancel();
   }
 
-  String resendString() {
-    if (_timer != "00:00") {
-      return "${language.pleaseWaitFor}" " $_timer";
-    } else {
-      return "${language.resendNewCode}";
+  String resendString() => language.resendNewCode ?? '';
+
+  TextStyle? resendStyle(BuildContext context) {
+    return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary);
+  }
+
+  // String resendString() {
+  //   if (_timer != "00:00") {
+  //     return "${language.pleaseWaitFor}" " $_timer";
+  //   } else {
+  //     return "${language.resendNewCode}";
+  //   }
+  // }
+  //
+  // TextStyle resendStyle(BuildContext context) {
+  //   if (_timer != "00:00") {
+  //     return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary) ?? const TextStyle();
+  //   } else {
+  //     return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primary) ?? const TextStyle();
+  //   }
+  // }
+
+  Future resend(BuildContext context, Function afterExecute) async {
+    final notifier = UserBloc();
+    try {
+      setLoading(true, loadingObject: resendLoadKey);
+
+      await notifier.recoverPasswordBloc(
+        context,
+        email: argument.email,
+        event: "RECOVER_PASS",
+        status: "INITIAL",
+      );
+      final fetch = notifier.userFetch;
+
+      if (fetch.userState == UserState.RecoverSuccess) {
+        SharedPreference().removeValue(SpKeys.lastTimeStampReachMaxAttempRecoverPassword);
+        afterExecute();
+        // ShowBottomSheet().onShowColouredSheet(
+        //   context,
+        //   language.checkYourEmail ?? '',
+        //   subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
+        // );
+      }
+    } finally {
+      setLoading(false, loadingObject: resendLoadKey);
     }
   }
 
-  TextStyle resendStyle(BuildContext context) {
-    if (_timer != "00:00") {
-      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant) ?? const TextStyle();
-    } else {
-      return Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.primaryVariant) ?? const TextStyle();
-    }
-  }
-
-  Function? onVerifyButton(BuildContext context, {required VerifyPageArgument argument}) {
-    if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
-      return () async {
-        bool connection = await System().checkConnections();
-        if (connection) {
-          // update loading state
-          loading = true;
-
-          SignIn? _accountResponse;
-
-          // concatenate code
-          String _verifyCode = "";
-          _verifyCode += tec1.value.text;
-          _verifyCode += tec2.value.text;
-          _verifyCode += tec3.value.text;
-          _verifyCode += tec4.value.text;
-
-          final notifier = UserBloc();
-
-          if (argument.redirect == VerifyPageRedirection.toHome) {
-            await notifier.recoverPasswordOTPBloc(
-              context,
-              email: email,
-              otp: _verifyCode,
+  Future onVerifyButton(BuildContext context, Function afterSuccess) async{
+    try {
+      bool connection = await System().checkConnections();
+      if(connection){
+        final notifier = UserBloc();
+        loading = true;
+        SignIn? _accountResponse;
+        final _verifyCode = pinController.text;
+        if (argument.redirect == VerifyPageRedirection.toHome) {
+          await notifier.recoverPasswordOTPBloc(
+            context,
+            email: email,
+            otp: _verifyCode,
+          );
+          final fetch = notifier.userFetch;
+          if (fetch.userState == UserState.RecoverSuccess) {
+            _handleVerifyAction(
+              context: context,
+              verifyPageArgument: argument,
+              message: language.yourResetCodeHasBeenVerified ?? '',
             );
-            final fetch = notifier.userFetch;
-            if (fetch.userState == UserState.RecoverSuccess) {
-              _handleVerifyAction(
-                context: context,
-                verifyPageArgument: argument,
-                message: language.yourResetCodeHasBeenVerified ?? '',
-              );
-            } else {
-              _loading = false;
-              _inCorrectCode = true;
-              notifyListeners();
-            }
           } else {
-            await notifier.verifyAccountBlocV2(context, email: email, otp: _verifyCode);
-
-            final fetch = notifier.userFetch;
-            if (fetch.userState == UserState.verifyAccountSuccess) {
-              _accountResponse = SignIn.fromJson(fetch.data);
-
-              SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
-              SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
-              SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
-              SharedPreference().writeStorage(SpKeys.lastHitPost, '');
-              SharedPreference().removeValue(SpKeys.isUserInOTP);
-              SharedPreference().removeValue(SpKeys.referralFrom);
-
-              // DynamicLinkService.hitReferralBackend(context);
-
-              _handleVerifyAction(
-                context: context,
-                verifyPageArgument: argument,
-                message: language.yourEmailHasBeenVerified ?? '',
-              );
-            } else {
-              _loading = false;
-              _inCorrectCode = true;
-              notifyListeners();
-            }
+            _loading = false;
+            _inCorrectCode = true;
+            notifyListeners();
           }
         } else {
-          loading = false;
-          ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-            Routing().moveBack();
-            onVerifyButton(context, argument: argument);
-          });
+          await notifier.verifyAccountBlocV2(context, email: email, otp: _verifyCode);
+
+          final fetch = notifier.userFetch;
+          if (fetch.userState == UserState.verifyAccountSuccess) {
+            _accountResponse = SignIn.fromJson(fetch.data);
+
+            SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
+            SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
+            SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
+            SharedPreference().writeStorage(SpKeys.lastHitPost, '');
+            SharedPreference().removeValue(SpKeys.isUserInOTP);
+            SharedPreference().removeValue(SpKeys.referralFrom);
+
+            // DynamicLinkService.hitReferralBackend(context);
+
+            _handleVerifyAction(
+              context: context,
+              verifyPageArgument: argument,
+              message: language.yourEmailHasBeenVerified ?? '',
+            );
+          } else {
+            _loading = false;
+            _inCorrectCode = true;
+            notifyListeners();
+          }
         }
-      };
-    } else {
-      return null;
+      }else{
+        throw 'No Internet Connection';
+      }
+
+    }catch(e){
+      'error pin verification $e'.logger();
+      // _loading = false;
+    } finally {
+      // try {
+      //   handleShowCountdown(notifier.userFetch.data.messages.info[0]);
+      // } catch (e) {
+      //   print(e);
+      // }
+      loading = false;
     }
   }
+
+  // Function? onVerifyButton(BuildContext context, {required VerifyPageArgument argument}) {
+  //   if (tec1.value.text.isNotEmpty && tec2.value.text.isNotEmpty && tec3.value.text.isNotEmpty && tec4.value.text.isNotEmpty) {
+  //     return () async {
+  //       bool connection = await System().checkConnections();
+  //       if (connection) {
+  //         // update loading state
+  //         loading = true;
+  //
+  //         SignIn? _accountResponse;
+  //
+  //         // concatenate code
+  //         String _verifyCode = "";
+  //         _verifyCode += tec1.value.text;
+  //         _verifyCode += tec2.value.text;
+  //         _verifyCode += tec3.value.text;
+  //         _verifyCode += tec4.value.text;
+  //
+  //         final notifier = UserBloc();
+  //
+  //         if (argument.redirect == VerifyPageRedirection.toHome) {
+  //           await notifier.recoverPasswordOTPBloc(
+  //             context,
+  //             email: email,
+  //             otp: _verifyCode,
+  //           );
+  //           final fetch = notifier.userFetch;
+  //           if (fetch.userState == UserState.RecoverSuccess) {
+  //             _handleVerifyAction(
+  //               context: context,
+  //               verifyPageArgument: argument,
+  //               message: language.yourResetCodeHasBeenVerified ?? '',
+  //             );
+  //           } else {
+  //             _loading = false;
+  //             _inCorrectCode = true;
+  //             notifyListeners();
+  //           }
+  //         } else {
+  //           await notifier.verifyAccountBlocV2(context, email: email, otp: _verifyCode);
+  //
+  //           final fetch = notifier.userFetch;
+  //           if (fetch.userState == UserState.verifyAccountSuccess) {
+  //             _accountResponse = SignIn.fromJson(fetch.data);
+  //
+  //             SharedPreference().writeStorage(SpKeys.email, _accountResponse.data?.email);
+  //             SharedPreference().writeStorage(SpKeys.userID, _accountResponse.data?.userId);
+  //             SharedPreference().writeStorage(SpKeys.userToken, _accountResponse.data?.token);
+  //             SharedPreference().writeStorage(SpKeys.lastHitPost, '');
+  //             SharedPreference().removeValue(SpKeys.isUserInOTP);
+  //             SharedPreference().removeValue(SpKeys.referralFrom);
+  //
+  //             // DynamicLinkService.hitReferralBackend(context);
+  //
+  //             _handleVerifyAction(
+  //               context: context,
+  //               verifyPageArgument: argument,
+  //               message: language.yourEmailHasBeenVerified ?? '',
+  //             );
+  //           } else {
+  //             _loading = false;
+  //             _inCorrectCode = true;
+  //             notifyListeners();
+  //           }
+  //         }
+  //       } else {
+  //         loading = false;
+  //         ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+  //           Routing().moveBack();
+  //           onVerifyButton(context, argument: argument);
+  //         });
+  //       }
+  //     };
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   Future _handleVerifyAction({
     required String message,
@@ -363,7 +484,7 @@ class SignUpPinNotifier with ChangeNotifier {
           Routing().moveAndRemoveUntil(
             Routes.signUpVerified,
             Routes.root,
-            argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome),
+            argument: VerifyPageArgument(redirect: VerifyPageRedirection.toHome, email: argument.email),
           );
           break;
         // TODO: Changed sign up rules
@@ -387,50 +508,50 @@ class SignUpPinNotifier with ChangeNotifier {
     _email = '';
   }
 
-  Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
-    print(_timer);
-    if (_timer != "00:00") {
-      // ignore: avoid_print
-      return null;
-    } else {
-      print(withStartTimer);
-      return () async {
-        if (withStartTimer) {
-          _timer = '';
-          startTimer();
-        }
-        resend(context);
-      };
-    }
-  }
+  // Function()? resendCode(BuildContext context, {bool withStartTimer = true}) {
+  //   print(_timer);
+  //   if (_timer != "00:00") {
+  //     // ignore: avoid_print
+  //     return null;
+  //   } else {
+  //     print(withStartTimer);
+  //     return () async {
+  //       if (withStartTimer) {
+  //         _timer = '';
+  //         startTimer();
+  //       }
+  //       resend(context);
+  //     };
+  //   }
+  // }
 
-  Future resend(BuildContext context) async {
-    bool connection = await System().checkConnections();
-    if (connection) {
-      final notifier = UserBloc();
-      await notifier.resendOTPBloc(context, email: email, function: () => resendCode(context));
-      final fetch = notifier.userFetch;
-      if (fetch.userState == UserState.resendOTPSuccess) {
-        print('Resend code success');
-        ShowBottomSheet().onShowColouredSheet(
-          context,
-          language.checkYourEmail ?? 'Check Your Email',
-          subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
-        );
-        // _timer = '';
-        // startTimer();
-        return true;
-      } else {
-        print('Resend code failed');
-        return false;
-      }
-    } else {
-      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
-        Routing().moveBack();
-        resendCode(context);
-      });
-    }
-  }
+  // Future resend(BuildContext context) async {
+  //   bool connection = await System().checkConnections();
+  //   if (connection) {
+  //     final notifier = UserBloc();
+  //     await notifier.resendOTPBloc(context, email: email, function: () => resendCode(context));
+  //     final fetch = notifier.userFetch;
+  //     if (fetch.userState == UserState.resendOTPSuccess) {
+  //       print('Resend code success');
+  //       ShowBottomSheet().onShowColouredSheet(
+  //         context,
+  //         language.checkYourEmail ?? 'Check Your Email',
+  //         subCaption: language.weHaveSentAVerificationCodeToYourEmail ?? '',
+  //       );
+  //       // _timer = '';
+  //       // startTimer();
+  //       return true;
+  //     } else {
+  //       print('Resend code failed');
+  //       return false;
+  //     }
+  //   } else {
+  //     ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+  //       Routing().moveBack();
+  //       resendCode(context);
+  //     });
+  //   }
+  // }
 
   void _setUserCompleteData(BuildContext context) {
     // final notifier = Provider.of<UserCompleteProfileNotifier>(context, listen: false);

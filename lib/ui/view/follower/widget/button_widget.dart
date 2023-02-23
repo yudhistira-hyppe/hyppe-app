@@ -73,7 +73,7 @@ class ButtonWidget extends StatelessWidget {
 
   Color buttonColor(ThemeData theme) {
     if (data?.event != InteractiveEvent.accept) {
-      return theme.colorScheme.primaryVariant;
+      return theme.colorScheme.primary;
     } else {
       return theme.colorScheme.surface;
     }

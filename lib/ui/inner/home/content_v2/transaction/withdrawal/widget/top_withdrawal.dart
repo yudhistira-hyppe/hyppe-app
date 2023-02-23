@@ -128,7 +128,7 @@ class TopWithdrawalWodget extends StatelessWidget {
             CustomTextWidget(
               textToDisplay: notifier.errorNoBalance != '' ? notifier.errorNoBalance : "Minimum Withdrawal Rp 50.000",
               textStyle: TextStyle(
-                color: notifier.errorNoBalance != '' ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondaryVariant,
+                color: notifier.errorNoBalance != '' ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.secondary,
               ),
             ),
             twentyFourPx,

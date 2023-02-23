@@ -56,7 +56,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                     CustomTextWidget(
                       textToDisplay: notifier.translate.categories ?? 'category',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                     ),
                     sixPx,
                     Container(
@@ -74,7 +74,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                   title: CustomTextWidget(
                     textToDisplay: supportNotifier.nameCategory != '' ? supportNotifier.nameCategory : notifier.translate.chooseCategoryIssue ?? '',
                     textAlign: TextAlign.start,
-                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                    textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(color: Theme.of(context).colorScheme.secondary),
                   ),
                   trailing: const Icon(Icons.arrow_forward_ios_rounded),
                   minLeadingWidth: 0,
@@ -86,7 +86,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                     CustomTextWidget(
                       textToDisplay: 'Level',
                       textAlign: TextAlign.start,
-                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                      textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                     ),
                     sixPx,
                     Container(
@@ -116,7 +116,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                         ),
                         subtitle: Text('The condition will appear if the users problem need technical that can’t be solved by Guideline and will most likely be an improvement or new feature.'),
                         controlAffinity: ListTileControlAffinity.leading,
-                        activeColor: Theme.of(context).colorScheme.primaryVariant,
+                        activeColor: Theme.of(context).colorScheme.primary,
                         isThreeLine: true,
                       )),
                 ),
@@ -124,7 +124,7 @@ class _SupportTicketScreenState extends State<SupportTicketScreen> {
                 CustomTextWidget(
                   textToDisplay: notifier.translate.description ?? '',
                   textAlign: TextAlign.start,
-                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondaryVariant),
+                  textStyle: Theme.of(context).textTheme.caption?.copyWith(color: Theme.of(context).colorScheme.secondary),
                 ),
                 TextFormField(
                   minLines: 1,

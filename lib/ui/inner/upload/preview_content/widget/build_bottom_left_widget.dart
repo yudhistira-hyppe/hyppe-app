@@ -99,7 +99,7 @@ class _BuildBottomLeftWidgetState extends State<BuildBottomLeftWidget> {
                                       : Icon(
                                           Icons.warning_amber_rounded,
                                           size: 40.0 * SizeConfig.scaleDiagonal,
-                                          color: Theme.of(context).colorScheme.primaryVariant,
+                                          color: Theme.of(context).colorScheme.primary,
                                         ),
                             ),
                           ),

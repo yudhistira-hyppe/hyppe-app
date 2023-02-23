@@ -21,7 +21,7 @@ class SenderLayout extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.only(
           topRight: Radius.zero,
           topLeft: Radius.circular(5),
@@ -51,7 +51,7 @@ class SenderLayout extends StatelessWidget {
             CustomTextWidget(
               textAlign: TextAlign.end,
               textToDisplay: chatData?.createdAt == null ? "" : System().dateFormatter(chatData?.createdAt ?? '', 1),
-              textStyle: TextStyle(color: Theme.of(context).colorScheme.secondaryVariant, fontSize: 10),
+              textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 10),
             ),
           ],
         ),

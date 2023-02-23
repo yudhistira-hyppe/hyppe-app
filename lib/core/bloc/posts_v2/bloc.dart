@@ -12,7 +12,9 @@ import 'package:hyppe/core/constants/status_code.dart';
 import 'package:hyppe/core/response/generic_response.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:native_device_orientation/native_device_orientation.dart';
+import 'package:provider/provider.dart';
 
 class PostsBloc {
   final _repos = Repos();
@@ -120,6 +122,20 @@ class PostsBloc {
     );
   }
 
+  Future getStoriesGroup(BuildContext context) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
+    setPostsFetch(PostsFetch(PostsState.loading));
+    await _repos.reposPost(context, (onResult) {
+      if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+        setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+      } else {
+        setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+      }
+    }, (errorData) {
+      setPostsFetch(PostsFetch(PostsState.getAllContentsError));
+    }, data: {'email': email}, host: UrlConstants.getStoriesLandingPage, withAlertMessage: false, methodType: MethodType.post, withCheckConnection: false);
+  }
+
   Future getAllContentsBlocV2(
     BuildContext context, {
     int pageRows = 5,
@@ -158,7 +174,7 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -200,13 +216,18 @@ class PostsBloc {
     final formData = FormData();
     final email = SharedPreference().readStorage(SpKeys.email);
 
+    File x = File(fileContents[0] ?? '');
+    if (Platform.isIOS && type == FeatureType.pic) {
+      x = await System().rotateAndCompressAndSaveImage(File(fileContents[0] ?? ''));
+    }
+
     formData.files.add(MapEntry(
         "postContent",
-        await MultipartFile.fromFile(File(fileContents[0] ?? '').path,
-            filename: "${System().basenameFiles(File(fileContents[0] ?? '').path)}.${System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "")}",
+        await MultipartFile.fromFile(x.path,
+            filename: "${System().basenameFiles(x.path)}.${System().extensionFiles(x.path)?.replaceAll(".", "")}",
             contentType: MediaType(
-              System().lookupContentMimeType(File(fileContents[0] ?? '').path)?.split('/')[0] ?? '',
-              System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "") ?? "",
+              System().lookupContentMimeType(x.path)?.split('/')[0] ?? '',
+              System().extensionFiles(x.path)?.replaceAll(".", "") ?? "",
             ))));
     formData.fields.add(MapEntry('email', email));
     formData.fields.add(MapEntry('postType', System().validatePostTypeV2(type)));
@@ -236,11 +257,17 @@ class PostsBloc {
     formData.fields.add(MapEntry('saleAmount', saleAmount != null ? saleAmount.toString() : "0"));
     formData.fields.add(MapEntry('saleLike', saleLike != null ? saleLike.toString() : "false"));
     formData.fields.add(MapEntry('saleView', saleView != null ? saleView.toString() : "false"));
-    formData.fields.add(MapEntry('isShared', isShared.toString()));
+    if (isShared != null) {
+      formData.fields.add(MapEntry('isShared', isShared.toString()));
+    } else {
+      formData.fields.add(MapEntry('isShared', 'false'));
+    }
+
     debugPrint("FORM_POST => " + allowComment.toString());
     debugPrint(formData.fields.join(" - "));
 
     print('createPost : ');
+    print("name file ${"${System().basenameFiles(File(fileContents[0] ?? '').path)}.${System().extensionFiles(File(fileContents[0] ?? '').path)?.replaceAll(".", "")}"}");
     print(formData.fields.map((e) => e).join(','));
     print('file upload: ${formData.files.toString()}');
 
@@ -285,6 +312,8 @@ class PostsBloc {
     formData.fields.add(MapEntry('postID', postId));
     formData.fields.add(const MapEntry('active', 'false'));
 
+    print("delet content");
+    print(formData.fields.map((e) => e).join(','));
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,
@@ -376,11 +405,25 @@ class PostsBloc {
   Future getVideoApsaraBlocV2(
     BuildContext context, {
     required String apsaraId,
+    SpeedInternet? speedInternet,
   }) async {
     final email = SharedPreference().readStorage(SpKeys.email);
     final token = SharedPreference().readStorage(SpKeys.userToken);
-
     setPostsFetch(PostsFetch(PostsState.loading));
+    String speed = 'SD';
+    speedInternet = context.read<HomeNotifier>().internetSpeed;
+    print("hasil dari home $speedInternet");
+    switch (speedInternet) {
+      case SpeedInternet.fast:
+        speed = 'SD';
+        break;
+      case SpeedInternet.medium:
+        speed = 'LD';
+        break;
+      default:
+        speed = 'FD';
+    }
+
     await _repos.reposPost(
       context,
       (onResult) {
@@ -395,7 +438,7 @@ class PostsBloc {
       (errorData) {
         setPostsFetch(PostsFetch(PostsState.videoApsaraError));
       },
-      data: {"apsaraId": apsaraId},
+      data: {"apsaraId": apsaraId, "definition": speed},
       headers: {
         'x-auth-user': email,
         'x-auth-token': token,

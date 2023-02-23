@@ -20,6 +20,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../../../app.dart';
 
@@ -313,6 +314,7 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   //////////////////////////////////////////////////////////////// Camera function
 
   void cancelVideoRecordingWhenAppIsPausedOrInactive() {
+    Wakelock.disable();
     cancelTimer();
     _progressDev = 0.0;
     _progressHuman = 0;
@@ -322,6 +324,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   @override
   void onStopRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
+
+    Wakelock.disable();
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
@@ -346,8 +350,8 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
   }
 
   @override
-  void onRecordedVideo(BuildContext context) {
-    print('start recors');
+  void onRecordedVideo(BuildContext context) async {
+    print('start recording');
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {
@@ -357,24 +361,28 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
     }
     _startTimer(context);
     cameraNotifier.startVideoRecording();
+    if (!(await Wakelock.enabled)) {
+      Wakelock.enable();
+    }
   }
 
   @override
   void onPauseRecordedVideo(BuildContext context) {
     dynamic cameraNotifier;
+
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {
       cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
     } else {
       cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
     }
-
+    Wakelock.enable();
     print('pause execute');
     cameraNotifier.pauseVideoRecording();
   }
 
   @override
-  void onResumeRecordedVideo(BuildContext context) {
+  void onResumeRecordedVideo(BuildContext context) async {
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
     if (canDeppAr == 'true') {
@@ -386,6 +394,9 @@ class MakeContentNotifier extends LoadingNotifier with ChangeNotifier implements
       cancelTimer();
       _startTimer(context);
     });
+    if (!(await Wakelock.enabled)) {
+      Wakelock.enable();
+    }
   }
 
   @override

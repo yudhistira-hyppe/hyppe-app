@@ -25,7 +25,8 @@ class SignUpPinBottom extends StatelessWidget {
             foregroundColor: MaterialStateProperty.all<Color>(notifier.verifyButtonColor(context)),
             shadowColor: MaterialStateProperty.all<Color>(notifier.verifyButtonColor(context)),
           ),
-          function: notifier.onVerifyButton(context, argument: argument),
+          function: (){},
+          // function: notifier.onVerifyButton(context, argument: argument),
           child: notifier.loading
               ? const CustomLoading()
               : CustomTextWidget(

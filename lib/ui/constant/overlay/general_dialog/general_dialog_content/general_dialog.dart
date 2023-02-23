@@ -82,7 +82,7 @@ class _GeneralAlertDialogState extends State<GeneralAlertDialog> {
                       child: _buildButton(
                         caption: '${widget.titleButtonPrimary}',
                         textColor: kHyppeLightButtonText,
-                        color: theme.colorScheme.primaryVariant,
+                        color: theme.colorScheme.primary,
                         function: widget.functionPrimary,
                         // function: () => widget.function(),
                         theme: theme,

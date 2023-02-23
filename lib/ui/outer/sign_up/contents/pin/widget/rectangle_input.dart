@@ -38,7 +38,7 @@ class RectangleInput extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
-                  color: notifier.inCorrectCode ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primaryVariant,
+                  color: notifier.inCorrectCode ? Theme.of(context).colorScheme.error : Theme.of(context).colorScheme.primary,
                   width: 1.0,
                 ),
               ),
@@ -48,7 +48,7 @@ class RectangleInput extends StatelessWidget {
                     color: notifier.inCorrectCode
                         ? Theme.of(context).colorScheme.error
                         : input.text.isNotEmpty
-                            ? Theme.of(context).colorScheme.primaryVariant
+                            ? Theme.of(context).colorScheme.primary
                             : Theme.of(context).primaryTextTheme.button?.color ?? Colors.white,
                     width: 1.0),
               ),

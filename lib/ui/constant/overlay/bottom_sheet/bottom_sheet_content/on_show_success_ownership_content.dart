@@ -53,9 +53,9 @@ class OnShowSuccessPostContentOwnershipBottomSheet extends StatelessWidget {
               function: () => Routing().moveBack(),
               buttonStyle: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant),
+                      Theme.of(context).colorScheme.primary),
                   overlayColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primaryVariant)),
+                      Theme.of(context).colorScheme.primary)),
             ),
           ],
         ),

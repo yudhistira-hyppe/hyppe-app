@@ -24,6 +24,7 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../../../../app.dart';
 
@@ -333,11 +334,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   Future<void> onTakePicture(BuildContext context) async {
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-    if (canDeppAr == 'true') {
-      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    } else {
-      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-    }
+    cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+
+    // if (canDeppAr == 'true' || Platform.isIOS) {
+    //   cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    // } else {
+    //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    // }
     ShowGeneralDialog.loadingDialog(context);
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
@@ -353,11 +356,12 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onTakeSelfie(BuildContext context) {
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-    if (canDeppAr == 'true') {
-      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    } else {
-      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-    }
+    cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    // if (canDeppAr == 'true') {
+    //   cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    // } else {
+    //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    // }
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         selfiePath = filePath.path;
@@ -422,10 +426,10 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
         kewarganegaraan: '',
         jenisKelamin: genderController.text,
         onReceiveProgress: (count, total) async {
-          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+          await _eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },
         onSendProgress: (received, total) async {
-          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+          await _eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
         },
       );
       final fetch = bloc.postsFetch;
@@ -723,23 +727,33 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   }
 
   @override
-  void onPauseRecordedVideo(BuildContext context) {
+  void onPauseRecordedVideo(BuildContext context) async {
+    if (!(await Wakelock.enabled)) {
+      Wakelock.enable();
+    }
     // TODO: implement onPauseRecordedVideo
   }
 
   @override
-  void onRecordedVideo(BuildContext context) {
+  void onRecordedVideo(BuildContext context) async {
     // TODO: implement onRecordedVideo
+    if (!(await Wakelock.enabled)) {
+      Wakelock.enable();
+    }
   }
 
   @override
-  void onResumeRecordedVideo(BuildContext context) {
+  void onResumeRecordedVideo(BuildContext context) async {
     // TODO: implement onResumeRecordedVideo
+    if (!(await Wakelock.enabled)) {
+      Wakelock.enable();
+    }
   }
 
   @override
   void onStopRecordedVideo(BuildContext context) {
     // TODO: implement onStopRecordedVideo
+    Wakelock.disable();
   }
 
   @override

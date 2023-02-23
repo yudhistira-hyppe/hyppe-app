@@ -36,7 +36,12 @@ class _SetNewPasswordState extends State<SetNewPassword> {
           appBar: AppBar(
             leading: CustomIconButtonWidget(
               color: Theme.of(context).iconTheme.color,
-              onPressed: () => Navigator.pop(context),
+              onPressed: (){
+                notifier.passwordConfirmController.text = '';
+                notifier.passwordController.text = '';
+                Navigator.pop(context);
+
+              },
               iconData: '${AssetPath.vectorPath}close.svg',
             ),
             title: CustomTextWidget(
@@ -80,7 +85,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                               //     color: notifier.incorrect
                               //         ? Theme.of(context).colorScheme.error
                               //         : notifier.passwordFocus.hasFocus
-                              //             ? Theme.of(context).colorScheme.primaryVariant
+                              //             ? Theme.of(context).colorScheme.primary
                               //             : null),
                               prefixIconConstraints: BoxConstraints(
                                 minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
@@ -110,15 +115,16 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                                   onPressed: () => notifier.hidePassword = !notifier.hidePassword,
                                 ),
                               ),
-                              border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
-                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
+                              border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                               // focusedBorder:
-                              //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary)),
+                              //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                             ),
                           ),
                           sixteenPx,
                           CustomTextFormField(
                             // focusNode: notifier.passwordFocus,
+                            isEnabled: notifier.validationRegister(),
                             obscuringCharacter: '*',
                             inputAreaHeight: (isMatch ? 55 : 70) * SizeConfig.scaleDiagonal,
                             inputAreaWidth: SizeConfig.screenWidth!,
@@ -136,7 +142,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                                 //     color: notifier.incorrect
                                 //         ? Theme.of(context).colorScheme.error
                                 //         : notifier.passwordFocus.hasFocus
-                                //             ? Theme.of(context).colorScheme.primaryVariant
+                                //             ? Theme.of(context).colorScheme.primary
                                 //             : null),
                                 prefixIconConstraints: BoxConstraints(
                                   minWidth: SizeWidget().calculateSize(30.0, SizeWidget.baseWidthXD, SizeConfig.screenWidth!),
@@ -165,10 +171,10 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                                     onPressed: () => notifier.hideConfirmPassword = !notifier.hideConfirmPassword,
                                   ),
                                 ),
-                                border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
-                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.secondary)),
+                                border: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
+                                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Theme.of(context).colorScheme.surface)),
                                 // focusedBorder:
-                                //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary)),
+                                //     UnderlineInputBorder(borderSide: BorderSide(color: notifier.passwordFocus.hasFocus ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface)),
                                 errorText: isMatch ? null : notifier.language.passwordDoesntMatch
                             ),
                           ),
@@ -230,9 +236,7 @@ class _SetNewPasswordState extends State<SetNewPassword> {
                         foregroundColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context)),
                         shadowColor: MaterialStateProperty.all<Color>(notifier.nextButtonColor(context))),
                     function: () {
-                      if (!notifier.loading) {
                         notifier.nextButton(context, mounted);
-                      }
                     },
                     child: notifier.loading
                         ? const CustomLoading()

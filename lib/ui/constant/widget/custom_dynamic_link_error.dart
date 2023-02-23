@@ -38,7 +38,7 @@ class CustomDynamicLinkErrorWidget extends StatelessWidget {
                 fourPx,
                 CustomTextWidget(
                     textToDisplay: _language.theContentMayHaveBeenRemovedOrTheLinkMayBeBroken ?? '',
-                    textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondaryVariant))
+                    textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
               ],
             ),
           )

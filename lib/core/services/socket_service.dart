@@ -52,6 +52,13 @@ class SocketService {
       _eventService.notifyRootSocketError(message);
     });
 
+    var startTime = DateTime.now();
+    _socket?.emit("ping", (_) {
+      var endTime = DateTime.now();
+      var duration = endTime.difference(startTime).inMilliseconds;
+      print("Ping duration: $duration ms");
+    });
+
     onEvent();
   }
 

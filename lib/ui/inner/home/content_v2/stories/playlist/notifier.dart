@@ -83,7 +83,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   Color? _sendButtonColor;
   PageController? _pageController = PageController(initialPage: 0);
   List<ContentData> _dataUserStories = [];
-  Map<String, List<ContentData>> _groupUserStories = {};
+  List<StoriesGroup> _groupUserStories = [];
   final TextEditingController _textEditingController = TextEditingController();
 
   bool get isReactAction => _isReactAction;
@@ -103,7 +103,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   Color? get buttonColor => _sendButtonColor;
   PageController? get pageController => _pageController;
   List<ContentData> get dataUserStories => _dataUserStories;
-  Map<String, List<ContentData>> get groupUserStories => _groupUserStories;
+  List<StoriesGroup> get groupUserStories => _groupUserStories;
   TextEditingController get textEditingController => _textEditingController;
 
   int _currentIndex = -1;
@@ -167,7 +167,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set groupUserStories(Map<String, List<ContentData>> maps) {
+  set groupUserStories(List<StoriesGroup> maps) {
     _groupUserStories = maps;
     notifyListeners();
   }
@@ -274,11 +274,11 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           final duration = story.music?.apsaraMusicUrl?.duration?.toInt();
           _result.add(
             StoryItem.pageImage(
-              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
               controller: storyController,
               imageFit: BoxFit.contain,
               isImages: true,
-              id: story.postID ?? '',
+              id: story.postID ?? ' ',
               duration: Duration(seconds: (duration ?? 3) > 15 ? 15 : 3),
               requestHeaders: {
                 'post-id': story.postID ?? '',
@@ -290,7 +290,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         } else {
           _result.add(
             StoryItem.pageImage(
-              url: (story.isApsara ?? false) ? story.mediaEndpoint ?? '' : story.fullThumbPath ?? '',
+              url: (story.isApsara ?? false) ? (story.media?.imageInfo?[0].url ?? (story.mediaEndpoint ?? '')) : story.fullThumbPath ?? '',
               controller: storyController,
               imageFit: BoxFit.contain,
               isImages: true,
@@ -350,7 +350,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         final duration = data.music?.apsaraMusicUrl?.duration?.toInt();
         _result.add(
           StoryItem.pageImage(
-            url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
+            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
@@ -366,7 +366,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       } else {
         _result.add(
           StoryItem.pageImage(
-            url: (data.isApsara ?? false) ? data.mediaEndpoint ?? '' : data.fullThumbPath ?? '',
+            url: (data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaEndpoint ?? '')) : data.fullThumbPath ?? '',
             controller: storyController,
             imageFit: BoxFit.contain,
             isImages: true,
@@ -451,11 +451,15 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void initStateGroup(BuildContext context, StoryDetailScreenArgument routeArgument) {
     // final myEmail = _sharedPrefs.readStorage(SpKeys.email);
     _routeArgument = _routeArgument;
+    final _email = SharedPreference().readStorage(SpKeys.email);
     _currentPage = routeArgument.peopleIndex.toDouble();
     _currentIndex = routeArgument.peopleIndex;
     final groups = routeArgument.groupStories;
+    final myGroup = routeArgument.myStories;
     if (groups != null) {
       _groupUserStories = groups;
+    }else if(myGroup != null){
+      _groupUserStories.add(StoriesGroup(email: myGroup[_email]?[0].email, username: myGroup[_email]?[0].username, story: myGroup[_email]));
     }
   }
 

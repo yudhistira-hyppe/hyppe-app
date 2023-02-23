@@ -119,7 +119,7 @@
 //                     height: 44.0 * SizeConfig.scaleDiagonal,
 //                     buttonStyle: ButtonStyle(
 //                         backgroundColor: notifier.remarkID.isNotEmpty
-//                             ? MaterialStateProperty.all<Color>(_themes.colorScheme.primaryVariant)
+//                             ? MaterialStateProperty.all<Color>(_themes.colorScheme.primary)
 //                             : MaterialStateProperty.all<Color>(_themes.colorScheme.surface)))),
 //             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat));
 //   }

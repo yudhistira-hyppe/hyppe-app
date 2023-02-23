@@ -119,7 +119,7 @@ class _OnReportSpamFormBottomSheetState extends State<OnReportSpamFormBottomShee
                                       maxLines: 2,
                                     ),
                                     controlAffinity: ListTileControlAffinity.trailing,
-                                    activeColor: Theme.of(context).colorScheme.primaryVariant,
+                                    activeColor: Theme.of(context).colorScheme.primary,
                                   );
                                 },
                               ),

@@ -61,9 +61,10 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
               },
               itemBuilder: (context, index) {
                 final fixNotifier = Provider.of<StoriesPlaylistNotifier>(context);
-                var key = fixNotifier.groupUserStories.keys.elementAt(index);
-                print('Story index $index : ${fixNotifier.currentPage}, ${fixNotifier.currentIndex}, $key');
-                var values = fixNotifier.groupUserStories[key] ?? [];
+                // var key = fixNotifier.groupUserStories.keys.elementAt(index);
+
+                print('Story index $index : ${fixNotifier.currentPage}, ${fixNotifier.currentIndex}, $index');
+                var values = fixNotifier.groupUserStories[index].story ?? [];
 
                 if (fixNotifier.currentIndex == index && fixNotifier.currentPage == index) {
                   double value = (fixNotifier.currentPage ?? 1) - index;

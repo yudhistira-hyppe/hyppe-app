@@ -22,7 +22,7 @@ class OtherProfilePrivateAccount extends StatelessWidget {
             textToDisplay: context.read<TranslateNotifierV2>().translate.followThisAccountToSeeTheirContents ?? '',
             textStyle: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).colorScheme.secondaryVariant,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ],

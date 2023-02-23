@@ -89,7 +89,7 @@ class OnShowIDVerificationBottomSheet extends StatelessWidget {
                 notifier.validateIdCard();
               },
               buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant)),
+                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
             ),
             CustomElevatedButton(
               child: CustomTextWidget(

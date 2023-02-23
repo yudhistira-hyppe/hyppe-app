@@ -59,7 +59,7 @@ class _ShareBlockState extends State<ShareBlock> {
                         child: CustomTextWidget(
                           textToDisplay: notifier.modelReferral?.data != null ? '${notifier.modelReferral?.data}' : '0',
                           textStyle: Theme.of(context).textTheme.button?.copyWith(
-                                color: Theme.of(context).colorScheme.primaryVariant,
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
                       ),

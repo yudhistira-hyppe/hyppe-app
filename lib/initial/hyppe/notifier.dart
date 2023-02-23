@@ -64,7 +64,7 @@ class HyppeNotifier with ChangeNotifier {
         context.read<SignUpPinNotifier>().email = email ?? "";
         _routing.moveReplacement(
           Routes.signUpPin,
-          argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2),
+          argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: email ?? ''),
         );
       } else if (token != null) {
         final formData = FormData();

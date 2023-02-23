@@ -28,7 +28,7 @@ class TicketHistoryTabsScreen extends StatelessWidget {
                     CustomTextWidget(
                       textAlign: TextAlign.center,
                       textToDisplay: notifier.language.help ?? 'Help',
-                      textStyle: TextStyle(fontSize: 14, color: notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
+                      textStyle: TextStyle(fontSize: 14, color: notifier.isHelpTab ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
                 ),
@@ -37,7 +37,7 @@ class TicketHistoryTabsScreen extends StatelessWidget {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.isHelpTab ? Theme.of(context).colorScheme.primary : null),
               ),
             ],
           ),
@@ -55,7 +55,7 @@ class TicketHistoryTabsScreen extends StatelessWidget {
                     CustomTextWidget(
                       textAlign: TextAlign.center,
                       textToDisplay: notifier.language.contentAppeal ?? 'Content Appeal',
-                      textStyle: TextStyle(fontSize: 14, color: !notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
+                      textStyle: TextStyle(fontSize: 14, color: !notifier.isHelpTab ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
                 ),
@@ -64,7 +64,7 @@ class TicketHistoryTabsScreen extends StatelessWidget {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: !notifier.isHelpTab ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: !notifier.isHelpTab ? Theme.of(context).colorScheme.primary : null),
               ),
             ],
           ),

@@ -29,7 +29,7 @@ class ButtonBoost extends StatefulWidget {
 
 class _ButtonBoostState extends State<ButtonBoost> {
   bool isLoading = false;
-  
+
   @override
   Widget build(BuildContext context) {
     final _isKyc = SharedPreference().readStorage(SpKeys.statusVerificationId);
@@ -118,7 +118,7 @@ class _ButtonBoostState extends State<ButtonBoost> {
                     notifier.interestData = [];
                     if (widget.contentData?.cats != null) {
                       widget.contentData?.cats!.map((val) {
-                        notifier.interestData.add(val.interestName ?? '');
+                        notifier.interestData.add(val.id ?? '');
                       }).toList();
                     }
                     notifier.userTagData = [];

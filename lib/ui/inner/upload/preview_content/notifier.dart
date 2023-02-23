@@ -976,7 +976,6 @@ class PreviewContentNotifier with ChangeNotifier {
       notifyListeners();
 
       // notifier.setVideoPlayerController(_betterPlayerController);
-
     } catch (e) {
       _errorHit++;
       "Error Init Video $e".logger();
@@ -1123,7 +1122,7 @@ class PreviewContentNotifier with ChangeNotifier {
     notifier.locationName == '' ? notifier.locationName = notifier.language.addLocation ?? 'add location' : notifier.locationName = notifier.locationName;
     notifier.musicSelected = _fixSelectedMusic;
     _fixSelectedMusic = null;
-    notifier.compressVideo();
+    notifier.checkForCompress();
 
     Routing().move(Routes.preUploadContent, argument: UpdateContentsArgument(onEdit: false)).whenComplete(() => isForcePaused = false);
   }
@@ -1205,10 +1204,10 @@ class PreviewContentNotifier with ChangeNotifier {
         rotate: _orientation ?? NativeDeviceOrientation.portraitUp,
         location: '',
         onReceiveProgress: (count, total) async {
-          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count, total: total));
+          await eventService.notifyUploadReceiveProgress(ProgressUploadArgument(count: count.toDouble(), total: total.toDouble()));
         },
         onSendProgress: (received, total) async {
-          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received, total: total));
+          await eventService.notifyUploadSendProgress(ProgressUploadArgument(count: received.toDouble(), total: total.toDouble()));
         },
       ).then((value) {
         _uploadSuccess = value;

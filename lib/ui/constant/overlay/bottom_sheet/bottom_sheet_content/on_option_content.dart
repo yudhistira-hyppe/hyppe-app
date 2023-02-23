@@ -144,7 +144,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           children: [
-            if (widget.contentData.reportedStatus != 'OWNED')
+            if (widget.contentData.reportedStatus != 'OWNED' && widget.isShare && widget.contentData.visibility == 'PUBLIC')
               _tileComponent(
                 moveBack: true,
                 caption: '${TranslateNotifierV2().translate.copyLink}',
@@ -173,9 +173,10 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   notifier.featureType = _system.getFeatureTypeV2(widget.contentData.postType ?? '');
 
                   notifier.thumbNail = widget.contentData.fullThumbPath;
-                  notifier.allowComment = widget.contentData.allowComments ?? false;
+                  notifier.allowComment = widget.contentData.allowComments ?? true;
                   notifier.certified = widget.contentData.certified ?? false;
                   notifier.ownershipEULA = widget.contentData.certified ?? false;
+                  notifier.isShared = widget.contentData.isShared ?? true;
 
                   if (widget.contentData.location != '') {
                     notifier.locationName = widget.contentData.location ?? '';
@@ -208,7 +209,7 @@ class _OnShowOptionContentState extends State<OnShowOptionContent> with GeneralM
                   notifier.interestData = [];
                   if (widget.contentData.cats != null) {
                     widget.contentData.cats!.map((val) {
-                      notifier.interestData.add(val.interestName ?? '');
+                      notifier.interestData.add(val.id ?? '');
                     }).toList();
                   }
                   notifier.userTagData = [];

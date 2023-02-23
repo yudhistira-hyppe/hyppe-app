@@ -66,7 +66,7 @@ class MainNotifier with ChangeNotifier {
     }
 
     // Auto follow user if app is install from a dynamic link
-    DynamicLinkService.followSender(context);
+    // DynamicLinkService.followSender(context);
 
     // final onlineVersion = SharedPreference().readStorage(SpKeys.onlineVersion);
     // await CheckVersion().check(context, onlineVersion);
@@ -168,18 +168,20 @@ class MainNotifier with ChangeNotifier {
             try {
               final msgData = MessageDataV2.fromJson(json.decode('$message'));
               print('ini message dari socket ${msgData.disqusID}');
-              if (msgData.disqusLogs[0].receiver == email) {
-                NotificationService().showNotification(
-                    RemoteMessage(
-                      notification: RemoteNotification(
-                        // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
-                        title: "${msgData.username}",
-                        body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+              if (token != null) {
+                if (msgData.disqusLogs[0].receiver == email) {
+                  NotificationService().showNotification(
+                      RemoteMessage(
+                        notification: RemoteNotification(
+                          title: "${msgData.disqusLogs[0].username}",
+                          // title: "${msgData.username}",
+                          body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+                        ),
+                        data: msgData.toJson(),
                       ),
-                      data: msgData.toJson(),
-                    ),
-                    data: msgData);
-                _eventService.notifyMessageReceived(msgData);
+                      data: msgData);
+                  _eventService.notifyMessageReceived(msgData);
+                }
               }
             } catch (e) {
               e.toString().logger();

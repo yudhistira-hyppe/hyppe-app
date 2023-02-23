@@ -22,7 +22,7 @@ class ButtonAccountPreferences extends StatelessWidget {
           function: () => notifier.onClickSaveProfile(context),
           buttonStyle: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
-              notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).colorScheme.secondary,
+              notifier.somethingChanged(context) ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.surface,
             ),
             overlayColor: MaterialStateProperty.all(Colors.transparent),
           ),

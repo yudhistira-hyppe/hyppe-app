@@ -2,9 +2,9 @@ import 'package:dio/dio.dart' as dio;
 import 'package:hyppe/core/services/event_service.dart';
 
 class UploadEventHandler implements EventHandler {
-  void onUploadReceiveProgress(int count, int total) {}
+  void onUploadReceiveProgress(double count, double total) {}
 
-  void onUploadSendProgress(int count, int total) {}
+  void onUploadSendProgress(double count, double total) {}
 
   void onUploadFinishingUp() {}
 

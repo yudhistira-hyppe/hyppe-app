@@ -73,7 +73,7 @@ class ProofPicture extends StatelessWidget {
   //         textToDisplay: "Veriyfing...",
   //         textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
   //               fontWeight: FontWeight.bold,
-  //               color: Theme.of(context).colorScheme.primaryVariant,
+  //               color: Theme.of(context).colorScheme.primary,
   //             ),
   //       ),
   //     );

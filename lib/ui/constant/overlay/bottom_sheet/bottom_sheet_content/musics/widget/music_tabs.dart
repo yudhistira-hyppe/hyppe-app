@@ -31,7 +31,7 @@ class MusicTabsScreen extends StatelessWidget {
                     CustomTextWidget(
                       textAlign: TextAlign.center,
                       textToDisplay: notifier.language.popular ?? '',
-                      textStyle: TextStyle(fontSize: 14, color: notifier.pageMusic == 0 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
+                      textStyle: TextStyle(fontSize: 14, color: notifier.pageMusic == 0 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
                 ),
@@ -40,7 +40,7 @@ class MusicTabsScreen extends StatelessWidget {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageMusic == 0 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.pageMusic == 0 ? Theme.of(context).colorScheme.primary : null),
               ),
             ],
           ),
@@ -59,7 +59,7 @@ class MusicTabsScreen extends StatelessWidget {
                     CustomTextWidget(
                       textAlign: TextAlign.center,
                       textToDisplay: notifier.language.explore ?? '',
-                      textStyle: TextStyle(fontSize: 14, color: notifier.pageMusic == 1 ? Theme.of(context).colorScheme.primaryVariant : Theme.of(context).tabBarTheme.unselectedLabelColor),
+                      textStyle: TextStyle(fontSize: 14, color: notifier.pageMusic == 1 ? Theme.of(context).colorScheme.primary : Theme.of(context).tabBarTheme.unselectedLabelColor),
                     ),
                   ],
                 ),
@@ -68,7 +68,7 @@ class MusicTabsScreen extends StatelessWidget {
               SizedBox(
                 height: 2 * SizeConfig.scaleDiagonal,
                 width: 125 * SizeConfig.scaleDiagonal,
-                child: Container(color: notifier.pageMusic == 1 ? Theme.of(context).colorScheme.primaryVariant : null),
+                child: Container(color: notifier.pageMusic == 1 ? Theme.of(context).colorScheme.primary : null),
               ),
             ],
           ),

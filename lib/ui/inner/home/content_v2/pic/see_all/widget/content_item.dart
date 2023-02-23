@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/like/notifier.dart';
+import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
+import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_thumbnail_report.dart';
@@ -76,17 +81,33 @@ class ContentItem extends StatelessWidget {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            ProfileComponent(
-                              show: true,
-                              onFollow: () {},
-                              following: true,
-                              haveStory: false,
-                              username: data?.username,
-                              featureType: FeatureType.pic,
-                              isCelebrity: data?.privacy?.isCelebrity,
-                              imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
-                              onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', isReplaced: false),
-                              createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ProfileComponent(
+                                  show: true,
+                                  onFollow: () {},
+                                  following: true,
+                                  haveStory: false,
+                                  username: data?.username,
+                                  featureType: FeatureType.pic,
+                                  isCelebrity: data?.privacy?.isCelebrity,
+                                  imageUrl: '${System().showUserPicture(data?.avatar?.mediaEndpoint)}',
+                                  onTapOnProfileImage: () => System().navigateToProfile(context, data?.email ?? '', isReplaced: false),
+                                  createdAt: '${System().readTimestamp(DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch, context, fullCaption: true)}',
+                                ),
+                                data?.email != SharedPreference().readStorage(SpKeys.email)
+                                    ? GestureDetector(
+                                        onTap: () => ShowBottomSheet.onReportContent(
+                                              context,
+                                              postData: data,
+                                              type: hyppePic,
+                                              adsData: null,
+                                              // onUpdate: () => context.read<PicSeeAllNotifier>().onUpdate(),
+                                            ),
+                                        child: const Icon(Icons.more_vert))
+                                    : Container(),
+                              ],
                             ),
                             twelvePx,
                             Stack(
@@ -113,7 +134,7 @@ class ContentItem extends StatelessWidget {
                                           padding: EdgeInsets.all(4.0),
                                           child: CustomIconWidget(
                                             iconData: "${AssetPath.vectorPath}sale.svg",
-                                            height: 20,
+                                            height: 22,
                                             defaultColor: false,
                                           ),
                                         ))
@@ -127,7 +148,7 @@ class ContentItem extends StatelessWidget {
                                       children: [
                                         (data?.tagPeople?.length ?? 0) != 0
                                             ? TagLabel(
-                                                icon: 'user',
+                                                icon: 'tag_people',
                                                 label: '${data?.tagPeople?.length} people ',
                                                 function: () {
                                                   context.read<PicDetailNotifier>().showUserTag(context, data?.tagPeople, data?.postID);
@@ -151,14 +172,24 @@ class ContentItem extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Expanded(
-                                    child: CustomTextWidget(
-                                      maxLines: 2,
-                                      textAlign: TextAlign.left,
-                                      textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
-                                      textStyle: Theme.of(context).textTheme.caption,
+                                  SizedBox(
+                                    width: 240,
+                                    child: CustomDescContent(
+                                      desc: "${data?.description}",
+                                      trimLines: 2,
+                                      textAlign: TextAlign.start,
+                                      normStyle: Theme.of(context).textTheme.caption,
+                                      hrefStyle: Theme.of(context).textTheme.caption?.copyWith(color: kHyppePrimary),
                                     ),
                                   ),
+                                  // Expanded(
+                                  //   child: CustomTextWidget(
+                                  //     maxLines: 2,
+                                  //     textAlign: TextAlign.left,
+                                  //     textToDisplay: "${data?.description} ${data?.tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" ")}",
+                                  //     textStyle: Theme.of(context).textTheme.caption,
+                                  //   ),
+                                  // ),
                                   eightPx,
                                   Align(
                                     alignment: Alignment.bottomRight,

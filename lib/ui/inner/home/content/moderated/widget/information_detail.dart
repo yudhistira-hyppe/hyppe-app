@@ -78,10 +78,10 @@ class _InformationDetailState extends State<InformationDetail> {
       buttonStyle: Theme.of(context).elevatedButtonTheme.style?.copyWith(
           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.background),
           overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.surface),
-          side: MaterialStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primaryVariant))),
+          side: MaterialStateProperty.all(BorderSide(color: Theme.of(context).colorScheme.primary))),
       child: CustomTextWidget(
         textToDisplay: context.read<TranslateNotifierV2>().translate.back ?? "",
-        textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+        textStyle: Theme.of(context).textTheme.button?.copyWith(color: Theme.of(context).colorScheme.primary),
       ),
     );
   }

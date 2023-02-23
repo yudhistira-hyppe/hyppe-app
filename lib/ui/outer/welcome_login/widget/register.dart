@@ -27,7 +27,7 @@ class Register extends StatelessWidget {
                   textToDisplay: notifier.language.registerHere ?? '',
                   textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primaryVariant,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                 ),
               ),

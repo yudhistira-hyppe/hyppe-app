@@ -77,7 +77,7 @@ class OnShowFilters extends StatelessWidget {
             height: 30,
             function: () => context.read<PreviewContentNotifier>().applyFilters(globalKey: globalKey),
             buttonStyle: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primaryVariant),
+                backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)))),
             child: Consumer<PreviewContentNotifier>(
               builder: (_, notifier, __) => CustomTextWidget(

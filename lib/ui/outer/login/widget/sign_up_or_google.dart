@@ -35,7 +35,7 @@ class SignUpOrGoogle extends StatelessWidget {
                     textToDisplay: notifier.language.registerHere ?? '',
                     textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primaryVariant,
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                   ),
                 ),
@@ -71,7 +71,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //       width: 50,
             //       height: 1,
             //       decoration: BoxDecoration(
-            //         border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            //         border: Border.all(color: Theme.of(context).colorScheme.surface),
             //       ),
             //     ),
             //     twelvePx,
@@ -81,7 +81,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //       width: 50,
             //       height: 1,
             //       decoration: BoxDecoration(
-            //         border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            //         border: Border.all(color: Theme.of(context).colorScheme.surface),
             //       ),
             //     ),
             //   ],
@@ -98,7 +98,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //         width: 48,
             //         height: 48,
             //         decoration: BoxDecoration(
-            //           border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            //           border: Border.all(color: Theme.of(context).colorScheme.surface),
             //           borderRadius: BorderRadius.circular(24),
             //         ),
             //         child: const Image(image: AssetImage('${AssetPath.pngPath}logo_google.png')),
@@ -111,7 +111,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //         width: 48,
             //         height: 48,
             //         decoration: BoxDecoration(
-            //           border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            //           border: Border.all(color: Theme.of(context).colorScheme.surface),
             //           borderRadius: BorderRadius.circular(24),
             //         ),
             //         child: const Image(image: AssetImage('${AssetPath.pngPath}logo_facebook.png')),
@@ -124,7 +124,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //         width: 48,
             //         height: 48,
             //         decoration: BoxDecoration(
-            //           border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            //           border: Border.all(color: Theme.of(context).colorScheme.surface),
             //           borderRadius: BorderRadius.circular(24),
             //         ),
             //         child: const Image(image: AssetImage('${AssetPath.pngPath}logo_twitter.png')),
@@ -135,7 +135,7 @@ class SignUpOrGoogle extends StatelessWidget {
             //       width: 48,
             //       height: 48,
             //       decoration: BoxDecoration(
-            //         border: Border.all(color: Theme.of(context).colorScheme.secondary),
+            //         border: Border.all(color: Theme.of(context).colorScheme.surface),
             //         borderRadius: BorderRadius.circular(24),
             //       ),
             //       child: const Image(image: AssetImage('${AssetPath.pngPath}logo_apple.png')),

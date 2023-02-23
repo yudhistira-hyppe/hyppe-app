@@ -35,6 +35,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../../../initial/hyppe/translate_v2.dart';
 import '../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
@@ -105,7 +106,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       if (_betterPlayerController != null) {
         if (_eventType != BetterPlayerEventType.showingAds) {
           if (_betterPlayerController?.isFullScreen == false) {
-            _betterPlayerController?.enterFullScreen();
+            print("here's my problem");
+            // _betterPlayerController?.enterFullScreen();
             _pauseOrientationListener();
             Future.delayed(const Duration(seconds: 2), () {
               _resumeOrientationListener();
@@ -224,7 +226,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       print("ini hasil iklan ${fetch.adsDataState}");
 
       // final fetch = notifier.adsVideoFetch;
-
     } catch (e) {
       'Failed hit view ads ${e}'.logger();
     }
@@ -315,11 +316,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     //   }
     //   SharedPreference().writeStorage(SpKeys.countAds, countAds.toString());
     // });
-
+    final height = widget.videoData?.metadata?.height ?? 0.0;
+    final width = widget.videoData?.metadata?.width ?? 0.0;
     BetterPlayerConfiguration betterPlayerConfiguration = BetterPlayerConfiguration(
+        videoSize: (height != 0.0 && width != 0.0) ? Size(width.toDouble(), height.toDouble()) : null,
+        aspectRatio: 1.0,
         autoDispose: true,
         autoPlay: autoPlay,
-        fit: BoxFit.contain,
+        fit: BoxFit.fitHeight,
         showPlaceholderUntilPlay: true,
         deviceOrientationsAfterFullScreen: [DeviceOrientation.portraitUp],
         autoDetectFullscreenAspectRatio: true,
@@ -367,13 +371,21 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
     try {
       await _betterPlayerController?.setupDataSource(dataSource);
-      _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
+      // final height = widget.videoData?.metadata?.height ?? 0.0;
+      // final width = widget.videoData?.metadata?.width ?? 0.0;
+      if (height != 0.0 && width != 0.0) {
+        final fixRatio = height / width;
+        _betterPlayerController?.setOverriddenAspectRatio(fixRatio);
+      } else {
+        _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
+      }
     } catch (e) {
       'Setup user data source error: $e'.logger();
     }
 
     _betterPlayerController?.addEventsListener(
       (event) {
+        'betterPlay event: ${event.betterPlayerEventType}'.logger();
         if (event.betterPlayerEventType == BetterPlayerEventType.showingAds) {
           print('event ads : ${event.parameters}');
           _initializeAdsBetterPlayerControllerMap(BetterPlayerRoll.fromJson(event.parameters ?? {}));
@@ -406,112 +418,116 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                     Positioned(
                       left: 10,
                       bottom: 20,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Container(
-                          //   width: context.getWidth() * 0.4,
-                          //   child: const Text(
-                          //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
-                          //     style: TextStyle(color: Colors.white, fontSize: 10),
-                          //   ),
-                          // ),
-                          eightPx,
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Colors.white,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                CustomBaseCacheImage(
-                                  imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
-                                  memCacheWidth: 200,
-                                  memCacheHeight: 200,
-                                  imageBuilder: (_, imageProvider) {
-                                    return Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: imageProvider,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  errorWidget: (_, __, ___) {
-                                    return Container(
-                                      width: 27,
-                                      height: 27,
-                                      decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  emptyWidget: Container(
-                                    width: 27,
-                                    height: 27,
-                                    decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                      image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                sixteenPx,
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Consumer<TranslateNotifierV2>(
+                        builder: (context, notifier, _) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Container(
+                              //   width: context.getWidth() * 0.4,
+                              //   child: const Text(
+                              //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
+                              //     style: TextStyle(color: Colors.white, fontSize: 10),
+                              //   ),
+                              // ),
+                              eightPx,
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                color: Colors.white,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      _newClipData?.data?.adsDescription ?? '',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                    CustomBaseCacheImage(
+                                      imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
+                                      memCacheWidth: 200,
+                                      memCacheHeight: 200,
+                                      imageBuilder: (_, imageProvider) {
+                                        return Container(
+                                          width: 27,
+                                          height: 27,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: imageProvider,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      errorWidget: (_, __, ___) {
+                                        return Container(
+                                          width: 27,
+                                          height: 27,
+                                          decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      emptyWidget: Container(
+                                        width: 27,
+                                        height: 27,
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    fourPx,
-                                    Text(
-                                      _newClipData?.data?.adsUrlLink ?? '',
-                                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                    sixteenPx,
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          _newClipData?.data?.adsDescription ?? '',
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                        ),
+                                        fourPx,
+                                        Text(
+                                          _newClipData?.data?.adsUrlLink ?? '',
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                    twelvePx,
+                                    InkWell(
+                                      onTap: () async {
+                                        final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                        final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                        if (await canLaunchUrl(uri)) {
+                                          print('adsView part 1');
+                                          adsView(_newClipData?.data ?? AdsData(), second);
+                                          await launchUrl(
+                                            uri,
+                                            mode: LaunchMode.externalApplication,
+                                          );
+                                        } else
+                                          // can't launch url, there is some error
+                                          throw "Could not launch $uri";
+                                      },
+                                      child: Container(
+                                        child: Text(
+                                          notifier.translate.learnMore ?? 'Learn More',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 7,
+                                          ),
+                                        ),
+                                        padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                                      ),
                                     )
                                   ],
                                 ),
-                                twelvePx,
-                                InkWell(
-                                  onTap: () async {
-                                    final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                    final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                    if (await canLaunchUrl(uri)) {
-                                      print('adsView part 1');
-                                      adsView(_newClipData?.data ?? AdsData(), second);
-                                      await launchUrl(
-                                        uri,
-                                        mode: LaunchMode.externalApplication,
-                                      );
-                                    } else
-                                      // can't launch url, there is some error
-                                      throw "Could not launch $uri";
-                                  },
-                                  child: Container(
-                                    child: Text(
-                                      'Learn more',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 7,
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
+                              )
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -559,7 +575,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       // final height = _betterPlayerControllerMap?.videoPlayerController?.value.size?.height;
       // final width = _betterPlayerControllerMap?.videoPlayerController?.value.size?.width;
       if (ratio != null) {
-        _betterPlayerControllerMap?.setOverriddenAspectRatio(ratio);
+        final height = widget.videoData?.metadata?.height ?? 0.0;
+        final width = widget.videoData?.metadata?.width ?? 0.0;
+        if (height != 0.0 && width != 0.0) {
+          final fixRatio = height / width;
+          _betterPlayerController?.setOverriddenAspectRatio(fixRatio);
+        } else {
+          _betterPlayerController?.setOverriddenAspectRatio(ratio);
+        }
       }
       setStateIfMounted(() {
         _eventType = BetterPlayerEventType.showingAds;
@@ -585,7 +608,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
             });
           } else {
             print('play iklan');
-            _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio ?? 0);
+            final height = widget.videoData?.metadata?.height ?? 0.0;
+            final width = widget.videoData?.metadata?.width ?? 0.0;
+            if (height != 0.0 && width != 0.0) {
+              final fixRatio = height / width;
+              _betterPlayerController?.setOverriddenAspectRatio(fixRatio);
+            } else {
+              _betterPlayerController?.setOverriddenAspectRatio(_betterPlayerController?.videoPlayerController?.value.aspectRatio ?? 0);
+            }
+            // _betterPlayerControllerMap?.setOverriddenAspectRatio(_betterPlayerControllerMap?.videoPlayerController?.value.aspectRatio ?? 0);
             _betterPlayerControllerMap?.play();
           }
         });

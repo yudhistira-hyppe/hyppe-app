@@ -6,7 +6,7 @@ ThemeData hyppeLightTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
     colorScheme: _lightColorScheme,
-    primaryColor: _lightColorScheme.primary,
+    primaryColor: _lightColorScheme.background,
     dividerTheme: _darkDividerThemeData,
     backgroundColor: _lightColorScheme.background,
     scaffoldBackgroundColor: _lightColorScheme.background,
@@ -42,7 +42,7 @@ ThemeData hyppeDarkTheme() {
   final ThemeData base = ThemeData.dark();
   return base.copyWith(
     colorScheme: _darkColorScheme,
-    primaryColor: _darkColorScheme.primary,
+    primaryColor: _darkColorScheme.background,
     dividerTheme: _darkDividerThemeData,
     backgroundColor: _darkColorScheme.background,
     scaffoldBackgroundColor: _darkColorScheme.background,
@@ -74,14 +74,12 @@ ThemeData hyppeDarkTheme() {
 }
 
 const ColorScheme _lightColorScheme = ColorScheme.light(
-  primary: kHyppeLightBackground,
+  primary: kHyppePrimary,
+  secondary: kHyppeLightSecondary,
   surface: kHyppeLightSurface,
-  secondary: kHyppeLightSurface,
   tertiary: kHyppeLightInactive1,
   background: kHyppeLightBackground,
   error: kHyppeLightDanger,
-  primaryVariant: kHyppePrimary,
-  secondaryVariant: kHyppeLightSecondary,
   brightness: Brightness.light,
   onBackground: kHyppeSurface,
   onSecondary: kHyppeLightActiveChip,
@@ -90,14 +88,12 @@ const ColorScheme _lightColorScheme = ColorScheme.light(
 );
 
 const ColorScheme _darkColorScheme = ColorScheme.dark(
-  primary: kHyppeBackground,
+  primary: kHyppePrimary,
+  secondary: kHyppeSecondary,
   surface: kHyppeSurface,
-  secondary: kHyppeSurface,
   tertiary: kHyppeLightInactive1,
   background: kHyppeBackground,
   error: kHyppeDanger,
-  primaryVariant: kHyppePrimary,
-  secondaryVariant: kHyppeSecondary,
   brightness: Brightness.dark,
   onBackground: kHyppeLightBackground,
   onSecondary: kHyppeBackground,

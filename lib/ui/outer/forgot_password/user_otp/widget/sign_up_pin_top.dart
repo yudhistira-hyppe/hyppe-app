@@ -148,7 +148,7 @@ class _SignUpPinTopState extends State<SignUpPinTop> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CustomTextWidget(textToDisplay: '${notifier.language.inWord?.toLowerCase()} ', textStyle: theme.textTheme.caption,),
-                CustomTextWidget(textToDisplay: '${System().getFullTime(timeout)} ', textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.primaryVariant),),
+                CustomTextWidget(textToDisplay: '${System().getFullTime(timeout)} ', textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.primary),),
                 CustomTextWidget(textToDisplay: '${notifier.language.minutes?.toLowerCase()}', textStyle: theme.textTheme.caption,)
               ],
             )

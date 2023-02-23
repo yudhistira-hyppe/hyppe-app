@@ -85,13 +85,13 @@ class _VerificationIDStep3State extends State<VerificationIDStep3> {
             ),
             buttonStyle: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
+                  Theme.of(context).colorScheme.primary),
               shadowColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
+                  Theme.of(context).colorScheme.primary),
               overlayColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
+                  Theme.of(context).colorScheme.primary),
               backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primaryVariant),
+                  Theme.of(context).colorScheme.primary),
             ),
           ),
         ),
