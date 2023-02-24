@@ -56,6 +56,7 @@ class HyppeNotifier with ChangeNotifier {
       String? email = SharedPreference().readStorage(SpKeys.email);
       bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
 
+
       //set light theme
       fixContext.read<HyppeNotifier>().themeData = hyppeLightTheme();
       SharedPreference().writeStorage(SpKeys.themeData, false); //set light theme
@@ -80,16 +81,23 @@ class HyppeNotifier with ChangeNotifier {
         await _repos.reposPost(
           fixContext,
               (onResult) async {
-            if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
-              await SharedPreference().logOutStorage();
-              _routing.moveReplacement(Routes.welcomeLogin);
-            } else {
-              _routing.moveReplacement(Routes.lobby);
+            bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
+            if(!isPreventRoute){
+              if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
+                await SharedPreference().logOutStorage();
+                _routing.moveReplacement(Routes.welcomeLogin);
+              } else {
+                _routing.moveReplacement(Routes.lobby);
+              }
             }
+
           },
               (errorData) {
+            bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
             'Exception on authCheck with error ${errorData.toString()}'.logger();
-            _routing.moveReplacement(Routes.lobby);
+            if(!isPreventRoute){
+              _routing.moveReplacement(Routes.lobby);
+            }
           },
           data: formData,
           headers: {
@@ -110,7 +118,10 @@ class HyppeNotifier with ChangeNotifier {
       FirebaseCrashlytics.instance
           .log('Hyppe Error: $e');
       Future.delayed(const Duration(milliseconds: 700), (){
-        _routing.moveReplacement(Routes.welcomeLogin);
+        bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
+        if(!isPreventRoute){
+          _routing.moveReplacement(Routes.welcomeLogin);
+        }
       });
     }
 

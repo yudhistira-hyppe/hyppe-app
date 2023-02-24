@@ -143,7 +143,7 @@ class DynamicLinkService {
             );
             break;
         }
-
+        SharedPreference().writeStorage(SpKeys.isPreventRoute, false);
         // Set [_linkProcessed] to true
         _linkProcessed = true;
         '_handleDeepLink | deeplink: $deepLink'.logger();

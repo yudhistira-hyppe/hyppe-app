@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/services/fcm_service.dart';
 import 'package:hyppe/core/services/notification_service.dart';
@@ -54,6 +55,7 @@ void mainApp(EnvType env) async {
   if (Platform.isAndroid) {
     await AndroidInAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
+  SharedPreference().writeStorage(SpKeys.isPreventRoute, false);
   FlutterError.onError = (errorDetails){
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
   };

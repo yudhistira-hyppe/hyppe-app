@@ -63,6 +63,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     _timerLink = Timer(const Duration(seconds: 2), () {
       FirebaseCrashlytics.instance
           .log('Log: from init');
+      SharedPreference().writeStorage(SpKeys.isPreventRoute, true);
       DynamicLinkService.handleDynamicLinks();
     });
     // _isolateService.turnOnWorkers();
