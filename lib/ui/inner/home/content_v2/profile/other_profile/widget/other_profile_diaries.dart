@@ -58,10 +58,10 @@ class OtherProfileDiaries extends StatelessWidget {
                                       ? const Align(
                                           alignment: Alignment.topRight,
                                           child: Padding(
-                                            padding: EdgeInsets.all(2.0),
+                                            padding: EdgeInsets.all(4.0),
                                             child: CustomIconWidget(
                                               iconData: "${AssetPath.vectorPath}sale.svg",
-                                              height: 15,
+                                              height: 22,
                                               defaultColor: false,
                                             ),
                                           ))

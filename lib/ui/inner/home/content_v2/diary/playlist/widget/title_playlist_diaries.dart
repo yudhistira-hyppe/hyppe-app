@@ -114,6 +114,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                               child: CustomIconWidget(
                                 iconData: "${AssetPath.vectorPath}sale.svg",
                                 defaultColor: false,
+                                height: 22,
                               ),
                             )
                           : const SizedBox(),

@@ -3,6 +3,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/icon_ownership.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
 import 'package:hyppe/ui/inner/home/notifier_v2.dart';
 import 'package:provider/provider.dart';
@@ -117,25 +118,17 @@ class _HyppePreviewDiaryState extends State<HyppePreviewDiary> {
                                         right: 8,
                                         child: const CustomIconWidget(
                                           iconData: "${AssetPath.vectorPath}sale.svg",
-                                          height: 20,
+                                          height: 22,
                                           defaultColor: false,
                                         ))
                                     : Container(),
                                 if ((notifier.diaryData?[index].certified ?? false) && (notifier.diaryData?[index].saleAmount ?? 0) == 0)
                                   Positioned(
-                                    top: 3,
-                                    right: 8,
-                                    child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(4),
-                                          color: Colors.black.withOpacity(0.3),
-                                        ),
-                                        child: const CustomIconWidget(
-                                          iconData: '${AssetPath.vectorPath}ownership.svg',
-                                          defaultColor: false,
-                                        )),
-                                  )
+                                      top: 3,
+                                      right: 8,
+                                      child: IconOwnership(
+                                        correct: true,
+                                      ))
                               ],
                             );
                           },

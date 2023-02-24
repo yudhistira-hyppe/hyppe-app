@@ -168,6 +168,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               padding: EdgeInsets.only(top: 10.0),
                               child: CustomIconWidget(
                                 iconData: "${AssetPath.vectorPath}sale.svg",
+                                height: 22,
                                 defaultColor: false,
                               ),
                             )

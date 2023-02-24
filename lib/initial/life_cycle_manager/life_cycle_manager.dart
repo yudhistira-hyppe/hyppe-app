@@ -1,6 +1,7 @@
 import 'dart:async' show Timer;
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'dart:convert';
+import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -120,7 +121,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           await activity.activityAwake(context);
           final fetch = activity.deviceFetch;
           if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
-            await getDevice();
+            if (Platform.isAndroid) {
+              await getDevice();
+            }
+
             print('cek version loh ini ${activity.deviceFetch.version.runtimeType}');
             //cek version aplikasi
             await CheckVersion().check(context, activity.deviceFetch.version);

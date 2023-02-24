@@ -628,6 +628,7 @@ class PreUploadContentNotifier with ChangeNotifier {
           color: kHyppeTextLightPrimary,
           iconSvg: "${AssetPath.vectorPath}info_white.svg",
           milisecond: 2000,
+          dismissible: false,
         );
       }
       if (_isCompress) {
