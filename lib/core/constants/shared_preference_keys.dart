@@ -20,6 +20,7 @@ class SpKeys {
 
   static const String isUserInOTP = 'isUserInOTP';
   // static const String isPreventRoute = 'isPreventRoute';
+  static const String datetimeLastShowAds = 'datetimeLastShowAds';
   static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
   static const String countAds = 'countAds';
   static const String setPin = 'setPin';

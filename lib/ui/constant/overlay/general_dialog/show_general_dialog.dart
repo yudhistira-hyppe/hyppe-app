@@ -1,3 +1,6 @@
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_popup_dialog..dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/ads_reward_popup.dart';
 import 'package:hyppe/ui/constant/overlay/general_dialog/general_dialog_content/delete_tag_user_content.dart';
@@ -293,7 +296,10 @@ class ShowGeneralDialog {
     );
   }
 
-  static Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false}) async {
+  static Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isInAppAds = false}) async {
+    if(isInAppAds){
+      SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, context.getCurrentDate());
+    }
     await showGeneralDialog(
       //Routing.navigatorKey.currentState.overlay.context    ini untuk bisa menjalankan diluar MaterialApp
       context: Routing.navigatorKey.currentState!.overlay!.context,
@@ -310,6 +316,7 @@ class ShowGeneralDialog {
         return ScaleTransition(child: child, scale: animation, alignment: Alignment.center);
       },
     );
+
   }
 
   static Future remarkWidthdrawal(BuildContext context) async {

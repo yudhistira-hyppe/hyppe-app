@@ -683,7 +683,7 @@ class HomeNotifier with ChangeNotifier {
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          System().adsPopUp(context, ads, adsUrl);
+          System().adsPopUp(context, ads, adsUrl, isInAppAds: true);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
