@@ -15,6 +15,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 
@@ -1261,12 +1262,20 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true}) async {
-    if (isPopUp) {
-      return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
-    } else {
-      return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
+  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true, bool isInAppAds = false}) async {
+    if(!isInAppAds){
+      if (isPopUp) {
+        return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
+      } else {
+        return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
+      }
+    }else{
+      String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
+      if(lastTimeAds.canShowAds()){
+        return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored, isInAppAds: isInAppAds);
+      }
     }
+
   }
 
   Future userVerified(status) async {

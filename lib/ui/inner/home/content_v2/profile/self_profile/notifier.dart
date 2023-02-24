@@ -227,6 +227,7 @@ class SelfProfileNotifier with ChangeNotifier {
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
       user.profile = null;
       user.profile = usersFetch.data;
+      user.profile?.avatar?.imageKey = SharedPreference().readStorage(SpKeys.uniqueKey);
       // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
       SharedPreference().writeStorage(SpKeys.userID, user.profile?.idUser);
       notifyListeners();
@@ -247,6 +248,22 @@ class SelfProfileNotifier with ChangeNotifier {
     precacheImage(CachedNetworkImageProvider(url, maxHeight: 50, maxWidth: 50), context);
   }
 
+  String key({bool onUpdateProfile = false}) {
+    var uniq = SharedPreference().readStorage(SpKeys.uniqueKey);
+    print('ini ke key $uniq');
+    if (uniq == null) {
+      uniq = UniqueKey().toString();
+      SharedPreference().writeStorage(SpKeys.uniqueKey, uniq);
+      return uniq;
+    } else {
+      if (onUpdateProfile) {
+        uniq = UniqueKey().toString();
+        SharedPreference().writeStorage(SpKeys.uniqueKey, uniq);
+      }
+      return uniq;
+    }
+  }
+
   Future getDataPerPgage(BuildContext context, {bool isReload = false}) async {
     print(pageIndex);
     if (isReload) {
@@ -255,8 +272,10 @@ class SelfProfileNotifier with ChangeNotifier {
       final usersFetch = usersNotifier.userFetch;
 
       if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+        var keyImageCache = key();
         user.profile = null;
         user.profile = usersFetch.data;
+        user.profile?.avatar?.imageKey = keyImageCache;
         // SharedPreference().writeStorage(SpKeys.isLoginSosmed, user.profile?.loginSource);
         notifyListeners();
       }

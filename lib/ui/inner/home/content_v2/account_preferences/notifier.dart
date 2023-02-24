@@ -262,8 +262,9 @@ class AccountPreferencesNotifier extends ChangeNotifier {
 
             hold = true;
             progress = "${language.finishingUp}...";
+            await context.read<SelfProfileNotifier>().getDataPerPgage(context, isReload: true);
 
-            context.read<MainNotifier>().initMain(context, onUpdateProfile: true).then((_) {
+            context.read<MainNotifier>().initMain(context, onUpdateProfile: true, updateProfilePict: true).then((_) {
               hold = false;
               ShowBottomSheet().onShowColouredSheet(context, language.successfullyUpdatedYourProfilePicture ?? '');
               notifyListeners();

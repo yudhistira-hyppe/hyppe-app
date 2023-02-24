@@ -1,15 +1,22 @@
 // import 'dart:js';
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_icmp_ping/flutter_icmp_ping.dart';
+import 'package:hyppe/core/bloc/ads_video/bloc.dart';
+import 'package:hyppe/core/bloc/ads_video/state.dart';
+import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/url_constants.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
+import 'package:hyppe/core/models/collection/advertising/ads_video_data.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/SqliteData.dart';
 import 'package:hyppe/core/services/check_version.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/notifier.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -652,5 +659,55 @@ class HomeNotifier with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future getAdsApsara(BuildContext context, bool mounted) async {
+    print('ke iklan yah');
+    final ads = await getPopUpAds(context);
+    final id = ads.videoId;
+    print('ke iklan yah $id');
+    print('ke iklan yah ${ads.adsType}');
+    if (id != null && ads.adsType != null) {
+      try {
+        final notifier = PostsBloc();
+        if (!mounted) return null;
+        await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
+
+        final fetch = notifier.postsFetch;
+
+        if (fetch.postsState == PostsState.videoApsaraSuccess) {
+          Map jsonMap = json.decode(fetch.data.toString());
+          print('jsonMap video Apsara : $jsonMap');
+          final adsUrl = jsonMap['PlayUrl'];
+          // _eventType = (_betterPlayerRollUri != null) ? BetterPlayerEventType.showingAds : null;
+          print('get Ads Video');
+          final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
+          // if (!isShowAds) {
+          System().adsPopUp(context, ads, adsUrl, isInAppAds: true);
+          // }
+
+          // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
+        }
+      } catch (e) {
+        'Failed to fetch ads data ${e}'.logger();
+      }
+    }
+  }
+
+  Future<AdsData> getPopUpAds(BuildContext context) async {
+    var data = AdsData();
+    try {
+      final notifier = AdsDataBloc();
+      await notifier.appAdsBloc(context);
+      final fetch = notifier.adsDataFetch;
+      print('video ads');
+      if (fetch.adsDataState == AdsDataState.getAdsVideoBlocSuccess) {
+        print('data iklan : ${fetch.data.toString()}');
+        data = fetch.data?.data;
+      }
+    } catch (e) {
+      'Failed to fetch ads data $e'.logger();
+    }
+    return data;
   }
 }

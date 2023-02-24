@@ -50,10 +50,15 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
 
   @override
   void didPopNext() {
-    Future.delayed(const Duration(milliseconds: 500), () {
+    Future.delayed(const Duration(milliseconds: 500), () async {
       isHomeScreen = true;
       'didPopNext isOnHomeScreen $isHomeScreen'.logger();
       context.read<ReportNotifier>().inPosition = contentPosition.home;
+      if (isHomeScreen) {
+        print("isOnHomeScreen hit ads");
+        var homneNotifier = context.read<HomeNotifier>();
+        await homneNotifier.getAdsApsara(context, mounted);
+      }
     });
 
     // System().disposeBlock();
@@ -172,7 +177,12 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   }
 
   @override
-  void afterFirstLayout(BuildContext context) {
+  void afterFirstLayout(BuildContext context) async {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
+    var homneNotifier = context.read<HomeNotifier>();
+    if (isHomeScreen) {
+      print("isOnHomeScreen hit ads");
+      await homneNotifier.getAdsApsara(context, mounted);
+    }
   }
 }

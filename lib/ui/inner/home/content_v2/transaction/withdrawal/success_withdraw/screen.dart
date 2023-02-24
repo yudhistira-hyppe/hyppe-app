@@ -97,8 +97,11 @@ class SuccessWithdrawScreen extends StatelessWidget {
                   width: SizeConfig.screenWidth,
                   child: CustomTextButton(
                     onPressed: () => notifier.backtransaction(),
-                    child: Text(notifier2.translate.backtoTransaction ?? ''),
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                    child: Text(
+                      notifier2.translate.backtoTransaction ?? 'Back to Transaction',
+                      style: const TextStyle(color: kHyppeLightButtonText),
+                    ),
                   ),
                 ),
               ),

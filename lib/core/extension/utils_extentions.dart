@@ -99,6 +99,15 @@ extension StringDefine on String {
     }
   }
 
+  bool canShowAds(){
+    if(isNotEmpty){
+      final lastDatetime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this);
+      return lastDatetime.isAfterFifteen();
+    }else{
+      return true;
+    }
+  }
+
   String getDateFormat(String format, LocalizationModelV2 translate, {bool isToday = true}) {
     try {
       final initForm = DateFormat(format);
@@ -166,6 +175,11 @@ extension DateHelpers on DateTime {
     // print('DateHelpers ${now.month} : ${this.month}');
     // print('DateHelpers ${now.year} : ${this.year}');
     return now.day == day && now.month == month && now.year == year;
+  }
+
+  bool isAfterFifteen(){
+    final after15M = DateTime.now().subtract(const Duration(minutes: 15));
+    return after15M.day >= day && after15M.month >= month && after15M.year >= year && after15M.hour >= hour && after15M.minute >= minute;
   }
 
   bool isYesterday() {

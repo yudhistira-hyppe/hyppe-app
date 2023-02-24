@@ -18,7 +18,7 @@ class SharedPreference {
   }
 
   void writeStorage(String key, value) {
-    if(_preferences != null){
+    if (_preferences != null) {
       if (value is String) {
         _preferences!.setString(key, value);
       }
@@ -43,19 +43,21 @@ class SharedPreference {
   }
 
   void removeValue(String k) {
-    if(_preferences != null){
+    if (_preferences != null) {
       _preferences!.remove(k);
     }
   }
 
   Future logOutStorage() async {
-    if(_preferences != null){
+    if (_preferences != null) {
       await _preferences!.remove(SpKeys.userToken);
       await _preferences!.remove(SpKeys.email);
       await _preferences!.remove(SpKeys.userID);
       await _preferences!.remove(SpKeys.lastHitPost);
       await _preferences!.remove(SpKeys.fcmToken);
       await _preferences!.remove(SpKeys.countAds);
+      await _preferences!.remove(SpKeys.uniqueKey);
+      await _preferences!.remove(SpKeys.datetimeLastShowAds);
     }
   }
 }
