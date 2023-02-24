@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       if (isHomeScreen) {
         print("isOnHomeScreen hit ads");
         var homneNotifier = context.read<HomeNotifier>();
-        await homneNotifier.getAdsApsara(context, mounted);
+        await homneNotifier.getAdsApsara(context, true);
       }
     });
 
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
       final _language = context.read<TranslateNotifierV2>().translate;
       final notifierFollow = context.read<FollowRequestUnfollowNotifier>();
 
-      notifier.initHome(context);
+      notifier.initHome(context, mounted);
       if (notifierFollow.listFollow.isEmpty) {
         notifierFollow.listFollow = [
           {'name': "${_language.follow}", 'code': 'TOFOLLOW'},
@@ -177,12 +177,13 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
   }
 
   @override
-  void afterFirstLayout(BuildContext context) async {
+  void afterFirstLayout(BuildContext context) {
+    print("afterrrrrrr============");
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute<dynamic>);
     var homneNotifier = context.read<HomeNotifier>();
     if (isHomeScreen) {
       print("isOnHomeScreen hit ads");
-      await homneNotifier.getAdsApsara(context, mounted);
+      homneNotifier.getAdsApsara(context, true);
     }
   }
 }

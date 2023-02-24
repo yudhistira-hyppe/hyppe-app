@@ -133,5 +133,3 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
 
   void goToEula() => _routing.move(Routes.userAgreement);
 }
-
-

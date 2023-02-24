@@ -196,7 +196,7 @@ class HomeNotifier with ChangeNotifier {
 
   void onUpdate() => notifyListeners();
 
-  Future initHome(BuildContext context) async {
+  Future initHome(BuildContext context, bool mounted) async {
     // db.initDb();
     // await db.insertFilterCamera('2', 'filter viking', 'viking', 'viking.ong', context);
     // db.checkFilterItemExists();
@@ -617,7 +617,7 @@ class HomeNotifier with ChangeNotifier {
     }
   }
 
-  void changeVisibility(BuildContext context, index) {
+  void changeVisibility(BuildContext context, bool mounted, index) {
     _visibilty = _visibiltyList[index]['code'];
     _visibilitySelect = _visibiltyList[index]['code'];
     onRefresh(context, _visibilitySelect);
@@ -661,7 +661,7 @@ class HomeNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getAdsApsara(BuildContext context, bool mounted) async {
+  Future getAdsApsara(BuildContext context, isInAppAds) async {
     print('ke iklan yah');
     final ads = await getPopUpAds(context);
     final id = ads.videoId;
@@ -670,7 +670,7 @@ class HomeNotifier with ChangeNotifier {
     if (id != null && ads.adsType != null) {
       try {
         final notifier = PostsBloc();
-        if (!mounted) return null;
+
         await notifier.getVideoApsaraBlocV2(context, apsaraId: ads.videoId ?? '');
 
         final fetch = notifier.postsFetch;
@@ -683,7 +683,7 @@ class HomeNotifier with ChangeNotifier {
           print('get Ads Video');
           final isShowAds = SharedPreference().readStorage(SpKeys.isShowPopAds);
           // if (!isShowAds) {
-          System().adsPopUp(context, ads, adsUrl, isInAppAds: true);
+          System().adsPopUp(context, ads, adsUrl, isInAppAds: isInAppAds);
           // }
 
           // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
