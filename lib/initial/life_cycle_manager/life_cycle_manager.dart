@@ -1,7 +1,9 @@
 import 'dart:async' show Timer;
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
@@ -12,7 +14,6 @@ import 'package:hyppe/core/bloc/device/bloc.dart';
 import 'package:hyppe/core/services/check_version.dart';
 
 import 'package:hyppe/core/services/socket_service.dart';
-import 'package:hyppe/core/services/isolate_service.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/dynamic_link_service.dart';
 
@@ -26,6 +27,7 @@ import '../../core/bloc/posts_v2/bloc.dart';
 import '../../core/bloc/posts_v2/state.dart';
 import '../../core/models/collection/advertising/ads_video_data.dart';
 import '../../ui/inner/upload/preview_content/notifier.dart';
+import '../../ui/outer/opening_logo/screen.dart';
 
 class LifeCycleManager extends StatefulWidget {
   final Widget? child;
@@ -37,14 +39,32 @@ class LifeCycleManager extends StatefulWidget {
 }
 
 class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBindingObserver {
+  late Future<void> _initializeFireFuture;
+
   Timer? _timerLink;
   final _socketService = SocketService();
   // final _isolateService = IsolateService();
 
+  Future<void> _initializeFlutterFire() async {
+    if (kDebugMode) {
+      // Force disable Crashlytics collection while doing every day development.
+      // Temporarily toggle this to true if you want to test crash reporting in your app.
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+    } else {
+      // Handle Crashlytics enabled status when not in Debug,
+      // e.g. allow your users to opt-in to crash reporting.
+    }
+  }
+
   @override
   void initState() {
+    _initializeFireFuture = _initializeFlutterFire();
     WidgetsBinding.instance.addObserver(this);
-    _timerLink = Timer(const Duration(seconds: 2), () => DynamicLinkService.handleDynamicLinks());
+    _timerLink = Timer(const Duration(seconds: 2), () {
+      FirebaseCrashlytics.instance.log('Log: from init');
+      // SharedPreference().writeStorage(SpKeys.isPreventRoute, true);
+      DynamicLinkService.handleDynamicLinks();
+    });
     // _isolateService.turnOnWorkers();
     super.initState();
   }
@@ -127,7 +147,10 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
           e.logger();
         }
       }
-      _timerLink = Timer(const Duration(milliseconds: 1000), () => DynamicLinkService.handleDynamicLinks());
+      _timerLink = Timer(const Duration(milliseconds: 1000), () {
+        FirebaseCrashlytics.instance.log('Log: from resume');
+        DynamicLinkService.handleDynamicLinks();
+      });
     }
 
     if (state == AppLifecycleState.paused) {
@@ -191,5 +214,27 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
   }
 
   @override
-  Widget build(_) => widget.child ?? Container();
+  Widget build(_) {
+    return FutureBuilder(
+        future: _initializeFireFuture,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              if (snapshot.hasError) {
+                return ErrorWidget(snapshot.error ?? Exception('Failed launched'));
+              }
+              return widget.child ?? const SizedBox.shrink();
+            default:
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                builder: (context, child) {
+                  return OpeningLogo(
+                    isLaunch: false,
+                  );
+                },
+              );
+          }
+          // return widget.child ?? const SizedBox.shrink();
+        });
+  }
 }

@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import '../../app.dart';
+
 class HyppeNotifier with ChangeNotifier {
   static final _repos = Repos();
   static final _system = System();
@@ -38,78 +40,87 @@ class HyppeNotifier with ChangeNotifier {
     _themeData = _themeState ? hyppeDarkTheme() : hyppeLightTheme();
   }
 
-  Future handleStartUp(BuildContext context) async {
-    try{
-      _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-      await context.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e){
-        throw '$e';
-      });
+  Future handleStartUp(bool mounted) async {
+    final fixContext = materialAppKey.currentContext!;
+    // try{
+    _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
+    await fixContext.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e) {
+      throw '$e';
+    });
 
-      await context.read<TranslateNotifierV2>().initTranslate(context, onError: (e){
-        throw '$e';
-      });
+    await fixContext.read<TranslateNotifierV2>().initTranslate(fixContext, onError: (e) {
+      throw '$e';
+    });
 
-      String? token = SharedPreference().readStorage(SpKeys.userToken);
-      String? email = SharedPreference().readStorage(SpKeys.email);
-      bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? email = SharedPreference().readStorage(SpKeys.email);
+    bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
 
-      //set light theme
-      context.read<HyppeNotifier>().themeData = hyppeLightTheme();
-      SharedPreference().writeStorage(SpKeys.themeData, false); //set light theme
-      System().systemUIOverlayTheme();
+    //set light theme
+    fixContext.read<HyppeNotifier>().themeData = hyppeLightTheme();
+    SharedPreference().writeStorage(SpKeys.themeData, false); //set light theme
+    System().systemUIOverlayTheme();
 
-      if (isUserInOTP) {
-        // print('pasti kesini');
-        // print(isUserInOTP);
-        context.read<SignUpPinNotifier>().email = email ?? "";
-        _routing.moveReplacement(
-          Routes.signUpPin,
-          argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: email ?? ''),
-        );
-      } else if (token != null) {
-        final formData = FormData();
-        formData.fields.add(const MapEntry('pageRow', '1'));
-        formData.fields.add(const MapEntry('pageNumber', '0'));
+    if (isUserInOTP) {
+      // print('pasti kesini');
+      // print(isUserInOTP);
+      fixContext.read<SignUpPinNotifier>().email = email ?? "";
+      _routing.moveReplacement(
+        Routes.signUpPin,
+        argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: email ?? ''),
+      );
+    } else if (token != null) {
+      final formData = FormData();
+      formData.fields.add(const MapEntry('pageRow', '1'));
+      formData.fields.add(const MapEntry('pageNumber', '0'));
 
-        print('getInnteractives');
-        print(formData.fields);
-
-        await _repos.reposPost(
-          context,
-              (onResult) async {
-            if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
-              await SharedPreference().logOutStorage();
-              _routing.moveReplacement(Routes.welcomeLogin);
-            } else {
-              _routing.moveReplacement(Routes.lobby);
-            }
-          },
-              (errorData) {
-            'Exception on authCheck with error ${errorData.toString()}'.logger();
+      print('getInnteractives');
+      print(formData.fields);
+      if (!mounted) return _routing.moveReplacement(Routes.welcomeLogin);
+      await _repos.reposPost(
+        fixContext,
+        (onResult) async {
+          // bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
+          // if(!isPreventRoute){
+          if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
+            await SharedPreference().logOutStorage();
+            _routing.moveReplacement(Routes.welcomeLogin);
+          } else {
             _routing.moveReplacement(Routes.lobby);
-          },
-          data: formData,
-          headers: {
-            'x-auth-user': email,
-            'x-auth-token': token,
-          },
-          host: UrlConstants.getInnteractives,
-          withAlertMessage: false,
-          withCheckConnection: false,
-          methodType: MethodType.post,
-        );
-      } else {
-        _routing.moveReplacement(Routes.welcomeLogin);
-        // _routing.moveReplacement(Routes.login);
-      }
-    }catch(e){
-      'handleStartUp error: $e'.logger();
-      FirebaseCrashlytics.instance
-          .log('Hyppe Error: $e');
-      Future.delayed(const Duration(milliseconds: 700), (){
-        _routing.moveReplacement(Routes.welcomeLogin);
-      });
+          }
+          // }
+        },
+        (errorData) {
+          // bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
+          // 'Exception on authCheck with error ${errorData.toString()}'.logger();
+          // if(!isPreventRoute){
+          _routing.moveReplacement(Routes.lobby);
+          // }
+        },
+        data: formData,
+        headers: {
+          'x-auth-user': email,
+          'x-auth-token': token,
+        },
+        host: UrlConstants.getInnteractives,
+        withAlertMessage: false,
+        withCheckConnection: false,
+        methodType: MethodType.post,
+      );
+    } else {
+      _routing.moveReplacement(Routes.welcomeLogin);
+      // _routing.moveReplacement(Routes.login);
     }
-
+    // }catch(e){
+    //   'handleStartUp error: $e'.logger();
+    //   FirebaseCrashlytics.instance
+    //       .log('Hyppe Error: $e');
+    //   Future.delayed(const Duration(milliseconds: 700), (){
+    //     bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
+    //     if(!isPreventRoute){
+    //       _routing.moveReplacement(Routes.welcomeLogin);
+    //     }
+    //   });
+    // }
   }
 }

@@ -58,7 +58,7 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false}) async {
+  Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false, bool updateProfilePict = false}) async {
     // Connect to socket
     if (isInitSocket) {
       _connectAndListenToSocket();
@@ -81,15 +81,23 @@ class MainNotifier with ChangeNotifier {
     }
     final usersNotifier = userV2.UserBloc();
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
+    var keyImageCache = key(onUpdateProfile, updateProfilePict);
+    print("image key $keyImageCache");
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+      var selfProfile = context.read<SelfProfileNotifier>();
+      selfProfile.user.profile = usersFetch.data;
+      selfProfile.user.profile?.avatar?.imageKey = keyImageCache;
+      selfProfile.onUpdate();
+      print("profile?.avatar ${selfProfile.user.profile?.avatar?.imageKey}");
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
-      context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
+      // context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
+      context.read<HomeNotifier>().profileImageKey = keyImageCache;
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
-      final _profile = context.read<SelfProfileNotifier>().user.profile;
-      System().userVerified(_profile?.statusKyc);
-      SharedPreference().writeStorage(SpKeys.setPin, _profile?.pinVerified.toString());
+
+      System().userVerified(selfProfile.user.profile?.statusKyc);
+      SharedPreference().writeStorage(SpKeys.setPin, selfProfile.user.profile?.pinVerified.toString());
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
       notifyListeners();
     }
@@ -99,6 +107,23 @@ class MainNotifier with ChangeNotifier {
         takeSelfie(context);
       }
     });
+  }
+
+  String key(bool onUpdateProfile, bool updateProfilePict) {
+    var uniq = SharedPreference().readStorage(SpKeys.uniqueKey);
+    print('ini ke key $uniq');
+    print('ini ke key $updateProfilePict');
+    if (uniq == null) {
+      uniq = UniqueKey().toString();
+      SharedPreference().writeStorage(SpKeys.uniqueKey, uniq);
+      return uniq;
+    } else {
+      if (onUpdateProfile && updateProfilePict) {
+        uniq = UniqueKey().toString();
+        SharedPreference().writeStorage(SpKeys.uniqueKey, uniq);
+      }
+      return uniq;
+    }
   }
 
   Future getReaction(BuildContext context) async {
