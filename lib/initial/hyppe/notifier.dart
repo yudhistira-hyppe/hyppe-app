@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import '../../app.dart';
+
 class HyppeNotifier with ChangeNotifier {
   static final _repos = Repos();
   static final _system = System();
@@ -38,14 +40,15 @@ class HyppeNotifier with ChangeNotifier {
     _themeData = _themeState ? hyppeDarkTheme() : hyppeLightTheme();
   }
 
-  Future handleStartUp(BuildContext context) async {
+  Future handleStartUp() async {
+    final fixContext = materialAppKey.currentContext!;
     try{
       _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
-      await context.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e){
+      await fixContext.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e){
         throw '$e';
       });
 
-      await context.read<TranslateNotifierV2>().initTranslate(context, onError: (e){
+      await fixContext.read<TranslateNotifierV2>().initTranslate(fixContext, onError: (e){
         throw '$e';
       });
 
@@ -54,14 +57,14 @@ class HyppeNotifier with ChangeNotifier {
       bool isUserInOTP = SharedPreference().readStorage(SpKeys.isUserInOTP) ?? false;
 
       //set light theme
-      context.read<HyppeNotifier>().themeData = hyppeLightTheme();
+      fixContext.read<HyppeNotifier>().themeData = hyppeLightTheme();
       SharedPreference().writeStorage(SpKeys.themeData, false); //set light theme
       System().systemUIOverlayTheme();
 
       if (isUserInOTP) {
         // print('pasti kesini');
         // print(isUserInOTP);
-        context.read<SignUpPinNotifier>().email = email ?? "";
+        fixContext.read<SignUpPinNotifier>().email = email ?? "";
         _routing.moveReplacement(
           Routes.signUpPin,
           argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: email ?? ''),
@@ -75,7 +78,7 @@ class HyppeNotifier with ChangeNotifier {
         print(formData.fields);
 
         await _repos.reposPost(
-          context,
+          fixContext,
               (onResult) async {
             if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
               await SharedPreference().logOutStorage();

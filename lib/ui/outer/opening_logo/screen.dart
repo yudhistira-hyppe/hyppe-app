@@ -1,27 +1,33 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/notifier.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 
 class OpeningLogo extends StatefulWidget {
-  const OpeningLogo({Key? key}) : super(key: key);
+  bool isLaunch;
+  OpeningLogo({Key? key, this.isLaunch = true}) : super(key: key);
 
   @override
   _OpeningLogoState createState() => _OpeningLogoState();
 }
 
-class _OpeningLogoState extends State<OpeningLogo> {
+class _OpeningLogoState extends State<OpeningLogo> with AfterFirstLayoutMixin{
   @override
   void initState() {
-    final _notifier = Provider.of<HyppeNotifier>(context, listen: false);
-    Timer(const Duration(seconds: 0), () async => await _notifier.handleStartUp(context));
 
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    if(widget.isLaunch){
+      final _notifier = Provider.of<HyppeNotifier>(context, listen: false);
+      _notifier.handleStartUp();
+    }
   }
 
   @override
@@ -89,4 +95,6 @@ class _OpeningLogoState extends State<OpeningLogo> {
       // ),
     );
   }
+
+
 }
