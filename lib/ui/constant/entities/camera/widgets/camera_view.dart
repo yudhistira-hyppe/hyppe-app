@@ -30,7 +30,7 @@ class _CameraViewState extends State<CameraView> {
   int _filterIndex = 0;
   int effected = -1;
 
-  final String _assetEffectsPath = 'effects/';
+  final String _assetEffectsPath = 'assets/effect/';
 
   @override
   void initState() {
@@ -62,11 +62,6 @@ class _CameraViewState extends State<CameraView> {
       {
         "path": "CrossedEyes",
         "efect": "crossed_eyes.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "FreeBeauty",
-        "efect": "freebeauty.deepar",
         "preview": "preview.png"
       },
       {
