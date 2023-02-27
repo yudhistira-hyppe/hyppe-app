@@ -17,7 +17,7 @@ class BuildProfileBody extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25.0),
         child: Column(
           children: [
-            BuildPersonalProfilePic(),
+            const BuildPersonalProfilePic(),
             TextInputAccountPreferences(
               controller: notifier.userNameController,
               labelText: "${notifier.language.userName}*",
@@ -51,6 +51,7 @@ class BuildProfileBody extends StatelessWidget {
               maxLength: 150,
               inputAreaHeight: 200 * SizeConfig.scaleDiagonal,
               minLines: 3,
+              textInput: TextInputType.multiline,
               keyboardNewline: true,
             ),
             const ProofPicture(),

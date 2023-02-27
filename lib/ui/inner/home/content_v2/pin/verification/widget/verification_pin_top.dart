@@ -33,9 +33,19 @@ class _VerificationPinTopState extends State<VerificationPinTop> {
             iconData: "${AssetPath.vectorPath}verification-email.svg",
           ),
           twentyPx,
-          CustomTextWidget(
-            textStyle: Theme.of(context).textTheme.bodyText2,
-            textToDisplay: "${notifier2.translate.pinTopText2} $email",
+          SizedBox(
+            width: SizeConfig.screenWidth! * 0.8,
+            child: Row(
+              children: [
+                Expanded(
+                  child: CustomTextWidget(
+                    textStyle: Theme.of(context).textTheme.bodyText2,
+                    textToDisplay: "${notifier2.translate.pinTopText2} $email",
+                    maxLines: 9,
+                  ),
+                ),
+              ],
+            ),
           ),
           fortyTwoPx,
           CustomRectangleVInput(),

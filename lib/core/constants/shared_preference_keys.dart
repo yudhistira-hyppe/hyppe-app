@@ -19,6 +19,8 @@ class SpKeys {
   static const String themeData = 'themeData';
 
   static const String isUserInOTP = 'isUserInOTP';
+  // static const String isPreventRoute = 'isPreventRoute';
+  static const String datetimeLastShowAds = 'datetimeLastShowAds';
   static const String lastTimeStampReachMaxAttempRecoverPassword = 'reachMaxAttempRecoverPassword';
   static const String countAds = 'countAds';
   static const String setPin = 'setPin';
@@ -27,4 +29,6 @@ class SpKeys {
   static const String referralFrom = 'referralFrom';
   static const String brand = 'brand';
   static const String canDeppAr = 'canDeppAr';
+
+  static const String uniqueKey = 'uniqueKey';
 }

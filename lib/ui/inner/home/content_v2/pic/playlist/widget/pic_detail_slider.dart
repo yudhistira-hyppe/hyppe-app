@@ -41,157 +41,158 @@ class PicDetailSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     // final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
-    return Consumer<PicDetailNotifier>(
-      builder: (_, notifier, __) => AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Stack(
-          children: [
-            /// Thumbnail
-            PageView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 1,
-              onPageChanged: print,
-              itemBuilder: (context, index) => InkWell(
-                child: Center(
-                  child: (picData?.reportedStatus == "BLURRED")
-                      ? PichTumbnailReport(pictData: picData)
-                      : CustomThumbImage(
-                          boxFit: BoxFit.cover,
-                          imageUrl: (picData?.isApsara ?? false) ? picData?.mediaThumbUri : picData?.fullThumbPath,
-                        ),
-                ),
-                onTap: () => notifier.navigateToDetailPic(picData),
-                // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
-              ),
-            ),
-
-            /// Back Button & More Options
-            ///
-            (picData?.saleAmount ?? 0) > 0
-                ? const Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: CustomIconWidget(
-                        iconData: "${AssetPath.vectorPath}sale.svg",
-                        defaultColor: false,
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Stack(
+        children: [
+          /// Thumbnail
+          PageView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 1,
+            onPageChanged: print,
+            itemBuilder: (context, index) => InkWell(
+              child: Center(
+                child: (picData?.reportedStatus == "BLURRED")
+                    ? PichTumbnailReport(pictData: picData)
+                    : CustomThumbImage(
+                        boxFit: BoxFit.cover,
+                        imageUrl: (picData?.isApsara ?? false) ? picData?.mediaThumbUri : picData?.fullThumbPath,
                       ),
+              ),
+              // onTap: () => notifier.navigateToDetailPic(picData),
+              // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
+            ),
+          ),
+
+          /// Back Button & More Options
+          ///
+          (picData?.saleAmount ?? 0) > 0
+              ? const Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: CustomIconWidget(
+                      iconData: "${AssetPath.vectorPath}sale.svg",
+                      defaultColor: false,
+                      height: 22,
                     ),
-                  )
-                : const SizedBox(),
+                  ),
+                )
+              : const SizedBox(),
 
-            (picData?.saleAmount == 0) && (picData?.certified ?? false)
-                ? const Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: IconOwnership(correct: true),
-                    ),
-                  )
-                : const SizedBox(),
+          (picData?.saleAmount == 0) && (picData?.certified ?? false)
+              ? const Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: IconOwnership(correct: true),
+                  ),
+                )
+              : const SizedBox(),
 
-            // Align(
-            //   alignment: Alignment.topRight,
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 0),
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         Visibility(
-            //           visible: onDetail,
-            //           child: CustomTextButton(
-            //             onPressed: () => notifier.onPop(),
-            //             child: const DecoratedIconWidget(
-            //               Icons.arrow_back_ios,
-            //               color: Colors.white,
-            //             ),
-            //           ),
-            //         ),
-            //         picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
-            //             ? SizedBox()
-            //             : Row(
-            //                 children: [
-            //                   (picData?.saleAmount ?? 0) > 0
-            //                       ? const Padding(
-            //                           padding: EdgeInsets.all(2.0),
-            //                           child: CustomIconWidget(
-            //                             iconData: "${AssetPath.vectorPath}sale.svg",
-            //                             defaultColor: false,
-            //                           ),
-            //                         )
-            //                       : const SizedBox(),
-            //                   picData?.email != SharedPreference().readStorage(SpKeys.email)
-            //                       ? SizedBox(
-            //                           width: 50,
-            //                           child: CustomTextButton(
-            //                             onPressed: () => ShowBottomSheet.onReportContent(
-            //                               context,
-            //                               postData: picData,
-            //                               type: hyppePic,
-            //                               adsData: null,
-            //                               onUpdate: () => notifier.onUpdate(),
-            //                             ),
-            //                             child: const CustomIconWidget(
-            //                               defaultColor: false,
-            //                               iconData: '${AssetPath.vectorPath}more.svg',
-            //                               color: kHyppeLightButtonText,
-            //                             ),
-            //                           ),
-            //                         )
-            //                       : const SizedBox(),
-            //                   picData?.email == SharedPreference().readStorage(SpKeys.email)
-            //                       ? SizedBox(
-            //                           width: 50,
-            //                           child: CustomTextButton(
-            //                             onPressed: () async {
-            //                               if (globalAudioPlayer != null) {
-            //                                 globalAudioPlayer!.pause();
-            //                               }
-            //                               await ShowBottomSheet().onShowOptionContent(
-            //                                 context,
-            //                                 onDetail: onDetail,
-            //                                 contentData: picData ?? ContentData(),
-            //                                 captionTitle: hyppePic,
-            //                                 onUpdate: () => notifier.onUpdate(),
-            //                                 isShare: picData?.isShared,
-            //                               );
-            //                               if (globalAudioPlayer != null) {
-            //                                 globalAudioPlayer!.seek(Duration.zero);
-            //                                 globalAudioPlayer!.resume();
-            //                               }
-            //                             },
-            //                             child: const CustomIconWidget(
-            //                               defaultColor: false,
-            //                               iconData: '${AssetPath.vectorPath}more.svg',
-            //                               color: kHyppeLightButtonText,
-            //                             ),
-            //                           ),
-            //                         )
-            //                       : const SizedBox(),
-            //                   Visibility(
-            //                     visible: (picData?.saleAmount == 0 && (picData?.certified ?? false)),
-            //                     child: const Padding(
-            //                       padding: EdgeInsets.all(8.0),
-            //                       child: IconOwnership(correct: true),
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
+          // Align(
+          //   alignment: Alignment.topRight,
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 0),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Visibility(
+          //           visible: onDetail,
+          //           child: CustomTextButton(
+          //             onPressed: () => notifier.onPop(),
+          //             child: const DecoratedIconWidget(
+          //               Icons.arrow_back_ios,
+          //               color: Colors.white,
+          //             ),
+          //           ),
+          //         ),
+          //         picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
+          //             ? SizedBox()
+          //             : Row(
+          //                 children: [
+          //                   (picData?.saleAmount ?? 0) > 0
+          //                       ? const Padding(
+          //                           padding: EdgeInsets.all(2.0),
+          //                           child: CustomIconWidget(
+          //                             iconData: "${AssetPath.vectorPath}sale.svg",
+          //                             defaultColor: false,
+          //                           ),
+          //                         )
+          //                       : const SizedBox(),
+          //                   picData?.email != SharedPreference().readStorage(SpKeys.email)
+          //                       ? SizedBox(
+          //                           width: 50,
+          //                           child: CustomTextButton(
+          //                             onPressed: () => ShowBottomSheet.onReportContent(
+          //                               context,
+          //                               postData: picData,
+          //                               type: hyppePic,
+          //                               adsData: null,
+          //                               onUpdate: () => notifier.onUpdate(),
+          //                             ),
+          //                             child: const CustomIconWidget(
+          //                               defaultColor: false,
+          //                               iconData: '${AssetPath.vectorPath}more.svg',
+          //                               color: kHyppeLightButtonText,
+          //                             ),
+          //                           ),
+          //                         )
+          //                       : const SizedBox(),
+          //                   picData?.email == SharedPreference().readStorage(SpKeys.email)
+          //                       ? SizedBox(
+          //                           width: 50,
+          //                           child: CustomTextButton(
+          //                             onPressed: () async {
+          //                               if (globalAudioPlayer != null) {
+          //                                 globalAudioPlayer!.pause();
+          //                               }
+          //                               await ShowBottomSheet().onShowOptionContent(
+          //                                 context,
+          //                                 onDetail: onDetail,
+          //                                 contentData: picData ?? ContentData(),
+          //                                 captionTitle: hyppePic,
+          //                                 onUpdate: () => notifier.onUpdate(),
+          //                                 isShare: picData?.isShared,
+          //                               );
+          //                               if (globalAudioPlayer != null) {
+          //                                 globalAudioPlayer!.seek(Duration.zero);
+          //                                 globalAudioPlayer!.resume();
+          //                               }
+          //                             },
+          //                             child: const CustomIconWidget(
+          //                               defaultColor: false,
+          //                               iconData: '${AssetPath.vectorPath}more.svg',
+          //                               color: kHyppeLightButtonText,
+          //                             ),
+          //                           ),
+          //                         )
+          //                       : const SizedBox(),
+          //                   Visibility(
+          //                     visible: (picData?.saleAmount == 0 && (picData?.certified ?? false)),
+          //                     child: const Padding(
+          //                       padding: EdgeInsets.all(8.0),
+          //                       child: IconOwnership(correct: true),
+          //                     ),
+          //                   ),
+          //                 ],
+          //               ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
-            picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
-                ? Container()
-                : Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
+          picData?.email != SharedPreference().readStorage(SpKeys.email) && (picData?.reportedStatus == "BLURRED")
+              ? Container()
+              : Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0).copyWith(bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Consumer<LikeNotifier>(
+                          builder: (context, value, child) => GestureDetector(
                             onTap: () {
                               Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, picData!.postID, 'LIKE', 'Like', picData?.email);
                             },
@@ -210,18 +211,18 @@ class PicDetailSlider extends StatelessWidget {
                                   CustomTextWidget(
                                     textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
                                     // textToDisplay: _system.formatterNumber(value.data?.insight?.likes),
-                                    textToDisplay: "${notifier.data?.insight?.likes}",
+                                    textToDisplay: _system.formatterNumber(picData?.insight?.likes),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-          ],
-        ),
+                ),
+        ],
       ),
     );
   }

@@ -174,7 +174,7 @@ class PostsBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setPostsFetch(PostsFetch(PostsState.getAllContentsError));
         } else {
-          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
+          setPostsFetch(PostsFetch(PostsState.getAllContentsSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
         }
       },
       (errorData) {
@@ -312,6 +312,8 @@ class PostsBloc {
     formData.fields.add(MapEntry('postID', postId));
     formData.fields.add(const MapEntry('active', 'false'));
 
+    print("delet content");
+    print(formData.fields.map((e) => e).join(','));
     setPostsFetch(PostsFetch(PostsState.loading));
     await _repos.reposPost(
       context,

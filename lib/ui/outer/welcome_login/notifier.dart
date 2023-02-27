@@ -343,6 +343,7 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
               _validateUserData(context, _result, true, onlineVersion: fetch.version);
             }
             if (fetch.userState == UserState.LoginError) {
+              _googleSignInService.handleSignOut();
               if (fetch.data != null) {
                 clearTextController();
                 incorrect = true;
@@ -355,7 +356,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           //       argument: UserInterestScreenArgument());
           //   notifyListeners();
           // }
-
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }
@@ -471,7 +471,6 @@ class WelcomeLoginNotifier extends LoadingNotifier with ChangeNotifier {
           // final session = await http.Client().post(
           //   signInWithAppleEndpoint,
           // );
-
         } else {
           ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () => Routing().moveBack());
         }

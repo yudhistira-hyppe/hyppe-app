@@ -58,7 +58,7 @@ class MainNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false}) async {
+  Future initMain(BuildContext context, {bool onUpdateProfile = false, bool isInitSocket = false, bool updateProfilePict = false}) async {
     // Connect to socket
     if (isInitSocket) {
       _connectAndListenToSocket();
@@ -66,12 +66,15 @@ class MainNotifier with ChangeNotifier {
     }
 
     // Auto follow user if app is install from a dynamic link
-    DynamicLinkService.followSender(context);
+    // DynamicLinkService.followSender(context);
 
     // final onlineVersion = SharedPreference().readStorage(SpKeys.onlineVersion);
     // await CheckVersion().check(context, onlineVersion);
 
     if (!onUpdateProfile) {
+      SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, '');
+      // context.read<HomeNotifier>().getAdsApsara(context, false);
+
       final utilsNotifier = UtilsBlocV2();
       await utilsNotifier.getReactionBloc(context);
       final utilsFetch = utilsNotifier.utilsFetch;
@@ -81,15 +84,24 @@ class MainNotifier with ChangeNotifier {
     }
     final usersNotifier = userV2.UserBloc();
     await usersNotifier.getUserProfilesBloc(context, withAlertMessage: true);
+    var keyImageCache = key(onUpdateProfile, updateProfilePict);
+    print("image key $keyImageCache");
     final usersFetch = usersNotifier.userFetch;
     if (usersFetch.userState == UserState.getUserProfilesSuccess) {
+      var selfProfile = context.read<SelfProfileNotifier>();
+      selfProfile.user.profile = usersFetch.data;
+      selfProfile.user.profile?.avatar?.imageKey = keyImageCache;
+      selfProfile.onUpdate();
+      print("profile?.avatar ${selfProfile.user.profile?.avatar?.imageKey}");
       context.read<SelfProfileNotifier>().user.profile = usersFetch.data;
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
-      context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
+      // context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
+      context.read<HomeNotifier>().profileImageKey = keyImageCache;
+
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
-      final _profile = context.read<SelfProfileNotifier>().user.profile;
-      System().userVerified(_profile?.statusKyc);
-      SharedPreference().writeStorage(SpKeys.setPin, _profile?.pinVerified.toString());
+
+      System().userVerified(selfProfile.user.profile?.statusKyc);
+      SharedPreference().writeStorage(SpKeys.setPin, selfProfile.user.profile?.pinVerified.toString());
       // SharedPreference().writeStorage(SpKeys.statusVerificationId, 'sdsd')asdasd
       notifyListeners();
     }
@@ -99,6 +111,23 @@ class MainNotifier with ChangeNotifier {
         takeSelfie(context);
       }
     });
+  }
+
+  String key(bool onUpdateProfile, bool updateProfilePict) {
+    var uniq = SharedPreference().readStorage(SpKeys.uniqueKey);
+    print('ini ke key $uniq');
+    print('ini ke key $updateProfilePict');
+    if (uniq == null) {
+      uniq = UniqueKey().toString();
+      SharedPreference().writeStorage(SpKeys.uniqueKey, uniq);
+      return uniq;
+    } else {
+      if (onUpdateProfile && updateProfilePict) {
+        uniq = UniqueKey().toString();
+        SharedPreference().writeStorage(SpKeys.uniqueKey, uniq);
+      }
+      return uniq;
+    }
   }
 
   Future getReaction(BuildContext context) async {
@@ -168,18 +197,20 @@ class MainNotifier with ChangeNotifier {
             try {
               final msgData = MessageDataV2.fromJson(json.decode('$message'));
               print('ini message dari socket ${msgData.disqusID}');
-              if (msgData.disqusLogs[0].receiver == email) {
-                NotificationService().showNotification(
-                    RemoteMessage(
-                      notification: RemoteNotification(
-                        // title: "@${msgData.disqusLogs[0].senderInfo?.fullName}",
-                        title: "${msgData.username}",
-                        body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+              if (token != null) {
+                if (msgData.disqusLogs[0].receiver == email) {
+                  NotificationService().showNotification(
+                      RemoteMessage(
+                        notification: RemoteNotification(
+                          title: "${msgData.disqusLogs[0].username}",
+                          // title: "${msgData.username}",
+                          body: msgData.fcmMessage ?? msgData.disqusLogs.firstOrNull?.txtMessages ?? '',
+                        ),
+                        data: msgData.toJson(),
                       ),
-                      data: msgData.toJson(),
-                    ),
-                    data: msgData);
-                _eventService.notifyMessageReceived(msgData);
+                      data: msgData);
+                  _eventService.notifyMessageReceived(msgData);
+                }
               }
             } catch (e) {
               e.toString().logger();

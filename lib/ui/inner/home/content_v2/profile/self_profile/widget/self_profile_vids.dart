@@ -18,8 +18,9 @@ class SelfProfileVids extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SelfProfileNotifier>(builder: (_, notifier, __) {
-      return notifier.user.vids != null ? notifier.user.vids!.isEmpty ?
-      const EmptyWidget()
+      return notifier.user.vids != null
+          ? notifier.user.vids!.isEmpty
+              ? const EmptyWidget()
               : SliverGrid(
                   delegate: SliverChildBuilderDelegate(
                     (BuildContext context, int index) {
@@ -61,10 +62,10 @@ class SelfProfileVids extends StatelessWidget {
                                           ? const Align(
                                               alignment: Alignment.topRight,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(2.0),
+                                                padding: const EdgeInsets.all(4.0),
                                                 child: CustomIconWidget(
                                                   iconData: "${AssetPath.vectorPath}sale.svg",
-                                                  height: 15,
+                                                  height: 22,
                                                   defaultColor: false,
                                                 ),
                                               ))
@@ -76,10 +77,6 @@ class SelfProfileVids extends StatelessWidget {
                                                   padding: const EdgeInsets.all(2.0),
                                                   child: Container(
                                                       padding: const EdgeInsets.all(4),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius.circular(4),
-                                                        color: Colors.black.withOpacity(0.3),
-                                                      ),
                                                       child: const CustomIconWidget(
                                                         iconData: '${AssetPath.vectorPath}ownership.svg',
                                                         defaultColor: false,

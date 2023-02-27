@@ -154,6 +154,7 @@ class UserBloc {
       withAlertMessage: true,
       host: UrlConstants.loginGoogle,
       data: payload,
+      errorServiceType: ErrorType.login,
     );
   }
 

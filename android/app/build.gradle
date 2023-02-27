@@ -103,6 +103,8 @@ android {
 
             ndk {
                 debugSymbolLevel 'SYMBOL_TABLE'
+                abiFilters "armeabi", "armeabi-v7a","x86_64", "mips",
+                        "mips64", "arm64-v8a"
             }
 
              

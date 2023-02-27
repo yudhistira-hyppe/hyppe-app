@@ -57,15 +57,17 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   void _resetData(BuildContext context) async {
-    try{
+    try {
       _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.lobby);
 
       await _googleSignInService.handleSignOut();
       await SharedPreference().logOutStorage();
 
       context.read<SelfProfileNotifier>().user = UserInfoModel();
+      context.read<SelfProfileNotifier>().onUpdate();
       context.read<OtherProfileNotifier>().user = UserInfoModel();
       context.read<SearchNotifier>().allContents = UserInfoModel();
+      context.read<HomeNotifier>().profileImage = '';
 
       context.read<PreviewStoriesNotifier>().myStoriesData = null;
       context.read<PreviewStoriesNotifier>().peopleStoriesData = null;
@@ -84,10 +86,9 @@ class SettingNotifier extends ChangeNotifier with LoadingNotifier {
       _eventService.cleanUp();
       _streamService.reset();
       context.read<WelcomeLoginNotifier>().signOutGoogle.handleSignOut();
-    }catch(e){
+    } catch (e) {
       'Reset Data Error: $e'.logger();
     }
-
   }
 
   @override

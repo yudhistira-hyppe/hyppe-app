@@ -160,11 +160,11 @@ class Repos {
       }
 
       /// check if token is valid or not, if not, force logOut
-      if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
+      // if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
         // await SharedPreference().logOutStorage();
         // _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
-        return;
-      }
+        // return;
+      // }
 
       /// execute given logic
       logic(_response);

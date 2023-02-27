@@ -9,16 +9,10 @@ class IconOwnership extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return correct
-        ? Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: Colors.black.withOpacity(0.3),
-            ),
-            child: const CustomIconWidget(
-              iconData: '${AssetPath.vectorPath}ownership.svg',
-              defaultColor: false,
-            ))
+        ? const CustomIconWidget(
+            iconData: '${AssetPath.vectorPath}ownership.svg',
+            defaultColor: false,
+          )
         : const SizedBox.shrink();
   }
 }

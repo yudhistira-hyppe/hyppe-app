@@ -117,8 +117,11 @@ class SummaryWithdrawalScreen extends StatelessWidget {
                 width: SizeConfig.screenWidth,
                 child: CustomTextButton(
                   onPressed: () => notifier.navigateToPin(),
-                  child: Text(notifier2.translate.withdrawal ?? ''),
                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all(kHyppePrimary)),
+                  child: Text(
+                    notifier2.translate.withdrawal ?? 'Withdrawal',
+                    style: const TextStyle(color: kHyppeLightButtonText),
+                  ),
                 ),
               )
             ],

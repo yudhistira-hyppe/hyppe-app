@@ -334,11 +334,13 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   Future<void> onTakePicture(BuildContext context) async {
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-    if (canDeppAr == 'true' || Platform.isIOS) {
-      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    } else {
-      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-    }
+    cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+
+    // if (canDeppAr == 'true' || Platform.isIOS) {
+    //   cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    // } else {
+    //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    // }
     ShowGeneralDialog.loadingDialog(context);
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
@@ -354,11 +356,12 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
   void onTakeSelfie(BuildContext context) {
     dynamic cameraNotifier;
     final canDeppAr = SharedPreference().readStorage(SpKeys.canDeppAr);
-    if (canDeppAr == 'true') {
-      cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
-    } else {
-      cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
-    }
+    cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    // if (canDeppAr == 'true') {
+    //   cameraNotifier = Provider.of<CameraDevicesNotifier>(context, listen: false);
+    // } else {
+    //   cameraNotifier = Provider.of<CameraNotifier>(context, listen: false);
+    // }
     cameraNotifier.takePicture().then((filePath) async {
       if (filePath != null) {
         selfiePath = filePath.path;

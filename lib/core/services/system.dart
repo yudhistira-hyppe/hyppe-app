@@ -15,6 +15,7 @@ import 'package:hyppe/core/constants/kyc_status.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart' as v2;
 
@@ -909,8 +910,12 @@ class System {
 
   double menghitungJumlahHari(DateTime from, DateTime to) {
     Duration diff = to.difference(from);
-
     return (diff.inHours / 24);
+  }
+
+  double menghitungJumlahMenit(DateTime from, DateTime to) {
+    Duration diff = to.difference(from);
+    return (diff.inMinutes % 60);
   }
 
   readTimestamp(int timestamp, BuildContext context, {required bool fullCaption}) {
@@ -1272,11 +1277,29 @@ class System {
     return intl.NumberFormat.currency(locale: 'id', symbol: '', decimalDigits: 0).format(amount);
   }
 
-  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true}) async {
-    if (isPopUp) {
-      return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
+  Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true, bool isInAppAds = false}) async {
+    if (!isInAppAds) {
+      if (isPopUp) {
+        return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
+      } else {
+        return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
+      }
     } else {
-      return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
+      String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
+      print("tanggall ======== $lastTimeAds");
+
+      if (lastTimeAds == '') {
+        return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored, isInAppAds: isInAppAds);
+      } else {
+        DateTime now = DateTime.now();
+        DateTime menitCache = DateTime.parse(lastTimeAds);
+        var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+        print(jumlahMenit);
+        if (jumlahMenit >= 14) {
+          // if (lastTimeAds.canShowAds()) {
+          return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored, isInAppAds: isInAppAds);
+        }
+      }
     }
   }
 
