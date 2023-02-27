@@ -83,9 +83,11 @@ class HyppeNotifier with ChangeNotifier {
           // bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
           // if(!isPreventRoute){
           if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
+            print('tidak ada eror');
             await SharedPreference().logOutStorage();
             _routing.moveReplacement(Routes.welcomeLogin);
           } else {
+            print('tidak ada eror 2');
             _routing.moveReplacement(Routes.lobby);
           }
           // }
@@ -100,7 +102,7 @@ class HyppeNotifier with ChangeNotifier {
         data: formData,
         headers: {
           'x-auth-user': email,
-          'x-auth-token': token,
+          'x-auth-token': "sdsdsf${token}xxxx",
         },
         host: UrlConstants.getInnteractives,
         withAlertMessage: false,

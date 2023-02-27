@@ -136,7 +136,7 @@ class ApiAction {
   }) async {
     Map<String, dynamic> _headers = <String, dynamic>{};
     if (headers != null) headers.forEach((k, v) => _headers[k] = v);
-    if (token != null) _headers['x-auth-token'] = token;
+    if (token != null) _headers['x-auth-token'] = "sdsdsf${token}xxxx";
     _headers['Content-Type'] = contentType;
 
     // if (Env.dataUrlv4.contains(url)) {
