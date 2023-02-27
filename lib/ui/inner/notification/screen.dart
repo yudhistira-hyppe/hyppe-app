@@ -1,6 +1,7 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/error_service.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -13,13 +14,17 @@ class NotificationScreen extends StatefulWidget {
   _NotificationScreenState createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen> {
+class _NotificationScreenState extends State<NotificationScreen> with AfterFirstLayoutMixin{
   @override
   void initState() {
+    super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
     final notifier = Provider.of<NotificationNotifier>(context, listen: false);
     notifier.onInitial();
     notifier.getNotifications(context, reload: true);
-    super.initState();
   }
 
   @override
@@ -113,4 +118,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
     );
   }
+
+
 }
