@@ -60,6 +60,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   BetterPlayerController? _betterPlayerController;
   final ValueNotifier<bool> _awaitInitial = ValueNotifier(false);
   final ValueNotifier<bool> _initializeVideo = ValueNotifier(false);
+  var secondsSkip = 0;
 
   // AdvertisingData? _clipsData;
   AdsVideo? _newClipData;
@@ -72,6 +73,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   bool _isStartFullScreen = false;
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
+
+
+
 
   void _resetOrintationStream() {
     _orientationStream?.cancel();
@@ -172,6 +176,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         // print('data : ${fetch.data.toString()}');
         _newClipData = fetch.data;
         'videoId : ${_newClipData?.data?.videoId}'.logger();
+        secondsSkip = _newClipData?.data?.adsSkip ?? 0;
         await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
       }
     } catch (e) {

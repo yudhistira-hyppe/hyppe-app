@@ -429,27 +429,32 @@ class _AdsScreenState extends State<AdsScreen> {
                 }
 
               },
-              child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-                  child: CustomTextWidget(
-                    textToDisplay: notifier.translate.learnMore ?? 'Learn more',
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  )
+              child: Builder(
+                builder: (context) {
+                  final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
+                  return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
+                      child: CustomTextWidget(
+                        textToDisplay: learnMore,
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
 
-                //  Text(
-                //   'Learn more',
-                //   style: TextStyle(
-                //     color: Colors.white,
-                //     fontSize: 14,
-                //     fontWeight: FontWeight.w700,
-                //   ),
-                // ),
+                    //  Text(
+                    //   'Learn more',
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w700,
+                    //   ),
+                    // ),
+                  );
+                }
               ),
             ),
           );

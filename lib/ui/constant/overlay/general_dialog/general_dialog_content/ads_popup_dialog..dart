@@ -52,7 +52,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
     _storyItems.add(StoryItem.pageVideo(widget.urlAds,
         controller: _storyController,
         requestHeaders: {
-          'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
+          'x-auth-user': _sharedPrefs.readStorage(SpKeys.email) ?? '',
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
         },
         id: widget.data.adsId ?? '',
@@ -408,18 +408,23 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                   }
 
                 },
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    notifier.translate.learnMore ?? 'Learn More',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
+                child: Builder(
+                  builder: (context) {
+                    final learnMore = secondsSkip < 1 ? (notifier.translate.learnMore ?? 'Learn More') : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
+                    return Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: Text(
+                        learnMore,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
+                    );
+                  }
                 ),
               ),
             );
