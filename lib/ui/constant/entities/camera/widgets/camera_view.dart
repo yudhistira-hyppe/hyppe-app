@@ -52,11 +52,6 @@ class _CameraViewState extends State<CameraView> {
       {"path": "BigGlasses", "efect": "big_glasses.deepar", "preview": "preview.png"},
       {"path": "Chief", "efect": "chief.deepar", "preview": "preview.png"},
       {"path": "CrossedEyes", "efect": "crossed_eyes.deepar", "preview": "preview.png"},
-      // {
-      //   "path": "FreeBeauty",
-      //   "efect": "freebeauty.deepar",
-      //   "preview": "preview.png"
-      // },
       {"path": "Jokester", "efect": "jokerster.deepar", "preview": "preview.png"},
       {"path": "LizardSkin", "efect": "lizard_skin.deepar", "preview": "preview.png"},
       {"path": "NeonWires", "efect": "neon_wires.deepar", "preview": "preview.png"},

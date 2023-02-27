@@ -413,23 +413,26 @@ class _AdsScreenState extends State<AdsScreen> {
             margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
             child: InkWell(
               onTap: () async {
-                final uri = Uri.parse(data.adsUrlLink ?? '');
-                if (await canLaunchUrl(uri)) {
-                  adsView(context, widget.argument.data, secondsVideo, isClick: true);
-                  Navigator.pop(context);
-                  await launchUrl(
-                    uri,
-                    mode: LaunchMode.externalApplication,
-                  );
-                } else {
-                  throw "Could not launch $uri";
+                if(secondsSkip < 1){
+                  final uri = Uri.parse(data.adsUrlLink ?? '');
+                  if (await canLaunchUrl(uri)) {
+                    adsView(context, widget.argument.data, secondsVideo, isClick: true);
+                    Navigator.pop(context);
+                    await launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    throw "Could not launch $uri";
+                  }
+                  // can't launch url, there is some error
                 }
-                // can't launch url, there is some error
+
               },
               child: Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                  decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
                   child: CustomTextWidget(
                     textToDisplay: notifier.translate.learnMore ?? 'Learn more',
                     textStyle: const TextStyle(
