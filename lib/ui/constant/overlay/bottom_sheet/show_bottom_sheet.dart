@@ -362,7 +362,7 @@ class ShowBottomSheet {
         return Consumer<VerificationIDNotifier>(
           builder: (_, notifier, __) => WillPopScope(
             onWillPop: () async {
-              notifier.retryTakeIdCard();
+              notifier.retryTakeIdCard(fromBottomSheet: true);
               return false;
             },
             child: Container(

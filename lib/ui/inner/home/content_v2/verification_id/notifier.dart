@@ -256,7 +256,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
       );
     } else {
       realName = nameText;
-      Routing().moveAndPop(Routes.verificationIDStep3);
+      Routing().move(Routes.verificationIDStep3);
     }
   }
 
@@ -593,7 +593,7 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     }
   }
 
-  void retryTakeIdCard() {
+  void retryTakeIdCard({bool fromBottomSheet = false}) {
     // imagePath = "";
     selfiePath = "";
     scannedText = "";
@@ -608,7 +608,14 @@ class VerificationIDNotifier with ChangeNotifier implements CameraInterface {
     pickedSupportingDocs = [];
     genderController.clear();
 
-    Routing().moveAndPop(Routes.verificationIDStep2);
+    if (fromBottomSheet) {
+      Routing().moveBack();
+      Routing().moveBack();
+    } else {
+      Routing().moveBack();
+    }
+
+    // Routing().moveAndPop(Routes.verificationIDStep2);
   }
 
   void backFromSelfie(BuildContext context) {
