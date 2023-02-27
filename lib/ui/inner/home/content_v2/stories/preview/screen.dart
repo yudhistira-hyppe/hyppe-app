@@ -88,7 +88,7 @@ class _HyppePreviewStoriesState extends State<HyppePreviewStories> {
                       child: CustomErrorWidget(
                         padding: const EdgeInsets.only(left: 20, top: 16, bottom: 16),
                         errorType: ErrorType.peopleStory,
-                        axis: Axis.horizontal,
+                        isVertical: false,
                         iconSize: 40,
                         // function: () => notifier.initialPeopleStories(context),
                       ),

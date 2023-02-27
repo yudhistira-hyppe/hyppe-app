@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomErrorWidget extends StatelessWidget {
-  final Axis axis;
+  final bool isVertical;
   final double? iconSize;
   final Function? function;
   final ErrorType? errorType;
@@ -20,7 +20,7 @@ class CustomErrorWidget extends StatelessWidget {
       this.function,
       this.iconSize,
       required this.errorType,
-      this.axis = Axis.vertical,
+      this.isVertical = true,
       this.padding = const EdgeInsets.symmetric(horizontal: 16)})
       : super(key: key);
 
@@ -30,7 +30,7 @@ class CustomErrorWidget extends StatelessWidget {
 
     return Consumer2<ErrorService, TranslateNotifierV2>(
       builder: (_, value, value2, __) {
-        return GestureDetector(
+        return isVertical ? GestureDetector(
           onTap: () async => await value.refresh(this, function),
           child: Padding(
             padding: padding,
@@ -44,7 +44,7 @@ class CustomErrorWidget extends StatelessWidget {
                 ),
                 Center(
                   child: Flex(
-                    direction: axis,
+                    direction: Axis.vertical,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomIconWidget(
@@ -67,6 +67,29 @@ class CustomErrorWidget extends StatelessWidget {
                 )
               ],
             ),
+          ),
+        ) : SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomIconWidget(
+                iconData: "${AssetPath.vectorPath}unexpected-error.svg",
+                defaultColor: false,
+                height: iconSize,
+                width: iconSize,
+              ),
+              eightPx,
+              value.refreshing(this)
+                  ? UnconstrainedBox(child: CircularProgressIndicator(color: theme.colorScheme.primary, strokeWidth: 2.0))
+                  : CustomTextWidget(textToDisplay: "${value2.translate.sorryUnexpectedError}", textStyle: theme.textTheme.subtitle1),
+              if (errorType != ErrorType.peopleStory) fourPx,
+              if (errorType != ErrorType.peopleStory)
+                CustomTextWidget(
+                    textToDisplay: "${value2.translate.weAreWorkingOnFixingTheProblemBeBackSoon}",
+                    textStyle: theme.textTheme.caption?.copyWith(color: theme.colorScheme.secondary))
+            ],
           ),
         );
       },
