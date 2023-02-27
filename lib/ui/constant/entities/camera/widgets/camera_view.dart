@@ -65,11 +65,6 @@ class _CameraViewState extends State<CameraView> {
         "preview": "preview.png"
       },
       {
-        "path": "FreeBeauty",
-        "efect": "freebeauty.deepar",
-        "preview": "preview.png"
-      },
-      {
         "path": "Jokester",
         "efect": "jokerster.deepar",
         "preview": "preview.png"

@@ -23,6 +23,1813 @@
 	},
 	"buffers":
 	[
+		{
+			"contents": "Searching 787 files for \"runApp\" (case sensitive)\n\n~/Work/HYPPE/Flutter-Frontend/lib/app.dart:\n   57      }\n   58  \n   59:     runApp(Hyppe());\n   60:     // runApp(ChangeNotifierProvider.value(\n   61      //     value: MainNotifier(), // Same object as above\n   62      //     child: Hyppe()));\n\n2 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 317,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			},
+			"undo_stack":
+			[
+			]
+		},
+		{
+			"file": "lib/app.dart",
+			"redo_stack":
+			[
+				[
+					99,
+					1,
+					"insert",
+					{
+						"characters": "sj"
+					},
+					"AwAAAIsGAAAAAAAAiwYAAAAAAAABAAAAaosGAAAAAAAAlQYAAAAAAAAAAAAAigYAAAAAAACKBgAAAAAAAAEAAABz",
+					"AQAAAAAAAAABAAAAjAYAAAAAAACMBgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					98,
+					1,
+					"unindent",
+					null,
+					"AQAAAIQGAAAAAAAAhgYAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAigYAAAAAAACUBgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					53,
+					1,
+					"left_delete",
+					null,
+					"AQAAAC4HAAAAAAAAWAcAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALgcAAAAAAAAuBwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					49,
+					1,
+					"left_delete",
+					null,
+					"AQAAAJkIAAAAAAAAHAkAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAmQgAAAAAAACZCAAAAAAAAAAAAAAAAPC/"
+				]
+			],
+			"settings":
+			{
+				"buffer_size": 2906,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+			]
+		},
+		{
+			"contents": "mongodump --host localhost:27022 --db ProdAll --collection userbasics --gzip --out db/\n\n\nIklan 1-7\n\n\n3571 kredit per hari",
+			"settings":
+			{
+				"buffer_size": 121,
+				"line_ending": "Unix",
+				"name": "mongodump --host localhost:27022 --db ProdAll --co"
+			},
+			"undo_stack":
+			[
+				[
+					1,
+					1,
+					"paste",
+					null,
+					"AQAAAAAAAAAAAAAAqQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					5,
+					1,
+					"insert",
+					{
+						"characters": "localhost\""
+					},
+					"CwAAABEAAAAAAAAAEgAAAAAAAAAAAAAAEgAAAAAAAAASAAAAAAAAABkAAAA8aG9zdG5hbWUtb2YtbW9uZ29zZXJ2ZXI+EgAAAAAAAAATAAAAAAAAAAAAAAATAAAAAAAAABQAAAAAAAAAAAAAABQAAAAAAAAAFQAAAAAAAAAAAAAAFQAAAAAAAAAWAAAAAAAAAAAAAAAWAAAAAAAAABcAAAAAAAAAAAAAABcAAAAAAAAAGAAAAAAAAAAAAAAAGAAAAAAAAAAZAAAAAAAAAAAAAAAZAAAAAAAAABoAAAAAAAAAAAAAABoAAAAAAAAAGwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAEQAAAAAAAAAqAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					6,
+					1,
+					"left_delete",
+					null,
+					"AQAAABoAAAAAAAAAGgAAAAAAAAABAAAAIg",
+					"AQAAAAAAAAABAAAAGwAAAAAAAAAbAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					7,
+					1,
+					"insert",
+					{
+						"characters": ":"
+					},
+					"AQAAABoAAAAAAAAAGwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAGgAAAAAAAAAaAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					8,
+					1,
+					"insert",
+					{
+						"characters": "27017"
+					},
+					"BQAAABsAAAAAAAAAHAAAAAAAAAAAAAAAHAAAAAAAAAAdAAAAAAAAAAAAAAAdAAAAAAAAAB4AAAAAAAAAAAAAAB4AAAAAAAAAHwAAAAAAAAAAAAAAHwAAAAAAAAAgAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAGwAAAAAAAAAbAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					11,
+					1,
+					"left_delete",
+					null,
+					"AQAAACYAAAAAAAAAJgAAAAAAAAAJAAAAPGRiLW5hbWU+",
+					"AQAAAAAAAAABAAAAJgAAAAAAAAAvAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					12,
+					1,
+					"insert",
+					{
+						"characters": "ProdAll"
+					},
+					"BwAAACYAAAAAAAAAJwAAAAAAAAAAAAAAJwAAAAAAAAAoAAAAAAAAAAAAAAAoAAAAAAAAACkAAAAAAAAAAAAAACkAAAAAAAAAKgAAAAAAAAAAAAAAKgAAAAAAAAArAAAAAAAAAAAAAAArAAAAAAAAACwAAAAAAAAAAAAAACwAAAAAAAAALQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJgAAAAAAAAAmAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					15,
+					1,
+					"insert",
+					{
+						"characters": "userbasics"
+					},
+					"CwAAADsAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAA8AAAAAAAAABEAAAA8Y29sbGVjdGlvbi1uYW1lPjwAAAAAAAAAPQAAAAAAAAAAAAAAPQAAAAAAAAA+AAAAAAAAAAAAAAA+AAAAAAAAAD8AAAAAAAAAAAAAAD8AAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAABBAAAAAAAAAAAAAABBAAAAAAAAAEIAAAAAAAAAAAAAAEIAAAAAAAAAQwAAAAAAAAAAAAAAQwAAAAAAAABEAAAAAAAAAAAAAABEAAAAAAAAAEUAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAOwAAAAAAAABMAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					22,
+					1,
+					"left_delete",
+					null,
+					"AQAAAEYAAAAAAAAARgAAAAAAAAAvAAAALS11c2VybmFtZSA8ZGJ1c2VyLW5hbWU+IC0tcGFzc3dvcmQgPHBhc3N3b3JkPiA",
+					"AQAAAAAAAAABAAAAdQAAAAAAAABGAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					25,
+					1,
+					"left_delete",
+					null,
+					"AQAAAFMAAAAAAAAAUwAAAAAAAAATAAAAPC9iYWNrdXAvbG9jYXRpb24vPg",
+					"AQAAAAAAAAABAAAAUwAAAAAAAABmAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					30,
+					2,
+					"left_delete",
+					null,
+					"AgAAAB8AAAAAAAAAHwAAAAAAAAABAAAANx4AAAAAAAAAHgAAAAAAAAABAAAAMQ",
+					"AQAAAAAAAAABAAAAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					31,
+					1,
+					"insert",
+					{
+						"characters": "22"
+					},
+					"AgAAAB4AAAAAAAAAHwAAAAAAAAAAAAAAHwAAAAAAAAAgAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAHgAAAAAAAAAeAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					36,
+					1,
+					"insert",
+					{
+						"characters": "db/"
+					},
+					"AwAAAFMAAAAAAAAAVAAAAAAAAAAAAAAAVAAAAAAAAABVAAAAAAAAAAAAAABVAAAAAAAAAFYAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAUwAAAAAAAABTAAAAAAAAAP///////+9/"
+				],
+				[
+					40,
+					1,
+					"insert",
+					{
+						"characters": "\n\n"
+					},
+					"AgAAAFcAAAAAAAAAWAAAAAAAAAAAAAAAWAAAAAAAAABZAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAVwAAAAAAAABXAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					41,
+					1,
+					"insert",
+					{
+						"characters": "37"
+					},
+					"AgAAAFkAAAAAAAAAWgAAAAAAAAAAAAAAWgAAAAAAAABbAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAWQAAAAAAAABZAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					42,
+					1,
+					"left_delete",
+					null,
+					"AQAAAFoAAAAAAAAAWgAAAAAAAAABAAAANw",
+					"AQAAAAAAAAABAAAAWwAAAAAAAABbAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					43,
+					1,
+					"insert",
+					{
+						"characters": "571"
+					},
+					"AwAAAFoAAAAAAAAAWwAAAAAAAAAAAAAAWwAAAAAAAABcAAAAAAAAAAAAAABcAAAAAAAAAF0AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAWgAAAAAAAABaAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					44,
+					1,
+					"insert",
+					{
+						"characters": " kredit"
+					},
+					"BwAAAF0AAAAAAAAAXgAAAAAAAAAAAAAAXgAAAAAAAABfAAAAAAAAAAAAAABfAAAAAAAAAGAAAAAAAAAAAAAAAGAAAAAAAAAAYQAAAAAAAAAAAAAAYQAAAAAAAABiAAAAAAAAAAAAAABiAAAAAAAAAGMAAAAAAAAAAAAAAGMAAAAAAAAAZAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAXQAAAAAAAABdAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					45,
+					1,
+					"insert",
+					{
+						"characters": " per"
+					},
+					"BAAAAGQAAAAAAAAAZQAAAAAAAAAAAAAAZQAAAAAAAABmAAAAAAAAAAAAAABmAAAAAAAAAGcAAAAAAAAAAAAAAGcAAAAAAAAAaAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAZAAAAAAAAABkAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					46,
+					1,
+					"insert",
+					{
+						"characters": " hari"
+					},
+					"BQAAAGgAAAAAAAAAaQAAAAAAAAAAAAAAaQAAAAAAAABqAAAAAAAAAAAAAABqAAAAAAAAAGsAAAAAAAAAAAAAAGsAAAAAAAAAbAAAAAAAAAAAAAAAbAAAAAAAAABtAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAaAAAAAAAAABoAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					48,
+					1,
+					"insert",
+					{
+						"characters": "\nIklan"
+					},
+					"BgAAAFgAAAAAAAAAWQAAAAAAAAAAAAAAWQAAAAAAAABaAAAAAAAAAAAAAABaAAAAAAAAAFsAAAAAAAAAAAAAAFsAAAAAAAAAXAAAAAAAAAAAAAAAXAAAAAAAAABdAAAAAAAAAAAAAABdAAAAAAAAAF4AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAWAAAAAAAAABYAAAAAAAAAAAAAAAAgGFA"
+				],
+				[
+					49,
+					1,
+					"insert",
+					{
+						"characters": " A"
+					},
+					"AgAAAF4AAAAAAAAAXwAAAAAAAAAAAAAAXwAAAAAAAABgAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAXgAAAAAAAABeAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					50,
+					1,
+					"left_delete",
+					null,
+					"AQAAAF8AAAAAAAAAXwAAAAAAAAABAAAAQQ",
+					"AQAAAAAAAAABAAAAYAAAAAAAAABgAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					51,
+					1,
+					"insert",
+					{
+						"characters": "1-7"
+					},
+					"AwAAAF8AAAAAAAAAYAAAAAAAAAAAAAAAYAAAAAAAAABhAAAAAAAAAAAAAABhAAAAAAAAAGIAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAXwAAAAAAAABfAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					52,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AQAAAGIAAAAAAAAAYwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAYgAAAAAAAABiAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					53,
+					1,
+					"insert",
+					{
+						"characters": "\nTi"
+					},
+					"AwAAAGMAAAAAAAAAZAAAAAAAAAAAAAAAZAAAAAAAAABlAAAAAAAAAAAAAABlAAAAAAAAAGYAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAYwAAAAAAAABjAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					54,
+					2,
+					"left_delete",
+					null,
+					"AgAAAGUAAAAAAAAAZQAAAAAAAAABAAAAaWQAAAAAAAAAZAAAAAAAAAABAAAAVA",
+					"AQAAAAAAAAABAAAAZgAAAAAAAABmAAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"contents": "{\n    \"Input Parameter\": [\n        {\n            \"_id\": ObjectId(\"63493a7157b4a81ec2b5f653\"),\n            \"keyword\": \"jualan\"\n        }\n    ],\n    \"user\": [\n        {\n            \"_id\": ObjectId(\"63493a7157b4a81ec2b5f653\")\n        }\n    ],\n    \"pict\": [\n        {\n            \"boosted\": [ ],\n            \"_id\": \"48838e95-47c8-471b-828a-caeefcc65454\",\n            \"mediaThumbEndpoint\": \"/thumb/48838e95-47c8-471b-828a-caeefcc65454\",\n            \"mediaEndpoint\": \"/stream/48838e95-47c8-471b-828a-caeefcc65454\",\n            \"mediaType\": \"image\",\n            \"createdAt\": \"2022-06-21 12:11:36\",\n            \"updatedAt\": \"2022-06-21 12:11:36\",\n            \"postID\": \"48838e95-47c8-471b-828a-caeefcc65454\",\n            \"email\": \"48838e95-47c8-471b-828a-caeefcc65454\",\n            \"postType\": \"pict\",\n            \"description\": \"jualan\",\n            \"active\": true,\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"9\"),\n                \"likes\": NumberLong(\"5\")\n            }\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"0cd21524-814b-4497-b98f-c0926cce1110\",\n            \"mediaThumbEndpoint\": \"/thumb/0cd21524-814b-4497-b98f-c0926cce1110\",\n            \"mediaEndpoint\": \"/stream/0cd21524-814b-4497-b98f-c0926cce1110\",\n            \"mediaType\": \"image\",\n            \"createdAt\": \"2022-07-08 16:50:21\",\n            \"updatedAt\": \"2022-07-08 16:50:21\",\n            \"postID\": \"0cd21524-814b-4497-b98f-c0926cce1110\",\n            \"email\": \"0cd21524-814b-4497-b98f-c0926cce1110\",\n            \"postType\": \"pict\",\n            \"description\": \"Bubur Ayam BCA, bubur ayam viral di Kelapa Gading yang viral karena porsi ayamnya yang banyak. Ini tempat jualan bubur udah ada dari masih gue kecil, awal-awal mereka di ruko sebelum kayak sekarang di gerobakan. Such a nostalgic.\\n\\nGue memutuskan buat order ini via ojol. Enak, sih gurih bumbunya kerasa. Tapi, kalau order ojol, mereka toppingnya gak seroyal pesen langsung. Dan kalau order ojol, mereka bumbunya kepisah. Jadi, harus racik sendiri.\",\n            \"active\": true,\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"4\"),\n                \"likes\": NumberLong(\"5\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"38e2cca3-920f-43ac-9e56-790727a542b0\",\n            \"mediaThumbEndpoint\": \"/thumb/38e2cca3-920f-43ac-9e56-790727a542b0\",\n            \"mediaEndpoint\": \"/stream/38e2cca3-920f-43ac-9e56-790727a542b0\",\n            \"mediaType\": \"image\",\n            \"createdAt\": \"2022-07-19 13:46:15\",\n            \"updatedAt\": \"2022-07-19 13:46:15\",\n            \"postID\": \"38e2cca3-920f-43ac-9e56-790727a542b0\",\n            \"email\": \"38e2cca3-920f-43ac-9e56-790727a542b0\",\n            \"postType\": \"pict\",\n            \"description\": \"First Love Pattiserie -- Tempat jualan kue yang ada di samping Pizza Marzano, Mall Kelapa Gading. Gue gak mau review banyak2 karena ini udah kunjungan gue ketiga kali. Jadi, bagi yang mau tahu review harga kue, review ambience, sama review service, bisa cek aja di review2 gue sebelumnya.\\n\\n\\nKali ini, gue memutuskan buat cobain kue mereka yang rada lavender. Iya, lavender. Gue sebenarnya pernah coba konsumsi lavender tapi, gue konsumsinya itu diminum karena lavendernya diolah jadi teh. Baru kali ini, gue cobain lavender yang diolah jadi kue.\\n\\nRasanya gimana?\\n\\nHmmm... gue sulit ngedeskripsiin rasanya lebih detail karena ini unik banget. Seriusan. Ada sensasi adem2 yang rada rileks gitu di mulut. Dan gak cuma itu, mereka krimnya juga kerasa, manisnya pas, dan gak kemanisan/bikin enek di mulut.\\n\\nUntuk teksturnya sendiri, ininih yang gue gak suka. Terlalu beku, jadinya susah dipotong. Gue gak tahu apakah mereka pakai tipe krim yang mudah meleleh sampai2 penyajiannya harus beku banget kayak gini.\\n\\nYang jelas, ini bikin gue susah buat potong kuenya. Mesti pakai tenaga. Dan yang pasti, gak bakalan bisa makan pakai table manner. Musti makan barbar karena emang sesusah itu kuenya buat dipotong.\",\n            \"active\": true,\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"0\"),\n                \"likes\": NumberLong(\"6\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"f4e41be4-f89d-47b0-8928-80022b97542e\",\n            \"mediaThumbEndpoint\": \"/thumb/f4e41be4-f89d-47b0-8928-80022b97542e\",\n            \"mediaEndpoint\": \"/stream/f4e41be4-f89d-47b0-8928-80022b97542e\",\n            \"mediaType\": \"image\",\n            \"createdAt\": \"2022-07-19 13:48:07\",\n            \"updatedAt\": \"2022-07-19 13:48:07\",\n            \"postID\": \"f4e41be4-f89d-47b0-8928-80022b97542e\",\n            \"email\": \"f4e41be4-f89d-47b0-8928-80022b97542e\",\n            \"postType\": \"pict\",\n            \"description\": \"Joni Steak -- Tempat jualan steak murah yang ada di Kelapa Gading. Gue udah cobain steak di sini dari mereka masih buka di samping Bakmi GM daerah Gajah Mada. Dulu gue inget banget, mereka masih awal2 itu bukanya di ruko kecil yang sumpeknya minta ampun dan tokonya selalu ramai sampai harus ngantri.\\n\\nSekarang, mereka udah buka banyak cabang di Jakarta (salah satunya di Gading) dan sekarang kedai mereka udah luas, adem, dan gak sumpek lagi.\\n\\nBiasa kalau ke sini, gue pesannya selalu Salmon Steak. Cuma mau agak beda, kali ini gue mencoba Tenderloin Steak seharga 80k. Gimana? Murah banget, kan. Kelewat murah, sih kalau menurut gue.\\n\\nJadi, buat kalian sobat yang duitnya ngepas tapi, mau cobain steak. Joni Steak lah tempatnya! :D .\\n\\nRasanya gimana?\\n\\nGue beli yang tipe well-done dengan saos mushroom dengan fries potato. Kalau dari tekstur, karena gue pesannya well-done, jadinya dia agak sedikit alot pada saat dipotong. Cuma kalau udah masuk ke mulut, dia lama kelamaan mulai melted dan empuk saat dikunyah.\\n\\nUntuk rasanya sendiri, dia ini rasa dari si dagingnya dia dominan ke smokey. Rasa saos mushroomnya sendiri, dia rada dominan ke gurih yang rada smokey di mulur dengan campuran rasa mushroom yang dominan. Untuk kentangnya sendiri, rasanya b aja. Sama lah ya kayak kentang goreng pada umumnya yang plain. Cuma karena makanan sama saosnya udah tasty, it's okay kalau side dishnya dibikin rada plain biar gak terlalu berat rasanya di mulut.\\n\\nUntuk ambience tempatnya enak, dia ada dua lantai. Di lantai 2 sendiri, tempatnya ada indoor sama outdoor. Untuk yang indoor dia adem, tempatnya luas, dan bisa buat kumpul rame2.\\n\\nUntuk pelayanan sendiri, dia ramah dan friendly. Sama proses penyajian makanannya termasuk cepat untuk ukuran restoran steak.\",\n            \"active\": true,\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"0\"),\n                \"likes\": NumberLong(\"6\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"c8b1b1fe-3ce7-46f9-88c2-8fad1c07debd\",\n            \"mediaThumbEndpoint\": \"/thumb/c8b1b1fe-3ce7-46f9-88c2-8fad1c07debd\",\n            \"mediaEndpoint\": \"/stream/c8b1b1fe-3ce7-46f9-88c2-8fad1c07debd\",\n            \"mediaType\": \"image\",\n            \"createdAt\": \"2022-07-27 09:22:00\",\n            \"updatedAt\": \"2022-07-27 09:22:00\",\n            \"postID\": \"c8b1b1fe-3ce7-46f9-88c2-8fad1c07debd\",\n            \"email\": \"c8b1b1fe-3ce7-46f9-88c2-8fad1c07debd\",\n            \"postType\": \"pict\",\n            \"description\": \"Adora Lezat -- Tempat jualan bolu enak yang ada di Jakarta.\\n\\nDi sini, gue mencoba yang rasa Nougat. Yang gue cobain ini yang roll seharga 75k (half-roll)/145k (full-roll). Cukup worth it ya.\\n\\nRasanya gimana?\\n\\nKalau yang nougat ini, dia creamy. Dominan ke manis tapi, ada hint moccanya. Dan karena dia pakai kacang, jadi ada rasa kacang yang ikut dominan di mulut.\\n\\nOverall, ini enak. Tapi, gue suka sama packagingnya. Benar-benar kayak kado dan cakep gitu desainnya.\",\n            \"active\": true,\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"2\"),\n                \"likes\": NumberLong(\"3\")\n            },\n            \"isApsara\": false\n        }\n    ],\n    \"vid\": [\n        {\n            \"boosted\": [ ],\n            \"_id\": \"dc2c6e9d-ddcc-432a-baf1-ea0a85ab1cf7\",\n            \"mediaThumbEndpoint\": \"/thumb/dc2c6e9d-ddcc-432a-baf1-ea0a85ab1cf7\",\n            \"mediaEndpoint\": \"/stream/dc2c6e9d-ddcc-432a-baf1-ea0a85ab1cf7\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-01-21 20:49:31\",\n            \"updatedAt\": \"2022-01-21 20:49:31\",\n            \"postID\": \"dc2c6e9d-ddcc-432a-baf1-ea0a85ab1cf7\",\n            \"email\": \"dc2c6e9d-ddcc-432a-baf1-ea0a85ab1cf7\",\n            \"postType\": \"vid\",\n            \"description\": \"siapa yang mau PUTIH BERSIH tanpa harus minum2 pil pemutih? , boleh banget cobain ini!! 🤩 #jualan #jualandihyppe #trending #trend #personalcare #skincare\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"22\"),\n                \"postRoll\": NumberInt(\"22\"),\n                \"postType\": \"vid\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"11\"),\n                \"postID\": \"dc2c6e9d-ddcc-432a-baf1-ea0a85ab1cf7\",\n                \"email\": \"jeslynflo123@gmail.com\"\n            },\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"6\"),\n                \"likes\": NumberLong(\"10\")\n            }\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"5d3132c5-9d92-44cd-87a7-61688edd99fb\",\n            \"mediaThumbEndpoint\": \"/thumb/5d3132c5-9d92-44cd-87a7-61688edd99fb\",\n            \"mediaEndpoint\": \"/stream/5d3132c5-9d92-44cd-87a7-61688edd99fb\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-09-06 16:03:33\",\n            \"updatedAt\": \"2022-09-06 16:03:33\",\n            \"postID\": \"5d3132c5-9d92-44cd-87a7-61688edd99fb\",\n            \"email\": \"5d3132c5-9d92-44cd-87a7-61688edd99fb\",\n            \"postType\": \"vid\",\n            \"description\": \"Gubug Soto -- Tempat jualan Soto Betawi yang ada di Food Court Ah Poong, Sentul, Bogor.\\n\\nDi sini, gue cobain Soto Betawi khas mereka seharga 50k. Well, menurut gue rada kemahalan lah ya.\\n\\nRasanya gimana?\\n\\nLumayan. Kuahnya berasa dominan gurih dagingnya, jadinya gak bikin enek meskipun mereka pakai susu sebagai base. Isian dagingnya juga balance. Gak yang royal tapi, masih termasuk banyak.\\n\\nPelayanan cukup ramah. #kuliner  #enak  #viral  #bogor  #betawi .\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"52\"),\n                \"postRoll\": NumberInt(\"52\"),\n                \"postType\": \"vid\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"26\"),\n                \"postID\": \"5d3132c5-9d92-44cd-87a7-61688edd99fb\",\n                \"email\": \"jacklyn7a17@gmail.com\"\n            },\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"1\"),\n                \"likes\": NumberLong(\"2\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"b2f69474-64dc-4515-9b2f-f42b76ce55ba\",\n            \"mediaThumbEndpoint\": \"/thumb/b2f69474-64dc-4515-9b2f-f42b76ce55ba\",\n            \"mediaEndpoint\": \"/stream/b2f69474-64dc-4515-9b2f-f42b76ce55ba\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-09-06 16:05:37\",\n            \"updatedAt\": \"2022-09-06 16:05:37\",\n            \"postID\": \"b2f69474-64dc-4515-9b2f-f42b76ce55ba\",\n            \"email\": \"b2f69474-64dc-4515-9b2f-f42b76ce55ba\",\n            \"postType\": \"vid\",\n            \"description\": \"Gubug Soto -- Tempat jualan Soto Betawi yang ada di Food Court Ah Poong, Sentul, Bogor.\\n\\nDi sini, gue cobain Soto Betawi khas mereka seharga 50k. Well, menurut gue rada kemahalan lah ya.\\n\\nRasanya gimana?\\n\\nLumayan. Kuahnya berasa dominan gurih dagingnya, jadinya gak bikin enek meskipun mereka pakai susu sebagai base. Isian dagingnya juga balance. Gak yang royal tapi, masih termasuk banyak.\\n\\nPelayanan cukup ramah. #kuliner  #enak  #viral  #bogor  #betawi .\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"52\"),\n                \"postRoll\": NumberInt(\"52\"),\n                \"postType\": \"vid\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"26\"),\n                \"postID\": \"b2f69474-64dc-4515-9b2f-f42b76ce55ba\",\n                \"email\": \"jacklyn7a17@gmail.com\"\n            },\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"1\"),\n                \"likes\": NumberLong(\"3\")\n            },\n            \"isApsara\": false\n        }\n    ],\n    \"diary\": [\n        {\n            \"boosted\": [ ],\n            \"_id\": \"d830249d-6613-45d3-ad43-9fcc7d3dbb55\",\n            \"mediaThumbEndpoint\": \"/thumb/d830249d-6613-45d3-ad43-9fcc7d3dbb55\",\n            \"mediaEndpoint\": \"/stream/d830249d-6613-45d3-ad43-9fcc7d3dbb55\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-07-25 19:45:03\",\n            \"updatedAt\": \"2022-07-25 19:45:03\",\n            \"postID\": \"d830249d-6613-45d3-ad43-9fcc7d3dbb55\",\n            \"email\": \"d830249d-6613-45d3-ad43-9fcc7d3dbb55\",\n            \"postType\": \"diary\",\n            \"description\": \"Shirokuma -- Tempat jualan dessert imut yang ada di Mall Gandaria City. Entah kenapa, namanya mengingatkanku pada satu anime lucu wkwkwk.\\n\\nDi sini, gue cobain: Dog Chibi Parfait seharga 38k. Worth it lah ya.\\n\\nBentukan es krimnya entah kenapa imut banget, jadi gak tega makan.\\n\\nRasanya gimana?\\n\\nKarena dia eskrim dengan varian green tea, jadi udah ketebak kalau rasanya dominan dan sama dengan rasa green tea ice cream pada umumnya.\\n\\nTapi, gue mau fokus ke rasa milk pudding yang jadi isian si ice cream. Dari tekstur sama rasanya, itu mirip2 tofu dicombine sama susu. Unik banget. Sama ada rasa buahnya juga yang khas, i like it.\\n\\nAmbience tempatnya enak. Lumayan luas dan cocok buat ngechill bentar kalau habis jalan2 di mall.\\n\\nPelayanannya juga ramah dan friendly.\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"47\"),\n                \"postRoll\": NumberInt(\"47\"),\n                \"postType\": \"diary\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"24\"),\n                \"postID\": \"d830249d-6613-45d3-ad43-9fcc7d3dbb55\",\n                \"email\": \"jacklyn7a17@gmail.com\"\n            },\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"0\"),\n                \"likes\": NumberLong(\"1\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"4bf9c664-f523-4e09-8219-fb82e7cde7bc\",\n            \"mediaThumbEndpoint\": \"/thumb/4bf9c664-f523-4e09-8219-fb82e7cde7bc\",\n            \"mediaEndpoint\": \"/stream/4bf9c664-f523-4e09-8219-fb82e7cde7bc\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-07-25 19:47:23\",\n            \"updatedAt\": \"2022-07-25 19:47:23\",\n            \"postID\": \"4bf9c664-f523-4e09-8219-fb82e7cde7bc\",\n            \"email\": \"4bf9c664-f523-4e09-8219-fb82e7cde7bc\",\n            \"postType\": \"diary\",\n            \"description\": \"Shirokuma -- Tempat jualan dessert imut yang ada di Mall Gandaria City. Entah kenapa, namanya mengingatkanku pada satu anime lucu wkwkwk.\\n\\nDi sini, gue cobain: Dog Chibi Parfait seharga 38k. Worth it lah ya.\\n\\nBentukan es krimnya entah kenapa imut banget, jadi gak tega makan.\\n\\nRasanya gimana?\\n\\nKarena dia eskrim dengan varian green tea, jadi udah ketebak kalau rasanya dominan dan sama dengan rasa green tea ice cream pada umumnya.\\n\\nTapi, gue mau fokus ke rasa milk pudding yang jadi isian si ice cream. Dari tekstur sama rasanya, itu mirip2 tofu dicombine sama susu. Unik banget. Sama ada rasa buahnya juga yang khas, i like it.\\n\\nAmbience tempatnya enak. Lumayan luas dan cocok buat ngechill bentar kalau habis jalan2 di mall.\\n\\nPelayanannya juga ramah dan friendly.\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"47\"),\n                \"postRoll\": NumberInt(\"47\"),\n                \"postType\": \"diary\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"24\"),\n                \"postID\": \"4bf9c664-f523-4e09-8219-fb82e7cde7bc\",\n                \"email\": \"jacklyn7a17@gmail.com\"\n            },\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"0\"),\n                \"likes\": NumberLong(\"1\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"a1888518-446c-4837-aaca-8c635cbaef0c\",\n            \"mediaThumbEndpoint\": \"/thumb/a1888518-446c-4837-aaca-8c635cbaef0c\",\n            \"mediaEndpoint\": \"/stream/a1888518-446c-4837-aaca-8c635cbaef0c\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-08-04 13:04:50\",\n            \"updatedAt\": \"2022-08-04 13:04:50\",\n            \"postID\": \"a1888518-446c-4837-aaca-8c635cbaef0c\",\n            \"email\": \"a1888518-446c-4837-aaca-8c635cbaef0c\",\n            \"postType\": \"diary\",\n            \"description\": \"Quesadilla Casa -- Ini merupakan tempat jualan makanan alasa TEX-MEX dan Italia yang ada di Daerah Cempaka Putih. Sebenarnya, mereka juga pernah buka restoran di Daerah Rawamangun. Tapi, baru2 ini udah tutup. Jadi, sekarang mereka cuma fokus buat jualan secara online di GoFood maupun GrabFood.\\n\\nDi sini, gue cobain: Grilled Chicken Burrito seharga 85k. Harganya masih termasuk worth it karena beli satu, kalian udah dapat 2 buritto dengan porsi tebal beserta nasi.\\n\\nRasanya gimana?\\n\\nIni, enak banget! Parah! Kalian wajib cobain. Karena gue pernah cobain burrito waktu pas pergi ke US, ini rasanya mirip banget sama burrito yang biasa dijual di 7 Eleven cabang US. Di dalamnya ada kacang merah, sayur, dan daging.\\n\\nJadi, isiannya ini rich dan rasanya juga rich. Benar-benar authentic kayak lagi dimasak sama orang Mexico langsung. Rasa gurihnya juga dapat dan dominan di mulut. Ditambah, rasa rempahnya itu berasa banget di mulut dengan tortilla yang teksturnya lembut.\\n\\nNasinya juga enak, gurih dan rempahnya dominan berasa.\\n\\nBuat kalian yang pengen cobain makanan Mexico macam burrito dengan rasa yang authentic. Wajib banget, sih order ini.\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"41\"),\n                \"postRoll\": NumberInt(\"41\"),\n                \"postType\": \"diary\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"21\"),\n                \"postID\": \"a1888518-446c-4837-aaca-8c635cbaef0c\",\n                \"email\": \"jacklyn7a17@gmail.com\"\n            },\n            \"location\": \"Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"0\"),\n                \"likes\": NumberLong(\"0\")\n            },\n            \"isApsara\": false\n        },\n        {\n            \"boosted\": [ ],\n            \"_id\": \"e66541e9-4177-45a4-a408-243e7c575cb9\",\n            \"mediaThumbEndpoint\": \"/thumb/e66541e9-4177-45a4-a408-243e7c575cb9\",\n            \"mediaEndpoint\": \"/stream/e66541e9-4177-45a4-a408-243e7c575cb9\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-08-22 12:42:55\",\n            \"updatedAt\": \"2022-08-22 12:42:55\",\n            \"postID\": \"e66541e9-4177-45a4-a408-243e7c575cb9\",\n            \"email\": \"e66541e9-4177-45a4-a408-243e7c575cb9\",\n            \"postType\": \"diary\",\n            \"description\": \"yuk buat grilled chicken sambal colo-colo\\ncari bahan nya di sayurbox \\nlink : https://tagproduct.eu.org/sayurbox  #sayurbox #affiliate #jualan #sayur #fresh #onlineshopping #shoppingonline  @\",\n            \"active\": true,\n            \"metadata\": {\n                \"duration\": NumberInt(\"58\"),\n                \"postRoll\": NumberInt(\"58\"),\n                \"postType\": \"diary\",\n                \"preRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"29\"),\n                \"postID\": \"e66541e9-4177-45a4-a408-243e7c575cb9\",\n                \"email\": \"anggahisseed@gmail.com\"\n            },\n            \"location\": \"Jakarta, Daerah Khusus Ibukota Jakarta, Indonesia\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"comments\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"2\"),\n                \"likes\": NumberLong(\"5\")\n            },\n            \"isApsara\": false\n        },\n        { \n            \"boosted\": [ ],\n            \"_id\": \"0c393507-389c-15ae-13c6-3790c470e765\",\n            \"mediaThumbEndpoint\": \"/thumb/0c393507-389c-15ae-13c6-3790c470e765\",\n            \"mediaEndpoint\": \"/stream/0c393507-389c-15ae-13c6-3790c470e765\",\n            \"mediaType\": \"video\",\n            \"createdAt\": \"2022-11-21 22:36:35\",\n            \"updatedAt\": \"2022-11-21 22:36:35\",\n            \"postID\": \"0c393507-389c-15ae-13c6-3790c470e765\",\n            \"email\": \"0c393507-389c-15ae-13c6-3790c470e765\",\n            \"postType\": \"diary\",\n            \"description\": \"cara membuat sayutt cumi peteee #food  #tutorial  #idejualan\",\n            \"active\": true,\n            \"metadata\": {//dari posts\n                \"postType\": \"diary\",\n                \"duration\": NumberInt(\"52\"),\n                \"postID\": \"0c393507-389c-15ae-13c6-3790c470e765\",\n                \"email\": \"cebloktv@gmail.com\",\n                \"postRoll\": NumberInt(\"0\"),\n                \"midRoll\": NumberInt(\"0\"),\n                \"preRoll\": NumberInt(\"0\")\n            },\n            \"location\": \"\",\n            \"isOwned\": false,\n            \"visibility\": \"PUBLIC\",\n            \"allowComments\": true,\n            \"saleAmount\": NumberInt(\"0\"),\n            \"insight\": {\n                \"shares\": NumberLong(\"0\"),\n                \"views\": NumberLong(\"3\"),\n                \"likes\": NumberLong(\"0\")\n            },\n            \"apsaraId\": \"02ed4203be0e47b8a21bffc37e5caab0\",\n            \"isApsara\": true\n        }\n    ]\n}\n",
+			"settings":
+			{
+				"buffer_size": 24044,
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					1,
+					1,
+					"paste",
+					null,
+					"AQAAAAAAAAAAAAAA5F0AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					51,
+					1,
+					"left_delete",
+					null,
+					"AQAAAAAAAAAAAAAAAAAAAAAAAAAFAAAALy8gMQo",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					74,
+					1,
+					"insert",
+					{
+						"characters": " //mediad"
+					},
+					"CQAAANNYAAAAAAAA1FgAAAAAAAAAAAAA1FgAAAAAAADVWAAAAAAAAAAAAADVWAAAAAAAANZYAAAAAAAAAAAAANZYAAAAAAAA11gAAAAAAAAAAAAA11gAAAAAAADYWAAAAAAAAAAAAADYWAAAAAAAANlYAAAAAAAAAAAAANlYAAAAAAAA2lgAAAAAAAAAAAAA2lgAAAAAAADbWAAAAAAAAAAAAADbWAAAAAAAANxYAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA01gAAAAAAADTWAAAAAAAAP///////+9/"
+				],
+				[
+					75,
+					1,
+					"insert",
+					{
+						"characters": "iaries"
+					},
+					"BgAAANxYAAAAAAAA3VgAAAAAAAAAAAAA3VgAAAAAAADeWAAAAAAAAAAAAADeWAAAAAAAAN9YAAAAAAAAAAAAAN9YAAAAAAAA4FgAAAAAAAAAAAAA4FgAAAAAAADhWAAAAAAAAAAAAADhWAAAAAAAAOJYAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA3FgAAAAAAADcWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					77,
+					1,
+					"insert",
+					{
+						"characters": "//"
+					},
+					"AgAAAC9ZAAAAAAAAMFkAAAAAAAAAAAAAMFkAAAAAAAAxWQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAL1kAAAAAAAAvWQAAAAAAAAAAAAAAyIRA"
+				],
+				[
+					78,
+					2,
+					"left_delete",
+					null,
+					"AgAAADBZAAAAAAAAMFkAAAAAAAABAAAALy9ZAAAAAAAAL1kAAAAAAAABAAAALw",
+					"AQAAAAAAAAABAAAAMVkAAAAAAAAxWQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					79,
+					1,
+					"insert",
+					{
+						"characters": " //mediadiaries"
+					},
+					"DwAAAC9ZAAAAAAAAMFkAAAAAAAAAAAAAMFkAAAAAAAAxWQAAAAAAAAAAAAAxWQAAAAAAADJZAAAAAAAAAAAAADJZAAAAAAAAM1kAAAAAAAAAAAAAM1kAAAAAAAA0WQAAAAAAAAAAAAA0WQAAAAAAADVZAAAAAAAAAAAAADVZAAAAAAAANlkAAAAAAAAAAAAANlkAAAAAAAA3WQAAAAAAAAAAAAA3WQAAAAAAADhZAAAAAAAAAAAAADhZAAAAAAAAOVkAAAAAAAAAAAAAOVkAAAAAAAA6WQAAAAAAAAAAAAA6WQAAAAAAADtZAAAAAAAAAAAAADtZAAAAAAAAPFkAAAAAAAAAAAAAPFkAAAAAAAA9WQAAAAAAAAAAAAA9WQAAAAAAAD5ZAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAL1kAAAAAAAAvWQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					82,
+					1,
+					"insert",
+					{
+						"characters": "dari"
+					},
+					"BAAAADJZAAAAAAAAM1kAAAAAAAAAAAAAM1kAAAAAAAA0WQAAAAAAAAAAAAA0WQAAAAAAADVZAAAAAAAAAAAAADVZAAAAAAAANlkAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAMlkAAAAAAAAyWQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					83,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAADZZAAAAAAAAN1kAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAANlkAAAAAAAA2WQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					86,
+					1,
+					"insert",
+					{
+						"characters": "dari"
+					},
+					"BAAAANZYAAAAAAAA11gAAAAAAAAAAAAA11gAAAAAAADYWAAAAAAAAAAAAADYWAAAAAAAANlYAAAAAAAAAAAAANlYAAAAAAAA2lgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA1lgAAAAAAADWWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					87,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAANpYAAAAAAAA21gAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA2lgAAAAAAADaWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					92,
+					1,
+					"insert",
+					{
+						"characters": "//dari"
+					},
+					"BgAAAPdaAAAAAAAA+FoAAAAAAAAAAAAA+FoAAAAAAAD5WgAAAAAAAAAAAAD5WgAAAAAAAPpaAAAAAAAAAAAAAPpaAAAAAAAA+1oAAAAAAAAAAAAA+1oAAAAAAAD8WgAAAAAAAAAAAAD8WgAAAAAAAP1aAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA91oAAAAAAAD3WgAAAAAAAAAAAAAAQINA"
+				],
+				[
+					93,
+					1,
+					"insert",
+					{
+						"characters": " mediadiarie"
+					},
+					"DAAAAP1aAAAAAAAA/loAAAAAAAAAAAAA/loAAAAAAAD/WgAAAAAAAAAAAAD/WgAAAAAAAABbAAAAAAAAAAAAAABbAAAAAAAAAVsAAAAAAAAAAAAAAVsAAAAAAAACWwAAAAAAAAAAAAACWwAAAAAAAANbAAAAAAAAAAAAAANbAAAAAAAABFsAAAAAAAAAAAAABFsAAAAAAAAFWwAAAAAAAAAAAAAFWwAAAAAAAAZbAAAAAAAAAAAAAAZbAAAAAAAAB1sAAAAAAAAAAAAAB1sAAAAAAAAIWwAAAAAAAAAAAAAIWwAAAAAAAAlbAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA/VoAAAAAAAD9WgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					94,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAAAlbAAAAAAAAClsAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAACVsAAAAAAAAJWwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					99,
+					1,
+					"insert",
+					{
+						"characters": "//parent"
+					},
+					"CAAAACtYAAAAAAAALFgAAAAAAAAAAAAALFgAAAAAAAAtWAAAAAAAAAAAAAAtWAAAAAAAAC5YAAAAAAAAAAAAAC5YAAAAAAAAL1gAAAAAAAAAAAAAL1gAAAAAAAAwWAAAAAAAAAAAAAAwWAAAAAAAADFYAAAAAAAAAAAAADFYAAAAAAAAMlgAAAAAAAAAAAAAMlgAAAAAAAAzWAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAK1gAAAAAAAArWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					100,
+					8,
+					"left_delete",
+					null,
+					"CAAAADJYAAAAAAAAMlgAAAAAAAABAAAAdDFYAAAAAAAAMVgAAAAAAAABAAAAbjBYAAAAAAAAMFgAAAAAAAABAAAAZS9YAAAAAAAAL1gAAAAAAAABAAAAci5YAAAAAAAALlgAAAAAAAABAAAAYS1YAAAAAAAALVgAAAAAAAABAAAAcCxYAAAAAAAALFgAAAAAAAABAAAALytYAAAAAAAAK1gAAAAAAAABAAAALw",
+					"AQAAAAAAAAABAAAAM1gAAAAAAAAzWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					101,
+					1,
+					"insert",
+					{
+						"characters": " //"
+					},
+					"AwAAACtYAAAAAAAALFgAAAAAAAAAAAAALFgAAAAAAAAtWAAAAAAAAAAAAAAtWAAAAAAAAC5YAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAK1gAAAAAAAArWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					102,
+					1,
+					"insert",
+					{
+						"characters": " dari"
+					},
+					"BQAAAC5YAAAAAAAAL1gAAAAAAAAAAAAAL1gAAAAAAAAwWAAAAAAAAAAAAAAwWAAAAAAAADFYAAAAAAAAAAAAADFYAAAAAAAAMlgAAAAAAAAAAAAAMlgAAAAAAAAzWAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALlgAAAAAAAAuWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					103,
+					1,
+					"insert",
+					{
+						"characters": " medi"
+					},
+					"BQAAADNYAAAAAAAANFgAAAAAAAAAAAAANFgAAAAAAAA1WAAAAAAAAAAAAAA1WAAAAAAAADZYAAAAAAAAAAAAADZYAAAAAAAAN1gAAAAAAAAAAAAAN1gAAAAAAAA4WAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAM1gAAAAAAAAzWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					104,
+					1,
+					"insert",
+					{
+						"characters": "adiaries"
+					},
+					"CAAAADhYAAAAAAAAOVgAAAAAAAAAAAAAOVgAAAAAAAA6WAAAAAAAAAAAAAA6WAAAAAAAADtYAAAAAAAAAAAAADtYAAAAAAAAPFgAAAAAAAAAAAAAPFgAAAAAAAA9WAAAAAAAAAAAAAA9WAAAAAAAAD5YAAAAAAAAAAAAAD5YAAAAAAAAP1gAAAAAAAAAAAAAP1gAAAAAAABAWAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAOFgAAAAAAAA4WAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					111,
+					1,
+					"left_delete",
+					null,
+					"AQAAAElZAAAAAAAASVkAAAAAAAAUAAAAIC8vZGFyaSBtZWRpYWRpYXJpZXM",
+					"AQAAAAAAAAABAAAAXVkAAAAAAABJWQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					115,
+					1,
+					"left_delete",
+					null,
+					"AQAAAOhYAAAAAAAA6FgAAAAAAAAUAAAAIC8vZGFyaSBtZWRpYWRpYXJpZXM",
+					"AQAAAAAAAAABAAAA6FgAAAAAAAD8WAAAAAAAAP///////+9/"
+				],
+				[
+					118,
+					1,
+					"insert",
+					{
+						"characters": "posts"
+					},
+					"BgAAAOtaAAAAAAAA7FoAAAAAAAAAAAAA7FoAAAAAAADsWgAAAAAAAAwAAABtZWRpYWRpYXJpZXPsWgAAAAAAAO1aAAAAAAAAAAAAAO1aAAAAAAAA7loAAAAAAAAAAAAA7loAAAAAAADvWgAAAAAAAAAAAADvWgAAAAAAAPBaAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA91oAAAAAAADrWgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					121,
+					1,
+					"left_delete",
+					null,
+					"AQAAAC5YAAAAAAAALlgAAAAAAAABAAAAIA",
+					"AQAAAAAAAAABAAAAL1gAAAAAAAAvWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					124,
+					1,
+					"insert",
+					{
+						"characters": "//dari"
+					},
+					"BgAAAAZdAAAAAAAAB10AAAAAAAAAAAAAB10AAAAAAAAIXQAAAAAAAAAAAAAIXQAAAAAAAAldAAAAAAAAAAAAAAldAAAAAAAACl0AAAAAAAAAAAAACl0AAAAAAAALXQAAAAAAAAAAAAALXQAAAAAAAAxdAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABl0AAAAAAAAGXQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					125,
+					1,
+					"insert",
+					{
+						"characters": " contentevents"
+					},
+					"DgAAAAxdAAAAAAAADV0AAAAAAAAAAAAADV0AAAAAAAAOXQAAAAAAAAAAAAAOXQAAAAAAAA9dAAAAAAAAAAAAAA9dAAAAAAAAEF0AAAAAAAAAAAAAEF0AAAAAAAARXQAAAAAAAAAAAAARXQAAAAAAABJdAAAAAAAAAAAAABJdAAAAAAAAE10AAAAAAAAAAAAAE10AAAAAAAAUXQAAAAAAAAAAAAAUXQAAAAAAABVdAAAAAAAAAAAAABVdAAAAAAAAFl0AAAAAAAAAAAAAFl0AAAAAAAAXXQAAAAAAAAAAAAAXXQAAAAAAABhdAAAAAAAAAAAAABhdAAAAAAAAGV0AAAAAAAAAAAAAGV0AAAAAAAAaXQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAADF0AAAAAAAAMXQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					133,
+					1,
+					"insert",
+					{
+						"characters": "group"
+					},
+					"BQAAAA1dAAAAAAAADl0AAAAAAAAAAAAADl0AAAAAAAAPXQAAAAAAAAAAAAAPXQAAAAAAABBdAAAAAAAAAAAAABBdAAAAAAAAEV0AAAAAAAAAAAAAEV0AAAAAAAASXQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAADV0AAAAAAAANXQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					134,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAABJdAAAAAAAAE10AAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAEl0AAAAAAAASXQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					153,
+					1,
+					"left_delete",
+					null,
+					"AQAAACxYAAAAAAAALFgAAAAAAAATAAAALy9kYXJpIG1lZGlhZGlhcmllcw",
+					"AQAAAAAAAAABAAAAP1gAAAAAAAAsWAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					156,
+					1,
+					"left_delete",
+					null,
+					"AQAAAPNcAAAAAAAA81wAAAAAAAAaAAAALy9kYXJpIGdyb3VwIGNvbnRlbnRldmVudHM",
+					"AQAAAAAAAAABAAAA81wAAAAAAAANXQAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "/Users/yudhis/Work/HYPPE/test/response-soal-1.json",
+			"settings":
+			{
+				"buffer_size": 421827,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					1,
+					1,
+					"paste",
+					null,
+					"AQAAAAAAAAAAAAAAmW8GAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"left_delete",
+					null,
+					"AQAAAA8AAAAAAAAADwAAAAAAAAAFAAAALy8gMQo",
+					"AQAAAAAAAAABAAAADwAAAAAAAAAUAAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					19,
+					1,
+					"insert",
+					{
+						"characters": " //m"
+					},
+					"BAAAACgAAAAAAAAAKQAAAAAAAAAAAAAAKQAAAAAAAAAqAAAAAAAAAAAAAAAqAAAAAAAAACsAAAAAAAAAAAAAACsAAAAAAAAALAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAKAAAAAAAAAAoAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					20,
+					4,
+					"left_delete",
+					null,
+					"BAAAACsAAAAAAAAAKwAAAAAAAAABAAAAbSoAAAAAAAAAKgAAAAAAAAABAAAALykAAAAAAAAAKQAAAAAAAAABAAAALygAAAAAAAAAKAAAAAAAAAABAAAAIA",
+					"AQAAAAAAAAABAAAALAAAAAAAAAAsAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					23,
+					1,
+					"left_delete",
+					null,
+					"AQAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAa2V5d29yZDogImRlIgoK",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					28,
+					1,
+					"insert",
+					{
+						"characters": " //m"
+					},
+					"BAAAABkAAAAAAAAAGgAAAAAAAAAAAAAAGgAAAAAAAAAbAAAAAAAAAAAAAAAbAAAAAAAAABwAAAAAAAAAAAAAABwAAAAAAAAAHQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAGQAAAAAAAAAZAAAAAAAAAAAAAAAAwFZA"
+				],
+				[
+					29,
+					1,
+					"left_delete",
+					null,
+					"AQAAABwAAAAAAAAAHAAAAAAAAAABAAAAbQ",
+					"AQAAAAAAAAABAAAAHQAAAAAAAAAdAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					30,
+					1,
+					"insert",
+					{
+						"characters": " EM"
+					},
+					"AwAAABwAAAAAAAAAHQAAAAAAAAAAAAAAHQAAAAAAAAAeAAAAAAAAAAAAAAAeAAAAAAAAAB8AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAHAAAAAAAAAAcAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					31,
+					2,
+					"left_delete",
+					null,
+					"AgAAAB4AAAAAAAAAHgAAAAAAAAABAAAATR0AAAAAAAAAHQAAAAAAAAABAAAARQ",
+					"AQAAAAAAAAABAAAAHwAAAAAAAAAfAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					32,
+					1,
+					"insert",
+					{
+						"characters": "MEMILIKI"
+					},
+					"CAAAAB0AAAAAAAAAHgAAAAAAAAAAAAAAHgAAAAAAAAAfAAAAAAAAAAAAAAAfAAAAAAAAACAAAAAAAAAAAAAAACAAAAAAAAAAIQAAAAAAAAAAAAAAIQAAAAAAAAAiAAAAAAAAAAAAAAAiAAAAAAAAACMAAAAAAAAAAAAAACMAAAAAAAAAJAAAAAAAAAAAAAAAJAAAAAAAAAAlAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAHQAAAAAAAAAdAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					33,
+					1,
+					"insert",
+					{
+						"characters": " PRO"
+					},
+					"BAAAACUAAAAAAAAAJgAAAAAAAAAAAAAAJgAAAAAAAAAnAAAAAAAAAAAAAAAnAAAAAAAAACgAAAAAAAAAAAAAACgAAAAAAAAAKQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJQAAAAAAAAAlAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					34,
+					3,
+					"left_delete",
+					null,
+					"AwAAACgAAAAAAAAAKAAAAAAAAAABAAAATycAAAAAAAAAJwAAAAAAAAABAAAAUiYAAAAAAAAAJgAAAAAAAAABAAAAUA",
+					"AQAAAAAAAAABAAAAKQAAAAAAAAApAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					35,
+					1,
+					"insert",
+					{
+						"characters": "M"
+					},
+					"AQAAACYAAAAAAAAAJwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJgAAAAAAAAAmAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					36,
+					1,
+					"left_delete",
+					null,
+					"AQAAACYAAAAAAAAAJgAAAAAAAAABAAAATQ",
+					"AQAAAAAAAAABAAAAJwAAAAAAAAAnAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					37,
+					1,
+					"insert",
+					{
+						"characters": "PROFILE"
+					},
+					"BwAAACYAAAAAAAAAJwAAAAAAAAAAAAAAJwAAAAAAAAAoAAAAAAAAAAAAAAAoAAAAAAAAACkAAAAAAAAAAAAAACkAAAAAAAAAKgAAAAAAAAAAAAAAKgAAAAAAAAArAAAAAAAAAAAAAAArAAAAAAAAACwAAAAAAAAAAAAAACwAAAAAAAAALQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJgAAAAAAAAAmAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					38,
+					1,
+					"insert",
+					{
+						"characters": " PICTURE"
+					},
+					"CAAAAC0AAAAAAAAALgAAAAAAAAAAAAAALgAAAAAAAAAvAAAAAAAAAAAAAAAvAAAAAAAAADAAAAAAAAAAAAAAADAAAAAAAAAAMQAAAAAAAAAAAAAAMQAAAAAAAAAyAAAAAAAAAAAAAAAyAAAAAAAAADMAAAAAAAAAAAAAADMAAAAAAAAANAAAAAAAAAAAAAAANAAAAAAAAAA1AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALQAAAAAAAAAtAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					41,
+					1,
+					"insert",
+					{
+						"characters": " //"
+					},
+					"AwAAANEEAAAAAAAA0gQAAAAAAAAAAAAA0gQAAAAAAADTBAAAAAAAAAAAAADTBAAAAAAAANQEAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA0QQAAAAAAADRBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					42,
+					1,
+					"insert",
+					{
+						"characters": " TIDAK"
+					},
+					"BgAAANQEAAAAAAAA1QQAAAAAAAAAAAAA1QQAAAAAAADWBAAAAAAAAAAAAADWBAAAAAAAANcEAAAAAAAAAAAAANcEAAAAAAAA2AQAAAAAAAAAAAAA2AQAAAAAAADZBAAAAAAAAAAAAADZBAAAAAAAANoEAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA1AQAAAAAAADUBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					43,
+					1,
+					"insert",
+					{
+						"characters": " MEMILIKI"
+					},
+					"CQAAANoEAAAAAAAA2wQAAAAAAAAAAAAA2wQAAAAAAADcBAAAAAAAAAAAAADcBAAAAAAAAN0EAAAAAAAAAAAAAN0EAAAAAAAA3gQAAAAAAAAAAAAA3gQAAAAAAADfBAAAAAAAAAAAAADfBAAAAAAAAOAEAAAAAAAAAAAAAOAEAAAAAAAA4QQAAAAAAAAAAAAA4QQAAAAAAADiBAAAAAAAAAAAAADiBAAAAAAAAOMEAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA2gQAAAAAAADaBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					44,
+					1,
+					"insert",
+					{
+						"characters": " PROFILE"
+					},
+					"CAAAAOMEAAAAAAAA5AQAAAAAAAAAAAAA5AQAAAAAAADlBAAAAAAAAAAAAADlBAAAAAAAAOYEAAAAAAAAAAAAAOYEAAAAAAAA5wQAAAAAAAAAAAAA5wQAAAAAAADoBAAAAAAAAAAAAADoBAAAAAAAAOkEAAAAAAAAAAAAAOkEAAAAAAAA6gQAAAAAAAAAAAAA6gQAAAAAAADrBAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA4wQAAAAAAADjBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					45,
+					1,
+					"insert",
+					{
+						"characters": " PICTURE"
+					},
+					"CAAAAOsEAAAAAAAA7AQAAAAAAAAAAAAA7AQAAAAAAADtBAAAAAAAAAAAAADtBAAAAAAAAO4EAAAAAAAAAAAAAO4EAAAAAAAA7wQAAAAAAAAAAAAA7wQAAAAAAADwBAAAAAAAAAAAAADwBAAAAAAAAPEEAAAAAAAAAAAAAPEEAAAAAAAA8gQAAAAAAAAAAAAA8gQAAAAAAADzBAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA6wQAAAAAAADrBAAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "/Users/yudhis/Work/HYPPE/test/response-soal-2.json",
+			"settings":
+			{
+				"buffer_size": 55561,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					1,
+					1,
+					"paste",
+					null,
+					"AQAAAAAAAAAAAAAAS8MAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					120,
+					1,
+					"left_delete",
+					null,
+					"AQAAAFMBAAAAAAAAUwEAAAAAAAAGAAAACi8vIDIK",
+					"AQAAAAAAAAABAAAAUwEAAAAAAABZAQAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					121,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AQAAAFMBAAAAAAAAVAEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAUwEAAAAAAABTAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					125,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AgAAAKICAAAAAAAAowIAAAAAAAAAAAAAowIAAAAAAACjAgAAAAAAAAYAAAAKLy8gMwo",
+					"AQAAAAAAAAABAAAAogIAAAAAAACoAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					140,
+					1,
+					"replace_all",
+					{
+						"close_panel": true
+					},
+					"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"
+				],
+				[
+					144,
+					1,
+					"left_delete",
+					null,
+					"AQAAAAAAAAAAAAAAAAAAAAAAAAAFAAAALy8gMQo",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAAAAAA"
+				],
+				[
+					151,
+					1,
+					"insert",
+					{
+						"characters": "\""
+					},
+					"AQAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					152,
+					1,
+					"left_delete",
+					null,
+					"AQAAAAAAAAAAAAAAAAAAAAAAAAABAAAAIg",
+					"AQAAAAAAAAABAAAAAQAAAAAAAAABAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					153,
+					1,
+					"insert",
+					{
+						"characters": "{\"trxhisto"
+					},
+					"CgAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAQAAAAAAAAACAAAAAAAAAAAAAAACAAAAAAAAAAMAAAAAAAAAAAAAAAMAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAFAAAAAAAAAAAAAAAFAAAAAAAAAAYAAAAAAAAAAAAAAAYAAAAAAAAABwAAAAAAAAAAAAAABwAAAAAAAAAIAAAAAAAAAAAAAAAIAAAAAAAAAAkAAAAAAAAAAAAAAAkAAAAAAAAACgAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					154,
+					1,
+					"insert",
+					{
+						"characters": "ry\":["
+					},
+					"BQAAAAoAAAAAAAAACwAAAAAAAAAAAAAACwAAAAAAAAAMAAAAAAAAAAAAAAAMAAAAAAAAAA0AAAAAAAAAAAAAAA0AAAAAAAAADgAAAAAAAAAAAAAADgAAAAAAAAAPAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAACgAAAAAAAAAKAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					155,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAA8AAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAUAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAADwAAAAAAAAAPAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					158,
+					1,
+					"indent",
+					null,
+					"5AUAABYAAAAAAAAAGgAAAAAAAAAAAAAASwAAAAAAAABPAAAAAAAAAAAAAABmAAAAAAAAAGoAAAAAAAAAAAAAAIIAAAAAAAAAhgAAAAAAAAAAAAAAswAAAAAAAAC3AAAAAAAAAAAAAADjAAAAAAAAAOcAAAAAAAAAAAAAAAcBAAAAAAAACwEAAAAAAAAAAAAAMAEAAAAAAAA0AQAAAAAAAAAAAABNAQAAAAAAAFEBAAAAAAAAAAAAAGkBAAAAAAAAbQEAAAAAAAAAAAAAiAEAAAAAAACMAQAAAAAAAAAAAACOAQAAAAAAAJIBAAAAAAAAAAAAAJUBAAAAAAAAmQEAAAAAAAAAAAAAygEAAAAAAADOAQAAAAAAAAAAAADlAQAAAAAAAOkBAAAAAAAAAAAAAAECAAAAAAAABQIAAAAAAAAAAAAAMgIAAAAAAAA2AgAAAAAAAAAAAABiAgAAAAAAAGYCAAAAAAAAAAAAAIYCAAAAAAAAigIAAAAAAAAAAAAArwIAAAAAAACzAgAAAAAAAAAAAADMAgAAAAAAANACAAAAAAAAAAAAAOgCAAAAAAAA7AIAAAAAAAAAAAAABwMAAAAAAAALAwAAAAAAAAAAAAANAwAAAAAAABEDAAAAAAAAAAAAABQDAAAAAAAAGAMAAAAAAAAAAAAASQMAAAAAAABNAwAAAAAAAAAAAABkAwAAAAAAAGgDAAAAAAAAAAAAAIADAAAAAAAAhAMAAAAAAAAAAAAAsQMAAAAAAAC1AwAAAAAAAAAAAADhAwAAAAAAAOUDAAAAAAAAAAAAAAUEAAAAAAAACQQAAAAAAAAAAAAALgQAAAAAAAAyBAAAAAAAAAAAAABLBAAAAAAAAE8EAAAAAAAAAAAAAGcEAAAAAAAAawQAAAAAAAAAAAAAhgQAAAAAAACKBAAAAAAAAAAAAACNBAAAAAAAAJEEAAAAAAAAAAAAAJMEAAAAAAAAlwQAAAAAAAAAAAAAyAQAAAAAAADMBAAAAAAAAAAAAADjBAAAAAAAAOcEAAAAAAAAAAAAAP8EAAAAAAAAAwUAAAAAAAAAAAAAMAUAAAAAAAA0BQAAAAAAAAAAAABgBQAAAAAAAGQFAAAAAAAAAAAAAIQFAAAAAAAAiAUAAAAAAAAAAAAArQUAAAAAAACxBQAAAAAAAAAAAADKBQAAAAAAAM4FAAAAAAAAAAAAAOYFAAAAAAAA6gUAAAAAAAAAAAAABQYAAAAAAAAJBgAAAAAAAAAAAAAMBgAAAAAAABAGAAAAAAAAAAAAABIGAAAAAAAAFgYAAAAAAAAAAAAARwYAAAAAAABLBgAAAAAAAAAAAABiBgAAAAAAAGYGAAAAAAAAAAAAAH4GAAAAAAAAggYAAAAAAAAAAAAArwYAAAAAAACzBgAAAAAAAAAAAADfBgAAAAAAAOMGAAAAAAAAAAAAAAMHAAAAAAAABwcAAAAAAAAAAAAALAcAAAAAAAAwBwAAAAAAAAAAAABJBwAAAAAAAE0HAAAAAAAAAAAAAGUHAAAAAAAAaQcAAAAAAAAAAAAAhAcAAAAAAACIBwAAAAAAAAAAAACLBwAAAAAAAI8HAAAAAAAAAAAAAJEHAAAAAAAAlQcAAAAAAAAAAAAAxgcAAAAAAADKBwAAAAAAAAAAAADhBwAAAAAAAOUHAAAAAAAAAAAAAP0HAAAAAAAAAQgAAAAAAAAAAAAALggAAAAAAAAyCAAAAAAAAAAAAABeCAAAAAAAAGIIAAAAAAAAAAAAAIIIAAAAAAAAhggAAAAAAAAAAAAAqwgAAAAAAACvCAAAAAAAAAAAAADICAAAAAAAAMwIAAAAAAAAAAAAAOQIAAAAAAAA6AgAAAAAAAAAAAAAAwkAAAAAAAAHCQAAAAAAAAAAAAAKCQAAAAAAAA4JAAAAAAAAAAAAABAJAAAAAAAAFAkAAAAAAAAAAAAARQkAAAAAAABJCQAAAAAAAAAAAABgCQAAAAAAAGQJAAAAAAAAAAAAAHwJAAAAAAAAgAkAAAAAAAAAAAAArQkAAAAAAACxCQAAAAAAAAAAAADdCQAAAAAAAOEJAAAAAAAAAAAAAAEKAAAAAAAABQoAAAAAAAAAAAAAKgoAAAAAAAAuCgAAAAAAAAAAAABHCgAAAAAAAEsKAAAAAAAAAAAAAGMKAAAAAAAAZwoAAAAAAAAAAAAAggoAAAAAAACGCgAAAAAAAAAAAACJCgAAAAAAAI0KAAAAAAAAAAAAAI8KAAAAAAAAkwoAAAAAAAAAAAAAxAoAAAAAAADICgAAAAAAAAAAAADfCgAAAAAAAOMKAAAAAAAAAAAAAPsKAAAAAAAA/woAAAAAAAAAAAAALAsAAAAAAAAwCwAAAAAAAAAAAABcCwAAAAAAAGALAAAAAAAAAAAAAIALAAAAAAAAhAsAAAAAAAAAAAAAqQsAAAAAAACtCwAAAAAAAAAAAADGCwAAAAAAAMoLAAAAAAAAAAAAAOILAAAAAAAA5gsAAAAAAAAAAAAAAQwAAAAAAAAFDAAAAAAAAAAAAAAIDAAAAAAAAAwMAAAAAAAAAAAAAA4MAAAAAAAAEgwAAAAAAAAAAAAAQwwAAAAAAABHDAAAAAAAAAAAAABeDAAAAAAAAGIMAAAAAAAAAAAAAHoMAAAAAAAAfgwAAAAAAAAAAAAAqwwAAAAAAACvDAAAAAAAAAAAAADbDAAAAAAAAN8MAAAAAAAAAAAAAP8MAAAAAAAAAw0AAAAAAAAAAAAAKA0AAAAAAAAsDQAAAAAAAAAAAABFDQAAAAAAAEkNAAAAAAAAAAAAAGENAAAAAAAAZQ0AAAAAAAAAAAAAgA0AAAAAAACEDQAAAAAAAAAAAACHDQAAAAAAAIsNAAAAAAAAAAAAAI0NAAAAAAAAkQ0AAAAAAAAAAAAAwg0AAAAAAADGDQAAAAAAAAAAAADdDQAAAAAAAOENAAAAAAAAAAAAAPkNAAAAAAAA/Q0AAAAAAAAAAAAAKg4AAAAAAAAuDgAAAAAAAAAAAABaDgAAAAAAAF4OAAAAAAAAAAAAAH4OAAAAAAAAgg4AAAAAAAAAAAAApw4AAAAAAACrDgAAAAAAAAAAAADEDgAAAAAAAMgOAAAAAAAAAAAAAOAOAAAAAAAA5A4AAAAAAAAAAAAA/w4AAAAAAAADDwAAAAAAAAAAAAAGDwAAAAAAAAoPAAAAAAAAAAAAAAwPAAAAAAAAEA8AAAAAAAAAAAAAQQ8AAAAAAABFDwAAAAAAAAAAAABcDwAAAAAAAGAPAAAAAAAAAAAAAHgPAAAAAAAAfA8AAAAAAAAAAAAAqQ8AAAAAAACtDwAAAAAAAAAAAADZDwAAAAAAAN0PAAAAAAAAAAAAAP0PAAAAAAAAARAAAAAAAAAAAAAAJhAAAAAAAAAqEAAAAAAAAAAAAABDEAAAAAAAAEcQAAAAAAAAAAAAAF8QAAAAAAAAYxAAAAAAAAAAAAAAfhAAAAAAAACCEAAAAAAAAAAAAACFEAAAAAAAAIkQAAAAAAAAAAAAAIsQAAAAAAAAjxAAAAAAAAAAAAAAwBAAAAAAAADEEAAAAAAAAAAAAADbEAAAAAAAAN8QAAAAAAAAAAAAAPcQAAAAAAAA+xAAAAAAAAAAAAAAKBEAAAAAAAAsEQAAAAAAAAAAAABYEQAAAAAAAFwRAAAAAAAAAAAAAHwRAAAAAAAAgBEAAAAAAAAAAAAApREAAAAAAACpEQAAAAAAAAAAAADCEQAAAAAAAMYRAAAAAAAAAAAAAN4RAAAAAAAA4hEAAAAAAAAAAAAA/REAAAAAAAABEgAAAAAAAAAAAAAEEgAAAAAAAAgSAAAAAAAAAAAAAAoSAAAAAAAADhIAAAAAAAAAAAAAPxIAAAAAAABDEgAAAAAAAAAAAABaEgAAAAAAAF4SAAAAAAAAAAAAAHYSAAAAAAAAehIAAAAAAAAAAAAApxIAAAAAAACrEgAAAAAAAAAAAADXEgAAAAAAANsSAAAAAAAAAAAAAPsSAAAAAAAA/xIAAAAAAAAAAAAAJBMAAAAAAAAoEwAAAAAAAAAAAABBEwAAAAAAAEUTAAAAAAAAAAAAAF0TAAAAAAAAYRMAAAAAAAAAAAAAfBMAAAAAAACAEwAAAAAAAAAAAACDEwAAAAAAAIcTAAAAAAAAAAAAAIkTAAAAAAAAjRMAAAAAAAAAAAAAvhMAAAAAAADCEwAAAAAAAAAAAADZEwAAAAAAAN0TAAAAAAAAAAAAAPUTAAAAAAAA+RMAAAAAAAAAAAAAJhQAAAAAAAAqFAAAAAAAAAAAAABWFAAAAAAAAFoUAAAAAAAAAAAAAHoUAAAAAAAAfhQAAAAAAAAAAAAAoxQAAAAAAACnFAAAAAAAAAAAAADAFAAAAAAAAMQUAAAAAAAAAAAAANwUAAAAAAAA4BQAAAAAAAAAAAAA+xQAAAAAAAD/FAAAAAAAAAAAAAACFQAAAAAAAAYVAAAAAAAAAAAAAAgVAAAAAAAADBUAAAAAAAAAAAAAPRUAAAAAAABBFQAAAAAAAAAAAABYFQAAAAAAAFwVAAAAAAAAAAAAAHQVAAAAAAAAeBUAAAAAAAAAAAAApRUAAAAAAACpFQAAAAAAAAAAAADVFQAAAAAAANkVAAAAAAAAAAAAAPkVAAAAAAAA/RUAAAAAAAAAAAAAIhYAAAAAAAAmFgAAAAAAAAAAAAA/FgAAAAAAAEMWAAAAAAAAAAAAAFsWAAAAAAAAXxYAAAAAAAAAAAAAehYAAAAAAAB+FgAAAAAAAAAAAACBFgAAAAAAAIUWAAAAAAAAAAAAAIcWAAAAAAAAixYAAAAAAAAAAAAAvBYAAAAAAADAFgAAAAAAAAAAAADXFgAAAAAAANsWAAAAAAAAAAAAAPMWAAAAAAAA9xYAAAAAAAAAAAAAJBcAAAAAAAAoFwAAAAAAAAAAAABUFwAAAAAAAFgXAAAAAAAAAAAAAHgXAAAAAAAAfBcAAAAAAAAAAAAAoRcAAAAAAAClFwAAAAAAAAAAAAC+FwAAAAAAAMIXAAAAAAAAAAAAANoXAAAAAAAA3hcAAAAAAAAAAAAA+RcAAAAAAAD9FwAAAAAAAAAAAAAAGAAAAAAAAAQYAAAAAAAAAAAAAAYYAAAAAAAAChgAAAAAAAAAAAAAOxgAAAAAAAA/GAAAAAAAAAAAAABWGAAAAAAAAFoYAAAAAAAAAAAAAHIYAAAAAAAAdhgAAAAAAAAAAAAAoxgAAAAAAACnGAAAAAAAAAAAAADTGAAAAAAAANcYAAAAAAAAAAAAAPcYAAAAAAAA+xgAAAAAAAAAAAAAIBkAAAAAAAAkGQAAAAAAAAAAAAA9GQAAAAAAAEEZAAAAAAAAAAAAAFkZAAAAAAAAXRkAAAAAAAAAAAAAeBkAAAAAAAB8GQAAAAAAAAAAAAB/GQAAAAAAAIMZAAAAAAAAAAAAAIUZAAAAAAAAiRkAAAAAAAAAAAAAuhkAAAAAAAC+GQAAAAAAAAAAAADVGQAAAAAAANkZAAAAAAAAAAAAAPEZAAAAAAAA9RkAAAAAAAAAAAAAIhoAAAAAAAAmGgAAAAAAAAAAAABSGgAAAAAAAFYaAAAAAAAAAAAAAHYaAAAAAAAAehoAAAAAAAAAAAAAnxoAAAAAAACjGgAAAAAAAAAAAAC8GgAAAAAAAMAaAAAAAAAAAAAAANgaAAAAAAAA3BoAAAAAAAAAAAAA9xoAAAAAAAD7GgAAAAAAAAAAAAD+GgAAAAAAAAIbAAAAAAAAAAAAAAQbAAAAAAAACBsAAAAAAAAAAAAAORsAAAAAAAA9GwAAAAAAAAAAAABUGwAAAAAAAFgbAAAAAAAAAAAAAHAbAAAAAAAAdBsAAAAAAAAAAAAAoRsAAAAAAAClGwAAAAAAAAAAAADRGwAAAAAAANUbAAAAAAAAAAAAAPUbAAAAAAAA+RsAAAAAAAAAAAAAHhwAAAAAAAAiHAAAAAAAAAAAAAA7HAAAAAAAAD8cAAAAAAAAAAAAAFccAAAAAAAAWxwAAAAAAAAAAAAAdhwAAAAAAAB6HAAAAAAAAAAAAAB9HAAAAAAAAIEcAAAAAAAAAAAAAIMcAAAAAAAAhxwAAAAAAAAAAAAAuBwAAAAAAAC8HAAAAAAAAAAAAADTHAAAAAAAANccAAAAAAAAAAAAAO8cAAAAAAAA8xwAAAAAAAAAAAAAIB0AAAAAAAAkHQAAAAAAAAAAAABQHQAAAAAAAFQdAAAAAAAAAAAAAHQdAAAAAAAAeB0AAAAAAAAAAAAAnR0AAAAAAAChHQAAAAAAAAAAAAC6HQAAAAAAAL4dAAAAAAAAAAAAANYdAAAAAAAA2h0AAAAAAAAAAAAA9R0AAAAAAAD5HQAAAAAAAAAAAAD8HQAAAAAAAAAeAAAAAAAAAAAAAAIeAAAAAAAABh4AAAAAAAAAAAAANx4AAAAAAAA7HgAAAAAAAAAAAABSHgAAAAAAAFYeAAAAAAAAAAAAAG4eAAAAAAAAch4AAAAAAAAAAAAAnx4AAAAAAACjHgAAAAAAAAAAAADPHgAAAAAAANMeAAAAAAAAAAAAAPMeAAAAAAAA9x4AAAAAAAAAAAAAHB8AAAAAAAAgHwAAAAAAAAAAAAA5HwAAAAAAAD0fAAAAAAAAAAAAAFUfAAAAAAAAWR8AAAAAAAAAAAAAdB8AAAAAAAB4HwAAAAAAAAAAAAB7HwAAAAAAAH8fAAAAAAAAAAAAAIEfAAAAAAAAhR8AAAAAAAAAAAAAth8AAAAAAAC6HwAAAAAAAAAAAADRHwAAAAAAANUfAAAAAAAAAAAAAO0fAAAAAAAA8R8AAAAAAAAAAAAAHiAAAAAAAAAiIAAAAAAAAAAAAABOIAAAAAAAAFIgAAAAAAAAAAAAAHIgAAAAAAAAdiAAAAAAAAAAAAAAmyAAAAAAAACfIAAAAAAAAAAAAAC4IAAAAAAAALwgAAAAAAAAAAAAANQgAAAAAAAA2CAAAAAAAAAAAAAA8yAAAAAAAAD3IAAAAAAAAAAAAAD6IAAAAAAAAP4gAAAAAAAAAAAAAAAhAAAAAAAABCEAAAAAAAAAAAAANSEAAAAAAAA5IQAAAAAAAAAAAABQIQAAAAAAAFQhAAAAAAAAAAAAAGwhAAAAAAAAcCEAAAAAAAAAAAAAnSEAAAAAAAChIQAAAAAAAAAAAADNIQAAAAAAANEhAAAAAAAAAAAAAPEhAAAAAAAA9SEAAAAAAAAAAAAAGiIAAAAAAAAeIgAAAAAAAAAAAAA3IgAAAAAAADsiAAAAAAAAAAAAAFMiAAAAAAAAVyIAAAAAAAAAAAAAciIAAAAAAAB2IgAAAAAAAAAAAAB5IgAAAAAAAH0iAAAAAAAAAAAAAH8iAAAAAAAAgyIAAAAAAAAAAAAAtCIAAAAAAAC4IgAAAAAAAAAAAADPIgAAAAAAANMiAAAAAAAAAAAAAOsiAAAAAAAA7yIAAAAAAAAAAAAAHCMAAAAAAAAgIwAAAAAAAAAAAABMIwAAAAAAAFAjAAAAAAAAAAAAAHAjAAAAAAAAdCMAAAAAAAAAAAAAmSMAAAAAAACdIwAAAAAAAAAAAAC2IwAAAAAAALojAAAAAAAAAAAAANIjAAAAAAAA1iMAAAAAAAAAAAAA8SMAAAAAAAD1IwAAAAAAAAAAAAD4IwAAAAAAAPwjAAAAAAAAAAAAAP4jAAAAAAAAAiQAAAAAAAAAAAAAMyQAAAAAAAA3JAAAAAAAAAAAAABOJAAAAAAAAFIkAAAAAAAAAAAAAGokAAAAAAAAbiQAAAAAAAAAAAAAmyQAAAAAAACfJAAAAAAAAAAAAADLJAAAAAAAAM8kAAAAAAAAAAAAAO8kAAAAAAAA8yQAAAAAAAAAAAAAGCUAAAAAAAAcJQAAAAAAAAAAAAA1JQAAAAAAADklAAAAAAAAAAAAAFElAAAAAAAAVSUAAAAAAAAAAAAAcCUAAAAAAAB0JQAAAAAAAAAAAAB3JQAAAAAAAHslAAAAAAAAAAAAAH0lAAAAAAAAgSUAAAAAAAAAAAAAsiUAAAAAAAC2JQAAAAAAAAAAAADNJQAAAAAAANElAAAAAAAAAAAAAOklAAAAAAAA7SUAAAAAAAAAAAAAGiYAAAAAAAAeJgAAAAAAAAAAAABKJgAAAAAAAE4mAAAAAAAAAAAAAG4mAAAAAAAAciYAAAAAAAAAAAAAlyYAAAAAAACbJgAAAAAAAAAAAAC0JgAAAAAAALgmAAAAAAAAAAAAANAmAAAAAAAA1CYAAAAAAAAAAAAA7yYAAAAAAADzJgAAAAAAAAAAAAD2JgAAAAAAAPomAAAAAAAAAAAAAPwmAAAAAAAAACcAAAAAAAAAAAAAMScAAAAAAAA1JwAAAAAAAAAAAABpJwAAAAAAAG0nAAAAAAAAAAAAAIEnAAAAAAAAhScAAAAAAAAAAAAAnScAAAAAAAChJwAAAAAAAAAAAADOJwAAAAAAANInAAAAAAAAAAAAAPQnAAAAAAAA+CcAAAAAAAAAAAAAHygAAAAAAAAjKAAAAAAAAAAAAABFKAAAAAAAAEkoAAAAAAAAAAAAAHooAAAAAAAAfigAAAAAAAAAAAAAsCgAAAAAAAC0KAAAAAAAAAAAAADWKAAAAAAAANooAAAAAAAAAAAAAAEpAAAAAAAABSkAAAAAAAAAAAAAHSkAAAAAAAAhKQAAAAAAAAAAAABKKQAAAAAAAE4pAAAAAAAAAAAAAIQpAAAAAAAAiCkAAAAAAAAAAAAAnykAAAAAAACjKQAAAAAAAAAAAADhKQAAAAAAAOUpAAAAAAAAAAAAAP0pAAAAAAAAASoAAAAAAAAAAAAAGSoAAAAAAAAdKgAAAAAAAAAAAAAgKgAAAAAAACQqAAAAAAAAAAAAACYqAAAAAAAAKioAAAAAAAAAAAAAWyoAAAAAAABfKgAAAAAAAAAAAACTKgAAAAAAAJcqAAAAAAAAAAAAAKsqAAAAAAAAryoAAAAAAAAAAAAAxyoAAAAAAADLKgAAAAAAAAAAAAD4KgAAAAAAAPwqAAAAAAAAAAAAAB4rAAAAAAAAIisAAAAAAAAAAAAASSsAAAAAAABNKwAAAAAAAAAAAABvKwAAAAAAAHMrAAAAAAAAAAAAAKQrAAAAAAAAqCsAAAAAAAAAAAAA2isAAAAAAADeKwAAAAAAAAAAAAAALAAAAAAAAAQsAAAAAAAAAAAAACssAAAAAAAALywAAAAAAAAAAAAARywAAAAAAABLLAAAAAAAAAAAAAB0LAAAAAAAAHgsAAAAAAAAAAAAAK4sAAAAAAAAsiwAAAAAAAAAAAAAySwAAAAAAADNLAAAAAAAAAAAAAALLQAAAAAAAA8tAAAAAAAAAAAAACctAAAAAAAAKy0AAAAAAAAAAAAAQy0AAAAAAABHLQAAAAAAAAAAAABKLQAAAAAAAE4tAAAAAAAAAAAAAFAtAAAAAAAAVC0AAAAAAAAAAAAAhS0AAAAAAACJLQAAAAAAAAAAAAC9LQAAAAAAAMEtAAAAAAAAAAAAANUtAAAAAAAA2S0AAAAAAAAAAAAA8S0AAAAAAAD1LQAAAAAAAAAAAAAiLgAAAAAAACYuAAAAAAAAAAAAAEguAAAAAAAATC4AAAAAAAAAAAAAdS4AAAAAAAB5LgAAAAAAAAAAAACbLgAAAAAAAJ8uAAAAAAAAAAAAANAuAAAAAAAA1C4AAAAAAAAAAAAABi8AAAAAAAAKLwAAAAAAAAAAAAAsLwAAAAAAADAvAAAAAAAAAAAAAFcvAAAAAAAAWy8AAAAAAAAAAAAAcy8AAAAAAAB3LwAAAAAAAAAAAACgLwAAAAAAAKQvAAAAAAAAAAAAANovAAAAAAAA3i8AAAAAAAAAAAAA9S8AAAAAAAD5LwAAAAAAAAAAAAAkMAAAAAAAACgwAAAAAAAAAAAAAEAwAAAAAAAARDAAAAAAAAAAAAAAXDAAAAAAAABgMAAAAAAAAAAAAABjMAAAAAAAAGcwAAAAAAAAAAAAAGkwAAAAAAAAbTAAAAAAAAAAAAAAnjAAAAAAAACiMAAAAAAAAAAAAADWMAAAAAAAANowAAAAAAAAAAAAAO4wAAAAAAAA8jAAAAAAAAAAAAAACjEAAAAAAAAOMQAAAAAAAAAAAAA7MQAAAAAAAD8xAAAAAAAAAAAAAGExAAAAAAAAZTEAAAAAAAAAAAAAjjEAAAAAAACSMQAAAAAAAAAAAAC0MQAAAAAAALgxAAAAAAAAAAAAAOkxAAAAAAAA7TEAAAAAAAAAAAAAHzIAAAAAAAAjMgAAAAAAAAAAAABFMgAAAAAAAEkyAAAAAAAAAAAAAHAyAAAAAAAAdDIAAAAAAAAAAAAAjDIAAAAAAACQMgAAAAAAAAAAAAC5MgAAAAAAAL0yAAAAAAAAAAAAAPMyAAAAAAAA9zIAAAAAAAAAAAAADjMAAAAAAAASMwAAAAAAAAAAAAA9MwAAAAAAAEEzAAAAAAAAAAAAAFkzAAAAAAAAXTMAAAAAAAAAAAAAdTMAAAAAAAB5MwAAAAAAAAAAAAB8MwAAAAAAAIAzAAAAAAAAAAAAAIIzAAAAAAAAhjMAAAAAAAAAAAAAtzMAAAAAAAC7MwAAAAAAAAAAAADvMwAAAAAAAPMzAAAAAAAAAAAAAAY0AAAAAAAACjQAAAAAAAAAAAAAIjQAAAAAAAAmNAAAAAAAAAAAAABTNAAAAAAAAFc0AAAAAAAAAAAAAHk0AAAAAAAAfTQAAAAAAAAAAAAApTQAAAAAAACpNAAAAAAAAAAAAADLNAAAAAAAAM80AAAAAAAAAAAAAAA1AAAAAAAABDUAAAAAAAAAAAAANjUAAAAAAAA6NQAAAAAAAAAAAABdNQAAAAAAAGE1AAAAAAAAAAAAAIk1AAAAAAAAjTUAAAAAAAAAAAAApTUAAAAAAACpNQAAAAAAAAAAAADSNQAAAAAAANY1AAAAAAAAAAAAAAw2AAAAAAAAEDYAAAAAAAAAAAAAJzYAAAAAAAArNgAAAAAAAAAAAACONgAAAAAAAJI2AAAAAAAAAAAAAKo2AAAAAAAArjYAAAAAAAAAAAAAyTYAAAAAAADNNgAAAAAAAAAAAADQNgAAAAAAANQ2AAAAAAAAAAAAANY2AAAAAAAA2jYAAAAAAAAAAAAACzcAAAAAAAAPNwAAAAAAAAAAAABDNwAAAAAAAEc3AAAAAAAAAAAAAFs3AAAAAAAAXzcAAAAAAAAAAAAAdzcAAAAAAAB7NwAAAAAAAAAAAACoNwAAAAAAAKw3AAAAAAAAAAAAAM43AAAAAAAA0jcAAAAAAAAAAAAA/DcAAAAAAAAAOAAAAAAAAAAAAAAiOAAAAAAAACY4AAAAAAAAAAAAAFc4AAAAAAAAWzgAAAAAAAAAAAAAjTgAAAAAAACROAAAAAAAAAAAAAC0OAAAAAAAALg4AAAAAAAAAAAAAOA4AAAAAAAA5DgAAAAAAAAAAAAA/DgAAAAAAAAAOQAAAAAAAAAAAAApOQAAAAAAAC05AAAAAAAAAAAAAGM5AAAAAAAAZzkAAAAAAAAAAAAAfjkAAAAAAACCOQAAAAAAAAAAAACsOQAAAAAAALA5AAAAAAAAAAAAAMg5AAAAAAAAzDkAAAAAAAAAAAAA5zkAAAAAAADrOQAAAAAAAAAAAADuOQAAAAAAAPI5AAAAAAAAAAAAAPQ5AAAAAAAA+DkAAAAAAAAAAAAAKToAAAAAAAAtOgAAAAAAAAAAAABhOgAAAAAAAGU6AAAAAAAAAAAAAHg6AAAAAAAAfDoAAAAAAAAAAAAAlDoAAAAAAACYOgAAAAAAAAAAAADFOgAAAAAAAMk6AAAAAAAAAAAAAOs6AAAAAAAA7zoAAAAAAAAAAAAAGTsAAAAAAAAdOwAAAAAAAAAAAAA/OwAAAAAAAEM7AAAAAAAAAAAAAHQ7AAAAAAAAeDsAAAAAAAAAAAAAqjsAAAAAAACuOwAAAAAAAAAAAADQOwAAAAAAANQ7AAAAAAAAAAAAAPs7AAAAAAAA/zsAAAAAAAAAAAAAGDwAAAAAAAAcPAAAAAAAAAAAAABFPAAAAAAAAEk8AAAAAAAAAAAAAH88AAAAAAAAgzwAAAAAAAAAAAAAmjwAAAAAAACePAAAAAAAAAAAAADQPAAAAAAAANQ8AAAAAAAAAAAAAOw8AAAAAAAA8DwAAAAAAAAAAAAACz0AAAAAAAAPPQAAAAAAAAAAAAASPQAAAAAAABY9AAAAAAAAAAAAABg9AAAAAAAAHD0AAAAAAAAAAAAATT0AAAAAAABRPQAAAAAAAAAAAACFPQAAAAAAAIk9AAAAAAAAAAAAAJw9AAAAAAAAoD0AAAAAAAAAAAAAuD0AAAAAAAC8PQAAAAAAAAAAAADpPQAAAAAAAO09AAAAAAAAAAAAAA8+AAAAAAAAEz4AAAAAAAAAAAAAOz4AAAAAAAA/PgAAAAAAAAAAAABfPgAAAAAAAGM+AAAAAAAAAAAAAJQ+AAAAAAAAmD4AAAAAAAAAAAAAyj4AAAAAAADOPgAAAAAAAAAAAADwPgAAAAAAAPQ+AAAAAAAAAAAAABs/AAAAAAAAHz8AAAAAAAAAAAAANz8AAAAAAAA7PwAAAAAAAAAAAABkPwAAAAAAAGg/AAAAAAAAAAAAAJ4/AAAAAAAAoj8AAAAAAAAAAAAAuj8AAAAAAAC+PwAAAAAAAAAAAAAoQAAAAAAAACxAAAAAAAAAAAAAAERAAAAAAAAASEAAAAAAAAAAAAAAY0AAAAAAAABnQAAAAAAAAAAAAABqQAAAAAAAAG5AAAAAAAAAAAAAAHBAAAAAAAAAdEAAAAAAAAAAAAAApUAAAAAAAACpQAAAAAAAAAAAAADdQAAAAAAAAOFAAAAAAAAAAAAAAPRAAAAAAAAA+EAAAAAAAAAAAAAAEEEAAAAAAAAUQQAAAAAAAAAAAABBQQAAAAAAAEVBAAAAAAAAAAAAAGdBAAAAAAAAa0EAAAAAAAAAAAAAk0EAAAAAAACXQQAAAAAAAAAAAAC5QQAAAAAAAL1BAAAAAAAAAAAAAO5BAAAAAAAA8kEAAAAAAAAAAAAAJEIAAAAAAAAoQgAAAAAAAAAAAABKQgAAAAAAAE5CAAAAAAAAAAAAAHVCAAAAAAAAeUIAAAAAAAAAAAAAkUIAAAAAAACVQgAAAAAAAAAAAAC+QgAAAAAAAMJCAAAAAAAAAAAAAPhCAAAAAAAA/EIAAAAAAAAAAAAAFEMAAAAAAAAYQwAAAAAAAAAAAAB2QwAAAAAAAHpDAAAAAAAAAAAAAJJDAAAAAAAAlkMAAAAAAAAAAAAAsUMAAAAAAAC1QwAAAAAAAAAAAAC4QwAAAAAAALxDAAAAAAAAAAAAAL5DAAAAAAAAwkMAAAAAAAAAAAAA80MAAAAAAAD3QwAAAAAAAAAAAAArRAAAAAAAAC9EAAAAAAAAAAAAAEJEAAAAAAAARkQAAAAAAAAAAAAAZEQAAAAAAABoRAAAAAAAAAAAAACVRAAAAAAAAJlEAAAAAAAAAAAAALtEAAAAAAAAv0QAAAAAAAAAAAAA6EQAAAAAAADsRAAAAAAAAAAAAAAORQAAAAAAABJFAAAAAAAAAAAAAENFAAAAAAAAR0UAAAAAAAAAAAAAeUUAAAAAAAB9RQAAAAAAAAAAAACgRQAAAAAAAKRFAAAAAAAAAAAAAMxFAAAAAAAA0EUAAAAAAAAAAAAA6UUAAAAAAADtRQAAAAAAAAAAAAAWRgAAAAAAABpGAAAAAAAAAAAAAFBGAAAAAAAAVEYAAAAAAAAAAAAAbEYAAAAAAABwRgAAAAAAAAAAAACTRgAAAAAAAJdGAAAAAAAAAAAAAK9GAAAAAAAAs0YAAAAAAAAAAAAAzkYAAAAAAADSRgAAAAAAAAAAAADVRgAAAAAAANlGAAAAAAAAAAAAANtGAAAAAAAA30YAAAAAAAAAAAAAEEcAAAAAAAAURwAAAAAAAAAAAABIRwAAAAAAAExHAAAAAAAAAAAAAF9HAAAAAAAAY0cAAAAAAAAAAAAAe0cAAAAAAAB/RwAAAAAAAAAAAACsRwAAAAAAALBHAAAAAAAAAAAAANJHAAAAAAAA1kcAAAAAAAAAAAAA/0cAAAAAAAADSAAAAAAAAAAAAAAjSAAAAAAAACdIAAAAAAAAAAAAAFhIAAAAAAAAXEgAAAAAAAAAAAAAjkgAAAAAAACSSAAAAAAAAAAAAAC2SAAAAAAAALpIAAAAAAAAAAAAAONIAAAAAAAA50gAAAAAAAAAAAAAAEkAAAAAAAAESQAAAAAAAAAAAAAtSQAAAAAAADFJAAAAAAAAAAAAAGdJAAAAAAAAa0kAAAAAAAAAAAAAhEkAAAAAAACISQAAAAAAAAAAAACwSQAAAAAAALRJAAAAAAAAAAAAAMxJAAAAAAAA0EkAAAAAAAAAAAAA60kAAAAAAADvSQAAAAAAAAAAAADySQAAAAAAAPZJAAAAAAAAAAAAAPhJAAAAAAAA/EkAAAAAAAAAAAAALUoAAAAAAAAxSgAAAAAAAAAAAABlSgAAAAAAAGlKAAAAAAAAAAAAAHxKAAAAAAAAgEoAAAAAAAAAAAAAmEoAAAAAAACcSgAAAAAAAAAAAADJSgAAAAAAAM1KAAAAAAAAAAAAAO9KAAAAAAAA80oAAAAAAAAAAAAAHEsAAAAAAAAgSwAAAAAAAAAAAABCSwAAAAAAAEZLAAAAAAAAAAAAAHdLAAAAAAAAe0sAAAAAAAAAAAAArUsAAAAAAACxSwAAAAAAAAAAAADUSwAAAAAAANhLAAAAAAAAAAAAAABMAAAAAAAABEwAAAAAAAAAAAAAHUwAAAAAAAAhTAAAAAAAAAAAAABKTAAAAAAAAE5MAAAAAAAAAAAAAIRMAAAAAAAAiEwAAAAAAAAAAAAAoUwAAAAAAAClTAAAAAAAAAAAAAAaTQAAAAAAAB5NAAAAAAAAAAAAADZNAAAAAAAAOk0AAAAAAAAAAAAAVU0AAAAAAABZTQAAAAAAAAAAAABcTQAAAAAAAGBNAAAAAAAAAAAAAGJNAAAAAAAAZk0AAAAAAAAAAAAAl00AAAAAAACbTQAAAAAAAAAAAADPTQAAAAAAANNNAAAAAAAAAAAAAOdNAAAAAAAA600AAAAAAAAAAAAAA04AAAAAAAAHTgAAAAAAAAAAAAA0TgAAAAAAADhOAAAAAAAAAAAAAFpOAAAAAAAAXk4AAAAAAAAAAAAAh04AAAAAAACLTgAAAAAAAAAAAACtTgAAAAAAALFOAAAAAAAAAAAAAOJOAAAAAAAA5k4AAAAAAAAAAAAAGE8AAAAAAAAcTwAAAAAAAAAAAAA/TwAAAAAAAENPAAAAAAAAAAAAAGtPAAAAAAAAb08AAAAAAAAAAAAAiE8AAAAAAACMTwAAAAAAAAAAAAC1TwAAAAAAALlPAAAAAAAAAAAAAO9PAAAAAAAA808AAAAAAAAAAAAADFAAAAAAAAAQUAAAAAAAAAAAAAA3UAAAAAAAADtQAAAAAAAAAAAAAFNQAAAAAAAAV1AAAAAAAAAAAAAAclAAAAAAAAB2UAAAAAAAAAAAAAB5UAAAAAAAAH1QAAAAAAAAAAAAAH9QAAAAAAAAg1AAAAAAAAAAAAAAtFAAAAAAAAC4UAAAAAAAAAAAAADsUAAAAAAAAPBQAAAAAAAAAAAAAANRAAAAAAAAB1EAAAAAAAAAAAAAH1EAAAAAAAAjUQAAAAAAAAAAAABQUQAAAAAAAFRRAAAAAAAAAAAAAHZRAAAAAAAAelEAAAAAAAAAAAAAo1EAAAAAAACnUQAAAAAAAAAAAADJUQAAAAAAAM1RAAAAAAAAAAAAAP5RAAAAAAAAAlIAAAAAAAAAAAAANFIAAAAAAAA4UgAAAAAAAAAAAABaUgAAAAAAAF5SAAAAAAAAAAAAAIVSAAAAAAAAiVIAAAAAAAAAAAAAolIAAAAAAACmUgAAAAAAAAAAAADPUgAAAAAAANNSAAAAAAAAAAAAAP1SAAAAAAAAAVMAAAAAAAAAAAAAGVMAAAAAAAAdUwAAAAAAAAAAAABQUwAAAAAAAFRTAAAAAAAAAAAAAGxTAAAAAAAAcFMAAAAAAAAAAAAAi1MAAAAAAACPUwAAAAAAAAAAAACSUwAAAAAAAJZTAAAAAAAAAAAAAJhTAAAAAAAAnFMAAAAAAAAAAAAAzVMAAAAAAADRUwAAAAAAAAAAAAAFVAAAAAAAAAlUAAAAAAAAAAAAABxUAAAAAAAAIFQAAAAAAAAAAAAAOFQAAAAAAAA8VAAAAAAAAAAAAABpVAAAAAAAAG1UAAAAAAAAAAAAAI9UAAAAAAAAk1QAAAAAAAAAAAAAvVQAAAAAAADBVAAAAAAAAAAAAADhVAAAAAAAAOVUAAAAAAAAAAAAABZVAAAAAAAAGlUAAAAAAAAAAAAATFUAAAAAAABQVQAAAAAAAAAAAAByVQAAAAAAAHZVAAAAAAAAAAAAAJ1VAAAAAAAAoVUAAAAAAAAAAAAAuVUAAAAAAAC9VQAAAAAAAAAAAADmVQAAAAAAAOpVAAAAAAAAAAAAABRWAAAAAAAAGFYAAAAAAAAAAAAAMFYAAAAAAAA0VgAAAAAAAAAAAABnVgAAAAAAAGtWAAAAAAAAAAAAAINWAAAAAAAAh1YAAAAAAAAAAAAAolYAAAAAAACmVgAAAAAAAAAAAACpVgAAAAAAAK1WAAAAAAAAAAAAAK9WAAAAAAAAs1YAAAAAAAAAAAAA5FYAAAAAAADoVgAAAAAAAAAAAAAcVwAAAAAAACBXAAAAAAAAAAAAADNXAAAAAAAAN1cAAAAAAAAAAAAAVVcAAAAAAABZVwAAAAAAAAAAAACGVwAAAAAAAIpXAAAAAAAAAAAAAKxXAAAAAAAAsFcAAAAAAAAAAAAA2lcAAAAAAADeVwAAAAAAAAAAAAAAWAAAAAAAAARYAAAAAAAAAAAAADVYAAAAAAAAOVgAAAAAAAAAAAAAa1gAAAAAAABvWAAAAAAAAAAAAACSWAAAAAAAAJZYAAAAAAAAAAAAAL5YAAAAAAAAwlgAAAAAAAAAAAAA21gAAAAAAADfWAAAAAAAAAAAAAAIWQAAAAAAAAxZAAAAAAAAAAAAAEJZAAAAAAAARlkAAAAAAAAAAAAAXVkAAAAAAABhWQAAAAAAAAAAAACJWQAAAAAAAI1ZAAAAAAAAAAAAAKVZAAAAAAAAqVkAAAAAAAAAAAAAxFkAAAAAAADIWQAAAAAAAAAAAADLWQAAAAAAAM9ZAAAAAAAAAAAAANFZAAAAAAAA1VkAAAAAAAAAAAAABloAAAAAAAAKWgAAAAAAAAAAAAA+WgAAAAAAAEJaAAAAAAAAAAAAAFVaAAAAAAAAWVoAAAAAAAAAAAAAd1oAAAAAAAB7WgAAAAAAAAAAAACoWgAAAAAAAKxaAAAAAAAAAAAAAM5aAAAAAAAA0loAAAAAAAAAAAAA/FoAAAAAAAAAWwAAAAAAAAAAAAAiWwAAAAAAACZbAAAAAAAAAAAAAFdbAAAAAAAAW1sAAAAAAAAAAAAAjVsAAAAAAACRWwAAAAAAAAAAAAC0WwAAAAAAALhbAAAAAAAAAAAAAOBbAAAAAAAA5FsAAAAAAAAAAAAA/VsAAAAAAAABXAAAAAAAAAAAAAAqXAAAAAAAAC5cAAAAAAAAAAAAAGRcAAAAAAAAaFwAAAAAAAAAAAAAgFwAAAAAAACEXAAAAAAAAAAAAAC3XAAAAAAAALtcAAAAAAAAAAAAANNcAAAAAAAA11wAAAAAAAAAAAAA8lwAAAAAAAD2XAAAAAAAAAAAAAD5XAAAAAAAAP1cAAAAAAAAAAAAAP9cAAAAAAAAA10AAAAAAAAAAAAANF0AAAAAAAA4XQAAAAAAAAAAAABsXQAAAAAAAHBdAAAAAAAAAAAAAINdAAAAAAAAh10AAAAAAAAAAAAAn10AAAAAAACjXQAAAAAAAAAAAADQXQAAAAAAANRdAAAAAAAAAAAAAPZdAAAAAAAA+l0AAAAAAAAAAAAAI14AAAAAAAAnXgAAAAAAAAAAAABJXgAAAAAAAE1eAAAAAAAAAAAAAH5eAAAAAAAAgl4AAAAAAAAAAAAAtF4AAAAAAAC4XgAAAAAAAAAAAADbXgAAAAAAAN9eAAAAAAAAAAAAAAdfAAAAAAAAC18AAAAAAAAAAAAAI18AAAAAAAAnXwAAAAAAAAAAAABQXwAAAAAAAFRfAAAAAAAAAAAAAH5fAAAAAAAAgl8AAAAAAAAAAAAAml8AAAAAAACeXwAAAAAAAAAAAADRXwAAAAAAANVfAAAAAAAAAAAAAO1fAAAAAAAA8V8AAAAAAAAAAAAADGAAAAAAAAAQYAAAAAAAAAAAAAATYAAAAAAAABdgAAAAAAAAAAAAABlgAAAAAAAAHWAAAAAAAAAAAAAATmAAAAAAAABSYAAAAAAAAAAAAACGYAAAAAAAAIpgAAAAAAAAAAAAAJ1gAAAAAAAAoWAAAAAAAAAAAAAAuWAAAAAAAAC9YAAAAAAAAAAAAADqYAAAAAAAAO5gAAAAAAAAAAAAABBhAAAAAAAAFGEAAAAAAAAAAAAAPWEAAAAAAABBYQAAAAAAAAAAAABhYQAAAAAAAGVhAAAAAAAAAAAAAJZhAAAAAAAAmmEAAAAAAAAAAAAAzGEAAAAAAADQYQAAAAAAAAAAAADzYQAAAAAAAPdhAAAAAAAAAAAAAB9iAAAAAAAAI2IAAAAAAAAAAAAAO2IAAAAAAAA/YgAAAAAAAAAAAABoYgAAAAAAAGxiAAAAAAAAAAAAAJZiAAAAAAAAmmIAAAAAAAAAAAAAsmIAAAAAAAC2YgAAAAAAAAAAAADpYgAAAAAAAO1iAAAAAAAAAAAAAAVjAAAAAAAACWMAAAAAAAAAAAAAJGMAAAAAAAAoYwAAAAAAAAAAAAArYwAAAAAAAC9jAAAAAAAAAAAAADFjAAAAAAAANWMAAAAAAAAAAAAAZmMAAAAAAABqYwAAAAAAAAAAAACeYwAAAAAAAKJjAAAAAAAAAAAAALVjAAAAAAAAuWMAAAAAAAAAAAAA0WMAAAAAAADVYwAAAAAAAAAAAAACZAAAAAAAAAZkAAAAAAAAAAAAAChkAAAAAAAALGQAAAAAAAAAAAAAVmQAAAAAAABaZAAAAAAAAAAAAAB8ZAAAAAAAAIBkAAAAAAAAAAAAALFkAAAAAAAAtWQAAAAAAAAAAAAA52QAAAAAAADrZAAAAAAAAAAAAAANZQAAAAAAABFlAAAAAAAAAAAAADhlAAAAAAAAPGUAAAAAAAAAAAAAVWUAAAAAAABZZQAAAAAAAAAAAACCZQAAAAAAAIZlAAAAAAAAAAAAALBlAAAAAAAAtGUAAAAAAAAAAAAAzGUAAAAAAADQZQAAAAAAAAAAAAADZgAAAAAAAAdmAAAAAAAAAAAAAB9mAAAAAAAAI2YAAAAAAAAAAAAAPmYAAAAAAABCZgAAAAAAAAAAAABFZgAAAAAAAElmAAAAAAAAAAAAAEtmAAAAAAAAT2YAAAAAAAAAAAAAgGYAAAAAAACEZgAAAAAAAAAAAAC4ZgAAAAAAALxmAAAAAAAAAAAAAM9mAAAAAAAA02YAAAAAAAAAAAAA62YAAAAAAADvZgAAAAAAAAAAAAAcZwAAAAAAACBnAAAAAAAAAAAAAEJnAAAAAAAARmcAAAAAAAAAAAAAcGcAAAAAAAB0ZwAAAAAAAAAAAACUZwAAAAAAAJhnAAAAAAAAAAAAAMlnAAAAAAAAzWcAAAAAAAAAAAAA/2cAAAAAAAADaAAAAAAAAAAAAAAlaAAAAAAAACloAAAAAAAAAAAAAFBoAAAAAAAAVGgAAAAAAAAAAAAAbWgAAAAAAABxaAAAAAAAAAAAAACaaAAAAAAAAJ5oAAAAAAAAAAAAAMhoAAAAAAAAzGgAAAAAAAAAAAAA5GgAAAAAAADoaAAAAAAAAAAAAAAbaQAAAAAAAB9pAAAAAAAAAAAAADdpAAAAAAAAO2kAAAAAAAAAAAAAVmkAAAAAAABaaQAAAAAAAAAAAABdaQAAAAAAAGFpAAAAAAAAAAAAAGNpAAAAAAAAZ2kAAAAAAAAAAAAAmGkAAAAAAACcaQAAAAAAAAAAAADQaQAAAAAAANRpAAAAAAAAAAAAAOdpAAAAAAAA62kAAAAAAAAAAAAAA2oAAAAAAAAHagAAAAAAAAAAAAA0agAAAAAAADhqAAAAAAAAAAAAAFpqAAAAAAAAXmoAAAAAAAAAAAAAiGoAAAAAAACMagAAAAAAAAAAAACuagAAAAAAALJqAAAAAAAAAAAAAONqAAAAAAAA52oAAAAAAAAAAAAAGWsAAAAAAAAdawAAAAAAAAAAAAA/awAAAAAAAENrAAAAAAAAAAAAAGprAAAAAAAAbmsAAAAAAAAAAAAAh2sAAAAAAACLawAAAAAAAAAAAAC0awAAAAAAALhrAAAAAAAAAAAAAOJrAAAAAAAA5msAAAAAAAAAAAAA/msAAAAAAAACbAAAAAAAAAAAAAA1bAAAAAAAADlsAAAAAAAAAAAAAFFsAAAAAAAAVWwAAAAAAAAAAAAAcGwAAAAAAAB0bAAAAAAAAAAAAAB3bAAAAAAAAHtsAAAAAAAAAAAAAH1sAAAAAAAAgWwAAAAAAAAAAAAAsmwAAAAAAAC2bAAAAAAAAAAAAADqbAAAAAAAAO5sAAAAAAAAAAAAAAFtAAAAAAAABW0AAAAAAAAAAAAAHW0AAAAAAAAhbQAAAAAAAAAAAABObQAAAAAAAFJtAAAAAAAAAAAAAHRtAAAAAAAAeG0AAAAAAAAAAAAAoW0AAAAAAAClbQAAAAAAAAAAAADFbQAAAAAAAMltAAAAAAAAAAAAAPptAAAAAAAA/m0AAAAAAAAAAAAAMG4AAAAAAAA0bgAAAAAAAAAAAABWbgAAAAAAAFpuAAAAAAAAAAAAAIFuAAAAAAAAhW4AAAAAAAAAAAAAnm4AAAAAAACibgAAAAAAAAAAAADLbgAAAAAAAM9uAAAAAAAAAAAAAPluAAAAAAAA/W4AAAAAAAAAAAAAFW8AAAAAAAAZbwAAAAAAAAAAAABMbwAAAAAAAFBvAAAAAAAAAAAAAGhvAAAAAAAAbG8AAAAAAAAAAAAAh28AAAAAAACLbwAAAAAAAAAAAACObwAAAAAAAJJvAAAAAAAAAAAAAJRvAAAAAAAAmG8AAAAAAAAAAAAAyW8AAAAAAADNbwAAAAAAAAAAAAABcAAAAAAAAAVwAAAAAAAAAAAAABhwAAAAAAAAHHAAAAAAAAAAAAAANHAAAAAAAAA4cAAAAAAAAAAAAABlcAAAAAAAAGlwAAAAAAAAAAAAAItwAAAAAAAAj3AAAAAAAAAAAAAAt3AAAAAAAAC7cAAAAAAAAAAAAADbcAAAAAAAAN9wAAAAAAAAAAAAABBxAAAAAAAAFHEAAAAAAAAAAAAARnEAAAAAAABKcQAAAAAAAAAAAABscQAAAAAAAHBxAAAAAAAAAAAAAJdxAAAAAAAAm3EAAAAAAAAAAAAAtHEAAAAAAAC4cQAAAAAAAAAAAADhcQAAAAAAAOVxAAAAAAAAAAAAAA9yAAAAAAAAE3IAAAAAAAAAAAAAK3IAAAAAAAAvcgAAAAAAAAAAAABicgAAAAAAAGZyAAAAAAAAAAAAAH5yAAAAAAAAgnIAAAAAAAAAAAAAnXIAAAAAAAChcgAAAAAAAAAAAACkcgAAAAAAAKhyAAAAAAAAAAAAAKpyAAAAAAAArnIAAAAAAAAAAAAA33IAAAAAAADjcgAAAAAAAAAAAAAXcwAAAAAAABtzAAAAAAAAAAAAAC5zAAAAAAAAMnMAAAAAAAAAAAAASnMAAAAAAABOcwAAAAAAAAAAAAB7cwAAAAAAAH9zAAAAAAAAAAAAAKFzAAAAAAAApXMAAAAAAAAAAAAAzXMAAAAAAADRcwAAAAAAAAAAAADzcwAAAAAAAPdzAAAAAAAAAAAAACh0AAAAAAAALHQAAAAAAAAAAAAAXnQAAAAAAABidAAAAAAAAAAAAACEdAAAAAAAAIh0AAAAAAAAAAAAAK90AAAAAAAAs3QAAAAAAAAAAAAAzHQAAAAAAADQdAAAAAAAAAAAAAD5dAAAAAAAAP10AAAAAAAAAAAAACd1AAAAAAAAK3UAAAAAAAAAAAAAQ3UAAAAAAABHdQAAAAAAAAAAAAB6dQAAAAAAAH51AAAAAAAAAAAAAJZ1AAAAAAAAmnUAAAAAAAAAAAAAtXUAAAAAAAC5dQAAAAAAAAAAAAC8dQAAAAAAAMB1AAAAAAAAAAAAAMJ1AAAAAAAAxnUAAAAAAAAAAAAA93UAAAAAAAD7dQAAAAAAAAAAAAAvdgAAAAAAADN2AAAAAAAAAAAAAEZ2AAAAAAAASnYAAAAAAAAAAAAAaHYAAAAAAABsdgAAAAAAAAAAAACZdgAAAAAAAJ12AAAAAAAAAAAAAL92AAAAAAAAw3YAAAAAAAAAAAAA7HYAAAAAAADwdgAAAAAAAAAAAAAQdwAAAAAAABR3AAAAAAAAAAAAAEV3AAAAAAAASXcAAAAAAAAAAAAAe3cAAAAAAAB/dwAAAAAAAAAAAACidwAAAAAAAKZ3AAAAAAAAAAAAAM53AAAAAAAA0ncAAAAAAAAAAAAA63cAAAAAAADvdwAAAAAAAAAAAAAYeAAAAAAAABx4AAAAAAAAAAAAAFJ4AAAAAAAAVngAAAAAAAAAAAAAb3gAAAAAAABzeAAAAAAAAAAAAACneAAAAAAAAKt4AAAAAAAAAAAAAMN4AAAAAAAAx3gAAAAAAAAAAAAA4ngAAAAAAADmeAAAAAAAAAAAAADpeAAAAAAAAO14AAAAAAAAAAAAAO94AAAAAAAA83gAAAAAAAAAAAAAJHkAAAAAAAAoeQAAAAAAAAAAAABceQAAAAAAAGB5AAAAAAAAAAAAAHN5AAAAAAAAd3kAAAAAAAAAAAAAj3kAAAAAAACTeQAAAAAAAAAAAADAeQAAAAAAAMR5AAAAAAAAAAAAAOZ5AAAAAAAA6nkAAAAAAAAAAAAAE3oAAAAAAAAXegAAAAAAAAAAAAA5egAAAAAAAD16AAAAAAAAAAAAAG56AAAAAAAAcnoAAAAAAAAAAAAApHoAAAAAAACoegAAAAAAAAAAAADKegAAAAAAAM56AAAAAAAAAAAAAPV6AAAAAAAA+XoAAAAAAAAAAAAAEXsAAAAAAAAVewAAAAAAAAAAAAA+ewAAAAAAAEJ7AAAAAAAAAAAAAGx7AAAAAAAAcHsAAAAAAAAAAAAAiHsAAAAAAACMewAAAAAAAAAAAAC/ewAAAAAAAMN7AAAAAAAAAAAAANt7AAAAAAAA33sAAAAAAAAAAAAA+nsAAAAAAAD+ewAAAAAAAAAAAAABfAAAAAAAAAV8AAAAAAAAAAAAAAd8AAAAAAAAC3wAAAAAAAAAAAAAPHwAAAAAAABAfAAAAAAAAAAAAAB0fAAAAAAAAHh8AAAAAAAAAAAAAIt8AAAAAAAAj3wAAAAAAAAAAAAAp3wAAAAAAACrfAAAAAAAAAAAAADYfAAAAAAAANx8AAAAAAAAAAAAAP58AAAAAAAAAn0AAAAAAAAAAAAALH0AAAAAAAAwfQAAAAAAAAAAAABSfQAAAAAAAFZ9AAAAAAAAAAAAAId9AAAAAAAAi30AAAAAAAAAAAAAvX0AAAAAAADBfQAAAAAAAAAAAADkfQAAAAAAAOh9AAAAAAAAAAAAABB+AAAAAAAAFH4AAAAAAAAAAAAALX4AAAAAAAAxfgAAAAAAAAAAAABafgAAAAAAAF5+AAAAAAAAAAAAAIh+AAAAAAAAjH4AAAAAAAAAAAAApH4AAAAAAACofgAAAAAAAAAAAADbfgAAAAAAAN9+AAAAAAAAAAAAAPd+AAAAAAAA+34AAAAAAAAAAAAAFn8AAAAAAAAafwAAAAAAAAAAAAAdfwAAAAAAACF/AAAAAAAAAAAAACN/AAAAAAAAJ38AAAAAAAAAAAAAWH8AAAAAAABcfwAAAAAAAAAAAACQfwAAAAAAAJR/AAAAAAAAAAAAAKd/AAAAAAAAq38AAAAAAAAAAAAAw38AAAAAAADHfwAAAAAAAAAAAAD0fwAAAAAAAPh/AAAAAAAAAAAAABqAAAAAAAAAHoAAAAAAAAAAAAAASIAAAAAAAABMgAAAAAAAAAAAAABugAAAAAAAAHKAAAAAAAAAAAAAAKOAAAAAAAAAp4AAAAAAAAAAAAAA2YAAAAAAAADdgAAAAAAAAAAAAAAAgQAAAAAAAASBAAAAAAAAAAAAACyBAAAAAAAAMIEAAAAAAAAAAAAASYEAAAAAAABNgQAAAAAAAAAAAAB2gQAAAAAAAHqBAAAAAAAAAAAAAKSBAAAAAAAAqIEAAAAAAAAAAAAAwIEAAAAAAADEgQAAAAAAAAAAAAD3gQAAAAAAAPuBAAAAAAAAAAAAABOCAAAAAAAAF4IAAAAAAAAAAAAAMoIAAAAAAAA2ggAAAAAAAAAAAAA5ggAAAAAAAD2CAAAAAAAAAAAAAD+CAAAAAAAAQ4IAAAAAAAAAAAAAdIIAAAAAAAB4ggAAAAAAAAAAAACsggAAAAAAALCCAAAAAAAAAAAAAMOCAAAAAAAAx4IAAAAAAAAAAAAA34IAAAAAAADjggAAAAAAAAAAAAAQgwAAAAAAABSDAAAAAAAAAAAAADaDAAAAAAAAOoMAAAAAAAAAAAAAZIMAAAAAAABogwAAAAAAAAAAAACKgwAAAAAAAI6DAAAAAAAAAAAAAL+DAAAAAAAAw4MAAAAAAAAAAAAA9YMAAAAAAAD5gwAAAAAAAAAAAAAchAAAAAAAACCEAAAAAAAAAAAAAEiEAAAAAAAATIQAAAAAAAAAAAAAZYQAAAAAAABphAAAAAAAAAAAAACShAAAAAAAAJaEAAAAAAAAAAAAAMCEAAAAAAAAxIQAAAAAAAAAAAAA3IQAAAAAAADghAAAAAAAAAAAAAAThQAAAAAAABeFAAAAAAAAAAAAAC+FAAAAAAAAM4UAAAAAAAAAAAAAToUAAAAAAABShQAAAAAAAAAAAABVhQAAAAAAAFmFAAAAAAAAAAAAAFuFAAAAAAAAX4UAAAAAAAAAAAAAkIUAAAAAAACUhQAAAAAAAAAAAADIhQAAAAAAAMyFAAAAAAAAAAAAAN+FAAAAAAAA44UAAAAAAAAAAAAA+4UAAAAAAAD/hQAAAAAAAAAAAAAshgAAAAAAADCGAAAAAAAAAAAAAFKGAAAAAAAAVoYAAAAAAAAAAAAAgIYAAAAAAACEhgAAAAAAAAAAAACmhgAAAAAAAKqGAAAAAAAAAAAAANuGAAAAAAAA34YAAAAAAAAAAAAAEYcAAAAAAAAVhwAAAAAAAAAAAAA3hwAAAAAAADuHAAAAAAAAAAAAAGKHAAAAAAAAZocAAAAAAAAAAAAAf4cAAAAAAACDhwAAAAAAAAAAAACshwAAAAAAALCHAAAAAAAAAAAAANqHAAAAAAAA3ocAAAAAAAAAAAAA9ocAAAAAAAD6hwAAAAAAAAAAAAAtiAAAAAAAADGIAAAAAAAAAAAAAEmIAAAAAAAATYgAAAAAAAAAAAAAaIgAAAAAAABsiAAAAAAAAAAAAABviAAAAAAAAHOIAAAAAAAAAAAAAHWIAAAAAAAAeYgAAAAAAAAAAAAAqogAAAAAAACuiAAAAAAAAAAAAADiiAAAAAAAAOaIAAAAAAAAAAAAAPmIAAAAAAAA/YgAAAAAAAAAAAAAFYkAAAAAAAAZiQAAAAAAAAAAAABGiQAAAAAAAEqJAAAAAAAAAAAAAGyJAAAAAAAAcIkAAAAAAAAAAAAAmokAAAAAAACeiQAAAAAAAAAAAAC+iQAAAAAAAMKJAAAAAAAAAAAAAPOJAAAAAAAA94kAAAAAAAAAAAAAKYoAAAAAAAAtigAAAAAAAAAAAABPigAAAAAAAFOKAAAAAAAAAAAAAHqKAAAAAAAAfooAAAAAAAAAAAAAlooAAAAAAACaigAAAAAAAAAAAADDigAAAAAAAMeKAAAAAAAAAAAAAPGKAAAAAAAA9YoAAAAAAAAAAAAADYsAAAAAAAARiwAAAAAAAAAAAABEiwAAAAAAAEiLAAAAAAAAAAAAAGCLAAAAAAAAZIsAAAAAAAAAAAAAf4sAAAAAAACDiwAAAAAAAAAAAACGiwAAAAAAAIqLAAAAAAAAAAAAAIyLAAAAAAAAkIsAAAAAAAAAAAAAwYsAAAAAAADFiwAAAAAAAAAAAAD5iwAAAAAAAP2LAAAAAAAAAAAAABCMAAAAAAAAFIwAAAAAAAAAAAAALIwAAAAAAAAwjAAAAAAAAAAAAABdjAAAAAAAAGGMAAAAAAAAAAAAAIOMAAAAAAAAh4wAAAAAAAAAAAAAsYwAAAAAAAC1jAAAAAAAAAAAAADXjAAAAAAAANuMAAAAAAAAAAAAAAyNAAAAAAAAEI0AAAAAAAAAAAAAQo0AAAAAAABGjQAAAAAAAAAAAABpjQAAAAAAAG2NAAAAAAAAAAAAAJWNAAAAAAAAmY0AAAAAAAAAAAAAsY0AAAAAAAC1jQAAAAAAAAAAAADejQAAAAAAAOKNAAAAAAAAAAAAAAyOAAAAAAAAEI4AAAAAAAAAAAAAKI4AAAAAAAAsjgAAAAAAAAAAAABfjgAAAAAAAGOOAAAAAAAAAAAAAHuOAAAAAAAAf44AAAAAAAAAAAAAmo4AAAAAAACejgAAAAAAAAAAAAChjgAAAAAAAKWOAAAAAAAAAAAAAKeOAAAAAAAAq44AAAAAAAAAAAAA3I4AAAAAAADgjgAAAAAAAAAAAAAUjwAAAAAAABiPAAAAAAAAAAAAACuPAAAAAAAAL48AAAAAAAAAAAAAR48AAAAAAABLjwAAAAAAAAAAAAB4jwAAAAAAAHyPAAAAAAAAAAAAAJ6PAAAAAAAAoo8AAAAAAAAAAAAAzI8AAAAAAADQjwAAAAAAAAAAAADyjwAAAAAAAPaPAAAAAAAAAAAAACeQAAAAAAAAK5AAAAAAAAAAAAAAXZAAAAAAAABhkAAAAAAAAAAAAACEkAAAAAAAAIiQAAAAAAAAAAAAALCQAAAAAAAAtJAAAAAAAAAAAAAAzZAAAAAAAADRkAAAAAAAAAAAAAD6kAAAAAAAAP6QAAAAAAAAAAAAACiRAAAAAAAALJEAAAAAAAAAAAAARJEAAAAAAABIkQAAAAAAAAAAAAB7kQAAAAAAAH+RAAAAAAAAAAAAAJeRAAAAAAAAm5EAAAAAAAAAAAAAtpEAAAAAAAC6kQAAAAAAAAAAAAC9kQAAAAAAAMGRAAAAAAAAAAAAAMORAAAAAAAAx5EAAAAAAAAAAAAA+JEAAAAAAAD8kQAAAAAAAAAAAAAwkgAAAAAAADSSAAAAAAAAAAAAAEeSAAAAAAAAS5IAAAAAAAAAAAAAY5IAAAAAAABnkgAAAAAAAAAAAACUkgAAAAAAAJiSAAAAAAAAAAAAALqSAAAAAAAAvpIAAAAAAAAAAAAA6JIAAAAAAADskgAAAAAAAAAAAAAOkwAAAAAAABKTAAAAAAAAAAAAAEOTAAAAAAAAR5MAAAAAAAAAAAAAeZMAAAAAAAB9kwAAAAAAAAAAAACfkwAAAAAAAKOTAAAAAAAAAAAAAMqTAAAAAAAAzpMAAAAAAAAAAAAA55MAAAAAAADrkwAAAAAAAAAAAAAUlAAAAAAAABiUAAAAAAAAAAAAAEKUAAAAAAAARpQAAAAAAAAAAAAAXpQAAAAAAABilAAAAAAAAAAAAACVlAAAAAAAAJmUAAAAAAAAAAAAALGUAAAAAAAAtZQAAAAAAAAAAAAA0JQAAAAAAADUlAAAAAAAAAAAAADXlAAAAAAAANuUAAAAAAAAAAAAAN2UAAAAAAAA4ZQAAAAAAAAAAAAAEpUAAAAAAAAWlQAAAAAAAAAAAABKlQAAAAAAAE6VAAAAAAAAAAAAAGGVAAAAAAAAZZUAAAAAAAAAAAAAfZUAAAAAAACBlQAAAAAAAAAAAACulQAAAAAAALKVAAAAAAAAAAAAANSVAAAAAAAA2JUAAAAAAAAAAAAAApYAAAAAAAAGlgAAAAAAAAAAAAAolgAAAAAAACyWAAAAAAAAAAAAAF2WAAAAAAAAYZYAAAAAAAAAAAAAk5YAAAAAAACXlgAAAAAAAAAAAAC5lgAAAAAAAL2WAAAAAAAAAAAAAOSWAAAAAAAA6JYAAAAAAAAAAAAAAZcAAAAAAAAFlwAAAAAAAAAAAAAulwAAAAAAADKXAAAAAAAAAAAAAFyXAAAAAAAAYJcAAAAAAAAAAAAAeJcAAAAAAAB8lwAAAAAAAAAAAACvlwAAAAAAALOXAAAAAAAAAAAAAMuXAAAAAAAAz5cAAAAAAAAAAAAA6pcAAAAAAADulwAAAAAAAAAAAADxlwAAAAAAAPWXAAAAAAAAAAAAAPeXAAAAAAAA+5cAAAAAAAAAAAAALJgAAAAAAAAwmAAAAAAAAAAAAABkmAAAAAAAAGiYAAAAAAAAAAAAAHuYAAAAAAAAf5gAAAAAAAAAAAAAl5gAAAAAAACbmAAAAAAAAAAAAADImAAAAAAAAMyYAAAAAAAAAAAAAO6YAAAAAAAA8pgAAAAAAAAAAAAAHZkAAAAAAAAhmQAAAAAAAAAAAABDmQAAAAAAAEeZAAAAAAAAAAAAAHiZAAAAAAAAfJkAAAAAAAAAAAAArpkAAAAAAACymQAAAAAAAAAAAADVmQAAAAAAANmZAAAAAAAAAAAAAAGaAAAAAAAABZoAAAAAAAAAAAAAHpoAAAAAAAAimgAAAAAAAAAAAABLmgAAAAAAAE+aAAAAAAAAAAAAAHmaAAAAAAAAfZoAAAAAAAAAAAAAlZoAAAAAAACZmgAAAAAAAAAAAADMmgAAAAAAANCaAAAAAAAAAAAAAOiaAAAAAAAA7JoAAAAAAAAAAAAAB5sAAAAAAAALmwAAAAAAAAAAAAAOmwAAAAAAABKbAAAAAAAAAAAAABSbAAAAAAAAGJsAAAAAAAAAAAAASZsAAAAAAABNmwAAAAAAAAAAAACBmwAAAAAAAIWbAAAAAAAAAAAAAJibAAAAAAAAnJsAAAAAAAAAAAAAtJsAAAAAAAC4mwAAAAAAAAAAAADlmwAAAAAAAOmbAAAAAAAAAAAAAAucAAAAAAAAD5wAAAAAAAAAAAAAOpwAAAAAAAA+nAAAAAAAAAAAAABgnAAAAAAAAGScAAAAAAAAAAAAAJWcAAAAAAAAmZwAAAAAAAAAAAAAy5wAAAAAAADPnAAAAAAAAAAAAADxnAAAAAAAAPWcAAAAAAAAAAAAABydAAAAAAAAIJ0AAAAAAAAAAAAAOJ0AAAAAAAA8nQAAAAAAAAAAAABlnQAAAAAAAGmdAAAAAAAAAAAAAJOdAAAAAAAAl50AAAAAAAAAAAAAr50AAAAAAACznQAAAAAAAAAAAADmnQAAAAAAAOqdAAAAAAAAAAAAAAKeAAAAAAAABp4AAAAAAAAAAAAAIZ4AAAAAAAAlngAAAAAAAAAAAAAongAAAAAAACyeAAAAAAAAAAAAAC6eAAAAAAAAMp4AAAAAAAAAAAAAY54AAAAAAABnngAAAAAAAAAAAACbngAAAAAAAJ+eAAAAAAAAAAAAALKeAAAAAAAAtp4AAAAAAAAAAAAAzp4AAAAAAADSngAAAAAAAAAAAAD/ngAAAAAAAAOfAAAAAAAAAAAAACWfAAAAAAAAKZ8AAAAAAAAAAAAAVJ8AAAAAAABYnwAAAAAAAAAAAAB6nwAAAAAAAH6fAAAAAAAAAAAAAK+fAAAAAAAAs58AAAAAAAAAAAAA5Z8AAAAAAADpnwAAAAAAAAAAAAALoAAAAAAAAA+gAAAAAAAAAAAAADagAAAAAAAAOqAAAAAAAAAAAAAAUqAAAAAAAABWoAAAAAAAAAAAAAB/oAAAAAAAAIOgAAAAAAAAAAAAAK2gAAAAAAAAsaAAAAAAAAAAAAAAyaAAAAAAAADNoAAAAAAAAAAAAAAAoQAAAAAAAAShAAAAAAAAAAAAAByhAAAAAAAAIKEAAAAAAAAAAAAAO6EAAAAAAAA/oQAAAAAAAAAAAABCoQAAAAAAAEahAAAAAAAAAAAAAEihAAAAAAAATKEAAAAAAAAAAAAAfaEAAAAAAACBoQAAAAAAAAAAAAC1oQAAAAAAALmhAAAAAAAAAAAAAMyhAAAAAAAA0KEAAAAAAAAAAAAA6KEAAAAAAADsoQAAAAAAAAAAAAAZogAAAAAAAB2iAAAAAAAAAAAAAD+iAAAAAAAAQ6IAAAAAAAAAAAAAbqIAAAAAAAByogAAAAAAAAAAAACUogAAAAAAAJiiAAAAAAAAAAAAAMmiAAAAAAAAzaIAAAAAAAAAAAAA/6IAAAAAAAADowAAAAAAAAAAAAAlowAAAAAAACmjAAAAAAAAAAAAAFCjAAAAAAAAVKMAAAAAAAAAAAAAbKMAAAAAAABwowAAAAAAAAAAAACZowAAAAAAAJ2jAAAAAAAAAAAAAMejAAAAAAAAy6MAAAAAAAAAAAAA46MAAAAAAADnowAAAAAAAAAAAAAapAAAAAAAAB6kAAAAAAAAAAAAADakAAAAAAAAOqQAAAAAAAAAAAAAVaQAAAAAAABZpAAAAAAAAAAAAABcpAAAAAAAAGCkAAAAAAAAAAAAAGKkAAAAAAAAZqQAAAAAAAAAAAAAl6QAAAAAAACbpAAAAAAAAAAAAADPpAAAAAAAANOkAAAAAAAAAAAAAOakAAAAAAAA6qQAAAAAAAAAAAAAAqUAAAAAAAAGpQAAAAAAAAAAAAAzpQAAAAAAADelAAAAAAAAAAAAAFmlAAAAAAAAXaUAAAAAAAAAAAAAh6UAAAAAAACLpQAAAAAAAAAAAACtpQAAAAAAALGlAAAAAAAAAAAAAOKlAAAAAAAA5qUAAAAAAAAAAAAAGKYAAAAAAAAcpgAAAAAAAAAAAAA+pgAAAAAAAEKmAAAAAAAAAAAAAGmmAAAAAAAAbaYAAAAAAAAAAAAAhaYAAAAAAACJpgAAAAAAAAAAAACypgAAAAAAALamAAAAAAAAAAAAAOCmAAAAAAAA5KYAAAAAAAAAAAAA/KYAAAAAAAAApwAAAAAAAAAAAAAzpwAAAAAAADenAAAAAAAAAAAAAE+nAAAAAAAAU6cAAAAAAAAAAAAAbqcAAAAAAABypwAAAAAAAAAAAAB1pwAAAAAAAHmnAAAAAAAAAAAAAHunAAAAAAAAf6cAAAAAAAAAAAAAsKcAAAAAAAC0pwAAAAAAAAAAAADopwAAAAAAAOynAAAAAAAAAAAAAP+nAAAAAAAAA6gAAAAAAAAAAAAAG6gAAAAAAAAfqAAAAAAAAAAAAABMqAAAAAAAAFCoAAAAAAAAAAAAAHKoAAAAAAAAdqgAAAAAAAAAAAAAoKgAAAAAAACkqAAAAAAAAAAAAADGqAAAAAAAAMqoAAAAAAAAAAAAAPuoAAAAAAAA/6gAAAAAAAAAAAAAMakAAAAAAAA1qQAAAAAAAAAAAABXqQAAAAAAAFupAAAAAAAAAAAAAIKpAAAAAAAAhqkAAAAAAAAAAAAAnqkAAAAAAACiqQAAAAAAAAAAAADLqQAAAAAAAM+pAAAAAAAAAAAAAPmpAAAAAAAA/akAAAAAAAAAAAAAFaoAAAAAAAAZqgAAAAAAAAAAAABMqgAAAAAAAFCqAAAAAAAAAAAAAGiqAAAAAAAAbKoAAAAAAAAAAAAAh6oAAAAAAACLqgAAAAAAAAAAAACOqgAAAAAAAJKqAAAAAAAAAAAAAJSqAAAAAAAAmKoAAAAAAAAAAAAAyaoAAAAAAADNqgAAAAAAAAAAAAABqwAAAAAAAAWrAAAAAAAAAAAAABirAAAAAAAAHKsAAAAAAAAAAAAANKsAAAAAAAA4qwAAAAAAAAAAAABlqwAAAAAAAGmrAAAAAAAAAAAAAIurAAAAAAAAj6sAAAAAAAAAAAAAuasAAAAAAAC9qwAAAAAAAAAAAADfqwAAAAAAAOOrAAAAAAAAAAAAABSsAAAAAAAAGKwAAAAAAAAAAAAASqwAAAAAAABOrAAAAAAAAAAAAABwrAAAAAAAAHSsAAAAAAAAAAAAAJusAAAAAAAAn6wAAAAAAAAAAAAAuKwAAAAAAAC8rAAAAAAAAAAAAADlrAAAAAAAAOmsAAAAAAAAAAAAABOtAAAAAAAAF60AAAAAAAAAAAAAL60AAAAAAAAzrQAAAAAAAAAAAABmrQAAAAAAAGqtAAAAAAAAAAAAAIKtAAAAAAAAhq0AAAAAAAAAAAAAoa0AAAAAAAClrQAAAAAAAAAAAACorQAAAAAAAKytAAAAAAAAAAAAAK6tAAAAAAAAsq0AAAAAAAAAAAAA460AAAAAAADnrQAAAAAAAAAAAAAbrgAAAAAAAB+uAAAAAAAAAAAAADKuAAAAAAAANq4AAAAAAAAAAAAATq4AAAAAAABSrgAAAAAAAAAAAAB/rgAAAAAAAIOuAAAAAAAAAAAAAKWuAAAAAAAAqa4AAAAAAAAAAAAA0q4AAAAAAADWrgAAAAAAAAAAAAD4rgAAAAAAAPyuAAAAAAAAAAAAAC2vAAAAAAAAMa8AAAAAAAAAAAAAY68AAAAAAABnrwAAAAAAAAAAAACJrwAAAAAAAI2vAAAAAAAAAAAAALSvAAAAAAAAuK8AAAAAAAAAAAAA0K8AAAAAAADUrwAAAAAAAAAAAAD9rwAAAAAAAAGwAAAAAAAAAAAAACuwAAAAAAAAL7AAAAAAAAAAAAAAR7AAAAAAAABLsAAAAAAAAAAAAAB+sAAAAAAAAIKwAAAAAAAAAAAAAJqwAAAAAAAAnrAAAAAAAAAAAAAAubAAAAAAAAC9sAAAAAAAAAAAAADAsAAAAAAAAMSwAAAAAAAAAAAAAMawAAAAAAAAyrAAAAAAAAAAAAAA+7AAAAAAAAD/sAAAAAAAAAAAAAAzsQAAAAAAADexAAAAAAAAAAAAAEqxAAAAAAAATrEAAAAAAAAAAAAAZrEAAAAAAABqsQAAAAAAAAAAAACXsQAAAAAAAJuxAAAAAAAAAAAAAL2xAAAAAAAAwbEAAAAAAAAAAAAA6rEAAAAAAADusQAAAAAAAAAAAAAQsgAAAAAAABSyAAAAAAAAAAAAAEWyAAAAAAAASbIAAAAAAAAAAAAAe7IAAAAAAAB/sgAAAAAAAAAAAAChsgAAAAAAAKWyAAAAAAAAAAAAAMyyAAAAAAAA0LIAAAAAAAAAAAAA6LIAAAAAAADssgAAAAAAAAAAAAAVswAAAAAAABmzAAAAAAAAAAAAAEOzAAAAAAAAR7MAAAAAAAAAAAAAX7MAAAAAAABjswAAAAAAAAAAAACWswAAAAAAAJqzAAAAAAAAAAAAALKzAAAAAAAAtrMAAAAAAAAAAAAA0bMAAAAAAADVswAAAAAAAAAAAADYswAAAAAAANyzAAAAAAAAAAAAAN6zAAAAAAAA4rMAAAAAAAAAAAAAE7QAAAAAAAAXtAAAAAAAAAAAAABLtAAAAAAAAE+0AAAAAAAAAAAAAGK0AAAAAAAAZrQAAAAAAAAAAAAAfrQAAAAAAACCtAAAAAAAAAAAAACvtAAAAAAAALO0AAAAAAAAAAAAANW0AAAAAAAA2bQAAAAAAAAAAAAAArUAAAAAAAAGtQAAAAAAAAAAAAAotQAAAAAAACy1AAAAAAAAAAAAAF21AAAAAAAAYbUAAAAAAAAAAAAAk7UAAAAAAACXtQAAAAAAAAAAAAC5tQAAAAAAAL21AAAAAAAAAAAAAOS1AAAAAAAA6LUAAAAAAAAAAAAAALYAAAAAAAAEtgAAAAAAAAAAAAAttgAAAAAAADG2AAAAAAAAAAAAAFu2AAAAAAAAX7YAAAAAAAAAAAAAd7YAAAAAAAB7tgAAAAAAAAAAAACutgAAAAAAALK2AAAAAAAAAAAAAMq2AAAAAAAAzrYAAAAAAAAAAAAA6bYAAAAAAADttgAAAAAAAAAAAADwtgAAAAAAAPS2AAAAAAAAAAAAAPa2AAAAAAAA+rYAAAAAAAAAAAAAK7cAAAAAAAAvtwAAAAAAAAAAAABjtwAAAAAAAGe3AAAAAAAAAAAAAHq3AAAAAAAAfrcAAAAAAAAAAAAAlrcAAAAAAACatwAAAAAAAAAAAADHtwAAAAAAAMu3AAAAAAAAAAAAAO23AAAAAAAA8bcAAAAAAAAAAAAAGrgAAAAAAAAeuAAAAAAAAAAAAABAuAAAAAAAAES4AAAAAAAAAAAAAHW4AAAAAAAAebgAAAAAAAAAAAAAq7gAAAAAAACvuAAAAAAAAAAAAADRuAAAAAAAANW4AAAAAAAAAAAAAPy4AAAAAAAAALkAAAAAAAAAAAAAGLkAAAAAAAAcuQAAAAAAAAAAAABFuQAAAAAAAEm5AAAAAAAAAAAAAHO5AAAAAAAAd7kAAAAAAAAAAAAAj7kAAAAAAACTuQAAAAAAAAAAAADGuQAAAAAAAMq5AAAAAAAAAAAAAOK5AAAAAAAA5rkAAAAAAAAAAAAAAboAAAAAAAAFugAAAAAAAAAAAAAIugAAAAAAAAy6AAAAAAAAAAAAAA66AAAAAAAAEroAAAAAAAAAAAAAQ7oAAAAAAABHugAAAAAAAAAAAAB7ugAAAAAAAH+6AAAAAAAAAAAAAJK6AAAAAAAAlroAAAAAAAAAAAAArroAAAAAAACyugAAAAAAAAAAAADfugAAAAAAAOO6AAAAAAAAAAAAAAW7AAAAAAAACbsAAAAAAAAAAAAAMrsAAAAAAAA2uwAAAAAAAAAAAABYuwAAAAAAAFy7AAAAAAAAAAAAAI27AAAAAAAAkbsAAAAAAAAAAAAAw7sAAAAAAADHuwAAAAAAAAAAAADpuwAAAAAAAO27AAAAAAAAAAAAABS8AAAAAAAAGLwAAAAAAAAAAAAAMLwAAAAAAAA0vAAAAAAAAAAAAABdvAAAAAAAAGG8AAAAAAAAAAAAAIu8AAAAAAAAj7wAAAAAAAAAAAAAp7wAAAAAAACrvAAAAAAAAAAAAADevAAAAAAAAOK8AAAAAAAAAAAAAPq8AAAAAAAA/rwAAAAAAAAAAAAAGb0AAAAAAAAdvQAAAAAAAAAAAAAgvQAAAAAAACS9AAAAAAAAAAAAACa9AAAAAAAAKr0AAAAAAAAAAAAAW70AAAAAAABfvQAAAAAAAAAAAACTvQAAAAAAAJe9AAAAAAAAAAAAAKq9AAAAAAAArr0AAAAAAAAAAAAAxr0AAAAAAADKvQAAAAAAAAAAAAD3vQAAAAAAAPu9AAAAAAAAAAAAAB2+AAAAAAAAIb4AAAAAAAAAAAAASr4AAAAAAABOvgAAAAAAAAAAAABwvgAAAAAAAHS+AAAAAAAAAAAAAKW+AAAAAAAAqb4AAAAAAAAAAAAA274AAAAAAADfvgAAAAAAAAAAAAABvwAAAAAAAAW/AAAAAAAAAAAAACy/AAAAAAAAML8AAAAAAAAAAAAASb8AAAAAAABNvwAAAAAAAAAAAAB2vwAAAAAAAHq/AAAAAAAAAAAAAKS/AAAAAAAAqL8AAAAAAAAAAAAAwL8AAAAAAADEvwAAAAAAAAAAAAD3vwAAAAAAAPu/AAAAAAAAAAAAABPAAAAAAAAAF8AAAAAAAAAAAAAAMsAAAAAAAAA2wAAAAAAAAAAAAAA5wAAAAAAAAD3AAAAAAAAAAAAAAD/AAAAAAAAAQ8AAAAAAAAAAAAAAdMAAAAAAAAB4wAAAAAAAAAAAAACswAAAAAAAALDAAAAAAAAAAAAAAMPAAAAAAAAAx8AAAAAAAAAAAAAA38AAAAAAAADjwAAAAAAAAAAAAAAQwQAAAAAAABTBAAAAAAAAAAAAADbBAAAAAAAAOsEAAAAAAAAAAAAAY8EAAAAAAABnwQAAAAAAAAAAAACJwQAAAAAAAI3BAAAAAAAAAAAAAL7BAAAAAAAAwsEAAAAAAAAAAAAA9MEAAAAAAAD4wQAAAAAAAAAAAAAawgAAAAAAAB7CAAAAAAAAAAAAAEXCAAAAAAAAScIAAAAAAAAAAAAAYsIAAAAAAABmwgAAAAAAAAAAAACPwgAAAAAAAJPCAAAAAAAAAAAAAL3CAAAAAAAAwcIAAAAAAAAAAAAA2cIAAAAAAADdwgAAAAAAAAAAAAAQwwAAAAAAABTDAAAAAAAAAAAAACzDAAAAAAAAMMMAAAAAAAAAAAAAS8MAAAAAAABPwwAAAAAAAAAAAABSwwAAAAAAAFbDAAAAAAAAAAAAAFjDAAAAAAAAXMMAAAAAAAAAAAAAjcMAAAAAAACRwwAAAAAAAAAAAADFwwAAAAAAAMnDAAAAAAAAAAAAANzDAAAAAAAA4MMAAAAAAAAAAAAA+MMAAAAAAAD8wwAAAAAAAAAAAAApxAAAAAAAAC3EAAAAAAAAAAAAAE/EAAAAAAAAU8QAAAAAAAAAAAAAfcQAAAAAAACBxAAAAAAAAAAAAACjxAAAAAAAAKfEAAAAAAAAAAAAANjEAAAAAAAA3MQAAAAAAAAAAAAADsUAAAAAAAASxQAAAAAAAAAAAAA1xQAAAAAAADnFAAAAAAAAAAAAAGHFAAAAAAAAZcUAAAAAAAAAAAAAfsUAAAAAAACCxQAAAAAAAAAAAACrxQAAAAAAAK/FAAAAAAAAAAAAANnFAAAAAAAA3cUAAAAAAAAAAAAA9cUAAAAAAAD5xQAAAAAAAAAAAAAsxgAAAAAAADDGAAAAAAAAAAAAAEjGAAAAAAAATMYAAAAAAAAAAAAAZ8YAAAAAAABrxgAAAAAAAAAAAABuxgAAAAAAAHLGAAAAAAAAAAAAAHTGAAAAAAAAeMYAAAAAAAAAAAAAqcYAAAAAAACtxgAAAAAAAAAAAADhxgAAAAAAAOXGAAAAAAAAAAAAAPjGAAAAAAAA/MYAAAAAAAAAAAAAFMcAAAAAAAAYxwAAAAAAAAAAAABFxwAAAAAAAEnHAAAAAAAAAAAAAGvHAAAAAAAAb8cAAAAAAAAAAAAAmccAAAAAAACdxwAAAAAAAAAAAAC9xwAAAAAAAMHHAAAAAAAAAAAAAPLHAAAAAAAA9scAAAAAAAAAAAAAKMgAAAAAAAAsyAAAAAAAAAAAAABPyAAAAAAAAFPIAAAAAAAAAAAAAHvIAAAAAAAAf8gAAAAAAAAAAAAAmMgAAAAAAACcyAAAAAAAAAAAAADFyAAAAAAAAMnIAAAAAAAAAAAAAPPIAAAAAAAA98gAAAAAAAAAAAAAD8kAAAAAAAATyQAAAAAAAAAAAABGyQAAAAAAAErJAAAAAAAAAAAAAGLJAAAAAAAAZskAAAAAAAAAAAAAgckAAAAAAACFyQAAAAAAAAAAAACIyQAAAAAAAIzJAAAAAAAAAAAAAI7JAAAAAAAAkskAAAAAAAAAAAAAw8kAAAAAAADHyQAAAAAAAAAAAAD7yQAAAAAAAP/JAAAAAAAAAAAAABLKAAAAAAAAFsoAAAAAAAAAAAAALsoAAAAAAAAyygAAAAAAAAAAAABfygAAAAAAAGPKAAAAAAAAAAAAAIXKAAAAAAAAicoAAAAAAAAAAAAAs8oAAAAAAAC3ygAAAAAAAAAAAADZygAAAAAAAN3KAAAAAAAAAAAAAA7LAAAAAAAAEssAAAAAAAAAAAAARMsAAAAAAABIywAAAAAAAAAAAABrywAAAAAAAG/LAAAAAAAAAAAAAJfLAAAAAAAAm8sAAAAAAAAAAAAAtMsAAAAAAAC4ywAAAAAAAAAAAADhywAAAAAAAOXLAAAAAAAAAAAAAA/MAAAAAAAAE8wAAAAAAAAAAAAAK8wAAAAAAAAvzAAAAAAAAAAAAABizAAAAAAAAGbMAAAAAAAAAAAAAH7MAAAAAAAAgswAAAAAAAAAAAAAncwAAAAAAAChzAAAAAAAAAAAAACkzAAAAAAAAKjMAAAAAAAAAAAAAKrMAAAAAAAArswAAAAAAAAAAAAA38wAAAAAAADjzAAAAAAAAAAAAAAXzQAAAAAAABvNAAAAAAAAAAAAAC7NAAAAAAAAMs0AAAAAAAAAAAAASs0AAAAAAABOzQAAAAAAAAAAAAB7zQAAAAAAAH/NAAAAAAAAAAAAAKHNAAAAAAAApc0AAAAAAAAAAAAAzc0AAAAAAADRzQAAAAAAAAAAAADzzQAAAAAAAPfNAAAAAAAAAAAAACjOAAAAAAAALM4AAAAAAAAAAAAAXs4AAAAAAABizgAAAAAAAAAAAACFzgAAAAAAAInOAAAAAAAAAAAAALHOAAAAAAAAtc4AAAAAAAAAAAAAzs4AAAAAAADSzgAAAAAAAAAAAAD7zgAAAAAAAP/OAAAAAAAAAAAAACnPAAAAAAAALc8AAAAAAAAAAAAARc8AAAAAAABJzwAAAAAAAAAAAAB8zwAAAAAAAIDPAAAAAAAAAAAAAJjPAAAAAAAAnM8AAAAAAAAAAAAAt88AAAAAAAC7zwAAAAAAAAAAAAC+zwAAAAAAAMLPAAAAAAAAAAAAAMTPAAAAAAAAyM8AAAAAAAAAAAAA+c8AAAAAAAD9zwAAAAAAAAAAAAAx0AAAAAAAADXQAAAAAAAAAAAAAEjQAAAAAAAATNAAAAAAAAAAAAAAZNAAAAAAAABo0AAAAAAAAAAAAACV0AAAAAAAAJnQAAAAAAAAAAAAALvQAAAAAAAAv9AAAAAAAAAAAAAA59AAAAAAAADr0AAAAAAAAAAAAAAN0QAAAAAAABHRAAAAAAAAAAAAAELRAAAAAAAARtEAAAAAAAAAAAAAeNEAAAAAAAB80QAAAAAAAAAAAACf0QAAAAAAAKPRAAAAAAAAAAAAAMvRAAAAAAAAz9EAAAAAAAAAAAAA6NEAAAAAAADs0QAAAAAAAAAAAAAV0gAAAAAAABnSAAAAAAAAAAAAAEPSAAAAAAAAR9IAAAAAAAAAAAAAX9IAAAAAAABj0gAAAAAAAAAAAACW0gAAAAAAAJrSAAAAAAAAAAAAALLSAAAAAAAAttIAAAAAAAAAAAAA0dIAAAAAAADV0gAAAAAAAAAAAADY0gAAAAAAANzSAAAAAAAAAAAAAN7SAAAAAAAA4tIAAAAAAAAAAAAAE9MAAAAAAAAX0wAAAAAAAAAAAABL0wAAAAAAAE/TAAAAAAAAAAAAAGLTAAAAAAAAZtMAAAAAAAAAAAAAftMAAAAAAACC0wAAAAAAAAAAAACv0wAAAAAAALPTAAAAAAAAAAAAANXTAAAAAAAA2dMAAAAAAAAAAAAAAdQAAAAAAAAF1AAAAAAAAAAAAAAn1AAAAAAAACvUAAAAAAAAAAAAAFzUAAAAAAAAYNQAAAAAAAAAAAAAktQAAAAAAACW1AAAAAAAAAAAAAC41AAAAAAAALzUAAAAAAAAAAAAAOPUAAAAAAAA59QAAAAAAAAAAAAAANUAAAAAAAAE1QAAAAAAAAAAAAAt1QAAAAAAADHVAAAAAAAAAAAAAFvVAAAAAAAAX9UAAAAAAAAAAAAAd9UAAAAAAAB71QAAAAAAAAAAAACu1QAAAAAAALLVAAAAAAAAAAAAAMrVAAAAAAAAztUAAAAAAAAAAAAA6dUAAAAAAADt1QAAAAAAAAAAAADw1QAAAAAAAPTVAAAAAAAAAAAAAPbVAAAAAAAA+tUAAAAAAAAAAAAAK9YAAAAAAAAv1gAAAAAAAAAAAABj1gAAAAAAAGfWAAAAAAAAAAAAAHrWAAAAAAAAftYAAAAAAAAAAAAAltYAAAAAAACa1gAAAAAAAAAAAADH1gAAAAAAAMvWAAAAAAAAAAAAAO3WAAAAAAAA8dYAAAAAAAAAAAAAGtcAAAAAAAAe1wAAAAAAAAAAAABA1wAAAAAAAETXAAAAAAAAAAAAAHXXAAAAAAAAedcAAAAAAAAAAAAAq9cAAAAAAACv1wAAAAAAAAAAAADR1wAAAAAAANXXAAAAAAAAAAAAAPzXAAAAAAAAANgAAAAAAAAAAAAAGNgAAAAAAAAc2AAAAAAAAAAAAABF2AAAAAAAAEnYAAAAAAAAAAAAAHPYAAAAAAAAd9gAAAAAAAAAAAAAj9gAAAAAAACT2AAAAAAAAAAAAADG2AAAAAAAAMrYAAAAAAAAAAAAAOLYAAAAAAAA5tgAAAAAAAAAAAAAAdkAAAAAAAAF2QAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAGgAAAAAAAAB2wQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					160,
+					1,
+					"insert",
+					{
+						"characters": "\n]}"
+					},
+					"BgAAAAbZAAAAAAAAB9kAAAAAAAAAAAAAB9kAAAAAAAAL2QAAAAAAAAAAAAAL2QAAAAAAAAzZAAAAAAAAAAAAAAfZAAAAAAAAB9kAAAAAAAAEAAAAICAgIAfZAAAAAAAAB9kAAAAAAAAAAAAACNkAAAAAAAAJ2QAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABtkAAAAAAAAG2QAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"contents": "{\"trxhistory\":[\n    {//get reward, userbasics x accountbalances\n        \"_id\": ObjectId(\"63bfecb7a121c14ab4a6dae7\"),\n        \"type\": \"Rewards\",\n        \"jenis\": \"Rewards\",\n        \"timestamp\": \"2023-01-12T18:19:19.225Z\",\n        \"description\": \"rewards form ads view\",\n        \"amount\": NumberInt(\"400\"),\n        \"totalamount\": NumberInt(\"400\"),\n        \"status\": \"Success\",\n        \"fullName\": \"joss\",\n        \"kepemilikan\": \"TIDAK\"\n    },\n    {//withdraw, userbasics x withdraws\n        \"_id\" : ObjectId(\"62ea3f0fc74c3fb4f775bbb0\"),\n        \"type\": \"Withdraw\",\n        \"jenis\": \"Withdraw\",\n        \"amount\" : NumberInt(100000),\n        \"status\" : \"Success\",\n        \"bankVerificationCharge\" : ObjectId(\"62bd4104f37a00001a004367\"),\n        \"bankDisbursmentCharge\" : ObjectId(\"62bd4126f37a00001a004368\"),\n        \"timestamp\" : \"2022-08-03T16:26:05.000Z\",\n        \"verified\" : false,\n        \"description\" : \"Test API Disburse\",\n        \"partnerTrxid\" : \"OYO379700\",\n        \"statusOtp\" : null,\n        \"idAccountBank\" : ObjectId(\"62ce79918f000000d90054d2\"),\n        \"totalamount\" : NumberInt(93000),    \n    },\n    {//buy content, userbasics x transactions x posts x mediapicts/mediavideos/mediadiaries\n        \"_id\": ObjectId(\"63566fca756378d0bd942093\"),\n        \"iduser\": ObjectId(\"62ccef9e5f458435760af946\"),\n        \"type\": \"Buy\",\n        \"jenis\": \"CONTENT\",\n        \"timestamp\": \"2022-10-24T17:58:08.030Z\",\n        \"description\": \"description\",\n        \"noinvoice\": \"INV/MMXXII/X/XXIV/6\",\n        \"nova\": \"700707760000331239\",\n        \"expiredtimeva\": \"2022-10-24T18:13:18.000Z\",\n        \"bank\": ObjectId(\"62bad7de5b0600005d003b15\"),\n        \"amount\": NumberInt(\"100000\"),\n        \"totalamount\": NumberInt(\"107000\"),\n        \"status\": \"Cancel\",\n        \"email\": \"ilhamarahman97@gmail.com\",\n        \"postID\": \"c7f6056f-2051-42ef-3e87-13d4f713bd82\",\n        \"postType\": \"vid\",\n        \"descriptionContent\": \"Spoiler Manga Boruto chapter 74 #anime  #boruto  #naruto #mangaboruto\",\n        \"fullName\": \"joss\",\n        \"kepemilikan\": \"TIDAK\"\n    },\n    {//buy voucher, userbasics x transactions\n        \"_id\": ObjectId(\"63bfeaaea121c14ab4a5549c\"),\n        \"iduser\": ObjectId(\"62ccef9e5f458435760af946\"),\n        \"type\": \"Buy\",\n        \"jenis\": \"VOUCHER\",\n        \"timestamp\": \"2023-01-12T18:10:38.392Z\",\n        \"description\": \"description\",\n        \"noinvoice\": \"INV/MMXXIII/I/XII/19\",\n        \"nova\": \"700707760000007720\",\n        \"expiredtimeva\": \"2023-01-12T18:25:38.000Z\",\n        \"bank\": ObjectId(\"62bad7de5b0600005d003b15\"),\n        \"amount\": NumberInt(\"75000\"),\n        \"totalamount\": NumberInt(\"81750\"),\n        \"status\": \"Success\",\n        \"email\": \"ilhamarahman97@gmail.com\",\n        \"postID\": \"63bfea7ca121c14ab4a5526a\",\n        \"postType\": \"pict\",\n        \"descriptionContent\": \"teroris nih bang ucup\",\n        \"fullName\": \"joss\",\n        \"kepemilikan\": \"TIDAK\"\n    },\n    {//sell content, userbasics x transactions x posts x mediapicts/mediavideos/mediadiaries\n        \"_id\": ObjectId(\"63493a7157b4a81ec2b5f653\"),\n        \"iduser\": ObjectId(\"62ccef9e5f458435760af946\"),\n        \"type\": \"Sell\",\n        \"jenis\": \"CONTENT\",\n        \"timestamp\": \"2022-10-14T17:31:04.407Z\",\n        \"description\": \"description\",\n        \"noinvoice\": \"INV/MMXXII/X/XIV/1\",\n        \"nova\": \"700707760000325422\",\n        \"expiredtimeva\": \"2022-10-14T17:32:13.000Z\",\n        \"bank\": ObjectId(\"62bad7de5b0600005d003b15\"),\n        \"amount\": NumberInt(\"50999\"),\n        \"totalamount\": NumberInt(\"50999\"),\n        \"status\": \"Cancel\",\n        \"email\": \"ilhamarahman97@gmail.com\",\n        \"postID\": \"7b035a61-d997-a41e-d1fe-00f234554b72\",\n        \"postType\": \"vid\",\n        \"descriptionContent\": \"wkwkwkwkwlwlwlwllwlwlwkwkwkkwkwl\",\n        \"fullName\": \"joss\",\n        \"kepemilikan\": \"YA\"\n    }\n]}\n",
+			"settings":
+			{
+				"buffer_size": 3781,
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					1,
+					1,
+					"paste",
+					null,
+					"AQAAAAAAAAAAAAAAjgEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					4,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AQAAAI0BAAAAAAAAjgEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAjQEAAAAAAACNAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					5,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAI4BAAAAAAAAjwEAAAAAAAAAAAAAjwEAAAAAAACTAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAjgEAAAAAAACOAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					6,
+					1,
+					"paste",
+					null,
+					"AQAAAJMBAAAAAAAA4gQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAkwEAAAAAAACTAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					7,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAOIEAAAAAAAA4wQAAAAAAAAAAAAA4wQAAAAAAADnBAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA4gQAAAAAAADiBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					8,
+					1,
+					"paste",
+					null,
+					"AQAAAOcEAAAAAAAA+wcAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA5wQAAAAAAADnBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					9,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAAPsHAAAAAAAA/AcAAAAAAAAAAAAA/AcAAAAAAAAACAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA+wcAAAAAAAD7BwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					10,
+					1,
+					"paste",
+					null,
+					"AQAAAAAIAAAAAAAAKgsAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					11,
+					3,
+					"left_delete",
+					null,
+					"AwAAACYLAAAAAAAAJgsAAAAAAAAEAAAAICAgICULAAAAAAAAJQsAAAAAAAABAAAACiQLAAAAAAAAJAsAAAAAAAABAAAALA",
+					"AQAAAAAAAAABAAAAKgsAAAAAAAAqCwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					12,
+					1,
+					"insert",
+					{
+						"characters": "\n]}"
+					},
+					"BgAAACQLAAAAAAAAJQsAAAAAAAAAAAAAJQsAAAAAAAApCwAAAAAAAAAAAAApCwAAAAAAACoLAAAAAAAAAAAAACULAAAAAAAAJQsAAAAAAAAEAAAAICAgICULAAAAAAAAJQsAAAAAAAAAAAAAJgsAAAAAAAAnCwAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJAsAAAAAAAAkCwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					17,
+					1,
+					"insert",
+					{
+						"characters": "//g"
+					},
+					"AwAAABUAAAAAAAAAFgAAAAAAAAAAAAAAFgAAAAAAAAAXAAAAAAAAAAAAAAAXAAAAAAAAABgAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAFQAAAAAAAAAVAAAAAAAAAAAAAAAAkHRA"
+				],
+				[
+					18,
+					1,
+					"left_delete",
+					null,
+					"AQAAABcAAAAAAAAAFwAAAAAAAAABAAAAZw",
+					"AQAAAAAAAAABAAAAGAAAAAAAAAAYAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					19,
+					1,
+					"insert",
+					{
+						"characters": "get"
+					},
+					"AwAAABcAAAAAAAAAGAAAAAAAAAAAAAAAGAAAAAAAAAAZAAAAAAAAAAAAAAAZAAAAAAAAABoAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAFwAAAAAAAAAXAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					20,
+					1,
+					"insert",
+					{
+						"characters": " reward"
+					},
+					"BwAAABoAAAAAAAAAGwAAAAAAAAAAAAAAGwAAAAAAAAAcAAAAAAAAAAAAAAAcAAAAAAAAAB0AAAAAAAAAAAAAAB0AAAAAAAAAHgAAAAAAAAAAAAAAHgAAAAAAAAAfAAAAAAAAAAAAAAAfAAAAAAAAACAAAAAAAAAAAAAAACAAAAAAAAAAIQAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAGgAAAAAAAAAaAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					24,
+					1,
+					"insert",
+					{
+						"characters": "//buy"
+					},
+					"BQAAAKABAAAAAAAAoQEAAAAAAAAAAAAAoQEAAAAAAACiAQAAAAAAAAAAAACiAQAAAAAAAKMBAAAAAAAAAAAAAKMBAAAAAAAApAEAAAAAAAAAAAAApAEAAAAAAAClAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAoAEAAAAAAACgAQAAAAAAAAAAAAAAAEVA"
+				],
+				[
+					25,
+					1,
+					"insert",
+					{
+						"characters": " content"
+					},
+					"CAAAAKUBAAAAAAAApgEAAAAAAAAAAAAApgEAAAAAAACnAQAAAAAAAAAAAACnAQAAAAAAAKgBAAAAAAAAAAAAAKgBAAAAAAAAqQEAAAAAAAAAAAAAqQEAAAAAAACqAQAAAAAAAAAAAACqAQAAAAAAAKsBAAAAAAAAAAAAAKsBAAAAAAAArAEAAAAAAAAAAAAArAEAAAAAAACtAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAApQEAAAAAAAClAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					29,
+					1,
+					"insert",
+					{
+						"characters": "//buy"
+					},
+					"BQAAAAEFAAAAAAAAAgUAAAAAAAAAAAAAAgUAAAAAAAADBQAAAAAAAAAAAAADBQAAAAAAAAQFAAAAAAAAAAAAAAQFAAAAAAAABQUAAAAAAAAAAAAABQUAAAAAAAAGBQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAAQUAAAAAAAABBQAAAAAAAAAAAAAAwHZA"
+				],
+				[
+					30,
+					1,
+					"insert",
+					{
+						"characters": " voucher"
+					},
+					"CAAAAAYFAAAAAAAABwUAAAAAAAAAAAAABwUAAAAAAAAIBQAAAAAAAAAAAAAIBQAAAAAAAAkFAAAAAAAAAAAAAAkFAAAAAAAACgUAAAAAAAAAAAAACgUAAAAAAAALBQAAAAAAAAAAAAALBQAAAAAAAAwFAAAAAAAAAAAAAAwFAAAAAAAADQUAAAAAAAAAAAAADQUAAAAAAAAOBQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABgUAAAAAAAAGBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					33,
+					1,
+					"insert",
+					{
+						"characters": "//sell"
+					},
+					"BgAAACcIAAAAAAAAKAgAAAAAAAAAAAAAKAgAAAAAAAApCAAAAAAAAAAAAAApCAAAAAAAACoIAAAAAAAAAAAAACoIAAAAAAAAKwgAAAAAAAAAAAAAKwgAAAAAAAAsCAAAAAAAAAAAAAAsCAAAAAAAAC0IAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJwgAAAAAAAAnCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					34,
+					1,
+					"insert",
+					{
+						"characters": " content"
+					},
+					"CAAAAC0IAAAAAAAALggAAAAAAAAAAAAALggAAAAAAAAvCAAAAAAAAAAAAAAvCAAAAAAAADAIAAAAAAAAAAAAADAIAAAAAAAAMQgAAAAAAAAAAAAAMQgAAAAAAAAyCAAAAAAAAAAAAAAyCAAAAAAAADMIAAAAAAAAAAAAADMIAAAAAAAANAgAAAAAAAAAAAAANAgAAAAAAAA1CAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALQgAAAAAAAAtCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					38,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AQAAACEAAAAAAAAAIgAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAIQAAAAAAAAAhAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					39,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAACIAAAAAAAAAIwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAIgAAAAAAAAAiAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					40,
+					1,
+					"left_delete",
+					null,
+					"AQAAACIAAAAAAAAAIgAAAAAAAAABAAAAIA",
+					"AQAAAAAAAAABAAAAIwAAAAAAAAAjAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					41,
+					1,
+					"insert",
+					{
+						"characters": "u"
+					},
+					"AQAAACIAAAAAAAAAIwAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAIgAAAAAAAAAiAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					42,
+					1,
+					"left_delete",
+					null,
+					"AQAAACIAAAAAAAAAIgAAAAAAAAABAAAAdQ",
+					"AQAAAAAAAAABAAAAIwAAAAAAAAAjAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					43,
+					1,
+					"insert",
+					{
+						"characters": " userbasics"
+					},
+					"CwAAACIAAAAAAAAAIwAAAAAAAAAAAAAAIwAAAAAAAAAkAAAAAAAAAAAAAAAkAAAAAAAAACUAAAAAAAAAAAAAACUAAAAAAAAAJgAAAAAAAAAAAAAAJgAAAAAAAAAnAAAAAAAAAAAAAAAnAAAAAAAAACgAAAAAAAAAAAAAACgAAAAAAAAAKQAAAAAAAAAAAAAAKQAAAAAAAAAqAAAAAAAAAAAAAAAqAAAAAAAAACsAAAAAAAAAAAAAACsAAAAAAAAALAAAAAAAAAAAAAAALAAAAAAAAAAtAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAIgAAAAAAAAAiAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					44,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAC0AAAAAAAAALgAAAAAAAAAAAAAALgAAAAAAAAAvAAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALQAAAAAAAAAtAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					45,
+					1,
+					"insert",
+					{
+						"characters": " accountbal"
+					},
+					"CwAAAC8AAAAAAAAAMAAAAAAAAAAAAAAAMAAAAAAAAAAxAAAAAAAAAAAAAAAxAAAAAAAAADIAAAAAAAAAAAAAADIAAAAAAAAAMwAAAAAAAAAAAAAAMwAAAAAAAAA0AAAAAAAAAAAAAAA0AAAAAAAAADUAAAAAAAAAAAAAADUAAAAAAAAANgAAAAAAAAAAAAAANgAAAAAAAAA3AAAAAAAAAAAAAAA3AAAAAAAAADgAAAAAAAAAAAAAADgAAAAAAAAAOQAAAAAAAAAAAAAAOQAAAAAAAAA6AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAALwAAAAAAAAAvAAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					46,
+					1,
+					"insert",
+					{
+						"characters": "ances"
+					},
+					"BQAAADoAAAAAAAAAOwAAAAAAAAAAAAAAOwAAAAAAAAA8AAAAAAAAAAAAAAA8AAAAAAAAAD0AAAAAAAAAAAAAAD0AAAAAAAAAPgAAAAAAAAAAAAAAPgAAAAAAAAA/AAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAOgAAAAAAAAA6AAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					49,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AQAAAMsBAAAAAAAAzAEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAywEAAAAAAADLAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					50,
+					1,
+					"insert",
+					{
+						"characters": " userbasics"
+					},
+					"CwAAAMwBAAAAAAAAzQEAAAAAAAAAAAAAzQEAAAAAAADOAQAAAAAAAAAAAADOAQAAAAAAAM8BAAAAAAAAAAAAAM8BAAAAAAAA0AEAAAAAAAAAAAAA0AEAAAAAAADRAQAAAAAAAAAAAADRAQAAAAAAANIBAAAAAAAAAAAAANIBAAAAAAAA0wEAAAAAAAAAAAAA0wEAAAAAAADUAQAAAAAAAAAAAADUAQAAAAAAANUBAAAAAAAAAAAAANUBAAAAAAAA1gEAAAAAAAAAAAAA1gEAAAAAAADXAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAzAEAAAAAAADMAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					51,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAANcBAAAAAAAA2AEAAAAAAAAAAAAA2AEAAAAAAADZAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA1wEAAAAAAADXAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					52,
+					1,
+					"insert",
+					{
+						"characters": " posts"
+					},
+					"BgAAANkBAAAAAAAA2gEAAAAAAAAAAAAA2gEAAAAAAADbAQAAAAAAAAAAAADbAQAAAAAAANwBAAAAAAAAAAAAANwBAAAAAAAA3QEAAAAAAAAAAAAA3QEAAAAAAADeAQAAAAAAAAAAAADeAQAAAAAAAN8BAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA2QEAAAAAAADZAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					53,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAN8BAAAAAAAA4AEAAAAAAAAAAAAA4AEAAAAAAADhAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA3wEAAAAAAADfAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					54,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAAOEBAAAAAAAA4gEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA4QEAAAAAAADhAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					55,
+					8,
+					"left_delete",
+					null,
+					"CAAAAOEBAAAAAAAA4QEAAAAAAAABAAAAIOABAAAAAAAA4AEAAAAAAAABAAAAeN8BAAAAAAAA3wEAAAAAAAABAAAAIN4BAAAAAAAA3gEAAAAAAAABAAAAc90BAAAAAAAA3QEAAAAAAAABAAAAdNwBAAAAAAAA3AEAAAAAAAABAAAAc9sBAAAAAAAA2wEAAAAAAAABAAAAb9oBAAAAAAAA2gEAAAAAAAABAAAAcA",
+					"AQAAAAAAAAABAAAA4gEAAAAAAADiAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					56,
+					1,
+					"insert",
+					{
+						"characters": "transactions"
+					},
+					"DAAAANoBAAAAAAAA2wEAAAAAAAAAAAAA2wEAAAAAAADcAQAAAAAAAAAAAADcAQAAAAAAAN0BAAAAAAAAAAAAAN0BAAAAAAAA3gEAAAAAAAAAAAAA3gEAAAAAAADfAQAAAAAAAAAAAADfAQAAAAAAAOABAAAAAAAAAAAAAOABAAAAAAAA4QEAAAAAAAAAAAAA4QEAAAAAAADiAQAAAAAAAAAAAADiAQAAAAAAAOMBAAAAAAAAAAAAAOMBAAAAAAAA5AEAAAAAAAAAAAAA5AEAAAAAAADlAQAAAAAAAAAAAADlAQAAAAAAAOYBAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA2gEAAAAAAADaAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					57,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAOYBAAAAAAAA5wEAAAAAAAAAAAAA5wEAAAAAAADoAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA5gEAAAAAAADmAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					58,
+					1,
+					"insert",
+					{
+						"characters": " posts"
+					},
+					"BgAAAOgBAAAAAAAA6QEAAAAAAAAAAAAA6QEAAAAAAADqAQAAAAAAAAAAAADqAQAAAAAAAOsBAAAAAAAAAAAAAOsBAAAAAAAA7AEAAAAAAAAAAAAA7AEAAAAAAADtAQAAAAAAAAAAAADtAQAAAAAAAO4BAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA6AEAAAAAAADoAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					59,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAO4BAAAAAAAA7wEAAAAAAAAAAAAA7wEAAAAAAADwAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7gEAAAAAAADuAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					60,
+					1,
+					"insert",
+					{
+						"characters": " mediapict"
+					},
+					"CgAAAPABAAAAAAAA8QEAAAAAAAAAAAAA8QEAAAAAAADyAQAAAAAAAAAAAADyAQAAAAAAAPMBAAAAAAAAAAAAAPMBAAAAAAAA9AEAAAAAAAAAAAAA9AEAAAAAAAD1AQAAAAAAAAAAAAD1AQAAAAAAAPYBAAAAAAAAAAAAAPYBAAAAAAAA9wEAAAAAAAAAAAAA9wEAAAAAAAD4AQAAAAAAAAAAAAD4AQAAAAAAAPkBAAAAAAAAAAAAAPkBAAAAAAAA+gEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA8AEAAAAAAADwAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					61,
+					1,
+					"insert",
+					{
+						"characters": "s/mediavids/"
+					},
+					"DAAAAPoBAAAAAAAA+wEAAAAAAAAAAAAA+wEAAAAAAAD8AQAAAAAAAAAAAAD8AQAAAAAAAP0BAAAAAAAAAAAAAP0BAAAAAAAA/gEAAAAAAAAAAAAA/gEAAAAAAAD/AQAAAAAAAAAAAAD/AQAAAAAAAAACAAAAAAAAAAAAAAACAAAAAAAAAQIAAAAAAAAAAAAAAQIAAAAAAAACAgAAAAAAAAAAAAACAgAAAAAAAAMCAAAAAAAAAAAAAAMCAAAAAAAABAIAAAAAAAAAAAAABAIAAAAAAAAFAgAAAAAAAAAAAAAFAgAAAAAAAAYCAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA+gEAAAAAAAD6AQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					62,
+					1,
+					"insert",
+					{
+						"characters": "mediadiaries"
+					},
+					"DAAAAAYCAAAAAAAABwIAAAAAAAAAAAAABwIAAAAAAAAIAgAAAAAAAAAAAAAIAgAAAAAAAAkCAAAAAAAAAAAAAAkCAAAAAAAACgIAAAAAAAAAAAAACgIAAAAAAAALAgAAAAAAAAAAAAALAgAAAAAAAAwCAAAAAAAAAAAAAAwCAAAAAAAADQIAAAAAAAAAAAAADQIAAAAAAAAOAgAAAAAAAAAAAAAOAgAAAAAAAA8CAAAAAAAAAAAAAA8CAAAAAAAAEAIAAAAAAAAAAAAAEAIAAAAAAAARAgAAAAAAAAAAAAARAgAAAAAAABICAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABgIAAAAAAAAGAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					70,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AQAAAHMFAAAAAAAAdAUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAcwUAAAAAAABzBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					71,
+					1,
+					"insert",
+					{
+						"characters": " se"
+					},
+					"AwAAAHQFAAAAAAAAdQUAAAAAAAAAAAAAdQUAAAAAAAB2BQAAAAAAAAAAAAB2BQAAAAAAAHcFAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAdAUAAAAAAAB0BQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					72,
+					2,
+					"left_delete",
+					null,
+					"AgAAAHYFAAAAAAAAdgUAAAAAAAABAAAAZXUFAAAAAAAAdQUAAAAAAAABAAAAcw",
+					"AQAAAAAAAAABAAAAdwUAAAAAAAB3BQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					73,
+					1,
+					"insert",
+					{
+						"characters": "userbasics"
+					},
+					"CgAAAHUFAAAAAAAAdgUAAAAAAAAAAAAAdgUAAAAAAAB3BQAAAAAAAAAAAAB3BQAAAAAAAHgFAAAAAAAAAAAAAHgFAAAAAAAAeQUAAAAAAAAAAAAAeQUAAAAAAAB6BQAAAAAAAAAAAAB6BQAAAAAAAHsFAAAAAAAAAAAAAHsFAAAAAAAAfAUAAAAAAAAAAAAAfAUAAAAAAAB9BQAAAAAAAAAAAAB9BQAAAAAAAH4FAAAAAAAAAAAAAH4FAAAAAAAAfwUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAdQUAAAAAAAB1BQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					74,
+					1,
+					"insert",
+					{
+						"characters": "  x"
+					},
+					"AwAAAH8FAAAAAAAAgAUAAAAAAAAAAAAAgAUAAAAAAACBBQAAAAAAAAAAAACBBQAAAAAAAIIFAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAfwUAAAAAAAB/BQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					75,
+					2,
+					"left_delete",
+					null,
+					"AgAAAIEFAAAAAAAAgQUAAAAAAAABAAAAeIAFAAAAAAAAgAUAAAAAAAABAAAAIA",
+					"AQAAAAAAAAABAAAAggUAAAAAAACCBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					76,
+					1,
+					"insert",
+					{
+						"characters": "x"
+					},
+					"AQAAAIAFAAAAAAAAgQUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAgAUAAAAAAACABQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					77,
+					1,
+					"insert",
+					{
+						"characters": " transactionx"
+					},
+					"DQAAAIEFAAAAAAAAggUAAAAAAAAAAAAAggUAAAAAAACDBQAAAAAAAAAAAACDBQAAAAAAAIQFAAAAAAAAAAAAAIQFAAAAAAAAhQUAAAAAAAAAAAAAhQUAAAAAAACGBQAAAAAAAAAAAACGBQAAAAAAAIcFAAAAAAAAAAAAAIcFAAAAAAAAiAUAAAAAAAAAAAAAiAUAAAAAAACJBQAAAAAAAAAAAACJBQAAAAAAAIoFAAAAAAAAAAAAAIoFAAAAAAAAiwUAAAAAAAAAAAAAiwUAAAAAAACMBQAAAAAAAAAAAACMBQAAAAAAAI0FAAAAAAAAAAAAAI0FAAAAAAAAjgUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAgQUAAAAAAACBBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					78,
+					1,
+					"left_delete",
+					null,
+					"AQAAAI0FAAAAAAAAjQUAAAAAAAABAAAAeA",
+					"AQAAAAAAAAABAAAAjgUAAAAAAACOBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					79,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAAI0FAAAAAAAAjgUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAjQUAAAAAAACNBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					80,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAI4FAAAAAAAAjwUAAAAAAAAAAAAAjwUAAAAAAACQBQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAjgUAAAAAAACOBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					81,
+					1,
+					"insert",
+					{
+						"characters": " posts"
+					},
+					"BgAAAJAFAAAAAAAAkQUAAAAAAAAAAAAAkQUAAAAAAACSBQAAAAAAAAAAAACSBQAAAAAAAJMFAAAAAAAAAAAAAJMFAAAAAAAAlAUAAAAAAAAAAAAAlAUAAAAAAACVBQAAAAAAAAAAAACVBQAAAAAAAJYFAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAkAUAAAAAAACQBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					82,
+					8,
+					"left_delete",
+					null,
+					"CAAAAJUFAAAAAAAAlQUAAAAAAAABAAAAc5QFAAAAAAAAlAUAAAAAAAABAAAAdJMFAAAAAAAAkwUAAAAAAAABAAAAc5IFAAAAAAAAkgUAAAAAAAABAAAAb5EFAAAAAAAAkQUAAAAAAAABAAAAcJAFAAAAAAAAkAUAAAAAAAABAAAAII8FAAAAAAAAjwUAAAAAAAABAAAAeI4FAAAAAAAAjgUAAAAAAAABAAAAIA",
+					"AQAAAAAAAAABAAAAlgUAAAAAAACWBQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					85,
+					1,
+					"insert",
+					{
+						"characters": ","
+					},
+					"AQAAALUIAAAAAAAAtggAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAtQgAAAAAAAC1CAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					86,
+					1,
+					"insert",
+					{
+						"characters": " userbasics"
+					},
+					"CwAAALYIAAAAAAAAtwgAAAAAAAAAAAAAtwgAAAAAAAC4CAAAAAAAAAAAAAC4CAAAAAAAALkIAAAAAAAAAAAAALkIAAAAAAAAuggAAAAAAAAAAAAAuggAAAAAAAC7CAAAAAAAAAAAAAC7CAAAAAAAALwIAAAAAAAAAAAAALwIAAAAAAAAvQgAAAAAAAAAAAAAvQgAAAAAAAC+CAAAAAAAAAAAAAC+CAAAAAAAAL8IAAAAAAAAAAAAAL8IAAAAAAAAwAgAAAAAAAAAAAAAwAgAAAAAAADBCAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAtggAAAAAAAC2CAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					87,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAMEIAAAAAAAAwggAAAAAAAAAAAAAwggAAAAAAADDCAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAwQgAAAAAAADBCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					88,
+					1,
+					"insert",
+					{
+						"characters": " transactions,"
+					},
+					"DgAAAMMIAAAAAAAAxAgAAAAAAAAAAAAAxAgAAAAAAADFCAAAAAAAAAAAAADFCAAAAAAAAMYIAAAAAAAAAAAAAMYIAAAAAAAAxwgAAAAAAAAAAAAAxwgAAAAAAADICAAAAAAAAAAAAADICAAAAAAAAMkIAAAAAAAAAAAAAMkIAAAAAAAAyggAAAAAAAAAAAAAyggAAAAAAADLCAAAAAAAAAAAAADLCAAAAAAAAMwIAAAAAAAAAAAAAMwIAAAAAAAAzQgAAAAAAAAAAAAAzQgAAAAAAADOCAAAAAAAAAAAAADOCAAAAAAAAM8IAAAAAAAAAAAAAM8IAAAAAAAA0AgAAAAAAAAAAAAA0AgAAAAAAADRCAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAwwgAAAAAAADDCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					89,
+					1,
+					"left_delete",
+					null,
+					"AQAAANAIAAAAAAAA0AgAAAAAAAABAAAALA",
+					"AQAAAAAAAAABAAAA0QgAAAAAAADRCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					90,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAANAIAAAAAAAA0QgAAAAAAAAAAAAA0QgAAAAAAADSCAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA0AgAAAAAAADQCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					91,
+					1,
+					"insert",
+					{
+						"characters": " posts"
+					},
+					"BgAAANIIAAAAAAAA0wgAAAAAAAAAAAAA0wgAAAAAAADUCAAAAAAAAAAAAADUCAAAAAAAANUIAAAAAAAAAAAAANUIAAAAAAAA1ggAAAAAAAAAAAAA1ggAAAAAAADXCAAAAAAAAAAAAADXCAAAAAAAANgIAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA0ggAAAAAAADSCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					98,
+					1,
+					"paste",
+					null,
+					"AQAAANgIAAAAAAAA/AgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA2AgAAAAAAADYCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					101,
+					1,
+					"insert",
+					{
+						"characters": "eo"
+					},
+					"AgAAAO4IAAAAAAAA7wgAAAAAAAAAAAAA7wgAAAAAAADwCAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA7ggAAAAAAADuCAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					104,
+					1,
+					"insert",
+					{
+						"characters": "eo"
+					},
+					"AgAAAAQCAAAAAAAABQIAAAAAAAAAAAAABQIAAAAAAAAGAgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAABAIAAAAAAAAEAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					113,
+					1,
+					"insert",
+					{
+						"characters": "\n"
+					},
+					"AgAAALgBAAAAAAAAuQEAAAAAAAAAAAAAuQEAAAAAAAC9AQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAuAEAAAAAAAC4AQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					114,
+					1,
+					"paste",
+					null,
+					"AQAAAL0BAAAAAAAAYQMAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAvQEAAAAAAAC9AQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					119,
+					5,
+					"left_delete",
+					null,
+					"BQAAAMQBAAAAAAAAxAEAAAAAAAAGAAAAcmV3YXJkwwEAAAAAAADDAQAAAAAAAAEAAAAgwgEAAAAAAADCAQAAAAAAAAEAAAB0wQEAAAAAAADBAQAAAAAAAAEAAABlwAEAAAAAAADAAQAAAAAAAAEAAABn",
+					"AQAAAAAAAAABAAAAxAEAAAAAAADKAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					120,
+					1,
+					"insert",
+					{
+						"characters": "withdraw"
+					},
+					"CAAAAMABAAAAAAAAwQEAAAAAAAAAAAAAwQEAAAAAAADCAQAAAAAAAAAAAADCAQAAAAAAAMMBAAAAAAAAAAAAAMMBAAAAAAAAxAEAAAAAAAAAAAAAxAEAAAAAAADFAQAAAAAAAAAAAADFAQAAAAAAAMYBAAAAAAAAAAAAAMYBAAAAAAAAxwEAAAAAAAAAAAAAxwEAAAAAAADIAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAwAEAAAAAAADAAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					123,
+					1,
+					"insert",
+					{
+						"characters": "withdraw"
+					},
+					"CAAAANcBAAAAAAAA2AEAAAAAAAAAAAAA2AEAAAAAAADZAQAAAAAAAAAAAADZAQAAAAAAANoBAAAAAAAAAAAAANoBAAAAAAAA2wEAAAAAAAAAAAAA2wEAAAAAAADcAQAAAAAAAAAAAADcAQAAAAAAAN0BAAAAAAAAAAAAAN0BAAAAAAAA3gEAAAAAAAAAAAAA3gEAAAAAAADfAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA1wEAAAAAAADXAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					124,
+					1,
+					"insert",
+					{
+						"characters": " x"
+					},
+					"AgAAAN8BAAAAAAAA4AEAAAAAAAAAAAAA4AEAAAAAAADhAQAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA3wEAAAAAAADfAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					125,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAAOEBAAAAAAAA4gEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA4QEAAAAAAADhAQAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					127,
+					4,
+					"left_delete",
+					null,
+					"BAAAAOIBAAAAAAAA4gEAAAAAAAAPAAAAYWNjb3VudGJhbGFuY2Vz4QEAAAAAAADhAQAAAAAAAAEAAAAg4AEAAAAAAADgAQAAAAAAAAEAAAB43wEAAAAAAADfAQAAAAAAAAEAAAAg",
+					"AQAAAAAAAAABAAAA4gEAAAAAAADxAQAAAAAAAP///////+9/"
+				],
+				[
+					131,
+					1,
+					"insert",
+					{
+						"characters": "\n\n"
+					},
+					"BQAAAFgDAAAAAAAAWQMAAAAAAAAAAAAAWQMAAAAAAABdAwAAAAAAAAAAAABdAwAAAAAAAF4DAAAAAAAAAAAAAF4DAAAAAAAAYgMAAAAAAAAAAAAAWQMAAAAAAABZAwAAAAAAAAQAAAAgICAg",
+					"AQAAAAAAAAABAAAAWAMAAAAAAABYAwAAAAAAAAAAAAAAQGpA"
+				],
+				[
+					132,
+					1,
+					"paste",
+					null,
+					"AQAAAF4DAAAAAAAAXgUAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAXgMAAAAAAABeAwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					141,
+					1,
+					"paste",
+					null,
+					"AgAAAOgBAAAAAAAAFQIAAAAAAAAAAAAAFQIAAAAAAAAVAgAAAAAAACwAAAAiX2lkIjogT2JqZWN0SWQoIjYzYmZlY2I3YTEyMWMxNGFiNGE2ZGFlNyIpLA",
+					"AQAAAAAAAAABAAAA6AEAAAAAAAAUAgAAAAAAAP///////+9/"
+				],
+				[
+					146,
+					1,
+					"insert",
+					{
+						"characters": "Withdraw"
+					},
+					"CQAAACcCAAAAAAAAKAIAAAAAAAAAAAAAKAIAAAAAAAAoAgAAAAAAAAcAAABSZXdhcmRzKAIAAAAAAAApAgAAAAAAAAAAAAApAgAAAAAAACoCAAAAAAAAAAAAACoCAAAAAAAAKwIAAAAAAAAAAAAAKwIAAAAAAAAsAgAAAAAAAAAAAAAsAgAAAAAAAC0CAAAAAAAAAAAAAC0CAAAAAAAALgIAAAAAAAAAAAAALgIAAAAAAAAvAgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJwIAAAAAAAAuAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					151,
+					1,
+					"insert",
+					{
+						"characters": "Withdraw"
+					},
+					"CQAAAEQCAAAAAAAARQIAAAAAAAAAAAAARQIAAAAAAABFAgAAAAAAAAcAAABSZXdhcmRzRQIAAAAAAABGAgAAAAAAAAAAAABGAgAAAAAAAEcCAAAAAAAAAAAAAEcCAAAAAAAASAIAAAAAAAAAAAAASAIAAAAAAABJAgAAAAAAAAAAAABJAgAAAAAAAEoCAAAAAAAAAAAAAEoCAAAAAAAASwIAAAAAAAAAAAAASwIAAAAAAABMAgAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAARAIAAAAAAABLAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					168,
+					1,
+					"cut",
+					null,
+					"AQAAAJYDAAAAAAAAlgMAAAAAAADQAQAAImFtb3VudCIgOiBOdW1iZXJJbnQoMTAwMDAwKSwKICAgICJzdGF0dXMiIDogIlN1Y2Nlc3MiLAogICAgImJhbmtWZXJpZmljYXRpb25DaGFyZ2UiIDogT2JqZWN0SWQoIjYyYmQ0MTA0ZjM3YTAwMDAxYTAwNDM2NyIpLAogICAgImJhbmtEaXNidXJzbWVudENoYXJnZSIgOiBPYmplY3RJZCgiNjJiZDQxMjZmMzdhMDAwMDFhMDA0MzY4IiksCiAgICAidGltZXN0YW1wIiA6ICIyMDIyLTA4LTAzVDE2OjI2OjA1LjAwMFoiLAogICAgInZlcmlmaWVkIiA6IGZhbHNlLAogICAgImRlc2NyaXB0aW9uIiA6ICJUZXN0IEFQSSBEaXNidXJzZSIsCiAgICAicGFydG5lclRyeGlkIiA6ICJPWU8zNzk3MDAiLAogICAgInN0YXR1c090cCIgOiBudWxsLAogICAgImlkQWNjb3VudEJhbmsiIDogT2JqZWN0SWQoIjYyY2U3OTkxOGYwMDAwMDBkOTAwNTRkMiIpLAogICAgInRvdGFsYW1vdW50IiA6IE51bWJlckludCg5MzAwMCksCiAgICA",
+					"AQAAAAAAAAABAAAAlgMAAAAAAABmBQAAAAAAAAAAAAAAADxA"
+				],
+				[
+					170,
+					1,
+					"left_delete",
+					null,
+					"AQAAAFwDAAAAAAAAXAMAAAAAAAA6AAAACiAgICAiaWRVc2VyIiA6IE9iamVjdElkKCI2MmExMGFlYjYyYTg2ZjU2MDJmYmVhM2YiKSwKICAgIA",
+					"AQAAAAAAAAABAAAAlgMAAAAAAABcAwAAAAAAAAAAAAAAADxA"
+				],
+				[
+					171,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAAFwDAAAAAAAAYAMAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAXAMAAAAAAABcAwAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					176,
+					1,
+					"paste",
+					null,
+					"AgAAAFcCAAAAAAAAJwQAAAAAAAAAAAAAJwQAAAAAAAAnBAAAAAAAAP0AAAAidGltZXN0YW1wIjogIjIwMjMtMDEtMTJUMTg6MTk6MTkuMjI1WiIsCiAgICAgICAgImRlc2NyaXB0aW9uIjogInJld2FyZHMgZm9ybSBhZHMgdmlldyIsCiAgICAgICAgImFtb3VudCI6IE51bWJlckludCgiNDAwIiksCiAgICAgICAgInRvdGFsYW1vdW50IjogTnVtYmVySW50KCI0MDAiKSwKICAgICAgICAic3RhdHVzIjogIlN1Y2Nlc3MiLAogICAgICAgICJmdWxsTmFtZSI6ICJqb3NzIiwKICAgICAgICAia2VwZW1pbGlrYW4iOiAiVElEQUsi",
+					"AQAAAAAAAAABAAAAVAMAAAAAAABXAgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					179,
+					1,
+					"indent",
+					null,
+					"CwAAAHUCAAAAAAAAeQIAAAAAAAAAAAAAkwIAAAAAAACXAgAAAAAAAAAAAADcAgAAAAAAAOACAAAAAAAAAAAAACQDAAAAAAAAKAMAAAAAAAAAAAAAVgMAAAAAAABaAwAAAAAAAAAAAAByAwAAAAAAAHYDAAAAAAAAAAAAAJ8DAAAAAAAAowMAAAAAAAAAAAAAxQMAAAAAAADJAwAAAAAAAAAAAADhAwAAAAAAAOUDAAAAAAAAAAAAACEEAAAAAAAAJQQAAAAAAAAAAAAASwQAAAAAAABPBAAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAAJwQAAAAAAAB9AgAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					184,
+					1,
+					"run_macro_file",
+					{
+						"file": "res://Packages/Default/Delete to Hard BOL.sublime-macro"
+					},
+					"AQAAAEsEAAAAAAAASwQAAAAAAAAEAAAAICAgIA",
+					"AQAAAAAAAAABAAAATwQAAAAAAABPBAAAAAAAAAAAAAAAADxA"
+				],
+				[
+					185,
+					1,
+					"left_delete",
+					null,
+					"AQAAAEoEAAAAAAAASgQAAAAAAAABAAAACg",
+					"AQAAAAAAAAABAAAASwQAAAAAAABLBAAAAAAAAAAAAAAAAPC/"
+				],
+				[
+					192,
+					1,
+					"insert",
+					{
+						"characters": "s"
+					},
+					"AQAAAN8BAAAAAAAA4AEAAAAAAAAAAAAA",
+					"AQAAAAAAAAABAAAA3wEAAAAAAADfAQAAAAAAAAAAAAAAAPC/"
+				]
+			]
+		},
+		{
+			"file": "lib/firebase_options.dart",
+			"settings":
+			{
+				"buffer_size": 2734,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lib/core/services/shared_preference.dart",
+			"settings":
+			{
+				"buffer_size": 1602,
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+			]
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -68,29 +1875,60 @@
 	],
 	"file_history":
 	[
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/widgets/camera_view.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/pubspec.yaml",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/hyppelive/live_search/screen.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/search_v2/widget/option_bar.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/hyppelive/live_search/widget/live_search_shimmer.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/hyppelive/live_search/widget/live_search.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/models/collection/search/search_content.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/report/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload/make_content/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/transaction/widget/buysell_widget.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/screen.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/asset_path.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/enum.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/models/collection/localization_v2/localization_model.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/initial/hyppe/multi_provider.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/url_constants.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/initial/life_cycle_manager/life_cycle_manager.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ux/path.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/hyppelive/live_search/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ux/generate.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/welcome_login/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ux/routing.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/models/collection/utils/language/language_data.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload/make_content/screen.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/check_version.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/dynamic_link_service.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/config/env.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/hyppe_version.dart",
+		"/Users/yudhis/Work/HYPPE/eula.html",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/eula.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/sign_up/contents/user_agreement/content/user_agreement_privacy_policy.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/models/collection/posts/content_v2/privacy.dart",
+		"/Users/yudhis/Work/HYPPE/experiment/deepar-flutter-plugin/example/lib/main.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/screen.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/ios/Podfile",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/notifier.dart",
+		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/bloc/ads_video/bloc.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/verification_id/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/verification_id/step_1/screen.dart",
 		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/example/lib/main.dart",
 		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/lib/src/deep_ar_preview.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/screen.dart",
 		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/lib/src/deep_ar_controller.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/constant/entities/camera/widgets/camera_view.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/utils.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/upload/pre_upload_content/notifier.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/asset_path.dart",
 		"/Users/yudhis/Work/exp/test-deepar-flutter-plugin/lib/deepar_flutter.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/inner/home/content_v2/account_preferences/notifier.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/constants/hyppe_version.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/sign_up/contents/user_agreement/user_agreement_demo_screen.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/locations.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/ui/outer/login/notifier.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/app.dart",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/core/services/system.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/pubspec.yaml",
 		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/initial/hyppe/screen.dart",
-		"/Users/yudhis/Work/HYPPE/Flutter-Frontend/lib/initial/hyppe/multi_provider.dart",
 		"/Applications/XAMPP/xamppfiles/htdocs/hoxsod/hoxsod.sublime-project",
 		"/Applications/XAMPP/xamppfiles/htdocs/hoxsod/hx_user_matrix_family.sql",
 		"/Applications/XAMPP/xamppfiles/htdocs/erp/apl!k4$i/controllers/accounting/Cashbank.php",
@@ -118,7 +1956,7 @@
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 38.0
 	},
 	"find_in_files":
 	{
@@ -130,144 +1968,149 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
-			"> ",
-			"_configureResolutionDeepArPreset",
-			"Resolution",
-			"ResolutionPreset",
-			"resolution",
-			"Resolution",
-			"_configureResolutionDeepArPreset",
-			"deepAr",
-			"mediaRecorder",
-			"Endpoint",
-			"\\",
-			"Endpoint",
-			"testhyppe",
-			"testinghyppe",
-			"prod",
-			"EnvData",
-			"stagingBaseApi",
-			"productionBaseApi",
-			"isapsara",
-			"([^\\n]*)\\n",
-			"Form",
-			"destroy",
-			"destroyIos",
-			"destroy",
+			"\\n\\n//([^\\n]*)\\n",
+			"Buy",
+			"jenis",
+			"redeem",
+			"WD",
+			"With",
+			"type",
+			"jualan",
+			"AndroidInAppWebViewController",
+			"local",
+			"Firebase",
+			"firebase",
+			"SharedPreference",
+			"SharedPreferences.getInstance",
+			"SharedPreferences.getInstane",
+			"disposeGlobalAudio",
+			"runApp",
+			"_effectsList2",
+			"_assetEffectsPath",
+			"ContentData",
+			"FeatureType",
+			"LiveSearch",
+			"LiveSearchContent",
+			"search",
+			"Search",
+			"Seaarch",
+			"arch",
+			"search_content",
+			"search_v2",
+			"Search",
+			"Content",
+			"shimmer",
+			"OptionBar",
+			"Tab",
+			"SearchContent(",
+			"SearchContent",
+			"SearchNotifier",
+			"SearchScreen",
+			"SearchScreenState",
+			"FeatureType",
+			"live",
+			"posts",
+			"slided_pic_detail",
+			"otherpro",
+			"other_profile",
+			"report",
+			"Boost",
+			"list_boost",
+			"boost",
+			"CreateLive",
+			"SearchScreen",
+			"diary",
+			"diary_detail",
+			"Diary",
+			"Search",
+			"welcome-login",
+			"Routes",
+			"hyppeStorYCaption",
+			"language",
+			"notifier",
+			"language",
+			"langIso",
+			"story",
+			"FeatureType",
+			"route",
+			"makeContent",
+			"route",
+			"routes",
+			"route",
+			"routes",
+			"makeContent",
+			"Routing",
+			"Router",
+			"GoRouter",
+			"router",
+			"routerConfig",
+			"routing",
+			"makeContent",
+			"Routes",
+			"onuploadcontentbottom",
+			"onUplo",
+			"Hanya Gambar",
+			"_userToken",
+			"SpKeys.userToken",
+			"_userToken",
+			"Kirim ke",
+			"Video berdurasi",
+			"hyppevid",
+			"hyppestory",
+			"HyppeVid",
+			"HyppeVideo",
+			"Html",
+			"html",
+			"privacy",
+			"EULA",
+			"getuserposts",
+			"elseedr",
+			"HEAD",
+			"apiV5",
+			"apiV3",
 			"isInitialized",
-			"initialize",
-			"destroy",
-			"_textureId",
-			"textureId",
-			"dispose",
-			"disposeCamera",
-			"dispose",
-			"deepArController",
-			"deep",
-			"disposeCamera",
-			"initCamera",
-			"dest",
-			"destroy",
-			"notifier",
-			"Ios",
-			"isIos",
-			"DeepAR",
-			"cameraAspectRatio",
-			"dime",
-			"cameraAsp",
-			"yScale",
-			"dimension",
-			"_configureResolutionDeepArPreset",
-			"minIphoneVersionForResolutionCamera",
-			"minIphone",
-			"_controller",
-			"deepArController",
-			"deep",
-			"notifier",
-			"_controller",
-			"Deeparpreview",
-			"Deepar",
-			"DeepArPreview(",
-			"DeepArPreview",
-			"take",
-			"dispose",
-			"deepArController",
-			"deepArController.dispos",
-			"cameraController",
-			"istakingpicture",
-			"onNewCameraSele",
-			"additional",
-			"additionalViews",
-			"widget",
-			"showEffe",
+			"flash",
+			"deepArController!.isInitialized",
+			"isInitialized",
+			"flash",
 			"camera_view",
-			"showEffected",
-			"showEffect",
-			"showEffected",
-			"deepArController",
-			"deeparpreview",
-			"D",
-			"DeepArPrevi",
+			"SizeConfig",
+			"ratio",
+			"isInitializedIos",
+			"cameraAspectRatio",
+			"isInitialized",
+			"deepArController!.isInitialized",
+			"isInitialized",
+			"notifyLis",
+			"Platform",
+			"isInitialized",
+			"isIniti",
+			"controller.isInitialized",
+			"controller",
+			"isInitialized",
+			"notifier",
+			"build",
+			"isIni",
+			"notifyList",
 			"DeepArPreview",
-			"initialized",
-			"isInit",
-			"isInitialized",
-			"initialize",
-			"isInitialized",
-			"example",
-			"switchFaceMask",
-			"camera open",
-			"camera",
-			"print",
-			"camera open",
-			"initCamera",
-			"mounted",
-			"initCamera",
-			"afterFirstLayout",
-			"initCamera",
-			"androidLicensekey",
-			"ini exit",
-			"effectsList2",
-			"effectsList",
-			"assetEffectsPath",
-			"maskList",
-			"switchFaceMask",
-			"maskList",
-			"switchFaceMask",
-			"switchFaceMsk",
-			"_initEffects",
-			"DefaultAsset",
-			"_getEffe",
-			"_topMediaOptions",
-			"switchFace",
-			"effectsList",
-			"masklist",
-			"maskList",
-			"initEffects",
-			"lower_face",
-			"initEffect",
-			"effectslist",
-			"effectslist2",
-			"assetEffectspat",
-			"assets",
-			"effect",
-			"asset",
-			"_configureResolutionDee",
-			"androidLicense",
-			"androidLcens",
-			"terms_of",
-			"Lisensi",
-			"Android"
+			"image",
+			"dkimage",
+			"DKImage"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			",\\n",
+			"\\n,",
+			"LiveSearchResult",
+			"LiveSearch",
+			"LiveSearchScreen",
 			"",
 			"$1,",
 			"SELECT * from customer where id=$1;\\n"
@@ -285,6 +2128,302 @@
 		{
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 317,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										127,
+										133
+									],
+									[
+										158,
+										164
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								131,
+								131
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "lib/app.dart",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2906,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2135,
+								2165
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Dart/Dart.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 272.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 121,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								121,
+								121
+							]
+						],
+						"settings":
+						{
+							"auto_name": "mongodump --host localhost:27022 --db ProdAll --co",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 24044,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								23795,
+								23795
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSON/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/Users/yudhis/Work/HYPPE/test/response-soal-1.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 421827,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								315990,
+								315990
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSON/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1360.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/yudhis/Work/HYPPE/test/response-soal-2.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 55561,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								9978,
+								10788
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSON/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4358.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3781,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								433,
+								433
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JSON/JSON.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 378.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "lib/firebase_options.dart",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2734,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Dart/Dart.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 280.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "lib/core/services/shared_preference.dart",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1602,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								490,
+								519
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Dart/Dart.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"stack_multiselect": false,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -327,7 +2466,7 @@
 	"project": "hyppeapp.sublime-project",
 	"replace":
 	{
-		"height": 44.0
+		"height": 68.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -337,12 +2476,172 @@
 		"selected_items":
 		[
 			[
+				"firebase",
+				"firebase_options.dart"
+			],
+			[
+				"sharedpre",
+				"core/services/shared_preference.dart"
+			],
+			[
+				"cameraview",
+				"ui/constant/entities/camera/widgets/camera_view.dart"
+			],
+			[
+				"searchcon",
+				"core/models/collection/search/search_content.dart"
+			],
+			[
+				"reportnotifi",
+				"ui/constant/entities/report/notifier.dart"
+			],
+			[
+				"optionbar",
+				"ui/inner/search_v2/widget/option_bar.dart"
+			],
+			[
+				"makecontentno",
+				"ui/inner/upload/make_content/notifier.dart"
+			],
+			[
+				"onuploadcontent",
+				"ui/constant/overlay/bottom_sheet/bottom_sheet_content/on_upload_content.dart"
+			],
+			[
+				"bottom",
+				"ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart"
+			],
+			[
+				"search_con",
+				"core/models/collection/search/search_content.dart"
+			],
+			[
+				"multipro",
+				"initial/hyppe/multi_provider.dart"
+			],
+			[
+				"genera",
+				"ux/generate.dart"
+			],
+			[
+				"generat",
+				"ux/generate.dart"
+			],
+			[
+				"welcomelogin",
+				"ui/outer/welcome_login/notifier.dart"
+			],
+			[
+				"path.da",
+				"ux/path.dart"
+			],
+			[
+				"routin",
+				"ux/routing.dart"
+			],
+			[
+				"localizationv",
+				"core/models/collection/localization_v2/localization_model.dart"
+			],
+			[
+				"makecontentnot",
+				"ui/inner/upload/make_content/notifier.dart"
+			],
+			[
+				"angug",
+				"core/models/collection/utils/language/language_data.dart"
+			],
+			[
+				"makecontentnt",
+				"ui/inner/upload/make_content/notifier.dart"
+			],
+			[
+				"enum",
+				"core/constants/enum.dart"
+			],
+			[
+				"makecontent",
+				"ui/inner/upload/make_content/screen.dart"
+			],
+			[
+				"routing",
+				"ux/routing.dart"
+			],
+			[
+				"rout",
+				"ux/routing.dart"
+			],
+			[
+				"makecontentnoti",
+				"ui/inner/upload/make_content/notifier.dart"
+			],
+			[
+				"show_bottom",
+				"ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart"
+			],
+			[
+				"homeapp",
+				"ui/inner/home/widget/home_app_bar.dart"
+			],
+			[
+				"assetp",
+				"core/constants/asset_path.dart"
+			],
+			[
+				"asset",
+				"core/constants/asset_path.dart"
+			],
+			[
+				"check",
+				"core/services/check_version.dart"
+			],
+			[
+				"checkver",
+				"core/services/check_version.dart"
+			],
+			[
+				"url_c",
+				"core/config/url_constants.dart"
+			],
+			[
+				"privacy",
+				"ui/outer/sign_up/contents/user_agreement/content/user_agreement_privacy_policy.dart"
+			],
+			[
+				"eula",
+				"core/constants/eula.dart"
+			],
+			[
+				"url_cons",
+				"core/config/url_constants.dart"
+			],
+			[
+				"version",
+				"core/constants/hyppe_version.dart"
+			],
+			[
 				"url_",
 				"core/config/url_constants.dart"
 			],
 			[
 				"url",
 				"core/config/url_constants.dart"
+			],
+			[
+				"camera_vie",
+				"ui/constant/entities/camera/widgets/camera_view.dart"
+			],
+			[
+				"pubsp",
+				"~/Work/HYPPE/Flutter-Frontend/pubspec.yaml"
+			],
+			[
+				"cameranotifier",
+				"ui/constant/entities/camera/notifier.dart"
+			],
+			[
+				"camerascreen",
+				"ui/constant/entities/camera/screen.dart"
 			],
 			[
 				"camernotifier",
@@ -355,10 +2654,6 @@
 			[
 				"stor",
 				"core/constants/thumb/hyppe_story.dart"
-			],
-			[
-				"version",
-				"core/constants/hyppe_version.dart"
 			],
 			[
 				"versio",
@@ -383,10 +2678,6 @@
 			[
 				"login/scr",
 				"ui/outer/login/screen.dart"
-			],
-			[
-				"url_cons",
-				"core/config/url_constants.dart"
 			],
 			[
 				"constn",
@@ -579,7 +2870,7 @@
 		[
 			[
 				"",
-				"/Applications/XAMPP/xamppfiles/htdocs/zuttelo/zuttelo.sublime-project"
+				"~/Work/HYPPE/backend.sublime-project"
 			]
 		],
 		"width": 380.0

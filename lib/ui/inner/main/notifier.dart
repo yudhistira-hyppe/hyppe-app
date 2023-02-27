@@ -72,6 +72,9 @@ class MainNotifier with ChangeNotifier {
     // await CheckVersion().check(context, onlineVersion);
 
     if (!onUpdateProfile) {
+      SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, '');
+      // context.read<HomeNotifier>().getAdsApsara(context, false);
+
       final utilsNotifier = UtilsBlocV2();
       await utilsNotifier.getReactionBloc(context);
       final utilsFetch = utilsNotifier.utilsFetch;
@@ -94,6 +97,7 @@ class MainNotifier with ChangeNotifier {
       context.read<HomeNotifier>().profileImage = context.read<SelfProfileNotifier>().user.profile?.avatar?.mediaEndpoint ?? '';
       // context.read<HomeNotifier>().profileImageKey = context.read<SelfProfileNotifier>().user.profile?.avatar?.imageKey ?? '';
       context.read<HomeNotifier>().profileImageKey = keyImageCache;
+
       // Provider.of<SelfProfileNotifier>(context, listen: false).user.profile = usersFetch.data;
 
       System().userVerified(selfProfile.user.profile?.statusKyc);

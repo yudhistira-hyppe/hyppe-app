@@ -11,7 +11,6 @@ import '../services/shared_preference.dart';
 import '../services/system.dart';
 
 extension ContextScreen on BuildContext {
-
   double getWidth() {
     return MediaQuery.of(this).size.width;
   }
@@ -24,7 +23,7 @@ extension ContextScreen on BuildContext {
     return Theme.of(this).textTheme;
   }
 
-  ColorScheme getColorScheme(){
+  ColorScheme getColorScheme() {
     return Theme.of(this).colorScheme;
   }
 
@@ -99,11 +98,11 @@ extension StringDefine on String {
     }
   }
 
-  bool canShowAds(){
-    if(isNotEmpty){
+  bool canShowAds() {
+    if (isNotEmpty) {
       final lastDatetime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this);
       return lastDatetime.isAfterFifteen();
-    }else{
+    } else {
       return true;
     }
   }
@@ -127,7 +126,7 @@ extension StringDefine on String {
     }
   }
 
-  int getMilliSeconds(){
+  int getMilliSeconds() {
     return DateTime.parse(System().dateTimeRemoveT(this)).millisecondsSinceEpoch;
   }
 }
@@ -148,21 +147,21 @@ extension IntegerExtension on int {
   }
 }
 
-extension SizeHelpers on Size{
-  Size getFixSize(BuildContext context){
+extension SizeHelpers on Size {
+  Size getFixSize(BuildContext context) {
     final heightScreen = context.getHeight();
     final widthScreen = context.getWidth();
     double fixHeight = height;
     double fixWidth = width;
-    if(widthScreen < fixWidth){
+    if (widthScreen < fixWidth) {
       final tempWidth = fixWidth;
       fixWidth = widthScreen;
-      fixHeight = (fixHeight*fixWidth)/tempWidth;
+      fixHeight = (fixHeight * fixWidth) / tempWidth;
     }
-    if(heightScreen < fixHeight){
+    if (heightScreen < fixHeight) {
       final tempHeight = heightScreen;
       fixHeight = heightScreen;
-      fixWidth = (fixWidth*fixHeight)/tempHeight;
+      fixWidth = (fixWidth * fixHeight) / tempHeight;
     }
     return Size(fixWidth, fixHeight);
   }
@@ -177,8 +176,15 @@ extension DateHelpers on DateTime {
     return now.day == day && now.month == month && now.year == year;
   }
 
-  bool isAfterFifteen(){
-    final after15M = DateTime.now().subtract(const Duration(minutes: 15));
+  bool isAfterFifteen() {
+    final after15M = DateTime.now().subtract(const Duration(minutes: 1));
+    print("hariiiiiii ============");
+    print(after15M);
+    print(after15M.minute);
+    print(day);
+    print(month);
+    print(minute);
+    print(day);
     return after15M.day >= day && after15M.month >= month && after15M.year >= year && after15M.hour >= hour && after15M.minute >= minute;
   }
 

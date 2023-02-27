@@ -899,8 +899,12 @@ class System {
 
   double menghitungJumlahHari(DateTime from, DateTime to) {
     Duration diff = to.difference(from);
-
     return (diff.inHours / 24);
+  }
+
+  double menghitungJumlahMenit(DateTime from, DateTime to) {
+    Duration diff = to.difference(from);
+    return (diff.inMinutes % 60);
   }
 
   readTimestamp(int timestamp, BuildContext context, {required bool fullCaption}) {
@@ -1263,19 +1267,29 @@ class System {
   }
 
   Future adsPopUp(BuildContext context, AdsData data, String url, {bool isSponsored = false, bool isPopUp = true, bool isInAppAds = false}) async {
-    if(!isInAppAds){
+    if (!isInAppAds) {
       if (isPopUp) {
         return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored);
       } else {
         return Routing().move(Routes.showAds, argument: AdsArgument(data: data, adsUrl: url, isSponsored: isSponsored));
       }
-    }else{
+    } else {
       String lastTimeAds = SharedPreference().readStorage(SpKeys.datetimeLastShowAds) ?? '';
-      if(lastTimeAds.canShowAds()){
+      print("tanggall ======== $lastTimeAds");
+
+      if (lastTimeAds == '') {
         return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored, isInAppAds: isInAppAds);
+      } else {
+        DateTime now = DateTime.now();
+        DateTime menitCache = DateTime.parse(lastTimeAds);
+        var jumlahMenit = System().menghitungJumlahMenit(menitCache, now);
+        print(jumlahMenit);
+        if (jumlahMenit >= 14) {
+          // if (lastTimeAds.canShowAds()) {
+          return ShowGeneralDialog.adsPopUp(context, data, url, isSponsored: isSponsored, isInAppAds: isInAppAds);
+        }
       }
     }
-
   }
 
   Future userVerified(status) async {
