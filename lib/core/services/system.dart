@@ -84,15 +84,18 @@ class System {
   }
 
   String? showUserPicture(String? url) {
-    if (url != null) {
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? email = SharedPreference().readStorage(SpKeys.email);
+    if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
-        return Env.data.baseUrl +
-            "/${Env.data.versionApi}/" +
-            url +
-            "?x-auth-token=" +
-            SharedPreference().readStorage(SpKeys.userToken) +
-            "&x-auth-user=" +
-            SharedPreference().readStorage(SpKeys.email);
+        return '${Env.data.baseUrl}/${Env.data.versionApi}/$url?x-auth-token=$token&x-auth-user=$email';
+        // return Env.data.baseUrl +
+        //     "/${Env.data.versionApi}/" +
+        //     url +
+        //     "?x-auth-token=" +
+        //     token +
+        //     "&x-auth-user=" +
+        //     email;
       } else {
         return '';
       }
@@ -103,7 +106,7 @@ class System {
       //     "&x-auth-user=" +
       //     SharedPreference().readStorage(SpKeys.email);
     } else {
-      return null;
+      return '';
     }
   }
 
