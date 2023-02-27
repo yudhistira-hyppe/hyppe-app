@@ -195,8 +195,8 @@ class _AdsScreenState extends State<AdsScreen> {
                           nextDebouncer: false,
                           onComplete: () async {
                             _storyController.pause();
-                            await adsView(
-                                context, widget.argument.data, secondsVideo);
+                            // await adsView(
+                            //     context, widget.argument.data, secondsVideo);
                           },
                         ),
                         widget.argument.data.isReport ?? false

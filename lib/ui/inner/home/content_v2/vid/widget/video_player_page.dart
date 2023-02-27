@@ -650,10 +650,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           'Ads finished'.logger();
           'Delaay for 3 second'.logger();
           'second end ads3 $second'.logger();
-          adsView(_newClipData?.data ?? AdsData(), second);
-          Future.delayed(const Duration(seconds: 3), () {
-            _handleClosingAdsEvent(roll);
-          });
+          // adsView(_newClipData?.data ?? AdsData(), second);
+          // Future.delayed(const Duration(seconds: 3), () {
+          //   _handleClosingAdsEvent(roll);
+          // });
         }
         final position = _betterPlayerControllerMap?.videoPlayerController?.position;
       });
