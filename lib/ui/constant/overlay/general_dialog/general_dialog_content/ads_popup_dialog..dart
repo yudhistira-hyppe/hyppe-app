@@ -18,11 +18,14 @@ import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../core/bloc/ads_video/bloc.dart';
 import '../../../../../core/constants/asset_path.dart';
 import '../../../../../core/constants/shared_preference_keys.dart';
 import '../../../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../../../core/services/shared_preference.dart';
+import '../../../../../ux/path.dart';
+import '../../../../../ux/routing.dart';
 import '../../../widget/custom_background_layer.dart';
 import '../../../widget/custom_base_cache_image.dart';
 import '../../../widget/custom_cache_image.dart';
@@ -449,18 +452,26 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
           child: InkWell(
             onTap: () async {
               if (secondsSkip < 1) {
-                final uri = Uri.parse(data.adsUrlLink ?? '');
-                if (await canLaunchUrl(uri)) {
-                  adsView(widget.data, secondsVideo, isClick: true);
+                if(data.adsUrlLink?.isEmail() ?? false){
+                  final email = data.adsUrlLink!.replaceAll('email:', '');
                   Navigator.pop(context);
-                  await launchUrl(
-                    uri,
-                    mode: LaunchMode.externalApplication,
-                  );
-                } else {
-                  throw "Could not launch $uri";
+                  Future.delayed(const Duration(milliseconds: 500), (){
+                    Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                  });
+                }else{
+                  final uri = Uri.parse(data.adsUrlLink ?? '');
+                  if (await canLaunchUrl(uri)) {
+                    adsView(widget.data, secondsVideo, isClick: true);
+                    Navigator.pop(context);
+                    await launchUrl(
+                      uri,
+                      mode: LaunchMode.externalApplication,
+                    );
+                  } else {
+                    throw "Could not launch $uri";
+                  }
+                  // can't launch url, there is some error
                 }
-                // can't launch url, there is some error
               }
             },
             child: Builder(builder: (context) {

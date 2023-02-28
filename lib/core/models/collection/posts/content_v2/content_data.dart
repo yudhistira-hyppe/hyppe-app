@@ -9,17 +9,17 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data_insig
 
 import '../../music/music.dart';
 
-class StoriesGroup{
+class StoriesGroup {
   List<ContentData>? story;
   String? email;
   String? username;
 
   StoriesGroup({this.story, this.email, this.username});
 
-  StoriesGroup.fromJson(Map<String, dynamic> json){
-    if(json['story'] != null){
+  StoriesGroup.fromJson(Map<String, dynamic> json) {
+    if (json['story'] != null) {
       story = [];
-      if(json['story'].isNotEmpty){
+      if (json['story'].isNotEmpty) {
         json['story'].forEach((v) => story?.add(ContentData.fromJson(v)));
       }
     }
@@ -274,9 +274,9 @@ class ContentData {
     saleAmount = json['saleAmount'] ?? 0;
     saleView = json['saleView'] ?? false;
     saleLike = json['saleLike'] ?? false;
-    if(json['isApsara'] != null){
+    if (json['isApsara'] != null) {
       isApsara = json['isApsara'] ?? false;
-    }else{
+    } else {
       isApsara = json['apsara'] ?? false;
     }
 
@@ -344,9 +344,9 @@ class ContentData {
     data['visibility'] = visibility;
     data['tagPeople'] = List<dynamic>.from((tagPeople ?? []).map((x) => x.toJson()));
     data['likes'] = likes;
-    if(data['isApsara'] != null){
+    if (data['isApsara'] != null) {
       data['isApsara'] = isApsara;
-    }else{
+    } else {
       data['apsara'] = isApsara;
     }
 
@@ -421,7 +421,7 @@ class Metadata {
   }
 }
 
-class   Privacy {
+class Privacy {
   bool? isPostPrivate;
 
   bool? isCelebrity;

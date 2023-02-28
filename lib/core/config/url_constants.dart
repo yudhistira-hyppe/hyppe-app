@@ -8,6 +8,8 @@ class UrlConstants {
   }
 
   /// Versioning
+  static const String apiV0 = '';
+
   static const String apiV1 = 'v1';
 
   static const String apiV2 = 'v2';
@@ -16,22 +18,23 @@ class UrlConstants {
 
   static const String apiV4 = 'v4';
 
-  static const String apiV5 = '';
+  static const String apiV5 = 'v5';
 
   static const String apiV6 = 'v6';
 
   /// Production Base url
   // static const String productionBaseApi = "https://prod.hyppe.app";
   static const String productionBaseApi = "https://prod.hyppe.app";
-  static const String productionUploadBaseApi = "https://upload.hyppe.app/";
+  static const String productionUploadBaseApi = "https://upload.hyppe.app";
   // static const String productionBaseApi = "https://staging.hyppe.app";
   // static const String productionUploadBaseApi = "https://stagingupload.hyppe.app/";
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
+  // static const String stagingBaseApi = "https://s1.hyppe.cloud";
   static const String stagingBaseApi = "https://staging.hyppe.app";
   // static const String stagingBaseApi = "http://192.168.0.135:5002";
-  static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app/";
+  static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
 
   // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 
