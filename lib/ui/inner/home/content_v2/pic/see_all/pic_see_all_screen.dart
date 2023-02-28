@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
@@ -16,7 +17,7 @@ class PicSeeAllScreen extends StatefulWidget {
   State<PicSeeAllScreen> createState() => _PicSeeAllScreenState();
 }
 
-class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProviderStateMixin {
+class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   final notifier = PicSeeAllNotifier();
 
   late TabController _tabController;
@@ -24,9 +25,14 @@ class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProv
   @override
   void initState() {
     _tabController = TabController(length: 1, vsync: this);
+
+    super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
     notifier.initState(context);
     context.read<ReportNotifier>().inPosition = contentPosition.seeAllPict;
-    super.initState();
   }
 
   @override
@@ -91,4 +97,6 @@ class _PicSeeAllScreenState extends State<PicSeeAllScreen> with SingleTickerProv
       ),
     );
   }
+
+
 }

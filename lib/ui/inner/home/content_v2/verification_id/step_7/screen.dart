@@ -8,6 +8,7 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/verification_id/notifier.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 
 class VerificationIDStep7 extends StatefulWidget {
   const VerificationIDStep7({Key? key}) : super(key: key);
@@ -31,13 +32,17 @@ class _VerificationIDStep7State extends State<VerificationIDStep7> {
           body: SafeArea(
             child: Stack(
               children: [
-                Image.file(
-                  File(notifier.selfiePath),
-                  // notifier.pickedSupportingDocs![0],
-                  fit: BoxFit.cover,
-                  height: double.infinity,
-                  width: double.infinity,
+                Transform(
+                  transform: Matrix4.rotationY(math.pi),
                   alignment: Alignment.center,
+                  child: Image.file(
+                    File(notifier.selfiePath),
+                    // notifier.pickedSupportingDocs![0],
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -53,15 +58,15 @@ class _VerificationIDStep7State extends State<VerificationIDStep7> {
                         width: 120,
                         height: 44.0 * SizeConfig.scaleDiagonal,
                         function: () => notifier.onPickSupportedDocument(context, true),
-                        child: CustomTextWidget(
-                          textToDisplay: notifier.language.continueStep ?? '',
-                          textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                        ),
                         buttonStyle: ButtonStyle(
                           foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                           shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                           overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                           backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                        ),
+                        child: CustomTextWidget(
+                          textToDisplay: notifier.language.continueStep ?? '',
+                          textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                         ),
                       ),
                     ],

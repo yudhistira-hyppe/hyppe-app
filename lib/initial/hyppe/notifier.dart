@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:hyppe/core/arguments/verify_page_argument.dart';
 import 'package:hyppe/core/bloc/repos/repos.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -16,7 +15,6 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/core/extension/log_extension.dart';
 
 import '../../app.dart';
 
@@ -69,7 +67,7 @@ class HyppeNotifier with ChangeNotifier {
         Routes.signUpPin,
         argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: email ?? ''),
       );
-    } else if (token != null) {
+    } else if (token != null && email != null) {
       final formData = FormData();
       formData.fields.add(const MapEntry('pageRow', '1'));
       formData.fields.add(const MapEntry('pageNumber', '0'));
@@ -84,6 +82,9 @@ class HyppeNotifier with ChangeNotifier {
           // if(!isPreventRoute){
           if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
             print('tidak ada eror');
+            await SharedPreference().logOutStorage();
+            _routing.moveReplacement(Routes.welcomeLogin);
+          } else if ((onResult.statusCode ?? 300) > HTTP_CODE) {
             await SharedPreference().logOutStorage();
             _routing.moveReplacement(Routes.welcomeLogin);
           } else {
@@ -102,6 +103,7 @@ class HyppeNotifier with ChangeNotifier {
         data: formData,
         headers: {
           'x-auth-user': email,
+          'x-auth-token': token,
         },
         host: UrlConstants.getInnteractives,
         withAlertMessage: false,
@@ -109,6 +111,7 @@ class HyppeNotifier with ChangeNotifier {
         methodType: MethodType.post,
       );
     } else {
+      await SharedPreference().logOutStorage();
       _routing.moveReplacement(Routes.welcomeLogin);
       // _routing.moveReplacement(Routes.login);
     }

@@ -16,7 +16,7 @@ class UrlConstants {
 
   static const String apiV4 = 'v4';
 
-  static const String apiV5 = 'v5';
+  static const String apiV5 = '';
 
   static const String apiV6 = 'v6';
 
