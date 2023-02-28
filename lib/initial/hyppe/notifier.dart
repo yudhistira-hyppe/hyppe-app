@@ -69,7 +69,7 @@ class HyppeNotifier with ChangeNotifier {
         Routes.signUpPin,
         argument: VerifyPageArgument(redirect: VerifyPageRedirection.toSignUpV2, email: email ?? ''),
       );
-    } else if (token != null) {
+    } else if (token != null && email != null) {
       final formData = FormData();
       formData.fields.add(const MapEntry('pageRow', '1'));
       formData.fields.add(const MapEntry('pageNumber', '0'));
@@ -84,6 +84,9 @@ class HyppeNotifier with ChangeNotifier {
           // if(!isPreventRoute){
           if ((onResult.statusCode ?? 300) == HTTP_UNAUTHORIZED) {
             print('tidak ada eror');
+            await SharedPreference().logOutStorage();
+            _routing.moveReplacement(Routes.welcomeLogin);
+          }else if( (onResult.statusCode ?? 300) > HTTP_CODE){
             await SharedPreference().logOutStorage();
             _routing.moveReplacement(Routes.welcomeLogin);
           } else {
@@ -102,7 +105,7 @@ class HyppeNotifier with ChangeNotifier {
         data: formData,
         headers: {
           'x-auth-user': email,
-          'x-auth-token': "sdsdsf${token}xxxx",
+          'x-auth-token': token,
         },
         host: UrlConstants.getInnteractives,
         withAlertMessage: false,
@@ -110,6 +113,7 @@ class HyppeNotifier with ChangeNotifier {
         methodType: MethodType.post,
       );
     } else {
+      await SharedPreference().logOutStorage();
       _routing.moveReplacement(Routes.welcomeLogin);
       // _routing.moveReplacement(Routes.login);
     }
