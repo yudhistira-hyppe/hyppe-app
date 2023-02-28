@@ -102,7 +102,6 @@ class HyppeNotifier with ChangeNotifier {
         data: formData,
         headers: {
           'x-auth-user': email,
-          'x-auth-token': "sdsdsf${token}xxxx",
         },
         host: UrlConstants.getInnteractives,
         withAlertMessage: false,

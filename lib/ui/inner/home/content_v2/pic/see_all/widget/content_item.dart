@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/entities/like/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import 'package:hyppe/ui/constant/widget/custom_desc_content_widget.dart';
 import 'package:hyppe/ui/constant/widget/no_result_found.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/widget/pic_thumbnail_report.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/see_all/widget/content_thumbnail.dart';
@@ -116,16 +117,15 @@ class ContentItem extends StatelessWidget {
                                   aspectRatio: 16 / 9,
                                   child: (data?.reportedStatus == "BLURRED")
                                       ? GestureDetector(
-                                          onTap: () => notifier.navigateToHyppePicDetail(context, data),
+                                          onTap: () => () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index), //notifier.navigateToHyppePicDetail(context, data),
                                           child: PichTumbnailReport(
                                             pictData: data,
                                             seeContent: false,
                                           ),
                                         )
                                       : ContentThumbnail(
-                                          picData: data,
-                                          fn: () => notifier.navigateToHyppePicDetail(context, data),
-                                        ),
+                                          picData: data, fn: () => context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, index) //  notifier.navigateToHyppePicDetail(context, data),
+                                          ),
                                 ),
                                 (data?.saleAmount ?? 0) > 0
                                     ? const Align(

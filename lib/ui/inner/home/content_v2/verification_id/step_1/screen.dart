@@ -111,15 +111,15 @@ class _VerificationIDStep1State extends State<VerificationIDStep1> {
                     width: SizeConfig.screenWidth,
                     height: 44.0 * SizeConfig.scaleDiagonal,
                     function: () => Routing().moveAndPop(Routes.verificationIDStep2),
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.language.agreeAndContinue ?? '',
-                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                    ),
                     buttonStyle: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                       shadowColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                       overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                       backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                    ),
+                    child: CustomTextWidget(
+                      textToDisplay: notifier.language.agreeAndContinue ?? '',
+                      textStyle: textTheme.button?.copyWith(color: kHyppeLightButtonText),
                     ),
                   ),
                   const SizedBox(height: 16),

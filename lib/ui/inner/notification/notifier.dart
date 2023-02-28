@@ -173,7 +173,7 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
       MentionNotification(): language.mention ?? '',
       GeneralNotification(): language.general ?? ''
     };
-    _screen = _listScreen.keys.elementAt(0);
+    _screen = _listScreen.keys.elementAt(_pageIndex);
   }
 
   Future acceptUser(
@@ -290,10 +290,9 @@ class NotificationNotifier extends LoadingNotifier with ChangeNotifier {
         fetch.data.forEach((v) => _listContentData.add(ContentData.fromJson(v)));
         if (featureType == FeatureType.pic || featureType == FeatureType.vid) {
           callback(_listContentData[0]);
-        }else{
+        } else {
           callback(_listContentData);
         }
-
       }
     }
   }
