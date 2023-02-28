@@ -33,9 +33,12 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
+import '../../../../../../ux/path.dart';
+import '../../../../../../ux/routing.dart';
 import '../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
@@ -502,18 +505,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                     twelvePx,
                                     InkWell(
                                       onTap: () async {
-                                        final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                        final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                        if (await canLaunchUrl(uri)) {
-                                          print('adsView part 1');
-                                          adsView(_newClipData?.data ?? AdsData(), second);
-                                          await launchUrl(
-                                            uri,
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        } else
-                                          // can't launch url, there is some error
-                                          throw "Could not launch $uri";
+                                        if(_newClipData?.data?.adsUrlLink?.isEmail() ?? false){
+                                          final email = _newClipData?.data?.adsUrlLink?.replaceAll('email: ', '');
+                                          Navigator.pop(context);
+                                          Future.delayed(const Duration(milliseconds: 500), (){
+                                            Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                          });
+                                        }else{
+                                          final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                          final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                          if (await canLaunchUrl(uri)) {
+                                            print('adsView part 1');
+                                            adsView(_newClipData?.data ?? AdsData(), second);
+                                            await launchUrl(
+                                              uri,
+                                              mode: LaunchMode.externalApplication,
+                                            );
+                                          } else
+                                            // can't launch url, there is some error
+                                            throw "Could not launch $uri";
+                                        }
+
                                       },
                                       child: Container(
                                         child: Text(

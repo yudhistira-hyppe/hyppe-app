@@ -46,23 +46,23 @@ class ImageLoader {
         final imageBytes = fileResponse.file.readAsBytesSync();
 
 
-        // final immutableBuffer = await ImmutableBuffer.fromUint8List(imageBytes);
+        final immutableBuffer = await ImmutableBuffer.fromUint8List(imageBytes);
 
         state = LoadState.success;
-        // PaintingBinding.instance.instantiateImageCodecFromBuffer(immutableBuffer).then((codec){
-        //     frames = codec;
-        //     onComplete();
-        //   }, onError: (error) {
-        //     state = LoadState.failure;
-        //     onComplete();
-        // });
-        PaintingBinding.instance?.instantiateImageCodec(imageBytes).then((codec) {
-          frames = codec;
-          onComplete();
-        }, onError: (error) {
-          state = LoadState.failure;
-          onComplete();
+        PaintingBinding.instance.instantiateImageCodecFromBuffer(immutableBuffer).then((codec){
+            frames = codec;
+            onComplete();
+          }, onError: (error) {
+            state = LoadState.failure;
+            onComplete();
         });
+        // PaintingBinding.instance?.instantiateImageCodec(imageBytes).then((codec) {
+        //   frames = codec;
+        //   onComplete();
+        // }, onError: (error) {
+        //   state = LoadState.failure;
+        //   onComplete();
+        // });
       },
       onError: (error) {
         state = LoadState.failure;
