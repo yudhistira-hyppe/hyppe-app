@@ -604,8 +604,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   @override
-  void dispose() {
+  void deactivate() {
     _dispose();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+
     CustomRouteObserver.routeObserver.unsubscribe(this);
     _preventScreenShootOff();
     super.dispose();

@@ -83,75 +83,80 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
     final activity = DeviceBloc();
 
     print("Status Lifecycle: $state");
-    final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
-    if (state == AppLifecycleState.inactive) {
-      if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
-        notifier.forceResetPlayer(true);
-      }
-      notifier.pauseAudioPreview();
-      // picNotifier.pauseAudioPlayer();
-      if (globalAudioPlayer != null) {
-        print('globalAudioPlayer!.pause');
-        globalAudioPlayer!.pause();
-      }
+    try{
+      final notifier = materialAppKey.currentContext!.read<PreviewContentNotifier>();
+      if (state == AppLifecycleState.inactive) {
+        if (notifier.listMusics.isNotEmpty || notifier.listExpMusics.isNotEmpty) {
+          notifier.forceResetPlayer(true);
+        }
+        notifier.pauseAudioPreview();
+        // picNotifier.pauseAudioPlayer();
+        if (globalAudioPlayer != null) {
+          print('globalAudioPlayer!.pause');
+          globalAudioPlayer!.pause();
+        }
 
-      "App Inactive".logger();
-      final _userToken = SharedPreference().readStorage(SpKeys.userToken);
-      if (_userToken != null) {
-        try {
-          await activity.activitySleep(context);
-        } catch (e) {
-          e.logger();
+        "App Inactive".logger();
+        final _userToken = SharedPreference().readStorage(SpKeys.userToken);
+        if (_userToken != null) {
+          try {
+            await activity.activitySleep(context);
+          } catch (e) {
+            e.logger();
+          }
         }
       }
-    }
-    if (state == AppLifecycleState.resumed) {
-      "App Resumed".logger();
-      notifier.resumeAudioPreview();
-      if (globalAudioPlayer != null) {
-        print('globalAudioPlayer!.resume');
-        globalAudioPlayer!.resume();
-      }
-
-      final _userToken = SharedPreference().readStorage(SpKeys.userToken);
-
-      if (_userToken != null) {
-        print('hahahahahahahaha');
-        try {
-          await activity.activityAwake(context);
-          final fetch = activity.deviceFetch;
-          if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
-            if (Platform.isAndroid) {
-              await getDevice();
-            }
-
-            print('cek version loh ini ${activity.deviceFetch.version.runtimeType}');
-            //cek version aplikasi
-            await CheckVersion().check(context, activity.deviceFetch.version);
-            if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
-              SharedPreference().writeStorage(SpKeys.canDeppAr, 'true');
-            } else {
-              SharedPreference().writeStorage(SpKeys.canDeppAr, 'false');
-            }
-          }
-
-          // final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
-          print('isOnHomeScreen: $isHomeScreen');
-          if (isHomeScreen) {
-            print("isOnHomeScreen hit ads");
-            await getAdsApsara();
-          }
-
-          print('cek version loh ini');
-        } catch (e) {
-          e.logger();
+      if (state == AppLifecycleState.resumed) {
+        "App Resumed".logger();
+        notifier.resumeAudioPreview();
+        if (globalAudioPlayer != null) {
+          print('globalAudioPlayer!.resume');
+          globalAudioPlayer!.resume();
         }
+
+        final _userToken = SharedPreference().readStorage(SpKeys.userToken);
+
+        if (_userToken != null) {
+          print('hahahahahahahaha');
+          try {
+            await activity.activityAwake(context);
+            final fetch = activity.deviceFetch;
+            if (fetch.deviceState == DeviceState.activityAwakeSuccess) {
+              if (Platform.isAndroid) {
+                await getDevice();
+              }
+
+              print('cek version loh ini ${activity.deviceFetch.version.runtimeType}');
+              //cek version aplikasi
+              await CheckVersion().check(context, activity.deviceFetch.version);
+              if (fetch.data.contains(SharedPreference().readStorage(SpKeys.brand))) {
+                SharedPreference().writeStorage(SpKeys.canDeppAr, 'true');
+              } else {
+                SharedPreference().writeStorage(SpKeys.canDeppAr, 'false');
+              }
+            }
+
+            // final isOnHomeScreen = SharedPreference().readStorage(SpKeys.isOnHomeScreen);
+            print('isOnHomeScreen: $isHomeScreen');
+            if (isHomeScreen) {
+              print("isOnHomeScreen hit ads");
+              await getAdsApsara();
+            }
+
+            print('cek version loh ini');
+          } catch (e) {
+            e.logger();
+          }
+        }
+        _timerLink = Timer(const Duration(milliseconds: 1000), () {
+          FirebaseCrashlytics.instance.log('Log: from resume');
+          DynamicLinkService.handleDynamicLinks();
+        });
       }
-      _timerLink = Timer(const Duration(milliseconds: 1000), () {
-        FirebaseCrashlytics.instance.log('Log: from resume');
-        DynamicLinkService.handleDynamicLinks();
-      });
+    }catch(e, s){
+      'error lifecycle: $e --- $s'.logger();
     }
+
 
     if (state == AppLifecycleState.paused) {
       // Show custom alert message or perform action
