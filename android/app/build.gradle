@@ -92,7 +92,7 @@ android {
 
             // Enables resource shrinking, which is performed by the
             // Android Gradle plugin.
-            shrinkResources false //untuk keperluan debug jadi false dan di tambah dimanifest debuggable="true"
+            shrinkResources true 
          
 
             // Includes the default ProGuard rules files that are packaged with

@@ -491,7 +491,7 @@ class AccountPreferencesNotifier extends ChangeNotifier {
         progress = "0%";
         FocusScopeNode currentFocus = FocusScope.of(context);
         uploadProgress = System().createPopupDialog(ShowOverlayLoading());
-        Overlay.of(context)?.insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
+        Overlay.of(context).insert(uploadProgress ?? OverlayEntry(builder: (context) => Container()));
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }

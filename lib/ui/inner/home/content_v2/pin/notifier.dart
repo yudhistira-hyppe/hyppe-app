@@ -203,6 +203,7 @@ class PinAccountNotifier extends ChangeNotifier {
   }
 
   Future sendVerificationMail(BuildContext context, {bool resend = false, bool checkPin = false, bool forgotPin = false}) async {
+    print("check otp ==================");
     bool connect = await System().checkConnections();
     if (connect) {
       final havePin = SharedPreference().readStorage(SpKeys.setPin);
@@ -314,7 +315,9 @@ class PinAccountNotifier extends ChangeNotifier {
         }
       }
 
-      if (fetch.postsState == TransactionState.getHistoryError) {
+      if (fetch.postsState == TransactionState.sendVerificationError) {
+        loading = false;
+        notifyListeners();
         if (fetch.data != null) {
           ShowBottomSheet().onShowColouredSheet(context, fetch.message['info'], color: Theme.of(context).colorScheme.error);
         }
