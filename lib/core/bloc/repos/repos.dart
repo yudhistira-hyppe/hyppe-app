@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/url_constants.dart';
-import 'package:hyppe/ux/path.dart';
-import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/initial/hyppe/translate_v2.dart';

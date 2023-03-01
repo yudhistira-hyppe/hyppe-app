@@ -81,9 +81,9 @@ class _ProcessUploadComponentState extends State<ProcessUploadComponent> with Up
       'Upload Success with certified checked $isCheckedOwnership'.logger();
 
       if (isCheckedOwnership) {
-        ShowBottomSheet.onShowSuccessPostContentOwnership(materialAppKey.currentContext ?? context);
+        ShowBottomSheet.onShowSuccessPostContentOwnership(context);
       } else {
-        ShowBottomSheet().onShowColouredSheet(materialAppKey.currentContext ?? context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
+        ShowBottomSheet().onShowColouredSheet(context, _uploadNotifier.message, color: kHyppeTextSuccess, maxLines: 2);
       }
     }
   }

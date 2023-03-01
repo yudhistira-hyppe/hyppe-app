@@ -29,7 +29,7 @@ class Env {
     baseUrl: UrlConstants.stagingBaseApi,
     deeplinkBaseUrl: UrlConstants.devDeeplinkUrl,
     apiBaseUrl: UrlConstants.stagingBaseApi,
-    versionApi: UrlConstants.apiV0,
+    versionApi: UrlConstants.apiV5,
   );
 
   static final EnvData prod = EnvData(
