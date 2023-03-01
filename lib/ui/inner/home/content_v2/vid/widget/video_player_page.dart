@@ -780,7 +780,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                           InkWell(
                             onTap: () async {
                               if(_newClipData?.data?.adsUrlLink?.isEmail() ?? false){
-                                final email = _newClipData?.data?.adsUrlLink?.replaceAll('email: ', '');
+                                final email = _newClipData?.data?.adsUrlLink?.replaceAll('email:', '');
                                 Navigator.pop(context);
                                 Future.delayed(const Duration(milliseconds: 500), (){
                                   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
