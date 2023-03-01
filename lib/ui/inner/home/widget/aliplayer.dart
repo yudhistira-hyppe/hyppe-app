@@ -1,31 +1,46 @@
-import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/ui/constant/widget/custom_profile_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
-import 'package:hyppe/ui/inner/home/content_v2/profile/self_profile/notifier.dart';
-import 'package:hyppe/ui/inner/home/notifier_v2.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
+// import 'package:flutter_aliplayer/flutter_aliplayer.dart';
+// import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
+// import 'package:flutter/material.dart';
 
-class AliPlayer extends StatelessWidget {
-  const AliPlayer({Key? key}) : super(key: key);
+// enum ModeType { URL, STS, AUTH, MPS }
 
-  @override
-  Widget build(BuildContext context) {
-    var notifier = context.select((SelfProfileNotifier value) => Tuple2(value.user, value.user.profile?.avatar?.mediaEndpoint));
+// class AliPlayer extends StatefulWidget {
+//   const AliPlayer({Key? key}) : super(key: key);
 
-    return SizedBox(
-      width: 50,
-      child: CustomTextButton(
-        style: ButtonStyle(alignment: Alignment.centerRight, padding: MaterialStateProperty.all(const EdgeInsets.only(left: 0.0))),
-        onPressed: () => context.read<HomeNotifier>().navigateToTestAliPlayer(context),
-        child: CustomProfileImage(
-          width: 26,
-          height: 26,
-          following: true,
-          imageUrl: System().showUserPicture(notifier.item2 ?? ''),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   State<AliPlayer> createState() => _AliPlayerState();
+// }
+
+// class _AliPlayerState extends State<AliPlayer> {
+//   FlutterAliplayer fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+
+//   Map _dataSourceMap = {};
+   
+
+//   @override
+//   Widget build(BuildContext context) {
+//     var x = 0.0;
+//     var y = 0.0;
+//     Orientation orientation = MediaQuery.of(context).orientation;
+//     var width = MediaQuery.of(context).size.width;
+
+//     var height;
+//     if (orientation == Orientation.portrait) {
+//       height = width * 9.0 / 16.0;
+//     } else {
+//       height = MediaQuery.of(context).size.height;
+//     }
+//     AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: x, y: y, width: width, height: height);
+//     return OrientationBuilder(
+//       builder: (BuildContext context, Orientation orientation) {
+//         return Scaffold(
+//           body: Column(
+//             children: [
+//               Container(color: Colors.black, child: aliPlayerView, width: width, height: height),
+//             ],
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
