@@ -29,7 +29,8 @@ class SelfProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
+            GestureDetector(onTap: () => Routing().move(Routes.aliTest), child: Text('Ali')),
+            // SelectableText("${notifier.displayPhotoProfile("${notifier.user.profile?.avatar?.mediaEndpoint}")}"),
             Row(
               children: <Widget>[
                 StoryColorValidator(

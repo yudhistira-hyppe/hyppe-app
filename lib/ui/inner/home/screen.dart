@@ -163,7 +163,6 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
                     ProcessUploadComponent(),
                     HyppePreviewStories(),
                     FilterLanding(),
-                    // AliPlayer(),
                     HyppePreviewVid(),
                     HyppePreviewDiary(),
                     HyppePreviewPic(),

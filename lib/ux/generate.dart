@@ -72,6 +72,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_load
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
@@ -357,6 +358,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PaymentBoostSummaryScreen());
       case Routes.boostList:
         return MaterialPageRoute(builder: (_) => const ListBoostScreen());
+      case Routes.aliTest:
+        return MaterialPageRoute(builder: (_) => const AliPlayer());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }
