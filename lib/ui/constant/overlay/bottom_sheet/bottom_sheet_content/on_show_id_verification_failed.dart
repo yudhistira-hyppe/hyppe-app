@@ -36,14 +36,16 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
                 textToDisplay: translate.theIDCardNumberAndorYourRealNamedidnotMatch ??
                     "The ID card number and/or your Real Name did not match. Make sure the lighting sufficient and the ID card is in a good condition. Please try again"),
             CustomElevatedButton(
-              child: CustomTextWidget(
-                textToDisplay: translate.uploadSupportDoc ?? "Upload Supporting Document",
-                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
-              ),
-              width: double.infinity,
-              height: 50 * SizeConfig.scaleDiagonal,
-              function: () => Routing().moveAndRemoveUntil(Routes.verificationIDStepSupportDocsEula, Routes.verificationIDStepSupportDocsEula),
-            ),
+                child: CustomTextWidget(
+                  textToDisplay: translate.uploadSupportDoc ?? "Upload Supporting Document",
+                  textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppePrimary),
+                ),
+                width: double.infinity,
+                height: 50 * SizeConfig.scaleDiagonal,
+                function: () {
+                  Routing().moveBack();
+                  Routing().moveAndPop(Routes.verificationIDStepSupportDocsEula);
+                }),
             CustomElevatedButton(
               child: CustomTextWidget(
                 textToDisplay: translate.retakeIdPicture ?? "Re-Take ID Picture",
@@ -51,9 +53,9 @@ class OnShowIDVerificationFailedBottomSheet extends StatelessWidget {
               ),
               width: double.infinity,
               height: 50 * SizeConfig.scaleDiagonal,
-              function: () => notifier.retryTakeIdCard(),
-              buttonStyle: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
+              function: () => notifier.retryTakeIdCard(fromBottomSheet: true),
+              buttonStyle:
+                  ButtonStyle(backgroundColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary), overlayColor: MaterialStateProperty.all(Theme.of(context).colorScheme.primary)),
             ),
           ],
         ),

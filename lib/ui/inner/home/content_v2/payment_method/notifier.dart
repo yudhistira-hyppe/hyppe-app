@@ -170,7 +170,7 @@ class PaymentMethodNotifier extends ChangeNotifier {
         Future.delayed(const Duration(seconds: 2), () {
           Routing().move(Routes.paymentSummaryScreen);
         });
-        _isLoading = false;
+        isLoading = false;
       }
     } catch (e) {
       print(e);

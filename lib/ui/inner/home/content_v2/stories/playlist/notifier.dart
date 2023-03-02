@@ -177,7 +177,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     notifyListeners();
   }
 
-  set pageIndex(int index){
+  set pageIndex(int index) {
     _pageIndex = index;
     notifyListeners();
   }
@@ -314,7 +314,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
         Size? videoSize;
         final width = story.metadata?.width?.toDouble();
         final height = story.metadata?.height?.toDouble();
-        if(width != null && height != null){
+        if (width != null && height != null) {
           videoSize = Size(width, height);
           videoSize = videoSize.getFixSize(context);
         }
@@ -390,7 +390,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
       Size? videoSize;
       final width = data.metadata?.width?.toDouble();
       final height = data.metadata?.height?.toDouble();
-      if(width != null && height != null){
+      if (width != null && height != null) {
         videoSize = Size(width, height);
         videoSize = videoSize.getFixSize(context);
       }
@@ -458,7 +458,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     final myGroup = routeArgument.myStories;
     if (groups != null) {
       _groupUserStories = groups;
-    }else if(myGroup != null){
+    } else if (myGroup != null) {
       _groupUserStories.add(StoriesGroup(email: myGroup[_email]?[0].email, username: myGroup[_email]?[0].username, story: myGroup[_email]));
     }
   }
@@ -506,7 +506,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
           child: const UnconstrainedBox(child: CustomLoading()),
         ),
       );
-      Overlay.of(context)?.insert(_popupDialog);
+      Overlay.of(context).insert(_popupDialog);
       await context.read<MainNotifier>().getReaction(context).whenComplete(() {
         _data = context.read<MainNotifier>().reactionData;
         _popupDialog.remove();

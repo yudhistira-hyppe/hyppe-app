@@ -128,15 +128,14 @@ class AdsAvatar {
   }
 
   String? concatThumbUri() {
-    if(mediaEndpoint != null){
-      if(mediaEndpoint!.isNotEmpty){
+    if (mediaEndpoint != null) {
+      if (mediaEndpoint!.isNotEmpty) {
         return '${Env.data.baseUrl}/${Env.data.versionApi}$mediaEndpoint?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
-      }else{
+      } else {
         return '';
       }
-    }else{
+    } else {
       return '';
     }
-
   }
 }

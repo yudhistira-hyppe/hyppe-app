@@ -60,7 +60,7 @@ class CustomTabPageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TabController tabController = (controller ?? DefaultTabController.of(context))!;
+    final TabController tabController = (controller ?? DefaultTabController.of(context));
     final Animation<double> animation = CurvedAnimation(
       parent: tabController.animation!,
       curve: Curves.fastOutSlowIn,

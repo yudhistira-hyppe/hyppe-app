@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
@@ -44,8 +45,14 @@ class _TransactionState extends State<Transaction> {
 
   @override
   void dispose() {
-    Provider.of<TransactionNotifier>(context, listen: false).setIsLoading(false);
+
     super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    Provider.of<TransactionNotifier>(materialAppKey.currentContext ?? context, listen: false).setIsLoading(false);
+    super.deactivate();
   }
 
   @override

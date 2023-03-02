@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:device_info_plus/device_info_plus.dart';
@@ -83,16 +84,25 @@ class System {
     return connection;
   }
 
+  String generateNonce([int length = 32]) {
+    const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
+  }
+
   String? showUserPicture(String? url) {
-    if (url != null) {
+    String? token = SharedPreference().readStorage(SpKeys.userToken);
+    String? email = SharedPreference().readStorage(SpKeys.email);
+    if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
-        return Env.data.baseUrl +
-            "/${Env.data.versionApi}/" +
-            url +
-            "?x-auth-token=" +
-            SharedPreference().readStorage(SpKeys.userToken) +
-            "&x-auth-user=" +
-            SharedPreference().readStorage(SpKeys.email);
+        return '${Env.data.baseUrl}/${Env.data.versionApi}/$url?x-auth-token=$token&x-auth-user=$email&rundom=';
+        // return Env.data.baseUrl +
+        //     "/${Env.data.versionApi}/" +
+        //     url +
+        //     "?x-auth-token=" +
+        //     token +
+        //     "&x-auth-user=" +
+        //     email;
       } else {
         return '';
       }
@@ -103,7 +113,7 @@ class System {
       //     "&x-auth-user=" +
       //     SharedPreference().readStorage(SpKeys.email);
     } else {
-      return null;
+      return '';
     }
   }
 

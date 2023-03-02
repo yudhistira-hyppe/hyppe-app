@@ -14,6 +14,7 @@ import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/arguments/other_profile_argument.dart';
 import '../../../core/bloc/ads_video/bloc.dart';
 import '../../../core/constants/asset_path.dart';
 import '../../../core/constants/enum.dart';
@@ -25,6 +26,7 @@ import '../../../core/models/collection/advertising/ads_video_data.dart';
 import '../../../core/models/collection/advertising/view_ads_request.dart';
 import '../../../core/services/shared_preference.dart';
 import '../../../initial/hyppe/translate_v2.dart';
+import '../../../ux/path.dart';
 import '../../constant/overlay/bottom_sheet/show_bottom_sheet.dart';
 import '../../constant/widget/custom_background_layer.dart';
 import '../../constant/widget/custom_base_cache_image.dart';
@@ -47,6 +49,7 @@ class _AdsScreenState extends State<AdsScreen> {
   final _sharedPrefs = SharedPreference();
   var secondsSkip = 0;
   var secondsVideo = 0;
+  bool loadingAction = false;
   // List<ContentData>? _vidData;
 
   @override
@@ -58,7 +61,9 @@ class _AdsScreenState extends State<AdsScreen> {
           'x-auth-user': _sharedPrefs.readStorage(SpKeys.email),
           'x-auth-token': _sharedPrefs.readStorage(SpKeys.userToken),
         },
-        duration: Duration(milliseconds: ((widget.argument.data.duration ?? 15) * 1000).toInt())));
+        duration: Duration(
+            milliseconds:
+                ((widget.argument.data.duration ?? 15) * 1000).toInt())));
     print('isShowPopAds true');
     SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
 
@@ -66,8 +71,13 @@ class _AdsScreenState extends State<AdsScreen> {
     super.initState();
   }
 
-  Future adsView(BuildContext context, AdsData data, int time, {bool isClick = false}) async {
+  Future adsView(BuildContext context, AdsData data, int time,
+      {bool isClick = false}) async {
     try {
+      setState((){
+        loadingAction = true;
+      });
+
       final notifier = AdsDataBloc();
       final request = ViewAdsRequest(
         watchingTime: time,
@@ -99,6 +109,9 @@ class _AdsScreenState extends State<AdsScreen> {
 
     } catch (e) {
       'Failed hit view ads $e'.logger();
+      setState(() {
+        loadingAction = false;
+      });
     }
   }
 
@@ -107,11 +120,14 @@ class _AdsScreenState extends State<AdsScreen> {
     final theme = Theme.of(context);
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(8.0)),
+          decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(8.0)),
           child: Stack(
             fit: StackFit.expand,
             children: [
-              (widget.argument.data.mediaType ?? '').translateType() == ContentType.image
+              (widget.argument.data.mediaType ?? '').translateType() ==
+                      ContentType.image
                   ? Stack(
                       children: [
                         // Background
@@ -128,7 +144,9 @@ class _AdsScreenState extends State<AdsScreen> {
                               imageBuilder: (ctx, imageProvider) {
                                 return Container(
                                   decoration: BoxDecoration(
-                                    image: DecorationImage(image: imageProvider, fit: BoxFit.contain),
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.contain),
                                   ),
                                 );
                               },
@@ -137,7 +155,8 @@ class _AdsScreenState extends State<AdsScreen> {
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.contain,
-                                      image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                      image: AssetImage(
+                                          '${AssetPath.pngPath}content-error.png'),
                                     ),
                                   ),
                                 );
@@ -146,7 +165,8 @@ class _AdsScreenState extends State<AdsScreen> {
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     fit: BoxFit.contain,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               ),
@@ -177,12 +197,14 @@ class _AdsScreenState extends State<AdsScreen> {
                           nextDebouncer: false,
                           onComplete: () async {
                             _storyController.pause();
-                            await adsView(context, widget.argument.data, secondsVideo);
+                            // await adsView(
+                            //     context, widget.argument.data, secondsVideo);
                           },
                         ),
                         widget.argument.data.isReport ?? false
                             ? BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                                filter:
+                                    ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                                 child: Container(
                                   color: Colors.black.withOpacity(0),
                                 ),
@@ -200,12 +222,20 @@ class _AdsScreenState extends State<AdsScreen> {
                           children: [
                             Spacer(),
                             const CustomIconWidget(
-                              iconData: "${AssetPath.vectorPath}valid-invert.svg",
+                              iconData:
+                                  "${AssetPath.vectorPath}valid-invert.svg",
                               defaultColor: false,
                               height: 30,
                             ),
-                            Text(transnot.translate.reportReceived ?? '', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                            Text(transnot.translate.yourReportWillbeHandledImmediately ?? '',
+                            Text(transnot.translate.reportReceived ?? '',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600)),
+                            Text(
+                                transnot.translate
+                                        .yourReportWillbeHandledImmediately ??
+                                    '',
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 13,
@@ -231,7 +261,10 @@ class _AdsScreenState extends State<AdsScreen> {
                                 ),
                                 child: Text(
                                   "See Ads",
-                                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600),
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -242,12 +275,18 @@ class _AdsScreenState extends State<AdsScreen> {
                       ),
                     ))
                   : Container(),
-              Positioned(left: 0, top: 50, right: 0, child: topAdsLayout(widget.argument.data)),
+              Positioned(
+                  left: 0,
+                  top: 50,
+                  right: 0,
+                  child: topAdsLayout(widget.argument.data)),
               Positioned(
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: (widget.argument.data.isReport ?? false) ? Container() : bottomAdsLayout(widget.argument.data),
+                child: (widget.argument.data.isReport ?? false)
+                    ? Container()
+                    : bottomAdsLayout(widget.argument.data),
               )
             ],
           )),
@@ -281,7 +320,8 @@ class _AdsScreenState extends State<AdsScreen> {
                                 width: 36,
                                 height: 36,
                                 decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: imageProvider,
@@ -294,10 +334,12 @@ class _AdsScreenState extends State<AdsScreen> {
                                 width: 36,
                                 height: 36,
                                 decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(18)),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(18)),
                                   image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                    image: AssetImage(
+                                        '${AssetPath.pngPath}content-error.png'),
                                   ),
                                 ),
                               );
@@ -306,10 +348,12 @@ class _AdsScreenState extends State<AdsScreen> {
                               width: 36,
                               height: 36,
                               decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(18)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(18)),
                                 image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  image: AssetImage(
+                                      '${AssetPath.pngPath}content-error.png'),
                                 ),
                               ),
                             ),
@@ -322,12 +366,16 @@ class _AdsScreenState extends State<AdsScreen> {
                                 children: [
                                   const CustomIconWidget(
                                     defaultColor: false,
-                                    iconData: "${AssetPath.vectorPath}ad_yellow_icon.svg",
+                                    iconData:
+                                        "${AssetPath.vectorPath}ad_yellow_icon.svg",
                                   ),
                                   fourPx,
                                   Text(
                                     data.adsDescription ?? 'Nike',
-                                    style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
                                   )
                                 ],
                               ),
@@ -367,19 +415,30 @@ class _AdsScreenState extends State<AdsScreen> {
                       ),
                     ),
                     secondsSkip < 1 || widget.argument.data.isReport == true
-                        ? InkWell(
-                            onTap: () {
-                              adsView(context, widget.argument.data, secondsVideo);
-                              Navigator.pop(context);
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 8.0),
-                              child: CustomIconWidget(
-                                defaultColor: false,
-                                iconData: "${AssetPath.vectorPath}close_ads.svg",
-                              ),
-                            ),
-                          )
+                        ? (loadingAction
+                            ? Container(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                width: 24,
+                                height: 24,
+                                alignment: Alignment.center,
+                                child: CircularProgressIndicator(
+                                    color: context.getColorScheme().primary,
+                                    strokeWidth: 3.0))
+                            : InkWell(
+                                onTap: () {
+                                  adsView(context, widget.argument.data,
+                                      secondsVideo);
+                                  Navigator.pop(context);
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 8.0),
+                                  child: CustomIconWidget(
+                                    defaultColor: false,
+                                    iconData:
+                                        "${AssetPath.vectorPath}close_ads.svg",
+                                  ),
+                                ),
+                              ))
                         : Container()
                   ],
                 )
@@ -392,10 +451,13 @@ class _AdsScreenState extends State<AdsScreen> {
                     margin: EdgeInsets.only(top: 0),
                     child: Text(
                       '$secondsSkip',
-                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(15)), color: Colors.grey),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        color: Colors.grey),
                   )
                 : Container()
           ],
@@ -408,49 +470,67 @@ class _AdsScreenState extends State<AdsScreen> {
     return Material(
       color: Colors.transparent,
       child: Consumer<TranslateNotifierV2>(
-        builder: (context, notifier, _){
+        builder: (context, notifier, _) {
           return Container(
             margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
             child: InkWell(
               onTap: () async {
-                if(secondsSkip < 1){
-                  final uri = Uri.parse(data.adsUrlLink ?? '');
-                  if (await canLaunchUrl(uri)) {
-                    adsView(context, widget.argument.data, secondsVideo, isClick: true);
+                if (secondsSkip < 1) {
+                  if(data.adsUrlLink?.isEmail() ?? false){
+                    final email = data.adsUrlLink!.replaceAll('email:', '');
                     Navigator.pop(context);
-                    await launchUrl(
-                      uri,
-                      mode: LaunchMode.externalApplication,
-                    );
-                  } else {
-                    throw "Could not launch $uri";
+                    Future.delayed(const Duration(milliseconds: 500), (){
+                      Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                    });
+                  }else{
+                    final uri = Uri.parse(data.adsUrlLink ?? '');
+                    if (await canLaunchUrl(uri)) {
+                      adsView(context, widget.argument.data, secondsVideo,
+                          isClick: true);
+                      Navigator.pop(context);
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      throw "Could not launch $uri";
+                    }
                   }
                   // can't launch url, there is some error
                 }
-
               },
-              child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(5)), color: secondsSkip < 1 ? KHyppeButtonAds : context.getColorScheme().secondary),
-                  child: CustomTextWidget(
-                    textToDisplay: notifier.translate.learnMore ?? 'Learn more',
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  )
+              child: Builder(builder: (context) {
+                final learnMore = secondsSkip < 1
+                    ? (notifier.translate.learnMore ?? 'Learn More')
+                    : "${notifier.translate.learnMore ?? 'Learn More'}($secondsSkip)";
+                return Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                        color: secondsSkip < 1
+                            ? KHyppeButtonAds
+                            : context.getColorScheme().secondary),
+                    child: CustomTextWidget(
+                      textToDisplay: learnMore,
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    )
 
-                //  Text(
-                //   'Learn more',
-                //   style: TextStyle(
-                //     color: Colors.white,
-                //     fontSize: 14,
-                //     fontWeight: FontWeight.w700,
-                //   ),
-                // ),
-              ),
+                    //  Text(
+                    //   'Learn more',
+                    //   style: TextStyle(
+                    //     color: Colors.white,
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w700,
+                    //   ),
+                    // ),
+                    );
+              }),
             ),
           );
         },

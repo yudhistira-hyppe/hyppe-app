@@ -440,7 +440,7 @@ class UserBloc {
   Future getUserProfilesBloc(BuildContext context, {String? search, required bool withAlertMessage, bool isByUsername = false}) async {
     setUserFetch(UserFetch(UserState.loading));
     var formData = FormData();
-    formData.fields.add(MapEntry('search', search ?? SharedPreference().readStorage(SpKeys.email)));
+    formData.fields.add(MapEntry('search', search ?? (SharedPreference().readStorage(SpKeys.email) ?? '')));
     print('formData.fields');
     print(formData.fields);
     await Repos().reposPost(

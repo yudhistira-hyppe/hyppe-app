@@ -34,7 +34,7 @@ class ApiAction {
         responseHeader: true,
       ));
       // _dio.interceptors.add(CurlLoggerDioInte?rceptor(printOnSuccess: true));
-      // _dio.interceptors.add(HttpFormatter());
+      _dio.interceptors.add(HttpFormatter());
     }
   }
 
@@ -93,7 +93,7 @@ class ApiAction {
       if (Env.data.debug == true) {
         url = UrlConstants.stagingUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
       } else {
-        url = UrlConstants.productionUploadBaseApi + Env.data.versionApi + UrlConstants.createuserposts;
+        url = UrlConstants.productionUploadBaseApi + "/" + Env.data.versionApi + UrlConstants.createuserposts;
       }
     }
 

@@ -70,8 +70,8 @@ class SelfProfileNotifier with ChangeNotifier {
 
   int get picCount => picContentsQuery.hasNext ? (user.pics?.length ?? 0) + 2 : (user.pics?.length ?? 0);
   bool get picHasNext => picContentsQuery.hasNext;
-  String _statusKyc = '';
-  String get statusKyc => _statusKyc;
+  String? _statusKyc = '';
+  String? get statusKyc => _statusKyc;
 
   bool _scollLoading = false;
   bool get scollLoading => _scollLoading;

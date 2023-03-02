@@ -48,107 +48,31 @@ class _CameraViewState extends State<CameraView> {
     final notifier = context.read<CameraNotifier>();
     notifier.deepArController ??= DeepArController();
     _effectsList2 = [
-      {
-        "path": "BabyChewbacca",
-        "efect": "baby_chewbacca.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "BigGlasses",
-        "efect": "big_glasses.deepar",
-        "preview": "preview.png"
-      },
+      {"path": "BabyChewbacca", "efect": "baby_chewbacca.deepar", "preview": "preview.png"},
+      {"path": "BigGlasses", "efect": "big_glasses.deepar", "preview": "preview.png"},
       {"path": "Chief", "efect": "chief.deepar", "preview": "preview.png"},
-      {
-        "path": "CrossedEyes",
-        "efect": "crossed_eyes.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "Jokester",
-        "efect": "jokerster.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "LizardSkin",
-        "efect": "lizard_skin.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "NeonWires",
-        "efect": "neon_wires.deepar",
-        "preview": "preview.png"
-      },
+      {"path": "CrossedEyes", "efect": "crossed_eyes.deepar", "preview": "preview.png"},
+      {"path": "Jokester", "efect": "jokerster.deepar", "preview": "preview.png"},
+      {"path": "LizardSkin", "efect": "lizard_skin.deepar", "preview": "preview.png"},
+      {"path": "NeonWires", "efect": "neon_wires.deepar", "preview": "preview.png"},
       {"path": "Peter", "efect": "peter.deepar", "preview": "preview.png"},
       {"path": "PopFace", "efect": "pop_face.deepar", "preview": "preview.png"},
       {"path": "Samurai", "efect": "samurai.deepar", "preview": "preview.png"},
-      {
-        "path": "BurningEffect",
-        "efect": "burning_effect.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "DevilNeonHorns",
-        "efect": "Neon_Devil_Horns.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "ElephantTrunk",
-        "efect": "Elephant_Trunk.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "EmotionMeter",
-        "efect": "Emotion_Meter.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "EmotionsExaggerator",
-        "efect": "Emotions_Exaggerator.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "FireEffect",
-        "efect": "Fire_Effect.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "FlowerFace",
-        "efect": "flower_face.deepar",
-        "preview": "preview.png"
-      },
+      {"path": "BurningEffect", "efect": "burning_effect.deepar", "preview": "preview.png"},
+      {"path": "DevilNeonHorns", "efect": "Neon_Devil_Horns.deepar", "preview": "preview.png"},
+      {"path": "ElephantTrunk", "efect": "Elephant_Trunk.deepar", "preview": "preview.png"},
+      {"path": "EmotionMeter", "efect": "Emotion_Meter.deepar", "preview": "preview.png"},
+      {"path": "EmotionsExaggerator", "efect": "Emotions_Exaggerator.deepar", "preview": "preview.png"},
+      {"path": "FireEffect", "efect": "Fire_Effect.deepar", "preview": "preview.png"},
+      {"path": "FlowerFace", "efect": "flower_face.deepar", "preview": "preview.png"},
       {"path": "Hope", "efect": "Hope.deepar", "preview": "preview.png"},
-      {
-        "path": "Humanoid",
-        "efect": "Humanoid.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "MakeupLookw_Slipt",
-        "efect": "Split_View_Look.deepar",
-        "preview": "preview.jpg"
-      },
-      {
-        "path": "PingPongMinigame",
-        "efect": "Ping_Pong.deepar",
-        "preview": "preview.png"
-      },
+      {"path": "Humanoid", "efect": "Humanoid.deepar", "preview": "preview.png"},
+      {"path": "MakeupLookw_Slipt", "efect": "Split_View_Look.deepar", "preview": "preview.jpg"},
+      {"path": "PingPongMinigame", "efect": "Ping_Pong.deepar", "preview": "preview.png"},
       {"path": "Snail", "efect": "Snail.deepar", "preview": "preview.png"},
-      {
-        "path": "Stallone",
-        "efect": "Stallone.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "VendettaMask",
-        "efect": "Vendetta_Mask.deepar",
-        "preview": "preview.png"
-      },
-      {
-        "path": "VikingHelmetPBR",
-        "efect": "viking_helmet.deepar",
-        "preview": "preview.png"
-      },
+      {"path": "Stallone", "efect": "Stallone.deepar", "preview": "preview.png"},
+      {"path": "VendettaMask", "efect": "Vendetta_Mask.deepar", "preview": "preview.png"},
+      {"path": "VikingHelmetPBR", "efect": "viking_helmet.deepar", "preview": "preview.png"},
     ];
     super.initState();
   }
@@ -180,8 +104,7 @@ class _CameraViewState extends State<CameraView> {
               ? const CustomLoading()
               : notifier.isInitialized
                   ? Transform.scale(
-                      scale: (1 / notifier.deepArController!.aspectRatio) /
-                          deviceRatio,
+                      scale: (1 / notifier.deepArController!.aspectRatio) / deviceRatio,
                       child: DeepArPreview(
                         notifier.deepArController!,
                         onViewCreated: () {
@@ -194,9 +117,7 @@ class _CameraViewState extends State<CameraView> {
                   : const Center(
                       child: Text("Loading..."),
                     ),
-          notifier.showEffected
-              ? listEfect(notifier.deepArController!)
-              : const SizedBox(),
+          notifier.showEffected ? listEfect(notifier.deepArController!) : const SizedBox(),
           // _topMediaOptions(notifier.deepArController),
           // _bottomMediaOptions(notifier.deepArController),
         ],
@@ -225,10 +146,7 @@ class _CameraViewState extends State<CameraView> {
                   child: GestureDetector(
                     onTap: () {
                       effected = index;
-                      _controller.switchFaceMask(_assetEffectsPath +
-                          _effectsList2[index]['path'] +
-                          "/" +
-                          _effectsList2[index]['efect']);
+                      _controller.switchFaceMask(_assetEffectsPath + _effectsList2[index]['path'] + "/" + _effectsList2[index]['efect']);
                       setState(() {});
                     },
                     child: Container(
@@ -243,8 +161,7 @@ class _CameraViewState extends State<CameraView> {
                               matchTextDirection: true,
                               fit: BoxFit.cover,
                               // image: AssetImage("assets/effect/BurningEffect/preview.png"),
-                              image: AssetImage(
-                                  "$_assetEffectsPath${_effectsList2[index]['path']}/${_effectsList2[index]['preview']}"),
+                              image: AssetImage("$_assetEffectsPath${_effectsList2[index]['path']}/${_effectsList2[index]['preview']}"),
                             ))),
                   ),
                 );
@@ -269,8 +186,7 @@ class _CameraViewState extends State<CameraView> {
             },
             color: Colors.white70,
             iconSize: 40,
-            icon:
-                Icon(_controller.flashState ? Icons.flash_on : Icons.flash_off),
+            icon: Icon(_controller.flashState ? Icons.flash_on : Icons.flash_off),
           ),
           IconButton(
             onPressed: () async {
@@ -286,9 +202,7 @@ class _CameraViewState extends State<CameraView> {
             color: Colors.white70,
             iconSize: 40,
             icon: Icon(
-              _isFaceMask
-                  ? Icons.face_retouching_natural_rounded
-                  : Icons.face_retouching_off,
+              _isFaceMask ? Icons.face_retouching_natural_rounded : Icons.face_retouching_off,
             ),
           ),
           IconButton(
@@ -364,9 +278,7 @@ class _CameraViewState extends State<CameraView> {
                 },
                 iconSize: 50,
                 color: Colors.white70,
-                icon: Icon(_controller.isRecording
-                    ? Icons.videocam_sharp
-                    : Icons.videocam_outlined)),
+                icon: Icon(_controller.isRecording ? Icons.videocam_sharp : Icons.videocam_outlined)),
             const SizedBox(width: 20),
             IconButton(
                 onPressed: () {
@@ -404,12 +316,9 @@ class _CameraViewState extends State<CameraView> {
   /// Get all deepar effects from assets
   ///
   Future<List<String>> _getEffectsFromAssets(BuildContext context) async {
-    final manifestContent =
-        await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
+    final manifestContent = await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
     final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-    final filePaths = manifestMap.keys
-        .where((path) => path.startsWith(_assetEffectsPath))
-        .toList();
+    final filePaths = manifestMap.keys.where((path) => path.startsWith(_assetEffectsPath)).toList();
     return filePaths;
   }
 

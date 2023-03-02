@@ -33,9 +33,12 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:screen_protector/screen_protector.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../../core/arguments/other_profile_argument.dart';
 import '../../../../../../core/constants/asset_path.dart';
 import '../../../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../../../initial/hyppe/translate_v2.dart';
+import '../../../../../../ux/path.dart';
+import '../../../../../../ux/routing.dart';
 import '../../../../../constant/widget/custom_base_cache_image.dart';
 import '../../../../../constant/widget/custom_spacer.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +63,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   BetterPlayerController? _betterPlayerController;
   final ValueNotifier<bool> _awaitInitial = ValueNotifier(false);
   final ValueNotifier<bool> _initializeVideo = ValueNotifier(false);
+  var secondsSkip = 0;
 
   // AdvertisingData? _clipsData;
   AdsVideo? _newClipData;
@@ -72,6 +76,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   bool _isStartFullScreen = false;
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
+
+
+
 
   void _resetOrintationStream() {
     _orientationStream?.cancel();
@@ -172,6 +179,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         // print('data : ${fetch.data.toString()}');
         _newClipData = fetch.data;
         'videoId : ${_newClipData?.data?.videoId}'.logger();
+        secondsSkip = _newClipData?.data?.adsSkip ?? 0;
         await getAdsVideoApsara(_newClipData?.data?.videoId ?? '');
       }
     } catch (e) {
@@ -411,129 +419,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     if (roll != null) {
       _isStartFullScreen = _betterPlayerController?.isFullScreen ?? false;
       BetterPlayerConfiguration betterPlayerConfigurationAds = BetterPlayerConfiguration(
-        overlay: (_betterPlayerController?.isFullScreen ?? false)
-            ? Expanded(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 10,
-                      bottom: 20,
-                      child: Consumer<TranslateNotifierV2>(
-                        builder: (context, notifier, _) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Container(
-                              //   width: context.getWidth() * 0.4,
-                              //   child: const Text(
-                              //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
-                              //     style: TextStyle(color: Colors.white, fontSize: 10),
-                              //   ),
-                              // ),
-                              eightPx,
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                color: Colors.white,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CustomBaseCacheImage(
-                                      imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
-                                      memCacheWidth: 200,
-                                      memCacheHeight: 200,
-                                      imageBuilder: (_, imageProvider) {
-                                        return Container(
-                                          width: 27,
-                                          height: 27,
-                                          decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: imageProvider,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      errorWidget: (_, __, ___) {
-                                        return Container(
-                                          width: 27,
-                                          height: 27,
-                                          decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      emptyWidget: Container(
-                                        width: 27,
-                                        height: 27,
-                                        decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(Radius.circular(18)),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: const AssetImage('${AssetPath.pngPath}content-error.png'),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    sixteenPx,
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          _newClipData?.data?.adsDescription ?? '',
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                                        ),
-                                        fourPx,
-                                        Text(
-                                          _newClipData?.data?.adsUrlLink ?? '',
-                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                                        )
-                                      ],
-                                    ),
-                                    twelvePx,
-                                    InkWell(
-                                      onTap: () async {
-                                        final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
-                                        final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
-                                        if (await canLaunchUrl(uri)) {
-                                          print('adsView part 1');
-                                          adsView(_newClipData?.data ?? AdsData(), second);
-                                          await launchUrl(
-                                            uri,
-                                            mode: LaunchMode.externalApplication,
-                                          );
-                                        } else
-                                          // can't launch url, there is some error
-                                          throw "Could not launch $uri";
-                                      },
-                                      child: Container(
-                                        child: Text(
-                                          notifier.translate.learnMore ?? 'Learn More',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 7,
-                                          ),
-                                        ),
-                                        padding: EdgeInsets.only(left: 16, bottom: 4, top: 4, right: 16),
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Container(),
+        overlayShownWhenFullScreen: true,
+        overlay: _overlayLayout(),
         autoPlay: true,
         fullScreenByDefault: _betterPlayerController?.isFullScreen ?? false,
         autoDispose: false,
@@ -597,6 +484,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
         setStateIfMounted(() async {
           if (_betterPlayerController?.isFullScreen ?? false) {
             print('play iklan fullscreen');
+            // _betterPlayerControllerMap?.setOverlay(_overlayLayout());
             _betterPlayerControllerMap?.enterFullScreen();
 
             Future.delayed(const Duration(seconds: 3), () {
@@ -645,10 +533,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
           'Ads finished'.logger();
           'Delaay for 3 second'.logger();
           'second end ads3 $second'.logger();
-          adsView(_newClipData?.data ?? AdsData(), second);
-          Future.delayed(const Duration(seconds: 3), () {
-            _handleClosingAdsEvent(roll);
-          });
+          // adsView(_newClipData?.data ?? AdsData(), second);
+          // Future.delayed(const Duration(seconds: 3), () {
+          //   _handleClosingAdsEvent(roll);
+          // });
         }
         final position = _betterPlayerControllerMap?.videoPlayerController?.position;
       });
@@ -685,6 +573,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
       _betterPlayerController?.deleteAdsByUri(_betterPlayerRollUri ?? '');
       _betterPlayerControllerMap?.pause();
       if (_betterPlayerControllerMap?.isFullScreen ?? false) {
+        // _betterPlayerController?.setOverlay(null);
         _betterPlayerControllerMap?.exitFullScreen();
       }
       Future.delayed(Duration.zero, () {
@@ -715,8 +604,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   @override
-  void dispose() {
+  void deactivate() {
     _dispose();
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+
     CustomRouteObserver.routeObserver.unsubscribe(this);
     _preventScreenShootOff();
     super.dispose();
@@ -801,6 +696,132 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                 ),
               ],
             ),
+    );
+  }
+
+  Widget _overlayLayout(){
+    return Positioned.fill(
+      child: Stack(
+        children: [
+          Positioned(
+            left: 10,
+            bottom: 40,
+            child: Consumer<TranslateNotifierV2>(
+              builder: (context, notifier, _) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    eightPx,
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      color: Colors.white,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomBaseCacheImage(
+                            imageUrl: _newClipData?.data?.avatar?.fullLinkURL,
+                            memCacheWidth: 200,
+                            memCacheHeight: 200,
+                            imageBuilder: (_, imageProvider) {
+                              return Container(
+                                width: 27,
+                                height: 27,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: imageProvider,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (_, __, ___) {
+                              return Container(
+                                width: 27,
+                                height: 27,
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                  ),
+                                ),
+                              );
+                            },
+                            emptyWidget: Container(
+                              width: 27,
+                              height: 27,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(Radius.circular(18)),
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: const AssetImage('${AssetPath.pngPath}content-error.png'),
+                                ),
+                              ),
+                            ),
+                          ),
+                          sixteenPx,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                _newClipData?.data?.adsDescription ?? '',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                              ),
+                              fourPx,
+                              Text(
+                                _newClipData?.data?.adsUrlLink ?? '',
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                              )
+                            ],
+                          ),
+                          twelvePx,
+                          InkWell(
+                            onTap: () async {
+                              if(_newClipData?.data?.adsUrlLink?.isEmail() ?? false){
+                                final email = _newClipData?.data?.adsUrlLink?.replaceAll('email:', '');
+                                Navigator.pop(context);
+                                Future.delayed(const Duration(milliseconds: 500), (){
+                                  Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
+                                });
+                              }else{
+                                final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
+                                final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
+                                if (await canLaunchUrl(uri)) {
+                                  print('adsView part 1');
+                                  adsView(_newClipData?.data ?? AdsData(), second);
+                                  await launchUrl(
+                                    uri,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                } else
+                                  // can't launch url, there is some error
+                                  throw "Could not launch $uri";
+                              }
+
+                            },
+                            child: Container(
+                              child: Text(
+                                notifier.translate.learnMore ?? 'Learn More',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 7,
+                                ),
+                              ),
+                              padding: EdgeInsets.only(left: 16, bottom: 10, top: 10, right: 16),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)), color: KHyppeButtonAds),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

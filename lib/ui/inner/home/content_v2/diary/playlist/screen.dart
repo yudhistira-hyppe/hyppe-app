@@ -10,7 +10,6 @@ import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/diary_page/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items_shimmer.dart';
 
-
 class HyppePlaylistDiaries extends StatefulWidget {
   final DiaryDetailScreenArgument argument;
 
@@ -70,47 +69,36 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                           if (notifier.currentPage?.floor() == rootIndex) {
                             double value = (notifier.currentPage ?? 0) - rootIndex;
                             double degValue = notifier.degreeToRadian(value * 90);
-                            return Transform(
-                              transform: Matrix4.identity()
-                                ..setEntry(3, 2, 0.001)
-                                ..rotateY(degValue),
-                              alignment: Alignment.centerRight,
-                              child: DiaryPage(
-                                // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
-                                // arguments: widget.argument,
-                                data: notifier.listData?[rootIndex],
-                                controller: _pageController,
-                                total: notifier.listData?.length,
-                                function: () {
-                                  notifier.onNextPage(
-                                    context: context,
-                                    data: notifier.listData?[rootIndex] ?? ContentData(),
-                                    mounted: mounted,
-                                  );
-                                },
-                                isScrolling: _pageController.position.activity?.isScrolling,
-                              ),
+                            return DiaryPage(
+                              // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
+                              // arguments: widget.argument,
+                              data: notifier.listData?[rootIndex],
+                              controller: _pageController,
+                              total: notifier.listData?.length,
+                              function: () {
+                                notifier.onNextPage(
+                                  context: context,
+                                  data: notifier.listData?[rootIndex] ?? ContentData(),
+                                  mounted: mounted,
+                                );
+                              },
+                              isScrolling: _pageController.position.activity?.isScrolling,
                             );
                           } else if ((notifier.currentPage?.floor() ?? 0) + 1 == rootIndex) {
                             double value = (notifier.currentPage ?? 0) - rootIndex;
                             double degValue = notifier.degreeToRadian(value * 90);
-                            return Transform(
-                                transform: Matrix4.identity()
-                                  ..setEntry(3, 2, 0.002)
-                                  ..rotateY(degValue),
-                                alignment: Alignment.centerLeft,
-                                child: DiaryPage(
-                                  // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
-                                  // arguments: widget.argument,
-                                  data: notifier.listData?[rootIndex],
-                                  controller: _pageController,
-                                  function: () => notifier.onNextPage(
-                                    context: context,
-                                    data: notifier.listData?[rootIndex] ?? ContentData(),
-                                    mounted: mounted,
-                                  ),
-                                  isScrolling: _pageController.position.activity?.isScrolling,
-                                ));
+                            return DiaryPage(
+                              // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
+                              // arguments: widget.argument,
+                              data: notifier.listData?[rootIndex],
+                              controller: _pageController,
+                              function: () => notifier.onNextPage(
+                                context: context,
+                                data: notifier.listData?[rootIndex] ?? ContentData(),
+                                mounted: mounted,
+                              ),
+                              isScrolling: _pageController.position.activity?.isScrolling,
+                            );
                           }
                           return DiaryPage(
                             // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
