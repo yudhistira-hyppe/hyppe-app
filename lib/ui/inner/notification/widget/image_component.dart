@@ -12,8 +12,10 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hyppe/ui/inner/home/content_v2/pic/notifier.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:hyppe/ux/routing.dart';
+import 'package:provider/provider.dart';
 
 class ImageComponent extends StatelessWidget {
   final double width;
@@ -62,6 +64,7 @@ class ImageComponent extends StatelessWidget {
               break;
             case FeatureType.pic:
               onGetContentData(context, featureType, (v) => Routing().move(Routes.picDetail, argument: PicDetailScreenArgument(picData: v)));
+              // context.read<PreviewPicNotifier>().navigateToSlidedDetailPic(context, 0);
               break;
             case FeatureType.story:
               onGetContentData(context, featureType, (v) => Routing().move(Routes.storyDetail, argument: StoryDetailScreenArgument(storyData: v)));

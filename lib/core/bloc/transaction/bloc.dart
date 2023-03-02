@@ -186,7 +186,7 @@ class TransactionBloc {
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setTransactionFetch(TransactionFetch(TransactionState.sendVerificationError, message: onResult.data['message'], data: onResult.data));
         } else {
-          setTransactionFetch(TransactionFetch(TransactionState.sendVerificationSuccess, version: onResult.data['version'], data: GenericResponse.fromJson(onResult.data).responseData));
+          setTransactionFetch(TransactionFetch(TransactionState.sendVerificationSuccess, version: onResult.data['version'], data: onResult.data));
         }
       },
       (errorData) {
@@ -201,7 +201,7 @@ class TransactionBloc {
       withCheckConnection: false,
       host: UrlConstants.userPin,
       methodType: MethodType.post,
-      errorServiceType: System().getErrorTypeV2(type),
+      errorServiceType: ErrorType.otpVerifyAccount,
     );
   }
 
