@@ -700,7 +700,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   }
 
   Widget _overlayLayout(){
-    return Expanded(
+    return Positioned.fill(
       child: Stack(
         children: [
           Positioned(
@@ -711,13 +711,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Container(
-                    //   width: context.getWidth() * 0.4,
-                    //   child: const Text(
-                    //     'The FUJIFILM X-T3 features the new X-Trans CMOS 4 sensor and X-Processor 4 image processing engine, ushering in a new, fourth generation of the X Series.',
-                    //     style: TextStyle(color: Colors.white, fontSize: 10),
-                    //   ),
-                    // ),
                     eightPx,
                     Container(
                       padding: EdgeInsets.all(10),
