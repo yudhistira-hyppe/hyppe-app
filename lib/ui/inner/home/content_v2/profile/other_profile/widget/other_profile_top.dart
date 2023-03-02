@@ -28,6 +28,7 @@ class OtherProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("${notifier.displayPhotoProfile()}"),
             Row(
               children: [
                 StoryColorValidator(
@@ -162,14 +163,16 @@ class OtherProfileTop extends StatelessWidget {
                     width: 167 * SizeConfig.scaleDiagonal,
                     height: 42 * SizeConfig.scaleDiagonal,
                     buttonStyle: ButtonStyle(
-                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following) ? null : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+                      backgroundColor: (notifier.statusFollowing == StatusFollowing.requested || notifier.statusFollowing == StatusFollowing.following)
+                          ? null
+                          : MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                     ),
                     function: notifier.isCheckLoading
                         ? null
                         : () {
                             if (notifier.statusFollowing == StatusFollowing.none || notifier.statusFollowing == StatusFollowing.rejected) {
                               notifier.followUser(context);
-                            }else if(notifier.statusFollowing == StatusFollowing.following){
+                            } else if (notifier.statusFollowing == StatusFollowing.following) {
                               notifier.followUser(context, isUnFollow: true);
                             }
                           },

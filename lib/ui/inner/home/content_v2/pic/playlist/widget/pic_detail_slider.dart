@@ -40,7 +40,7 @@ class PicDetailSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    // final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
+    final notifier = Provider.of<PicDetailNotifier>(context, listen: false);
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: Stack(
@@ -59,7 +59,9 @@ class PicDetailSlider extends StatelessWidget {
                         imageUrl: (picData?.isApsara ?? false) ? picData?.mediaThumbUri : picData?.fullThumbPath,
                       ),
               ),
-              // onTap: () => notifier.navigateToDetailPic(picData),
+              onTap: () {
+                notifier.navigateToDetailPic(picData);
+              },
               // onTap: () => notifier.navigateToSlidedDetailPic(context, index),
             ),
           ),
