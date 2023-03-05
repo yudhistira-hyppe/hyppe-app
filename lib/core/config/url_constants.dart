@@ -294,6 +294,9 @@ class UrlConstants {
   /// post => Get Notification
   static const String getNotification = "$postRouteV2/getnotification";
 
+  /// post => Get auth apsara
+  static const String apsaraauth = "$postRouteV2/apsaraauth?apsaraId=";
+
   /// post => Get Notification
   static const String getBoostMaster = "$postRoute/boostmaster";
 

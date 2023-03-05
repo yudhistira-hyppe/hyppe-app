@@ -227,7 +227,7 @@ class MainNotifier with ChangeNotifier {
           .setTransports(
             ['websocket'],
           )
-          .setPath('${Env.data.versionApi}socket.io')
+          .setPath('${Env.data.versionApi}/socket.io')
           .disableAutoConnect()
           .build(),
     );

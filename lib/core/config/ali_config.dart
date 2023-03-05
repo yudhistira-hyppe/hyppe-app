@@ -1,20 +1,3 @@
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-
-class HttpConstant {
-  static const String HTTP_HOST = 'https://alivc-demo.aliyuncs.com/';
-  static const String HTTP_METHOD_GET = 'GET';
-  static const String HTTP_METHOD_POST = 'POST';
-
-  static const String GET_STS = 'player/getVideoSts';
-  static const String GET_AUTH = 'player/getVideoPlayAuth';
-  static const String GET_MPS = 'player/getVideoMps';
-
-  static const String GET_VIDEO_LIST = 'player/getVideoList';
-  static const String GET_RANDOM_USER = 'user/randomUser';
-  static const String GET_RECOMMEND_VIDEO_LIST = 'vod/getRecommendVideoList';
-}
-
 class GlobalSettings {
   ///软硬解开关
   static bool mEnableHardwareDecoder = true;
@@ -32,31 +15,26 @@ class GlobalSettings {
   static String mPlayerName = "";
 }
 
-/// 播放方式
-enum ModeType { URL, STS, AUTH, MPS }
-
-enum VideoShowMode { Grid, Srceen }
-
 ///播放源相关
 class DataSourceRelated {
-  static const String DEFAULT_REGION = "ap-southeast-5";
-  static const String DEFAULT_VID = "6b357371ef3c45f4a06e2536fd534380";
+  static const String defaultRegion = "ap-southeast-5";
+  static const String defaultVideo = "6b357371ef3c45f4a06e2536fd534380";
 
-  static const String DEFAULT_URL = "https://alivc-demo-vod.aliyuncs.com/6b357371ef3c45f4a06e2536fd534380/53733986bce75cfc367d7554a47638c0-fd.mp4";
+  static const String defaultUrl = "https://alivc-demo-vod.aliyuncs.com/6b357371ef3c45f4a06e2536fd534380/53733986bce75cfc367d7554a47638c0-fd.mp4";
 
-  static const String TYPE_KEY = "type";
-  static const String REGION_KEY = "region";
-  static const String URL_KEY = "https://alivc-demo-vod.aliyuncs.com/6b357371ef3c45f4a06e2536fd534380/53733986bce75cfc367d7554a47638c0-fd.mp4";
-  static const String VID_KEY = "5e79b300b28271edbf8f442380ea0102";
-  static const String INDEX_KEY = "index";
-  static const String ACCESSKEYID_KEY = "LTAI5tP2FZeBukPgRq3McSpM";
-  static const String ACCESSKEYSECRET_KEY = "Q5hRgEciIYI2g265zbWsh2kc7meBjI";
-  static const String SECURITYTOKEN_KEY = "securityToken";
-  static const String PREVIEWTIME_KEY = "previewTime";
-  static const String PLAYAUTH_KEY = "playAuth";
-  static const String PLAYDOMAIN_KEY = "playDomain";
-  static const String AUTHINFO_KEY = "authInfo";
-  static const String HLSURITOKEN_KEY = "hlsUriToken";
-  static const String DOWNLOAD_SAVE_PATH = "savePath";
-  static const String DEFINITION_LIST = "definitionList";
+  static const String typeKey = "type";
+  static const String regionKey = "region";
+  static const String urlKey = "https://alivc-demo-vod.aliyuncs.com/6b357371ef3c45f4a06e2536fd534380/53733986bce75cfc367d7554a47638c0-fd.mp4";
+  static const String vidKey = "5e79b300b28271edbf8f442380ea0102";
+  static const String indexKey = "index";
+  static const String accessKeyId = "LTAI5tP2FZeBukPgRq3McSpM";
+  static const String accessKeySecret = "Q5hRgEciIYI2g265zbWsh2kc7meBjI";
+  static const String securityToken = "securityToken";
+  static const String previewTime = "previewTime";
+  static const String playAuth = "playAuth";
+  static const String playDomain = "playDomain";
+  static const String authInfoKey = "authInfo";
+  static const String hlsUriTokenKey = "hlsUriToken";
+  static const String downloadSavePath = "savePath";
+  static const String definitionList = "definitionList";
 }

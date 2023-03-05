@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/url_constants.dart';
+import 'package:hyppe/ux/path.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
@@ -159,12 +161,11 @@ class Repos {
         'StatusCode from backend ${_response.data?['statusCode'] ?? _response.data?['status']}'.logger();
       }
 
-      /// check if token is valid or not, if not, force logOut
-      // if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
-      // await SharedPreference().logOutStorage();
-      // _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
-      // return;
-      // }
+      // / check if token is valid or not, if not, force logOut
+      if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
+        await SharedPreference().logOutStorage();
+        Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+      }
 
       /// execute given logic
       logic(_response);

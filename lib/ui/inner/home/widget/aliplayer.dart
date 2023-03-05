@@ -2,8 +2,7 @@ import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/ali_config.dart';
-
-enum ModeType { URL, STS, AUTH, MPS }
+import 'package:hyppe/core/constants/enum.dart';
 
 class AliPlayer extends StatefulWidget {
   const AliPlayer({Key? key}) : super(key: key);
@@ -45,39 +44,39 @@ class _AliPlayerState extends State<AliPlayer> {
   }
 
   Map _dataSourceMap = {};
-  ModeType _playMode = ModeType.URL;
+  ModeTypeAliPLayer _playMode = ModeTypeAliPLayer.url;
 
-  void onViewPlayerCreated(viewId) async {
-    ///将 渲染 View 设置给播放器
-    fAliplayer.setPlayerView(1);
-    //设置播放源
-    switch (_playMode) {
-      //URL 播放方式
-      case ModeType.URL:
-        fAliplayer.setUrl("https://alivc-demo-vod.aliyuncs.com/6b357371ef3c45f4a06e2536fd534380/53733986bce75cfc367d7554a47638c0-fd.mp4");
-        break;
-      //STS 播放方式
-      case ModeType.STS:
-        fAliplayer.setVidSts(
-          vid: _dataSourceMap[DataSourceRelated.VID_KEY],
-          region: _dataSourceMap[DataSourceRelated.REGION_KEY],
-          accessKeyId: _dataSourceMap[DataSourceRelated.ACCESSKEYID_KEY],
-          accessKeySecret: _dataSourceMap[DataSourceRelated.ACCESSKEYSECRET_KEY],
-          securityToken: _dataSourceMap[DataSourceRelated.SECURITYTOKEN_KEY],
-        );
-        break;
-      //AUTH 播放方式
-      case ModeType.AUTH:
-        fAliplayer.setVidAuth(
-            vid: _dataSourceMap[DataSourceRelated.VID_KEY],
-            region: _dataSourceMap[DataSourceRelated.REGION_KEY],
-            playAuth: _dataSourceMap[DataSourceRelated.PLAYAUTH_KEY],
-            definitionList: _dataSourceMap[DataSourceRelated.DEFINITION_LIST],
-            previewTime: _dataSourceMap[DataSourceRelated.PREVIEWTIME_KEY]);
-        break;
-      default:
-    }
-  }
+  // void onViewPlayerCreated(viewId) async {
+  //   ///将 渲染 View 设置给播放器
+  //   fAliplayer.setPlayerView(1);
+  //   //设置播放源
+  //   switch (_playMode) {
+  //     //URL 播放方式
+  //     case ModeType.URL:
+  //       fAliplayer.setUrl("https://alivc-demo-vod.aliyuncs.com/6b357371ef3c45f4a06e2536fd534380/53733986bce75cfc367d7554a47638c0-fd.mp4");
+  //       break;
+  //     //STS 播放方式
+  //     case ModeType.STS:
+  //       fAliplayer.setVidSts(
+  //         vid: _dataSourceMap[DataSourceRelated.VID_KEY],
+  //         region: _dataSourceMap[DataSourceRelated.REGION_KEY],
+  //         accessKeyId: _dataSourceMap[DataSourceRelated.ACCESSKEYID_KEY],
+  //         accessKeySecret: _dataSourceMap[DataSourceRelated.ACCESSKEYSECRET_KEY],
+  //         securityToken: _dataSourceMap[DataSourceRelated.SECURITYTOKEN_KEY],
+  //       );
+  //       break;
+  //     //AUTH 播放方式
+  //     case ModeType.AUTH:
+  //       fAliplayer.setVidAuth(
+  //           vid: _dataSourceMap[DataSourceRelated.VID_KEY],
+  //           region: _dataSourceMap[DataSourceRelated.REGION_KEY],
+  //           playAuth: _dataSourceMap[DataSourceRelated.PLAYAUTH_KEY],
+  //           definitionList: _dataSourceMap[DataSourceRelated.DEFINITION_LIST],
+  //           previewTime: _dataSourceMap[DataSourceRelated.PREVIEWTIME_KEY]);
+  //       break;
+  //     default:
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +91,7 @@ class _AliPlayerState extends State<AliPlayer> {
     } else {
       height = MediaQuery.of(context).size.height;
     }
-    AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: x, y: y, width: width, height: height);
+    // AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: x, y: y, width: width, height: height);
     return SizedBox(
       height: 300,
       width: 200,
@@ -101,7 +100,9 @@ class _AliPlayerState extends State<AliPlayer> {
           return Scaffold(
             body: Column(
               children: [
-                Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
+                Container(
+                  color: Colors.black, width: width, height: height, //child: aliPlayerView
+                ),
               ],
             ),
           );

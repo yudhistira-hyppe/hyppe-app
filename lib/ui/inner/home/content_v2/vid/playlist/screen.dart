@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/config/ali_config.dart';
+import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/player/player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_top.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
@@ -47,6 +50,11 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
       create: (context) => _notifier,
       child: Consumer<VidDetailNotifier>(
         builder: (_, notifier, __) {
+          var map = {
+            DataSourceRelated.vidKey: notifier.data?.apsaraId,
+            DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
+          };
+
           return WillPopScope(
             onWillPop: notifier.onPop,
             child: Scaffold(
@@ -59,6 +67,17 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         VidDetailTop(data: notifier.data),
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Container(
+                            color: Colors.black,
+                            child: PlayerPage(
+                              playMode: ModeTypeAliPLayer.auth,
+                              dataSourceMap: map,
+                              data: notifier.data!,
+                            ),
+                          ),
+                        ),
                         _notifier.data != null
                             ? Stack(
                                 children: [
@@ -72,6 +91,7 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                                       ),
                                     ),
                                   ),
+
                                   // Row(
                                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   //   children: [
