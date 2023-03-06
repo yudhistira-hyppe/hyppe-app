@@ -3,6 +3,7 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/services/error_service.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
@@ -13,6 +14,8 @@ import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/content_sea
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/search_contents_tab.dart';
 import 'package:provider/provider.dart';
 
+import '../hashtag/tab_screen.dart';
+
 class SearchMoreCompleteScreenV2 extends StatefulWidget {
   const SearchMoreCompleteScreenV2({Key? key}) : super(key: key);
 
@@ -20,26 +23,33 @@ class SearchMoreCompleteScreenV2 extends StatefulWidget {
   _SearchMoreCompleteScreenV2 createState() => _SearchMoreCompleteScreenV2();
 }
 
-class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with SingleTickerProviderStateMixin {
+class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
   @override
   void initState() {
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+
     // Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
+      final notifier = Provider.of<SearchNotifier>(context, listen: false);
+      notifier.tabIndex = _tabController.index;
       setState(() {
-        notifier.tabIndex = _tabController.index;
         _selectedIndex = _tabController.index;
-        notifier.limit = 20;
-        notifier.onSearchPost(context);
+        // notifier.limit = 20;
+        // notifier.onSearchPost(context);
       });
     });
 
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    notifier.getDataSearch(context);
   }
 
   @override
@@ -146,10 +156,10 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                             // physics: const NeverScrollableScrollPhysics(),
                             controller: _tabController,
                             children: [
-                              AllSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
-                              AccountSearchContent(content: notifier.searchContent, featureType: notifier.vidContentsQuery.featureType),
-                              SearchContentsTab(),
-                              ContentSearch(content: notifier.searchContent?.diary, featureType: notifier.diaryContentsQuery.featureType, selectIndex: _selectedIndex),
+                              const AllSearchContent(),
+                              AccountSearchContent(users: notifier.searchUsers),
+                              const SearchContentsTab(),
+                              const HashtagTabScreen(),
                             ],
                           ),
                         ),
@@ -164,4 +174,6 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
       );
     });
   }
+
+
 }

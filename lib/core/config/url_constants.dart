@@ -31,8 +31,8 @@ class UrlConstants {
 
   /// Staging v2 Base url
   // static const String stagingBaseApi = "https://prod.hyppe.app";
-  // static const String stagingBaseApi = "https://s1.hyppe.cloud";
-  static const String stagingBaseApi = "https://staging.hyppe.app";
+  static const String stagingBaseApi = "https://s1.hyppe.cloud";
+  // static const String stagingBaseApi = "https://staging.hyppe.app";
   // static const String stagingBaseApi = "http://192.168.0.135:5002";
   static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
 
@@ -305,6 +305,7 @@ class UrlConstants {
   ///---------------------------------------------------------------------------------------------------------///
   /* v3 search data content dan user */
   static const String getSearchContentV3 = "$contentRouteV3/searchdata";
+  static const String getSearchContentV4 = "$contentRouteV3/searchdatanew";
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";
 

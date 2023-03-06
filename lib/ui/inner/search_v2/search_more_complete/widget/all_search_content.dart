@@ -1,5 +1,5 @@
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/models/collection/search/search_content.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +12,12 @@ import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/vid_search_content.dart';
 import 'package:provider/provider.dart';
 
+import '../../hashtag/widget/hashtag_item.dart';
+
 class AllSearchContent extends StatefulWidget {
-  final SearchContentModel? content;
-  final FeatureType? featureType;
-  const AllSearchContent({Key? key, this.content, this.featureType}) : super(key: key);
+  // final SearchContentModel? content;
+  // final FeatureType? featureType;
+  const AllSearchContent({Key? key}) : super(key: key);
 
   @override
   State<AllSearchContent> createState() => _AllSearchContentState();
@@ -43,57 +45,68 @@ class _AllSearchContentState extends State<AllSearchContent> {
   @override
   Widget build(BuildContext context) {
     final _themes = Theme.of(context);
-    return widget.content != null
-        ? SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  (widget.content?.users?.isNotEmpty ?? false) ? widgetUserList(_themes) : const SizedBox(),
-                  sixteenPx,
-                  // ------video content search
-                  (widget.content?.vid?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.vid, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2) : const SizedBox(),
-                  sixteenPx,
-                  //------diaries content search
-                  (widget.content?.diary?.isNotEmpty ?? false)
-                      ? VidSearchContent(content: widget.content?.diary, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3)
-                      : const SizedBox(),
-                  sixteenPx,
-                  //------pic  content search
-                  (widget.content?.pict?.isNotEmpty ?? false) ? VidSearchContent(content: widget.content?.pict, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4) : const SizedBox(),
-                ],
-              ),
-            ),
-          )
-        : const AllSearchShimmer();
+
+    return Consumer<SearchNotifier>(builder: (context, notifier, _){
+      final vids = notifier.searchVid;
+      final diaries = notifier.searchDiary;
+      final pics = notifier.searchPic;
+      final users = notifier.searchUsers;
+      return notifier.loadingSearch
+          ? SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              (users?.isNotEmpty ?? false) ? widgetUserList(_themes, notifier) : const SizedBox(),
+              sixteenPx,
+              // ------video content search
+              (vids?.isNotEmpty ?? false) ? VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2) : const SizedBox(),
+              sixteenPx,
+              //------diaries content search
+              (diaries?.isNotEmpty ?? false)
+                  ? VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3)
+                  : const SizedBox(),
+              sixteenPx,
+              //------pic  content search
+              (pics?.isNotEmpty ?? false) ? VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4) : const SizedBox(),
+            ],
+          ),
+        ),
+      )
+          : const AllSearchShimmer();
+    });
+
   }
 
-  Widget widgetUserList(_themes) {
+  Widget widgetUserList(_themes, SearchNotifier notifier) {
+    final users = notifier.searchUsers;
+    final tags = notifier.searchHashtag;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         twelvePx,
-        CustomTextWidget(
-          maxLines: 1,
-          textAlign: TextAlign.left,
-          textToDisplay: _translate?.translate.account ?? '',
-          textStyle: _themes.textTheme.button?.apply(
-            color: _themes.bottomNavigationBarTheme.unselectedItemColor,
+        Container(
+          padding: const EdgeInsets.only(left: 0, top: 16),
+          width: double.infinity,
+          child: CustomTextWidget(
+            textToDisplay: notifier.language.account ?? 'Contents',
+            textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+            textAlign: TextAlign.start,
           ),
         ),
         twelvePx,
         Column(
           children: [
             ...List.generate(
-              (widget.content?.users?.length ?? 0) >= 4 ? 4 : widget.content?.users?.length ?? 0,
+              (users?.length ?? 0) >= 5 ? 5 : users?.length ?? 0,
               (index) => Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ListTile(
-                  onTap: () => _system.navigateToProfile(context, widget.content?.users?[index].email ?? ''),
+                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
                   contentPadding: EdgeInsets.zero,
-                  title: Text("${widget.content?.users?[index].fullName}"),
-                  subtitle: Text("${widget.content?.users?[index].username}"),
+                  title: Text("${users?[index].fullName}"),
+                  subtitle: Text("${users?[index].username}"),
                   leading: StoryColorValidator(
                     haveStory: false,
                     featureType: FeatureType.pic,
@@ -101,13 +114,47 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       width: 50,
                       height: 50,
                       onTap: () {},
-                      imageUrl: System().showUserPicture(widget.content?.users?[index].avatar?[0].mediaEndpoint?.replaceAll("_860.jpeg", "")),
+                      imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.replaceAll("_860.jpeg", "")),
                       following: true,
                       onFollow: () {},
                     ),
                   ),
                 ),
               ),
+            ),
+          ],
+        ),
+        sixteenPx,
+        Container(
+          padding: const EdgeInsets.only(left: 0, top: 16),
+          width: double.infinity,
+          child: CustomTextWidget(
+            textToDisplay: notifier.language.hashtags ?? 'Hashtags',
+            textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        twelvePx,
+        Column(
+          children: [
+            ...List.generate(
+              (tags?.length ?? 0) >= 5 ? 5 : tags?.length ?? 0,
+                  (index) => Builder(
+                    builder: (context){
+                      final data = tags?[index];
+                      if (data != null) {
+                        return HashtagItem(
+                            onTap: () {},
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            title: '#${data.tag}',
+                            count: data.total ?? 0,
+                            countContainer:
+                            notifier.language.posts ?? 'Posts');
+                      }else{
+                        return Container();
+                      }
+                    }
+                  ),
             ),
           ],
         ),

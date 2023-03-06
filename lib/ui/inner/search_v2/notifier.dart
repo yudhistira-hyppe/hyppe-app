@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
@@ -50,6 +52,53 @@ class SearchNotifier with ChangeNotifier {
 
   SearchContentModel? _searchContent;
   SearchContentModel? get searchContent => _searchContent;
+
+  bool _loadingSearch = true;
+  bool get loadingSearch => _loadingSearch;
+  set loadingSearch(bool state){
+    _loadingSearch = state;
+    notifyListeners();
+  }
+
+  List<ContentData>? _searchVid;
+  List<ContentData>? get searchVid => _searchVid;
+
+  set searchVid(List<ContentData>? values){
+    _searchVid = values;
+    notifyListeners();
+  }
+
+  List<ContentData>? _searchDiary;
+  List<ContentData>? get searchDiary => _searchDiary;
+
+  set searchDiary(List<ContentData>? values){
+    _searchDiary = values;
+    notifyListeners();
+  }
+
+  List<ContentData>? _searchPic;
+  List<ContentData>? get searchPic => _searchPic;
+
+  set searchPic(List<ContentData>? values){
+    _searchPic = values;
+    notifyListeners();
+  }
+
+  List<Tags>? _searchHashtag;
+  List<Tags>? get searchHashtag => _searchHashtag;
+
+  set searchHashtag(List<Tags>? values){
+    _searchHashtag = values;
+    notifyListeners();
+  }
+
+  List<DataUser>? _searchUsers;
+  List<DataUser>? get searchUsers => _searchUsers;
+
+  set searchUsers(List<DataUser>? values){
+    _searchUsers = values;
+    notifyListeners();
+  }
 
   AllContents? _searchContentFirstPage;
   AllContents? get searchContentFirstPage => _searchContentFirstPage;
@@ -546,6 +595,7 @@ class SearchNotifier with ChangeNotifier {
       "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
       "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
       "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
+      "listtag": tabIndex == 0 || tabIndex == 5 ? true : false,
       "skip": skip,
       "limit": _limit,
     };
@@ -583,6 +633,140 @@ class SearchNotifier with ChangeNotifier {
     // }
     isLoading = false;
     notifyListeners();
+  }
+
+  void getDataSearch(
+      BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all}) async {
+    loadingSearch = true;
+    try{
+
+      String email = SharedPreference().readStorage(SpKeys.email);
+      String search = searchController.text;
+      Map<String, dynamic> param = {};
+
+      focusNode.unfocus();
+      const _slimit = 12;
+      final lenghtVid = _searchVid?.length ?? 12;
+      final lenghtDiary = _searchDiary?.length ?? 12;
+      final lenghtPic = _searchPic?.length ?? 12;
+
+      isLoading = true;
+      // _searchContent = null;
+      var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+
+      final int currentSkip = typeSearch == SearchLoadData.all ? 0 :
+      typeSearch == SearchLoadData.hashtag ? (_searchHashtag?.length ?? 0) :
+      typeSearch == SearchLoadData.content ? skipContent :
+      typeSearch == SearchLoadData.user ? _searchUsers?.length ?? 0 : 0;
+      if(currentSkip != 0 && typeSearch != SearchLoadData.all){
+        throw 'Error get all because the state is not from beginning';
+      }else if(currentSkip%_slimit != 0){
+        throw 'Error because we have to prevent the action for refusing wasting action';
+      }
+      switch(typeSearch){
+        case SearchLoadData.all:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": true,
+            "listvid": true,
+            "listdiary": true,
+            "listpict": true,
+            "listtag": true,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch);
+          break;
+        case SearchLoadData.user:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": true,
+            "listvid": false,
+            "listdiary": false,
+            "listpict": false,
+            "listtag": false,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch);
+          break;
+        case SearchLoadData.hashtag:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": false,
+            "listvid": false,
+            "listdiary": false,
+            "listpict": false,
+            "listtag": true,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch);
+          break;
+        case SearchLoadData.content:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": false,
+            "listvid": true,
+            "listdiary": true,
+            "listpict": true,
+            "listtag": false,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch);
+          break;
+
+      }
+
+      isLoading = false;
+      notifyListeners();
+    }catch(e){
+      'Error getAllDataSearch: $e'.logger();
+    }finally{
+      loadingSearch = false;
+    }
+
+  }
+
+  Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req, SearchLoadData typeSearch) async{
+    try{
+      final notifier = SearchContentBloc();
+      await notifier.getSearchContent(context, req);
+      final fetch = notifier.searchContentFetch;
+      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+        final _res = SearchContentModel.fromJson(fetch.data[0]);
+        switch(typeSearch){
+          case SearchLoadData.all:
+            searchUsers = _res.users;
+            searchVid = _res.vid;
+            searchDiary = _res.diary;
+            searchPic = _res.pict;
+            searchHashtag = _res.tags;
+            break;
+          case SearchLoadData.content:
+            searchVid = [...(searchVid ?? []), ...(_res.vid ?? [])];
+            searchDiary = [...(searchDiary ?? []), ...(_res.diary ?? [])];
+            searchPic = [...(searchPic ?? []), ...(_res.pict ?? [])];
+            break;
+          case SearchLoadData.user:
+            searchUsers = [...(searchUsers ?? []), ...(_res.users ?? [])];
+            break;
+          case SearchLoadData.hashtag:
+            searchHashtag = [...(searchHashtag ?? []), ...(_res.tags ?? [])];
+            break;
+        }
+
+      }else if(fetch.searchContentState == SearchContentState.getSearchContentBlocError){
+        throw 'getAllDataSearch failed $typeSearch';
+      }
+    }catch(e){
+      rethrow;
+    }
   }
 
   Future navigateToSeeAllScreen(BuildContext context, List<ContentData> data, int index) async {

@@ -38,7 +38,7 @@ class SearchContentBloc {
       },
       withAlertMessage: true,
       withCheckConnection: true,
-      host: UrlConstants.getSearchContentV3,
+      host: UrlConstants.getSearchContentV4,
       methodType: MethodType.post,
     );
   }

@@ -76,7 +76,6 @@ import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/screen.dart';
-import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen_lama.dart';
 import 'package:hyppe/ui/inner/upload/make_content/screen.dart';
 import 'package:hyppe/ui/inner/upload/payment/screen.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/boost/screen.dart';
@@ -245,8 +244,6 @@ class Generate {
 
       case Routes.searcMore:
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
-      case Routes.searcMoreComplete:
-        return MaterialPageRoute(builder: (_) => const SearchMoreCompleteScreen());
       case Routes.verificationIDStep1:
         return MaterialPageRoute(builder: (_) => const VerificationIDStep1());
       case Routes.verificationIDStep2:

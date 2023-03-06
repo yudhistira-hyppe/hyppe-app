@@ -6,6 +6,13 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/constants/asset_path.dart';
+import '../../../../../core/constants/size_config.dart';
+import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
+import '../../../../constant/widget/custom_content_moderated_widget.dart';
+import '../../../../constant/widget/custom_icon_widget.dart';
+import '../../../home/content_v2/profile/self_profile/widget/sensitive_content.dart';
+
 class SearchContentsTab extends StatefulWidget {
   const SearchContentsTab({Key? key}) : super(key: key);
 
@@ -23,83 +30,278 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final language = notifier.language;
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 16),
-                child: CustomTextWidget(
-                  textToDisplay: language.contents ?? 'Contents',
-                  textStyle: context.getTextTheme().bodyText1,
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: listTab.map((e) {
-                      final isActive = e == notifier.contentTab;
-                      return Container(
-                        margin:
-                        const EdgeInsets.only(right: 12, top: 10, bottom: 16),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Ink(
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 16, top: 16),
+            width: double.infinity,
+            margin: const EdgeInsets.only(bottom: 16),
+            child: CustomTextWidget(
+              textToDisplay: language.contents ?? 'Contents',
+              textStyle: context.getTextTheme().bodyText1?.copyWith(color: context.getColorScheme().onBackground, fontWeight: FontWeight.w700),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 16),
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: listTab.map((e) {
+                  final isActive = e == notifier.contentTab;
+                  return Container(
+                    margin:
+                    const EdgeInsets.only(right: 12, top: 10, bottom: 16),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Ink(
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: isActive
+                              ? context.getColorScheme().primary
+                              : context.getColorScheme().background,
+                          borderRadius:
+                          const BorderRadius.all(Radius.circular(18)),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            notifier.contentTab = e;
+                          },
+                          borderRadius: const BorderRadius.all(Radius.circular(18)),
+                          splashColor: context.getColorScheme().primary,
+                          child: Container(
+                            alignment: Alignment.center,
                             height: 36,
+                            padding: const EdgeInsets.symmetric( horizontal: 16),
                             decoration: BoxDecoration(
-                              color: isActive
-                                  ? context.getColorScheme().primary
-                                  : context.getColorScheme().background,
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(18)),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                notifier.contentTab = e;
-                              },
-                              borderRadius: const BorderRadius.all(Radius.circular(18)),
-                              splashColor: context.getColorScheme().primary,
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 36,
-                                padding: const EdgeInsets.symmetric( horizontal: 16),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                    const BorderRadius.all(Radius.circular(18)),
-                                    border: !isActive
-                                        ? Border.all(
-                                        color:
-                                        context.getColorScheme().secondary,
-                                        width: 1)
-                                        : null),
-                                child: CustomTextWidget(
-                                  textToDisplay:
-                                  System().getTitleHyppe(e),
-                                  textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
-                                ),
-                              ),
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(18)),
+                                border: !isActive
+                                    ? Border.all(
+                                    color:
+                                    context.getColorScheme().secondary,
+                                    width: 1)
+                                    : null),
+                            child: CustomTextWidget(
+                              textToDisplay:
+                              System().getTitleHyppe(e),
+                              textStyle: context.getTextTheme().bodyText2?.copyWith(color: isActive ? context.getColorScheme().background : context.getColorScheme().secondary),
                             ),
                           ),
                         ),
-                      );
-                    }).toList()),
-              ),
-              Container(
-                width: double.infinity,
-                height: 500,
-                alignment: Alignment.center,
-                child: Text('search content'),
-              )
-            ],
+                      ),
+                    ),
+                  );
+                }).toList()),
           ),
-        ),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Builder(
+                builder: (context) {
+                  final type = notifier.contentTab;
+                  switch(type){
+                    case HyppeType.HyppeVid:
+                      return _gridContentView(context, type, notifier.searchVid ?? []);
+                    case HyppeType.HyppeDiary:
+                      return _gridContentView(context, type, notifier.searchDiary ?? []);
+                    case HyppeType.HyppePic:
+                      return _gridContentView(context, type, notifier.searchPic ?? []);
+                  }
+                }
+              ),
+            ),
+          )
+        ],
       );
     });
+  }
+
+  Widget _gridContentView(BuildContext context, HyppeType type, List<ContentData> data){
+
+    return CustomScrollView(
+      primary: false,
+      shrinkWrap: true,
+      slivers: <Widget>[
+        SliverPadding(
+          padding: const EdgeInsets.all(10),
+          sliver: SliverGrid.count(
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            crossAxisCount: 3,
+            childAspectRatio: 1.0,
+            children: data
+                .map(
+                  (e){
+                    String thumb = System().showUserPicture(e.mediaThumbEndPoint) ?? '';
+                    if(type == HyppeType.HyppePic){
+                      thumb = (e.isApsara ?? false)
+                          ? ( e.media?.imageInfo?[0].url ?? (e.mediaThumbEndPoint ?? ''))
+                          : System().showUserPicture(e.mediaThumbEndPoint) ?? '';
+                    }else{
+                      thumb = (e.isApsara ?? false)
+                          ? ( e.media?.videoList?[0].coverURL ?? (e.mediaThumbEndPoint ?? ''))
+                          : System().showUserPicture(e.mediaThumbEndPoint) ?? '';
+                    }
+                    switch(type){
+                      case HyppeType.HyppePic:
+                        return GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                            child: e.reportedStatus == 'BLURRED' || e.reportedStatus == 'OWNED'
+                                ? SensitiveContentProfile(data: e)
+                                : Stack(
+                              children: [
+                                Center(
+                                  child: CustomContentModeratedWidget(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    isSale: false,
+                                    isSafe: true, //notifier.postData.data.listPic[index].isSafe,
+                                    thumbnail: thumb,
+                                  ),
+                                ),
+                                // SelectableText(notifier.iw tem1?.pics?[index].isApsara ?? false
+                                //     ? (notifier.user?.pics?[index].mediaThumbEndPoint ?? '')
+                                //     : System().showUserPicture(notifier.user?.pics?[index].mediaThumbEndPoint) ?? ''),
+                                (e.saleAmount ?? 0) > 0
+                                    ? const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        height: 22,
+                                        defaultColor: false,
+                                      ),
+                                    ))
+                                    : Container(),
+                                (e.certified ?? false) && (e.saleAmount ?? 0) == 0
+                                    ? Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: const CustomIconWidget(
+                                              iconData: '${AssetPath.vectorPath}ownership.svg',
+                                              defaultColor: false,
+                                            ))))
+                                    : Container()
+                              ],
+                            ),
+                          ),
+                        );
+                      case HyppeType.HyppeDiary:
+                        return GestureDetector(
+                          onTap: (){
+
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                            child: e.reportedStatus == 'BLURRED' || e.reportedStatus == 'OWNED'
+                                ? SensitiveContentProfile(data: e)
+                                : Stack(
+                              children: [
+                                Center(
+                                  child: CustomContentModeratedWidget(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    featureType: FeatureType.vid,
+                                    isSale: false,
+                                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                    thumbnail: thumb,
+                                  ),
+                                ),
+                                (e.saleAmount ?? 0) > 0
+                                    ? const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        height: 22,
+                                        defaultColor: false,
+                                      ),
+                                    ))
+                                    : Container(),
+                                (e.certified ?? false) && (e.saleAmount ?? 0) == 0
+                                    ? Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: const CustomIconWidget(
+                                              iconData: '${AssetPath.vectorPath}ownership.svg',
+                                              defaultColor: false,
+                                            ))))
+                                    : Container()
+                              ],
+                            ),
+                          ),
+                        );
+                      case HyppeType.HyppeVid:
+                        return GestureDetector(
+                          onTap: (){},
+                          child: Padding(
+                            padding: EdgeInsets.all(2 * SizeConfig.scaleDiagonal),
+                            child: e.reportedStatus == 'BLURRED' || e.reportedStatus == 'OWNED'
+                                ? SensitiveContentProfile(data: e)
+                                : Stack(
+                              children: [
+                                Center(
+                                  child: CustomContentModeratedWidget(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    featureType: FeatureType.vid,
+                                    isSale: false,
+                                    isSafe: true, //notifier.postData.data.listVid[index].isSafe,
+                                    thumbnail: thumb,
+                                  ),
+                                ),
+                                // SelectableText(notifier.iw tem1?.vids?[index].isApsara ?? false
+                                //     ? (notifier.user?.vids?[index].mediaThumbEndPoint ?? '')
+                                //     : System().showUserPicture(notifier.user?.vids?[index].mediaThumbEndPoint) ?? ''),
+                                (e.saleAmount ?? 0) > 0
+                                    ? const Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: CustomIconWidget(
+                                        iconData: "${AssetPath.vectorPath}sale.svg",
+                                        height: 22,
+                                        defaultColor: false,
+                                      ),
+                                    ))
+                                    : Container(),
+                                (e.certified ?? false) && (e.saleAmount ?? 0) == 0
+                                    ? Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: const CustomIconWidget(
+                                              iconData: '${AssetPath.vectorPath}ownership.svg',
+                                              defaultColor: false,
+                                            ))))
+                                    : Container()
+                              ],
+                            ),
+                          ),
+                        );
+                    }
+
+              },
+            )
+                .toList(),
+          ),
+        ),
+      ],
+    );
   }
 }

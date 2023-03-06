@@ -32,6 +32,8 @@ enum SearchLayout { first, search, searchMore, mainHashtagDetail, hashtagDetail,
 
 enum HyppeType {HyppeVid, HyppeDiary, HyppePic}
 
+enum SearchLoadData {all, content, user, hashtag}
+
 enum ErrorType {
   myStory,
   peopleStory,

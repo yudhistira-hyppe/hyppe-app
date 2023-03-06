@@ -12,19 +12,20 @@ class HashtagItem extends StatelessWidget {
   int count;
   String countContainer;
   Function()? onTap;
-  HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap}) : super(key: key);
+  EdgeInsetsGeometry? padding;
+  HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: Ink(
-        color: Colors.white,
+        color: context.getColorScheme().background,
         child: InkWell(
           onTap: onTap,
           splashColor: context.getColorScheme().primary,
           child: Container(
-            padding: const EdgeInsets.only(left: 18, top: 10, bottom: 10),
+            padding: padding ?? const EdgeInsets.only(left: 18, top: 10, bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

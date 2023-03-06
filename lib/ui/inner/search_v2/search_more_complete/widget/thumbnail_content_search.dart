@@ -11,7 +11,6 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_bottom_item.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/widget/pic_top_item.dart';
 
-// import 'package:hyppe/ui/inner/home/content/pic/widget/pic_top_item.dart';
 
 class ThumbnailContentSearch extends StatelessWidget {
   final Function? onTap;
@@ -23,7 +22,7 @@ class ThumbnailContentSearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2;
+    final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 3;
     String gambar;
     if (data?.postType == 'pict') {
       if (data?.apsara ?? false) {
@@ -52,7 +51,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),
               width: _scaling,
-              height: 168,
+              height: _scaling,
               decoration: BoxDecoration(
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                 borderRadius: BorderRadius.circular(8.0),
@@ -63,7 +62,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),
               width: _scaling,
-              height: 186,
+              height: _scaling,
               child: _buildBody(context),
               decoration: BoxDecoration(
                 image: const DecorationImage(
@@ -77,7 +76,7 @@ class ThumbnailContentSearch extends StatelessWidget {
               margin: margin,
               // const EdgeInsets.symmetric(horizontal: 4.5),
               width: _scaling,
-              height: 186,
+              height: _scaling,
               child: _buildBody(context),
               decoration: BoxDecoration(
                 image: const DecorationImage(
@@ -104,6 +103,7 @@ class ThumbnailContentSearch extends StatelessWidget {
   }
 
   Widget _buildBody(context) {
+    final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 3;
     return Stack(
       children: [
         PicTopItem(data: data),
@@ -117,8 +117,8 @@ class ThumbnailContentSearch extends StatelessWidget {
                   ),
                   child: Container(
                     alignment: Alignment.center,
-                    width: (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 2,
-                    height: 167,
+                    width: _scaling,
+                    height: _scaling,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
