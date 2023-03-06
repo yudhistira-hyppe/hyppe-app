@@ -28,7 +28,7 @@ class OtherProfileTop extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("${notifier.displayPhotoProfile()}"),
+            // Text("${notifier.displayPhotoProfile()}"),
             Row(
               children: [
                 StoryColorValidator(
