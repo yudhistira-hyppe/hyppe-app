@@ -103,13 +103,12 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           );
           final fetch = notifier.followFetch;
           if (fetch.followState == FollowState.followUserSuccess) {
-            if(isUnFollow){
+            if (isUnFollow) {
               statusFollowing = StatusFollowing.none;
-            }else{
+            } else {
               statusFollowing = StatusFollowing.following;
             }
-
-          }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+          } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
             statusFollowing = StatusFollowing.none;
           }
           //   },
@@ -127,13 +126,12 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           );
           final fetch = notifier.followFetch;
           if (fetch.followState == FollowState.followUserSuccess) {
-            if(isUnFollow){
+            if (isUnFollow) {
               statusFollowing = StatusFollowing.none;
-            }else{
+            } else {
               statusFollowing = StatusFollowing.following;
             }
-
-          }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+          } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
             statusFollowing = StatusFollowing.none;
           }
         }

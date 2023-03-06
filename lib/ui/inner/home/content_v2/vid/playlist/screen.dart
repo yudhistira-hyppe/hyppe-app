@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/player/player_page.dart';
@@ -51,7 +52,7 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
       child: Consumer<VidDetailNotifier>(
         builder: (_, notifier, __) {
           var map = {
-            DataSourceRelated.vidKey: notifier.data?.apsaraId,
+            DataSourceRelated.vidKey: widget.arguments.vidData?.apsaraId,
             DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
           };
 
@@ -74,23 +75,23 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
                             child: PlayerPage(
                               playMode: ModeTypeAliPLayer.auth,
                               dataSourceMap: map,
-                              data: notifier.data!,
+                              data: widget.arguments.vidData,
                             ),
                           ),
                         ),
                         _notifier.data != null
                             ? Stack(
                                 children: [
-                                  AspectRatio(
-                                    aspectRatio: 16 / 9,
-                                    child: Container(
-                                      color: Colors.black,
-                                      child: VideoPlayerPage(
-                                        videoData: notifier.data,
-                                        afterView: () => notifier.updateView(context),
-                                      ),
-                                    ),
-                                  ),
+                                  // AspectRatio(
+                                  //   aspectRatio: 16 / 9,
+                                  //   child: Container(
+                                  //     color: Colors.black,
+                                  //     child: VideoPlayerPage(
+                                  //       videoData: notifier.data,
+                                  //       afterView: () => notifier.updateView(context),
+                                  //     ),
+                                  //   ),
+                                  // ),
 
                                   // Row(
                                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,

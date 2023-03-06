@@ -16,14 +16,13 @@ import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart'
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/constant/widget/custom_text_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 class PlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
-  final ContentData data;
+  final ContentData? data;
 
   const PlayerPage({Key? key, required this.playMode, required this.dataSourceMap, required this.data}) : super(key: key);
 
@@ -106,10 +105,14 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     super.initState();
     getAuth();
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+    fAliplayer?.setAutoPlay(false);
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
     _playMode = widget.playMode;
     _dataSourceMap = widget.dataSourceMap;
+    isPlay = false;
+    isPrepare = false;
+    setState(() {});
 
     //Turn on mix mode
     if (Platform.isIOS) {
@@ -151,7 +154,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     });
     try {
       final notifier = PostsBloc();
-      await notifier.getAuthApsara(context, apsaraId: widget.data.apsaraId ?? '');
+      await notifier.getAuthApsara(context, apsaraId: widget.data?.apsaraId ?? '');
       final fetch = notifier.postsFetch;
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         print(fetch.data);
@@ -373,6 +376,12 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     }
   }
 
+  void play() {
+    fAliplayer?.play();
+    isPlay = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var x = 0.0;
@@ -398,62 +407,38 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (!isPrepare) fAliplayer?.prepare();
       });
-      return GestureDetector(
-        onTap: () {
-          print('sentuh aku dong');
-          onTapCtrl = true;
-          setState(() {});
-        },
-        child: OrientationBuilder(
-          builder: (BuildContext context, Orientation orientation) {
-            return GestureDetector(
-              onTap: () {
-                print('sentuh aku dong');
+      return OrientationBuilder(
+        builder: (BuildContext context, Orientation orientation) {
+          return GestureDetector(
+            onTap: () {
+              print('sdsd');
+              if (isPlay) {
                 onTapCtrl = true;
                 setState(() {});
-              },
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      print('sdsdsd');
-                      onTapCtrl = true;
-                      setState(() {});
-                    },
-                    child: Container(
-                      width: width,
-                      height: height,
-                      // color: Colors.red,
-                    ),
+              }
+            },
+            child: Stack(
+              children: [
+                Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
+                if (isPlay)
+                  SizedBox(
+                    width: width,
+                    height: height,
+                    // padding: EdgeInsets.only(bottom: 25.0),
+                    child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
                   ),
-                  Container(
-                      color: Colors.black,
-                      width: width,
-                      height: height,
-                      child: GestureDetector(
-                          onTap: () {
-                            print('sentuh aku dong');
-                            onTapCtrl = true;
-                            setState(() {});
-                          },
-                          child: aliPlayerView)),
-                  if (isPlay)
-                    SizedBox(
-                      width: width,
-                      height: height,
-                      // padding: EdgeInsets.only(bottom: 25.0),
-                      child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
-                    ),
-                  if (!isPlay) _buildThumbnail(width, height),
-                  if (!isPlay)
-                    Center(
-                      child: CustomTextButton(
-                        onPressed: () {
-                          isPlay = true;
-                          fAliplayer?.prepare();
-                          fAliplayer?.play();
-                          setState(() {});
-                        },
+                // if (!isPlay) _buildThumbnail(width, height),
+                if (!isPlay && isPrepare)
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        print("ini play");
+                        isPlay = true;
+                        fAliplayer?.play();
+                        setState(() {});
+                      },
+                      child: SizedBox(
+                        width: width,
                         child: const CustomIconWidget(
                           defaultColor: false,
                           iconData: '${AssetPath.vectorPath}pause.svg',
@@ -461,63 +446,68 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
                         ),
                       ),
                     ),
-                  _buildProgressBar(width, height),
-                  _buildTipsWidget(width, height),
-                  _buildNetWorkTipsWidget(width, height),
+                  ),
+
+                _buildProgressBar(width, height),
+                _buildTipsWidget(width, height),
+                // _buildNetWorkTipsWidget(width, height),
+                // Align(
+                //   alignment: Alignment.center,
+                //   child: AnimatedOpacity(
+                //     opacity: 1,
+                //     duration: Duration(seconds: 1),
+                //     child: Container(
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           Icon(
+                //             Icons.play_arrow,
+                //             size: SizeConfig.screenWidth! * 0.3,
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                if (isPlay)
                   Align(
                     alignment: Alignment.center,
-                    child: AnimatedOpacity(
-                      opacity: 1,
-                      duration: Duration(seconds: 1),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.play_arrow,
-                              size: SizeConfig.screenWidth! * 0.3,
-                            ),
-                          ],
-                        ),
-                      ),
+                    child: _buildBottomBar(
+                      Colors.transparent,
+                      Colors.white,
+                      100,
+                      width,
+                      height,
                     ),
                   ),
 
-                  SizedBox(width: width, height: height, child: _buildBottomBar(Colors.red, Colors.white, 4, width, height)),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Text(
-                      'sdsdsd',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                  // Positioned(
-                  //   left: 30,
-                  //   top: height / 2,
-                  //   child: Offstage(
-                  //       offstage: orientation == Orientation.portrait,
-                  //       child: InkWell(
-                  //         onTap: () {
-                  //           setState(() {
-                  //             _isLock = !_isLock;
-                  //           });
-                  //         },
-                  //         child: Container(
-                  //           width: 40,
-                  //           height: 40,
-                  //           decoration: BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(20)),
-                  //           child: Icon(
-                  //             _isLock ? Icons.lock : Icons.lock_open,
-                  //             color: Colors.white,
-                  //           ),
-                  //         ),
-                  //       )),
-                  // )
-                ],
-              ),
-            );
-          },
-        ),
+                // Positioned(
+                //   left: 30,
+                //   top: height / 2,
+                //   child: Offstage(
+                //       offstage: orientation == Orientation.portrait,
+                //       child: InkWell(
+                //         onTap: () {
+                //           setState(() {
+                //             _isLock = !_isLock;
+                //           });
+                //         },
+                //         child: Container(
+                //           width: 40,
+                //           height: 40,
+                //           decoration: BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(20)),
+                //           child: Icon(
+                //             _isLock ? Icons.lock : Icons.lock_open,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       )),
+                // )
+              ],
+            ),
+          );
+        },
       );
     }
   }
@@ -555,8 +545,10 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   }
 
   void _onPlayerHide() {
-    onTapCtrl = false;
-    setState(() {});
+    Future.delayed(const Duration(seconds: 4), () {
+      onTapCtrl = false;
+      setState(() {});
+    });
   }
 
   Widget _buildBottomBar(
@@ -567,27 +559,21 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     double height,
   ) {
     return AnimatedOpacity(
-      opacity: 1.0,
+      opacity: onTapCtrl ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 500),
       onEnd: _onPlayerHide,
       child: Container(
-        alignment: Alignment.bottomCenter,
-        // margin: EdgeInsets.all(marginSize),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Container(
-            height: barHeight,
-            decoration: BoxDecoration(
-              color: backgroundColor,
-            ),
-            child: Row(
-              children: <Widget>[
-                _buildSkipBack(iconColor, barHeight),
-                _buildPlayPause(iconColor, barHeight),
-                _buildSkipForward(iconColor, barHeight),
-              ],
-            ),
-          ),
+        height: 300,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildSkipBack(iconColor, barHeight),
+            _buildPlayPause(iconColor, barHeight),
+            _buildSkipForward(iconColor, barHeight),
+          ],
         ),
       ),
     );
@@ -598,53 +584,48 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     double barHeight,
   ) {
     return GestureDetector(
-      // onTap: _onPlayPause,
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Icon(
-          isPause ? Icons.pause : Icons.play_arrow_rounded,
-          color: iconColor,
-          size: barHeight * 0.6,
-        ),
+      onTap: () {
+        // fAliplayer?.play();
+      },
+      child: CustomIconWidget(
+        iconData: isPause ? "${AssetPath.vectorPath}pause.svg" : "${AssetPath.vectorPath}pause.svg",
+        defaultColor: false,
       ),
+      // Icon(
+      //   isPause ? Icons.pause : Icons.play_arrow_rounded,
+      //   color: iconColor,
+      //   size: 200,
+      // ),
     );
   }
 
   GestureDetector _buildSkipBack(Color iconColor, double barHeight) {
     return GestureDetector(
       onTap: () {},
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        margin: const EdgeInsets.only(left: 10.0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 8,
-        ),
-        child: Icon(
-          Icons.replay_10_outlined,
-          color: iconColor,
-          size: barHeight * 0.4,
-        ),
+      child: CustomIconWidget(
+        iconData: "${AssetPath.vectorPath}replay10.svg",
+        defaultColor: false,
       ),
+      // Icon(
+      //   Icons.replay_10_outlined,
+      //   color: iconColor,
+      //   size: barHeight * 0.4,
+      // ),
     );
   }
 
   GestureDetector _buildSkipForward(Color iconColor, double barHeight) {
     return GestureDetector(
       // onTap: skipForward,
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        margin: const EdgeInsets.only(right: 8.0),
-        child: Icon(
-          Icons.forward_10_outlined,
-          color: iconColor,
-          size: barHeight * 0.4,
-        ),
+      child: const CustomIconWidget(
+        iconData: "${AssetPath.vectorPath}forward10.svg",
+        defaultColor: false,
       ),
+      //  Icon(
+      //   Icons.forward_10_outlined,
+      //   color: iconColor,
+      //   size: barHeight * 0.4,
+      // ),
     );
   }
 
@@ -658,7 +639,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         direction: Axis.vertical,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          widget.data.mediaThumbEndPoint == '' ? Container() : Container(width: width, height: height, child: Image.network(widget.data.mediaThumbEndPoint ?? '')),
+          widget.data?.mediaThumbEndPoint == '' ? Container() : Container(width: width, height: height, child: Image.network(widget.data?.mediaThumbEndPoint ?? '')),
         ],
       ),
     );
