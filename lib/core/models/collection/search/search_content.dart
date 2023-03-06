@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
@@ -14,6 +15,7 @@ class SearchContentModel {
     this.vid,
     this.diary,
     this.pict,
+    this.interests
   });
 
   List<DataUser>? users;
@@ -21,19 +23,46 @@ class SearchContentModel {
   List<ContentData>? vid;
   List<ContentData>? diary;
   List<ContentData>? pict;
+  List<Interest>? interests;
 
-  factory SearchContentModel.fromJson(Map<String, dynamic> json) =>
-      SearchContentModel(
-        tags: List<Tags>.from(json['tags'].map((x) => Tags.fromJson(x))),
-        users:
-            List<DataUser>.from(json["user"].map((x) => DataUser.fromJson(x))),
-        vid: List<ContentData>.from(
-            json["vid"].map((x) => ContentData.fromJson(x))),
-        diary: List<ContentData>.from(
-            json["diary"].map((x) => ContentData.fromJson(x))),
-        pict: List<ContentData>.from(
-            json["picts"].map((x) => ContentData.fromJson(x))),
+  SearchContentModel.fromJson(Map<String, dynamic> json){
+    if(json['tags'] != null){
+      tags = List<Tags>.from(json['tags'].map((x) => Tags.fromJson(x)));
+    }
+    if(json["user"] != null){
+      users = List<DataUser>.from(json["user"].map((x) => DataUser.fromJson(x)));
+    }
+    if(json['vid'] != null){
+      vid = List<ContentData>.from(
+          json["vid"].map((x) => ContentData.fromJson(x)));
+    }
+    if(json['diary'] != null){
+      diary = List<ContentData>.from(
+          json["diary"].map((x) => ContentData.fromJson(x)));
+    }
+
+    if(json['picts'] != null){
+      pict = List<ContentData>.from(
+          json["picts"].map((x) => ContentData.fromJson(x)));
+    }
+    if(json['interests'] != null){
+      interests = List<Interest>.from(
+        json['interests'].map((x) => Interest.fromJson(x))
       );
+    }
+    // SearchContentModel(
+    //   tags: List<Tags>.from(json['tags'].map((x) => Tags.fromJson(x))),
+    //   users:
+    //   List<DataUser>.from(json["user"].map((x) => DataUser.fromJson(x))),
+    //   vid: List<ContentData>.from(
+    //       json["vid"].map((x) => ContentData.fromJson(x))),
+    //   diary: List<ContentData>.from(
+    //       json["diary"].map((x) => ContentData.fromJson(x))),
+    //   pict: List<ContentData>.from(
+    //       json["picts"].map((x) => ContentData.fromJson(x))),
+    // );
+  }
+
 }
 
 class Diary {
@@ -63,6 +92,26 @@ class Diary {
         "skip": skip,
         "limit": limit,
       };
+}
+
+class LandingSearch{
+  List<Tags>? tag;
+  List<Interest>? interest;
+
+  LandingSearch.fromJson(Map<String, dynamic> json){
+    if(json['tag'] != null){
+      tag = List<Tags>.from(json['tag'].map((v)=> Tags.fromJson(v) ));
+    }else{
+      tag = [];
+    }
+
+    if(json['interest'] != null){
+      interest = List<Interest>.from(json['interest'].map((e) => Interest.fromJson(e)));
+    }else{
+      interest = [];
+    }
+
+  }
 }
 
 class Tags {

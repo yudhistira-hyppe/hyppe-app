@@ -22,7 +22,6 @@ import 'package:hyppe/core/models/collection/posts/content_v2/boost_response.dar
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_content_model.dart';
 import 'package:hyppe/core/models/collection/utils/boost/boost_master_model.dart';
-import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/models/collection/utils/search_people/search_people.dart';
 import 'package:hyppe/core/models/collection/utils/setting/setting.dart';
 import 'package:hyppe/core/models/collection/utils/user/user_data.dart';
@@ -52,6 +51,8 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:light_compressor/light_compressor.dart';
 import 'package:path_provider/path_provider.dart' as path;
+
+import '../../../../core/models/collection/search/search_content.dart';
 
 class PreUploadContentNotifier with ChangeNotifier {
   final eventService = EventService();
@@ -127,8 +128,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   Music? _musicSelected;
 
   List<String> _interestData = [];
-  List<InterestData> _interest = [];
-  List<InterestData> _interestList = [];
+  List<Interest> _interest = [];
+  List<Interest> _interestList = [];
   List<UserData> _userList = [];
   List<String> _userTagData = [];
   List<TagPeople> _userTagDataReal = [];
@@ -158,8 +159,8 @@ class PreUploadContentNotifier with ChangeNotifier {
   String get visibility => _visibility;
   dynamic get thumbNail => _thumbNail;
   Music? get musicSelected => _musicSelected;
-  List<InterestData> get interest => _interest;
-  List<InterestData> get interestList => _interestList;
+  List<Interest> get interest => _interest;
+  List<Interest> get interestList => _interestList;
   List<UserData> get userList => _userList;
   List<String> get userTagData => _userTagData;
   String get locationName => _locationName;
@@ -219,7 +220,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set interestList(List<InterestData> val) {
+  set interestList(List<Interest> val) {
     _interestList = val;
     notifyListeners();
   }
@@ -239,7 +240,7 @@ class PreUploadContentNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  set interest(List<InterestData> val) {
+  set interest(List<Interest> val) {
     _interest = val;
     notifyListeners();
   }
@@ -1128,7 +1129,7 @@ class PreUploadContentNotifier with ChangeNotifier {
       await notifier.getInterestBloc(context);
       final fetch = notifier.utilsFetch;
 
-      final InterestData seeMore = InterestData(
+      final Interest seeMore = Interest(
         id: '11111',
         interestName: 'See More',
       );
@@ -1143,12 +1144,12 @@ class PreUploadContentNotifier with ChangeNotifier {
         _interest = [];
         fetch.data.forEach((v) {
           if (_interest.length <= 5) {
-            _interest.add(InterestData.fromJson(v));
+            _interest.add(Interest.fromJson(v));
           }
           if (_interest.length == 6) {
             _interest.add(seeMore);
           }
-          _interestList.add(InterestData.fromJson(v));
+          _interestList.add(Interest.fromJson(v));
         });
         _interestList.sort((a, b) {
           return a.interestName?.compareTo(b.interestName ?? '') ?? 0;

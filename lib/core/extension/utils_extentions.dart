@@ -133,6 +133,13 @@ extension StringDefine on String {
   bool isEmail(){
     return (substring(0, 6) == 'email:');
   }
+
+  bool isHashtag(){
+    if(isEmpty){
+      return false;
+    }
+    return (substring(0 , 1) == '#');
+  }
 }
 
 extension IntegerExtension on int {

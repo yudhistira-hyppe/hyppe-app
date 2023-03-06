@@ -72,6 +72,10 @@ class DatabaseHelper {
         fileName TEXT,
         preview TEXT
       );
+      CREATE TABLE IF NOT EXISTS search (
+        searchId TEXT PRIMARY KEY,
+        keyword TEXT
+      );
         ''').then((value) => print('sukses datase '));
     } catch (e) {
       print('gagal database $e');

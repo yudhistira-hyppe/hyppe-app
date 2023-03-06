@@ -26,8 +26,8 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
 
   @override
   void afterFirstLayout(BuildContext context) {
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    Future.delayed(Duration.zero, () => notifier.initHashTag(context));
+    // final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    // Future.delayed(Duration.zero, () => notifier.initHashTag(context));
   }
 
   @override
@@ -50,7 +50,7 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
             ),
           ),
           eightPx,
-          notifier.loadHashtag
+          notifier.loadLandingPage
               ? ListView.builder(
             shrinkWrap: true,
             itemBuilder: (context, index) {
@@ -59,12 +59,13 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
             itemCount: 3,
           )
               : ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: notifier.listHashtag?.length,
+              itemCount: 6,
               itemBuilder: (context, index) {
                 return HashtagItem(
-                  title: notifier.listHashtag?[index].name ?? "",
-                  count: notifier.listHashtag?[index].count ?? 0,
+                  title: notifier.listHashtag?[index].tag ?? "",
+                  count: notifier.listHashtag?[index].total ?? 0,
                   countContainer: notifier.language.posts ?? 'Posts',
                   onTap: () {
                     notifier.selectedHashtag = notifier.listHashtag?[index];

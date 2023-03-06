@@ -29,7 +29,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
   void initState() {
     _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 

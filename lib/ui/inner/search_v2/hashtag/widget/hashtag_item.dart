@@ -25,30 +25,34 @@ class HashtagItem extends StatelessWidget {
           onTap: onTap,
           splashColor: context.getColorScheme().primary,
           child: Container(
-            padding: padding ?? const EdgeInsets.only(left: 18, top: 10, bottom: 10),
+            padding: padding ?? const EdgeInsets.only(left: 18, top: 10, bottom: 10, right: 16),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomIconWidget(iconData: '${AssetPath.vectorPath}hashtag_icon.svg', width: 20, height: 20,),
                 fourteenPx,
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay:
-                      title,
-                      textStyle: context.getTextTheme().bodyMedium,
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      count > 500
-                          ? "500+ $countContainer"
-                          : "$count $countContainer",
-                      style: const TextStyle(
-                          fontSize: 12, color: kHyppeGrey),
-                    )
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextWidget(
+                        maxLines: 1,
+                        textToDisplay:
+                        title,
+                        textStyle: context.getTextTheme().bodyMedium,
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        count > 500
+                            ? "500+ $countContainer"
+                            : "$count $countContainer",
+                        style: const TextStyle(
+                            fontSize: 12, color: kHyppeGrey),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

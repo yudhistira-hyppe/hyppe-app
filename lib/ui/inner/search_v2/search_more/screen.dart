@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/widget/auto_complete_search.dart';
+import 'package:hyppe/ui/inner/search_v2/search_more/widget/new_autocomplete_search.dart';
 import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
 
@@ -72,19 +74,20 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                   onSubmitted: (v) {
                                     notifier.limit = 5;
                                     notifier.tabIndex = 0;
-                                    notifier.onSearchPost(context, isMove: true);
+                                    // notifier.onSearchPost(context, isMove: true);
                                   },
                                   onPressedIcon: () {
                                     notifier.tabIndex = 0;
                                     notifier.limit = 5;
-                                    notifier.onSearchPost(context, isMove: true);
+                                    // notifier.onSearchPost(context, isMove: true);
                                   },
                                   autoFocus: true,
                                   onChanged: (e) {
                                     if (e.length > 2) {
                                       if (lastInputValue != e) {
                                         lastInputValue = e;
-                                        notifier.searchPeople(context, input: e);
+                                        final isHashtag = e.isHashtag();
+                                        notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user);
                                       }
                                     }
                                   }),
@@ -92,7 +95,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                           ),
                         ],
                       ),
-                      Expanded(child: AutoCompleteSearch()),
+                      const Expanded(child: NewAutoCompleteSearch()),
                     ],
                   ),
                 ),

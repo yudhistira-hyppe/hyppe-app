@@ -32,7 +32,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
   void initState() {
     _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 
@@ -51,7 +51,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
       final diaries = notifier.searchDiary;
       final pics = notifier.searchPic;
       final users = notifier.searchUsers;
-      return notifier.loadingSearch
+      return !notifier.isLoading
           ? SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),

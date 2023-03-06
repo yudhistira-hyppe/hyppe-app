@@ -2,21 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
-import 'package:hyppe/ui/inner/search_v2/interest/notifier.dart';
+import 'package:hyppe/core/services/system.dart';
+import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
-import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../core/models/collection/search/search_content.dart';
 import '../../../constant/widget/custom_shimmer.dart';
 import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/custom_text_widget.dart';
 
 class InterestScreen extends StatefulWidget {
-  List<InterestData> data;
-  Function(InterestData)? onClick;
-  InterestScreen({Key? key, required this.data, this.onClick}) : super(key: key);
+  Function(Interest)? onClick;
+  InterestScreen({Key? key, this.onClick}) : super(key: key);
 
   @override
   State<InterestScreen> createState() => _InterestScreenState();
@@ -25,14 +24,14 @@ class InterestScreen extends StatefulWidget {
 class _InterestScreenState extends State<InterestScreen> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<InterestNotifier>(builder: (context, notifier, child) {
+    return Consumer<SearchNotifier>(builder: (context, notifier, child) {
       return WillPopScope(
         onWillPop: () {
           return Future.value(true);
         },
-        child: Builder(
+        child: notifier.loadLandingPage ? _shimmerInterests(context) : Builder(
           builder: (context) {
-            final image = Image.asset(widget.data[0].icon ?? '');
+            final image = Image.asset(System().getPathByInterest(notifier.listInterest?[0].id ?? ''));
             final completer = Completer<ui.Image>();
             image.image
                 .resolve(const ImageConfiguration()).addListener(ImageStreamListener((image, synchronousCall) {
@@ -69,7 +68,7 @@ class _InterestScreenState extends State<InterestScreen> {
                               mainAxisSpacing: 10,
                               crossAxisCount: 2,
                               childAspectRatio: (snapshot.data?.width ?? 3)/(snapshot.data?.height ?? 1),
-                              children: widget.data
+                              children: (notifier.listInterest ?? [])
                                   .map(
                                     (e){
                                   return Stack(
@@ -82,8 +81,7 @@ class _InterestScreenState extends State<InterestScreen> {
                                               borderRadius: BorderRadius.circular(2),
                                               image: DecorationImage(
                                                 fit: BoxFit.contain,
-                                                image: AssetImage(e.icon ??
-                                                    '${AssetPath.pngPath}content-error.png'),
+                                                image: AssetImage(System().getPathByInterest(e.id ?? '')),
                                               ),
                                             ),
                                           )),
@@ -120,7 +118,7 @@ class _InterestScreenState extends State<InterestScreen> {
                                   );
                                 },
                               )
-                                  .toList(),
+                                  .toList().sublist(0, 6),
                             ),
                           ),
                         ],
@@ -206,5 +204,35 @@ class _InterestScreenState extends State<InterestScreen> {
         ),
       );
     });
+  }
+
+  Widget _shimmerInterests(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(child: CustomShimmer(height: 50, width: double.infinity, radius: 8, margin: const EdgeInsets.only(right: 6),)),
+              Expanded(child: CustomShimmer(height: 50, width: double.infinity, radius: 8, margin: const EdgeInsets.only(left: 6),))
+            ],
+          ),
+          twelvePx,
+          Row(
+            children: [
+              Expanded(child: CustomShimmer(height: 50, width: double.infinity, radius: 8, margin: const EdgeInsets.only(right: 6),)),
+              Expanded(child: CustomShimmer(height: 50, width: double.infinity, radius: 8, margin: const EdgeInsets.only(left: 6),))
+            ],
+          ),
+          twelvePx,
+          Row(
+            children: [
+              Expanded(child: CustomShimmer(height: 50, width: double.infinity, radius: 8, margin: const EdgeInsets.only(right: 6),)),
+              Expanded(child: CustomShimmer(height: 50, width: double.infinity, radius: 8, margin: const EdgeInsets.only(left: 6),))
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

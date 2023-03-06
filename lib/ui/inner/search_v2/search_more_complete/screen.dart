@@ -66,8 +66,6 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
       final List _list = [notifier.language.recommended, notifier.language.account, notifier.language.contents, notifier.language.hashtags];
       return Scaffold(
         key: _scaffoldKey,
-        // endDrawerEnableOpenDragGesture: true,
-        // endDrawer: FilterSearchMoreCompleteScreen(),
         body: SafeArea(
           child: Column(
             children: [
@@ -101,12 +99,12 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                 onSubmitted: (v) {
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
-                                  notifier.onSearchPost(context, value: v, isMove: true);
+                                  // notifier.onSearchPost(context, value: v, isMove: true);
                                 },
                                 onPressedIcon: () {
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
-                                  notifier.onSearchPost(context, isMove: true);
+                                  // notifier.onSearchPost(context, isMove: true);
                                 },
                                 // onTap: () => notifier.moveSearchMore(),
                                 autoFocus: false,
@@ -118,14 +116,7 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                       TabBar(
                         controller: _tabController,
                         isScrollable: true,
-                        // physics: const BouncingScrollPhysics(),
-                        // indicatorSize: TabBarIndicatorSize.tab,
-                        // labelPadding: const EdgeInsets.symmetric(vertical: 8),
-                        // labelColor: Theme.of(context).tabBarTheme.labelColor,
-                        // unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                        // labelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
                         indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                        // unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 16 * SizeConfig.scaleDiagonal),
 
                         tabs: _list.map((e) {
                           return Container(

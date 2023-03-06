@@ -28,11 +28,13 @@ enum TicketStatus { newest, inProgress, solved, notSolved }
 
 enum AppealStatus { newest, flaging, notSuspended, suspend, removed }
 
-enum SearchLayout { first, search, searchMore, mainHashtagDetail, hashtagDetail, }
+enum SearchLayout { first, search, searchMore, mainHashtagDetail, hashtagDetail, interestDetail}
 
 enum HyppeType {HyppeVid, HyppeDiary, HyppePic}
 
 enum SearchLoadData {all, content, user, hashtag}
+
+enum TypeApiSearch {normal, detailHashTag, detailInterest}
 
 enum ErrorType {
   myStory,

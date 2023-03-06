@@ -1410,4 +1410,51 @@ class System {
     int stateMinutes = Duration(seconds: values).inMinutes;
     return stateMinutes < 10 ? '0$stateMinutes' : '$stateMinutes';
   }
+
+  String getPathByInterest(String idInterest){
+    switch(idInterest){
+      case '613bc4da9ec319617aa6c396':
+        return '${AssetPath.pngPath}in_animal.png';
+      case '613bc4da9ec319617aa6c399':
+        return '${AssetPath.pngPath}in_automotive.png';
+      case '613bc4da9ec319617aa6c393':
+        return '${AssetPath.pngPath}in_beauty.png';
+      case '613bc4da9ec319617aa6c394':
+        return '${AssetPath.pngPath}in_celeb_account.png';
+      case '613bc4da9ec319617aa6c392':
+        return '${AssetPath.pngPath}in_comedy.png';
+      case '613bc4da9ec319617aa6c400':
+        return '${AssetPath.pngPath}in_daily.png';
+      case '613bc4da9ec319617aa6c38e':
+        return '${AssetPath.pngPath}in_entertainment.png';
+      case '613bc4da9ec319617aa6c398':
+        return '${AssetPath.pngPath}in_fashion.png';
+      case '613bc4da9ec319617aa6c40a':
+        return '${AssetPath.pngPath}in_fnb.png';
+      case '613bc4da9ec319617aa6c38f':
+        return '${AssetPath.pngPath}in_gaming.png';
+      case '613bc4da9ec319617aa6c40b':
+        return '${AssetPath.pngPath}in_healthy.png';
+      case '613bc4da9ec319617aa6c397':
+        return '${AssetPath.pngPath}in_hobby.png';
+      case '613bc4da9ec319617aa6c390':
+        return '${AssetPath.pngPath}in_film.png';
+      case '613bc4da9ec319617aa6c38c':
+        return '${AssetPath.pngPath}in_music.png';
+      case '613bc4da9ec319617aa6c391':
+        return '${AssetPath.pngPath}in_news.png';
+      case '613bc4da9ec319617aa6c40c':
+        return '${AssetPath.pngPath}in_knowledge.png';
+      case '613bc4da9ec319617aa6c395':
+        return '${AssetPath.pngPath}in_sport.png';
+      case '613bc4da9ec319617aa6c39a':
+        return '${AssetPath.pngPath}in_technology.png';
+      case '613bc4da9ec319617aa6c38d':
+        return '${AssetPath.pngPath}in_travel.png';
+      case '613bc4da9ec319617aa6c39b':
+        return '${AssetPath.pngPath}in_tutorial.png';
+      default:
+        return '${AssetPath.pngPath}in_animal.png';
+    }
+  }
 }

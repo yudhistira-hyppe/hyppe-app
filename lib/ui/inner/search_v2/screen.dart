@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
-import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/inner/home/widget/home_app_bar.dart';
 import 'package:hyppe/ui/inner/main/notifier.dart';
@@ -20,12 +19,14 @@ import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import 'interest/detail_screen.dart';
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin {
+class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   late TabController _tabController;
   int _currentIndex = 0;
@@ -63,6 +64,12 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     }
     context.read<ReportNotifier>().setPosition(contentPosition.searchFirst);
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    notifier.onSearchLandingPage(context);
   }
 
   @override
@@ -105,57 +112,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
     'didPush searfc false'.logger();
     super.didPush();
   }
-
-  final interests = [
-    InterestData(
-      id: '1',
-      interestName: 'Hiburan',
-      interestNameId: '1',
-      icon: '${AssetPath.pngPath}hiburan.png',
-      langID: 'id',
-      cts: '',
-    ),
-    InterestData(
-      id: '2',
-      interestName: 'Gaming',
-      interestNameId: '2',
-      icon: '${AssetPath.pngPath}gaming.png',
-      langID: 'id',
-      cts: '',
-    ),
-    InterestData(
-      id: '3',
-      interestName: 'Film',
-      interestNameId: '3',
-      icon: '${AssetPath.pngPath}film.png',
-      langID: 'id',
-      cts: '',
-    ),
-    InterestData(
-      id: '4',
-      interestName: 'Fashion',
-      interestNameId: '4',
-      icon: '${AssetPath.pngPath}fashion.png',
-      langID: 'id',
-      cts: '',
-    ),
-    InterestData(
-      id: '5',
-      interestName: 'Akun Selebriti',
-      interestNameId: '5',
-      icon: '${AssetPath.pngPath}akun_selebriti.png',
-      langID: 'id',
-      cts: '',
-    ),
-    InterestData(
-      id: '6',
-      interestName: 'Travel',
-      interestNameId: '6',
-      icon: '${AssetPath.pngPath}travel.png',
-      langID: 'id',
-      cts: '',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -201,7 +157,10 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
               ),
             ),
             const HashtagScreen(),
-            InterestScreen(data: interests,),
+            InterestScreen(onClick: (value){
+              notifier.selectedInterest = value;
+              notifier.layout = SearchLayout.interestDetail;
+            },),
           ],
         ),
       ),
@@ -228,7 +187,16 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         }else{
           return _firstLayout(notifier);
         }
+      case SearchLayout.interestDetail:
+        if(notifier.selectedInterest != null){
+          return InterestDetailScreen(data: notifier.selectedInterest!);
+        }else{
+          return _firstLayout(notifier);
+        }
+
 
     }
   }
+
+
 }

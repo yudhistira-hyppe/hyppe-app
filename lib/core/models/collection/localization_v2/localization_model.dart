@@ -880,6 +880,7 @@ class LocalizationModelV2 {
   String? privacyPost;
   String? prepareYourContent;
   String? pleaseWaitThisProcessWillTakeSomeTime;
+  String? moreContents;
 
   LocalizationModelV2({
     this.login,
@@ -1763,6 +1764,7 @@ class LocalizationModelV2 {
     this.privacyPost,
     this.prepareYourContent,
     this.pleaseWaitThisProcessWillTakeSomeTime,
+    this.moreContents,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2665,5 +2667,6 @@ class LocalizationModelV2 {
     privacyPost = json['privacyPost'];
     prepareYourContent = json['prepareYourContent'];
     pleaseWaitThisProcessWillTakeSomeTime = json['pleaseWaitThisProcessWillTakeSomeTime'];
+    moreContents = json['moreContents'];
   }
 }
