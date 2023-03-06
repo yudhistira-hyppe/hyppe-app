@@ -146,16 +146,16 @@ class VideoThumbnail extends StatelessWidget {
         ),
 
         /// play pause button
-        Center(
-          child: CustomTextButton(
-            onPressed: () => fn(),
-            child: const CustomIconWidget(
-              defaultColor: false,
-              iconData: '${AssetPath.vectorPath}pause.svg',
-              color: kHyppeLightButtonText,
-            ),
-          ),
-        ),
+        // Center(
+        //   child: CustomTextButton(
+        //     onPressed: () => fn(),
+        //     child: const CustomIconWidget(
+        //       defaultColor: false,
+        //       iconData: '${AssetPath.vectorPath}pause.svg',
+        //       color: kHyppeLightButtonText,
+        //     ),
+        //   ),
+        // ),
 
         /// Like count & Duration Video
         Align(
