@@ -32,7 +32,7 @@ class ContentSearchState extends State<ContentSearch> {
   @override
   void initState() {
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+    // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
 

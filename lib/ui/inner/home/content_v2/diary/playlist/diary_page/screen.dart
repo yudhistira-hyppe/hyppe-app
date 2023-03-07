@@ -38,7 +38,7 @@ class DiaryPage extends StatefulWidget {
   _DiaryPageState createState() => _DiaryPageState();
 }
 
-class _DiaryPageState extends State<DiaryPage>{
+class _DiaryPageState extends State<DiaryPage> {
   // bool _postViewAdded = false;
   List<StoryItem> _storyItems = [];
   final StoryController _storyController = StoryController();
@@ -58,7 +58,7 @@ class _DiaryPageState extends State<DiaryPage>{
     isLoading = true;
     final notifier = Provider.of<DiariesPlaylistNotifier>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if(mounted){
+      if (mounted) {
         notifier.initializeData(context, _storyController, widget.data ?? ContentData());
         _storyItems = notifier.result;
         isLoading = false;
@@ -69,12 +69,10 @@ class _DiaryPageState extends State<DiaryPage>{
           System().disposeBlock();
         }
       }
-
     });
 
     super.initState();
   }
-
 
   @override
   void dispose() {

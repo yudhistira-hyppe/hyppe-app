@@ -241,6 +241,9 @@
   "dateOfBirth": "Tanggal lahir",
   "userName": "Nama Pengguna",
   "all": "Semua",
+  "recommended": "Rekomendasi",
+  "contents": "Konten",
+  "hashtags": "Tagar",
   "signIn": "Masuk",
   "notAValidEmailAddressOrUsername": "Alamat email atau nama pengguna tidak sah",
   "emailOrUsernameCannotBeEmpty": "Email atau nama pengguna tidak dapat kosong",
@@ -309,6 +312,7 @@
   "select": "Pilih",
   "signUp": "Daftar",
   "searchName": "Cari nama",
+
   "skipTour": "Lewati",
   "startedFollowingYou": "Mulai mengikuti anda",
   "somethingsWrong": "Terjadi kesalahan",
@@ -876,5 +880,7 @@
   "sharePost": "Bagikan Postingan",
   "privacyPost": "Privacy Postingan",
   "prepareYourContent": "Menyiapkan Kontenmu",
-  "pleaseWaitThisProcessWillTakeSomeTime": "Silahkan tunggu, proses ini akan memakan waktu."
+  "pleaseWaitThisProcessWillTakeSomeTime": "Silahkan tunggu, proses ini akan memakan waktu.",
+  "moreContents": "Konten Lainnya",
+  "trendsForYou": "Tren Buat Kamu"
 }

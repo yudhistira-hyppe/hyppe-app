@@ -14,9 +14,9 @@ class SearchContentBloc {
   SearchContentFetch get searchContentFetch => _searchContentFetch;
   setSearchContentFetch(SearchContentFetch val) => _searchContentFetch = val;
 
-  Future getSearchContent(BuildContext context, param) async {
+  Future getSearchContent(BuildContext context, param, {TypeApiSearch type = TypeApiSearch.normal}) async {
     String email = SharedPreference().readStorage(SpKeys.email);
-
+    final isNormal = type == TypeApiSearch.normal;
     await Repos().reposPost(
       context,
       (onResult) {
@@ -33,12 +33,39 @@ class SearchContentBloc {
         setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
       },
       data: param,
-      headers: {
+      headers: isNormal ? {
         "x-auth-user": email,
+      } : null,
+      withAlertMessage: true,
+      withCheckConnection: true,
+      host: isNormal ? UrlConstants.getSearchContentV4 : type == TypeApiSearch.detailHashTag ? UrlConstants.getDetailHashtag : UrlConstants.getDetailInterest,
+      methodType: MethodType.post,
+    );
+  }
+
+  Future landingPageSearch(BuildContext context) async {
+    await Repos().reposPost(
+      context,
+          (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
+        } else {
+          setSearchContentFetch(SearchContentFetch(
+            SearchContentState.getSearchContentBlocSuccess,
+            data: GenericResponse.fromJson(onResult.data).responseData,
+          ));
+        }
+      },
+          (errorData) {
+        setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
+      },
+      data: {
+        'page': 0,
+        'limit': 10
       },
       withAlertMessage: true,
       withCheckConnection: true,
-      host: UrlConstants.getSearchContentV3,
+      host: UrlConstants.landingPageSearch,
       methodType: MethodType.post,
     );
   }

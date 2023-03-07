@@ -33,7 +33,7 @@ class Repos {
     return _instance;
   }
 
-  // static final _routing = Routing();
+  static final _routing = Routing();
   static final _apiAction = ApiAction();
 
   static Future<Response> _communicate(
@@ -161,10 +161,10 @@ class Repos {
         'StatusCode from backend ${_response.data?['statusCode'] ?? _response.data?['status']}'.logger();
       }
 
-      // / check if token is valid or not, if not, force logOut
+      /// check if token is valid or not, if not, force logOut
       if (_response.statusCode == HTTP_UNAUTHORIZED || _response.statusCode == HTTP_FORBIDDEN) {
         await SharedPreference().logOutStorage();
-        Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+        _routing.moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
       }
 
       /// execute given logic

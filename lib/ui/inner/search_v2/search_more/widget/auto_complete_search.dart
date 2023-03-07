@@ -79,7 +79,7 @@ class AutoCompleteSearch extends StatelessWidget {
                         onTap: () {
                           notifier.limit = 5;
                           notifier.tabIndex = 0;
-                          notifier.onSearchPost(context, isMove: true);
+                          // notifier.onSearchPost(context, isMove: true);
                         },
                         title: CustomTextWidget(
                           textToDisplay: 'See More',

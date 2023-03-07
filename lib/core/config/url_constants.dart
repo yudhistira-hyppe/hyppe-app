@@ -102,6 +102,8 @@ class UrlConstants {
   /* Post route */
   static const String contentRouteV3 = "/api/getusercontents";
 
+  static const String interestCount = "/api/interest-count";
+
   ///---------------------------------------------------------------------------------------------------------///
   /* APIs Bookmark */
   /// get => Get bookmark.
@@ -309,6 +311,10 @@ class UrlConstants {
   ///---------------------------------------------------------------------------------------------------------///
   /* v3 search data content dan user */
   static const String getSearchContentV3 = "$contentRouteV3/searchdata";
+  static const String getSearchContentV4 = "$contentRouteV3/searchdatanew";
+  static const String landingPageSearch = "$interestCount/default-page";
+  static const String getDetailHashtag = "$contentRouteV3/searchdatanew/detailtag";
+  static const String getDetailInterest = "$contentRouteV3/searchdatanew/detailinterest";
   // v3 delete tag
   static const String deletTagUser = "$postRouteV2/deletetag";
 

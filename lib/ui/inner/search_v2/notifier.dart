@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
-import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
 import 'package:hyppe/core/bloc/search_content/bloc.dart';
@@ -10,6 +11,7 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/localization_v2/localization_model.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
@@ -51,11 +53,76 @@ class SearchNotifier with ChangeNotifier {
   SearchContentModel? _searchContent;
   SearchContentModel? get searchContent => _searchContent;
 
+  // bool _loadingSearch = true;
+  // bool get loadingSearch => _loadingSearch;
+  // set loadingSearch(bool state){
+  //   _loadingSearch = state;
+  //   notifyListeners();
+  // }
+
+  List<ContentData>? _searchVid;
+  List<ContentData>? get searchVid => _searchVid;
+
+  set searchVid(List<ContentData>? values){
+    _searchVid = values;
+    notifyListeners();
+  }
+
+  List<ContentData>? _searchDiary;
+  List<ContentData>? get searchDiary => _searchDiary;
+
+  set searchDiary(List<ContentData>? values){
+    _searchDiary = values;
+    notifyListeners();
+  }
+
+  List<ContentData>? _searchPic;
+  List<ContentData>? get searchPic => _searchPic;
+
+  set searchPic(List<ContentData>? values){
+    _searchPic = values;
+    notifyListeners();
+  }
+
+  List<Tags>? _searchHashtag;
+  List<Tags>? get searchHashtag => _searchHashtag;
+
+  set searchHashtag(List<Tags>? values){
+    _searchHashtag = values;
+    notifyListeners();
+  }
+
+  List<DataUser>? _searchUsers;
+  List<DataUser>? get searchUsers => _searchUsers;
+
+  set searchUsers(List<DataUser>? values){
+    _searchUsers = values;
+    notifyListeners();
+  }
+
+  SearchContentModel? _detailHashTag;
+  SearchContentModel? get detailHashTag => _detailHashTag;
+  set detailHashTag(SearchContentModel? val){
+    _detailHashTag = val;
+    notifyListeners();
+  }
+
+  SearchContentModel? _detailInterest;
+  SearchContentModel? get detailInterest => _detailInterest;
+  set detailInterest(SearchContentModel? val){
+    _detailInterest = val;
+    notifyListeners();
+  }
+
+
   AllContents? _searchContentFirstPage;
   AllContents? get searchContentFirstPage => _searchContentFirstPage;
 
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
+
+  bool _hasNext = true;
+  bool get hasNext => _hasNext;
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
@@ -100,6 +167,113 @@ class SearchNotifier with ChangeNotifier {
   int get skip3 => _skip3;
   int get skip4 => _skip4;
 
+  // void getHashtag() async{
+  //   listHashtag = [];
+  //   loadHashtag = true;
+  //   Future.delayed(const Duration(seconds: 2), (){
+  //     loadHashtag = false;
+  //     listHashtag = [Hashtag("#WisataIndonesia", 600), Hashtag('#WisataJakarta', 700), Hashtag('#WisataBandung', 300)];
+  //   });
+  //   notifyListeners();
+  // }
+  //
+  // List<Hashtag>? _listHashtag;
+  // bool _loadHashtag = true;
+  // bool get loadHashtag => _loadHashtag;
+  // set loadHashtag(bool state){
+  //   _loadHashtag = state;
+  //   notifyListeners();
+  // }
+
+  bool _loadLandingPage = true;
+  bool get loadLandingPage => _loadLandingPage;
+
+  set loadLandingPage(bool state){
+    _loadLandingPage = state;
+    notifyListeners();
+  }
+
+  List<Tags>? _listHashtag;
+  List<Tags>? get listHashtag => _listHashtag;
+
+  set listHashtag(List<Tags>? val) {
+    _listHashtag = val;
+    notifyListeners();
+  }
+
+  List<Interest>? _listInterest;
+  List<Interest>? get listInterest => _listInterest;
+
+  set listInterest(List<Interest>? values){
+    _listInterest = values;
+    notifyListeners();
+  }
+
+  Map<String, SearchContentModel> _interestContents = {};
+  Map<String, SearchContentModel> get interestContents => _interestContents;
+
+  set interestContents(Map<String, SearchContentModel> values){
+    _interestContents = values;
+    notifyListeners();
+  }
+
+  Tags? _selectedHashtag;
+  Tags? get selectedHashtag => _selectedHashtag;
+  set selectedHashtag(Tags? data){
+    _selectedHashtag = data;
+    notifyListeners();
+  }
+
+  Interest? _selectedInterest;
+  Interest? get selectedInterest => _selectedInterest;
+  set selectedInterest(Interest? val){
+    _selectedInterest = val;
+    notifyListeners();
+  }
+
+
+  Future onSearchLandingPage(BuildContext context) async{
+    try{
+      loadLandingPage = true;
+      final notifier = SearchContentBloc();
+      await notifier.landingPageSearch(context);
+      final fetch = notifier.searchContentFetch;
+      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+        LandingSearch res = LandingSearch.fromJson(fetch.data);
+        listHashtag = res.tag ?? [];
+        listInterest = res.interest ?? [];
+      }else{
+        throw 'Failed landing page search execution';
+      }
+    }catch(e){
+      'Error onSearchLandingPage: $e'.logger();
+    }finally{
+      loadLandingPage = false;
+      try{
+        if(listInterest != null){
+          if(listInterest!.isNotEmpty){
+            await for(final value in getInterest(context, listInterest! )){
+              final id = value?.interests?[0].id ?? '613bc4da9ec319617aa6c38e';
+              if(value != null){
+                interestContents[id] = value;
+              }
+            }
+            notifyListeners();
+          }
+        }
+      }catch(e){
+        'Error Get Interest Contests'.logger();
+      }
+
+    }
+  }
+
+  Stream<SearchContentModel?> getInterest(BuildContext context, List<Interest> interests) async*{
+    for(final interest in interests){
+      yield await _hitApiGetDetail(context, interest.id ?? '613bc4da9ec319617aa6c38e', TypeApiSearch.detailInterest, 0);
+    }
+  }
+
   // List<ContentData>? _initDataVid = null;
   // List<ContentData>? get initDataVid => _initDataVid;
   // set initDataVid(List<ContentData>? data){
@@ -120,6 +294,31 @@ class SearchNotifier with ChangeNotifier {
   //   _initDataPic = data;
   //   notifyListeners();
   // }
+
+  SearchLayout _layout = SearchLayout.first;
+  SearchLayout get layout => _layout;
+  set layout(SearchLayout val){
+    _layout = val;
+    notifyListeners();
+  }
+
+  startLayout(){
+    _layout = SearchLayout.first;
+  }
+
+  HyppeType _contentTab = HyppeType.HyppeVid;
+  HyppeType get contentTab => _contentTab;
+  set contentTab(HyppeType type){
+    _contentTab = type;
+    notifyListeners();
+  }
+
+  HyppeType _hashtagTab = HyppeType.HyppeVid;
+  HyppeType get hashtagTab => _hashtagTab;
+  set hashtagTab(HyppeType type){
+    _hashtagTab = type;
+    notifyListeners();
+  }
 
   int get vidCount => _searchContentFirstPage?.video == null
       ? 18
@@ -182,6 +381,11 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  set hasNext(bool val){
+    _hasNext = val;
+    notifyListeners();
+  }
+
   set allContents(UserInfoModel val) {
     _allContents = val;
     notifyListeners();
@@ -220,7 +424,7 @@ class SearchNotifier with ChangeNotifier {
 
   Future onInitialSearchNew(BuildContext context, FeatureType featureType, {bool reload = false}) async {
     focusNode.unfocus();
-
+    _layout = SearchLayout.first;
     print('reload search');
     print(reload);
     print(reload == false);
@@ -379,148 +583,403 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  onScrollListener(BuildContext context, ScrollController scrollController) async {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
-      String email = SharedPreference().readStorage(SpKeys.email);
-      String search = searchController.text;
-      focusNode.unfocus();
-      Map param = {};
-      if (tabIndex == 1) {
-        _skip = _skip1;
-      }
-      if (tabIndex == 2) {
-        _skip = _skip2;
-      }
-      if (tabIndex == 3) {
-        _skip = _skip3;
-      }
-      if (tabIndex == 4) {
-        _skip = _skip4;
-      }
-      param = {
-        "email": email,
-        "keys": search,
-        "listuser": tabIndex == 0 || tabIndex == 1 ? true : false,
-        "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
-        "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
-        "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
-        "skip": _skip,
-        "limit": _limit,
-      };
+  // onScrollListener(BuildContext context, ScrollController scrollController) async {
+  //   if (scrollController.offset >= scrollController.position.maxScrollExtent && !scrollController.position.outOfRange) {
+  //     String email = SharedPreference().readStorage(SpKeys.email);
+  //     String search = searchController.text;
+  //     focusNode.unfocus();
+  //     Map param = {};
+  //     if (tabIndex == 1) {
+  //       _skip = _skip1;
+  //     }
+  //     if (tabIndex == 2) {
+  //       _skip = _skip2;
+  //     }
+  //     if (tabIndex == 3) {
+  //       _skip = _skip3;
+  //     }
+  //     if (tabIndex == 4) {
+  //       _skip = _skip4;
+  //     }
+  //     param = {
+  //       "email": email,
+  //       "keys": search,
+  //       "listuser": tabIndex == 0 || tabIndex == 1 ? true : false,
+  //       "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
+  //       "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
+  //       "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
+  //       "skip": _skip,
+  //       "limit": _limit,
+  //     };
+  //
+  //     final notifier = SearchContentBloc();
+  //     await notifier.getSearchContent(context, param);
+  //     final fetch = notifier.searchContentFetch;
+  //     if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+  //       SearchContentModel _res = SearchContentModel.fromJson(fetch.data[0]);
+  //       if (tabIndex == 1) {
+  //         _skip1 += _limit;
+  //         _searchContent?.users?.addAll(_res.users ?? []);
+  //       }
+  //       if (tabIndex == 2) {
+  //         _skip2 += _limit;
+  //         _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
+  //       }
+  //       if (tabIndex == 3) {
+  //         _skip3 += _limit;
+  //         _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
+  //       }
+  //       if (tabIndex == 4) {
+  //         _skip4 += _limit;
+  //         _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
+  //       }
+  //     }
+  //
+  //     notifyListeners();
+  //   }
+  // }
 
-      final notifier = SearchContentBloc();
-      await notifier.getSearchContent(context, param);
-      final fetch = notifier.searchContentFetch;
-      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
-        SearchContentModel _res = SearchContentModel.fromJson(fetch.data[0]);
-        if (tabIndex == 1) {
-          _skip1 += _limit;
-          _searchContent?.users?.addAll(_res.users ?? []);
+  // void onSearchPost(
+  //   BuildContext context, {
+  //   String? value,
+  //   int skip = 0,
+  //   bool isMove = false,
+  // }) async {
+  //   if (isMove) {
+  //     // _routing.moveReplacement(Routes.searcMoreComplete);
+  //     layout = SearchLayout.searchMore;
+  //     _tab1 = 0;
+  //     _tab2 = 0;
+  //     _tab3 = 0;
+  //     _tab4 = 0;
+  //     _skip1 = 0;
+  //     _skip2 = 0;
+  //     _skip3 = 0;
+  //     _skip4 = 0;
+  //   }
+  //   if (!isMove && tabIndex == 0 && _searchContent != null) {
+  //     return;
+  //   }
+  //   if (!isMove && tabIndex == 1 && _searchContent?.users != null && _tab1 > 1) {
+  //     return;
+  //   }
+  //   if (!isMove && tabIndex == 2 && _searchContent?.vid != null && _tab2 > 1) {
+  //     return;
+  //   }
+  //   if (!isMove && tabIndex == 3 && _searchContent?.diary != null && _tab3 > 1) {
+  //     return;
+  //   }
+  //   if (!isMove && tabIndex == 4 && _searchContent?.pict != null && _tab4 > 1) {
+  //     return;
+  //   }
+  //   final notifier = SearchContentBloc();
+  //   String email = SharedPreference().readStorage(SpKeys.email);
+  //   String search = value ?? searchController.text;
+  //   Map param = {};
+  //
+  //   focusNode.unfocus();
+  //
+  //   isLoading = true;
+  //   // _searchContent = null;
+  //
+  //   param = {
+  //     "email": email,
+  //     "keys": search,
+  //     "listuser": tabIndex == 0 || tabIndex == 1 ? true : false,
+  //     "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
+  //     "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
+  //     "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
+  //     "listtag": tabIndex == 0 || tabIndex == 5 ? true : false,
+  //     "skip": skip,
+  //     "limit": _limit,
+  //   };
+  //   await notifier.getSearchContent(context, param);
+  //   final fetch = notifier.searchContentFetch;
+  //   if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+  //     final _res = SearchContentModel.fromJson(fetch.data[0]);
+  //
+  //     if (tabIndex == 0) {
+  //       _searchContent = _res;
+  //     }
+  //     if (tabIndex == 1) {
+  //       _searchContent?.users = [];
+  //       _searchContent?.users?.addAll(_res.users ?? []);
+  //       _skip1 += _limit;
+  //     }
+  //     if (tabIndex == 2) {
+  //       _searchContent?.vid = [];
+  //       _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
+  //       _skip2 += _limit;
+  //     }
+  //     if (tabIndex == 3) {
+  //       _searchContent?.diary = [];
+  //       _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
+  //       _skip3 += _limit;
+  //     }
+  //     if (tabIndex == 4) {
+  //       _searchContent?.pict = [];
+  //       _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
+  //       _skip4 += _limit;
+  //     }
+  //   }
+  //   // else {
+  //   // _searchContent = null;
+  //   // }
+  //   isLoading = false;
+  //   notifyListeners();
+  // }
+
+  void getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true}) async{
+    try{
+      if(reload){
+        isLoading = true;
+      }else{
+        hasNext = true;
+      }
+
+      List<ContentData> currentVid = [];
+      List<ContentData> currentDairy = [];
+      List<ContentData> currentPic = [];
+      int currentSkip = 0;
+      if(!reload){
+        if(type == TypeApiSearch.detailHashTag){
+          currentVid = detailHashTag?.vid ?? [];
+          currentDairy = detailHashTag?.diary ?? [];
+          currentPic = detailHashTag?.pict ?? [];
+          final lenghtVid = currentVid.length;
+          final lenghtDiary = currentDairy.length;
+          final lenghtPic = currentPic.length;
+          currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+        }else if(type == TypeApiSearch.detailInterest){
+          currentVid = detailInterest?.vid ?? [];
+          currentDairy = detailInterest?.diary ?? [];
+          currentPic = detailInterest?.pict ?? [];
+          final lenghtVid = currentVid.length;
+          final lenghtDiary = currentDairy.length;
+          final lenghtPic = currentPic.length;
+          currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
         }
-        if (tabIndex == 2) {
-          _skip2 += _limit;
-          _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
+        if(currentSkip%12 != 0){
+          throw 'hitApiGetDetail : preventing api because the system must reduce useless action';
         }
-        if (tabIndex == 3) {
-          _skip3 += _limit;
-          _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
-        }
-        if (tabIndex == 4) {
-          _skip4 += _limit;
-          _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
+      }
+      final _res = await _hitApiGetDetail(context, keys, type, currentSkip);
+      if(_res != null){
+        final videos = _res.vid;
+        final diaries = _res.diary;
+        final pics = _res.diary;
+        if(type == TypeApiSearch.detailHashTag){
+          if(!reload){
+            detailHashTag?.vid = [...currentVid, ...(videos ?? [])];
+            detailHashTag?.diary = [...currentDairy, ...(diaries ?? [])];
+            detailHashTag?.pict = [...currentPic, ...(pics ?? [])];
+          }else{
+            detailHashTag = _res;
+          }
+        }else if(type == TypeApiSearch.detailInterest){
+          if(!reload){
+            detailInterest?.vid = [...currentVid, ...(videos ?? [])];
+            detailInterest?.diary = [...currentDairy, ...(diaries ?? [])];
+            detailInterest?.pict = [...currentPic, ...(pics ?? [])];
+          }else{
+            detailInterest = _res;
+          }
         }
       }
 
-      notifyListeners();
+    }catch(e){
+      'Error getDetail: $e'.logger();
+    }finally{
+      if(reload){
+        isLoading = false;
+      }else{
+        hasNext = false;
+      }
     }
   }
 
-  void onSearchPost(
-    BuildContext context, {
-    String? value,
-    int skip = 0,
-    bool isMove = false,
-  }) async {
-    if (isMove) {
-      _routing.moveReplacement(Routes.searcMoreComplete);
-      _tab1 = 0;
-      _tab2 = 0;
-      _tab3 = 0;
-      _tab4 = 0;
-      _skip1 = 0;
-      _skip2 = 0;
-      _skip3 = 0;
-      _skip4 = 0;
-    }
-    if (!isMove && tabIndex == 0 && _searchContent != null) {
-      return;
-    }
-    if (!isMove && tabIndex == 1 && _searchContent?.users != null && _tab1 > 1) {
-      return;
-    }
-    if (!isMove && tabIndex == 2 && _searchContent?.vid != null && _tab2 > 1) {
-      return;
-    }
-    if (!isMove && tabIndex == 3 && _searchContent?.diary != null && _tab3 > 1) {
-      return;
-    }
-    if (!isMove && tabIndex == 4 && _searchContent?.pict != null && _tab4 > 1) {
-      return;
-    }
-    final notifier = SearchContentBloc();
-    String email = SharedPreference().readStorage(SpKeys.email);
-    String search = value ?? searchController.text;
-    Map param = {};
+  Future<SearchContentModel?> _hitApiGetDetail(BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip) async{
+    try{
+      String email = SharedPreference().readStorage(SpKeys.email);
 
-    focusNode.unfocus();
+      final param = {
+        "email": email,
+        "keys": keys,
+        "listvid": true,
+        "listdiary": true,
+        "listpict": true,
+        "skip": currentSkip,
+        "limit": 12,
+      };
+      final notifier = SearchContentBloc();
+      await notifier.getSearchContent(context, param, type: typeApi);
+      final fetch = notifier.searchContentFetch;
+      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+        final _res = SearchContentModel.fromJson(fetch.data[0]);
+        return _res;
+      }else if(fetch.searchContentState == SearchContentState.getSearchContentBlocError){
+        throw 'getAllDataSearch failed $typeApi';
+      }else{
+        throw 'undefined';
+      }
+    }catch(e){
+      'Error _hitApiGetDetail: $e'.logger();
+      return null;
+    }
+  }
 
-    isLoading = true;
-    // _searchContent = null;
+  void getDataSearch(
+      BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async {
+    const _slimit = 12;
 
-    param = {
-      "email": email,
-      "keys": search,
-      "listuser": tabIndex == 0 || tabIndex == 1 ? true : false,
-      "listvid": tabIndex == 0 || tabIndex == 2 ? true : false,
-      "listdiary": tabIndex == 0 || tabIndex == 3 ? true : false,
-      "listpict": tabIndex == 0 || tabIndex == 4 ? true : false,
-      "skip": skip,
-      "limit": _limit,
-    };
-    await notifier.getSearchContent(context, param);
-    final fetch = notifier.searchContentFetch;
-    if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
-      final _res = SearchContentModel.fromJson(fetch.data[0]);
 
-      if (tabIndex == 0) {
-        _searchContent = _res;
+    try{
+      final lenghtVid = _searchVid?.length ?? 12;
+      final lenghtDiary = _searchDiary?.length ?? 12;
+      final lenghtPic = _searchPic?.length ?? 12;
+      var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+
+      final int currentSkip = typeSearch == SearchLoadData.all ? 0 :
+      typeSearch == SearchLoadData.hashtag ? (_searchHashtag?.length ?? 0) :
+      typeSearch == SearchLoadData.content ? skipContent :
+      typeSearch == SearchLoadData.user ? _searchUsers?.length ?? 0 : 0;
+      if((currentSkip != 0 && typeSearch == SearchLoadData.all)){
+        throw 'Error get all because the state is not from beginning $currentSkip';
+      }else if(currentSkip%_slimit != 0){
+        throw 'Error because we have to prevent the action for refusing wasting action';
       }
-      if (tabIndex == 1) {
-        _searchContent?.users = [];
-        _searchContent?.users?.addAll(_res.users ?? []);
-        _skip1 += _limit;
+
+      if(reload){
+        isLoading = true;
+      }else{
+        hasNext = true;
       }
-      if (tabIndex == 2) {
-        _searchContent?.vid = [];
-        _searchContent?.vid = [...(_searchContent?.vid ?? []), ...(_res.vid ?? [])];
-        _skip2 += _limit;
+
+      String email = SharedPreference().readStorage(SpKeys.email);
+      String search = searchController.text;
+      if(search.isHashtag()){
+        search = search.replaceFirst('#', '');
       }
-      if (tabIndex == 3) {
-        _searchContent?.diary = [];
-        _searchContent?.diary = [...(_searchContent?.diary ?? []), ...(_res.diary ?? [])];
-        _skip3 += _limit;
+      Map<String, dynamic> param = {};
+      if(typeSearch == SearchLoadData.all){
+        focusNode.unfocus();
       }
-      if (tabIndex == 4) {
-        _searchContent?.pict = [];
-        _searchContent?.pict = [...(_searchContent?.pict ?? []), ...(_res.pict ?? [])];
-        _skip4 += _limit;
+
+      switch(typeSearch){
+        case SearchLoadData.all:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": true,
+            "listvid": true,
+            "listdiary": true,
+            "listpict": true,
+            "listtag": true,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          break;
+        case SearchLoadData.user:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": true,
+            "listvid": false,
+            "listdiary": false,
+            "listpict": false,
+            "listtag": false,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          break;
+        case SearchLoadData.hashtag:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": false,
+            "listvid": false,
+            "listdiary": false,
+            "listpict": false,
+            "listtag": true,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          break;
+        case SearchLoadData.content:
+          param = {
+            "email": email,
+            "keys": search,
+            "listuser": false,
+            "listvid": true,
+            "listdiary": true,
+            "listpict": true,
+            "listtag": false,
+            "skip": currentSkip,
+            "limit": _slimit,
+          };
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          break;
+
+      }
+
+    }catch(e){
+      'Error getAllDataSearch: $e'.logger();
+    }finally{
+      if(reload){
+        isLoading = false;
+      }else{
+        hasNext = false;
       }
     }
-    // else {
-    // _searchContent = null;
-    // }
-    isLoading = false;
-    notifyListeners();
+
+  }
+
+  Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req, SearchLoadData typeSearch, bool reload) async{
+    try{
+      final notifier = SearchContentBloc();
+      await notifier.getSearchContent(context, req);
+      final fetch = notifier.searchContentFetch;
+      if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
+        final _res = SearchContentModel.fromJson(fetch.data[0]);
+        switch(typeSearch){
+          case SearchLoadData.all:
+            searchUsers = _res.users;
+            searchVid = _res.vid;
+            searchDiary = _res.diary;
+            searchPic = _res.pict;
+            searchHashtag = _res.tags;
+            break;
+          case SearchLoadData.content:
+            searchVid = [...(searchVid ?? []), ...(_res.vid ?? [])];
+            searchDiary = [...(searchDiary ?? []), ...(_res.diary ?? [])];
+            searchPic = [...(searchPic ?? []), ...(_res.pict ?? [])];
+            break;
+          case SearchLoadData.user:
+            if(!reload){
+              searchUsers = [...(searchUsers ?? []), ...(_res.users ?? [])];
+            }else{
+              searchUsers = _res.users;
+            }
+            break;
+          case SearchLoadData.hashtag:
+            if(!reload){
+              searchHashtag = [...(searchHashtag ?? []), ...(_res.tags ?? [])];
+            }else{
+              searchHashtag = _res.tags;
+            }
+
+            break;
+        }
+
+      }else if(fetch.searchContentState == SearchContentState.getSearchContentBlocError){
+        throw 'getAllDataSearch failed $typeSearch';
+      }
+    }catch(e){
+      rethrow;
+    }
   }
 
   Future navigateToSeeAllScreen(BuildContext context, List<ContentData> data, int index) async {
@@ -584,13 +1043,15 @@ class SearchNotifier with ChangeNotifier {
 
   void backPage() {
     searchController1.clear();
-    _routing.moveBack();
+    layout = SearchLayout.first;
+    // _routing.moveBack();
   }
 
   void backFromSearchMore() {
     searchController1.text = '';
     searchController.clear();
-    _routing.moveBack();
+    layout = SearchLayout.first;
+    // _routing.moveBack();
     notifyListeners();
   }
 

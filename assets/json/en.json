@@ -241,6 +241,9 @@
   "dateOfBirth": "Date of Birth",
   "userName": "Username",
   "all": "All",
+  "recommended": "Recommended",
+  "contents": "Contents",
+  "hashtags": "Hashtags",
   "signIn": "Sign in",
   "notAValidEmailAddressOrUsername": "Not a valid email address or username",
   "emailOrUsernameCannotBeEmpty": "Email or username cannot be empty",
@@ -876,5 +879,6 @@
   "sharePost": "Share Post",
   "privacyPost": "Privacy Post",
   "prepareYourContent": "Prepare your content",
-  "pleaseWaitThisProcessWillTakeSomeTime": "Please wait, this process will take some time."
+  "pleaseWaitThisProcessWillTakeSomeTime": "Please wait, this process will take some time.",
+  "moreContents": "More Contents"
 }

@@ -239,6 +239,9 @@ class LocalizationModelV2 {
   String? dateOfBirth;
   String? userName;
   String? all;
+  String? recommended;
+  String? contents;
+  String? hashtags;
   String? signIn;
   String? notAValidEmailAddressOrUsername;
   String? emailOrUsernameCannotBeEmpty;
@@ -877,6 +880,7 @@ class LocalizationModelV2 {
   String? privacyPost;
   String? prepareYourContent;
   String? pleaseWaitThisProcessWillTakeSomeTime;
+  String? moreContents;
 
   LocalizationModelV2({
     this.login,
@@ -1119,6 +1123,9 @@ class LocalizationModelV2 {
     this.dateOfBirth,
     this.userName,
     this.all,
+    this.recommended,
+    this.contents,
+    this.hashtags,
     this.signIn,
     this.notAValidEmailAddressOrUsername,
     this.emailOrUsernameCannotBeEmpty,
@@ -1757,6 +1764,7 @@ class LocalizationModelV2 {
     this.privacyPost,
     this.prepareYourContent,
     this.pleaseWaitThisProcessWillTakeSomeTime,
+    this.moreContents,
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2000,6 +2008,9 @@ class LocalizationModelV2 {
     dateOfBirth = json['dateOfBirth'];
     userName = json['userName'];
     all = json['all'];
+    recommended = json['recommended'];
+    contents = json['contents'];
+    hashtags = json['hashtags'];
     signIn = json['signIn'];
     notAValidEmailAddressOrUsername = json['notAValidEmailAddressOrUsername'];
     emailOrUsernameCannotBeEmpty = json['emailOrUsernameCannotBeEmpty'];
@@ -2656,5 +2667,6 @@ class LocalizationModelV2 {
     privacyPost = json['privacyPost'];
     prepareYourContent = json['prepareYourContent'];
     pleaseWaitThisProcessWillTakeSomeTime = json['pleaseWaitThisProcessWillTakeSomeTime'];
+    moreContents = json['moreContents'];
   }
 }

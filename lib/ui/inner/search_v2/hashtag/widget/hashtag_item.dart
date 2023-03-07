@@ -12,42 +12,47 @@ class HashtagItem extends StatelessWidget {
   int count;
   String countContainer;
   Function()? onTap;
-  HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap}) : super(key: key);
+  EdgeInsetsGeometry? padding;
+  HashtagItem({Key? key, required this.title, required this.count, required this.countContainer, this.onTap, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: Ink(
-        color: Colors.white,
+        color: context.getColorScheme().background,
         child: InkWell(
           onTap: onTap,
           splashColor: context.getColorScheme().primary,
           child: Container(
-            padding: const EdgeInsets.only(left: 18, top: 10, bottom: 10),
+            padding: padding ?? const EdgeInsets.only(left: 18, top: 10, bottom: 10, right: 16),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomIconWidget(iconData: '${AssetPath.vectorPath}hashtag_icon.svg', width: 20, height: 20,),
                 fourteenPx,
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextWidget(
-                      textToDisplay:
-                      title,
-                      textStyle: context.getTextTheme().bodyMedium,
-                      textAlign: TextAlign.start,
-                    ),
-                    Text(
-                      count > 500
-                          ? "500+ $countContainer"
-                          : "$count $countContainer",
-                      style: const TextStyle(
-                          fontSize: 12, color: kHyppeGrey),
-                    )
-                  ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextWidget(
+                        maxLines: 1,
+                        textToDisplay:
+                        title,
+                        textStyle: context.getTextTheme().bodyMedium,
+                        textAlign: TextAlign.start,
+                      ),
+                      Text(
+                        count > 500
+                            ? "500+ $countContainer"
+                            : "$count $countContainer",
+                        style: const TextStyle(
+                            fontSize: 12, color: kHyppeGrey),
+                      )
+                    ],
+                  ),
                 )
               ],
             ),

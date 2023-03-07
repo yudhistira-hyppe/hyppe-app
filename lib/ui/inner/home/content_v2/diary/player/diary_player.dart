@@ -31,7 +31,7 @@ class DiaryPlayerPage extends StatefulWidget {
   State<DiaryPlayerPage> createState() => _DiaryPlayerPageState();
 }
 
-class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingObserver {
+class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingObserver, TickerProviderStateMixin {
   FlutterAliplayer? fAliplayer;
   bool isloading = false;
   bool isPrepare = false;
@@ -109,7 +109,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
-    // fAliplayer?.setAutoPlay(true);
+    fAliplayer?.setAutoPlay(true);
+    fAliplayer?.isLoop();
 
     if (widget.data?.apsaraId != '') {
       _playMode = ModeTypeAliPLayer.auth;
@@ -386,6 +387,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
+    print("detik ${_videoDuration / _currentPosition.toDouble()}");
     var x = 0.0;
     var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
@@ -413,15 +415,33 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         child: Stack(
           children: [
             Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(40.0),
+                child: LinearProgressIndicator(
+                  value: AnimationController(
+                    /// [AnimationController]s can be created with `vsync: this` because of
+                    /// [TickerProviderStateMixin].
+                    vsync: this,
+                    duration: Duration(milliseconds: _videoDuration),
+                  )
+                      // value: _currentPosition / _videoDuration)
+                      .value,
+                  backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
+                  valueColor: AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                ),
+              ),
+            ),
 
             // /====slide dan tombol fullscreen
-            if (isPlay)
-              SizedBox(
-                width: width,
-                height: height,
-                // padding: EdgeInsets.only(bottom: 25.0),
-                child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
-              ),
+            // if (isPlay)
+            //   SizedBox(
+            //     width: width,
+            //     height: height,
+            //     // padding: EdgeInsets.only(bottom: 25.0),
+            //     child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
+            //   ),
 
             if (!isPlay)
               Center(
@@ -441,7 +461,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                     height: height,
                     child: const CustomIconWidget(
                       defaultColor: false,
-                      iconData: '${AssetPath.vectorPath}pause.svg',
+                      iconData: '${AssetPath.vectorPath}pause.svxg',
                       color: kHyppeLightButtonText,
                     ),
                   ),
@@ -493,7 +513,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   void onViewPlayerCreated(viewId) async {
     fAliplayer?.setPlayerView(viewId);
-    print("ini play auth ${auth}");
     switch (_playMode) {
       case ModeTypeAliPLayer.url:
         fAliplayer?.setUrl(_dataSourceMap?[DataSourceRelated.urlKey]);

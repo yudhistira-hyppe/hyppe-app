@@ -11,7 +11,8 @@ import 'package:hyppe/core/bloc/utils_v2/bloc.dart';
 import 'package:hyppe/core/bloc/utils_v2/state.dart';
 import 'package:hyppe/ui/constant/entities/loading/notifier.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
-import 'package:hyppe/core/models/collection/utils/interest/interest_data.dart';
+
+import '../../../../../core/models/collection/search/search_content.dart';
 
 class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   final _routing = Routing();
@@ -24,9 +25,9 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
   }
 
   List<String> _interestData = [];
-  List<InterestData> _interest = [];
+  List<Interest> _interest = [];
 
-  List<InterestData> get interest => _interest;
+  List<Interest> get interest => _interest;
 
   set interestData(List<String> val) {
     _interestData = [];
@@ -110,7 +111,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
     final fetch = notifier.utilsFetch;
     if (fetch.utilsState == UtilsState.getInterestsSuccess) {
       _interest = [];
-      fetch.data.forEach((v) => _interest.add(InterestData.fromJson(v)));
+      fetch.data.forEach((v) => _interest.add(Interest.fromJson(v)));
       notifyListeners();
     }
     if (fetch.utilsState == UtilsState.getInterestsError) {

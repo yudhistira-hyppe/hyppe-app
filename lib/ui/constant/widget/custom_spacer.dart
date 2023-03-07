@@ -14,6 +14,7 @@ const Widget fifteenPx = SizedBox(width: 15.0, height: 15.0);
 const Widget sixteenPx = SizedBox(width: 16.0, height: 16.0);
 const Widget twentyPx = SizedBox(width: 20.0, height: 20.0);
 const Widget twentyFourPx = SizedBox(width: 24.0, height: 24.0);
+const Widget twentyEightPx = SizedBox(width: 28.0, height: 28.0);
 const Widget thirtyTwoPx = SizedBox(width: 32.0, height: 32.0);
 
 const Widget thirtySixPx = SizedBox(width: 36.0, height: 36.0);
