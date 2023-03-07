@@ -10,7 +10,6 @@ import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
@@ -20,19 +19,20 @@ import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-class PlayerFullScreenPage extends StatefulWidget {
-  final FlutterAliplayer? fAliplayer;
-  final ModeTypeAliPLayer playMode;
-  final Map<String, dynamic> dataSourceMap;
+class DiaryPlayerPage extends StatefulWidget {
   final ContentData? data;
 
-  const PlayerFullScreenPage({Key? key, required this.playMode, required this.dataSourceMap, required this.data, this.fAliplayer}) : super(key: key);
+  const DiaryPlayerPage({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
-  State<PlayerFullScreenPage> createState() => _PlayerFullScreenPageState();
+  State<DiaryPlayerPage> createState() => _DiaryPlayerPageState();
 }
 
-class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with WidgetsBindingObserver {
+class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingObserver {
+  FlutterAliplayer? fAliplayer;
   bool isloading = false;
   bool isPrepare = false;
   bool isPause = false;
@@ -40,6 +40,7 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
   List<Widget>? mFramePage;
   ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
+  String auth = '';
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -103,55 +104,55 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
 
   @override
   void initState() {
-    widget.fAliplayer?.play();
     super.initState();
+    getAuth();
+    fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
+    WidgetsBinding.instance.addObserver(this);
+    bottomIndex = 0;
+    // fAliplayer?.setAutoPlay(true);
+
+    if (widget.data?.apsaraId != '') {
+      _playMode = ModeTypeAliPLayer.auth;
+    } else {
+      _playMode = ModeTypeAliPLayer.url;
+    }
+    isPlay = false;
+    isPrepare = false;
+    setState(() {});
+
+    //Turn on mix mode
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(true);
+    }
+
+    //set player
+    fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
+    fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
+
+    if (Platform.isAndroid) {
+      getExternalStorageDirectories().then((value) {
+        if ((value?.length ?? 0) > 0) {
+          _snapShotPath = value![0].path;
+          return _snapShotPath;
+        }
+      });
+    }
+
+    // mOptionsFragment = OptionsFragment(fAliplayer);
+    // mFramePage = [
+    //   mOptionsFragment,
+    //   PlayConfigFragment(fAliplayer),
+    //   FilterFragment(fAliplayer),
+    //   CacheConfigFragment(fAliplayer),
+    //   TrackFragment(trackFragmentKey, fAliplayer),
+    // ];
+
+    // mOptionsFragment.setOnEnablePlayBackChanged((mEnablePlayBack) {
+    //   this._mEnablePlayBack = mEnablePlayBack;
+    // });
+
+    _initListener();
   }
-  // void initState() {
-  //   super.initState();
-  //   getAuth();
-
-  //   widget.fAliplayer?.setAutoPlay(false);
-  //   WidgetsBinding.instance.addObserver(this);
-  //   bottomIndex = 0;
-  //   _playMode = widget.playMode;
-  //   _dataSourceMap = widget.dataSourceMap;
-  //   isPlay = false;
-  //   isPrepare = false;
-  //   setState(() {});
-
-  //   //Turn on mix mode
-  //   if (Platform.isIOS) {
-  //     FlutterAliplayer.enableMix(true);
-  //   }
-
-  //   //set player
-  //   widget.fAliplayer?.setPreferPlayerName(GlobalSettings.mPlayerName);
-  //   widget.fAliplayer?.setEnableHardwareDecoder(GlobalSettings.mEnableHardwareDecoder);
-
-  //   if (Platform.isAndroid) {
-  //     getExternalStorageDirectories().then((value) {
-  //       if ((value?.length ?? 0) > 0) {
-  //         _snapShotPath = value![0].path;
-  //         return _snapShotPath;
-  //       }
-  //     });
-  //   }
-
-  //   // mOptionsFragment = OptionsFragment(widget.fAliplayer;
-  //   // mFramePage = [
-  //   //   mOptionsFragment,
-  //   //   PlayConfigFragment(widget.fAliplayer,
-  //   //   FilterFragment(widget.fAliplayer,
-  //   //   CacheConfigFragment(widget.fAliplayer,
-  //   //   TrackFragment(trackFragmentKey, widget.fAliplayer,
-  //   // ];
-
-  //   // mOptionsFragment.setOnEnablePlayBackChanged((mEnablePlayBack) {
-  //   //   this._mEnablePlayBack = mEnablePlayBack;
-  //   // });
-
-  //   _initListener();
-  // }
 
   Future getAuth() async {
     setState(() {
@@ -164,7 +165,9 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
       if (fetch.postsState == PostsState.videoApsaraSuccess) {
         print(fetch.data);
         Map jsonMap = json.decode(fetch.data.toString());
-        _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
+
+        auth = jsonMap['PlayAuth'];
+        setState(() {});
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
@@ -176,24 +179,24 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
   }
 
   _initListener() {
-    widget.fAliplayer?.setOnEventReportParams((params, playerId) {
+    fAliplayer?.setOnEventReportParams((params, playerId) {
       print("EventReportParams=${params}");
     });
-    widget.fAliplayer?.setOnPrepared((playerId) {
+    fAliplayer?.setOnPrepared((playerId) {
       // Fluttertoast.showToast(msg: "OnPrepared ");
-      widget.fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
-      widget.fAliplayer?.getMediaInfo().then((value) {
+      fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
+      fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
         setState(() {
           isPrepare = true;
         });
       });
     });
-    widget.fAliplayer?.setOnRenderingStart((playerId) {
+    fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
-    widget.fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
-    widget.fAliplayer?.setOnStateChanged((newState, playerId) {
+    fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
+    fAliplayer?.setOnStateChanged((newState, playerId) {
       _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
       switch (newState) {
@@ -211,7 +214,7 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
         default:
       }
     });
-    widget.fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+    fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
       setState(() {
         _loadingPercent = 0;
         _showLoading = true;
@@ -227,10 +230,10 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
         _showLoading = false;
       });
     });
-    widget.fAliplayer?.setOnSeekComplete((playerId) {
+    fAliplayer?.setOnSeekComplete((playerId) {
       _inSeek = false;
     });
-    widget.fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
+    fAliplayer?.setOnInfo((infoCode, extraValue, extraMsg, playerId) {
       if (infoCode == FlutterAvpdef.CURRENTPOSITION) {
         if (_videoDuration != 0 && (extraValue ?? 0) <= _videoDuration) {
           _currentPosition = extraValue ?? 0;
@@ -258,27 +261,28 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
         // mOptionsFragment.switchHardwareDecoder();
       }
     });
-    widget.fAliplayer?.setOnCompletion((playerId) {
+    fAliplayer?.setOnCompletion((playerId) {
       _showTipsWidget = true;
       _showLoading = false;
-      _tipsContent = "Play完成";
+      _tipsContent = "Play Again";
+      isPause = true;
       setState(() {
         _currentPosition = _videoDuration;
       });
     });
 
-    widget.fAliplayer?.setOnSnapShot((path, playerId) {
+    fAliplayer?.setOnSnapShot((path, playerId) {
       print("aliyun : snapShotPath = $path");
       // Fluttertoast.showToast(msg: "SnapShot Save : $path");
     });
-    widget.fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
+    fAliplayer?.setOnError((errorCode, errorExtra, errorMsg, playerId) {
       _showTipsWidget = true;
       _showLoading = false;
       _tipsContent = "$errorCode \n $errorMsg";
       setState(() {});
     });
 
-    widget.fAliplayer?.setOnTrackChanged((value, playerId) {
+    fAliplayer?.setOnTrackChanged((value, playerId) {
       AVPTrackInfo info = AVPTrackInfo.fromJson(value);
       if (info != null && (info.trackDefinition?.length ?? 0) > 0) {
         // trackFragmentKey.currentState.onTrackChanged(info);
@@ -286,13 +290,13 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
       }
     });
 
-    widget.fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
+    fAliplayer?.setOnThumbnailPreparedListener(preparedSuccess: (playerId) {
       _thumbnailSuccess = true;
     }, preparedFail: (playerId) {
       _thumbnailSuccess = false;
     });
 
-    widget.fAliplayer?.setOnThumbnailGetListener(
+    fAliplayer?.setOnThumbnailGetListener(
         onThumbnailGetSuccess: (bitmap, range, playerId) {
           // _thumbnailBitmap = bitmap;
           var provider = MemoryImage(bitmap);
@@ -304,7 +308,7 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
         },
         onThumbnailGetFail: (playerId) {});
 
-    widget.fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
+    fAliplayer?.setOnSubtitleHide((trackIndex, subtitleID, playerId) {
       if (mounted) {
         setState(() {
           extSubTitleText = '';
@@ -312,7 +316,7 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
       }
     });
 
-    widget.fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
+    fAliplayer?.setOnSubtitleShow((trackIndex, subtitleID, subtitle, playerId) {
       if (mounted) {
         setState(() {
           extSubTitleText = subtitle;
@@ -326,14 +330,14 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
   _setNetworkChangedListener() {
     _networkSubscriptiion = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.mobile) {
-        widget.fAliplayer?.pause();
+        fAliplayer?.pause();
         setState(() {
           _isShowMobileNetWork = true;
         });
       } else if (result == ConnectivityResult.wifi) {
         //从4G网络或者无网络切换到wifi
         if (_currentConnectivityResult == ConnectivityResult.mobile || _currentConnectivityResult == ConnectivityResult.none) {
-          widget.fAliplayer?.play();
+          fAliplayer?.play();
         }
         setState(() {
           _isShowMobileNetWork = false;
@@ -354,7 +358,7 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
-          widget.fAliplayer?.pause();
+          fAliplayer?.pause();
         }
         if (_networkSubscriptiion != null) {
           _networkSubscriptiion?.cancel();
@@ -366,25 +370,18 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
   }
 
   @override
-  // void dispose() {
-  //   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  //   if (Platform.isIOS) {
-  //     FlutterAliplayer.enableMix(false);
-  //   }
+  void dispose() {
+    if (Platform.isIOS) {
+      FlutterAliplayer.enableMix(false);
+    }
 
-  //   widget.fAliplayer?.stop();
-  //   widget.fAliplayer?.destroy();
-  //   super.dispose();
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   if (_networkSubscriptiion != null) {
-  //     _networkSubscriptiion?.cancel();
-  //   }
-  // }
-
-  void play() {
-    widget.fAliplayer?.play();
-    isPlay = true;
-    setState(() {});
+    fAliplayer?.stop();
+    fAliplayer?.destroy();
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    if (_networkSubscriptiion != null) {
+      _networkSubscriptiion?.cancel();
+    }
   }
 
   @override
@@ -393,124 +390,116 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
     var y = 0.0;
     Orientation orientation = MediaQuery.of(context).orientation;
     var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
-    var height;
-    if (orientation == Orientation.portrait) {
-      height = width * 9.0 / 16.0;
-    } else {
-      height = MediaQuery.of(context).size.height;
-    }
     if (isloading) {
-      return SizedBox(
+      return Container(
         width: width,
         height: height,
+        color: Colors.blue,
         // padding: EdgeInsets.only(bottom: 25.0),
         // child: _buildThumbnail(width, height),
       );
     } else {
-      AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: x, y: y, width: width, height: height);
+      AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: width, height: height);
       Future.delayed(const Duration(milliseconds: 500), () {
-        if (!isPrepare) widget.fAliplayer?.prepare();
+        if (!isPrepare) fAliplayer?.prepare();
       });
-      return OrientationBuilder(
-        builder: (BuildContext context, Orientation orientation) {
-          return GestureDetector(
-            onTap: () {
-              onTapCtrl = true;
-              setState(() {});
-            },
-            child: Stack(
-              children: [
-                Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
+      return GestureDetector(
+        onTap: () {
+          onTapCtrl = true;
+          setState(() {});
+        },
+        child: Stack(
+          children: [
+            Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
 
-                ///====slide dan tombol fullscreen
-                if (isPlay)
-                  SizedBox(
+            // /====slide dan tombol fullscreen
+            if (isPlay)
+              SizedBox(
+                width: width,
+                height: height,
+                // padding: EdgeInsets.only(bottom: 25.0),
+                child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
+              ),
+
+            if (!isPlay)
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    print("ini play");
+                    isPlay = true;
+                    setState(() {
+                      _showLoading = true;
+                    });
+                    fAliplayer?.prepare().whenComplete(() => _showLoading = false);
+                    fAliplayer?.play();
+                    setState(() {});
+                  },
+                  child: SizedBox(
                     width: width,
                     height: height,
-                    // padding: EdgeInsets.only(bottom: 25.0),
-                    child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
-                  ),
-
-                // if (!isPlay)
-                //   VideoThumbnail(
-                //     videoData: widget.data,
-                //     onDetail: false,
-                //     fn: () {},
-                //   ),
-                if (!isPlay && isPrepare)
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        print("ini play");
-                        isPlay = true;
-                        widget.fAliplayer?.play();
-                        setState(() {});
-                      },
-                      child: SizedBox(
-                        width: width,
-                        child: const CustomIconWidget(
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}pause.svg',
-                          color: kHyppeLightButtonText,
-                        ),
-                      ),
+                    child: const CustomIconWidget(
+                      defaultColor: false,
+                      iconData: '${AssetPath.vectorPath}pause.svg',
+                      color: kHyppeLightButtonText,
                     ),
                   ),
+                ),
+              ),
 
-                _buildProgressBar(width, height),
-                _buildTipsWidget(width, height),
+            _buildProgressBar(width, height),
+            // _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
 
-                if (isPlay)
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: _buildController(
-                      Colors.transparent,
-                      Colors.white,
-                      100,
-                      width,
-                      height,
-                    ),
-                  ),
+            if (isPlay)
+              Align(
+                alignment: Alignment.topCenter,
+                child: _buildController(
+                  Colors.transparent,
+                  Colors.white,
+                  100,
+                  width,
+                  height,
+                ),
+              ),
 
-                // Positioned(
-                //   left: 30,
-                //   top: height / 2,
-                //   child: Offstage(
-                //       offstage: orientation == Orientation.portrait,
-                //       child: InkWell(
-                //         onTap: () {
-                //           setState(() {
-                //             _isLock = !_isLock;
-                //           });
-                //         },
-                //         child: Container(
-                //           width: 40,
-                //           height: 40,
-                //           decoration: BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(20)),
-                //           child: Icon(
-                //             _isLock ? Icons.lock : Icons.lock_open,
-                //             color: Colors.white,
-                //           ),
-                //         ),
-                //       )),
-                // )
-              ],
-            ),
-          );
-        },
+            // Positioned(
+            //   left: 30,
+            //   top: height / 2,
+            //   child: Offstage(
+            //       offstage: orientation == Orientation.portrait,
+            //       child: InkWell(
+            //         onTap: () {
+            //           setState(() {
+            //             _isLock = !_isLock;
+            //           });
+            //         },
+            //         child: Container(
+            //           width: 40,
+            //           height: 40,
+            //           decoration: BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(20)),
+            //           child: Icon(
+            //             _isLock ? Icons.lock : Icons.lock_open,
+            //             color: Colors.white,
+            //           ),
+            //         ),
+            //       )),
+            // )
+          ],
+        ),
       );
     }
   }
 
   void onViewPlayerCreated(viewId) async {
-    widget.fAliplayer?.setPlayerView(viewId);
+    fAliplayer?.setPlayerView(viewId);
+    print("ini play auth ${auth}");
     switch (_playMode) {
       case ModeTypeAliPLayer.url:
-        widget.fAliplayer?.setUrl(_dataSourceMap?[DataSourceRelated.urlKey]);
+        fAliplayer?.setUrl(_dataSourceMap?[DataSourceRelated.urlKey]);
         break;
       case ModeTypeAliPLayer.sts:
-        widget.fAliplayer?.setVidSts(
+        fAliplayer?.setVidSts(
             vid: _dataSourceMap?[DataSourceRelated.vidKey],
             region: _dataSourceMap?[DataSourceRelated.regionKey],
             accessKeyId: _dataSourceMap?[DataSourceRelated.accessKeyId],
@@ -520,16 +509,16 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
             previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
         break;
       case ModeTypeAliPLayer.auth:
-        widget.fAliplayer?.setVidAuth(
-            vid: _dataSourceMap?[DataSourceRelated.vidKey],
-            region: _dataSourceMap?[DataSourceRelated.regionKey],
-            playAuth: _dataSourceMap?[DataSourceRelated.playAuth],
+        fAliplayer?.setVidAuth(
+            vid: widget.data?.apsaraId,
+            region: DataSourceRelated.defaultRegion,
+            playAuth: auth,
             definitionList: _dataSourceMap?[DataSourceRelated.definitionList],
             previewTime: _dataSourceMap?[DataSourceRelated.previewTime]);
 
         break;
       case ModeTypeAliPLayer.mps:
-        widget.fAliplayer?.setVidMps(_dataSourceMap!);
+        fAliplayer?.setVidMps(_dataSourceMap!);
         break;
       default:
     }
@@ -577,11 +566,12 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
     return GestureDetector(
       onTap: () {
         if (isPause) {
-          widget.fAliplayer?.play();
+          if (_showTipsWidget) fAliplayer?.prepare();
+          fAliplayer?.play();
           isPause = false;
           setState(() {});
         } else {
-          widget.fAliplayer?.pause();
+          fAliplayer?.pause();
           isPause = true;
           setState(() {});
         }
@@ -600,46 +590,74 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
 
   GestureDetector _buildSkipBack(Color iconColor, double barHeight) {
     return GestureDetector(
-      onTap: () {},
-      child: CustomIconWidget(
+      onTap: () {
+        if (!onTapCtrl) return;
+
+        int value;
+        int changevalue;
+
+        if (_videoDuration > 60000) {
+          value = 10000;
+        } else {
+          value = 5000;
+        }
+        changevalue = _currentPosition - value;
+        if (changevalue < 0) {
+          changevalue = 0;
+        }
+        fAliplayer?.requestBitmapAtPosition(changevalue);
+        setState(() {
+          _currentPosition = changevalue;
+        });
+        _inSeek = false;
+        setState(() {
+          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+            setState(() {
+              _showTipsWidget = false;
+            });
+          }
+        });
+        fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+      },
+      child: const CustomIconWidget(
         iconData: "${AssetPath.vectorPath}replay10.svg",
         defaultColor: false,
       ),
-      // Icon(
-      //   Icons.replay_10_outlined,
-      //   color: iconColor,
-      //   size: barHeight * 0.4,
-      // ),
     );
   }
 
   GestureDetector _buildSkipForward(Color iconColor, double barHeight) {
     return GestureDetector(
-      // onTap: skipForward,
+      onTap: () {
+        if (!onTapCtrl) return;
+        int value;
+        int changevalue;
+        if (_videoDuration > 60000) {
+          value = 10000;
+        } else {
+          value = 5000;
+        }
+        changevalue = _currentPosition + value;
+        if (changevalue > _videoDuration) {
+          changevalue = _videoDuration;
+        }
+        fAliplayer?.requestBitmapAtPosition(changevalue);
+        setState(() {
+          _currentPosition = changevalue;
+        });
+        _inSeek = false;
+        setState(() {
+          if (_currentPlayerState == FlutterAvpdef.completion && _showTipsWidget) {
+            setState(() {
+              _showTipsWidget = false;
+            });
+          }
+        });
+        fAliplayer?.seekTo(changevalue, GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+      },
       child: const CustomIconWidget(
         iconData: "${AssetPath.vectorPath}forward10.svg",
         defaultColor: false,
-      ),
-      //  Icon(
-      //   Icons.forward_10_outlined,
-      //   color: iconColor,
-      //   size: barHeight * 0.4,
-      // ),
-    );
-  }
-
-  ///缩略图
-  _buildThumbnail(double width, double height) {
-    return Container(
-      alignment: Alignment.center,
-      width: width,
-      height: height,
-      child: Wrap(
-        direction: Axis.vertical,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          widget.data?.mediaThumbEndPoint == '' ? Container() : Container(width: width, height: height, child: Image.network(widget.data?.mediaThumbEndPoint ?? '')),
-        ],
       ),
     );
   }
@@ -674,8 +692,8 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
                 setState(() {
                   _showTipsWidget = false;
                 });
-                widget.fAliplayer?.prepare();
-                widget.fAliplayer?.play();
+                fAliplayer?.prepare();
+                fAliplayer?.play();
               },
             ),
           ],
@@ -722,7 +740,7 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
                     setState(() {
                       _isShowMobileNetWork = false;
                     });
-                    widget.fAliplayer?.play();
+                    fAliplayer?.play();
                   },
                 ),
                 SizedBox(
@@ -829,11 +847,12 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
                             });
                           }
                         });
-                        widget.fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
+                        fAliplayer?.seekTo(value.ceil(), GlobalSettings.mEnableAccurateSeek ? FlutterAvpdef.ACCURATE : FlutterAvpdef.INACCURATE);
                       },
                       onChanged: (value) {
+                        print('on change');
                         if (_thumbnailSuccess) {
-                          widget.fAliplayer?.requestBitmapAtPosition(value.ceil());
+                          fAliplayer?.requestBitmapAtPosition(value.ceil());
                         }
                         setState(() {
                           _currentPosition = value.ceil();
@@ -843,62 +862,28 @@ class _PlayerFullScreenPageState extends State<PlayerFullScreenPage> with Widget
               ),
               GestureDetector(
                 onTap: () {
-                  print('full screen');
-                  print(orientation);
+                  print('sentuh aku $orientation');
+
                   if (orientation == Orientation.portrait) {
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
                     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
                   } else {
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-                    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
                   }
                 },
-                child: Icon(
-                  orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
-                  color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(19.0),
+                  child: Icon(
+                    orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-              // IconButton(
-              //   padding: EdgeInsets.zero,
-              //   icon: Icon(
-              //     orientation == Orientation.portrait ? Icons.fullscreen : Icons.fullscreen_exit,
-              //     color: Colors.white,
-              //   ),
-              //   onPressed: () {
-              //     if (orientation == Orientation.portrait) {
-              //       SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-              //     } else {
-              //       SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-              //     }
-              //   },
-              // ),
             ],
           ),
         ],
       ),
     );
-  }
-
-  //底部tab
-  _buildBottomNavigationBar(Orientation orientation) {
-    if (orientation == Orientation.portrait) {
-      return BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(label: "options", icon: Icon(Icons.control_point)),
-          BottomNavigationBarItem(label: "config", icon: Icon(Icons.control_point)),
-          BottomNavigationBarItem(label: "filter", icon: Icon(Icons.control_point)),
-          BottomNavigationBarItem(label: "cache", icon: Icon(Icons.control_point)),
-          BottomNavigationBarItem(label: "track", icon: Icon(Icons.control_point)),
-        ],
-        currentIndex: bottomIndex ?? 0,
-        onTap: (index) {
-          if (index != bottomIndex) {
-            setState(() {
-              bottomIndex = index;
-            });
-          }
-        },
-      );
-    }
   }
 }
