@@ -9,6 +9,9 @@ import 'package:hyppe/ux/routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/services/shared_preference.dart';
+import '../../../../../ux/path.dart';
+
 class OnInternalServerErrorBottomSheet extends StatelessWidget {
   final Function tryAgainButton;
   final Function? backButton;
@@ -49,9 +52,12 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: CustomTextButton(
-                    onPressed: backButton ?? () => Routing().moveBack(),
+                    onPressed: ()async{
+                      await SharedPreference().logOutStorage();
+                      Routing().moveReplacement(Routes.welcomeLogin);
+                    },
                     child: CustomTextWidget(
-                      textToDisplay: notifier.translate.back ?? 'back',
+                      textToDisplay: notifier.translate.logOut ?? 'back',
                       textStyle: Theme.of(context).textTheme.button,
                     ),
                   ),

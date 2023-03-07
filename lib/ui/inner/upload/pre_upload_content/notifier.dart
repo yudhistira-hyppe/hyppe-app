@@ -1159,8 +1159,6 @@ class PreUploadContentNotifier with ChangeNotifier {
       } else if (fetch.utilsState == UtilsState.getInterestsError) {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           // _routing.moveBack();
-        }, backButton: () {
-          // _routing.moveBack();
         });
       }
     }

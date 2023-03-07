@@ -27,120 +27,117 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            notifier.searchUsers != null
-                ? notifier.isLoading
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Expanded(
-                              child:
-                                  SizedBox(height: 50, child: CustomLoading())),
-                        ],
-                      )
-                    : (notifier.searchUsers?.isEmpty ?? false) &&
-                            notifier.searchController.text != ''
-                        ? Row(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                  child: Center(
-                                      child: Text(
-                                          '${notifier.language.noResultsFor} "${notifier.searchController.text}"'))),
-                            ],
-                          )
-                        : Builder(builder: (context) {
-                            final isHashTag = notifier.searchController.text.isHashtag();
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: isHashTag
-                                  ? ((notifier.searchHashtag?.length ?? 0) >= 5
-                                      ? 5
-                                      : notifier.searchHashtag?.length)
-                                  : ((notifier.searchUsers?.length ?? 0) >= 5
-                                      ? 5
-                                      : notifier.searchUsers?.length),
-                              itemBuilder: (context, index) {
-                                if (isHashTag) {
-                                  final hashTag =
-                                      notifier.searchHashtag?[index];
-                                  return HashtagItem(
-                                    onTap: (){
-                                      notifier.selectedHashtag = notifier.searchHashtag?[index];
-                                      notifier.layout = SearchLayout.mainHashtagDetail;
-                                    },
-                                      title: hashTag?.tag ?? 'No Tag',
-                                      count: hashTag?.total ?? 0,
-                                      countContainer:
-                                          notifier.language.posts ?? 'Posts');
-                                } else {
-                                  return SizedBox(
-                                    height: 60,
-                                    child: ListTile(
-                                      onTap: () {
-                                        System().navigateToProfile(
-                                            context,
-                                            notifier.searchUsers?[index]
-                                                    .email ??
-                                                '', isReplaced: false);
-                                      },
-                                      title: CustomTextWidget(
-                                        textToDisplay: notifier
-                                                .searchUsers?[index].fullName ??
-                                            '',
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      subtitle: Text(
-                                        notifier.searchUsers?[index].username ??
-                                            '',
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                      leading: StoryColorValidator(
-                                        haveStory: false,
-                                        featureType: FeatureType.pic,
-                                        child: CustomProfileImage(
-                                          width: 40,
-                                          height: 40,
-                                          onTap: () {},
-                                          imageUrl: System().showUserPicture(
-                                              notifier
-                                                      .searchUsers?[index]
-                                                      .avatar?[0]
-                                                      .mediaEndpoint ??
-                                                  ''),
-                                          following: true,
-                                          onFollow: () {},
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                            );
-                          })
-                : Container(),
-            notifier.searchUsers != null
-                ? notifier.searchController.text != ''
-                    ? ListTile(
+            notifier.isLoading
+                ? Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Expanded(
+                    child:
+                    SizedBox(height: 50, child: CustomLoading())),
+              ],
+            )
+                : (notifier.searchUsers?.isEmpty ?? false) &&
+                notifier.searchController.text != ''
+                ? Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Center(
+                        child: Text(
+                            '${notifier.language.noResultsFor} "${notifier.searchController.text}"'))),
+              ],
+            )
+                : Builder(builder: (context) {
+              final isHashTag = notifier.searchController.text.isEmpty ? false :
+              notifier.searchController.text.isHashtag();
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: isHashTag
+                    ? ((notifier.searchHashtag?.length ?? 0) >= 5
+                    ? 5
+                    : notifier.searchHashtag?.length)
+                    : ((notifier.searchUsers?.length ?? 0) >= 5
+                    ? 5
+                    : notifier.searchUsers?.length),
+                itemBuilder: (context, index) {
+                  if (isHashTag) {
+                    final hashTag =
+                    notifier.searchHashtag?[index];
+                    return HashtagItem(
+                        onTap: (){
+                          notifier.selectedHashtag = notifier.searchHashtag?[index];
+                          notifier.layout = SearchLayout.mainHashtagDetail;
+                        },
+                        title: hashTag?.tag ?? 'No Tag',
+                        count: hashTag?.total ?? 0,
+                        countContainer:
+                        notifier.language.posts ?? 'Posts');
+                  } else {
+                    return SizedBox(
+                      height: 60,
+                      child: ListTile(
                         onTap: () {
-                          notifier.limit = 5;
-                          notifier.tabIndex = 0;
-                          notifier.layout = SearchLayout.searchMore;
-                          // notifier.getDataSearch(context, isMove: true);
+                          System().navigateToProfile(
+                              context,
+                              notifier.searchUsers?[index]
+                                  .email ??
+                                  '', isReplaced: false);
                         },
                         title: CustomTextWidget(
-                          textToDisplay: 'See More',
+                          textToDisplay: notifier
+                              .searchUsers?[index].fullName ??
+                              '',
                           textStyle: Theme.of(context)
                               .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: kHyppePrimary),
+                              .bodyMedium,
+                          textAlign: TextAlign.start,
                         ),
-                      )
-                    : const SizedBox()
+                        subtitle: Text(
+                          notifier.searchUsers?[index].username ??
+                              '',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        leading: StoryColorValidator(
+                          haveStory: false,
+                          featureType: FeatureType.pic,
+                          child: CustomProfileImage(
+                            width: 40,
+                            height: 40,
+                            onTap: () {},
+                            imageUrl: System().showUserPicture(
+                                notifier
+                                    .searchUsers?[index]
+                                    .avatar?[0]
+                                    .mediaEndpoint ??
+                                    ''),
+                            following: true,
+                            onFollow: () {},
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
+            }),
+            notifier.searchController.text != ''
+                ? ListTile(
+              onTap: () {
+                notifier.limit = 5;
+                notifier.tabIndex = 0;
+                notifier.layout = SearchLayout.searchMore;
+                // notifier.getDataSearch(context, isMove: true);
+              },
+              title: CustomTextWidget(
+                textToDisplay: 'See More',
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: kHyppePrimary),
+              ),
+            )
                 : const SizedBox(),
           ],
         ),

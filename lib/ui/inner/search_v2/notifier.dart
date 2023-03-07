@@ -1034,6 +1034,39 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
+  Future navigateToSeeAllScreen3(BuildContext context, List<ContentData> data, int index, HyppeType type) async {
+    context.read<ReportNotifier>().inPosition = contentPosition.search;
+    focusNode.unfocus();
+    bool connect = await System().checkConnections();
+    if (connect) {
+
+      switch(type){
+        case HyppeType.HyppeVid:
+          context.read<ReportNotifier>().type = 'vid';
+          _routing.move(Routes.vidDetail,
+              argument: VidDetailScreenArgument(vidData: data[index])
+                ..postID = data[index].postID
+                ..backPage = true);
+          break;
+        case HyppeType.HyppeDiary:
+          context.read<ReportNotifier>().type = 'diary';
+          _routing.move(Routes.diaryDetail,
+              argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
+          break;
+        case HyppeType.HyppePic:
+          context.read<ReportNotifier>().type = 'pict';
+          _routing.move(Routes.picSlideDetailPreview,
+              argument: SlidedPicDetailScreenArgument(picData: data, index: index.toDouble(), page: picContentsQuery.page, limit: picContentsQuery.limit, type: TypePlaylist.search));
+
+      }
+    } else {
+      ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
+        _routing.moveBack();
+        navigateToSeeAllScreen3(context, data, index, type);
+      });
+    }
+  }
+
   void moveSearchMore() {
     print('kesini seacrhmore');
     focusNode1.unfocus();
