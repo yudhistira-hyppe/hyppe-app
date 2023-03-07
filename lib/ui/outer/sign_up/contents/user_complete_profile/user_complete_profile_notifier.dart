@@ -93,9 +93,7 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           Routing().moveBack();
           initCountry(context, reload: reload);
-        }, backButton: () {
-          Routing().moveBack();
-        });
+        },);
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -146,8 +144,6 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
           ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
             Routing().moveBack();
             initProvince(context, country: country, reload: reload);
-          }, backButton: () {
-            Routing().moveBack();
           });
         }
       }
@@ -157,9 +153,7 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           Routing().moveBack();
           initProvince(context, country: country, reload: reload);
-        }, backButton: () {
-          Routing().moveBack();
-        });
+        },);
       }
     } else {
       page--;
@@ -209,8 +203,6 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
           ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
             Routing().moveBack();
             initCity(context, province: province, reload: reload);
-          }, backButton: () {
-            Routing().moveBack();
           });
         }
       }
@@ -220,8 +212,6 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
         ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
           Routing().moveBack();
           initCity(context, province: province, reload: reload);
-        }, backButton: () {
-          Routing().moveBack();
         });
       }
     } else {

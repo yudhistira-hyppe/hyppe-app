@@ -98,6 +98,7 @@ class HyppeNotifier with ChangeNotifier {
           // bool isPreventRoute = SharedPreference().readStorage(SpKeys.isPreventRoute) ?? false;
           // 'Exception on authCheck with error ${errorData.toString()}'.logger();
           // if(!isPreventRoute){
+          SharedPreference().logOutStorage();
           _routing.moveReplacement(Routes.welcomeLogin);
           // }
         },

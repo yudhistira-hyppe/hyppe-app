@@ -169,7 +169,7 @@ class ShowBottomSheet {
     );
   }
 
-  static onInternalServerError(_, {Function? tryAgainButton, Function? backButton}) {
+  static onInternalServerError(_, {Function? tryAgainButton}) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: _,
@@ -189,7 +189,7 @@ class ShowBottomSheet {
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton ?? () {}, backButton: backButton),
+            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton ?? () {}),
           ),
         );
       },

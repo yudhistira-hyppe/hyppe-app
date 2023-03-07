@@ -84,11 +84,13 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                   autoFocus: true,
                                   onChanged: (e) {
                                     if (e.length > 2) {
-                                      if (lastInputValue != e) {
-                                        lastInputValue = e;
-                                        final isHashtag = e.isHashtag();
-                                        notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user);
-                                      }
+                                      Future.delayed(const Duration(milliseconds: 500), (){
+                                        if (lastInputValue != e) {
+                                          lastInputValue = e;
+                                          final isHashtag = e.isHashtag();
+                                          notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user);
+                                        }
+                                      });
                                     }
                                   }),
                             ),

@@ -104,7 +104,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                             width: 56,
                                             height: 56,
                                             decoration: BoxDecoration(
-                                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                              borderRadius: const BorderRadius.all(Radius.circular(28)),
                                               image: DecorationImage(
                                                 fit: BoxFit.contain,
                                                 image: imageProvider,

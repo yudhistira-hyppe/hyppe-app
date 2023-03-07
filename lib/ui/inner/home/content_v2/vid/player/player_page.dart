@@ -17,7 +17,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+// import 'package:connectivity_plus/connectivity_plus.dart';
 
 class PlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
@@ -90,7 +90,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   ImageProvider? _imageProvider;
 
   //当前网络状态
-  ConnectivityResult? _currentConnectivityResult;
+  // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
   bool _inSeek = false;
@@ -325,28 +325,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         });
       }
     });
-
-    _setNetworkChangedListener();
-  }
-
-  _setNetworkChangedListener() {
-    _networkSubscriptiion = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile) {
-        fAliplayer?.pause();
-        setState(() {
-          _isShowMobileNetWork = true;
-        });
-      } else if (result == ConnectivityResult.wifi) {
-        //从4G网络或者无网络切换到wifi
-        if (_currentConnectivityResult == ConnectivityResult.mobile || _currentConnectivityResult == ConnectivityResult.none) {
-          fAliplayer?.play();
-        }
-        setState(() {
-          _isShowMobileNetWork = false;
-        });
-      }
-      _currentConnectivityResult = result;
-    });
   }
 
   @override
@@ -356,7 +334,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.resumed:
-        _setNetworkChangedListener();
+        // _setNetworkChangedListener();
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {

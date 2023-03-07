@@ -17,7 +17,7 @@ import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+// import 'package:connectivity_plus/connectivity_plus.dart';
 
 class DiaryPlayerPage extends StatefulWidget {
   final ContentData? data;
@@ -82,7 +82,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   ImageProvider? _imageProvider;
 
   //当前网络状态
-  ConnectivityResult? _currentConnectivityResult;
+  // ConnectivityResult? _currentConnectivityResult;
 
   ///seek中
   bool _inSeek = false;
@@ -101,6 +101,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   StreamSubscription? _networkSubscriptiion;
 
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
+  AnimationController? _animationController;
 
   @override
   void initState() {
@@ -110,7 +111,24 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
     fAliplayer?.setAutoPlay(true);
-    fAliplayer?.isLoop();
+    fAliplayer?.setLoop(true);
+    var configMap = {
+      'mClearFrameWhenStop': true,
+    };
+    fAliplayer?.setConfig(configMap);
+
+    print("Hahahaha $_videoDuration");
+
+    _animationController = AnimationController(
+      /// [AnimationController]s can be created with `vsync: this` because of
+      /// [TickerProviderStateMixin].
+      vsync: this,
+      // duration: Duration(milliseconds: _videoDuration),
+    )..addListener(() {
+        setState(() {});
+      });
+
+    // _animationController?.repeat(reverse: false);
 
     if (widget.data?.apsaraId != '') {
       _playMode = ModeTypeAliPLayer.auth;
@@ -168,15 +186,17 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         Map jsonMap = json.decode(fetch.data.toString());
 
         auth = jsonMap['PlayAuth'];
-        setState(() {});
+        setState(() {
+          isloading = false;
+        });
         // widget.videoData?.fullContentPath = jsonMap['PlayUrl'];
       }
     } catch (e) {
+      setState(() {
+        isloading = false;
+      });
       // 'Failed to fetch ads data $e'.logger();
     }
-    setState(() {
-      isloading = false;
-    });
   }
 
   _initListener() {
@@ -188,12 +208,14 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       fAliplayer?.getPlayerName().then((value) => print("getPlayerName==${value}"));
       fAliplayer?.getMediaInfo().then((value) {
         _videoDuration = value['duration'];
+        _animationController?.duration = Duration(milliseconds: _videoDuration);
         setState(() {
           isPrepare = true;
         });
       });
     });
     fAliplayer?.setOnRenderingStart((playerId) {
+      _animationController?.forward();
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
@@ -324,28 +346,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
         });
       }
     });
-
-    _setNetworkChangedListener();
-  }
-
-  _setNetworkChangedListener() {
-    _networkSubscriptiion = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.mobile) {
-        fAliplayer?.pause();
-        setState(() {
-          _isShowMobileNetWork = true;
-        });
-      } else if (result == ConnectivityResult.wifi) {
-        //从4G网络或者无网络切换到wifi
-        if (_currentConnectivityResult == ConnectivityResult.mobile || _currentConnectivityResult == ConnectivityResult.none) {
-          fAliplayer?.play();
-        }
-        setState(() {
-          _isShowMobileNetWork = false;
-        });
-      }
-      _currentConnectivityResult = result;
-    });
   }
 
   @override
@@ -355,7 +355,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       case AppLifecycleState.inactive:
         break;
       case AppLifecycleState.resumed:
-        _setNetworkChangedListener();
+        // _setNetworkChangedListener();
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
@@ -372,6 +372,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   @override
   void dispose() {
+    _animationController?.dispose();
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
@@ -420,14 +421,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(40.0),
                 child: LinearProgressIndicator(
-                  value: AnimationController(
-                    /// [AnimationController]s can be created with `vsync: this` because of
-                    /// [TickerProviderStateMixin].
-                    vsync: this,
-                    duration: Duration(milliseconds: _videoDuration),
-                  )
-                      // value: _currentPosition / _videoDuration)
-                      .value,
+                  value: _animationController?.value,
                   backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
                   valueColor: AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
                 ),
