@@ -34,7 +34,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUtilsFetch(UtilsFetch(UtilsState.welcomeNotesError));
       },
       host: UrlConstants.welcomeNotes + "?langIso=$_langIso&countryCode=ID&pageNumber=0&pageRow=100",
@@ -105,7 +105,7 @@ class UtilsBlocV2 {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUtilsFetch(UtilsFetch(UtilsState.getEulaError));
       },
       host: UrlConstants.eula + "?langIso=$_langIso",

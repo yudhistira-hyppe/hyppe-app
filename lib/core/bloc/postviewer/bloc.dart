@@ -31,7 +31,7 @@ class PostViewerBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setPostViewerFetch(PostViewerFetch(PostViewerState.postViewerUserError));
       },
       headers: {
@@ -70,7 +70,7 @@ class PostViewerBloc {
       (errorData) {
         print('asasas');
         print(errorData);
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
       },
       headers: {
@@ -106,7 +106,7 @@ class PostViewerBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setPostViewerFetch(PostViewerFetch(PostViewerState.likeViewError));
       },
       headers: {

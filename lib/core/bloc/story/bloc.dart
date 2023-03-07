@@ -28,7 +28,7 @@ class StoryBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setStoriesFetch(StoryFetch(StoryState.getViewerStoriesError));
       },
       errorServiceType: ErrorType.getViewerStories,

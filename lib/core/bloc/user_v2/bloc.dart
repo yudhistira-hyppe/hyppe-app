@@ -56,7 +56,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.RecoverError));
         Dio().close(force: true);
       },
@@ -86,7 +86,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.RecoverError));
         Dio().close(force: true);
       },
@@ -143,10 +143,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          function();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.LoginError));
       },
       methodType: MethodType.post,
@@ -193,10 +190,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          function();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.LoginError));
       },
       methodType: MethodType.post,
@@ -244,10 +238,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          function();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.LoginError));
       },
       errorServiceType: ErrorType.login,
@@ -269,7 +260,7 @@ class UserBloc {
         setUserFetch(UserFetch(UserState.signUpSuccess, data: GenericResponse.fromJson(onResult.data).responseData));
       }
     }, (errorData) {
-      ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+      ShowBottomSheet.onInternalServerError(context);
       setUserFetch(UserFetch(UserState.signUpError));
       Dio().close(force: true);
     }, host: UrlConstants.signUp, data: data.toJson(), methodType: MethodType.post, withAlertMessage: true, withCheckConnection: false, errorServiceType: ErrorType.register, verbose: true);
@@ -288,7 +279,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.completeProfileError));
         Dio().close(force: true);
       },
@@ -315,7 +306,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.updateInterestError));
         Dio().close(force: true);
       },
@@ -386,7 +377,7 @@ class UserBloc {
         if (errorData.type == DioErrorType.cancel) {
           print("You canceled change picture photo");
         } else {
-          ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+          ShowBottomSheet.onInternalServerError(context);
         }
       },
       data: formData,
@@ -416,7 +407,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.changePasswordError));
         Dio().close(force: true);
       },
@@ -553,9 +544,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.verifyAccountError));
         Dio().close(force: true);
       },
@@ -600,10 +589,7 @@ class UserBloc {
       },
       (errorData) {
         print(errorData);
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          function();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.resendOTPError));
         Dio().close(force: true);
       },
@@ -630,7 +616,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.LoginGoogleError));
       },
       methodType: MethodType.post,
@@ -669,9 +655,7 @@ class UserBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setUserFetch(UserFetch(UserState.deleteAccountError));
         Dio().close(force: true);
       },

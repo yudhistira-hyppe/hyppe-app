@@ -169,10 +169,10 @@ class ShowBottomSheet {
     );
   }
 
-  static onInternalServerError(_, {Function? tryAgainButton}) {
+  static onInternalServerError(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
-      context: _,
+      context: context,
       enableDrag: false,
       isDismissible: false,
       backgroundColor: Colors.transparent,
@@ -182,14 +182,14 @@ class ShowBottomSheet {
           child: Container(
             height: SizeConfig.screenHeight,
             decoration: BoxDecoration(
-              color: Theme.of(_).colorScheme.surface,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8),
                 topRight: Radius.circular(8),
               ),
             ),
             padding: const EdgeInsets.all(0),
-            child: OnInternalServerErrorBottomSheet(tryAgainButton: tryAgainButton ?? () {}),
+            child: OnInternalServerErrorBottomSheet(),
           ),
         );
       },

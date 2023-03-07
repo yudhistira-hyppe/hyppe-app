@@ -27,7 +27,7 @@ class GoogleMapPlaceBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setGoogleMapPlaceFetch(GoogleMapPlaceFetch(GoogleMapPlaceState.getGoogleMapPlaceBlocError));
       },
       host: UrlConstants.getGoogleMapApis + "?input=$keyword&language=$language&key=$googleMapApiKey&sessiontoken=$sessiontoken",

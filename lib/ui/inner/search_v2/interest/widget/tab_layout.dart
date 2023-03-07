@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
@@ -10,15 +12,17 @@ import '../../../../constant/widget/custom_text_widget.dart';
 import '../../widget/grid_content_view.dart';
 
 class InterestTabLayout extends StatefulWidget {
-  SearchContentModel data;
-  InterestTabLayout({Key? key, required this.data}) : super(key: key);
+  // SearchContentModel data;
+  Interest interest;
+
+  InterestTabLayout({Key? key, required this.interest}) : super(key: key);
 
   @override
   State<InterestTabLayout> createState() => _InterestTabLayoutState();
 }
 
-class _InterestTabLayoutState extends State<InterestTabLayout> {
-  late HyppeType currentType;
+class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLayoutMixin{
+  HyppeType currentType = HyppeType.HyppeVid;
   final _scrollController = ScrollController();
 
   @override
@@ -26,10 +30,17 @@ class _InterestTabLayoutState extends State<InterestTabLayout> {
     currentType = HyppeType.HyppeVid;
     _scrollController.addListener(() {
       if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
-
+        final notifier = context.read<SearchNotifier>();
+        notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
       }
     });
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = context.read<SearchNotifier>();
+    notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
   }
   
   @override
@@ -40,7 +51,8 @@ class _InterestTabLayoutState extends State<InterestTabLayout> {
       HyppeType.HyppePic
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
-      return Column(
+      final data = notifier.interestContents[widget.interest.id];
+      return data != null ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -106,19 +118,21 @@ class _InterestTabLayoutState extends State<InterestTabLayout> {
                     final type = currentType;
                     switch(type){
                       case HyppeType.HyppeVid:
-                        return GridContentView(type: type, data: widget.data.vid ?? []);
+                        return GridContentView(type: type, data: data.vid ?? [], hasNext: notifier.hasNext,);
                       case HyppeType.HyppeDiary:
-                        return GridContentView(type: type, data: widget.data.diary ?? []);
+                        return GridContentView(type: type, data: data.diary ?? [], hasNext: notifier.hasNext,);
                       case HyppeType.HyppePic:
-                        return GridContentView(type: type, data: widget.data.pict ?? []);
+                        return GridContentView(type: type, data: data.pict ?? [], hasNext: notifier.hasNext,);
                     }
                   }
               ),
             ),
           )
         ],
-      );
+      ) : const Center(child: CustomLoading(),);
     });
   }
+
+
 }
 

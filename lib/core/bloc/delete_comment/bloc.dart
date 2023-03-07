@@ -35,8 +35,7 @@ class DeleteCommentBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context,
-            tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setDeleteCommentFetch(
             DeleteCommentPost(DeleteCommentState.deleteCommentError));
       },

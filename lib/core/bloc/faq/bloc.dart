@@ -33,7 +33,7 @@ class FAQBloc{
         }
       },
           (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setFAQFetch(FAQFetch(FAQState.faqError, data: '$errorData'));
       },
       data: arg.toJson(),

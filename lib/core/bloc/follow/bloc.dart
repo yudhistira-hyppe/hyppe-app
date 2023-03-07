@@ -57,7 +57,7 @@ class FollowBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setFollowFetch(FollowFetch(FollowState.followUserError));
       },
       data: data.toMap(),
@@ -84,7 +84,7 @@ class FollowBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setFollowFetch(FollowFetch(FollowState.followUserError));
       },
       headers: {

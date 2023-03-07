@@ -101,14 +101,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with Single
                     // physics: const NeverScrollableScrollPhysics(),
                     controller: _tabController,
                     children: (notifier.listInterest ?? []).map((e) {
-                      final _data = notifier.interestContents[e.id];
-                      if(_data != null){
-                        return InterestTabLayout(data: _data);
-                      }else {
-                        return Center(
-                          child: CustomTextWidget(textToDisplay: notifier.language.noData ?? 'No Data'),
-                        );
-                      }
+                      return InterestTabLayout(interest: e);
 
                     }).toList().sublist(0, (notifier.listInterest ?? []).length > 6 ? 6 : (notifier.listInterest ?? []).length),
                   ),

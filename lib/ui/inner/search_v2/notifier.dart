@@ -258,7 +258,7 @@ class SearchNotifier with ChangeNotifier {
       'Error onSearchLandingPage: $e'.logger();
     }finally{
       loadLandingPage = false;
-      getAllInterestContents(context);
+      // getAllInterestContents(context);
     }
   }
 
@@ -769,9 +769,9 @@ class SearchNotifier with ChangeNotifier {
           final lenghtPic = currentPic.length;
           currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
         }else if(type == TypeApiSearch.detailInterest){
-          currentVid = detailInterest?.vid ?? [];
-          currentDairy = detailInterest?.diary ?? [];
-          currentPic = detailInterest?.pict ?? [];
+          currentVid = interestContents[keys]?.vid ?? [];
+          currentDairy = interestContents[keys]?.diary ?? [];
+          currentPic = interestContents[keys]?.pict ?? [];
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
@@ -779,6 +779,16 @@ class SearchNotifier with ChangeNotifier {
         }
         if(currentSkip%12 != 0){
           throw 'hitApiGetDetail : preventing api because the system must reduce useless action';
+        }
+      }else{
+        if(type == TypeApiSearch.detailHashTag){
+          if(detailHashTag != null){
+            throw 'prevent data hashtag detail';
+          }
+        }else if(type == TypeApiSearch.detailInterest){
+          if(interestContents[keys] != null){
+            throw 'prevent data interest detail';
+          }
         }
       }
       final _res = await _hitApiGetDetail(context, keys, type, currentSkip);
@@ -796,11 +806,11 @@ class SearchNotifier with ChangeNotifier {
           }
         }else if(type == TypeApiSearch.detailInterest){
           if(!reload){
-            detailInterest?.vid = [...currentVid, ...(videos ?? [])];
-            detailInterest?.diary = [...currentDairy, ...(diaries ?? [])];
-            detailInterest?.pict = [...currentPic, ...(pics ?? [])];
+            interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
+            interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
+            interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
           }else{
-            detailInterest = _res;
+            interestContents[keys] = _res;
           }
         }
       }
