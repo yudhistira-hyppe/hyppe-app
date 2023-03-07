@@ -72,7 +72,6 @@ class MainNotifier with ChangeNotifier {
     // await CheckVersion().check(context, onlineVersion);
 
     if (!onUpdateProfile) {
-      SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, '');
       // context.read<HomeNotifier>().getAdsApsara(context, false);
 
       final utilsNotifier = UtilsBlocV2();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
@@ -29,6 +30,8 @@ class VidDetailScreen extends StatefulWidget {
 class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayoutMixin {
   final _notifier = VidDetailNotifier();
 
+  Orientation? orientation = Orientation.portrait;
+
   @override
   void afterFirstLayout(BuildContext context) {
     _notifier.initState(context, widget.arguments);
@@ -42,11 +45,30 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
   @override
   void dispose() {
     System().disposeBlock();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     super.dispose();
+  }
+
+  void changeOrientation(Orientation value) {
+    setState(() {
+      orientation = value;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    var x = 0.0;
+    var y = 0.0;
+    Orientation orientation = MediaQuery.of(context).orientation;
+
+    setState(() {});
+    var width = MediaQuery.of(context).size.width;
+    var height;
+    if (orientation == Orientation.portrait) {
+      height = width * 9.0 / 16.0;
+    } else {
+      height = MediaQuery.of(context).size.height;
+    }
     return ChangeNotifierProvider<VidDetailNotifier>(
       create: (context) => _notifier,
       child: Consumer<VidDetailNotifier>(
@@ -55,74 +77,42 @@ class _VidDetailScreenState extends State<VidDetailScreen> with AfterFirstLayout
             DataSourceRelated.vidKey: widget.arguments.vidData?.apsaraId,
             DataSourceRelated.regionKey: DataSourceRelated.defaultRegion,
           };
-
           return WillPopScope(
             onWillPop: notifier.onPop,
             child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: SafeArea(
-                child: Scaffold(
-                  resizeToAvoidBottomInset: false,
-                  body: Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (notifier.orientation == Orientation.portrait) VidDetailTop(data: notifier.data),
-                        Container(
-                          color: Colors.black,
-                          child: PlayerPage(
-                            playMode: ModeTypeAliPLayer.auth,
-                            dataSourceMap: map,
-                            data: widget.arguments.vidData,
-                          ),
-                        ),
-                        if (notifier.orientation == Orientation.portrait)
-                          _notifier.data != null
-                              ? Stack(
-                                  children: [
-                                    // AspectRatio(
-                                    //   aspectRatio: 16 / 9,
-                                    //   child: Container(
-                                    //     color: Colors.black,
-                                    //     child: VideoPlayerPage(
-                                    //       videoData: notifier.data,
-                                    //       afterView: () => notifier.updateView(context),
-                                    //     ),
-                                    //   ),
-                                    // ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    if (orientation == Orientation.portrait) VidDetailTop(data: notifier.data),
 
-                                    // Row(
-                                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    //   children: [
-                                    //     Visibility(
-                                    //       visible: true,
-                                    //       child: CustomTextButton(
-                                    //         onPressed: () => notifier.onPop(),
-                                    //         child: const DecoratedIconWidget(
-                                    //           Icons.arrow_back_ios,
-                                    //           size: 48 * 0.4,
-                                    //           color: Colors.white,
-                                    //         ),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                  ],
-                                )
-                              : VidDetailShimmer(),
-                        if (notifier.orientation == Orientation.portrait) VidDetailBottom(data: notifier.data),
-                        if (notifier.orientation == Orientation.portrait)
-                          _notifier.data != null && (_notifier.data?.allowComments ?? false)
-                              ? Expanded(
-                                  child: OnShowCommentBottomSheetV2(
-                                  fromFront: true,
-                                  postID: _notifier.data?.postID,
-                                ))
-                              : const SizedBox.shrink()
-                      ],
+                    Container(
+                      color: Colors.black,
+                      child: PlayerPage(
+                        playMode: ModeTypeAliPLayer.auth,
+                        dataSourceMap: map,
+                        data: widget.arguments.vidData,
+                        height: height,
+                        width: width,
+                      ),
                     ),
-                  ),
+                    Offstage(
+                      offstage: orientation == Orientation.landscape,
+                      child: VidDetailBottom(data: notifier.data),
+                    ),
+                    // if (orientation == Orientation.portrait)
+                    _notifier.data != null && (_notifier.data?.allowComments ?? false)
+                        ? Expanded(
+                            child: Offstage(
+                            offstage: orientation == Orientation.landscape,
+                            child: OnShowCommentBottomSheetV2(
+                              fromFront: true,
+                              postID: _notifier.data?.postID,
+                            ),
+                          ))
+                        : const SizedBox.shrink()
+                  ],
                 ),
               ),
             ),

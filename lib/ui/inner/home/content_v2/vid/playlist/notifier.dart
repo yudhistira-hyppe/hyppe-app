@@ -36,7 +36,7 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   bool _checkIsLoading = false;
   bool get checkIsLoading => _checkIsLoading;
 
-  Orientation? _orientation;
+  Orientation? _orientation = Orientation.portrait;
   Orientation? get orientation => _orientation;
 
   set orientation(val) {

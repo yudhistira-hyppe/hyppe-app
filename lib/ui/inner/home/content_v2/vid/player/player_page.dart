@@ -17,16 +17,28 @@ import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/player/player_full_screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:provider/provider.dart';
 
 class PlayerPage extends StatefulWidget {
   final ModeTypeAliPLayer playMode;
   final Map<String, dynamic> dataSourceMap;
   final ContentData? data;
 
-  const PlayerPage({Key? key, required this.playMode, required this.dataSourceMap, required this.data}) : super(key: key);
+  double? height;
+  double? width;
+
+  PlayerPage({
+    Key? key,
+    required this.playMode,
+    required this.dataSourceMap,
+    required this.data,
+    this.height,
+    this.width,
+  }) : super(key: key);
 
   @override
   State<PlayerPage> createState() => _PlayerPageState();
@@ -57,7 +69,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   int _bufferPosition = 0;
 
   //是否展示loading
-  bool _showLoading = false;
+  bool _showLoading = true;
 
   //loading进度
   int _loadingPercent = 0;
@@ -108,6 +120,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     getAuth();
     fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
     fAliplayer?.setAutoPlay(false);
+
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
     _playMode = widget.playMode;
@@ -364,7 +377,6 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     if (Platform.isIOS) {
       FlutterAliplayer.enableMix(false);
     }
@@ -399,103 +411,107 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     }
     if (isloading) {
       return SizedBox(
-        width: width,
-        height: height,
+        width: widget.width,
+        height: widget.height,
         // padding: EdgeInsets.only(bottom: 25.0),
         // child: _buildThumbnail(width, height),
       );
     } else {
-      AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: x, y: y, width: width, height: height);
+      AliPlayerView aliPlayerView = AliPlayerView(onCreated: onViewPlayerCreated, x: 0.0, y: 0.0, width: widget.width, height: widget.height);
       Future.delayed(const Duration(milliseconds: 500), () {
         if (!isPrepare) fAliplayer?.prepare();
       });
       return OrientationBuilder(
-        builder: (BuildContext context, Orientation orientation) {
-          return GestureDetector(
-            onTap: () {
-              onTapCtrl = true;
-              setState(() {});
-            },
-            child: Stack(
-              children: [
-                Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
+        builder: (BuildContext context, Orientation orientation) => GestureDetector(
+          onTap: () {
+            onTapCtrl = true;
+            setState(() {});
+          },
+          child: Stack(
+            children: [
+              Container(color: Colors.black, width: width, height: height, child: aliPlayerView),
 
-                ///====slide dan tombol fullscreen
-                if (isPlay)
-                  SizedBox(
-                    width: width,
-                    height: height,
-                    // padding: EdgeInsets.only(bottom: 25.0),
-                    child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
-                  ),
+              // /====slide dan tombol fullscreen
+              if (isPlay)
+                SizedBox(
+                  width: widget.width,
+                  height: widget.height,
+                  // padding: EdgeInsets.only(bottom: 25.0),
+                  child: Offstage(offstage: _isLock, child: _buildContentWidget(orientation)),
+                ),
 
-                if (!isPlay)
-                  VideoThumbnail(
+              if (!isPlay)
+                SizedBox(
+                  height: height,
+                  width: width,
+                  child: VideoThumbnail(
                     videoData: widget.data,
                     onDetail: false,
                     fn: () {},
                   ),
-                if (!isPlay && isPrepare)
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        print("ini play");
-                        isPlay = true;
-                        fAliplayer?.play();
-                        setState(() {});
-                      },
-                      child: SizedBox(
-                        width: width,
-                        child: const CustomIconWidget(
-                          defaultColor: false,
-                          iconData: '${AssetPath.vectorPath}pause.svg',
-                          color: kHyppeLightButtonText,
-                        ),
+                ),
+              if (!isPlay)
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      print("ini play");
+                      isPlay = true;
+                      fAliplayer?.prepare();
+                      fAliplayer?.play();
+                      setState(() {});
+                    },
+                    child: SizedBox(
+                      width: widget.width,
+                      height: widget.height,
+                      child: const CustomIconWidget(
+                        defaultColor: false,
+                        iconData: '${AssetPath.vectorPath}pause.svg',
+                        color: kHyppeLightButtonText,
                       ),
                     ),
                   ),
+                ),
 
-                _buildProgressBar(width, height),
-                _buildTipsWidget(width, height),
+              _buildProgressBar(widget.width ?? 0, widget.height ?? 0),
+              _buildTipsWidget(widget.width ?? 0, widget.height ?? 0),
 
-                if (isPlay)
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: _buildController(
-                      Colors.transparent,
-                      Colors.white,
-                      100,
-                      width,
-                      height,
-                    ),
+              if (isPlay)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: _buildController(
+                    Colors.transparent,
+                    Colors.white,
+                    100,
+                    widget.width ?? 0,
+                    widget.height ?? 0,
                   ),
+                ),
 
-                // Positioned(
-                //   left: 30,
-                //   top: height / 2,
-                //   child: Offstage(
-                //       offstage: orientation == Orientation.portrait,
-                //       child: InkWell(
-                //         onTap: () {
-                //           setState(() {
-                //             _isLock = !_isLock;
-                //           });
-                //         },
-                //         child: Container(
-                //           width: 40,
-                //           height: 40,
-                //           decoration: BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(20)),
-                //           child: Icon(
-                //             _isLock ? Icons.lock : Icons.lock_open,
-                //             color: Colors.white,
-                //           ),
-                //         ),
-                //       )),
-                // )
-              ],
-            ),
-          );
-        },
+              // Positioned(
+              //   left: 30,
+              //   top: height / 2,
+              //   child: Offstage(
+              //       offstage: orientation == Orientation.portrait,
+              //       child: InkWell(
+              //         onTap: () {
+              //           setState(() {
+              //             _isLock = !_isLock;
+              //           });
+              //         },
+              //         child: Container(
+              //           width: 40,
+              //           height: 40,
+              //           decoration: BoxDecoration(color: Colors.black.withAlpha(150), borderRadius: BorderRadius.circular(20)),
+              //           child: Icon(
+              //             _isLock ? Icons.lock : Icons.lock_open,
+              //             color: Colors.white,
+              //           ),
+              //         ),
+              //       )),
+              // )
+            ],
+          ),
+        ),
       );
     }
   }
@@ -840,12 +856,21 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
               ),
               GestureDetector(
                 onTap: () {
-                  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+                  print('sentuh aku $orientation');
+
                   if (orientation == Orientation.portrait) {
+                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
                     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
+                    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+                    // context.read<VidDetailNotifier>().orientation = Orientation.landscape;
+                    // context.read<VidDetailNotifier>().onUpdate();
                   } else {
-                    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-                    // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+                    // widget.function!(Orientation.landscape);
+
+                    // context.read<VidDetailNotifier>().orientation = Orientation.landscape;
+                    // context.read<VidDetailNotifier>().onUpdate();
                   }
                 },
                 child: Padding(
