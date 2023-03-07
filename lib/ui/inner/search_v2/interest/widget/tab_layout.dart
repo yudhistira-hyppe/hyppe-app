@@ -19,10 +19,16 @@ class InterestTabLayout extends StatefulWidget {
 
 class _InterestTabLayoutState extends State<InterestTabLayout> {
   late HyppeType currentType;
-  
+  final _scrollController = ScrollController();
+
   @override
   void initState() {
     currentType = HyppeType.HyppeVid;
+    _scrollController.addListener(() {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+
+      }
+    });
     super.initState();
   }
   
@@ -94,6 +100,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> {
           ),
           Expanded(
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Builder(
                   builder: (context) {
                     final type = currentType;

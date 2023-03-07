@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../constant/widget/custom_loading.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 
 class AccountSearchContent extends StatefulWidget {
@@ -28,8 +29,20 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
   @override
   void initState() {
     _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset >=
+          _scrollController.position.maxScrollExtent &&
+          !_scrollController.position.outOfRange) {
+        final notifier = context.read<SearchNotifier>();
+        final lenght = notifier.searchUsers?.length;
+        if (lenght != null) {
+          if (lenght % 12 == 0) {
+            notifier.getDataSearch(context, typeSearch: SearchLoadData.user, reload: false);
+          }
+        }
+      }
+    });
     super.initState();
   }
 
@@ -87,6 +100,13 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                           ),
                         ),
                       ),
+                      if(notifier.hasNext)
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: const CustomLoading(),
+                        )
                     ],
                   ),
                 ),

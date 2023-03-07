@@ -23,8 +23,9 @@ import 'hastag_tab.dart';
 // }
 
 class BottomDetail extends StatelessWidget {
+  final scrollController;
   SearchContentModel? data;
-  BottomDetail({Key? key, required this.data}) : super(key: key);
+  BottomDetail({Key? key, required this.data, required this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,18 +67,21 @@ class BottomDetail extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Builder(
-                builder: (context) {
-                  final type = notifier.hashtagTab;
-                  switch(type){
-                    case HyppeType.HyppeVid:
-                      return GridContentView(type: type, data: notifier.searchVid ?? []);
-                    case HyppeType.HyppeDiary:
-                      return GridContentView(type: type, data: notifier.searchDiary ?? []);
-                    case HyppeType.HyppePic:
-                      return GridContentView(type: type, data: notifier.searchPic ?? []);
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: Builder(
+                  builder: (context) {
+                    final type = notifier.hashtagTab;
+                    switch(type){
+                      case HyppeType.HyppeVid:
+                        return GridContentView(type: type, data: data?.vid ?? [], hasNext: notifier.hasNext,);
+                      case HyppeType.HyppeDiary:
+                        return GridContentView(type: type, data: data?.diary ?? [], hasNext: notifier.hasNext,);
+                      case HyppeType.HyppePic:
+                        return GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,);
+                    }
                   }
-                }
+              ),
             ),
           )
         ],

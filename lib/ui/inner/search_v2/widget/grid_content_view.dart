@@ -10,11 +10,19 @@ import '../../../constant/widget/custom_content_moderated_widget.dart';
 import '../../../constant/widget/custom_icon_widget.dart';
 import '../../home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 
-class GridContentView extends StatelessWidget {
+
+class GridContentView extends StatefulWidget {
   HyppeType type;
   List<ContentData> data;
   bool hasNext;
   GridContentView({Key? key, required this.type, required this.data, this.hasNext = false}) : super(key: key);
+
+  @override
+  State<GridContentView> createState() => _GridContentViewState();
+}
+
+class _GridContentViewState extends State<GridContentView>{
+
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +37,11 @@ class GridContentView extends StatelessWidget {
             mainAxisSpacing: 10,
             crossAxisCount: 3,
             childAspectRatio: 1.0,
-            children: data
+            children: widget.data
                 .map(
                   (e){
                 String thumb = System().showUserPicture(e.mediaThumbEndPoint) ?? '';
-                if(type == HyppeType.HyppePic){
+                if(widget.type == HyppeType.HyppePic){
                   thumb = (e.isApsara ?? false)
                       ? ( e.media?.imageInfo?[0].url ?? (e.mediaThumbEndPoint ?? ''))
                       : System().showUserPicture(e.mediaThumbEndPoint) ?? '';
@@ -42,7 +50,7 @@ class GridContentView extends StatelessWidget {
                       ? ( e.media?.videoList?[0].coverURL ?? (e.mediaThumbEndPoint ?? ''))
                       : System().showUserPicture(e.mediaThumbEndPoint) ?? '';
                 }
-                switch(type){
+                switch(widget.type){
                   case HyppeType.HyppePic:
                     return GestureDetector(
                       onTap: (){
@@ -196,19 +204,21 @@ class GridContentView extends StatelessWidget {
                 }
 
               },
-            )
-                .toList(),
+            ).toList(),
           ),
         ),
-        if(hasNext)
-        SliverToBoxAdapter(
-          child: Container(
-            width: double.infinity,
-              height: 50,
-              alignment: Alignment.center,
-              child: const CustomLoading()),
-        )
+        if(widget.hasNext)
+          SliverToBoxAdapter(
+            child: Container(
+                width: double.infinity,
+                height: 50,
+                alignment: Alignment.center,
+                child: const CustomLoading()),
+          )
       ],
     );
   }
+
+
 }
+

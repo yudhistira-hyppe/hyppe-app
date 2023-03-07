@@ -33,6 +33,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
 
 
 
+
+
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
@@ -59,6 +61,8 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         });
       },
     );
+
+
     if (notifier.searchContentFirstPage?.video == null) {
       Future.delayed(Duration.zero, () => notifier.onInitialSearchNew(context, FeatureType.vid));
     }

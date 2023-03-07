@@ -121,6 +121,9 @@ class SearchNotifier with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
+  bool _hasNext = true;
+  bool get hasNext => _hasNext;
+
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
@@ -375,6 +378,11 @@ class SearchNotifier with ChangeNotifier {
 
   set isLoading(bool val) {
     _isLoading = val;
+    notifyListeners();
+  }
+
+  set hasNext(bool val){
+    _hasNext = val;
     notifyListeners();
   }
 
@@ -723,7 +731,12 @@ class SearchNotifier with ChangeNotifier {
 
   void getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true}) async{
     try{
-      isLoading = true;
+      if(reload){
+        isLoading = true;
+      }else{
+        hasNext = true;
+      }
+
       List<ContentData> currentVid = [];
       List<ContentData> currentDairy = [];
       List<ContentData> currentPic = [];
@@ -777,7 +790,11 @@ class SearchNotifier with ChangeNotifier {
     }catch(e){
       'Error getDetail: $e'.logger();
     }finally{
-      isLoading = false;
+      if(reload){
+        isLoading = false;
+      }else{
+        hasNext = false;
+      }
     }
   }
 
@@ -812,11 +829,31 @@ class SearchNotifier with ChangeNotifier {
   }
 
   void getDataSearch(
-      BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all}) async {
-    isLoading = true;
+      BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async {
+    const _slimit = 12;
 
 
     try{
+      final lenghtVid = _searchVid?.length ?? 12;
+      final lenghtDiary = _searchDiary?.length ?? 12;
+      final lenghtPic = _searchPic?.length ?? 12;
+      var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+
+      final int currentSkip = typeSearch == SearchLoadData.all ? 0 :
+      typeSearch == SearchLoadData.hashtag ? (_searchHashtag?.length ?? 0) :
+      typeSearch == SearchLoadData.content ? skipContent :
+      typeSearch == SearchLoadData.user ? _searchUsers?.length ?? 0 : 0;
+      if((currentSkip != 0 && typeSearch == SearchLoadData.all)){
+        throw 'Error get all because the state is not from beginning $currentSkip';
+      }else if(currentSkip%_slimit != 0){
+        throw 'Error because we have to prevent the action for refusing wasting action';
+      }
+
+      if(reload){
+        isLoading = true;
+      }else{
+        hasNext = true;
+      }
 
       String email = SharedPreference().readStorage(SpKeys.email);
       String search = searchController.text;
@@ -828,24 +865,6 @@ class SearchNotifier with ChangeNotifier {
         focusNode.unfocus();
       }
 
-      const _slimit = 12;
-      final lenghtVid = _searchVid?.length ?? 12;
-      final lenghtDiary = _searchDiary?.length ?? 12;
-      final lenghtPic = _searchPic?.length ?? 12;
-
-
-      // _searchContent = null;
-      var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
-
-      final int currentSkip = typeSearch == SearchLoadData.all ? 0 :
-      typeSearch == SearchLoadData.hashtag ? (_searchHashtag?.length ?? 0) :
-      typeSearch == SearchLoadData.content ? skipContent :
-      typeSearch == SearchLoadData.user ? _searchUsers?.length ?? 0 : 0;
-      if((currentSkip != 0 && typeSearch != SearchLoadData.all) || (currentSkip != 0 && typeSearch != SearchLoadData.user) || (currentSkip != 0 && typeSearch != SearchLoadData.hashtag)){
-        throw 'Error get all because the state is not from beginning';
-      }else if(currentSkip%_slimit != 0){
-        throw 'Error because we have to prevent the action for refusing wasting action';
-      }
       switch(typeSearch){
         case SearchLoadData.all:
           param = {
@@ -859,7 +878,7 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": _slimit,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch);
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
         case SearchLoadData.user:
           param = {
@@ -873,7 +892,7 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": _slimit,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch);
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
         case SearchLoadData.hashtag:
           param = {
@@ -887,7 +906,7 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": _slimit,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch);
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
         case SearchLoadData.content:
           param = {
@@ -901,23 +920,24 @@ class SearchNotifier with ChangeNotifier {
             "skip": currentSkip,
             "limit": _slimit,
           };
-          await  _hitApiGetSearchData(context, param, typeSearch);
+          await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
 
       }
 
-
-      isLoading = false;
     }catch(e){
-      isLoading = false;
       'Error getAllDataSearch: $e'.logger();
     }finally{
-
+      if(reload){
+        isLoading = false;
+      }else{
+        hasNext = false;
+      }
     }
 
   }
 
-  Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req, SearchLoadData typeSearch) async{
+  Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req, SearchLoadData typeSearch, bool reload) async{
     try{
       final notifier = SearchContentBloc();
       await notifier.getSearchContent(context, req);
@@ -938,14 +958,14 @@ class SearchNotifier with ChangeNotifier {
             searchPic = [...(searchPic ?? []), ...(_res.pict ?? [])];
             break;
           case SearchLoadData.user:
-            if((searchUsers ?? []).contains(_res.users) && searchUsers?.length == 12){
+            if(!reload){
               searchUsers = [...(searchUsers ?? []), ...(_res.users ?? [])];
             }else{
               searchUsers = _res.users;
             }
             break;
           case SearchLoadData.hashtag:
-            if((searchHashtag ?? []).contains(_res.tags) && searchHashtag?.length == 12){
+            if(!reload){
               searchHashtag = [...(searchHashtag ?? []), ...(_res.tags ?? [])];
             }else{
               searchHashtag = _res.tags;

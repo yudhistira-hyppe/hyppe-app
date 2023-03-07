@@ -144,7 +144,10 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       final data = tags?[index];
                       if (data != null) {
                         return HashtagItem(
-                            onTap: () {},
+                            onTap: () {
+                              notifier.selectedHashtag = data;
+                              notifier.layout = SearchLayout.mainHashtagDetail;
+                            },
                             padding: const EdgeInsets.only(top: 10, bottom: 10),
                             title: '#${data.tag}',
                             count: data.total ?? 0,

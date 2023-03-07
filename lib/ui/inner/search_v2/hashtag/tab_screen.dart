@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/widget/hashtag_item.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
@@ -26,7 +27,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
         final lenght = notifier.searchHashtag?.length;
         if (lenght != null) {
           if (lenght % 12 == 0) {
-            notifier.getDataSearch(context, typeSearch: SearchLoadData.hashtag);
+            notifier.getDataSearch(context, typeSearch: SearchLoadData.hashtag, reload: false);
           }
         }
       }
@@ -61,27 +62,58 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
             ),
           ),
           Expanded(
-            child: values == null
-                ? _noResult(
-                    context, notifier.language.noResultsFor ?? '', keyword)
-                : values.isEmpty
-                    ? _noResult(
-                        context, notifier.language.noResultsFor ?? '', keyword)
-                    : ListView.builder(
-                        controller: _scrollController,
-                        itemCount: notifier.searchHashtag?.length ?? 0,
-                        itemBuilder: (context, index) {
-                          final data = notifier.searchHashtag?[index];
-                          if (data != null) {
-                            return HashtagItem(
-                                onTap: () {},
-                                title: '#${data.tag}',
-                                count: data.total ?? 0,
-                                countContainer:
-                                    notifier.language.posts ?? 'Posts');
-                          }
-                        }),
-          )
+              child: values == null
+                  ? _noResult(
+                      context, notifier.language.noResultsFor ?? '', keyword)
+                  : values.isEmpty
+                      ? _noResult(context, notifier.language.noResultsFor ?? '',
+                          keyword)
+                      : SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Column(
+                            children: [
+                              ...(List<Widget>.generate(
+                                notifier.searchHashtag?.length ?? 0,
+                                (int index) {
+                                  final data = notifier.searchHashtag?[index];
+                                  if (data != null) {
+                                    return HashtagItem(
+                                        onTap: () {
+                                          notifier.selectedHashtag = data;
+                                          notifier.layout = SearchLayout.mainHashtagDetail;
+                                        },
+                                        title: '#${data.tag}',
+                                        count: data.total ?? 0,
+                                        countContainer:
+                                            notifier.language.posts ?? 'Posts');
+                                  } else {
+                                    return const SizedBox.shrink();
+                                  }
+                                },
+                              ).toList()), ...(notifier.hasNext ?[Container(
+                                width: double.infinity,
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: const CustomLoading(),
+                              )] : [])
+                            ],
+                          ),
+                        )
+              // ListView.builder(
+              //             controller: _scrollController,
+              //             itemCount: notifier.searchHashtag?.length ?? 0,
+              //             itemBuilder: (context, index) {
+              //               final data = notifier.searchHashtag?[index];
+              //               if (data != null) {
+              //                 return HashtagItem(
+              //                     onTap: () {},
+              //                     title: '#${data.tag}',
+              //                     count: data.total ?? 0,
+              //                     countContainer:
+              //                         notifier.language.posts ?? 'Posts');
+              //               }
+              //             }),
+              )
         ],
       );
     });

@@ -66,6 +66,10 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                                   final hashTag =
                                       notifier.searchHashtag?[index];
                                   return HashtagItem(
+                                    onTap: (){
+                                      notifier.selectedHashtag = notifier.searchHashtag?[index];
+                                      notifier.layout = SearchLayout.mainHashtagDetail;
+                                    },
                                       title: hashTag?.tag ?? 'No Tag',
                                       count: hashTag?.total ?? 0,
                                       countContainer:
@@ -79,7 +83,7 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                                             context,
                                             notifier.searchUsers?[index]
                                                     .email ??
-                                                '');
+                                                '', isReplaced: false);
                                       },
                                       title: CustomTextWidget(
                                         textToDisplay: notifier
