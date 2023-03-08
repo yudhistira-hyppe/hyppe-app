@@ -460,6 +460,7 @@ class _AdsPopUpDialogState extends State<AdsPopUpDialog> {
                   });
                 }else{
                   final uri = Uri.parse(data.adsUrlLink ?? '');
+                  print('bottomAdsLayout ${data.adsUrlLink}');
                   if (await canLaunchUrl(uri)) {
                     adsView(widget.data, secondsVideo, isClick: true);
                     Navigator.pop(context);

@@ -158,6 +158,20 @@ extension IntegerExtension on int {
   }
 }
 
+extension ListExtentsion on List?{
+  bool isNotNullAndEmpty(){
+    if(this == null){
+      return true;
+    }else{
+      if(this!.isNotEmpty){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  }
+}
+
 extension SizeHelpers on Size {
   Size getFixSize(BuildContext context) {
     final heightScreen = context.getHeight();

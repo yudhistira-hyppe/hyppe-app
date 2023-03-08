@@ -33,11 +33,12 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
 
   @override
   void initState() {
+    final notifier = context.read<SearchNotifier>();
+    notifier.initDetailHashtag();
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        final notifier = context.read<SearchNotifier>();
         notifier.getDetail(context, widget.hashtag.tag ?? 'tag', TypeApiSearch.detailHashTag, reload: false);
       }
     });
@@ -48,7 +49,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
     notifier.getDetail(
-        context, widget.hashtag.tag ?? '', TypeApiSearch.detailHashTag);
+        context, widget.hashtag.tag ?? ' ', TypeApiSearch.detailHashTag);
   }
 
   @override
@@ -66,7 +67,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
           title: CustomTextWidget(
             textToDisplay: widget.isTitle
                 ? (notifier.language.popularHashtag ?? 'Popular Hashtag')
-                : (widget.hashtag.tag ?? ''),
+                : ('#${widget.hashtag.tag}' ?? ''),
             textStyle: context
                 .getTextTheme()
                 .bodyText1
@@ -87,13 +88,13 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                         children: [
                           Row(
                             children: [
-                              notifier.detailHashTag?.pict != null
+                              notifier.detailHashTag?.pict?.isNotNullAndEmpty() ?? false
                                   ? Builder(builder: (context) {
                                       final data =
-                                          notifier.detailHashTag!.pict![0];
-                                      final url = (data.isApsara ?? false)
+                                          notifier.detailHashTag?.pict?[0];
+                                      final url = data != null ? ((data.isApsara ?? false)
                                           ? ( data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? ''))
-                                          : System().showUserPicture(data.mediaThumbEndPoint) ?? '';
+                                          : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
                                       return CustomBaseCacheImage(
                                         imageUrl: url,
                                         memCacheWidth: 70,
@@ -141,33 +142,35 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(28)),
                                       assetPath:
-                                          '${AssetPath.pngPath}thumb_hashtag.png'),
+                                          '${AssetPath.pngPath}content-error.png'),
                               twelvePx,
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomTextWidget(
-                                    textToDisplay: widget.hashtag.tag ?? '',
-                                    textStyle: context
-                                        .getTextTheme()
-                                        .bodyText1
-                                        ?.copyWith(
-                                            fontWeight: FontWeight.w700,
-                                            color: context
-                                                .getColorScheme()
-                                                .onBackground),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  fourPx,
-                                  Text(
-                                    count > 500
-                                        ? "500+ ${notifier.language.posts}"
-                                        : "$count ${notifier.language.posts}",
-                                    style: const TextStyle(
-                                        fontSize: 12, color: kHyppeGrey),
-                                  )
-                                ],
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomTextWidget(
+                                      textToDisplay: widget.hashtag.tag ?? '',
+                                      textStyle: context
+                                          .getTextTheme()
+                                          .bodyText1
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                              color: context
+                                                  .getColorScheme()
+                                                  .onBackground),
+                                      textAlign: TextAlign.start,
+                                    ),
+                                    fourPx,
+                                    Text(
+                                      count > 500
+                                          ? "500+ ${notifier.language.posts}"
+                                          : "$count ${notifier.language.posts}",
+                                      style: const TextStyle(
+                                          fontSize: 12, color: kHyppeGrey),
+                                    )
+                                  ],
+                                ),
                               )
                             ],
                           )
@@ -182,6 +185,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                     Expanded(
                         child: BottomDetail(
                       data: notifier.detailHashTag,
+                      hashtag: widget.hashtag,
                       scrollController: _scrollController,
                     ))
                   ],

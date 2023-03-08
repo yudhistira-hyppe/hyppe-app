@@ -3,6 +3,7 @@ import 'package:hyppe/app.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/core/services/route_observer_service.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
@@ -19,6 +20,7 @@ import 'package:hyppe/ui/inner/search_v2/search_more_complete/screen.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 
+import '../../constant/widget/custom_spacer.dart';
 import 'interest/detail_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -141,31 +143,38 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
       ),
       // endDrawerEnableOpenDragGesture: true,
       // endDrawer: FilterSearchScreen(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: CustomSearchBar(
-                hintText: notifier.language.whatAreYouFindOut,
-                contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
-                focusNode: notifier.focusNode1,
-                controller: notifier.searchController1,
-                // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-                // onPressedIcon: () => notifier.onSearchPost(context),
-                // onTap: () => notifier.moveSearchMore(),
-                // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
-                onTap: (){
-                  notifier.layout = SearchLayout.search;
-                },
+      body: RefreshIndicator(
+        strokeWidth: 2.0,
+        color: context.getColorScheme().primary,
+        onRefresh: () => notifier.onSearchLandingPage(context),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: CustomSearchBar(
+                  hintText: notifier.language.whatAreYouFindOut,
+                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                  focusNode: notifier.focusNode1,
+                  controller: notifier.searchController1,
+                  // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
+                  // onPressedIcon: () => notifier.onSearchPost(context),
+                  // onTap: () => notifier.moveSearchMore(),
+                  // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
+                  onTap: (){
+                    notifier.layout = SearchLayout.search;
+                  },
+                ),
               ),
-            ),
-            const HashtagScreen(),
-            InterestScreen(onClick: (value){
-              notifier.selectedInterest = value;
-              notifier.layout = SearchLayout.interestDetail;
-            },),
-          ],
+              const HashtagScreen(),
+              InterestScreen(onClick: (value){
+                notifier.selectedInterest = value;
+                notifier.layout = SearchLayout.interestDetail;
+              },),
+              sixtyFourPx,
+              sixtyFourPx
+            ],
+          ),
         ),
       ),
     );

@@ -882,5 +882,7 @@
   "prepareYourContent": "Menyiapkan Kontenmu",
   "pleaseWaitThisProcessWillTakeSomeTime": "Silahkan tunggu, proses ini akan memakan waktu.",
   "moreContents": "Konten Lainnya",
-  "trendsForYou": "Tren Buat Kamu"
+  "trendsForYou": "Tren Buat Kamu",
+  "searchHistory": "Riwayat Pencarian",
+  "messageNoResult": "Cobalah gunakan kata kunci\nyang lebih relevan."
 }

@@ -881,6 +881,8 @@ class LocalizationModelV2 {
   String? prepareYourContent;
   String? pleaseWaitThisProcessWillTakeSomeTime;
   String? moreContents;
+  String? searchHistory;
+  String? messageNoResult;
 
   LocalizationModelV2({
     this.login,
@@ -1765,6 +1767,8 @@ class LocalizationModelV2 {
     this.prepareYourContent,
     this.pleaseWaitThisProcessWillTakeSomeTime,
     this.moreContents,
+    this.searchHistory,
+    this.messageNoResult
   });
 
   LocalizationModelV2.fromJson(Map<String, dynamic> json) {
@@ -2668,5 +2672,7 @@ class LocalizationModelV2 {
     prepareYourContent = json['prepareYourContent'];
     pleaseWaitThisProcessWillTakeSomeTime = json['pleaseWaitThisProcessWillTakeSomeTime'];
     moreContents = json['moreContents'];
+    searchHistory = json['searchHistory'];
+    messageNoResult = json['messageNoResult'];
   }
 }

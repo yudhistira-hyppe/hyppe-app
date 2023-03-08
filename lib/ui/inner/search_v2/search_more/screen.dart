@@ -4,7 +4,11 @@ import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
+import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
+import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/widget/new_autocomplete_search.dart';
@@ -17,7 +21,8 @@ class SearchMoreScreen extends StatefulWidget {
   _SearchMoreScreenState createState() => _SearchMoreScreenState();
 }
 
-class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerProviderStateMixin {
+class _SearchMoreScreenState extends State<SearchMoreScreen>
+    with SingleTickerProviderStateMixin, AfterFirstLayoutMixin {
   late TabController _tabController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? lastInputValue;
@@ -31,6 +36,12 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
   }
 
   @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = context.read<SearchNotifier>();
+    notifier.getHistories();
+  }
+
+  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
@@ -39,8 +50,16 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final error = context.select((ErrorService value) => value.getError(ErrorType.getPost));
     return Consumer<SearchNotifier>(builder: (context, notifier, child) {
+      final values = notifier.riwayat;
+      values?.sort((a, b) => DateTime.parse(b.datetime ?? '')
+          .compareTo(DateTime.parse(a.datetime ?? '')));
+      // if(values != null){
+      //   for(final data in values){
+      //     print('riwayat data: ${data.toJson(withID: true)}');
+      //   }
+      // }
+
       return Scaffold(
         body: SafeArea(
           child: Column(
@@ -63,10 +82,12 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: CustomSearchBar(
                                   hintText: notifier.language.whatAreYouFindOut,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 16 * SizeConfig.scaleDiagonal),
                                   focusNode: notifier.focusNode,
                                   controller: notifier.searchController,
                                   onSubmitted: (v) {
@@ -81,12 +102,18 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                                   },
                                   autoFocus: true,
                                   onChanged: (e) {
-                                    if (e.length > 2) {
-                                      Future.delayed(const Duration(milliseconds: 500), (){
+                                    final isHashtag = e.isHashtag();
+                                    if (e.length > (isHashtag ? 3: 2)) {
+                                      Future.delayed(
+                                          const Duration(milliseconds: 500),
+                                          () {
                                         if (lastInputValue != e) {
                                           lastInputValue = e;
-                                          final isHashtag = e.isHashtag();
-                                          notifier.getDataSearch(context, typeSearch: isHashtag ? SearchLoadData.hashtag : SearchLoadData.user);
+
+                                          notifier.getDataSearch(context,
+                                              typeSearch: isHashtag
+                                                  ? SearchLoadData.hashtag
+                                                  : SearchLoadData.user);
                                         }
                                       });
                                     }
@@ -95,7 +122,65 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
                           ),
                         ],
                       ),
-                      const Expanded(child: NewAutoCompleteSearch()),
+                      notifier.searchController.text.length > 2
+                          ? const Expanded(child: NewAutoCompleteSearch())
+                          : Builder(builder: (context) {
+                              if (values != null) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [...[
+                                    Container(
+                                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
+                                      child: CustomTextWidget(
+                                        textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w700, color: context.getColorScheme().onBackground),
+                                        textAlign: TextAlign.start,
+                                          textToDisplay: notifier.language.searchHistory ?? 'Search History'),
+                                    ),
+                                  ],...List.generate(
+                                      values.length > 10 ? 10 : values.length,
+                                      (index) => InkWell(
+                                        onTap: (){
+                                          notifier.searchController.text = values[index].keyword ?? '';
+                                          notifier.layout = SearchLayout.searchMore;
+                                        },
+                                        child: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 18,
+                                                  right: 20,
+                                                  top: 16,
+                                                  bottom: 16),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: CustomTextWidget(
+                                                      textToDisplay:
+                                                          values[index].keyword ??
+                                                              '',
+                                                      textAlign: TextAlign.start,
+                                                        textStyle: context.getTextTheme().bodyText2?.copyWith(fontWeight: FontWeight.w400, color: context.getColorScheme().onBackground)
+                                                    ),
+                                                  ),
+                                                  tenPx,
+                                                  InkWell(
+                                                    onTap: (){
+                                                      notifier.deleteHistory(values[index]);
+                                                    },
+                                                    child: const CustomIconWidget(
+                                                      iconData:
+                                                          '${AssetPath.vectorPath}close.svg',
+                                                      height: 14,
+                                                      width: 14,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                      )).toList()],
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            }),
                     ],
                   ),
                 ),

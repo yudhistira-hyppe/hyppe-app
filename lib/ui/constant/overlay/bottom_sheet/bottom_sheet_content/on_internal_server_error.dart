@@ -45,41 +45,23 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
               textOverflow: TextOverflow.clip,
             ),
             SizedBox(height: 37 * SizeConfig.scaleDiagonal),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Expanded(
-                //   flex: 1,
-                //   child: CustomTextButton(
-                //     onPressed: ()async{
-                //       await SharedPreference().logOutStorage();
-                //       Routing().moveReplacement(Routes.welcomeLogin);
-                //     },
-                //     child: CustomTextWidget(
-                //       textToDisplay: notifier.translate.logOut ?? 'back',
-                //       textStyle: Theme.of(context).textTheme.button,
-                //     ),
-                //   ),
-                // ),
-                CustomElevatedButton(
-                  child: CustomTextWidget(
-                    textToDisplay: notifier.translate.tryAgain ?? 'try again',
-                    textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                  ),
-                  width: 164 * SizeConfig.scaleDiagonal,
-                  height: 42 * SizeConfig.scaleDiagonal,
-                  function: () async{
-                    await SharedPreference().logOutStorage();
-                    Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
-                  },
-                  buttonStyle: ButtonStyle(
-                      elevation: MaterialStateProperty.all<double>(0.0),
-                      visualDensity: VisualDensity.adaptivePlatformDensity,
-                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                      shape:
-                          MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
-                ),
-              ],
+            CustomElevatedButton(
+              child: CustomTextWidget(
+                textToDisplay: notifier.translate.tryAgain ?? 'try again',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              ),
+              width: 164 * SizeConfig.scaleDiagonal,
+              height: 42 * SizeConfig.scaleDiagonal,
+              function: () async{
+                await SharedPreference().logOutStorage();
+                Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+              },
+              buttonStyle: ButtonStyle(
+                  elevation: MaterialStateProperty.all<double>(0.0),
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
+                  shape:
+                  MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
             ),
           ],
         ),

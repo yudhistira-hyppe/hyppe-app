@@ -30,11 +30,11 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
 
   @override
   void initState() {
-
-    // Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    notifier.initSearchAll();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
-      final notifier = Provider.of<SearchNotifier>(context, listen: false);
+
       notifier.tabIndex = _tabController.index;
       setState(() {
         _selectedIndex = _tabController.index;

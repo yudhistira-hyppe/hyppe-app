@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
@@ -10,6 +12,7 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 import '../../widget/grid_content_view.dart';
+import '../../widget/search_no_result_image.dart';
 
 class InterestTabLayout extends StatefulWidget {
   // SearchContentModel data;
@@ -31,7 +34,14 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     _scrollController.addListener(() {
       if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
         final notifier = context.read<SearchNotifier>();
-        notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
+        final key = widget.interest.id;
+        final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
+        final lenghtDiary = notifier.interestContents[key]?.diary?.length ?? 0;
+        final lenghtPic = notifier.interestContents[key]?.diary?.length ?? 0;
+        final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+        if(currentSkip%12 == 0){
+          notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
+        }
       }
     });
     super.initState();
@@ -40,7 +50,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
-    notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
+    notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest);
   }
   
   @override
@@ -111,20 +121,25 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                 }).toList()),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Builder(
-                  builder: (context) {
-                    final type = currentType;
-                    switch(type){
-                      case HyppeType.HyppeVid:
-                        return GridContentView(type: type, data: data.vid ?? [], hasNext: notifier.hasNext,);
-                      case HyppeType.HyppeDiary:
-                        return GridContentView(type: type, data: data.diary ?? [], hasNext: notifier.hasNext,);
-                      case HyppeType.HyppePic:
-                        return GridContentView(type: type, data: data.pict ?? [], hasNext: notifier.hasNext,);
+            child: RefreshIndicator(
+              strokeWidth: 2.0,
+              color: context.getColorScheme().primary,
+              onRefresh: () => notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Builder(
+                    builder: (context) {
+                      final type = currentType;
+                      switch(type){
+                        case HyppeType.HyppeVid:
+                          return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                        case HyppeType.HyppeDiary:
+                          return data.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                        case HyppeType.HyppePic:
+                          return data.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                      }
                     }
-                  }
+                ),
               ),
             ),
           )

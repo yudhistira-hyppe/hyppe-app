@@ -27,7 +27,8 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
         final lenght = notifier.searchHashtag?.length;
         if (lenght != null) {
           if (lenght % 12 == 0) {
-            notifier.getDataSearch(context, typeSearch: SearchLoadData.hashtag, reload: false);
+            notifier.getDataSearch(context,
+                typeSearch: SearchLoadData.hashtag, reload: false);
           }
         }
       }
@@ -68,35 +69,47 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                   : values.isEmpty
                       ? _noResult(context, notifier.language.noResultsFor ?? '',
                           keyword)
-                      : SingleChildScrollView(
-                          controller: _scrollController,
-                          child: Column(
-                            children: [
-                              ...(List<Widget>.generate(
-                                notifier.searchHashtag?.length ?? 0,
-                                (int index) {
-                                  final data = notifier.searchHashtag?[index];
-                                  if (data != null) {
-                                    return HashtagItem(
-                                        onTap: () {
-                                          notifier.selectedHashtag = data;
-                                          notifier.layout = SearchLayout.mainHashtagDetail;
-                                        },
-                                        title: '#${data.tag}',
-                                        count: data.total ?? 0,
-                                        countContainer:
-                                            notifier.language.posts ?? 'Posts');
-                                  } else {
-                                    return const SizedBox.shrink();
-                                  }
-                                },
-                              ).toList()), ...(notifier.hasNext ?[Container(
-                                width: double.infinity,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: const CustomLoading(),
-                              )] : [])
-                            ],
+                      : RefreshIndicator(
+                          strokeWidth: 2.0,
+                          color: context.getColorScheme().primary,
+                          onRefresh: () => notifier.getDataSearch(context),
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            child: Column(
+                              children: [
+                                ...(List<Widget>.generate(
+                                  notifier.searchHashtag?.length ?? 0,
+                                  (int index) {
+                                    final data = notifier.searchHashtag?[index];
+                                    if (data != null) {
+                                      return HashtagItem(
+                                          onTap: () {
+                                            notifier.selectedHashtag = data;
+                                            notifier.layout =
+                                                SearchLayout.mainHashtagDetail;
+                                          },
+                                          title: '#${data.tag}',
+                                          count: data.total ?? 0,
+                                          countContainer:
+                                              notifier.language.posts ??
+                                                  'Posts');
+                                    } else {
+                                      return const SizedBox.shrink();
+                                    }
+                                  },
+                                ).toList()),
+                                ...(notifier.hasNext
+                                    ? [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 50,
+                                          alignment: Alignment.center,
+                                          child: const CustomLoading(),
+                                        )
+                                      ]
+                                    : [])
+                              ],
+                            ),
                           ),
                         )
               // ListView.builder(
