@@ -7,6 +7,7 @@ import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/hashtag/widget/bottom_detail.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ux/routing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/arguments/hashtag_argument.dart';
@@ -47,8 +48,12 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   @override
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
+    var tag = widget.argument.hashtag.tag;
+    if(widget.argument.fromRoute){
+      tag = tag?.replaceAll(' ', '');
+    }
     notifier.getDetail(
-        context, widget.argument.hashtag.tag ?? ' ', TypeApiSearch.detailHashTag);
+        context, tag ?? ' ', TypeApiSearch.detailHashTag);
   }
 
   @override
@@ -60,7 +65,13 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
       return Scaffold(
         appBar: AppBar(
           leading: CustomIconButtonWidget(
-            onPressed: () => notifier.backFromSearchMore(),
+            onPressed: (){
+              if(widget.argument.fromRoute){
+                Routing().moveBack();
+              }else{
+                notifier.backFromSearchMore();
+              }
+            },
             defaultColor: false,
             iconData: "${AssetPath.vectorPath}back-arrow.svg",
             color: Theme.of(context).colorScheme.onSurface,
@@ -68,7 +79,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
           title: CustomTextWidget(
             textToDisplay: widget.argument.isTitle
                 ? (notifier.language.popularHashtag ?? 'Popular Hashtag')
-                : ('#${widget.argument.hashtag.tag}' ?? ''),
+                : ('#${widget.argument.hashtag.tag}' ),
             textStyle: context
                 .getTextTheme()
                 .bodyText1
@@ -151,7 +162,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomTextWidget(
-                                      textToDisplay: widget.argument.hashtag.tag ?? '',
+                                      textToDisplay: '#${widget.argument.hashtag.tag}',
                                       textStyle: context
                                           .getTextTheme()
                                           .bodyText1

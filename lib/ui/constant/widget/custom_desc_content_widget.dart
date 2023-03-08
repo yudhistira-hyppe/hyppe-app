@@ -98,7 +98,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
         style: _defaultDelimiterStyle,
         recognizer: TapGestureRecognizer()..onTap = _onSeeMore);
 
-    print('desc ${widget.desc}');
+    print('desc ${widget.desc} ');
     Widget result = LayoutBuilder(builder: (context, constraints) {
       assert(constraints.hasBoundedWidth);
       final maxWidth = constraints.maxWidth;
@@ -212,10 +212,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
                 : (TapGestureRecognizer()
                   ..onTap = () {
                     if (item.type == CaptionType.hashtag) {
-                      final fixKeyword = item.desc[0] == '@'
+                      final fixKeyword = item.desc[0] == '#'
                           ? item.desc.substring(1, item.desc.length)
                           : item.desc;
-                      Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword)));
+                      Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                     } else {
                       final fixUsername = item.desc[0] == '@'
                           ? item.desc.substring(1, item.desc.length)
@@ -271,7 +271,7 @@ class _CustomDescContentState extends State<CustomDescContent> {
             tempDesc = '';
           }
           descItems
-              .add(ItemDesc(desc: '$tempDesc ', type: CaptionType.hashtag));
+              .add(ItemDesc(desc: '${splitDesc[i]}  ', type: CaptionType.hashtag));
         } else {
           tempDesc = '$tempDesc ${splitDesc[i]}';
           if (i == (splitDesc.length - 1)) {
