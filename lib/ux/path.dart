@@ -66,6 +66,7 @@ class Routes {
 
   //search
   static const String searcMore = '/search-more';
+  static const String hashtagDetail = 'hashtag-detail';
 
   static const String verificationIDStep1 = '/verification-id-step-1';
   static const String verificationIDStep2 = '/verification-id-step-2';

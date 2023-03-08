@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_image_assets.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
@@ -10,6 +9,7 @@ import 'package:hyppe/ui/inner/search_v2/hashtag/widget/bottom_detail.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/arguments/hashtag_argument.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/services/system.dart';
@@ -18,9 +18,8 @@ import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/icon_button_widget.dart';
 
 class DetailHashtagScreen extends StatefulWidget {
-  bool isTitle;
-  Tags hashtag;
-  DetailHashtagScreen({Key? key, required this.isTitle, required this.hashtag})
+  HashtagArgument argument;
+  DetailHashtagScreen({Key? key, required this.argument})
       : super(key: key);
 
   @override
@@ -39,7 +38,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        notifier.getDetail(context, widget.hashtag.tag ?? 'tag', TypeApiSearch.detailHashTag, reload: false);
+        notifier.getDetail(context, widget.argument.hashtag.tag ?? 'tag', TypeApiSearch.detailHashTag, reload: false);
       }
     });
     super.initState();
@@ -49,13 +48,15 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   void afterFirstLayout(BuildContext context) {
     final notifier = context.read<SearchNotifier>();
     notifier.getDetail(
-        context, widget.hashtag.tag ?? ' ', TypeApiSearch.detailHashTag);
+        context, widget.argument.hashtag.tag ?? ' ', TypeApiSearch.detailHashTag);
   }
 
   @override
   Widget build(BuildContext context) {
-    final count = (widget.hashtag.total ?? 0);
+
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
+      final extraTag = notifier.detailHashTag?.tags;
+      final count = (widget.argument.hashtag.total ?? (extraTag.isNotNullAndEmpty() ? (extraTag?[0].total ?? 0) : 0));
       return Scaffold(
         appBar: AppBar(
           leading: CustomIconButtonWidget(
@@ -65,9 +66,9 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
             color: Theme.of(context).colorScheme.onSurface,
           ),
           title: CustomTextWidget(
-            textToDisplay: widget.isTitle
+            textToDisplay: widget.argument.isTitle
                 ? (notifier.language.popularHashtag ?? 'Popular Hashtag')
-                : ('#${widget.hashtag.tag}' ?? ''),
+                : ('#${widget.argument.hashtag.tag}' ?? ''),
             textStyle: context
                 .getTextTheme()
                 .bodyText1
@@ -150,7 +151,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomTextWidget(
-                                      textToDisplay: widget.hashtag.tag ?? '',
+                                      textToDisplay: widget.argument.hashtag.tag ?? '',
                                       textStyle: context
                                           .getTextTheme()
                                           .bodyText1
@@ -185,7 +186,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                     Expanded(
                         child: BottomDetail(
                       data: notifier.detailHashTag,
-                      hashtag: widget.hashtag,
+                      hashtag: widget.argument.hashtag,
                       scrollController: _scrollController,
                     ))
                   ],
