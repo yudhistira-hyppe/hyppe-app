@@ -125,6 +125,7 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
               notifier.searchController.text != ''
                   ? ListTile(
                       onTap: () {
+                        notifier.insertHistory(context, notifier.searchController.text);
                         notifier.limit = 5;
                         notifier.tabIndex = 0;
                         notifier.layout = SearchLayout.searchMore;

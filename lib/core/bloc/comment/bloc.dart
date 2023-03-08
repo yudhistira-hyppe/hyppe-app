@@ -62,7 +62,7 @@ class CommentBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setCommentFetch(CommentFetch(CommentState.commentsBlocError));
       },
       data: formData,

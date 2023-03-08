@@ -38,10 +38,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          function();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocError));
       },
       host: UrlConstants.addPostReaction,
@@ -74,7 +71,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setReactionFetch(ReactionFetch(ReactionState.addPostReactionBlocErrorV2));
       },
       headers: {
@@ -100,10 +97,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          function();
-        });
+        ShowBottomSheet.onInternalServerError(context);
         setReactionFetch(ReactionFetch(ReactionState.addReactOnCommentBlocError));
       },
       host: UrlConstants.addReactOnComment,
@@ -131,7 +125,7 @@ class ReactionBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setReactionFetch(ReactionFetch(ReactionState.getCommentReactionsBlocSuccess));
       },
       host: UrlConstants.getCommentReactions + "?postID=$postID&commentID=$commentID",

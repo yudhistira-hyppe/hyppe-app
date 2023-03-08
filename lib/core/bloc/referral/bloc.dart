@@ -62,7 +62,7 @@ class ReferralBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setReferralFetch(ReferralFetch(ReferralState.referralUserError));
       },
       headers: {
@@ -94,7 +94,7 @@ class ReferralBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setReferralFetch(ReferralFetch(ReferralState.referralUserError, message: errorData));
       },
       headers: {

@@ -10,6 +10,7 @@ import 'package:hyppe/ui/constant/widget/story_color_validator.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_shimmer.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/vid_search_content.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/search_no_result.dart';
 import 'package:provider/provider.dart';
 
 import '../../hashtag/widget/hashtag_item.dart';
@@ -52,28 +53,31 @@ class _AllSearchContentState extends State<AllSearchContent> {
       final pics = notifier.searchPic;
       final users = notifier.searchUsers;
       return !notifier.isLoading
-          ? SingleChildScrollView(
+          ? RefreshIndicator(
+        strokeWidth: 2.0,
+        color: context.getColorScheme().primary,
+        onRefresh: () => notifier.getDataSearch(context),
+            child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              (users?.isNotEmpty ?? false) ? widgetUserList(_themes, notifier) : const SizedBox(),
-              sixteenPx,
-              // ------video content search
-              (vids?.isNotEmpty ?? false) ? VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2) : const SizedBox(),
-              sixteenPx,
-              //------diaries content search
-              (diaries?.isNotEmpty ?? false)
-                  ? VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3)
-                  : const SizedBox(),
-              sixteenPx,
-              //------pic  content search
-              (pics?.isNotEmpty ?? false) ? VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4) : const SizedBox(),
-            ],
-          ),
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                widgetUserList(_themes, notifier),
+                sixteenPx,
+                // ------video content search
+                VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2),
+                sixteenPx,
+                //------diaries content search
+                VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3),
+                sixteenPx,
+                //------pic  content search
+                VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4),
+              ],
+            ),
         ),
-      )
+      ),
+          )
           : const AllSearchShimmer();
     });
 
@@ -96,14 +100,14 @@ class _AllSearchContentState extends State<AllSearchContent> {
           ),
         ),
         twelvePx,
-        Column(
+        users.isNotNullAndEmpty() ? Column(
           children: [
             ...List.generate(
               (users?.length ?? 0) >= 5 ? 5 : users?.length ?? 0,
               (index) => Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ListTile(
-                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
+                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? '',isReplaced: false),
                   contentPadding: EdgeInsets.zero,
                   title: Text("${users?[index].fullName}"),
                   subtitle: Text("${users?[index].username}"),
@@ -123,7 +127,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
               ),
             ),
           ],
-        ),
+        ) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
         sixteenPx,
         Container(
           padding: const EdgeInsets.only(left: 0, top: 16),
@@ -135,7 +139,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
           ),
         ),
         twelvePx,
-        Column(
+        tags.isNotNullAndEmpty() ? Column(
           children: [
             ...List.generate(
               (tags?.length ?? 0) >= 5 ? 5 : tags?.length ?? 0,
@@ -160,7 +164,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   ),
             ),
           ],
-        ),
+        ) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
       ],
     );
   }

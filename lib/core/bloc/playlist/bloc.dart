@@ -26,7 +26,7 @@ class PlaylistBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setPlaylistFetch(PlaylistFetch(PlaylistState.createNewPlaylistBlocError));
       },
       host: UrlConstants.createNewPlaylist,
@@ -50,7 +50,7 @@ class PlaylistBloc {
         }
       },
       (errorData) {
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+        ShowBottomSheet.onInternalServerError(context);
         setPlaylistFetch(PlaylistFetch(PlaylistState.getAllPlaylistBlocBlocError));
       },
       host: UrlConstants.getAllPlaylist + "?pageNumber=$page",

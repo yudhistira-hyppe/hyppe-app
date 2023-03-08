@@ -61,7 +61,7 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
               : ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 6,
+              itemCount: 5,
               itemBuilder: (context, index) {
                 return HashtagItem(
                   title: notifier.listHashtag?[index].tag ?? "",
@@ -69,7 +69,7 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
                   countContainer: notifier.language.posts ?? 'Posts',
                   onTap: () {
                     notifier.selectedHashtag = notifier.listHashtag?[index];
-                    notifier.layout = SearchLayout.mainHashtagDetail;
+                    notifier.layout = SearchLayout.hashtagDetail;
                   },
                 );})
         ],

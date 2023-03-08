@@ -30,11 +30,11 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
 
   @override
   void initState() {
-
-    // Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    notifier.initSearchAll();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
-      final notifier = Provider.of<SearchNotifier>(context, listen: false);
+
       notifier.tabIndex = _tabController.index;
       setState(() {
         _selectedIndex = _tabController.index;
@@ -99,11 +99,13 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                 onSubmitted: (v) {
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
+                                  notifier.getDataSearch(context);
                                   // notifier.onSearchPost(context, value: v, isMove: true);
                                 },
                                 onPressedIcon: () {
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
+                                  notifier.getDataSearch(context);
                                   // notifier.onSearchPost(context, isMove: true);
                                 },
                                 // onTap: () => notifier.moveSearchMore(),

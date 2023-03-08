@@ -90,10 +90,7 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
       if (fetch.utilsState == UtilsState.loadCountryError) {
         page--;
         loadMore = false;
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          initCountry(context, reload: reload);
-        },);
+        ShowBottomSheet.onInternalServerError(context,);
       }
     } else {
       ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: () {
@@ -141,19 +138,13 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
         if (fetch2.utilsState == UtilsState.loadAreaError) {
           page--;
           loadMore = false;
-          ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-            Routing().moveBack();
-            initProvince(context, country: country, reload: reload);
-          });
+          ShowBottomSheet.onInternalServerError(context);
         }
       }
       if (fetch.utilsState == UtilsState.loadCountryError) {
         page--;
         loadMore = false;
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          initProvince(context, country: country, reload: reload);
-        },);
+        ShowBottomSheet.onInternalServerError(context,);
       }
     } else {
       page--;
@@ -200,19 +191,13 @@ class UserCompleteProfileNotifier extends ChangeNotifier {
         if (fetch2.utilsState == UtilsState.loadCityError) {
           page--;
           loadMore = false;
-          ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-            Routing().moveBack();
-            initCity(context, province: province, reload: reload);
-          });
+          ShowBottomSheet.onInternalServerError(context);
         }
       }
       if (fetch.utilsState == UtilsState.loadAreaError) {
         page--;
         loadMore = false;
-        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-          Routing().moveBack();
-          initCity(context, province: province, reload: reload);
-        });
+        ShowBottomSheet.onInternalServerError(context);
       }
     } else {
       page--;

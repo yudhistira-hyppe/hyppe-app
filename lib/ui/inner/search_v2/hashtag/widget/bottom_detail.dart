@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/search_no_result_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../core/models/collection/search/search_content.dart';
@@ -25,7 +27,8 @@ import 'hastag_tab.dart';
 class BottomDetail extends StatelessWidget {
   final scrollController;
   SearchContentModel? data;
-  BottomDetail({Key? key, required this.data, required this.scrollController}) : super(key: key);
+  Tags hashtag;
+  BottomDetail({Key? key, required this.data, required this.hashtag, required this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,20 +70,31 @@ class BottomDetail extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: Builder(
-                  builder: (context) {
-                    final type = notifier.hashtagTab;
-                    switch(type){
-                      case HyppeType.HyppeVid:
-                        return GridContentView(type: type, data: data?.vid ?? [], hasNext: notifier.hasNext,);
-                      case HyppeType.HyppeDiary:
-                        return GridContentView(type: type, data: data?.diary ?? [], hasNext: notifier.hasNext,);
-                      case HyppeType.HyppePic:
-                        return GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,);
+            child: RefreshIndicator(
+              strokeWidth: 2.0,
+              color: context.getColorScheme().primary,
+              onRefresh: () => notifier.getDetail(context, hashtag.tag ?? 'tag', TypeApiSearch.detailHashTag),
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Builder(
+                    builder: (context) {
+                      final type = notifier.hashtagTab;
+                      final fixData = data;
+                      if(fixData != null){
+                        switch(type){
+                          case HyppeType.HyppeVid:
+                            return fixData.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          case HyppeType.HyppeDiary:
+                            return fixData.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          case HyppeType.HyppePic:
+                            return fixData.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                        }
+                      }else{
+                        return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                      }
+
                     }
-                  }
+                ),
               ),
             ),
           )

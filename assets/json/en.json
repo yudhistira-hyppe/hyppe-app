@@ -880,5 +880,7 @@
   "privacyPost": "Privacy Post",
   "prepareYourContent": "Prepare your content",
   "pleaseWaitThisProcessWillTakeSomeTime": "Please wait, this process will take some time.",
-  "moreContents": "More Contents"
+  "moreContents": "More Contents",
+  "searchHistory": "Search History",
+  "messageNoResult": "Try to use keywords\nthat are more relevant."
 }

@@ -95,7 +95,7 @@ class System {
     String? email = SharedPreference().readStorage(SpKeys.email);
     if (url != null && email != null && token != null) {
       if (url.isNotEmpty) {
-        return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email';
+        return '${Env.data.baseUrl}${Env.data.versionApi}$url?x-auth-token=$token&x-auth-user=$email&rundom=';
         // return Env.data.baseUrl +
         //     "/${Env.data.versionApi}/" +
         //     url +
@@ -1539,5 +1539,11 @@ class System {
       default:
         return '${AssetPath.pngPath}in_animal.png';
     }
+  }
+
+  String getCurrentDate() {
+    final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
+    return formatter.format(now);
   }
 }

@@ -115,9 +115,7 @@ class UserInterestNotifier extends ChangeNotifier with LoadingNotifier {
       notifyListeners();
     }
     if (fetch.utilsState == UtilsState.getInterestsError) {
-      ShowBottomSheet.onInternalServerError(context, tryAgainButton: () {
-        _routing.moveBack();
-      });
+      ShowBottomSheet.onInternalServerError(context);
     }
   }
 

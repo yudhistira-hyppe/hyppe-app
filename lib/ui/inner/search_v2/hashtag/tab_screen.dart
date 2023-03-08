@@ -7,6 +7,8 @@ import 'package:hyppe/ui/inner/search_v2/hashtag/widget/hashtag_item.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../widget/search_no_result.dart';
+
 class HashtagTabScreen extends StatefulWidget {
   const HashtagTabScreen({Key? key}) : super(key: key);
 
@@ -27,7 +29,8 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
         final lenght = notifier.searchHashtag?.length;
         if (lenght != null) {
           if (lenght % 12 == 0) {
-            notifier.getDataSearch(context, typeSearch: SearchLoadData.hashtag, reload: false);
+            notifier.getDataSearch(context,
+                typeSearch: SearchLoadData.hashtag, reload: false);
           }
         }
       }
@@ -61,42 +64,48 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                   fontWeight: FontWeight.w700),
             ),
           ),
-          Expanded(
-              child: values == null
-                  ? _noResult(
-                      context, notifier.language.noResultsFor ?? '', keyword)
-                  : values.isEmpty
-                      ? _noResult(context, notifier.language.noResultsFor ?? '',
-                          keyword)
-                      : SingleChildScrollView(
-                          controller: _scrollController,
-                          child: Column(
-                            children: [
-                              ...(List<Widget>.generate(
-                                notifier.searchHashtag?.length ?? 0,
-                                (int index) {
-                                  final data = notifier.searchHashtag?[index];
-                                  if (data != null) {
-                                    return HashtagItem(
-                                        onTap: () {
-                                          notifier.selectedHashtag = data;
-                                          notifier.layout = SearchLayout.mainHashtagDetail;
-                                        },
-                                        title: '#${data.tag}',
-                                        count: data.total ?? 0,
-                                        countContainer:
-                                            notifier.language.posts ?? 'Posts');
-                                  } else {
-                                    return const SizedBox.shrink();
-                                  }
-                                },
-                              ).toList()), ...(notifier.hasNext ?[Container(
-                                width: double.infinity,
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: const CustomLoading(),
-                              )] : [])
-                            ],
+          values.isNotNullAndEmpty() ? Expanded(
+              child: RefreshIndicator(
+                          strokeWidth: 2.0,
+                          color: context.getColorScheme().primary,
+                          onRefresh: () => notifier.getDataSearch(context),
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            child: Column(
+                              children: [
+                                ...(List<Widget>.generate(
+                                  notifier.searchHashtag?.length ?? 0,
+                                  (int index) {
+                                    final data = notifier.searchHashtag?[index];
+                                    if (data != null) {
+                                      return HashtagItem(
+                                          onTap: () {
+                                            notifier.selectedHashtag = data;
+                                            notifier.layout =
+                                                SearchLayout.mainHashtagDetail;
+                                          },
+                                          title: '#${data.tag}',
+                                          count: data.total ?? 0,
+                                          countContainer:
+                                              notifier.language.posts ??
+                                                  'Posts');
+                                    } else {
+                                      return const SizedBox.shrink();
+                                    }
+                                  },
+                                ).toList()),
+                                ...(notifier.hasNext
+                                    ? [
+                                        Container(
+                                          width: double.infinity,
+                                          height: 50,
+                                          alignment: Alignment.center,
+                                          child: const CustomLoading(),
+                                        )
+                                      ]
+                                    : [])
+                              ],
+                            ),
                           ),
                         )
               // ListView.builder(
@@ -113,16 +122,9 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
               //                         notifier.language.posts ?? 'Posts');
               //               }
               //             }),
-              )
+              ): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text, margin: const EdgeInsets.only(left: 16),)
         ],
       );
     });
-  }
-
-  Widget _noResult(BuildContext context, String message, String keyword) {
-    return CustomTextWidget(
-      textToDisplay: '$message "$keyword"',
-      textStyle: context.getTextTheme().bodyText1,
-    );
   }
 }

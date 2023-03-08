@@ -57,7 +57,7 @@ dependencies:
   # flutter_facebook_auth: ^4.3.0
   # twitter_login: ^4.2.2
   location: ^4.4.0
-  url_launcher: ^6.1.4
+  url_launcher: ^6.1.10
   sign_in_with_apple: ^4.0.0
   crypto: ^3.0.0 
   uuid: ^3.0.6

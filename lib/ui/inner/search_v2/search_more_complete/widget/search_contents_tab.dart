@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
@@ -6,6 +8,8 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/widget/grid_content_view.dart';
 import 'package:provider/provider.dart';
+
+import '../../widget/search_no_result_image.dart';
 
 class SearchContentsTab extends StatefulWidget {
   const SearchContentsTab({Key? key}) : super(key: key);
@@ -23,7 +27,14 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
       if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
         print('_SearchContentsTabState test ');
         final notifier = context.read<SearchNotifier>();
-        notifier.getDataSearch(context, typeSearch: SearchLoadData.content, reload: false);
+        final lenghtVid = notifier.searchVid?.length ?? 0;
+        final lenghtDiary = notifier.searchDiary?.length ?? 0;
+        final lenghtPic = notifier.searchPic?.length ?? 0;
+        final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+        if(currentSkip%12 == 0){
+          notifier.getDataSearch(context, typeSearch: SearchLoadData.content, reload: false);
+        }
+
 
       }
     });
@@ -105,20 +116,25 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
                 }).toList()),
           ),
           Expanded(
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              child: Builder(
-                builder: (context) {
-                  final type = notifier.contentTab;
-                  switch(type){
-                    case HyppeType.HyppeVid:
-                      return GridContentView(type: type, data: notifier.searchVid ?? [], hasNext: notifier.hasNext,);
-                    case HyppeType.HyppeDiary:
-                      return GridContentView(type: type, data: notifier.searchDiary ?? [], hasNext: notifier.hasNext);
-                    case HyppeType.HyppePic:
-                      return GridContentView(type: type, data: notifier.searchPic ?? [], hasNext: notifier.hasNext);
+            child: RefreshIndicator(
+              strokeWidth: 2.0,
+              color: context.getColorScheme().primary,
+              onRefresh: () => notifier.getDataSearch(context),
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Builder(
+                  builder: (context) {
+                    final type = notifier.contentTab;
+                    switch(type){
+                      case HyppeType.HyppeVid:
+                        return notifier.searchVid.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchVid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text,);
+                      case HyppeType.HyppeDiary:
+                        return notifier.searchDiary.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchDiary ?? [], hasNext: notifier.hasNext) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                      case HyppeType.HyppePic:
+                        return notifier.searchPic.isNotNullAndEmpty() ? GridContentView(type: type, data: notifier.searchPic ?? [], hasNext: notifier.hasNext) : SearchNoResultImage(locale: notifier.language, keyword: notifier.searchController.text);
+                    }
                   }
-                }
+                ),
               ),
             ),
           )

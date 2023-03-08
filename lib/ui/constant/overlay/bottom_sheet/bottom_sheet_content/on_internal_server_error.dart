@@ -13,9 +13,7 @@ import '../../../../../core/services/shared_preference.dart';
 import '../../../../../ux/path.dart';
 
 class OnInternalServerErrorBottomSheet extends StatelessWidget {
-  final Function tryAgainButton;
-  final Function? backButton;
-  const OnInternalServerErrorBottomSheet({Key? key, required this.tryAgainButton, this.backButton}) : super(key: key);
+  const OnInternalServerErrorBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,40 +45,23 @@ class OnInternalServerErrorBottomSheet extends StatelessWidget {
               textOverflow: TextOverflow.clip,
             ),
             SizedBox(height: 37 * SizeConfig.scaleDiagonal),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: CustomTextButton(
-                    onPressed: ()async{
-                      await SharedPreference().logOutStorage();
-                      Routing().moveReplacement(Routes.welcomeLogin);
-                    },
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.translate.logOut ?? 'back',
-                      textStyle: Theme.of(context).textTheme.button,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: CustomElevatedButton(
-                    child: CustomTextWidget(
-                      textToDisplay: notifier.translate.tryAgain ?? 'try again',
-                      textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
-                    ),
-                    width: 164 * SizeConfig.scaleDiagonal,
-                    height: 42 * SizeConfig.scaleDiagonal,
-                    function: tryAgainButton,
-                    buttonStyle: ButtonStyle(
-                        elevation: MaterialStateProperty.all<double>(0.0),
-                        visualDensity: VisualDensity.adaptivePlatformDensity,
-                        backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                        shape:
-                            MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
-                  ),
-                ),
-              ],
+            CustomElevatedButton(
+              child: CustomTextWidget(
+                textToDisplay: notifier.translate.tryAgain ?? 'try again',
+                textStyle: Theme.of(context).textTheme.button?.copyWith(color: kHyppeLightButtonText),
+              ),
+              width: 164 * SizeConfig.scaleDiagonal,
+              height: 42 * SizeConfig.scaleDiagonal,
+              function: () async{
+                await SharedPreference().logOutStorage();
+                Routing().moveAndRemoveUntil(Routes.welcomeLogin, Routes.root);
+              },
+              buttonStyle: ButtonStyle(
+                  elevation: MaterialStateProperty.all<double>(0.0),
+                  visualDensity: VisualDensity.adaptivePlatformDensity,
+                  backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
+                  shape:
+                  MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)))),
             ),
           ],
         ),

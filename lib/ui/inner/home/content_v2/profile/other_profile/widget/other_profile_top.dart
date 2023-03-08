@@ -193,7 +193,7 @@ class OtherProfileTop extends StatelessWidget {
                           e.logger();
                         }
                       } else {
-                        ShowBottomSheet.onInternalServerError(context, tryAgainButton: () => Routing().moveBack());
+                        ShowBottomSheet.onInternalServerError(context);
                       }
                     },
                   ),
