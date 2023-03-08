@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
@@ -10,7 +11,6 @@ import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/account_search_content.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/all_search_content.dart';
-import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/content_search.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more_complete/widget/search_contents_tab.dart';
 import 'package:provider/provider.dart';
 
@@ -97,16 +97,25 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                 focusNode: notifier.focusNode,
                                 controller: notifier.searchController,
                                 onSubmitted: (v) {
+                                  final isHashTag = v.isHashtag();
+                                  final lenght = v.length;
+                                  final maxLenght = isHashTag ? 4 : 3;
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
-                                  notifier.getDataSearch(context);
-                                  // notifier.onSearchPost(context, value: v, isMove: true);
+                                  if(lenght >= maxLenght){
+                                    notifier.getDataSearch(context);
+                                  }
                                 },
                                 onPressedIcon: () {
+                                  final isHashTag = notifier.searchController.text.isHashtag();
+                                  final lenght = notifier.searchController.text.length;
+                                  final maxLenght = isHashTag ? 4 : 3;
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
                                   notifier.getDataSearch(context);
-                                  // notifier.onSearchPost(context, isMove: true);
+                                  if(lenght >= maxLenght){
+                                    notifier.getDataSearch(context);
+                                  }
                                 },
                                 // onTap: () => notifier.moveSearchMore(),
                                 autoFocus: false,
