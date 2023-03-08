@@ -639,6 +639,8 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
+
+
   Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true}) async{
     try{
       if(reload){

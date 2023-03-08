@@ -52,7 +52,7 @@ class _GridContentViewState extends State<GridContentView>{
                         ? ( dataitem.media?.videoList?[0].coverURL ?? (dataitem.mediaThumbEndPoint ?? ''))
                         : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                   }
-                  print('GridContentView URL Image: $thumb');
+                  // print('GridContentView URL Image: $thumb');
 
                   switch(widget.type){
                     case HyppeType.HyppePic:

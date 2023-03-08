@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/bottom_sheet_content/comment_v2/on_show_comment_v2.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/player/player_page.dart';
@@ -11,9 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_bottom.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_shimmer.dart';
 
 class VidDetailScreen extends StatefulWidget {
   final VidDetailScreenArgument arguments;

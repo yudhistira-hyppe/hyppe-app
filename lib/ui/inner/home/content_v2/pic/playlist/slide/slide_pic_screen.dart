@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
+import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/inner/home/content_v2/pic/playlist/slide/pic_screen.dart';
 import 'package:hyppe/ux/path.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class SlidePicScreen extends StatefulWidget {
   State<SlidePicScreen> createState() => _SlidePicScreenState();
 }
 
-class _SlidePicScreenState extends State<SlidePicScreen> {
+class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMixin{
   @override
   void initState() {
     print('pindah screen ${widget.data.certified ?? false}');
@@ -56,6 +57,12 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
       System().disposeBlock();
     }
     super.initState();
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    final notifier = context.read<SlidedPicDetailNotifier>();
+    notifier.initDetailPost(context, widget.data.postID ?? '');
   }
 
   @override
@@ -78,7 +85,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
           sigmaX: 30,
           sigmaY: 30,
           // thumbnail: picData.content[arguments].contentUrl,
-          thumbnail: (widget.data.isApsara ?? false) ? widget.data.mediaThumbUri : widget.data.fullThumbPath,
+          thumbnail: (widget.data.isApsara ?? false) ? (widget.data.mediaThumbUri ?? (widget.data.media?.imageInfo?[0].url ?? '')) : widget.data.fullThumbPath,
         ),
         // Content
         (widget.data.reportedStatus == "BLURRED")
@@ -151,9 +158,9 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
                               onTapOnProfileImage: () => System().navigateToProfile(context, widget.data.email ?? ''),
                               spaceProfileAndId: eightPx,
                               featureType: FeatureType.pic,
-                              username: widget.data.username,
+                              username: (widget.data.username?.isNotEmpty ?? false) ? widget.data.username : notifier.savedData?.username,
                               isCelebrity: widget.data.privacy?.isCelebrity,
-                              imageUrl: '${System().showUserPicture(widget.data.avatar?.mediaEndpoint)}',
+                              imageUrl: '${System().showUserPicture((widget.data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ?  widget.data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
                               createdAt: '${System().readTimestamp(
                                 DateTime.parse(System().dateTimeRemoveT(widget.data.createdAt ?? '')).millisecondsSinceEpoch,
                                 context,
@@ -474,4 +481,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> {
       ),
     );
   }
+
+
 }

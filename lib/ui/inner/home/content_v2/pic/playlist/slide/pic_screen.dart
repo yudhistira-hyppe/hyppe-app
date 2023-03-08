@@ -71,7 +71,7 @@ class _PicPlaylishScreenState extends State<PicPlaylishScreen> {
         },
         child: CustomCacheImage(
           // imageUrl: picData.content[arguments].contentUrl,
-          imageUrl: (widget.contentData.isApsara ?? false) ? widget.contentData.mediaEndpoint : widget.contentData.fullThumbPath,
+          imageUrl: (widget.contentData.isApsara ?? false) ? (widget.contentData.mediaThumbUri ?? (widget.contentData.media?.imageInfo?[0].url ?? '')) : widget.contentData.fullThumbPath,
           imageBuilder: (ctx, imageProvider) {
             return Container(
               decoration: BoxDecoration(
