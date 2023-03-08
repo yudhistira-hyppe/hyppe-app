@@ -112,7 +112,6 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                   final maxLenght = isHashTag ? 4 : 3;
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
-                                  notifier.getDataSearch(context);
                                   if(lenght >= maxLenght){
                                     notifier.getDataSearch(context);
                                   }

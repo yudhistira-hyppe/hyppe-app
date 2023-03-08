@@ -169,8 +169,8 @@ class _SearchMoreScreenState extends State<SearchMoreScreen>
                                                     child: const CustomIconWidget(
                                                       iconData:
                                                           '${AssetPath.vectorPath}close.svg',
-                                                      height: 14,
-                                                      width: 14,
+                                                      height: 25,
+                                                      width: 25,
                                                     ),
                                                   )
                                                 ],
