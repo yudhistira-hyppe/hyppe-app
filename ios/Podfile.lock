@@ -1,4 +1,7 @@
 PODS:
+  - AliPlayerSDK_iOS (5.4.9.1-26507944):
+    - AliPlayerSDK_iOS/AliPlayerSDK (= 5.4.9.1-26507944)
+  - AliPlayerSDK_iOS/AliPlayerSDK (5.4.9.1-26507944)
   - AppAuth (1.6.0):
     - AppAuth/Core (= 1.6.0)
     - AppAuth/ExternalUserAgent (= 1.6.0)
@@ -75,22 +78,22 @@ PODS:
   - Firebase/Messaging (9.6.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 9.6.0)
-  - firebase_auth (4.2.5):
+  - firebase_auth (4.2.7):
     - Firebase/Auth (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.4.1):
+  - firebase_core (2.6.0):
     - Firebase/CoreOnly (= 9.6.0)
     - Flutter
-  - firebase_crashlytics (3.0.11):
+  - firebase_crashlytics (3.0.13):
     - Firebase/Crashlytics (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_dynamic_links (5.0.11):
+  - firebase_dynamic_links (5.0.13):
     - Firebase/DynamicLinks (= 9.6.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (14.2.1):
+  - firebase_messaging (14.2.3):
     - Firebase/Messaging (= 9.6.0)
     - firebase_core
     - Flutter
@@ -135,6 +138,10 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
+  - flutter_aliplayer (0.0.1):
+    - AliPlayerSDK_iOS (= 5.4.9.1-26507944)
+    - Flutter
+    - MJExtension
   - flutter_icmp_ping (0.0.1):
     - Flutter
   - flutter_image_compress (1.0.0):
@@ -241,6 +248,7 @@ PODS:
   - Mantle (2.2.0):
     - Mantle/extobjc (= 2.2.0)
   - Mantle/extobjc (2.2.0)
+  - MJExtension (3.4.1)
   - MLImage (1.0.0-beta3)
   - MLKitCommon (8.0.0):
     - GoogleDataTransport (~> 9.0)
@@ -336,6 +344,7 @@ DEPENDENCIES:
   - firebase_dynamic_links (from `.symlinks/plugins/firebase_dynamic_links/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - flutter_aliplayer (from `.symlinks/plugins/flutter_aliplayer/ios`)
   - flutter_icmp_ping (from `.symlinks/plugins/flutter_icmp_ping/ios`)
   - flutter_image_compress (from `.symlinks/plugins/flutter_image_compress/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
@@ -365,6 +374,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AliPlayerSDK_iOS
     - AppAuth
     - Cache
     - DKImagePickerController
@@ -392,6 +402,7 @@ SPEC REPOS:
     - HLSCachingReverseProxyServer
     - libwebp
     - Mantle
+    - MJExtension
     - MLImage
     - MLKitCommon
     - MLKitTextRecognition
@@ -436,6 +447,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+  flutter_aliplayer:
+    :path: ".symlinks/plugins/flutter_aliplayer/ios"
   flutter_icmp_ping:
     :path: ".symlinks/plugins/flutter_icmp_ping/ios"
   flutter_image_compress:
@@ -488,6 +501,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock/ios"
 
 SPEC CHECKSUMS:
+  AliPlayerSDK_iOS: e6a135eea616e85e4aea6fde5aaa7c6afa258229
   AppAuth: 8fca6b5563a5baef2c04bee27538025e4ceb2add
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   better_player: 2406bfe8175203c7a46fa15f9d778d73b12e1646
@@ -501,11 +515,11 @@ SPEC CHECKSUMS:
   ffmpeg_kit_flutter: 17e9f35a4ec996ac55051c20be05240f2a0b53e8
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: 5ae8b7cf8efce559a653aef0ad95bab3f427c351
-  firebase_auth: aa41092a9db430f98e655a8a34ca9d58a39b19de
-  firebase_core: 65194fd501b27a95f98e68a3f9c7ef9fd4f57c0a
-  firebase_crashlytics: 623a1cd96e4fdc59187b1f083c2bedd8cdd71d6a
-  firebase_dynamic_links: e320552826d11dcb9c683d5e671bb44144ac66c3
-  firebase_messaging: 1df072347da911bdfc702fed5dda6d5d6f651196
+  firebase_auth: 04ae739819f10246fc9b045e0a05e5d0ccb8869d
+  firebase_core: aa90fc1579fdde8642f6a8cb2a7c612660bb979b
+  firebase_crashlytics: 0ca8f57b919e40109803b6e9c22ddaa4264e1d75
+  firebase_dynamic_links: 650e2fe1dd37418cf7930a0b7ede347941c75346
+  firebase_messaging: 92470bdf6cc214954db62bae2a82e3a656bc3715
   FirebaseAuth: e4a5d3c36e778e41141b91cc861103a441d80bcc
   FirebaseCore: 2082fffcd855f95f883c0a1641133eb9bbe76d40
   FirebaseCoreDiagnostics: 99a495094b10a57eeb3ae8efa1665700ad0bdaa6
@@ -515,6 +529,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 0a115432c4e223c5ab20b0dbbe4cbefa793a0e8e
   FirebaseMessaging: a4d7910e4af663c9cbfc1071c5bef34651690949
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_aliplayer: ade3b95c37b64e61b2f23a590937d8e61fe47bdc
   flutter_icmp_ping: 2b159955eee0c487c766ad83fec224ae35e7c935
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
@@ -540,6 +555,7 @@ SPEC CHECKSUMS:
   light_compressor: 789ed7df289f0cd43f1dae8a6eed5d932b214c59
   location: 3a2eed4dd2fab25e7b7baf2a9efefe82b512d740
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
+  MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MLImage: 489dfec109f21da8621b28d476401aaf7a0d4ff4
   MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
   MLKitTextRecognition: f6fda8923564f6cebe2bb952a1adb0414e1d731b
@@ -566,7 +582,7 @@ SPEC CHECKSUMS:
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
-  url_launcher_ios: ae1517e5e344f5544fb090b079e11f399dfbe4d2
+  url_launcher_ios: fb12c43172927bb5cf75aeebd073f883801f1993
   video_thumbnail: c4e2a3c539e247d4de13cd545344fd2d26ffafd1
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
 

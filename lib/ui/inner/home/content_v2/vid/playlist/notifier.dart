@@ -36,6 +36,14 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
   bool _checkIsLoading = false;
   bool get checkIsLoading => _checkIsLoading;
 
+  Orientation? _orientation = Orientation.portrait;
+  Orientation? get orientation => _orientation;
+
+  set orientation(val) {
+    _orientation = val;
+    notifyListeners();
+  }
+
   set checkIsLoading(bool val) {
     _checkIsLoading = val;
     notifyListeners();
@@ -103,13 +111,12 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           );
           final fetch = notifier.followFetch;
           if (fetch.followState == FollowState.followUserSuccess) {
-            if(isUnFollow){
+            if (isUnFollow) {
               statusFollowing = StatusFollowing.none;
-            }else{
+            } else {
               statusFollowing = StatusFollowing.following;
             }
-
-          }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+          } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
             statusFollowing = StatusFollowing.none;
           }
           //   },
@@ -127,13 +134,12 @@ class VidDetailNotifier with ChangeNotifier, GeneralMixin {
           );
           final fetch = notifier.followFetch;
           if (fetch.followState == FollowState.followUserSuccess) {
-            if(isUnFollow){
+            if (isUnFollow) {
               statusFollowing = StatusFollowing.none;
-            }else{
+            } else {
               statusFollowing = StatusFollowing.following;
             }
-
-          }else if(statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following){
+          } else if (statusFollowing != StatusFollowing.none && statusFollowing != StatusFollowing.following) {
             statusFollowing = StatusFollowing.none;
           }
         }

@@ -26,6 +26,7 @@ import 'package:hyppe/ui/constant/page_not_found.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/confirm_delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/account_preferences/delete_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/content_preferences/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
 // import 'package:hyppe/ui/inner/home/content/wallet/screen_lama.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/see_all/diary_see_all_screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/help/FAQ/screen.dart';
@@ -73,6 +74,7 @@ import 'package:hyppe/ui/inner/home/content_v2/verification_id/verification_load
 
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/see_all/vid_see_all_screen.dart';
+import 'package:hyppe/ui/inner/home/widget/aliplayer.dart';
 import 'package:hyppe/ui/inner/main/screen.dart';
 import 'package:hyppe/ui/inner/message_v2/message_detail/screen.dart' as message_detail_v2;
 import 'package:hyppe/ui/inner/message_v2/message_detail/widget/image_preview_view.dart';
@@ -192,8 +194,11 @@ class Generate {
       case Routes.picSlideDetailPreview:
         return MaterialPageRoute(builder: (_) => SlidedPicDetail(arguments: settings.arguments as SlidedPicDetailScreenArgument));
 
+      // case Routes.diaryDetail:
+      //   return MaterialPageRoute(builder: (_) => HyppePlaylistDiaries(argument: settings.arguments as DiaryDetailScreenArgument));
+
       case Routes.diaryDetail:
-        return MaterialPageRoute(builder: (_) => HyppePlaylistDiaries(argument: settings.arguments as DiaryDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => DiaryPlayerPage(argument: settings.arguments as DiaryDetailScreenArgument));
 
       case Routes.storyDetail:
         return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
@@ -358,6 +363,8 @@ class Generate {
         return MaterialPageRoute(builder: (_) => const PaymentBoostSummaryScreen());
       case Routes.boostList:
         return MaterialPageRoute(builder: (_) => const ListBoostScreen());
+      case Routes.aliTest:
+        return MaterialPageRoute(builder: (_) => const AliPlayer());
     }
     return MaterialPageRoute(builder: (_) => PageNotFoundScreen());
   }

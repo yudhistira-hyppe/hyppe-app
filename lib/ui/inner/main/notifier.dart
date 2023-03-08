@@ -72,7 +72,6 @@ class MainNotifier with ChangeNotifier {
     // await CheckVersion().check(context, onlineVersion);
 
     if (!onUpdateProfile) {
-      SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, '');
       // context.read<HomeNotifier>().getAdsApsara(context, false);
 
       final utilsNotifier = UtilsBlocV2();
@@ -227,7 +226,7 @@ class MainNotifier with ChangeNotifier {
           .setTransports(
             ['websocket'],
           )
-          .setPath('/${Env.data.versionApi}/socket.io')
+          .setPath('${Env.data.versionApi}/socket.io')
           .disableAutoConnect()
           .build(),
     );
@@ -280,7 +279,7 @@ class MainNotifier with ChangeNotifier {
           .setTransports(
             ['websocket'],
           )
-          .setPath('/${Env.data.versionApi}/socket.io')
+          .setPath('${Env.data.versionApi}socket.io')
           .disableAutoConnect()
           .build(),
     );

@@ -129,8 +129,8 @@ extension StringDefine on String {
   int getMilliSeconds() {
     return DateTime.parse(System().dateTimeRemoveT(this)).millisecondsSinceEpoch;
   }
-  
-  bool isEmail(){
+
+  bool isEmail() {
     return (substring(0, 6) == 'email:');
   }
 

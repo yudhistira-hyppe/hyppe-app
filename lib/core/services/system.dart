@@ -117,8 +117,8 @@ class System {
     }
   }
 
-  String getTitleHyppe(HyppeType type){
-    switch(type){
+  String getTitleHyppe(HyppeType type) {
+    switch (type) {
       case HyppeType.HyppeVid:
         return 'HyppeVid';
       case HyppeType.HyppeDiary:
@@ -1164,7 +1164,7 @@ class System {
         }
       } catch (e) {
         if (kDebugMode) {
-          print('Interactive error with $e' );
+          print('Interactive error with $e');
         }
       }
     }
@@ -1411,8 +1411,91 @@ class System {
     return stateMinutes < 10 ? '0$stateMinutes' : '$stateMinutes';
   }
 
-  String getPathByInterest(String idInterest){
-    switch(idInterest){
+  static String getFileSizeDescription(int size) {
+    StringBuffer bytes = new StringBuffer();
+    if (size >= 1024 * 1024 * 1024) {
+      double i = (size / (1024.00 * 1024.00 * 1024.00));
+      bytes
+        ..write(i.toStringAsFixed(2))
+        ..write("G");
+    } else if (size >= 1024 * 1024) {
+      double i = (size / (1024.00 * 1024.00));
+      bytes
+        ..write(i.toStringAsFixed(2))
+        ..write("M");
+    } else if (size >= 1024) {
+      double i = (size / (1024.00));
+      bytes
+        ..write(i.toStringAsFixed(2))
+        ..write("K");
+    } else if (size < 1024) {
+      if (size <= 0) {
+        bytes.write("0B");
+      } else {
+        bytes
+          ..write(size)
+          ..write("B");
+      }
+    }
+    return bytes.toString();
+  }
+
+  ///格式化毫秒数为 xx:xx:xx这样的时间格式。
+  static String getTimeformatByMs(int ms) {
+    if (ms == null) {
+      return "00:00";
+    }
+    int seconds = (ms / 1000).round();
+    int finalSec = seconds % 60;
+    int finalMin = (seconds / 60 % 60).floor();
+    int finalHour = (seconds / 3600).round();
+
+    StringBuffer msBuilder = StringBuffer("");
+    if (finalHour > 9) {
+      msBuilder
+        ..write(finalHour)
+        ..write(":");
+    } else if (finalHour > 0) {
+      msBuilder
+        ..write("0")
+        ..write(finalHour)
+        ..write(":");
+    } else {
+      msBuilder
+        ..write("")
+        ..write("");
+    }
+
+    if (finalMin > 9) {
+      msBuilder
+        ..write(finalMin)
+        ..write(":");
+    } else if (finalMin > 0) {
+      msBuilder
+        ..write("0")
+        ..write(finalMin)
+        ..write(":");
+    } else {
+      msBuilder
+        ..write("00")
+        ..write(":");
+    }
+
+    if (finalSec > 9) {
+      msBuilder..write(finalSec);
+    } else if (finalSec > 0) {
+      msBuilder
+        ..write("0")
+        ..write(finalSec);
+    } else {
+      msBuilder.write("00");
+    }
+
+    return msBuilder.toString();
+  }
+
+  String getPathByInterest(String idInterest) {
+    switch (idInterest) {
       case '613bc4da9ec319617aa6c396':
         return '${AssetPath.pngPath}in_animal.png';
       case '613bc4da9ec319617aa6c399':
@@ -1458,7 +1541,7 @@ class System {
     }
   }
 
-  String getCurrentDate(){
+  String getCurrentDate() {
     final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return formatter.format(now);

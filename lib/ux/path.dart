@@ -125,4 +125,6 @@ class Routes {
   static const String boostUpload = '/boost-upload';
   static const String boostPaymentSummary = '/boost-payment-summary';
   static const String boostList = '/boost-list';
+
+  static const String aliTest = '/ali-test';
 }

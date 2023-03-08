@@ -92,3 +92,7 @@ enum contentPosition { home, myprofile, otherprofile, search, searchFirst, seeAl
 enum CaptionType { normal, mention, hashtag, seeMore, seeLess }
 
 enum SpeedInternet { fast, medium, slow }
+
+enum ModeTypeAliPLayer { url, sts, auth, mps }
+
+enum VideoShowMode { grid, screen }

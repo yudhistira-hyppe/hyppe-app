@@ -89,7 +89,7 @@ class TicketModel {
         map['fsTargetUri'].forEach((v) => fsSourceName?.add(v));
       }
       for (var i = 0; i < fsSourceName!.length; i++) {
-        imageUrl.add('${Env.data.baseUrl}/${Env.data.versionApi}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser');
+        imageUrl.add('${Env.data.baseUrl}${Env.data.versionApi}ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser');
       }
     }
     version = map['version'];
@@ -227,7 +227,7 @@ class TicketDetail {
         map['fsTargetUri'].forEach((v) => fsTargetUri?.add(v));
       }
       for (var i = 0; i < fsTargetUri!.length; i++) {
-        ticketUrls.add(TicketUrl(localDir: fsTargetUri![i], realUrl: '${Env.data.baseUrl}/${Env.data.versionApi}/ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser'));
+        ticketUrls.add(TicketUrl(localDir: fsTargetUri![i], realUrl: '${Env.data.baseUrl}${Env.data.versionApi}ticket/detail/supportfile/$id/$i?x-auth-token=$token&x-auth-user=$emailUser'));
       }
     }
 

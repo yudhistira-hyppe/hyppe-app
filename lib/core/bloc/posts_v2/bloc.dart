@@ -449,4 +449,35 @@ class PostsBloc {
       methodType: MethodType.post,
     );
   }
+
+  Future getAuthApsara(
+    BuildContext context, {
+    required String apsaraId,
+  }) async {
+    final email = SharedPreference().readStorage(SpKeys.email);
+
+    setPostsFetch(PostsFetch(PostsState.loading));
+    var url = UrlConstants.apsaraauth + apsaraId;
+
+    await _repos.reposPost(
+      context,
+      (onResult) {
+        if ((onResult.statusCode ?? 300) > HTTP_CODE) {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+        } else {
+          setPostsFetch(PostsFetch(PostsState.videoApsaraSuccess, data: onResult));
+        }
+      },
+      (errorData) {
+        setPostsFetch(PostsFetch(PostsState.videoApsaraError));
+      },
+      headers: {
+        'x-auth-user': email,
+      },
+      withAlertMessage: false,
+      withCheckConnection: true,
+      host: url,
+      methodType: MethodType.get,
+    );
+  }
 }

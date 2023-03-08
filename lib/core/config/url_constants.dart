@@ -10,17 +10,17 @@ class UrlConstants {
   /// Versioning
   static const String apiV0 = '';
 
-  static const String apiV1 = 'v1';
+  static const String apiV1 = '/v1/';
 
-  static const String apiV2 = 'v2';
+  static const String apiV2 = '/v2/';
 
-  static const String apiV3 = 'v3';
+  static const String apiV3 = '/v3/';
 
-  static const String apiV4 = 'v4';
+  static const String apiV4 = '/v4/';
 
-  static const String apiV5 = 'v5';
+  static const String apiV5 = '/v5/';
 
-  static const String apiV6 = 'v6';
+  static const String apiV6 = '/v6/';
 
   /// Production Base url
   // static const String productionBaseApi = "https://prod.hyppe.app";
@@ -34,7 +34,8 @@ class UrlConstants {
   static const String stagingBaseApi = "https://s1.hyppe.cloud";
   // static const String stagingBaseApi = "https://staging.hyppe.app";
   // static const String stagingBaseApi = "http://192.168.0.135:5002";
-  static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
+  // static const String stagingUploadBaseApi = "https://stagingupload.hyppe.app";
+  static const String stagingUploadBaseApi = "https://s1.hyppe.cloud";
 
   // static const String stagingBaseApi = "http://192.168.43.179/erp/";
 
@@ -294,6 +295,9 @@ class UrlConstants {
 
   /// post => Get Notification
   static const String getNotification = "$postRouteV2/getnotification";
+
+  /// post => Get auth apsara
+  static const String apsaraauth = "$postRouteV2/apsaraauth?apsaraId=";
 
   /// post => Get Notification
   static const String getBoostMaster = "$postRoute/boostmaster";

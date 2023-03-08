@@ -40,6 +40,7 @@ class HyppeNotifier with ChangeNotifier {
 
   Future handleStartUp(bool mounted) async {
     final fixContext = materialAppKey.currentContext!;
+    SharedPreference().writeStorage(SpKeys.datetimeLastShowAds, '');
     // try{
     _system.getPackageInfo().then((value) => appVersion = '${value.version}+${value.buildNumber}');
     await fixContext.read<CameraDevicesNotifier>().prepareCameraPage(onError: (e) {

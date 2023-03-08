@@ -361,7 +361,7 @@ class ContentData {
   String? concatThumbUri() {
     final fixMedia = mediaThumbEndPoint ?? mediaEndpoint ?? '';
     if (fixMedia.isNotEmpty) {
-      return Env.data.baseUrl + "/${Env.data.versionApi}/" + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
+      return Env.data.baseUrl + "${Env.data.versionApi}" + fixMedia + '?x-auth-token=${SharedPreference().readStorage(SpKeys.userToken)}&x-auth-user=${SharedPreference().readStorage(SpKeys.email)}';
     } else {
       return fixMedia;
     }
@@ -370,7 +370,7 @@ class ContentData {
   String? concatContentUri() {
     final fixMedia = mediaEndpoint ?? '';
     if (fixMedia.isNotEmpty) {
-      return Env.data.baseUrl + "/${Env.data.versionApi}/" + (mediaEndpoint ?? '');
+      return Env.data.baseUrl + "${Env.data.versionApi}" + (mediaEndpoint ?? '');
     } else {
       return '';
     }
