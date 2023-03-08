@@ -11,9 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_player_page.dart';
 import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_bottom.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/playlist/widget/vid_detail_shimmer.dart';
 
 class VidDetailScreen extends StatefulWidget {
   final VidDetailScreenArgument arguments;

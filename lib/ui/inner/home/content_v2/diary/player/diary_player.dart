@@ -13,6 +13,7 @@ import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -22,6 +23,7 @@ import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_view.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
@@ -116,7 +118,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
   // GlobalKey<TrackFragmentState> trackFragmentKey = GlobalKey();
   AnimationController? _animationController;
 
-  PageController? _pageController;
+  // PageController? _pageController;
+  ScrollController? _pageController;
 
   RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
 
@@ -128,7 +131,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _curIdx = widget.argument.index.toInt();
       _lastCurIndex = widget.argument.index.toInt();
-      _pageController = PageController(initialPage: _curIdx);
+      _pageController = ScrollController(initialScrollOffset: 1.0);
       initDiary();
 
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
@@ -152,8 +155,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       )..addListener(() {
           setState(() {});
         });
-
-      // _animationController?.repeat(reverse: false);
 
       _playMode = ModeTypeAliPLayer.auth;
       // if (widget.data?.apsaraId != '') {
@@ -249,6 +250,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       _animationController?.forward();
+
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
     fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
@@ -262,15 +264,18 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
             _showLoading = false;
             isPause = false;
           });
+          _animationController?.forward();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
           setState(() {});
+          _animationController?.stop();
           break;
         default:
       }
     });
     fAliplayer?.setOnLoadingStatusListener(loadingBegin: (playerId) {
+      _animationController?.stop();
       setState(() {
         _loadingPercent = 0;
         _showLoading = true;
@@ -282,6 +287,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       }
       setState(() {});
     }, loadingEnd: (playerId) {
+      _animationController?.forward();
       setState(() {
         _showLoading = false;
       });
@@ -311,6 +317,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       } else if (infoCode == FlutterAvpdef.CACHEERROR) {
         // Fluttertoast.showToast(msg: "Cache Error $extraMsg");
       } else if (infoCode == FlutterAvpdef.LOOPINGSTART) {
+        _animationController?.reset();
+        _animationController?.forward();
         // Fluttertoast.showToast(msg: "Looping Start");
       } else if (infoCode == FlutterAvpdef.SWITCHTOSOFTWAREVIDEODECODER) {
         // Fluttertoast.showToast(msg: "change to soft ware decoder");
@@ -322,6 +330,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       _showLoading = false;
       _tipsContent = "Play Again";
       isPause = true;
+      _animationController?.reset();
       setState(() {
         _currentPosition = _videoDuration;
       });
@@ -433,70 +442,98 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.black,
       body: isloading
           ? Container()
           : NotificationListener(
               onNotification: (ScrollNotification notification) {
-                print("test test $_curIdx");
+                print('asdasd $notification');
                 if (notification.depth == 0 && notification is ScrollUpdateNotification) {
-                  final PageMetrics metrics = notification.metrics as PageMetrics;
-                  _playerY = metrics.pixels - _curIdx * MediaQuery.of(context).size.height;
-                  print("selesai _curIdx $_curIdx");
+                  final FixedScrollMetrics metrics = notification.metrics as FixedScrollMetrics;
+                  _playerY = metrics.pixels - _curIdx * (SizeConfig.screenWidth ?? 0);
                   setState(() {});
                 } else if (notification is ScrollEndNotification) {
                   _playerY = 0.0;
-                  PageMetrics metrics = notification.metrics as PageMetrics;
-                  _curIdx = metrics.page!.round();
-                  print("selesai _curIdx $_curIdx");
+                  print(notification.dragDetails);
+                  print(notification.context);
+                  print(notification.metrics);
+                  // PageMetrics metrics = notification.metrics as PageMetrics;
+                  FixedScrollMetrics metrics = notification.metrics as FixedScrollMetrics;
+                  print(metrics.maxScrollExtent);
+                  print(metrics.minScrollExtent);
+                  print(metrics.pixels);
+                  print(metrics.viewportDimension);
+                  print(metrics.extentAfter);
+                  print(metrics.extentAfter);
+                  print(metrics.extentBefore);
+                  print(metrics.extentInside);
+
+                  // _curIdx = metrics.page!.round();
+                  print("_curIdx $_curIdx");
                   if (_lastCurIndex != _curIdx) {
-                    start();
+                    // start();
                   }
-                  print("selesai _curIdx2 $_curIdx");
+
                   _lastCurIndex = _curIdx;
-                  print("selesai _lastCurIndex $_lastCurIndex");
                 }
                 return false;
               },
               child: Stack(
                 children: [
                   Positioned(
-                    left: 0,
-                    bottom: _playerY,
-                    child: Container(
-                      color: Colors.red,
+                    right: _playerY,
+                    bottom: 0,
+                    child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      // child: Center(
-                      //     child: Text(
-                      //   "${_lastCurIndex}",
-                      //   style: TextStyle(color: Colors.white),
-                      // )),
-                      child: AliPlayerView(
-                        onCreated: onViewPlayerCreated,
-                        x: 0,
-                        y: _playerY,
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
+                      child: Stack(
+                        children: [
+                          AliPlayerView(
+                            onCreated: onViewPlayerCreated,
+                            x: 0,
+                            y: _playerY,
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                          ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: SafeArea(
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(40.0),
+                                      child: LinearProgressIndicator(
+                                        value: _animationController?.value,
+                                        backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
+                                        valueColor: AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
+                                      ),
+                                    ),
+                                    // GestureDetector(
+                                    //   onTap: () {},
+                                    //   child: TitlePlaylistDiaries(
+                                    //     data: _listData?[_curIdx],
+                                    //     // storyController: _storyController,
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40.0),
-                      child: LinearProgressIndicator(
-                        value: _animationController?.value,
-                        backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
-                        valueColor: AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
-                      ),
-                    ),
-                  ),
+
                   _buildProgressBar(
                     MediaQuery.of(context).size.width,
                     MediaQuery.of(context).size.height,
                   ),
+
                   SmartRefresher(
                     // scrollDirection: Axis.horizontal,
                     enablePullDown: true,
@@ -509,6 +546,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                     // onRefresh: _onRefresh,
                     // onLoading: _onLoadMore,
                     child: CustomScrollView(
+                      scrollDirection: Axis.horizontal,
                       physics: const PageScrollPhysics(),
                       controller: _pageController,
                       slivers: <Widget>[
@@ -522,21 +560,21 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      // _exitScreenMode();
-                    },
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                          size: 24,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
+                  // InkWell(
+                  //   onTap: () {
+                  //     // _exitScreenMode();
+                  //   },
+                  //   child: SafeArea(
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.all(16.0),
+                  //       child: Icon(
+                  //         Icons.arrow_back_ios,
+                  //         size: 24,
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -556,74 +594,70 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           fAliplayer?.play();
         }
       },
-      child: Container(
-        // color: Colors.black,
-        child: Stack(
-          children: [
-            _curIdx == index && _isFirstRenderShow
-                ? Container(
-                    color: Colors.black,
-                    child: CustomBaseCacheImage(
-                      widthPlaceHolder: 112,
-                      heightPlaceHolder: 40,
-                      imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
-                      imageBuilder: (context, imageProvider) => Container(
-                        clipBehavior: Clip.hardEdge,
-                        width: double.infinity,
-                        height: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: _buildBody(index),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: _buildBody(index),
-                      ),
-                      emptyWidget: Container(
-                        width: double.infinity,
-                        height: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: _buildBody(index),
-                      ),
-                    ),
-                  )
-                : Container(),
-            Container(
-              color: Colors.black.withAlpha(0),
-              alignment: Alignment.center,
-              child: Offstage(
-                offstage: _isPause == false || _isBackgroundMode == true,
-                child: Icon(
-                  Icons.play_circle_filled,
-                  size: 48,
+      child: Stack(
+        children: [
+          !isPlay
+              ? Container(
                   color: Colors.black,
-                ),
+                  child: CustomBaseCacheImage(
+                    widthPlaceHolder: 112,
+                    heightPlaceHolder: 40,
+                    imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
+                    imageBuilder: (context, imageProvider) => Container(
+                      clipBehavior: Clip.hardEdge,
+                      width: double.infinity,
+                      height: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      child: _buildBody(index),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: _buildBody(index),
+                    ),
+                    emptyWidget: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                      decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: _buildBody(index),
+                    ),
+                  ),
+                )
+              : Container(),
+          Container(
+            alignment: Alignment.center,
+            child: Offstage(
+              offstage: _isPause == false || _isBackgroundMode == true,
+              child: Icon(
+                Icons.play_circle_filled,
+                size: 48,
+                color: Colors.black,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -684,7 +718,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   void start() async {
     // if (notifier.listData != null && (notifier.listData?.length ?? 0) > 0 && _curIdx < (notifier.listData?.length ?? 0)) {
-
+    _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
     await getAuth(_listData?[_curIdx].apsaraId ?? '');
