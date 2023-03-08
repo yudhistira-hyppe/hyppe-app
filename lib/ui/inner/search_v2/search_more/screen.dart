@@ -7,9 +7,7 @@ import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
 import 'package:hyppe/ui/constant/widget/icon_button_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
-import 'package:hyppe/ui/inner/search_v2/search_more/widget/auto_complete_search.dart';
 import 'package:hyppe/ui/inner/search_v2/search_more/widget/new_autocomplete_search.dart';
-import 'package:hyppe/ui/inner/upload/pre_upload_content/widget/process_upload_component.dart';
 import 'package:provider/provider.dart';
 
 class SearchMoreScreen extends StatefulWidget {
@@ -28,7 +26,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen> with SingleTickerPr
   void initState() {
     _tabController = TabController(length: 4, vsync: this);
     final notifier = Provider.of<SearchNotifier>(context, listen: false);
-    Future.delayed(Duration.zero, () => notifier.onInitialSearch(context));
+    notifier.onInitialSearch(context);
     super.initState();
   }
 

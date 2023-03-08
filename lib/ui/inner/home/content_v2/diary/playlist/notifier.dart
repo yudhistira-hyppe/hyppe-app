@@ -234,9 +234,9 @@ class DiariesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   }
 
   void initState(BuildContext context, DiaryDetailScreenArgument routeArgument) {
+    print('ini ini ini');
     _routeArgument = routeArgument;
     _currentPage = _routeArgument?.index;
-
     if (_routeArgument?.postID != null) {
       _initialDiary(context);
     } else {

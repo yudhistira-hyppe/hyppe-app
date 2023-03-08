@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/player/diary_player.dart';
+import 'package:hyppe/ui/inner/home/content_v2/diary/player/test.dart';
 import 'package:provider/provider.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_dynamic_link_error.dart';
@@ -70,7 +71,9 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                           if (notifier.currentPage?.floor() == rootIndex) {
                             double value = (notifier.currentPage ?? 0) - rootIndex;
                             double degValue = notifier.degreeToRadian(value * 90);
-                            return DiaryPlayerPage(data: notifier.listData?[rootIndex]);
+                            // return DiaryPlayerPage(
+                            //   data: notifier.listData?[rootIndex],
+                            // );
                             // return DiaryPage(
                             //   // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
                             //   // arguments: widget.argument,
@@ -89,7 +92,8 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                           } else if ((notifier.currentPage?.floor() ?? 0) + 1 == rootIndex) {
                             double value = (notifier.currentPage ?? 0) - rootIndex;
                             double degValue = notifier.degreeToRadian(value * 90);
-                            return DiaryPlayerPage(data: notifier.listData?[rootIndex]);
+
+                            // return DiaryPlayerPage(data: notifier.listData?[rootIndex]);
                             // return DiaryPage(
                             //   // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
                             //   // arguments: widget.argument,
@@ -103,7 +107,7 @@ class _HyppePlaylistDiariesState extends State<HyppePlaylistDiaries> with AfterF
                             //   isScrolling: _pageController.position.activity?.isScrolling,
                             // );
                           }
-                          return DiaryPlayerPage(data: notifier.listData?[rootIndex]);
+                          // return DiaryPlayerPage(data: notifier.listData?[rootIndex]);
                           // return DiaryPage(
                           //   // function: () => notifier.onNextPage(context, _pageController, widget.arguments),
                           //   // arguments: widget.argument,

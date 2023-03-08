@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 import 'package:hyppe/ui/inner/search_v2/interest/widget/tab_layout.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/grid_contents_shimmer.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';
@@ -71,7 +73,9 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with Single
                   ?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
-          body: Column(
+          body: notifier.loadContents ? Center(
+            child: CustomLoading(),
+          ) : Column(
             children: [
               TabBar(
                 controller: _tabController,

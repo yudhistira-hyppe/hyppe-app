@@ -193,6 +193,14 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loadContents = true;
+  bool get loadContents => _loadContents;
+
+  set loadContents(bool state){
+    _loadContents = state;
+    notifyListeners();
+  }
+
   List<Tags>? _listHashtag;
   List<Tags>? get listHashtag => _listHashtag;
 
@@ -242,6 +250,7 @@ class SearchNotifier with ChangeNotifier {
         LandingSearch res = LandingSearch.fromJson(fetch.data);
         listHashtag = res.tag ?? [];
         listInterest = res.interest ?? [];
+
       }else{
         throw 'Failed landing page search execution';
       }
@@ -249,23 +258,30 @@ class SearchNotifier with ChangeNotifier {
       'Error onSearchLandingPage: $e'.logger();
     }finally{
       loadLandingPage = false;
-      try{
-        if(listInterest != null){
-          if(listInterest!.isNotEmpty){
-            await for(final value in getInterest(context, listInterest! )){
-              final id = value?.interests?[0].id ?? '613bc4da9ec319617aa6c38e';
-              if(value != null){
-                interestContents[id] = value;
-              }
-            }
-            notifyListeners();
-          }
-        }
-      }catch(e){
-        'Error Get Interest Contests'.logger();
-      }
-
+      getAllInterestContents(context);
     }
+  }
+
+  Future getAllInterestContents(BuildContext context) async{
+    try{
+      loadContents = true;
+      if(listInterest != null){
+        if(listInterest!.isNotEmpty){
+          await for(final value in getInterest(context, listInterest! )){
+            final id = value?.interests?[0].id ?? '613bc4da9ec319617aa6c38e';
+            if(value != null){
+              interestContents[id] = value;
+            }
+          }
+          notifyListeners();
+        }
+      }
+    }catch(e){
+      'Error Get Interest Contests'.logger();
+    }finally{
+      loadContents = false;
+    }
+
   }
 
   Stream<SearchContentModel?> getInterest(BuildContext context, List<Interest> interests) async*{
@@ -404,22 +420,24 @@ class SearchNotifier with ChangeNotifier {
   void onUpdate() => notifyListeners();
 
   onInitialSearch(BuildContext context) async {
-    if (allContents.vids == null && allContents.diaries == null && allContents.pics == null) {
-      vidContentsQuery.featureType = FeatureType.vid;
-      diaryContentsQuery.featureType = FeatureType.diary;
-      picContentsQuery.featureType = FeatureType.pic;
-
-      vidContentsQuery.limit = 18;
-      diaryContentsQuery.limit = 18;
-      picContentsQuery.limit = 18;
-
-      allContents = UserInfoModel();
-      print('reload contentsQuery : 23');
-      allContents.vids = await vidContentsQuery.reload(context);
-      allContents.diaries = await diaryContentsQuery.reload(context);
-      allContents.pics = await picContentsQuery.reload(context);
-      notifyListeners();
-    }
+    _searchUsers = [];
+    _searchHashtag = [];
+    // if (allContents.vids == null && allContents.diaries == null && allContents.pics == null) {
+    //   vidContentsQuery.featureType = FeatureType.vid;
+    //   diaryContentsQuery.featureType = FeatureType.diary;
+    //   picContentsQuery.featureType = FeatureType.pic;
+    //
+    //   vidContentsQuery.limit = 18;
+    //   diaryContentsQuery.limit = 18;
+    //   picContentsQuery.limit = 18;
+    //
+    //   allContents = UserInfoModel();
+    //   print('reload contentsQuery : 23');
+    //   allContents.vids = await vidContentsQuery.reload(context);
+    //   allContents.diaries = await diaryContentsQuery.reload(context);
+    //   allContents.pics = await picContentsQuery.reload(context);
+    //   notifyListeners();
+    // }
   }
 
   Future onInitialSearchNew(BuildContext context, FeatureType featureType, {bool reload = false}) async {
