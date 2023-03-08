@@ -99,11 +99,13 @@ class _SearchMoreCompleteScreenV2 extends State<SearchMoreCompleteScreenV2> with
                                 onSubmitted: (v) {
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
+                                  notifier.getDataSearch(context);
                                   // notifier.onSearchPost(context, value: v, isMove: true);
                                 },
                                 onPressedIcon: () {
                                   notifier.limit = 5;
                                   notifier.tabIndex = 0;
+                                  notifier.getDataSearch(context);
                                   // notifier.onSearchPost(context, isMove: true);
                                 },
                                 // onTap: () => notifier.moveSearchMore(),

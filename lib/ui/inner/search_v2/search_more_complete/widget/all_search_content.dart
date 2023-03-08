@@ -66,15 +66,13 @@ class _AllSearchContentState extends State<AllSearchContent> {
                 widgetUserList(_themes, notifier),
                 sixteenPx,
                 // ------video content search
-                (vids?.isNotEmpty ?? false) ? VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                VidSearchContent(content: vids, featureType: FeatureType.vid, title: 'HyppeVid', selecIndex: 2),
                 sixteenPx,
                 //------diaries content search
-                (diaries?.isNotEmpty ?? false)
-                    ? VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3)
-                    : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                VidSearchContent(content: diaries, featureType: FeatureType.diary, title: 'HyppeDiary', selecIndex: 3),
                 sixteenPx,
                 //------pic  content search
-                (pics?.isNotEmpty ?? false) ? VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4) : SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
+                VidSearchContent(content: pics, featureType: FeatureType.pic, title: 'HyppePic', selecIndex: 4),
               ],
             ),
         ),
@@ -109,7 +107,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
               (index) => Padding(
                 padding: const EdgeInsets.all(2.0),
                 child: ListTile(
-                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? ''),
+                  onTap: () => _system.navigateToProfile(context, users?[index].email ?? '',isReplaced: false),
                   contentPadding: EdgeInsets.zero,
                   title: Text("${users?[index].fullName}"),
                   subtitle: Text("${users?[index].username}"),

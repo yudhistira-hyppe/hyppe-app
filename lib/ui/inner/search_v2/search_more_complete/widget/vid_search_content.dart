@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/pic_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 import 'package:hyppe/ui/constant/entities/report/notifier.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -18,6 +19,8 @@ import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_shimmer.dart';
 import 'package:hyppe/ui/constant/widget/custom_error_widget.dart';
+
+import '../../widget/search_no_result.dart';
 
 class VidSearchContent extends StatefulWidget {
   final String? title;
@@ -47,7 +50,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
     return Consumer<SearchNotifier>(
       builder: (_, notifier, __) => Container(
         width: SizeConfig.screenWidth,
-        height: SizeWidget.barHyppePic,
+        height: widget.content.isNotNullAndEmpty() ? SizeWidget.barHyppePic : 50,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
@@ -56,12 +59,13 @@ class _VidSearchContentState extends State<VidSearchContent> {
               maxLines: 1,
               textAlign: TextAlign.left,
               textToDisplay: widget.title ?? '',
-              textStyle: _themes.textTheme.button?.apply(
-                color: _themes.bottomNavigationBarTheme.unselectedItemColor,
+              textStyle: _themes.textTheme.bodyText1?.copyWith(
+                color: _themes.colorScheme.onBackground,
+                fontWeight: FontWeight.w700
               ),
             ),
             sixPx,
-            Expanded(
+            widget.content.isNotNullAndEmpty() ? Expanded(
               child: context.read<ErrorService>().isInitialError(error, widget.content)
                   ? CustomErrorWidget(
                       errorType: ErrorType.pic,
@@ -143,7 +147,7 @@ class _VidSearchContentState extends State<VidSearchContent> {
                         },
                       ),
                     ),
-            ),
+            ): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
           ],
         ),
       ),
