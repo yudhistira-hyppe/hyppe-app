@@ -795,7 +795,10 @@ class SearchNotifier with ChangeNotifier {
       if((currentSkip != 0 && typeSearch == SearchLoadData.all)){
         throw 'Error get all because the state is not from beginning $currentSkip';
       }else if(currentSkip%limitSearch != 0){
-        throw 'Error because we have to prevent the action for refusing wasting action';
+        if(!reload){
+          throw 'Error because we have to prevent the action for refusing wasting action';
+        }
+
       }
 
       if(reload){
