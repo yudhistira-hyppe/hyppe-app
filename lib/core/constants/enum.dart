@@ -89,7 +89,7 @@ enum EnvType { development, production }
 
 enum contentPosition { home, myprofile, otherprofile, search, searchFirst, seeAllVid, seeAllDiary, seeAllPict }
 
-enum CaptionType { normal, mention, seeMore, seeLess }
+enum CaptionType { normal, mention, hashtag, seeMore, seeLess }
 
 enum SpeedInternet { fast, medium, slow }
 

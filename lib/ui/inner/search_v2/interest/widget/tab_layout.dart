@@ -127,6 +127,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
               onRefresh: () => notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest),
               child: SingleChildScrollView(
                 controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
                 child: Builder(
                     builder: (context) {
                       final type = currentType;

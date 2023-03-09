@@ -1,55 +1,37 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer.dart';
 import 'package:flutter_aliplayer/flutter_aliplayer_factory.dart';
-import 'package:hyppe/core/arguments/contents/diary_detail_screen_argument.dart';
+import 'package:hyppe/core/arguments/contents/story_detail_screen_argument.dart';
 import 'package:hyppe/core/bloc/posts_v2/bloc.dart';
 import 'package:hyppe/core/bloc/posts_v2/state.dart';
 import 'package:hyppe/core/config/ali_config.dart';
 import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
-import 'package:hyppe/core/constants/shared_preference_keys.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/themes/hyppe_colors.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
-import 'package:hyppe/core/services/shared_preference.dart';
-import 'package:hyppe/core/services/system.dart';
-import 'package:hyppe/initial/hyppe/translate_v2.dart';
-import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
-import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
-import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/left_items.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/right_items.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/title_playlist_diaries.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_item_view.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/bottom_user_tag.dart';
-import 'package:hyppe/ui/inner/home/content_v2/diary/preview/widget/top_item_view.dart';
-import 'package:hyppe/ui/inner/home/content_v2/vid/widget/video_thumbnail.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/notifier.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
 
-class DiaryPlayerPage extends StatefulWidget {
-  final DiaryDetailScreenArgument argument;
+class StoryPlayerPage extends StatefulWidget {
+  final StoryDetailScreenArgument argument;
 
-  const DiaryPlayerPage({
+  const StoryPlayerPage({
     Key? key,
     required this.argument,
   }) : super(key: key);
 
   @override
-  State<DiaryPlayerPage> createState() => _DiaryPlayerPageState();
+  State<StoryPlayerPage> createState() => _StoryPlayerPageState();
 }
 
-class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingObserver, TickerProviderStateMixin {
+class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingObserver, TickerProviderStateMixin {
   FlutterAliplayer? fAliplayer;
 
   bool isloading = false;
@@ -126,9 +108,17 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
 
   RefreshController _videoListRefreshController = RefreshController(initialRefresh: false);
 
-  List<ContentData>? _listData;
+  List<StoriesGroup>? _groupUserStories;
 
   late PageController _pageController;
+
+  int _curIdx = 0;
+  int _curChildIdx = 0;
+  int _lastCurIndex = -1;
+  bool _isPause = false;
+  double _playerY = 0;
+  bool _isFirstRenderShow = false;
+  bool _isBackgroundMode = false;
 
   @override
   void initState() {
@@ -137,9 +127,10 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _curIdx = widget.argument.index.toInt();
       _lastCurIndex = widget.argument.index.toInt();
-      _pageController = PageController(initialPage: widget.argument.index.toInt());
+      _pageController = PageController(initialPage: widget.argument.peopleIndex);
+      print("initial index ${widget.argument.peopleIndex}");
       // _pageController.addListener(() => notifier.currentPage = _pageController.page);
-      initDiary();
+      initStory();
 
       fAliplayer = FlutterAliPlayerFactory.createAliPlayer();
 
@@ -435,13 +426,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     }
   }
 
-  int _curIdx = 0;
-  int _lastCurIndex = -1;
-  bool _isPause = false;
-  double _playerY = 0;
-  bool _isFirstRenderShow = false;
-  bool _isBackgroundMode = false;
-
   void onViewPlayerCreated(viewId) async {
     print('onViewPlayerCreated===');
     fAliplayer?.setPlayerView(viewId);
@@ -452,7 +436,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     return PageView.builder(
       controller: _pageController,
       scrollDirection: Axis.horizontal,
-      itemCount: _listData?.length ?? 0,
+      itemCount: _groupUserStories?.length ?? 0,
       onPageChanged: (index) async {
         _curIdx = index;
         setState(() {});
@@ -501,37 +485,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
               ),
             ),
           ),
-          _listData?[_curIdx].reportedStatus == "BLURRED"
-              ? CustomBackgroundLayer(
-                  sigmaX: 30,
-                  sigmaY: 30,
-                  // thumbnail: picData!.content[arguments].contentUrl,
-                  thumbnail: (_listData?[_curIdx].isApsara ?? false) ? (_listData?[_curIdx].mediaThumbEndPoint ?? '') : (_listData?[_curIdx].fullThumbPath ?? ''),
-                )
-              : Container(),
-          (_listData?[_curIdx].reportedStatus == "BLURRED") ? DiarySensitive(data: _listData?[_curIdx]) : Container(),
-          TitlePlaylistDiaries(
-            data: _listData?[_curIdx],
-            // storyController: _storyController,
-          ),
-          _listData?[_curIdx].reportedStatus == "BLURRED"
-              ? Container()
-              : RightItems(
-                  data: _listData?[_curIdx] ?? ContentData(),
-                ),
-          _listData?[_curIdx].reportedStatus == "BLURRED"
-              ? Container()
-              : LeftItems(
-                  description: _listData?[_curIdx].description,
-                  // tags: _listData?[_curIdx].tags?.map((e) => "#${e.replaceFirst('#', '')}").join(" "),
-                  music: _listData?[_curIdx].music,
-                  authorName: _listData?[_curIdx].username,
-                  userName: _listData?[_curIdx].username,
-                  location: _listData?[_curIdx].location,
-                  postID: _listData?[_curIdx].postID,
-                  // storyController: _storyController,
-                  tagPeople: _listData?[_curIdx].tagPeople,
-                  data: _listData?[_curIdx]),
         ],
       ),
     );
@@ -558,7 +511,9 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
                   child: CustomBaseCacheImage(
                     widthPlaceHolder: 112,
                     heightPlaceHolder: 40,
-                    imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
+                    imageUrl: (_groupUserStories?[_curIdx].story?[_curChildIdx].isApsara ?? false)
+                        ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].mediaThumbEndPoint}"
+                        : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullThumbPath}",
                     imageBuilder: (context, imageProvider) => Container(
                       clipBehavior: Clip.hardEdge,
                       width: double.infinity,
@@ -608,10 +563,11 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     );
   }
 
-  void initDiary() async {
-    var notifier = context.read<DiariesPlaylistNotifier>();
-    notifier.initState(context, widget.argument);
-    _listData = notifier.listData;
+  void initStory() async {
+    var notifier = context.read<StoriesPlaylistNotifier>();
+    notifier.initStateGroup(context, widget.argument);
+    _groupUserStories = notifier.groupUserStories;
+
     start();
   }
 
@@ -620,7 +576,7 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     _animationController?.reset();
     fAliplayer?.stop();
     isPlay = false;
-    await getAuth(_listData?[_curIdx].apsaraId ?? '');
+    await getAuth(_groupUserStories?[_curIdx].story?[_curChildIdx].apsaraId ?? '');
     setState(() {
       _isPause = false;
       _isFirstRenderShow = false;

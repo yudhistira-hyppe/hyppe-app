@@ -8,6 +8,7 @@ import 'package:hyppe/core/arguments/contents/user_interest_screen_argument.dart
 import 'package:hyppe/core/arguments/contents/vid_detail_screen_argument.dart';
 import 'package:hyppe/core/arguments/faq_argument.dart';
 import 'package:hyppe/core/arguments/follower_screen_argument.dart';
+import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/arguments/image_preview_argument.dart';
 import 'package:hyppe/core/arguments/message_detail_argument.dart';
 import 'package:hyppe/core/arguments/other_profile_argument.dart';
@@ -45,6 +46,7 @@ import 'package:hyppe/ui/inner/home/content_v2/referral/list_referral.dart';
 import 'package:hyppe/ui/inner/home/content_v2/referral/screen.dart';
 
 import 'package:hyppe/ui/inner/home/content_v2/review_buy/screen.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_group/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/add_bank_account/screen.dart';
 import 'package:hyppe/ui/inner/home/content_v2/transaction/all_transaction/screen.dart';
@@ -120,6 +122,7 @@ import '../core/arguments/detail_ticket_argument.dart';
 import '../ui/inner/home/content_v2/help/detail_ticket/screen.dart';
 import '../ui/inner/home/content_v2/help/ticket_history/screen.dart';
 import '../ui/inner/home/content_v2/pic/playlist/slide/slide_screen.dart';
+import '../ui/inner/search_v2/hashtag/detail_screen.dart';
 
 class Generate {
   static List<Route<dynamic>> initialRoute(_) {
@@ -200,8 +203,10 @@ class Generate {
 
       case Routes.storyDetail:
         return MaterialPageRoute(builder: (_) => HyppePlaylistStories(argument: settings.arguments as StoryDetailScreenArgument));
+      // case Routes.showStories:
+      //   return MaterialPageRoute(builder: (_) => StoryGroupScreen(argument: settings.arguments as StoryDetailScreenArgument));
       case Routes.showStories:
-        return MaterialPageRoute(builder: (_) => StoryGroupScreen(argument: settings.arguments as StoryDetailScreenArgument));
+        return MaterialPageRoute(builder: (_) => StoryPlayerPage(argument: settings.arguments as StoryDetailScreenArgument));
       case Routes.appSettings:
         return MaterialPageRoute(builder: (_) => const SettingScreen());
 
@@ -249,6 +254,11 @@ class Generate {
 
       case Routes.searcMore:
         return MaterialPageRoute(builder: (_) => const SearchMoreScreen());
+      case Routes.hashtagDetail:
+        return MaterialPageRoute(
+            builder: (_) => DetailHashtagScreen(
+                  argument: settings.arguments as HashtagArgument,
+                ));
       case Routes.verificationIDStep1:
         return MaterialPageRoute(builder: (_) => const VerificationIDStep1());
       case Routes.verificationIDStep2:

@@ -137,7 +137,7 @@ class _SearchMoreScreenState extends State<SearchMoreScreen>
                                           textToDisplay: notifier.language.searchHistory ?? 'Search History'),
                                     ),
                                   ],...List.generate(
-                                      values.length > 10 ? 10 : values.length,
+                                      values.length > 4 ? 5 : values.length,
                                       (index) => InkWell(
                                         onTap: (){
                                           notifier.searchController.text = values[index].keyword ?? '';
@@ -169,8 +169,8 @@ class _SearchMoreScreenState extends State<SearchMoreScreen>
                                                     child: const CustomIconWidget(
                                                       iconData:
                                                           '${AssetPath.vectorPath}close.svg',
-                                                      height: 14,
-                                                      width: 14,
+                                                      height: 25,
+                                                      width: 25,
                                                     ),
                                                   )
                                                 ],

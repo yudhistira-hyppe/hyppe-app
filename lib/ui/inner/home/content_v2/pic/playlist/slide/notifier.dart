@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/extension/custom_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/ui/constant/overlay/bottom_sheet/show_bottom_sheet.dart';
@@ -209,6 +210,36 @@ class SlidedPicDetailNotifier with ChangeNotifier, GeneralMixin {
     if (urlAds != null) {
       _adsUrl = urlAds;
     }
+  }
+
+  Future<ContentData?> getDetailPost(BuildContext context, String postID) async{
+    final notifier = PostsBloc();
+    await notifier.getContentsBlocV2(context,
+        postID: postID,
+        pageRows: 1,
+        pageNumber: 1,
+        type: FeatureType.pic);
+    final fetch = notifier.postsFetch;
+
+    final res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+    if(res != null){
+      return res.firstOrNull();
+    }else{
+      return null;
+    }
+  }
+
+  ContentData? _savedData;
+  ContentData? get savedData => _savedData;
+  set savedData(ContentData? data){
+    _savedData = data;
+    notifyListeners();
+  }
+
+  Future initDetailPost(BuildContext context, String postID) async{
+
+    savedData = await getDetailPost(context, postID);
+    print("tetsdausdjha ${savedData?.toJson()}");
   }
 
   Future<void> nextPlaylistPic(BuildContext context, int value) async {

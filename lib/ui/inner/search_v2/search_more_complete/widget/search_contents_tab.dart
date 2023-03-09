@@ -34,8 +34,6 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
         if(currentSkip%12 == 0){
           notifier.getDataSearch(context, typeSearch: SearchLoadData.content, reload: false);
         }
-
-
       }
     });
     super.initState();

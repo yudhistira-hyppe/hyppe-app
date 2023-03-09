@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/app.dart';
+import 'package:hyppe/core/arguments/hashtag_argument.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/constants/size_widget.dart';
@@ -190,13 +191,13 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         return const SearchMoreCompleteScreenV2();
       case SearchLayout.mainHashtagDetail:
         if(notifier.selectedHashtag != null){
-          return DetailHashtagScreen(isTitle: true, hashtag: notifier.selectedHashtag!);
+          return DetailHashtagScreen(argument: HashtagArgument(isTitle: true, hashtag: notifier.selectedHashtag!),);
         }else{
           return _firstLayout(notifier);
         }
       case SearchLayout.hashtagDetail:
         if(notifier.selectedHashtag != null){
-          return DetailHashtagScreen(isTitle: false, hashtag: notifier.selectedHashtag!);
+          return DetailHashtagScreen(argument: HashtagArgument(isTitle: false, hashtag: notifier.selectedHashtag!));
         }else{
           return _firstLayout(notifier);
         }
