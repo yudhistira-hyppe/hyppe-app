@@ -8,6 +8,7 @@ import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
 
 import 'package:hyppe/core/response/generic_response.dart';
+import 'package:hyppe/core/services/system.dart';
 
 class SearchContentBloc {
   SearchContentFetch _searchContentFetch = SearchContentFetch(SearchContentState.init);
@@ -17,9 +18,11 @@ class SearchContentBloc {
   Future getSearchContent(BuildContext context, param, {TypeApiSearch type = TypeApiSearch.normal}) async {
     String email = SharedPreference().readStorage(SpKeys.email);
     final isNormal = type == TypeApiSearch.normal;
+    print('_hitApiGetSearchData#2 ${System().getCurrentDate()}');
     await Repos().reposPost(
       context,
       (onResult) {
+        print('_hitApiGetSearchData#5 ${System().getCurrentDate()}');
         if ((onResult.statusCode ?? 300) > HTTP_CODE) {
           setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
         } else {
@@ -33,9 +36,6 @@ class SearchContentBloc {
         setSearchContentFetch(SearchContentFetch(SearchContentState.getSearchContentBlocError));
       },
       data: param,
-      headers: isNormal ? {
-        "x-auth-user": email,
-      } : null,
       withAlertMessage: true,
       withCheckConnection: true,
       host: isNormal ? UrlConstants.getSearchContentV4 : type == TypeApiSearch.detailHashTag ? UrlConstants.getDetailHashtag : UrlConstants.getDetailInterest,

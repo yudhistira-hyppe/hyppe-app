@@ -115,7 +115,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                       width: 50,
                       height: 50,
                       onTap: () {},
-                      imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.replaceAll("_860.jpeg", "")),
+                      imageUrl: System().showUserPicture(users?[index].avatar?[0].mediaEndpoint?.replaceAll("_0001.jpeg", "")),
                       following: true,
                       onFollow: () {},
                     ),

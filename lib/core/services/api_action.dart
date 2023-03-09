@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:dio_http_formatter/dio_http_formatter.dart';
 import 'package:hyppe/core/config/env.dart';
 import 'package:hyppe/core/config/url_constants.dart';
@@ -161,7 +162,7 @@ class ApiAction {
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),
             onTimeout: () => throw DioError(
-              type: DioErrorType.connectTimeout,
+              type: DioErrorType.connectionTimeout,
               requestOptions: RequestOptions(path: url),
             ),
           );
@@ -202,7 +203,7 @@ class ApiAction {
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),
             onTimeout: () => throw DioError(
-              type: DioErrorType.connectTimeout,
+              type: DioErrorType.connectionTimeout,
               requestOptions: RequestOptions(path: url),
             ),
           );
@@ -246,7 +247,7 @@ class ApiAction {
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),
             onTimeout: () => throw DioError(
-              type: DioErrorType.connectTimeout,
+              type: DioErrorType.connectionTimeout,
               requestOptions: RequestOptions(path: url),
             ),
           );
@@ -289,7 +290,7 @@ class ApiAction {
           .timeout(
             const Duration(seconds: TIMEOUT_DURATION),
             onTimeout: () => throw DioError(
-              type: DioErrorType.connectTimeout,
+              type: DioErrorType.connectionTimeout,
               requestOptions: RequestOptions(path: url),
             ),
           );

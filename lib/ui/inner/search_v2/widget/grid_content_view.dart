@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
+import 'package:hyppe/ui/inner/search_v2/widget/search_no_result_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';
@@ -40,7 +41,7 @@ class _GridContentViewState extends State<GridContentView>{
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
                 childAspectRatio: 1.0,
-                children: List.generate(widget.data.length, (index){
+                children: widget.data.isNotEmpty ? List.generate(widget.data.length, (index){
                   final dataitem = widget.data[index];
                   String thumb = System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                   if(widget.type == HyppeType.HyppePic){
@@ -208,7 +209,9 @@ class _GridContentViewState extends State<GridContentView>{
                         ),
                       );
                   }
-                }).toList(),
+                }).toList() : [
+                  SearchNoResultImage(locale: notifier.language, keyword: '')
+                ],
               ),
             ),
             if(widget.hasNext)

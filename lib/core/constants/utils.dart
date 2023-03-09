@@ -13,4 +13,4 @@ const vidIndex = 1;
 const diaryIndex = 2;
 const pictIndex = 3;
 
-const limitSearch = 6;
+const limitSearch = 12;

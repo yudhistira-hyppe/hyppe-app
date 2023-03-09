@@ -7,8 +7,10 @@ import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
+import '../../../../core/constants/shared_preference_keys.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
 import '../../../../core/models/collection/search/search_content.dart';
+import '../../../../core/services/shared_preference.dart';
 import '../../../constant/widget/custom_shimmer.dart';
 import '../../../constant/widget/custom_spacer.dart';
 import '../../../constant/widget/custom_text_widget.dart';
@@ -37,6 +39,8 @@ class _InterestScreenState extends State<InterestScreen> {
                 .resolve(const ImageConfiguration()).addListener(ImageStreamListener((image, synchronousCall) {
               completer.complete(image.image);
             }));
+            final locale = SharedPreference().readStorage(SpKeys.isoCode);
+            final isIndo = locale == 'id';
             return FutureBuilder(
               future: completer.future,
               builder: (context, snapshot) {
@@ -104,7 +108,7 @@ class _InterestScreenState extends State<InterestScreen> {
                                                   alignment: Alignment.centerLeft,
                                                   margin: const EdgeInsets.only(left: 12),
                                                   child: CustomTextWidget(
-                                                    textToDisplay: e.interestName ?? '',
+                                                    textToDisplay: isIndo ? (e.interestNameId ?? '') : (e.interestName ?? ''),
                                                     textStyle: Theme.of(context)
                                                         .textTheme
                                                         .subtitle2
