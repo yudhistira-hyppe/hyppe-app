@@ -490,8 +490,9 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
     return SafeArea(
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
+          Container(
+            padding: const EdgeInsets.only(left: 10.0, right: 10, top: 5),
+            height: 9,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(40.0),
               child: LinearProgressIndicator(

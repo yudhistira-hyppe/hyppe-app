@@ -487,10 +487,12 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
   void showMyReaction(
     BuildContext context,
     ContentData? data,
-    StoryController storyController,
+    StoryController? storyController,
     AnimationController? animationController,
+    void pause,
   ) async {
-    storyController.pause();
+    // storyController?.pause();
+    pause;
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {
@@ -517,7 +519,7 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     _isReactAction = true;
 
     if (_data != null) {
-      storyController.pause();
+      storyController?.pause();
       showGeneralDialog(
         barrierLabel: "Barrier",
         barrierDismissible: false,

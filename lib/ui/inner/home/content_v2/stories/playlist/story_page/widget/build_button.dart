@@ -13,16 +13,16 @@ import 'package:story_view/controller/story_controller.dart';
 import 'package:hyppe/core/models/collection/posts/content_v2/content_data.dart';
 
 class BuildButton extends StatelessWidget {
-  final StoryController storyController;
+  final StoryController? storyController;
   final AnimationController? animationController;
   final ContentData? data;
+  final void pause;
   const BuildButton({
-    required this.storyController,
+    this.storyController,
     required this.animationController,
     required this.data,
+    this.pause,
   });
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,13 @@ class BuildButton extends StatelessWidget {
             children: [
               InkWell(
                 onTap: () {
-                  notifier.showMyReaction(context, data, storyController, animationController);
+                  notifier.showMyReaction(
+                    context,
+                    data,
+                    storyController,
+                    animationController,
+                    pause,
+                  );
                 },
                 child: const CustomIconWidget(
                   defaultColor: false,

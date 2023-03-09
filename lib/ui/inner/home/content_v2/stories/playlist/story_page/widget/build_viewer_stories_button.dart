@@ -24,12 +24,14 @@ import 'package:story_view/controller/story_controller.dart';
 class ViewerStoriesButton extends StatelessWidget {
   final int? currentStory;
   final ContentData? data;
-  final StoryController storyController;
+  final StoryController? storyController;
+  final void pause;
   const ViewerStoriesButton({
     Key? key,
     required this.data,
     required this.currentStory,
-    required this.storyController,
+    this.storyController,
+    required this.pause,
   }) : super(key: key);
 
   static final _system = System();
@@ -44,6 +46,20 @@ class ViewerStoriesButton extends StatelessWidget {
         child: Align(
           alignment: Alignment.bottomCenter,
           child: CustomElevatedButton(
+            width: context.getWidth() / 2,
+            height: 30,
+            function: () {
+              // storyController.pause();
+              pause;
+              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email, storyController: storyController);
+              // context.read<StoriesPlaylistNotifier>().forceStop = true;
+              // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory].storyID);
+            },
+            buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
+              backgroundColor: MaterialStateProperty.all(
+                Colors.transparent,
+              ),
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -62,19 +78,6 @@ class ViewerStoriesButton extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-            width: context.getWidth() / 2,
-            height: 30,
-            function: () {
-              storyController.pause();
-              Provider.of<LikeNotifier>(context, listen: false).viewLikeContent(context, data?.postID, 'VIEW', 'Viewer', data?.email, storyController: storyController);
-              // context.read<StoriesPlaylistNotifier>().forceStop = true;
-              // ShowBottomSheet.onShowViewers(context, storyID: data?.story[currentStory].storyID);
-            },
-            buttonStyle: theme.elevatedButtonTheme.style?.copyWith(
-              backgroundColor: MaterialStateProperty.all(
-                Colors.transparent,
-              ),
             ),
           ),
         ),

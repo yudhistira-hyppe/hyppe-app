@@ -70,7 +70,7 @@ class _NewAutoCompleteSearchState extends State<NewAutoCompleteSearch> {
                                       notifier.selectedHashtag =
                                           notifier.searchHashtag?[index];
                                       notifier.layout =
-                                          SearchLayout.mainHashtagDetail;
+                                          SearchLayout.hashtagDetail;
                                     },
                                     title: hashTag?.tag ?? 'No Tag',
                                     count: hashTag?.total ?? 0,

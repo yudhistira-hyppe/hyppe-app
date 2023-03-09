@@ -7,6 +7,7 @@ import 'package:hyppe/ui/inner/search_v2/hashtag/widget/hashtag_item.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 
+import '../search_more_complete/widget/all_search_shimmer.dart';
 import '../widget/search_no_result.dart';
 
 class HashtagTabScreen extends StatefulWidget {
@@ -52,7 +53,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
 
       final keyword = notifier.searchController.text;
 
-      return Column(
+      return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -124,7 +125,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
               //             }),
               ): SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text, margin: const EdgeInsets.only(left: 16),)
         ],
-      );
+      ): const AllSearchShimmer();
     });
   }
 }

@@ -333,6 +333,7 @@ class SearchNotifier with ChangeNotifier {
 
   initDetailHashtag(){
     _hashtagTab = HyppeType.HyppeVid;
+    _hasNext = false;
   }
 
   initSearchAll(){
@@ -671,20 +672,8 @@ class SearchNotifier with ChangeNotifier {
           final lenghtPic = currentPic.length;
           currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
         }
-        if(currentSkip%12 != 0){
+        if(currentSkip%limitSearch != 0){
           throw 'hitApiGetDetail : preventing api because the system must reduce useless action';
-        }
-      }
-      else{
-        if(type == TypeApiSearch.detailHashTag){
-          final currentKey = detailHashTag?.tags?[0].tag;
-          if(currentKey != null){
-            if(currentKey == keys){
-              if(detailHashTag != null){
-                throw 'prevent data hashtag detail';
-              }
-            }
-          }
         }
       }
       final _res = await _hitApiGetDetail(context, keys, type, currentSkip);
@@ -733,7 +722,7 @@ class SearchNotifier with ChangeNotifier {
         "listdiary": true,
         "listpict": true,
         "skip": currentSkip,
-        "limit": 12,
+        "limit": limitSearch,
       };
       final notifier = SearchContentBloc();
       await notifier.getSearchContent(context, param, type: typeApi);
@@ -754,13 +743,12 @@ class SearchNotifier with ChangeNotifier {
 
   Future getDataSearch(
       BuildContext context, {SearchLoadData typeSearch = SearchLoadData.all, bool reload = true}) async {
-    const _slimit = 12;
 
 
     try{
-      final lenghtVid = _searchVid?.length ?? 12;
-      final lenghtDiary = _searchDiary?.length ?? 12;
-      final lenghtPic = _searchPic?.length ?? 12;
+      final lenghtVid = _searchVid?.length ?? limitSearch;
+      final lenghtDiary = _searchDiary?.length ?? limitSearch;
+      final lenghtPic = _searchPic?.length ?? limitSearch;
       var skipContent = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
 
       final int currentSkip = typeSearch == SearchLoadData.all ? 0 :
@@ -769,7 +757,7 @@ class SearchNotifier with ChangeNotifier {
       typeSearch == SearchLoadData.user ? _searchUsers?.length ?? 0 : 0;
       if((currentSkip != 0 && typeSearch == SearchLoadData.all)){
         throw 'Error get all because the state is not from beginning $currentSkip';
-      }else if(currentSkip%_slimit != 0){
+      }else if(currentSkip%limitSearch != 0){
         throw 'Error because we have to prevent the action for refusing wasting action';
       }
 
@@ -800,9 +788,10 @@ class SearchNotifier with ChangeNotifier {
             "listpict": true,
             "listtag": true,
             "skip": currentSkip,
-            "limit": _slimit,
+            "limit": limitSearch,
           };
           await  _hitApiGetSearchData(context, param, typeSearch, reload);
+          insertHistory(context, search);
           break;
         case SearchLoadData.user:
           param = {
@@ -814,7 +803,7 @@ class SearchNotifier with ChangeNotifier {
             "listpict": false,
             "listtag": false,
             "skip": currentSkip,
-            "limit": _slimit,
+            "limit": limitSearch,
           };
           await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
@@ -828,7 +817,7 @@ class SearchNotifier with ChangeNotifier {
             "listpict": false,
             "listtag": true,
             "skip": currentSkip,
-            "limit": _slimit,
+            "limit": limitSearch,
           };
           await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
@@ -842,11 +831,10 @@ class SearchNotifier with ChangeNotifier {
             "listpict": true,
             "listtag": false,
             "skip": currentSkip,
-            "limit": _slimit,
+            "limit": limitSearch,
           };
           await  _hitApiGetSearchData(context, param, typeSearch, reload);
           break;
-
       }
 
     }catch(e){

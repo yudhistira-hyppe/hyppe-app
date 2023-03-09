@@ -19,13 +19,24 @@ import '../../../../../../../constant/widget/custom_spacer.dart';
 import '../../../../../../../constant/widget/music_status_page_widget.dart';
 
 class BuildBottomView extends StatefulWidget {
-  final StoryController storyController;
+  final StoryController? storyController;
   final AnimationController? animationController;
   final ContentData? data;
   final int? currentStory;
   final int currentIndex;
+  final Function? pause;
+  final Function? play;
 
-  BuildBottomView({Key? key, required this.storyController, required this.animationController, required this.data, required this.currentStory, required this.currentIndex});
+  BuildBottomView({
+    Key? key,
+    this.storyController,
+    this.animationController,
+    required this.data,
+    required this.currentStory,
+    required this.currentIndex,
+    this.pause,
+    this.play,
+  });
 
   @override
   State<BuildBottomView> createState() => _BuildBottomViewState();
@@ -52,6 +63,7 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
               children: [
                 ViewerStoriesButton(
                   data: widget.data,
+                  pause: widget.pause,
                   currentStory: widget.currentStory == -1 ? 0 : widget.currentStory,
                   storyController: widget.storyController,
                 ),

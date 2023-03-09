@@ -95,13 +95,16 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     _routeArgument = routeArgument;
     if (_routeArgument?.postID != null) {
       'pic playlist'.logger();
+
       await _initialPic(context);
     } else {
       _data = _routeArgument?.picData;
       data?.isLiked.logger();
       notifyListeners();
+
       _checkFollowingToUser(context, autoFollow: false);
       _increaseViewCount(context);
+      await initDetailPost(context, _data?.postID ?? '');
     }
   }
 
@@ -143,6 +146,40 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
       'Failed to fetch ads data ${e}'.logger();
     }
     return null;
+  }
+
+  Future<ContentData?> getDetailPost(BuildContext context, String postID) async{
+    final notifier = PostsBloc();
+    await notifier.getContentsBlocV2(context,
+        postID: postID,
+        pageRows: 1,
+        pageNumber: 1,
+        type: FeatureType.pic);
+    final fetch = notifier.postsFetch;
+
+    final _res = (fetch.data as List<dynamic>?)?.map((e) => ContentData.fromJson(e as Map<String, dynamic>)).toList();
+    if(_res != null){
+      if(_res.isNotEmpty){
+        return _res.first;
+      }else{
+        return null;
+      }
+    }else{
+      return null;
+    }
+  }
+
+  ContentData? _savedData;
+  ContentData? get savedData => _savedData;
+  set savedData(ContentData? data){
+    _savedData = data;
+    notifyListeners();
+  }
+
+  Future initDetailPost(BuildContext context, String postID) async{
+
+    savedData = await getDetailPost(context, postID);
+    print("tetsdausdjha1 ${savedData?.toJson()}");
   }
 
   Future<void> _initialPic(

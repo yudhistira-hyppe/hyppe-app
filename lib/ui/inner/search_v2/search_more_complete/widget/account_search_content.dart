@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../../../constant/widget/custom_loading.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 import '../../widget/search_no_result.dart';
+import 'all_search_shimmer.dart';
 
 class AccountSearchContent extends StatefulWidget {
   final List<DataUser>? users;
@@ -59,7 +60,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
     return widget.users != null
         ? Consumer<SearchNotifier>(
           builder: (context, notifier, _) {
-            return RefreshIndicator(
+            return !notifier.isLoading ? RefreshIndicator(
               strokeWidth: 2.0,
               color: context.getColorScheme().primary,
               onRefresh: () => notifier.getDataSearch(context),
@@ -119,7 +120,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                     ),
                   ),
                 ),
-            );
+            ): const AllSearchShimmer();
           }
         )
         : Container();

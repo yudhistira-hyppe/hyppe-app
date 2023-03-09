@@ -87,7 +87,7 @@ class BottomDetail extends StatelessWidget {
                           case HyppeType.HyppeDiary:
                             return fixData.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
                           case HyppeType.HyppePic:
-                            return fixData.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                            return fixData.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
                         }
                       }else{
                         return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');

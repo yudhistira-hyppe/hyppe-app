@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/constants/enum.dart';
 import '../../../../../core/services/system.dart';
+import '../../../../constant/widget/custom_spacer.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
 import '../../widget/grid_content_view.dart';
 import '../../widget/search_no_result_image.dart';
@@ -32,12 +33,12 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
   void initState() {
     currentType = HyppeType.HyppeVid;
     _scrollController.addListener(() {
-      if (_scrollController.offset >= _scrollController.position.maxScrollExtent && !_scrollController.position.outOfRange) {
+      if (_scrollController.offset >= _scrollController.position.maxScrollExtent) {
         final notifier = context.read<SearchNotifier>();
         final key = widget.interest.id;
         final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
         final lenghtDiary = notifier.interestContents[key]?.diary?.length ?? 0;
-        final lenghtPic = notifier.interestContents[key]?.diary?.length ?? 0;
+        final lenghtPic = notifier.interestContents[key]?.pict?.length ?? 0;
         final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
         if(currentSkip%12 == 0){
           notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
@@ -64,6 +65,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
       final data = notifier.interestContents[widget.interest.id];
       return data != null ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Container(
             margin: const EdgeInsets.only(left: 16),
@@ -128,18 +130,23 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
               child: SingleChildScrollView(
                 controller: _scrollController,
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: Builder(
-                    builder: (context) {
-                      final type = currentType;
-                      switch(type){
-                        case HyppeType.HyppeVid:
-                          return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                        case HyppeType.HyppeDiary:
-                          return data.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                        case HyppeType.HyppePic:
-                          return data.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                      }
-                    }
+                child: Column(
+                  children: [
+                    Builder(
+                        builder: (context) {
+                          final type = currentType;
+                          switch(type){
+                            case HyppeType.HyppeVid:
+                              return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                            case HyppeType.HyppeDiary:
+                              return data.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                            case HyppeType.HyppePic:
+                              return data.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                          }
+                        }
+                    ),
+                    fortyPx
+                  ],
                 ),
               ),
             ),
