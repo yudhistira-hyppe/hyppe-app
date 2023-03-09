@@ -113,6 +113,8 @@ class _SearchMoreScreenState extends State<SearchMoreScreen>
                                               typeSearch: isHashtag
                                                   ? SearchLoadData.hashtag
                                                   : SearchLoadData.user);
+                                        }else{
+                                          notifier.onUpdate();
                                         }
                                       });
                                     }
