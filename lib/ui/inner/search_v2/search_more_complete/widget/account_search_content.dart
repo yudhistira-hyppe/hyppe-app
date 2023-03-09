@@ -102,7 +102,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                                   width: 50,
                                   height: 50,
                                   onTap: () {},
-                                  imageUrl: widget.users?[index].avatar == null ? '' : System().showUserPicture(widget.users?[index].avatar?[0].mediaEndpoint?.replaceAll("_0001.jpeg", "")),
+                                  imageUrl: widget.users?[index].avatar == null ? '' : System().showUserPicture(widget.users?[index].avatar?[0].mediaEndpoint?.split('_')[0]),
                                   following: true,
                                   onFollow: () {},
                                 ),
