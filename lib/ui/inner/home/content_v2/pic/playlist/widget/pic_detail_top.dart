@@ -180,23 +180,27 @@ class PicDetailTop extends StatelessWidget {
   }
 
   Widget _buildProfilePicture(BuildContext context) => data != null
-      ? ProfileComponent(
-          show: true,
-          following: true,
-          onFollow: () {},
-          username: data?.username,
-          spaceProfileAndId: eightPx,
-          haveStory: false,
-          isCelebrity: false,
-          onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
-          featureType: FeatureType.pic,
-          imageUrl: '${_system.showUserPicture(data?.avatar?.mediaEndpoint)}',
-          createdAt: '${_system.readTimestamp(
-            DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
-            context,
-            fullCaption: true,
-          )}',
-        )
+      ? Consumer<PicDetailNotifier>(
+        builder: (context, notifier, _) {
+          return ProfileComponent(
+              show: true,
+              following: true,
+              onFollow: () {},
+              username: (data?.username?.isNotEmpty ?? false) ? data?.username : notifier.savedData?.username,
+              spaceProfileAndId: eightPx,
+              haveStory: false,
+              isCelebrity: false,
+              onTapOnProfileImage: () => _system.navigateToProfile(context, data?.email ?? ''),
+              featureType: FeatureType.pic,
+              imageUrl: '${_system.showUserPicture((data?.avatar?.mediaEndpoint?.isNotEmpty ?? false) ?  data?.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
+              createdAt: '${_system.readTimestamp(
+                DateTime.parse(System().dateTimeRemoveT(data?.createdAt ?? '')).millisecondsSinceEpoch,
+                context,
+                fullCaption: true,
+              )}',
+            );
+        }
+      )
       : Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: const [

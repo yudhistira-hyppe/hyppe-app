@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_image_assets.dart';
@@ -13,6 +16,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/arguments/hashtag_argument.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/themes/hyppe_colors.dart';
+import '../../../../core/services/route_observer_service.dart';
 import '../../../../core/services/system.dart';
 import '../../../constant/widget/custom_base_cache_image.dart';
 import '../../../constant/widget/custom_spacer.dart';
@@ -28,8 +32,51 @@ class DetailHashtagScreen extends StatefulWidget {
 }
 
 class _DetailHashtagScreenState extends State<DetailHashtagScreen>
-    with AfterFirstLayoutMixin {
+    with RouteAware, AfterFirstLayoutMixin {
   final _scrollController = ScrollController();
+
+
+  @override
+  void didPop() {
+    'DetailHashtagScreen didPop'.logger();
+    super.didPop();
+  }
+
+
+  @override
+  void didPush() {
+    'DetailHashtagScreen didPush'.logger();
+    super.didPush();
+  }
+
+
+  @override
+  void didPushNext() {
+    'DetailHashtagScreen didPushNext'.logger();
+    super.didPushNext();
+  }
+
+
+  @override
+  void didPopNext() {
+    'DetailHashtagScreen didPopNext'.logger();
+    final notifier = context.read<SearchNotifier>();
+    notifier.getDetail(
+        context, widget.argument.hashtag.tag ?? ' ', TypeApiSearch.detailHashTag);
+    super.didPopNext();
+  }
+
+  @override
+  void didChangeDependencies() {
+    CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    CustomRouteObserver.routeObserver.unsubscribe(this);
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -39,7 +86,15 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
       if (_scrollController.offset >=
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        notifier.getDetail(context, widget.argument.hashtag.tag ?? 'tag', TypeApiSearch.detailHashTag, reload: false);
+        final notifier = context.read<SearchNotifier>();
+        final key = widget.argument.hashtag.tag;
+        final lenghtVid = notifier.detailHashTag?.vid?.length ?? 0;
+        final lenghtDiary = notifier.detailHashTag?.diary?.length ?? 0;
+        final lenghtPic = notifier.detailHashTag?.pict?.length ?? 0;
+        final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+        if(currentSkip%12 == 0){
+          notifier.getDetail(context, key ?? 'tag', TypeApiSearch.detailHashTag, reload: false);
+        }
       }
     });
     super.initState();

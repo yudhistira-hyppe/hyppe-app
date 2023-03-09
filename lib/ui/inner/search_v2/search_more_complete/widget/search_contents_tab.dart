@@ -10,6 +10,7 @@ import 'package:hyppe/ui/inner/search_v2/widget/grid_content_view.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/search_no_result_image.dart';
+import 'all_search_shimmer.dart';
 
 class SearchContentsTab extends StatefulWidget {
   const SearchContentsTab({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final language = notifier.language;
-      return Column(
+      return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
@@ -137,7 +138,7 @@ class _SearchContentsTabState extends State<SearchContentsTab> {
             ),
           )
         ],
-      );
+      ): const AllSearchShimmer();
     });
   }
 }

@@ -125,7 +125,7 @@ class _SlidedPicDetailState extends State<SlidedPicDetail> with AfterFirstLayout
                                       resetZooming: resetZooming,
                                       rootIndex: indexRoot,
                                     )
-                                  : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data));
+                                  : PicDetailScreen(arguments: PicDetailScreenArgument(picData: data, ));
                             } else {
                               return Stack(
                                 children: [

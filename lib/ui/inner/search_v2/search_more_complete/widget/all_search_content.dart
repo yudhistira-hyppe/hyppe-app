@@ -16,8 +16,6 @@ import 'package:provider/provider.dart';
 import '../../hashtag/widget/hashtag_item.dart';
 
 class AllSearchContent extends StatefulWidget {
-  // final SearchContentModel? content;
-  // final FeatureType? featureType;
   const AllSearchContent({Key? key}) : super(key: key);
 
   @override
@@ -51,7 +49,6 @@ class _AllSearchContentState extends State<AllSearchContent> {
       final vids = notifier.searchVid;
       final diaries = notifier.searchDiary;
       final pics = notifier.searchPic;
-      final users = notifier.searchUsers;
       return !notifier.isLoading
           ? RefreshIndicator(
         strokeWidth: 2.0,

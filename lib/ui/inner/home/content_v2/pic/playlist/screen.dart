@@ -24,6 +24,7 @@ class PicDetailScreen extends StatefulWidget {
 class _PicDetailScreenState extends State<PicDetailScreen> with AfterFirstLayoutMixin {
   final _notifier = PicDetailNotifier();
 
+
   @override
   void afterFirstLayout(BuildContext context) {
     _notifier.initState(context, widget.arguments);

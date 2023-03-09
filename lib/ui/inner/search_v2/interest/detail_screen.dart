@@ -33,6 +33,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with Single
   @override
   void initState() {
     _tabController = TabController(length: 6, vsync: this);
+    final notifier = Provider.of<SearchNotifier>(context, listen: false);
     _tabController.addListener(() {
       final notifier = Provider.of<SearchNotifier>(context, listen: false);
       notifier.tabIndex = _tabController.index;

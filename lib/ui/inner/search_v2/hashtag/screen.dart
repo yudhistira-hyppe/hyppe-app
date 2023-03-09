@@ -69,7 +69,7 @@ class _HashtagScreenState extends State<HashtagScreen> with AfterFirstLayoutMixi
                   countContainer: notifier.language.posts ?? 'Posts',
                   onTap: () {
                     notifier.selectedHashtag = notifier.listHashtag?[index];
-                    notifier.layout = SearchLayout.hashtagDetail;
+                    notifier.layout = SearchLayout.mainHashtagDetail;
                   },
                 );})
         ],
