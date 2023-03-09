@@ -1,5 +1,7 @@
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +85,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
   Widget widgetUserList(_themes, SearchNotifier notifier) {
     final users = notifier.searchUsers;
     final tags = notifier.searchHashtag;
+    final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -107,7 +110,7 @@ class _AllSearchContentState extends State<AllSearchContent> {
                   onTap: () => _system.navigateToProfile(context, users?[index].email ?? '',isReplaced: false),
                   contentPadding: EdgeInsets.zero,
                   title: Text("${users?[index].fullName}"),
-                  subtitle: Text("${users?[index].username}"),
+                  subtitle: Text(isIndo ? (users?[index].statusID ?? '') : (users?[index].statusEN ?? ''), style: context.getTextTheme().caption,),
                   leading: StoryColorValidator(
                     haveStory: false,
                     featureType: FeatureType.pic,

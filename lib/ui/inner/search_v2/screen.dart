@@ -142,8 +142,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
         preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
         child: HomeAppBar(),
       ),
-      // endDrawerEnableOpenDragGesture: true,
-      // endDrawer: FilterSearchScreen(),
       body: RefreshIndicator(
         strokeWidth: 2.0,
         color: context.getColorScheme().primary,
@@ -158,10 +156,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
                   contentPadding: EdgeInsets.symmetric(vertical: 16 * SizeConfig.scaleDiagonal),
                   focusNode: notifier.focusNode1,
                   controller: notifier.searchController1,
-                  // onSubmitted: (v) => notifier.onSearchPost(context, value: v),
-                  // onPressedIcon: () => notifier.onSearchPost(context),
-                  // onTap: () => notifier.moveSearchMore(),
-                  // onTap: () => _scaffoldKey.currentState.openEndDrawer(),
                   onTap: (){
                     notifier.layout = SearchLayout.search;
                   },

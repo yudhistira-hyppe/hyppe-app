@@ -1,6 +1,8 @@
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/shared_preference_keys.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
+import 'package:hyppe/core/services/shared_preference.dart';
 import 'package:hyppe/core/services/system.dart';
 import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
     return widget.users != null
         ? Consumer<SearchNotifier>(
           builder: (context, notifier, _) {
+            final isIndo = SharedPreference().readStorage(SpKeys.isoCode) == 'id';
             return !notifier.isLoading ? RefreshIndicator(
               strokeWidth: 2.0,
               color: context.getColorScheme().primary,
@@ -91,7 +94,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                               onTap: () => _system.navigateToProfile(context, widget.users?[index].email ?? '', isReplaced: false),
                               contentPadding: EdgeInsets.zero,
                               title: Text("${widget.users?[index].fullName}"),
-                              subtitle: Text("${widget.users?[index].username}"),
+                              subtitle: Text(isIndo ? (widget.users?[index].statusID ?? '') : (widget.users?[index].statusEN ?? ''), style: context.getTextTheme().caption,),
                               leading: StoryColorValidator(
                                 haveStory: false,
                                 featureType: FeatureType.pic,
