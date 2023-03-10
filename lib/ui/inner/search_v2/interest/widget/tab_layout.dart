@@ -12,6 +12,7 @@ import '../../../../../core/constants/enum.dart';
 import '../../../../../core/services/system.dart';
 import '../../../../constant/widget/custom_spacer.dart';
 import '../../../../constant/widget/custom_text_widget.dart';
+import '../../search_more_complete/widget/all_search_shimmer.dart';
 import '../../widget/grid_content_view.dart';
 import '../../widget/search_no_result_image.dart';
 
@@ -64,7 +65,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
-      return data != null ? Column(
+      return !notifier.isLoading ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -94,7 +95,6 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                             setState((){
                               currentType = e;
                             });
-
                           },
                           borderRadius: const BorderRadius.all(Radius.circular(18)),
                           splashColor: context.getColorScheme().primary,
@@ -136,14 +136,19 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
                     Builder(
                         builder: (context) {
                           final type = currentType;
-                          switch(type){
-                            case HyppeType.HyppeVid:
-                              return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                            case HyppeType.HyppeDiary:
-                              return data.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
-                            case HyppeType.HyppePic:
-                              return data.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                          if(data != null){
+                            switch(type){
+                              case HyppeType.HyppeVid:
+                                return data.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data.vid ?? []) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                              case HyppeType.HyppeDiary:
+                                return data.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data.diary ?? []) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                              case HyppeType.HyppePic:
+                                return data.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data.pict ?? []) : SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
+                            }
+                          }else{
+                            return SearchNoResultImage(locale: notifier.language, keyword: widget.interest.interestName ?? '');
                           }
+
                         }
                     ),
                     fortyPx
@@ -153,7 +158,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
             ),
           )
         ],
-      ) : const Center(child: CustomLoading(),);
+      ) :  const AllSearchShimmer();
     });
   }
 

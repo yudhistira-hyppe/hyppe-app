@@ -26,9 +26,8 @@ import 'hastag_tab.dart';
 
 class BottomDetail extends StatelessWidget {
   final scrollController;
-  SearchContentModel? data;
   Tags hashtag;
-  BottomDetail({Key? key, required this.data, required this.hashtag, required this.scrollController}) : super(key: key);
+  BottomDetail({Key? key, required this.hashtag, required this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,18 +78,43 @@ class BottomDetail extends StatelessWidget {
                 child: Builder(
                     builder: (context) {
                       final type = notifier.hashtagTab;
-                      final fixData = data;
-                      if(fixData != null){
-                        switch(type){
-                          case HyppeType.HyppeVid:
-                            return fixData.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
-                          case HyppeType.HyppeDiary:
-                            return fixData.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
-                          case HyppeType.HyppePic:
-                            return fixData.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
-                        }
-                      }else{
-                        return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                      final vid = notifier.hashtagVid;
+                      final diary = notifier.hashtagDiary;
+                      final pic = notifier.hashtagPic;
+                      // if(fixData != null){
+                      //   switch(type){
+                      //     case HyppeType.HyppeVid:
+                      //       return fixData.vid.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.vid ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                      //     case HyppeType.HyppeDiary:
+                      //       return fixData.diary.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.diary ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                      //     case HyppeType.HyppePic:
+                      //       return fixData.pict.isNotNullAndEmpty() ? GridContentView(type: type, data: data?.pict ?? [], hasNext: notifier.hasNext,) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                      //   }
+                      // }else{
+                      //   return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                      // }
+
+                      switch(type){
+                        case HyppeType.HyppeVid:
+                          if(vid.isNotNullAndEmpty()){
+                            return vid.isNotNullAndEmpty() ? GridContentView(type: type, data: vid ?? []) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          }else{
+                            return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          }
+
+                        case HyppeType.HyppeDiary:
+                          if(vid.isNotNullAndEmpty()){
+                            return diary.isNotNullAndEmpty() ? GridContentView(type: type, data: diary ?? []) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          }else{
+                            return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          }
+
+                        case HyppeType.HyppePic:
+                          if(vid.isNotNullAndEmpty()){
+                            return pic.isNotNullAndEmpty() ? GridContentView(type: type, data: pic ?? []) : SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          }else{
+                            return SearchNoResultImage(locale: notifier.language, keyword: hashtag.tag ?? '');
+                          }
                       }
 
                     }

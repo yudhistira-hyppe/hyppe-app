@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/constants/asset_path.dart';
 import '../../../../core/constants/enum.dart';
 import '../../../../core/constants/size_config.dart';
+import '../../../../core/constants/utils.dart';
 import '../../../../core/models/collection/posts/content_v2/content_data.dart';
 import '../../../../core/services/system.dart';
 import '../../../constant/widget/custom_content_moderated_widget.dart';
@@ -14,11 +15,10 @@ import '../../../constant/widget/custom_icon_widget.dart';
 import '../../home/content_v2/profile/self_profile/widget/sensitive_content.dart';
 
 
-class GridContentView extends StatefulWidget {
+class GridContentView extends StatefulWidget{
   HyppeType type;
   List<ContentData> data;
-  bool hasNext;
-  GridContentView({Key? key, required this.type, required this.data, this.hasNext = false}) : super(key: key);
+  GridContentView({Key? key, required this.type, required this.data}) : super(key: key);
 
   @override
   State<GridContentView> createState() => _GridContentViewState();
@@ -41,7 +41,7 @@ class _GridContentViewState extends State<GridContentView>{
                 mainAxisSpacing: 10,
                 crossAxisCount: 3,
                 childAspectRatio: 1.0,
-                children: widget.data.isNotEmpty ? List.generate(widget.data.length, (index){
+                children: List.generate(widget.data.length, (index){
                   final dataitem = widget.data[index];
                   String thumb = System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                   if(widget.type == HyppeType.HyppePic){
@@ -209,12 +209,10 @@ class _GridContentViewState extends State<GridContentView>{
                         ),
                       );
                   }
-                }).toList() : [
-                  SearchNoResultImage(locale: notifier.language, keyword: '')
-                ],
+                }).toList()
               ),
             ),
-            if(widget.hasNext)
+            if(widget.data.length%limitSearch == 0)
               SliverToBoxAdapter(
                 child: Container(
                     width: double.infinity,
