@@ -642,7 +642,7 @@ class SearchNotifier with ChangeNotifier {
 
 
 
-  Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true}) async{
+  Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true, HyppeType? hyppe}) async{
     try{
       if(reload){
         isLoading = true;
@@ -662,7 +662,8 @@ class SearchNotifier with ChangeNotifier {
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
-          currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+          currentSkip = hyppe == HyppeType.HyppeVid ? lenghtVid :
+          hyppe == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
         }else if(type == TypeApiSearch.detailInterest){
           currentVid = interestContents[keys]?.vid ?? [];
           currentDairy = interestContents[keys]?.diary ?? [];
@@ -670,30 +671,53 @@ class SearchNotifier with ChangeNotifier {
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
-          currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+          currentSkip = hyppe == HyppeType.HyppeVid ? lenghtVid :
+          hyppe == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
         }
         if(currentSkip%limitSearch != 0){
-          throw 'hitApiGetDetail : preventing api because the system must reduce useless action';
+          throw 'hitApiGetDetail : preventing api because the system must reduce useless action ';
         }
       }
-      final _res = await _hitApiGetDetail(context, keys, type, currentSkip);
+      final _res = await _hitApiGetDetail(context, keys, type, currentSkip, type: hyppe);
       if(_res != null){
         final videos = _res.vid;
         final diaries = _res.diary;
         final pics = _res.pict;
         if(type == TypeApiSearch.detailHashTag){
           if(!reload){
-            detailHashTag?.vid = [...currentVid, ...(videos ?? [])];
-            detailHashTag?.diary = [...currentDairy, ...(diaries ?? [])];
-            detailHashTag?.pict = [...currentPic, ...(pics ?? [])];
+            if(hyppe != null){
+              if(hyppe == HyppeType.HyppeVid){
+                detailHashTag?.vid = [...currentVid, ...(videos ?? [])];
+              }else if(hyppe == HyppeType.HyppeDiary){
+                detailHashTag?.diary = [...currentDairy, ...(diaries ?? [])];
+              }else{
+                detailHashTag?.pict = [...currentPic, ...(pics ?? [])];
+              }
+            }else{
+              detailHashTag?.vid = [...currentVid, ...(videos ?? [])];
+              detailHashTag?.diary = [...currentDairy, ...(diaries ?? [])];
+              detailHashTag?.pict = [...currentPic, ...(pics ?? [])];
+            }
+
           }else{
             detailHashTag = _res;
           }
         }else if(type == TypeApiSearch.detailInterest){
           if(!reload){
-            interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
-            interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
-            interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
+            if(hyppe != null){
+              if(hyppe == HyppeType.HyppeVid){
+                interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
+              }else if(hyppe == HyppeType.HyppeDiary){
+                interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
+              }else{
+                interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
+              }
+            }else{
+              interestContents[keys]?.vid = [...currentVid, ...(videos ?? [])];
+              interestContents[keys]?.diary = [...currentDairy, ...(diaries ?? [])];
+              interestContents[keys]?.pict = [...currentPic, ...(pics ?? [])];
+            }
+
           }else{
             interestContents[keys] = _res;
           }
@@ -711,19 +735,32 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
-  Future<SearchContentModel?> _hitApiGetDetail(BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip) async{
+  Future<SearchContentModel?> _hitApiGetDetail(BuildContext context, String keys, TypeApiSearch typeApi, int currentSkip, {HyppeType? type}) async{
     try{
       String email = SharedPreference().readStorage(SpKeys.email);
+      var param = <String, dynamic>{};
+      if(type != null){
+        param = {
+          "email": email,
+          "keys": keys,
+          "listvid": type == HyppeType.HyppeVid ? true : false,
+          "listdiary": type == HyppeType.HyppeDiary ? true : false,
+          "listpict": type == HyppeType.HyppePic ? true : false,
+          "skip": currentSkip,
+          "limit": limitSearch,
+        };
+      }else{
+        param = {
+          "email": email,
+          "keys": keys,
+          "listvid": true,
+          "listdiary": true,
+          "listpict": true,
+          "skip": currentSkip,
+          "limit": limitSearch,
+        };
+      }
 
-      final param = {
-        "email": email,
-        "keys": keys,
-        "listvid": true,
-        "listdiary": true,
-        "listpict": true,
-        "skip": currentSkip,
-        "limit": limitSearch,
-      };
       final notifier = SearchContentBloc();
       await notifier.getSearchContent(context, param, type: typeApi);
       final fetch = notifier.searchContentFetch;
@@ -851,8 +888,11 @@ class SearchNotifier with ChangeNotifier {
 
   Future _hitApiGetSearchData(BuildContext context, Map<String, dynamic> req, SearchLoadData typeSearch, bool reload) async{
     try{
+
       final notifier = SearchContentBloc();
+      print('_hitApiGetSearchData#1 ${context.getCurrentDate()}');
       await notifier.getSearchContent(context, req);
+      print('_hitApiGetSearchData ${context.getCurrentDate()}');
       final fetch = notifier.searchContentFetch;
       if (fetch.searchContentState == SearchContentState.getSearchContentBlocSuccess) {
         final _res = SearchContentModel.fromJson(fetch.data[0]);

@@ -169,17 +169,10 @@ class PicDetailNotifier with ChangeNotifier, GeneralMixin {
     }
   }
 
-  ContentData? _savedData;
-  ContentData? get savedData => _savedData;
-  set savedData(ContentData? data){
-    _savedData = data;
-    notifyListeners();
-  }
-
   Future initDetailPost(BuildContext context, String postID) async{
 
-    savedData = await getDetailPost(context, postID);
-    print("tetsdausdjha1 ${savedData?.toJson()}");
+    data = await getDetailPost(context, postID);
+    print("tetsdausdjha1 ${data?.toJson()}");
   }
 
   Future<void> _initialPic(

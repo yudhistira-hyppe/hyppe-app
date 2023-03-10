@@ -39,9 +39,10 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
         final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
         final lenghtDiary = notifier.interestContents[key]?.diary?.length ?? 0;
         final lenghtPic = notifier.interestContents[key]?.pict?.length ?? 0;
-        final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+        final currentSkip =  currentType == HyppeType.HyppeVid ? lenghtVid :
+        currentType == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
         if(currentSkip%12 == 0){
-          notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false);
+          notifier.getDetail(context, widget.interest.id ?? '', TypeApiSearch.detailInterest, reload: false, hyppe: currentType);
         }
       }
     });

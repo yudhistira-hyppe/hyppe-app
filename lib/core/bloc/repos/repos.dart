@@ -140,7 +140,7 @@ class Repos {
         }
         return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
       }
-
+      print('_hitApiGetSearchData#3 ${System().getCurrentDate()}');
       /// communicate with backend
       final _response = await _communicate(
         methodType,
@@ -153,7 +153,7 @@ class Repos {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-
+      print('_hitApiGetSearchData#4 ${System().getCurrentDate()}');
       /// log statusCode from backend
       if (verbose) 'Actual response data ${_response.data}'.logger();
       'StatusCode from dio ${_response.statusCode}'.logger();

@@ -62,7 +62,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
     'DetailHashtagScreen didPopNext'.logger();
     final notifier = context.read<SearchNotifier>();
     notifier.getDetail(
-        context, widget.argument.hashtag.tag ?? ' ', TypeApiSearch.detailHashTag);
+        context, widget.argument.hashtag.tag?.replaceAll(' ', '') ?? ' ', TypeApiSearch.detailHashTag);
     super.didPopNext();
   }
 
@@ -91,9 +91,11 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
         final lenghtVid = notifier.detailHashTag?.vid?.length ?? 0;
         final lenghtDiary = notifier.detailHashTag?.diary?.length ?? 0;
         final lenghtPic = notifier.detailHashTag?.pict?.length ?? 0;
-        final currentSkip = [lenghtVid, lenghtDiary, lenghtPic].reduce(max);
+        final type = notifier.hashtagTab;
+        final currentSkip = type == HyppeType.HyppeVid ? lenghtVid :
+        type == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
         if(currentSkip%12 == 0){
-          notifier.getDetail(context, key ?? 'tag', TypeApiSearch.detailHashTag, reload: false);
+          notifier.getDetail(context, key?.replaceAll(' ', '') ?? 'tag', TypeApiSearch.detailHashTag, reload: false, hyppe: type);
         }
       }
     });
@@ -108,7 +110,7 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
       tag = tag?.replaceAll(' ', '');
     }
     notifier.getDetail(
-        context, tag ?? ' ', TypeApiSearch.detailHashTag);
+        context, tag?.replaceAll(' ', '') ?? ' ', TypeApiSearch.detailHashTag);
   }
 
   @override

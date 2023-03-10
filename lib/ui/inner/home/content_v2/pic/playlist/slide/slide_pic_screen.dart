@@ -67,10 +67,6 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
 
   @override
   void dispose() {
-    if (widget.data.certified ?? false) {
-      print('close dispose ${widget.data.certified ?? false}');
-      // disposeBlock();
-    }
     super.dispose();
   }
 
@@ -78,6 +74,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
   Widget build(BuildContext context) {
     final notifier = Provider.of<SlidedPicDetailNotifier>(context);
     final translate = Provider.of<TranslateNotifierV2>(context, listen: false).translate;
+    final data = notifier.savedData ?? widget.data;
     return Stack(
       children: [
         // Background
@@ -85,19 +82,19 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
           sigmaX: 30,
           sigmaY: 30,
           // thumbnail: picData.content[arguments].contentUrl,
-          thumbnail: (widget.data.isApsara ?? false) ? (widget.data.mediaThumbUri ?? (widget.data.media?.imageInfo?[0].url ?? '')) : widget.data.fullThumbPath,
+          thumbnail: (data.isApsara ?? false) ? (data.mediaThumbUri ?? (data.media?.imageInfo?[0].url ?? '')) : data.fullThumbPath,
         ),
         // Content
-        (widget.data.reportedStatus == "BLURRED")
+        (data.reportedStatus == "BLURRED")
             ? Container()
             : PicPlaylishScreen(
                 data: notifier.adsData,
                 url: notifier.adsUrl,
-                contentData: widget.data,
+                contentData: data,
                 transformationController: widget.transformationController,
               ),
         // Top action
-        (widget.data.reportedStatus == "BLURRED")
+        (data.reportedStatus == "BLURRED")
             ? SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
@@ -148,21 +145,21 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                                 color: Colors.white,
                               ),
                             ),
-                            // Text("${widget.data.isShared}"),
+                            // Text("${data.isShared}"),
                             ProfileComponent(
                               isDetail: true,
                               show: true,
                               following: true,
                               onFollow: () {},
                               haveStory: false,
-                              onTapOnProfileImage: () => System().navigateToProfile(context, widget.data.email ?? ''),
+                              onTapOnProfileImage: () => System().navigateToProfile(context, data.email ?? ''),
                               spaceProfileAndId: eightPx,
                               featureType: FeatureType.pic,
-                              username: (widget.data.username?.isNotEmpty ?? false) ? widget.data.username : notifier.savedData?.username,
-                              isCelebrity: widget.data.privacy?.isCelebrity,
-                              imageUrl: '${System().showUserPicture((widget.data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ?  widget.data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
+                              username: (data.username?.isNotEmpty ?? false) ? data.username : notifier.savedData?.username,
+                              isCelebrity: data.privacy?.isCelebrity,
+                              imageUrl: '${System().showUserPicture((data.avatar?.mediaEndpoint?.isNotEmpty ?? false) ?  data.avatar?.mediaEndpoint : (notifier.savedData?.avatar?.mediaEndpoint ?? ''))}',
                               createdAt: '${System().readTimestamp(
-                                DateTime.parse(System().dateTimeRemoveT(widget.data.createdAt ?? '')).millisecondsSinceEpoch,
+                                DateTime.parse(System().dateTimeRemoveT(data.createdAt ?? '')).millisecondsSinceEpoch,
                                 context,
                                 fullCaption: true,
                               )}',
@@ -170,7 +167,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           ],
                         ),
                       ),
-                      (widget.data.saleAmount ?? 0) > 0
+                      (data.saleAmount ?? 0) > 0
                           ? const Padding(
                               padding: EdgeInsets.only(top: 10.0),
                               child: CustomIconWidget(
@@ -180,7 +177,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               ),
                             )
                           : const SizedBox(),
-                      widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                      data.email == SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
@@ -189,8 +186,8 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                                 SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                                 await ShowBottomSheet().onShowOptionContent(
                                   context,
-                                  contentData: widget.data,
-                                  captionTitle: hyppePic, isShare: widget.data.isShared,
+                                  contentData: data,
+                                  captionTitle: hyppePic, isShare: data.isShared,
                                   // storyController: widget.storyController,
                                   onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
                                 );
@@ -199,13 +196,13 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               },
                             )
                           : const SizedBox(),
-                      widget.data.email != SharedPreference().readStorage(SpKeys.email)
+                      data.email != SharedPreference().readStorage(SpKeys.email)
                           ? _buildButtonV2(
                               context: context,
                               iconData: '${AssetPath.vectorPath}more.svg',
                               function: () => ShowBottomSheet.onReportContent(
                                 context,
-                                postData: widget.data,
+                                postData: data,
                                 adsData: null,
                                 type: hyppePic,
                                 onUpdate: () => context.read<SlidedPicDetailNotifier>().onUpdate(),
@@ -213,7 +210,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             )
                           : const SizedBox(),
                       Visibility(
-                        visible: (widget.data.saleAmount == 0 && (widget.data.certified ?? false)),
+                        visible: (data.saleAmount == 0 && (data.certified ?? false)),
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: IconOwnership(correct: true),
@@ -223,7 +220,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                   ),
                 ),
               ),
-        widget.data.reportedStatus == "BLURRED"
+        data.reportedStatus == "BLURRED"
             ? SafeArea(
                 child: SizedBox(
                 width: SizeConfig.screenWidth,
@@ -244,9 +241,9 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             color: Colors.white,
                             fontSize: 13,
                           )),
-                      widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                      data.email == SharedPreference().readStorage(SpKeys.email)
                           ? GestureDetector(
-                              onTap: () => Routing().move(Routes.appeal, argument: widget.data),
+                              onTap: () => Routing().move(Routes.appeal, argument: data),
                               child: Container(
                                   padding: const EdgeInsets.all(8),
                                   margin: const EdgeInsets.all(18),
@@ -257,7 +254,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          context.read<ReportNotifier>().seeContent(context, widget.data, hyppePic);
+                          context.read<ReportNotifier>().seeContent(context, data, hyppePic);
                         },
                         child: Container(
                           padding: const EdgeInsets.only(top: 8),
@@ -285,7 +282,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
               ))
             : Container(),
         // Bottom action
-        (widget.data.reportedStatus == "BLURRED")
+        (data.reportedStatus == "BLURRED")
             ? Container()
             : Align(
                 alignment: Alignment.bottomCenter,
@@ -298,7 +295,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       children: [
                         sixteenPx,
                         Consumer<LikeNotifier>(
-                          builder: (context, notifier, child) => widget.data.insight?.isloading ?? false
+                          builder: (context, notifier, child) => data.insight?.isloading ?? false
                               ? const SizedBox(
                                   height: 21,
                                   width: 21,
@@ -309,65 +306,65 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                                 )
                               : _buildButtonV2(
                                   context: context,
-                                  colorIcon: (widget.data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
-                                  iconData: '${AssetPath.vectorPath}${(widget.data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
+                                  colorIcon: (data.insight?.isPostLiked ?? false) ? kHyppePrimary : kHyppeLightButtonText,
+                                  iconData: '${AssetPath.vectorPath}${(data.insight?.isPostLiked ?? false) ? 'liked.svg' : 'none-like.svg'}',
                                   function: () {
                                     print('ini l0000ike');
-                                    notifier.likePost(context, widget.data);
+                                    notifier.likePost(context, data);
                                   },
                                 ),
                         ),
                         eightPx,
-                        if ((widget.data.allowComments ?? true))
+                        if ((data.allowComments ?? true))
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}comment.svg',
                             function: () {
-                              ShowBottomSheet.onShowCommentV2(context, postID: widget.data.postID);
+                              ShowBottomSheet.onShowCommentV2(context, postID: data.postID);
                             },
                           ),
                         eightPx,
-                        if ((widget.data.isShared ?? true) && widget.data.visibility == 'PUBLIC')
+                        if ((data.isShared ?? true) && data.visibility == 'PUBLIC')
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}share.svg',
-                            function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: widget.data),
+                            function: () => context.read<PicDetailNotifier>().createdDynamicLink(context, data: data),
                           ),
                         eightPx,
-                        if ((widget.data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != widget.data.email)
+                        if ((data.saleAmount ?? 0) > 0 && SharedPreference().readStorage(SpKeys.email) != data.email)
                           _buildButtonV2(
                             context: context,
                             iconData: '${AssetPath.vectorPath}cart.svg',
                             function: () async {
                               notifier.preventMusic = true;
                               SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
-                              await ShowBottomSheet.onBuyContent(context, data: widget.data);
+                              await ShowBottomSheet.onBuyContent(context, data: data);
                               notifier.preventMusic = false;
                               SharedPreference().writeStorage(SpKeys.isShowPopAds, false);
                             },
                           ),
                       ],
                     ),
-                    (widget.data.tagPeople?.isNotEmpty ?? false) || widget.data.location != ''
+                    (data.tagPeople?.isNotEmpty ?? false) || data.location != ''
                         ? Padding(
                             padding: const EdgeInsets.only(left: 16, bottom: 0, top: 16),
                             child: Row(
                               children: [
-                                widget.data.tagPeople?.isNotEmpty ?? false
+                                data.tagPeople?.isNotEmpty ?? false
                                     ? PicTagLabel(
                                         icon: 'tag_people',
-                                        label: '${widget.data.tagPeople?.length} people',
+                                        label: '${data.tagPeople?.length} people',
                                         function: () {
-                                          context.read<PicDetailNotifier>().showUserTag(context, widget.data.tagPeople, widget.data.postID);
+                                          context.read<PicDetailNotifier>().showUserTag(context, data.tagPeople, data.postID);
                                         },
                                         width: 18,
                                       )
                                     : const SizedBox(),
-                                widget.data.location == '' || widget.data.location == null
+                                data.location == '' || data.location == null
                                     ? const SizedBox()
                                     : PicTagLabel(
                                         icon: 'maptag-white',
-                                        label: "${widget.data.location}",
+                                        label: "${data.location}",
                                         function: () {},
                                         width: 13,
                                       ),
@@ -386,7 +383,7 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             CustomDescContent(
-                              desc: "${widget.data.description}",
+                              desc: "${data.description}",
                               trimLines: 5,
                               textAlign: TextAlign.start,
                               seeLess: ' ${translate.seeLess}',
@@ -395,24 +392,24 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                               hrefStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: kHyppePrimary),
                               expandStyle: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.primary),
                             ),
-                            if (widget.data.music?.musicTitle != null && (widget.data.apsaraId ?? '').isNotEmpty)
+                            if (data.music?.musicTitle != null && (data.apsaraId ?? '').isNotEmpty)
                               notifier.preventMusic
                                   ? const SizedBox.shrink()
                                   : notifier.isLoadMusic
                                       ? LoadingMusicScreen(
-                                          music: widget.data.music!,
+                                          music: data.music!,
                                           index: widget.rootIndex,
                                         )
                                       : Builder(builder: (context) {
                                           final musicPost = notifier.urlMusic;
                                           if (musicPost.isNotEmpty) {
                                             return MusicStatusPage(
-                                              music: widget.data.music!,
+                                              music: data.music!,
                                               urlMusic: notifier.urlMusic,
                                             );
                                           } else {
                                             return LoadingMusicScreen(
-                                              music: widget.data.music!,
+                                              music: data.music!,
                                               index: widget.rootIndex,
                                             );
                                           }
@@ -423,11 +420,11 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     ),
                     twentyPx,
-                    (widget.data.reportedStatus != 'OWNED' && widget.data.reportedStatus != 'BLURRED' && widget.data.reportedStatus2 != 'BLURRED') &&
-                            (widget.data.boosted.isEmpty) &&
-                            widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                    (data.reportedStatus != 'OWNED' && data.reportedStatus != 'BLURRED' && data.reportedStatus2 != 'BLURRED') &&
+                            (data.boosted.isEmpty) &&
+                            data.email == SharedPreference().readStorage(SpKeys.email)
                         ? ButtonBoost(
-                            contentData: widget.data,
+                            contentData: data,
                             startState: () {
                               SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                               notifier.preventMusic = true;
@@ -438,18 +435,18 @@ class _SlidePicScreenState extends State<SlidePicScreen> with AfterFirstLayoutMi
                             },
                           )
                         : Container(),
-                    (widget.data.boosted.isNotEmpty) && widget.data.email == SharedPreference().readStorage(SpKeys.email)
+                    (data.boosted.isNotEmpty) && data.email == SharedPreference().readStorage(SpKeys.email)
                         ? Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: JangkaunStatus(
-                              jangkauan: widget.data.boostJangkauan ?? 0,
+                              jangkauan: data.boostJangkauan ?? 0,
                               isDiary: true,
                             ),
                           )
                         : Container(),
-                    widget.data.email == SharedPreference().readStorage(SpKeys.email) && (widget.data.reportedStatus == 'OWNED')
+                    data.email == SharedPreference().readStorage(SpKeys.email) && (data.reportedStatus == 'OWNED')
                         ? ContentViolationWidget(
-                            data: widget.data,
+                            data: data,
                             text: translate.thisHyppePicisSubjectToModeration ?? '',
                           )
                         : Container(),
