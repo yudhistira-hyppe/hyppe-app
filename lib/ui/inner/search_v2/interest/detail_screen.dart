@@ -83,7 +83,7 @@ class _InterestDetailScreenState extends State<InterestDetailScreen> with Single
                     padding: EdgeInsets.fromLTRB(8.0, 20, 8, 13),
                     child: Center(
                       child: Text(
-                        e.interestName ?? '',
+                          context.isIndo() ? (e.interestNameId ?? '') : (e.interestName ?? ''),
                         style: const TextStyle(fontSize: 14),
                       ),
                     ),

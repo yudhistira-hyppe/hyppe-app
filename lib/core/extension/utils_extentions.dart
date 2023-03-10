@@ -73,6 +73,8 @@ extension ContextScreen on BuildContext {
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     return formatter.format(now);
   }
+
+  bool isIndo () => SharedPreference().readStorage(SpKeys.isoCode) == 'id';
 }
 
 extension StringDefine on String {
