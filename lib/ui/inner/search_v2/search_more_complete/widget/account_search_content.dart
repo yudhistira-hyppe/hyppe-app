@@ -1,5 +1,6 @@
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/shared_preference_keys.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/core/services/shared_preference.dart';
@@ -112,7 +113,7 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                         ),
                         if(!widget.users.isNotNullAndEmpty())
                           SearchNoResult(locale: notifier.language, keyword: notifier.searchController.text),
-                        if(notifier.hasNext)
+                        if((widget.users?.length ?? 0) % limitSearch == 0)
                           Container(
                             width: double.infinity,
                             height: 50,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/constants/enum.dart';
+import 'package:hyppe/core/constants/utils.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
@@ -95,7 +96,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                                     }
                                   },
                                 ).toList()),
-                                ...(notifier.hasNext
+                                ...((notifier.searchHashtag?.length ?? 0) % limitSearch == 0
                                     ? [
                                         Container(
                                           width: double.infinity,

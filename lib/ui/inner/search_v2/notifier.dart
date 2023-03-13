@@ -102,10 +102,38 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  SearchContentModel? _detailHashTag;
-  SearchContentModel? get detailHashTag => _detailHashTag;
-  set detailHashTag(SearchContentModel? val){
-    _detailHashTag = val;
+  // SearchContentModel? _detailHashTag;
+  // SearchContentModel? get detailHashTag => _detailHashTag;
+  // set detailHashTag(SearchContentModel? val){
+  //   _detailHashTag = val;
+  //   notifyListeners();
+  // }
+
+  List<ContentData>? _hashtagVid;
+  List<ContentData>? get hashtagVid => _hashtagVid;
+  set hashtagVid(List<ContentData>? data){
+    _hashtagVid = data;
+    notifyListeners();
+  }
+
+  List<ContentData>? _hashtagDiary;
+  List<ContentData>? get hashtagDiary => _hashtagDiary;
+  set hashtagDiary(List<ContentData>? data){
+    _hashtagDiary = data;
+    notifyListeners();
+  }
+
+  List<ContentData>? _hashtagPic;
+  List<ContentData>? get hashtagPic => _hashtagPic;
+  set hashtagPic(List<ContentData>? data){
+    _hashtagPic = data;
+    notifyListeners();
+  }
+
+  Tags? _currentHashtag;
+  Tags? get currentHashtag => _currentHashtag;
+  set currentHashtag(Tags? data){
+    _currentHashtag = data;
     notifyListeners();
   }
 
@@ -123,8 +151,6 @@ class SearchNotifier with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-  bool _hasNext = true;
-  bool get hasNext => _hasNext;
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
@@ -333,12 +359,10 @@ class SearchNotifier with ChangeNotifier {
 
   initDetailHashtag(){
     _hashtagTab = HyppeType.HyppeVid;
-    _hasNext = false;
   }
 
   initSearchAll(){
     _contentTab = HyppeType.HyppeVid;
-    _hasNext = false;
   }
 
   HyppeType _contentTab = HyppeType.HyppeVid;
@@ -413,11 +437,6 @@ class SearchNotifier with ChangeNotifier {
 
   set isLoading(bool val) {
     _isLoading = val;
-    notifyListeners();
-  }
-
-  set hasNext(bool val){
-    _hasNext = val;
     notifyListeners();
   }
 
@@ -630,8 +649,6 @@ class SearchNotifier with ChangeNotifier {
     try{
       if(reload){
         isLoading = true;
-      }else{
-        hasNext = true;
       }
 
       List<ContentData> currentVid = [];
@@ -640,9 +657,12 @@ class SearchNotifier with ChangeNotifier {
       int currentSkip = 0;
       if(!reload){
         if(type == TypeApiSearch.detailHashTag){
-          currentVid = detailHashTag?.vid ?? [];
-          currentDairy = detailHashTag?.diary ?? [];
-          currentPic = detailHashTag?.pict ?? [];
+          // currentVid = detailHashTag?.vid ?? [];
+          // currentDairy = detailHashTag?.diary ?? [];
+          // currentPic = detailHashTag?.pict ?? [];
+          currentVid = hashtagVid ?? [];
+          currentDairy = hashtagDiary ?? [];
+          currentPic = hashtagPic ?? [];
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
@@ -667,24 +687,31 @@ class SearchNotifier with ChangeNotifier {
         final videos = _res.vid;
         final diaries = _res.diary;
         final pics = _res.pict;
+        final hashtags = _res.tags;
+
         if(type == TypeApiSearch.detailHashTag){
           if(!reload){
             if(hyppe != null){
               if(hyppe == HyppeType.HyppeVid){
-                detailHashTag?.vid = [...currentVid, ...(videos ?? [])];
+                hashtagVid = [...currentVid, ...(videos ?? [])];
               }else if(hyppe == HyppeType.HyppeDiary){
-                detailHashTag?.diary = [...currentDairy, ...(diaries ?? [])];
+                hashtagDiary = [...currentDairy, ...(diaries ?? [])];
               }else{
-                detailHashTag?.pict = [...currentPic, ...(pics ?? [])];
+                hashtagPic = [...currentPic, ...(pics ?? [])];
               }
             }else{
-              detailHashTag?.vid = [...currentVid, ...(videos ?? [])];
-              detailHashTag?.diary = [...currentDairy, ...(diaries ?? [])];
-              detailHashTag?.pict = [...currentPic, ...(pics ?? [])];
+              hashtagVid = [...currentVid, ...(videos ?? [])];
+              hashtagDiary = [...currentDairy, ...(diaries ?? [])];
+              hashtagPic = [...currentPic, ...(pics ?? [])];
             }
 
           }else{
-            detailHashTag = _res;
+            if(hashtags.isNotNullAndEmpty()){
+              currentHashtag = hashtags?.first;
+            }
+            hashtagVid = videos;
+            hashtagDiary = diaries;
+            hashtagPic = pics;
           }
         }else if(type == TypeApiSearch.detailInterest){
           if(!reload){
@@ -706,6 +733,7 @@ class SearchNotifier with ChangeNotifier {
             interestContents[keys] = _res;
           }
         }
+        notifyListeners();
       }
 
     }catch(e){
@@ -713,8 +741,6 @@ class SearchNotifier with ChangeNotifier {
     }finally{
       if(reload){
         isLoading = false;
-      }else{
-        hasNext = false;
       }
     }
   }
@@ -787,8 +813,6 @@ class SearchNotifier with ChangeNotifier {
 
       if(reload){
         isLoading = true;
-      }else{
-        hasNext = true;
       }
 
       String email = SharedPreference().readStorage(SpKeys.email);
@@ -866,8 +890,6 @@ class SearchNotifier with ChangeNotifier {
     }finally{
       if(reload){
         isLoading = false;
-      }else{
-        hasNext = false;
       }
     }
 

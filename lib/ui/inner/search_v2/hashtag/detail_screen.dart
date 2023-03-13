@@ -88,9 +88,12 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
           !_scrollController.position.outOfRange) {
         final notifier = context.read<SearchNotifier>();
         final key = widget.argument.hashtag.tag;
-        final lenghtVid = notifier.detailHashTag?.vid?.length ?? 0;
-        final lenghtDiary = notifier.detailHashTag?.diary?.length ?? 0;
-        final lenghtPic = notifier.detailHashTag?.pict?.length ?? 0;
+        // final lenghtVid = notifier.detailHashTag?.vid?.length ?? 0;
+        // final lenghtDiary = notifier.detailHashTag?.diary?.length ?? 0;
+        // final lenghtPic = notifier.detailHashTag?.pict?.length ?? 0;
+        final lenghtVid = notifier.hashtagVid?.length ?? 0;
+        final lenghtDiary = notifier.hashtagDiary?.length ?? 0;
+        final lenghtPic = notifier.hashtagPic?.length ?? 0;
         final type = notifier.hashtagTab;
         final currentSkip = type == HyppeType.HyppeVid ? lenghtVid :
         type == HyppeType.HyppeDiary ? lenghtDiary : lenghtPic;
@@ -117,8 +120,8 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
   Widget build(BuildContext context) {
 
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
-      final extraTag = notifier.detailHashTag?.tags;
-      final count = (widget.argument.hashtag.total ?? (extraTag.isNotNullAndEmpty() ? (extraTag?[0].total ?? 0) : 0));
+      final extraTag = notifier.currentHashtag;
+      final count = (widget.argument.hashtag.total ?? (extraTag != null ? (extraTag.total ?? 0) : 0));
       return Scaffold(
         appBar: AppBar(
           leading: CustomIconButtonWidget(
@@ -157,10 +160,10 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                         children: [
                           Row(
                             children: [
-                              notifier.detailHashTag?.pict?.isNotNullAndEmpty() ?? false
+                              notifier.hashtagPic?.isNotNullAndEmpty() ?? false
                                   ? Builder(builder: (context) {
                                       final data =
-                                          notifier.detailHashTag?.pict?[0];
+                                          notifier.hashtagPic?[0];
                                       final url = data != null ? ((data.isApsara ?? false)
                                           ? ( data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? ''))
                                           : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
@@ -253,7 +256,6 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
                     ),
                     Expanded(
                         child: BottomDetail(
-                      data: notifier.detailHashTag,
                       hashtag: widget.argument.hashtag,
                       scrollController: _scrollController,
                     ))

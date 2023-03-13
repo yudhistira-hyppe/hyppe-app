@@ -25,14 +25,14 @@ class ThumbnailContentSearch extends StatelessWidget {
     final _scaling = (MediaQuery.of(context).size.width - 11.5 - 11.5 - 9) / 3;
     String gambar;
     if (data?.postType == 'pict') {
-      if (data?.apsara ?? false) {
-        gambar = data?.media?.imageInfo?[0].url ?? '';
+      if (data?.isApsara ?? false) {
+        gambar = data?.media?.imageInfo?[0].url ?? (data?.mediaThumbEndPoint ?? '');
       } else {
-        gambar = System().showUserPicture(data?.mediaEndpoint ?? '') ?? '';
+        gambar = System().showUserPicture(data?.mediaThumbEndPoint ?? '') ?? '';
       }
     } else {
-      if (data?.apsara ?? false) {
-        gambar = data?.media?.videoList?[0].coverURL ?? '';
+      if (data?.isApsara ?? false) {
+        gambar = data?.media?.videoList?[0].coverURL ?? (data?.mediaThumbEndPoint ?? '');
       } else {
         gambar = System().showUserPicture(data?.mediaThumbEndPoint ?? '') ?? '';
       }
