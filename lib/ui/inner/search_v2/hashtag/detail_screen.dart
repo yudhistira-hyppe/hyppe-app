@@ -119,7 +119,10 @@ class _DetailHashtagScreenState extends State<DetailHashtagScreen>
 
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final extraTag = notifier.currentHashtag;
-      final count = (widget.argument.hashtag.total ?? (extraTag != null ? (extraTag.total ?? 0) : 0));
+      var count = (widget.argument.hashtag.total ?? (extraTag != null ? (extraTag.total ?? 0) : 0));
+      if((notifier.hashtagPic?.isEmpty ?? true) && (notifier.hashtagDiary?.isEmpty ?? true) && (notifier.hashtagVid?.isEmpty?? true)){
+        count = 0;
+      }
       return Scaffold(
         appBar: AppBar(
           leading: CustomIconButtonWidget(
