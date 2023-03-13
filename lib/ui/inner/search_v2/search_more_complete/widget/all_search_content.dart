@@ -31,8 +31,8 @@ class _AllSearchContentState extends State<AllSearchContent> {
 
   @override
   void initState() {
-    _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
-    final notifier = Provider.of<SearchNotifier>(context, listen: false);
+    // _translate = Provider.of<TranslateNotifierV2>(context, listen: false);
+    // final notifier = Provider.of<SearchNotifier>(context, listen: false);
     // _scrollController.addListener(() => notifier.onScrollListener(context, _scrollController));
     super.initState();
   }
