@@ -3,7 +3,6 @@ import 'package:hyppe/core/constants/asset_path.dart';
 import 'package:hyppe/core/constants/enum.dart';
 import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
-import 'package:hyppe/core/services/error_service.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
 import 'package:hyppe/ui/constant/widget/custom_search_bar.dart';
@@ -107,13 +106,15 @@ class _SearchMoreScreenState extends State<SearchMoreScreen>
                                       Future.delayed(
                                           const Duration(milliseconds: 500),
                                           () {
-                                        if (lastInputValue != e) {
+                                        if (notifier.searchController.text == e ) {
                                           lastInputValue = e;
 
                                           notifier.getDataSearch(context,
                                               typeSearch: isHashtag
                                                   ? SearchLoadData.hashtag
                                                   : SearchLoadData.user);
+                                        }else{
+                                          notifier.onUpdate();
                                         }
                                       });
                                     }

@@ -48,6 +48,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   ModeTypeAliPLayer? _playMode;
   Map<String, dynamic>? _dataSourceMap;
   String auth = '';
+  List shown = [];
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -116,7 +117,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   List<StoriesGroup>? _groupUserStories;
 
-  late PageController? _pageController;
+  PageController? _pageController;
 
   int _curIdx = 0;
   int _curChildIdx = 0;
@@ -131,6 +132,19 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
     print("======================ke initstate");
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _animationController = AnimationController(
+        vsync: this,
+      )
+        ..addListener(() {
+          setState(() {});
+        })
+        ..addStatusListener(
+          (AnimationStatus status) {
+            if (status == AnimationStatus.completed) {
+              storyComplete();
+            }
+          },
+        );
       _curIdx = widget.argument.peopleIndex.toInt();
       _lastCurIndex = widget.argument.peopleIndex.toInt();
       _pageController = PageController(initialPage: widget.argument.peopleIndex);
@@ -149,20 +163,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       fAliplayer?.setConfig(configMap);
 
       print("Hahahaha $_videoDuration");
-
-      _animationController = AnimationController(
-        vsync: this,
-      )
-        ..addListener(() {
-          setState(() {});
-        })
-        ..addStatusListener(
-          (AnimationStatus status) {
-            if (status == AnimationStatus.completed) {
-              storyComplete();
-            }
-          },
-        );
 
       _playMode = ModeTypeAliPLayer.auth;
       // if (widget.data?.apsaraId != '') {
@@ -244,7 +244,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       isPlay = true;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
-      _animationController?.forward();
+      // _animationController?.forward();
 
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
@@ -259,7 +259,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             _showLoading = false;
             isPause = false;
           });
-          _animationController?.forward();
+          // _animationController?.forward();
           break;
         case FlutterAvpdef.AVPStatus_AVPStatusPaused:
           isPause = true;
@@ -282,7 +282,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       }
       setState(() {});
     }, loadingEnd: (playerId) {
-      _animationController?.forward();
+      // _animationController?.forward();
       setState(() {
         _showLoading = false;
       });
@@ -388,6 +388,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
 
   void storyComplete() {
     if (_curChildIdx == ((_groupUserStories![_curIdx].story?.length ?? 0) - 1)) {
+      shown = [];
       if (_curIdx == (_groupUserStories!.length - 1)) {
         Routing().moveBack();
       } else {
@@ -396,8 +397,15 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         setState(() {});
       }
     } else {
-      _curChildIdx++;
-      setState(() {});
+      setState(() {
+        if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
+          _animationController?.duration = const Duration(milliseconds: 5000);
+          _animationController?.forward();
+        }
+        shown.add(_groupUserStories![_curIdx].story?[_curChildIdx].postID);
+        print(shown);
+        _curChildIdx++;
+      });
       start();
     }
   }
@@ -409,6 +417,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       start();
     } else {
       if (_curIdx > 0) {
+        shown = [];
         _pageController?.previousPage(duration: const Duration(milliseconds: 900), curve: Curves.ease);
         _curChildIdx = 0;
         setState(() {});
@@ -427,7 +436,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         break;
       case AppLifecycleState.paused:
         if (!_mEnablePlayBack) {
-          fAliplayer?.pause();
+          // fAliplayer?.pause();
         }
         if (_networkSubscriptiion != null) {
           _networkSubscriptiion?.cancel();
@@ -459,7 +468,9 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   }
 
   void pause() {
+    print('pause pause');
     fAliplayer?.pause();
+    _animationController?.stop();
   }
 
   void onViewPlayerCreated(viewId) async {
@@ -524,9 +535,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(40.0),
                       child: LinearProgressIndicator(
-                        value: it.postID == _groupUserStories![_curIdx].story?[_curChildIdx].postID
-                            ? _animationController?.value
-                            : (((_groupUserStories![_curIdx].story!.length - 1) - _curChildIdx) > 0 ? 0 : 1),
+                        value: it.postID == _groupUserStories![_curIdx].story?[_curChildIdx].postID ? _animationController?.value : (shown.contains(it.postID) ? 1 : 0),
                         backgroundColor: kHyppeLightButtonText.withOpacity(0.4),
                         valueColor: const AlwaysStoppedAnimation<Color>(kHyppeLightButtonText),
                       ),
@@ -574,127 +583,113 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
             data: _groupUserStories![_curIdx].story?[_curChildIdx],
             // storyController: _storyController,
           ),
-          // (_groupUserStories![_curIdx].story?[_curChildIdx].isReport ?? false)
-          //     ? Container()
-          //     : Form(
-          //         child: BuildBottomView(
-          //           data: _groupUserStories![_curIdx].story?[_curChildIdx],
-          //           // storyController: _storyController,
-          //           currentStory: _groupUserStories![_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
-          //           // animationController: animationController,
-          //           currentIndex: _curChildIdx,
-          //           pause: pause,
-          //           play: play,
-          //         ),
-          //       ),
-          // AnimatedSwitcher(
-          //   duration: const Duration(milliseconds: 800),
-          //   transitionBuilder: (child, animation) {
-          //     animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
+          (_groupUserStories![_curIdx].story?[_curChildIdx].isReport ?? false)
+              ? Container()
+              : Form(
+                  child: BuildBottomView(
+                    data: _groupUserStories![_curIdx].story?[_curChildIdx],
+                    // storyController: _storyController,
+                    currentStory: _groupUserStories![_curIdx].story?.indexOf(_groupUserStories![_curIdx].story?[_curChildIdx] ?? ContentData()),
+                    // animationController: animationController,
+                    currentIndex: _curChildIdx,
+                    pause: pause,
+                    // play: play,
+                  ),
+                ),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 800),
+            transitionBuilder: (child, animation) {
+              animation = CurvedAnimation(parent: animation, curve: Curves.bounceOut);
 
-          //     return ScaleTransition(
-          //       scale: animation,
-          //       alignment: Alignment.center,
-          //       child: child,
-          //     );
-          //   },
-          //   child: notifier.linkCopied
-          //       ? const Center(
-          //           child: LinkCopied(),
-          //         )
-          //       : const SizedBox.shrink(),
-          // ),
-          // BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
-          // ...notifier.buildItems(_animationController!)
+              return ScaleTransition(
+                scale: animation,
+                alignment: Alignment.center,
+                child: child,
+              );
+            },
+            child: notifier.linkCopied
+                ? const Center(
+                    child: LinkCopied(),
+                  )
+                : const SizedBox.shrink(),
+          ),
+          BuildReplayCaption(data: _groupUserStories![_curIdx].story?[_curChildIdx]),
+          ...notifier.buildItems(_animationController!)
         ],
       ),
     );
   }
 
   Widget _buildSingleScreen(int index) {
+    print("build lagi ga");
     // VideoModel model = _dataList[index];
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _isPause = !_isPause;
-        });
-        if (_isPause) {
-          fAliplayer?.pause();
-        } else {
-          fAliplayer?.play();
-        }
-      },
-      child: !isPlay
-          ? Stack(
-              children: [
-                _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image'
-                    ? Container(
-                        color: Colors.black,
-                        child: CustomBaseCacheImage(
-                          widthPlaceHolder: 112,
-                          heightPlaceHolder: 40,
-                          imageUrl: (_groupUserStories?[_curIdx].story?[_curChildIdx].isApsara ?? false)
-                              ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
-                              : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullThumbPath}",
-                          imageBuilder: (context, imageProvider) {
-                            if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {
-                              _animationController?.duration = const Duration(milliseconds: 5000);
-                              _animationController?.forward();
-                            }
-                            return Container(
-                              clipBehavior: Clip.hardEdge,
-                              width: double.infinity,
-                              height: double.infinity,
-                              margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                              // child: _buildBody(index),
-                            );
-                          },
-                          errorWidget: (context, url, error) => Container(
+    return !isPlay
+        ? Stack(
+            children: [
+              _groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image'
+                  ? Container(
+                      color: Colors.black,
+                      child: CustomBaseCacheImage(
+                        widthPlaceHolder: 112,
+                        heightPlaceHolder: 40,
+                        imageUrl: (_groupUserStories?[_curIdx].story?[_curChildIdx].isApsara ?? false)
+                            ? "${_groupUserStories?[_curIdx].story?[_curChildIdx].media?.imageInfo?[0].url}"
+                            : "${_groupUserStories?[_curIdx].story?[_curChildIdx].fullThumbPath}",
+                        imageBuilder: (context, imageProvider) {
+                          if (_groupUserStories?[_curIdx].story?[_curChildIdx].mediaType == 'image') {}
+                          return Container(
+                            clipBehavior: Clip.hardEdge,
                             width: double.infinity,
                             height: double.infinity,
                             margin: const EdgeInsets.symmetric(horizontal: 4.0),
                             decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                fit: BoxFit.cover,
-                              ),
                               borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                              ),
                             ),
                             // child: _buildBody(index),
-                          ),
-                          emptyWidget: Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                            decoration: BoxDecoration(
-                              image: const DecorationImage(
-                                image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                          );
+                        },
+                        errorWidget: (context, url, error) => Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              fit: BoxFit.cover,
                             ),
-                            // child: _buildBody(index),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
+                          // child: _buildBody(index),
                         ),
-                      )
-                    : Center(
-                        child: const CircularProgressIndicator(
-                          backgroundColor: Colors.white,
-                          strokeWidth: 3.0,
+                        emptyWidget: Container(
+                          width: double.infinity,
+                          height: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          // child: _buildBody(index),
                         ),
                       ),
-                _buildFillStory()
-              ],
-            )
-          : Container(),
-    );
+                    )
+                  : Center(
+                      child: const CircularProgressIndicator(
+                        backgroundColor: Colors.white,
+                        strokeWidth: 3.0,
+                      ),
+                    ),
+              _buildFillStory()
+            ],
+          )
+        : Container();
   }
 
   void initStory() async {
@@ -719,6 +714,10 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       });
 
       fAliplayer?.prepare();
+    } else {
+      print("animasi start");
+      _animationController?.duration = const Duration(milliseconds: 5000);
+      _animationController?.forward();
     }
 
     // fAliplayer?.play();

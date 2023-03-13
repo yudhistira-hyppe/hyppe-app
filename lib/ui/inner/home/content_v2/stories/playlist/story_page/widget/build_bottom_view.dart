@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
+import 'package:hyppe/ui/inner/home/content_v2/stories/player/story_player.dart';
 import 'package:hyppe/ui/inner/home/content_v2/stories/playlist/story_page/widget/loading_music_story.dart';
 import 'package:provider/provider.dart';
 import 'package:story_view/story_view.dart';
@@ -25,7 +26,6 @@ class BuildBottomView extends StatefulWidget {
   final int? currentStory;
   final int currentIndex;
   final Function? pause;
-  final Function? play;
 
   BuildBottomView({
     Key? key,
@@ -35,7 +35,6 @@ class BuildBottomView extends StatefulWidget {
     required this.currentStory,
     required this.currentIndex,
     this.pause,
-    this.play,
   });
 
   @override
@@ -136,38 +135,53 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                           duration: const Duration(milliseconds: 200),
                           width: SizeWidget().calculateSize(!notifier.isKeyboardActive ? 274 : 290, SizeWidget.baseWidthXD, SizeConfig.screenWidth ?? context.getWidth()),
                           margin: const EdgeInsets.only(left: 10),
-                          child: TextFormField(
-                            maxLines: null,
-                            validator: (String? input) {
-                              if (input?.isEmpty ?? true) {
-                                return "Please enter message";
-                              } else {
-                                return null;
-                              }
+                          child: GestureDetector(
+                            onTap: () {
+                              widget.pause!();
                             },
-                            controller: notifier.textEditingController,
-                            keyboardAppearance: Brightness.dark,
-                            decoration: InputDecoration(
-                              filled: true,
-                              hintText: "Balas ke ${widget.data?.username}...",
-                              fillColor: Theme.of(context).colorScheme.background,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(25.0),
-                                borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: TextFormField(
+                                maxLines: null,
+                                validator: (String? input) {
+                                  if (input?.isEmpty ?? true) {
+                                    return "Please enter message";
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                controller: notifier.textEditingController,
+                                keyboardAppearance: Brightness.dark,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  hintText: "Balas ke ${widget.data?.username}...",
+                                  fillColor: Theme.of(context).colorScheme.background,
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(25.0),
+                                    borderSide: BorderSide(color: Theme.of(context).colorScheme.surface),
+                                  ),
+                                ),
+                                onTap: () {
+                                  print("sentuh dong");
+                                  widget.pause!();
+                                  widget.pause!();
+                                  widget.animationController!.stop();
+
+                                  notifier.forceStop = true;
+                                },
+                                onChanged: (value) => notifier.onChangeHandler(context, value),
+                                onFieldSubmitted: (value) => notifier.textEditingController.text = value,
                               ),
                             ),
-                            onTap: () => notifier.forceStop = true,
-                            onChanged: (value) => notifier.onChangeHandler(context, value),
-                            onFieldSubmitted: (value) => notifier.textEditingController.text = value,
                           ),
                         ),
                         Expanded(
@@ -176,10 +190,13 @@ class _BuildBottomViewState extends State<BuildBottomView> with AfterFirstLayout
                             transitionBuilder: (child, animation) {
                               return FadeTransition(opacity: animation, child: child);
                             },
-                            child: BuildButton(
-                              storyController: widget.storyController,
-                              animationController: widget.animationController,
-                              data: widget.data,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: BuildButton(
+                                storyController: widget.storyController,
+                                animationController: widget.animationController,
+                                data: widget.data,
+                              ),
                             ),
                           ),
                         )

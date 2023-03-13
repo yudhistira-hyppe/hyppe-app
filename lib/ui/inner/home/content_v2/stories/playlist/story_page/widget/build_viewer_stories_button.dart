@@ -25,13 +25,13 @@ class ViewerStoriesButton extends StatelessWidget {
   final int? currentStory;
   final ContentData? data;
   final StoryController? storyController;
-  final void pause;
+  final Function? pause;
   const ViewerStoriesButton({
     Key? key,
     required this.data,
     required this.currentStory,
     this.storyController,
-    required this.pause,
+    this.pause,
   }) : super(key: key);
 
   static final _system = System();

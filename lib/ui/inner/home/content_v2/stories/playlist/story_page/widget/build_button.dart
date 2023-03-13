@@ -16,7 +16,7 @@ class BuildButton extends StatelessWidget {
   final StoryController? storyController;
   final AnimationController? animationController;
   final ContentData? data;
-  final void pause;
+  final Function? pause;
   const BuildButton({
     this.storyController,
     required this.animationController,
@@ -50,7 +50,7 @@ class BuildButton extends StatelessWidget {
                     data,
                     storyController,
                     animationController,
-                    pause,
+                    pause!,
                   );
                 },
                 child: const CustomIconWidget(

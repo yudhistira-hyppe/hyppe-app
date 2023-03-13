@@ -125,7 +125,6 @@ class _AccountSearchContentState extends State<AccountSearchContent> {
                 ),
             ): const AllSearchShimmer();
           }
-        )
-        : Container();
+        ) : Container();
   }
 }

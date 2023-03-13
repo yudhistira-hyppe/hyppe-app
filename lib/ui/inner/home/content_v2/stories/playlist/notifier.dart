@@ -489,10 +489,10 @@ class StoriesPlaylistNotifier with ChangeNotifier, GeneralMixin {
     ContentData? data,
     StoryController? storyController,
     AnimationController? animationController,
-    void pause,
+    Function pause,
   ) async {
     // storyController?.pause();
-    pause;
+    pause();
     // _system.actionReqiredIdCard(
     //   context,
     //   action: () async {

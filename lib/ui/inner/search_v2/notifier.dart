@@ -442,22 +442,6 @@ class SearchNotifier with ChangeNotifier {
     _searchUsers = [];
     _searchHashtag = [];
     searchController.clear();
-    // if (allContents.vids == null && allContents.diaries == null && allContents.pics == null) {
-    //   vidContentsQuery.featureType = FeatureType.vid;
-    //   diaryContentsQuery.featureType = FeatureType.diary;
-    //   picContentsQuery.featureType = FeatureType.pic;
-    //
-    //   vidContentsQuery.limit = 18;
-    //   diaryContentsQuery.limit = 18;
-    //   picContentsQuery.limit = 18;
-    //
-    //   allContents = UserInfoModel();
-    //   print('reload contentsQuery : 23');
-    //   allContents.vids = await vidContentsQuery.reload(context);
-    //   allContents.diaries = await diaryContentsQuery.reload(context);
-    //   allContents.pics = await picContentsQuery.reload(context);
-    //   notifyListeners();
-    // }
   }
 
   void getHistories() async{
@@ -795,7 +779,10 @@ class SearchNotifier with ChangeNotifier {
       if((currentSkip != 0 && typeSearch == SearchLoadData.all)){
         throw 'Error get all because the state is not from beginning $currentSkip';
       }else if(currentSkip%limitSearch != 0){
-        throw 'Error because we have to prevent the action for refusing wasting action';
+        if(!reload){
+          throw 'Error because we have to prevent the action for refusing wasting action';
+        }
+
       }
 
       if(reload){
