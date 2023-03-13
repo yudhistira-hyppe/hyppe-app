@@ -1,10 +1,8 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ui/constant/widget/after_first_layout_mixin.dart';
-import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
 

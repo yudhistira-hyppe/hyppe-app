@@ -5,7 +5,6 @@ import 'package:hyppe/ui/constant/widget/custom_text_widget.dart';
 
 import '../../../../../core/constants/enum.dart';
 import '../../../../../core/constants/themes/hyppe_colors.dart';
-import '../../../../../core/models/collection/posts/content_v2/content_data.dart';
 
 class HashtagTab extends StatelessWidget {
   bool isActive;

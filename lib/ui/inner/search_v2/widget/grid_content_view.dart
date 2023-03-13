@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
-import 'package:hyppe/ui/inner/search_v2/widget/search_no_result_image.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/constants/asset_path.dart';

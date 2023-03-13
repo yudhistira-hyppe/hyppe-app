@@ -84,7 +84,7 @@ class _HashtagTabScreenState extends State<HashtagTabScreen> {
                                           onTap: () {
                                             notifier.selectedHashtag = data;
                                             notifier.layout =
-                                                SearchLayout.mainHashtagDetail;
+                                                SearchLayout.hashtagDetail;
                                           },
                                           title: '#${data.tag}',
                                           count: data.total ?? 0,
