@@ -126,6 +126,7 @@ class Repos {
     // print(_language);
     bool? connection;
     String? token = SharedPreference().readStorage(SpKeys.userToken);
+    // String token = 'asdasd';
     dynamic dataError = {"type": "ERROR"};
     'User Token = $token'.logger();
     'Send data ${data}'.logger();
@@ -141,6 +142,7 @@ class Repos {
         return ShowBottomSheet.onNoInternetConnection(context, tryAgainButton: onNoInternet);
       }
       print('_hitApiGetSearchData#3 ${System().getCurrentDate()}');
+
       /// communicate with backend
       final _response = await _communicate(
         methodType,
@@ -154,6 +156,7 @@ class Repos {
         onReceiveProgress: onReceiveProgress,
       );
       print('_hitApiGetSearchData#4 ${System().getCurrentDate()}');
+
       /// log statusCode from backend
       if (verbose) 'Actual response data ${_response.data}'.logger();
       'StatusCode from dio ${_response.statusCode}'.logger();

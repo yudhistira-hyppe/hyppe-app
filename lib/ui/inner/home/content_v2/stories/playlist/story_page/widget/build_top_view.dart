@@ -22,14 +22,14 @@ class BuildTopView extends StatefulWidget {
   final String when;
   final bool onDetail;
   final ContentData? data;
-  final StoryController storyController;
+  final StoryController? storyController;
 
   const BuildTopView({
     Key? key,
     this.data,
     required this.when,
     this.onDetail = true,
-    required this.storyController,
+    this.storyController,
   }) : super(key: key);
 
   @override
@@ -82,7 +82,7 @@ class _BuildTopViewState extends State<BuildTopView> {
                 widget.data?.email == SharedPreference().readStorage(SpKeys.email)
                     ? GestureDetector(
                         onTap: () {
-                          widget.storyController.pause();
+                          widget.storyController?.pause();
                           ShowBottomSheet().onShowOptionContent(
                             context,
                             contentData: widget.data!,

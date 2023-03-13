@@ -23,12 +23,12 @@ import 'package:story_view/story_view.dart';
 
 class TitlePlaylistDiaries extends StatefulWidget {
   final ContentData? data;
-  final StoryController storyController;
+  final StoryController? storyController;
 
   const TitlePlaylistDiaries({
     Key? key,
     this.data,
-    required this.storyController,
+    this.storyController,
   }) : super(key: key);
 
   @override
@@ -122,7 +122,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                           ? CustomBalloonWidget(
                               child: GestureDetector(
                                 onTap: () async {
-                                  widget.storyController.pause();
+                                  // widget.storyController.pause();
                                   SharedPreference().writeStorage(SpKeys.isShowPopAds, true);
                                   await ShowBottomSheet().onShowOptionContent(
                                     context,
@@ -146,7 +146,7 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                           ? CustomBalloonWidget(
                               child: GestureDetector(
                                 onTap: () {
-                                  widget.storyController.pause();
+                                  // widget.storyController.pause();
                                   ShowBottomSheet.onReportContent(
                                     context,
                                     postData: widget.data,
@@ -155,10 +155,10 @@ class _TitlePlaylistDiariesState extends State<TitlePlaylistDiaries> {
                                     storyController: widget.storyController,
                                     onUpdate: () {
                                       context.read<DiariesPlaylistNotifier>().onUpdate();
-                                      widget.storyController.pause();
+                                      // widget.storyController.pause();
                                     },
                                   );
-                                  widget.storyController.pause();
+                                  // widget.storyController.pause();
                                 },
                                 child: const CustomIconWidget(
                                   defaultColor: false,

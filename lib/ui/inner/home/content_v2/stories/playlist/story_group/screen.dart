@@ -53,36 +53,54 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
           resizeToAvoidBottomInset: false,
           body: notifier.groupUserStories.isNotEmpty
               ? PageView.builder(
-              controller: _pageController,
-              itemCount: notifier.groupUserStories.length,
-              onPageChanged: (index) {
-                print('StoryGroupScreen index: $index');
-                notifier.currentIndex = index;
-              },
-              itemBuilder: (context, index) {
-                final fixNotifier = Provider.of<StoriesPlaylistNotifier>(context);
-                // var key = fixNotifier.groupUserStories.keys.elementAt(index);
+                  controller: _pageController,
+                  itemCount: notifier.groupUserStories.length,
+                  onPageChanged: (index) {
+                    print('StoryGroupScreen index: $index');
+                    notifier.currentIndex = index;
+                  },
+                  itemBuilder: (context, index) {
+                    final fixNotifier = Provider.of<StoriesPlaylistNotifier>(context);
+                    // var key = fixNotifier.groupUserStories.keys.elementAt(index);
 
-                print('Story index $index : ${fixNotifier.currentPage}, ${fixNotifier.currentIndex}, $index');
-                var values = fixNotifier.groupUserStories[index].story ?? [];
+                    print('Story index $index : ${fixNotifier.currentPage}, ${fixNotifier.currentIndex}, $index');
+                    var values = fixNotifier.groupUserStories[index].story ?? [];
 
-                if (fixNotifier.currentIndex == index && fixNotifier.currentPage == index) {
-                  double value = (fixNotifier.currentPage ?? 1) - index;
-                  double degValue = fixNotifier.degreeToRadian(value * 90);
-                  return Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..rotateY(degValue),
-                    alignment: Alignment.centerRight,
-                    child: StoryPageV2(
-                      isScrolling: _pageController.position.activity?.isScrolling ?? false,
-                      controller: _pageController,
-                      index: index,
-                      stories: values,
-                    ),
-                  );
-                }
-                return Container(
+                    if (fixNotifier.currentIndex == index && fixNotifier.currentPage == index) {
+                      double value = (fixNotifier.currentPage ?? 1) - index;
+                      double degValue = fixNotifier.degreeToRadian(value * 90);
+                      return Transform(
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..rotateY(degValue),
+                        alignment: Alignment.centerRight,
+                        child: StoryPageV2(
+                          isScrolling: _pageController.position.activity?.isScrolling ?? false,
+                          controller: _pageController,
+                          index: index,
+                          stories: values,
+                        ),
+                      );
+                    }
+                    return Container(
+                      color: Colors.black,
+                      width: 100,
+                      height: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          SizedBox(
+                            height: 90,
+                            child: SizedBox(
+                              height: 10,
+                              child: CustomLoading(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  })
+              : Container(
                   color: Colors.black,
                   width: 100,
                   height: 100,
@@ -98,25 +116,7 @@ class _StoryGroupScreenState extends State<StoryGroupScreen> with AfterFirstLayo
                       ),
                     ],
                   ),
-                );
-              })
-              : Container(
-              color: Colors.black,
-              width: 100,
-              height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  SizedBox(
-                    height: 90,
-                    child: SizedBox(
-                      height: 10,
-                      child: CustomLoading(),
-                    ),
-                  ),
-                ],
-              ),
-          ),
+                ),
         ),
       ),
     );

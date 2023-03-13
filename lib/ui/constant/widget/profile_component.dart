@@ -56,7 +56,6 @@ class ProfileComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    print('ProfileComponent: $createdAt');
     return Visibility(
       visible: show,
       child: Row(
