@@ -77,9 +77,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
   StreamSubscription<NativeDeviceOrientation>? _orientationStream;
   final _nativeDeviceOrientationCommunicator = NativeDeviceOrientationCommunicator();
 
-
-
-
   void _resetOrintationStream() {
     _orientationStream?.cancel();
     _orientationStream = null;
@@ -611,7 +608,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
 
   @override
   void dispose() {
-
     CustomRouteObserver.routeObserver.unsubscribe(this);
     _preventScreenShootOff();
     super.dispose();
@@ -699,7 +695,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
     );
   }
 
-  Widget _overlayLayout(){
+  Widget _overlayLayout() {
     return Positioned.fill(
       child: Stack(
         children: [
@@ -778,13 +774,13 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                           twelvePx,
                           InkWell(
                             onTap: () async {
-                              if(_newClipData?.data?.adsUrlLink?.isEmail() ?? false){
+                              if (_newClipData?.data?.adsUrlLink?.isEmail() ?? false) {
                                 final email = _newClipData?.data?.adsUrlLink?.replaceAll('email:', '');
                                 Navigator.pop(context);
-                                Future.delayed(const Duration(milliseconds: 500), (){
+                                Future.delayed(const Duration(milliseconds: 500), () {
                                   Routing().move(Routes.otherProfile, argument: OtherProfileArgument(senderEmail: email));
                                 });
-                              }else{
+                              } else {
                                 final uri = Uri.parse(_newClipData?.data?.adsUrlLink ?? '');
                                 final second = _betterPlayerControllerMap?.videoPlayerController?.value.position.inSeconds ?? 0;
                                 if (await canLaunchUrl(uri)) {
@@ -798,7 +794,6 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> with RouteAware, Afte
                                   // can't launch url, there is some error
                                   throw "Could not launch $uri";
                               }
-
                             },
                             child: Container(
                               child: Text(

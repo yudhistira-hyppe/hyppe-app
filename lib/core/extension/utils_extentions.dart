@@ -34,7 +34,7 @@ extension ContextScreen on BuildContext {
   int getAdsCount() {
     try {
       int _countAds = SharedPreference().readStorage(SpKeys.countAds);
-      print('success get count $_countAds');
+      print('================== success get count $_countAds');
       if (_countAds == null) {
         SharedPreference().writeStorage(SpKeys.countAds, 0);
         return 0;
@@ -74,7 +74,7 @@ extension ContextScreen on BuildContext {
     return formatter.format(now);
   }
 
-  bool isIndo () => SharedPreference().readStorage(SpKeys.isoCode) == 'id';
+  bool isIndo() => SharedPreference().readStorage(SpKeys.isoCode) == 'id';
 }
 
 extension StringDefine on String {
@@ -136,11 +136,11 @@ extension StringDefine on String {
     return (substring(0, 6) == 'email:');
   }
 
-  bool isHashtag(){
-    if(isEmpty){
+  bool isHashtag() {
+    if (isEmpty) {
       return false;
     }
-    return (substring(0 , 1) == '#');
+    return (substring(0, 1) == '#');
   }
 }
 
@@ -160,14 +160,14 @@ extension IntegerExtension on int {
   }
 }
 
-extension ListExtentsion on List?{
-  bool isNotNullAndEmpty(){
-    if(this == null){
+extension ListExtentsion on List? {
+  bool isNotNullAndEmpty() {
+    if (this == null) {
       return true;
-    }else{
-      if(this!.isNotEmpty){
+    } else {
+      if (this!.isNotEmpty) {
         return true;
-      }else{
+      } else {
         return false;
       }
     }

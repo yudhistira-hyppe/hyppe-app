@@ -22,6 +22,7 @@ import 'package:hyppe/initial/hyppe/translate_v2.dart';
 import 'package:hyppe/ui/constant/widget/custom_background_layer.dart';
 import 'package:hyppe/ui/constant/widget/custom_base_cache_image.dart';
 import 'package:hyppe/ui/constant/widget/custom_icon_widget.dart';
+import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/constant/widget/custom_spacer.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/notifier.dart';
 import 'package:hyppe/ui/inner/home/content_v2/diary/playlist/widget/diary_sensitive.dart';
@@ -555,53 +556,58 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
           ? Stack(
               children: [
                 Container(
-                  color: Colors.black,
-                  child: CustomBaseCacheImage(
-                    widthPlaceHolder: 112,
-                    heightPlaceHolder: 40,
-                    imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
-                    imageBuilder: (context, imageProvider) => Container(
-                      clipBehavior: Clip.hardEdge,
-                      width: double.infinity,
-                      height: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      // child: _buildBody(index),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      // child: _buildBody(index),
-                    ),
-                    emptyWidget: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage('${AssetPath.pngPath}content-error.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      // child: _buildBody(index),
-                    ),
-                  ),
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Center(child: SizedBox(width: 40, height: 40, child: CustomLoading())),
                 ),
+                // Container(
+                //   color: Colors.black,
+                //   child: CustomBaseCacheImage(
+                //     widthPlaceHolder: 112,
+                //     heightPlaceHolder: 40,
+                //     imageUrl: (_listData?[index].isApsara ?? false) ? "${_listData?[index].mediaThumbEndPoint}" : "${_listData?[index].fullThumbPath}",
+                //     imageBuilder: (context, imageProvider) => Container(
+                //       clipBehavior: Clip.hardEdge,
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(8.0),
+                //         image: DecorationImage(
+                //           image: imageProvider,
+                //           fit: BoxFit.contain,
+                //         ),
+                //       ),
+                //       // child: _buildBody(index),
+                //     ),
+                //     errorWidget: (context, url, error) => Container(
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         image: const DecorationImage(
+                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                //           fit: BoxFit.cover,
+                //         ),
+                //         borderRadius: BorderRadius.circular(8.0),
+                //       ),
+                //       // child: _buildBody(index),
+                //     ),
+                //     emptyWidget: Container(
+                //       width: double.infinity,
+                //       height: double.infinity,
+                //       margin: const EdgeInsets.symmetric(horizontal: 4.0),
+                //       decoration: BoxDecoration(
+                //         image: const DecorationImage(
+                //           image: AssetImage('${AssetPath.pngPath}content-error.png'),
+                //           fit: BoxFit.cover,
+                //         ),
+                //         borderRadius: BorderRadius.circular(8.0),
+                //       ),
+                //       // child: _buildBody(index),
+                //     ),
+                //   ),
+                // ),
                 _buildFillDiary()
               ],
             )

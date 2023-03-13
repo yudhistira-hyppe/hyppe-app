@@ -621,7 +621,6 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
   }
 
   Widget _buildSingleScreen(int index) {
-    print("build lagi ga");
     // VideoModel model = _dataList[index];
     return !isPlay
         ? Stack(
