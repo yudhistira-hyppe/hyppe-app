@@ -63,6 +63,7 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
   Map<String, dynamic>? _dataSourceMap;
   Map<String, dynamic>? _dataSourceAdsMap;
   String urlVid = '';
+  String _savePath='';
 
   bool isPlay = false;
   bool onTapCtrl = false;
@@ -169,7 +170,28 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           return _snapShotPath;
         }
       });
+      getExternalStorageDirectories().then((value) {
+        if (value?.length != 0) {
+          _savePath = value![0].path + "/localCache/";
+          return Directory(_savePath);
+        }
+      }).then((value) {
+        return value!.exists();
+      }).then((value) {
+        if (!value) {
+          Directory directory = Directory(_savePath);
+          directory.create();
+        }
+        return _savePath;
+      }).then((value) {
+        GlobalSettings.mDirController = _savePath;
+      });
     }
+    else if (Platform.isIOS) {
+      _savePath = "localCache";
+      GlobalSettings.mDirController = _savePath;
+    }
+
     fAliplayer?.setOnEventReportParams((params, playerId) {
       print("EventReportParams=${params}");
     });
@@ -186,7 +208,9 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");
     });
-    fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {});
+    fAliplayer?.setOnVideoSizeChanged((width, height, rotation, playerId) {
+      print('video size changed');
+    });
     fAliplayer?.setOnStateChanged((newState, playerId) {
       _currentPlayerState = newState;
       print("aliyun : onStateChanged $newState");
@@ -344,6 +368,25 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
         } else {
           print("-======= auth konten ${jsonMap['PlayAuth']}");
           _dataSourceMap?[DataSourceRelated.playAuth] = jsonMap['PlayAuth'] ?? '';
+          var configMap = {
+            'mStartBufferDuration':GlobalSettings.mStartBufferDuration,// The buffer duration before playback. Unit: milliseconds.
+            'mHighBufferDuration':GlobalSettings.mHighBufferDuration,// The duration of high buffer. Unit: milliseconds.
+            'mMaxBufferDuration':GlobalSettings.mMaxBufferDuration,// The maximum buffer duration. Unit: milliseconds.
+            'mMaxDelayTime': GlobalSettings.mMaxDelayTime,// The maximum latency of live streaming. Unit: milliseconds. You can specify the latency only for live streams.
+            'mNetworkTimeout': GlobalSettings.mNetworkTimeout,// The network timeout period. Unit: milliseconds.
+            'mNetworkRetryCount':GlobalSettings.mNetworkRetryCount,// The number of retires after a network timeout. Unit: milliseconds.
+            'mEnableLocalCache':GlobalSettings.mEnableCacheConfig,
+            'mLocalCacheDir':GlobalSettings.mDirController
+          };
+          // Configure the application.
+          fAliplayer?.setConfig(configMap);
+          var map = {
+            "mMaxSizeMB": GlobalSettings.mMaxSizeMBController,/// The maximum space that can be occupied by the cache directory.
+            "mMaxDurationS": GlobalSettings.mMaxDurationSController,/// The maximum cache duration of a single file.
+            "mDir": GlobalSettings.mDirController,/// The cache directory.
+            "mEnable": GlobalSettings.mEnableCacheConfig/// Specify whether to enable the cache feature.
+          };
+          fAliplayer?.setCacheConfig(map);
           fAliplayer?.prepare();print('prepare done');
         }
         
