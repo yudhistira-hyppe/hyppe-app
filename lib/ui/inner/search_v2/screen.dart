@@ -35,9 +35,6 @@ class _SearchScreenState extends State<SearchScreen> with RouteAware, SingleTick
   int _currentIndex = 0;
 
 
-
-
-
   @override
   void didChangeDependencies() {
     CustomRouteObserver.routeObserver.subscribe(this, ModalRoute.of(context) as PageRoute);

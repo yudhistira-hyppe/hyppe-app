@@ -33,6 +33,10 @@ import 'package:story_view/controller/story_controller.dart';
 import '../../../core/arguments/contents/slided_pic_detail_screen_argument.dart';
 import '../../../core/bloc/posts_v2/bloc.dart';
 import '../../../core/models/collection/database/search_history.dart';
+import '../../constant/widget/custom_loading.dart';
+import 'hashtag/widget/grid_hashtag_diary.dart';
+import 'hashtag/widget/grid_hashtag_pic.dart';
+import 'hashtag/widget/grid_hashtag_vid.dart';
 
 class SearchNotifier with ChangeNotifier {
   LocalizationModelV2 language = LocalizationModelV2();
@@ -102,12 +106,12 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  // SearchContentModel? _detailHashTag;
-  // SearchContentModel? get detailHashTag => _detailHashTag;
-  // set detailHashTag(SearchContentModel? val){
-  //   _detailHashTag = val;
-  //   notifyListeners();
-  // }
+  SearchContentModel? _detailHashTag;
+  SearchContentModel? get detailHashTag => _detailHashTag;
+  set detailHashTag(SearchContentModel? val) {
+    _detailHashTag = val;
+    notifyListeners();
+  }
 
   List<ContentData>? _hashtagVid;
   List<ContentData>? get hashtagVid => _hashtagVid;
@@ -130,6 +134,20 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  String _tagImageMain = '';
+  String get tagImageMain => _tagImageMain;
+  set tagImageMain(String val) {
+    _tagImageMain = val;
+    notifyListeners();
+  }
+
+  int _countTag = 0;
+  int get countTag => _countTag;
+  set countTag(int value) {
+    _countTag = value;
+    notifyListeners();
+  }
+
   Tags? _currentHashtag;
   Tags? get currentHashtag => _currentHashtag;
   set currentHashtag(Tags? data) {
@@ -149,6 +167,10 @@ class SearchNotifier with ChangeNotifier {
 
   bool _isLoading = true;
   bool get isLoading => _isLoading;
+
+  setLoading(bool state) {
+    _isLoading = state;
+  }
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
@@ -224,6 +246,13 @@ class SearchNotifier with ChangeNotifier {
 
   set loadContents(bool state) {
     _loadContents = state;
+    notifyListeners();
+  }
+
+  bool _hasNext = false;
+  bool get hasNext => _hasNext;
+  set hasNext(bool state) {
+    _hasNext = state;
     notifyListeners();
   }
 
@@ -638,12 +667,136 @@ class SearchNotifier with ChangeNotifier {
     }
   }
 
+  Future getDetailHashtag(BuildContext context, String keys, {reload = true, HyppeType? hyppe}) async {
+    try {
+      final lenghtVid = _detailHashTag?.vid?.length ?? 0;
+      final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
+      final lenghtPic = _detailHashTag?.pict?.length ?? 0;
+      if (reload) {
+        isLoading = true;
+        final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailHashTag, 0, type: hyppe);
+        if (_res != null) {
+          _detailHashTag = _res;
+          final videos = _detailHashTag?.vid ?? [];
+          final diaries = _detailHashTag?.diary ?? [];
+          final pics = _detailHashTag?.pict ?? [];
+          final hashtags = _detailHashTag?.tags ?? [];
+          if (hashtags.isNotNullAndEmpty()) {
+            _currentHashtag = hashtags.first;
+            final extraTag = _currentHashtag;
+            final count = (extraTag != null ? (extraTag.total ?? 0) : 0);
+            if ((pics.isEmpty) && (diaries.isEmpty) && (videos.isEmpty)) {
+              _countTag = 0;
+            } else {
+              _countTag = count;
+            }
+          }
+          _detailHashTag?.vid = videos;
+          _detailHashTag?.diary = diaries;
+          _detailHashTag?.pict = pics;
+          if (pics.isNotNullAndEmpty()) {
+            final data = pics[0];
+            final url = data != null ? ((data.isApsara ?? false) ? (data.media?.imageInfo?[0].url ?? (data.mediaThumbEndPoint ?? '')) : System().showUserPicture(data.mediaThumbEndPoint) ?? '') : '';
+            _tagImageMain = url;
+          }
+        }
+        isLoading = false;
+      } else {
+        final currentSkip = hyppe == HyppeType.HyppeVid
+            ? lenghtVid
+            : hyppe == HyppeType.HyppeDiary
+                ? lenghtDiary
+                : lenghtPic;
+        if (currentSkip % 12 == 0) {
+          if (!hasNext) {
+            hasNext = true;
+            final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailHashTag, currentSkip, type: hyppe);
+            if (_res != null) {
+              final videos = _res.vid;
+              final diaries = _res.diary;
+              final pics = _res.pict;
+              if (hyppe == HyppeType.HyppeVid) {
+                for (final video in videos ?? []) {
+                  _detailHashTag?.vid?.add(video);
+                }
+                // _hashtagVid = [...(_hashtagVid ?? []), ...(videos ?? [])];
+              } else if (hyppe == HyppeType.HyppeDiary) {
+                for (final diary in diaries ?? []) {
+                  _detailHashTag?.diary?.add(diary);
+                }
+                // _hashtagDiary = [...(_hashtagDiary ?? []), ...(diaries ?? [])];
+              } else {
+                for (final pic in pics ?? []) {
+                  _detailHashTag?.pict?.add(pic);
+                }
+                // _hashtagPic = [...(_hashtagPic ?? []), ...(pics ?? [])];
+              }
+            }
+          }
+        }
+        hasNext = false;
+      }
+    } catch (e) {
+      if (_isLoading) {
+        isLoading = false;
+      }
+      if (_hasNext) {
+        hasNext = false;
+      }
+
+      'Error getDetail: $e'.logger();
+    } finally {
+      if (_isLoading) {
+        isLoading = false;
+      }
+      if (_hasNext) {
+        hasNext = false;
+      }
+    }
+  }
+
+  List<Widget> getGridHashtag(String hashtag) {
+    Map<String, List<Widget>> map = {
+      'HyppeVid': [
+        GridHashtagVid(),
+        if ((hashtagVid ?? []).length % limitSearch == 0)
+          SliverToBoxAdapter(
+            child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+          )
+      ],
+      'HyppeDiary': [
+        GridHashtagDiary(),
+        if ((hashtagDiary ?? []).length % limitSearch == 0)
+          SliverToBoxAdapter(
+            child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+          )
+      ],
+      'HyppePic': [
+        GridHashtagPic(),
+        if ((hashtagPic ?? []).length % limitSearch == 0)
+          SliverToBoxAdapter(
+            child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+          )
+      ]
+    };
+    final key = System().getTitleHyppe(hashtagTab);
+    return map[key] ??
+        [
+          GridHashtagVid(),
+          if ((hashtagVid ?? []).length % limitSearch == 0)
+            SliverToBoxAdapter(
+              child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+            )
+        ];
+  }
+
   Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true, HyppeType? hyppe}) async {
     try {
       if (reload) {
         isLoading = true;
+      } else {
+        hasNext = true;
       }
-
       List<ContentData> currentVid = [];
       List<ContentData> currentDairy = [];
       List<ContentData> currentPic = [];
@@ -653,9 +806,9 @@ class SearchNotifier with ChangeNotifier {
           // currentVid = detailHashTag?.vid ?? [];
           // currentDairy = detailHashTag?.diary ?? [];
           // currentPic = detailHashTag?.pict ?? [];
-          currentVid = hashtagVid ?? [];
-          currentDairy = hashtagDiary ?? [];
-          currentPic = hashtagPic ?? [];
+          currentVid = _hashtagVid ?? [];
+          currentDairy = _hashtagDiary ?? [];
+          currentPic = _hashtagPic ?? [];
           final lenghtVid = currentVid.length;
           final lenghtDiary = currentDairy.length;
           final lenghtPic = currentPic.length;
@@ -692,24 +845,24 @@ class SearchNotifier with ChangeNotifier {
           if (!reload) {
             if (hyppe != null) {
               if (hyppe == HyppeType.HyppeVid) {
-                hashtagVid = [...currentVid, ...(videos ?? [])];
+                _hashtagVid = [...currentVid, ...(videos ?? [])];
               } else if (hyppe == HyppeType.HyppeDiary) {
-                hashtagDiary = [...currentDairy, ...(diaries ?? [])];
+                _hashtagDiary = [...currentDairy, ...(diaries ?? [])];
               } else {
-                hashtagPic = [...currentPic, ...(pics ?? [])];
+                _hashtagPic = [...currentPic, ...(pics ?? [])];
               }
             } else {
-              hashtagVid = [...currentVid, ...(videos ?? [])];
-              hashtagDiary = [...currentDairy, ...(diaries ?? [])];
-              hashtagPic = [...currentPic, ...(pics ?? [])];
+              _hashtagVid = [...currentVid, ...(videos ?? [])];
+              _hashtagDiary = [...currentDairy, ...(diaries ?? [])];
+              _hashtagPic = [...currentPic, ...(pics ?? [])];
             }
           } else {
             if (hashtags.isNotNullAndEmpty()) {
               currentHashtag = hashtags?.first;
             }
-            hashtagVid = videos;
-            hashtagDiary = diaries;
-            hashtagPic = pics;
+            _hashtagVid = videos;
+            _hashtagDiary = diaries;
+            _hashtagPic = pics;
           }
         } else if (type == TypeApiSearch.detailInterest) {
           if (!reload) {
@@ -730,13 +883,14 @@ class SearchNotifier with ChangeNotifier {
             interestContents[keys] = _res;
           }
         }
-        notifyListeners();
       }
     } catch (e) {
       'Error getDetail: $e'.logger();
     } finally {
       if (reload) {
         isLoading = false;
+      } else {
+        hasNext = true;
       }
     }
   }
@@ -1003,11 +1157,8 @@ class SearchNotifier with ChangeNotifier {
           break;
         case HyppeType.HyppeDiary:
           context.read<ReportNotifier>().type = 'diary';
-
           _routing.move(Routes.diaryDetail,
-              argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search)
-              // ..postID = data[index].postID);
-              );
+              argument: DiaryDetailScreenArgument(diaryData: data, index: index.toDouble(), page: diaryContentsQuery.page, limit: diaryContentsQuery.limit, type: TypePlaylist.search));
           break;
         case HyppeType.HyppePic:
           context.read<ReportNotifier>().type = 'pict';

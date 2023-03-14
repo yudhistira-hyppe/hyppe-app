@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hyppe/core/arguments/hashtag_argument.dart';
-import 'package:hyppe/core/constants/size_config.dart';
 import 'package:hyppe/core/extension/log_extension.dart';
 import 'package:hyppe/core/models/collection/search/search_content.dart';
 import 'package:hyppe/ux/path.dart';
@@ -212,9 +211,10 @@ class _CustomDescContentState extends State<CustomDescContent> {
                 : (TapGestureRecognizer()
                   ..onTap = () {
                     if (item.type == CaptionType.hashtag) {
-                      final fixKeyword = item.desc[0] == '#'
+                      var fixKeyword = item.desc[0] == '#'
                           ? item.desc.substring(1, item.desc.length)
                           : item.desc;
+                      fixKeyword = fixKeyword.replaceAll(',', '');
                       Routing().move(Routes.hashtagDetail, argument: HashtagArgument(isTitle: false, hashtag: Tags(tag: fixKeyword, id: fixKeyword), fromRoute: true));
                     } else {
                       final fixUsername = item.desc[0] == '@'
