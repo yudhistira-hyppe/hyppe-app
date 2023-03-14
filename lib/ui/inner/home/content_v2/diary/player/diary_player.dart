@@ -133,10 +133,6 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       bottomIndex = 0;
       fAliplayer?.setAutoPlay(true);
       fAliplayer?.setLoop(true);
-      var configMap = {
-        'mClearFrameWhenStop': true,
-      };
-      fAliplayer?.setConfig(configMap);
 
       _animationController = AnimationController(
         /// [AnimationController]s can be created with `vsync: this` because of
@@ -659,7 +655,8 @@ class _DiaryPlayerPageState extends State<DiaryPlayerPage> with WidgetsBindingOb
       'mNetworkTimeout': GlobalSettings.mNetworkTimeout,// The network timeout period. Unit: milliseconds.
       'mNetworkRetryCount':GlobalSettings.mNetworkRetryCount,// The number of retires after a network timeout. Unit: milliseconds.
       'mEnableLocalCache':GlobalSettings.mEnableCacheConfig,
-      'mLocalCacheDir':GlobalSettings.mDirController
+      'mLocalCacheDir':GlobalSettings.mDirController,
+      'mClearFrameWhenStop': true
     };
     // Configure the application.
     fAliplayer?.setConfig(configMap);

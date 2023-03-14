@@ -147,6 +147,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addObserver(this);
     bottomIndex = 0;
+
+    fAliplayer?.setAutoPlay(true);
     _playMode = widget.playMode;
     _dataSourceMap = widget.dataSourceMap;
     _dataSourceAdsMap = {};
@@ -204,6 +206,8 @@ class _PlayerPageState extends State<PlayerPage> with WidgetsBindingObserver {
           isPrepare = true;
         });
       });
+      isPlay = true;
+      isPause=false;
     });
     fAliplayer?.setOnRenderingStart((playerId) {
       // Fluttertoast.showToast(msg: " OnFirstFrameShow ");

@@ -159,11 +159,7 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
       WidgetsBinding.instance.addObserver(this);
       bottomIndex = 0;
       fAliplayer?.setAutoPlay(true);
-      var configMap = {
-        'mClearFrameWhenStop': true,
-      };
-      fAliplayer?.setConfig(configMap);
-
+      
       print("Hahahaha $_videoDuration");
 
       _playMode = ModeTypeAliPLayer.auth;
@@ -728,7 +724,8 @@ class _StoryPlayerPageState extends State<StoryPlayerPage> with WidgetsBindingOb
         'mNetworkTimeout': GlobalSettings.mNetworkTimeout,// The network timeout period. Unit: milliseconds.
         'mNetworkRetryCount':GlobalSettings.mNetworkRetryCount,// The number of retires after a network timeout. Unit: milliseconds.
         'mEnableLocalCache':GlobalSettings.mEnableCacheConfig,
-        'mLocalCacheDir':GlobalSettings.mDirController
+        'mLocalCacheDir':GlobalSettings.mDirController,
+        'mClearFrameWhenStop': true
       };
       // Configure the application.
       fAliplayer?.setConfig(configMap);
