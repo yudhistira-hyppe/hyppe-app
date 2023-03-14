@@ -53,14 +53,6 @@ class _BottomDetailState extends State<BottomDetail> {
               children: [
                 Expanded(
                     child: HashtagTab(
-                        onTap: (value) {
-                          notifier.hashtagTab = value;
-                        },
-                        isActive: notifier.hashtagTab == HyppeType.HyppePic,
-                        // data: data.pict ?? [],
-                        type: HyppeType.HyppePic)),
-                Expanded(
-                    child: HashtagTab(
                   onTap: (value) {
                     notifier.hashtagTab = value;
                   },
@@ -76,6 +68,14 @@ class _BottomDetailState extends State<BottomDetail> {
                         isActive: notifier.hashtagTab == HyppeType.HyppeDiary,
                         // data: data.diary ?? [],
                         type: HyppeType.HyppeDiary)),
+                Expanded(
+                    child: HashtagTab(
+                        onTap: (value) {
+                          notifier.hashtagTab = value;
+                        },
+                        isActive: notifier.hashtagTab == HyppeType.HyppePic,
+                        // data: data.pict ?? [],
+                        type: HyppeType.HyppePic)),
               ],
             ),
           ),

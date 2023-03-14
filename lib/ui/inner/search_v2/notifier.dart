@@ -168,8 +168,13 @@ class SearchNotifier with ChangeNotifier {
   bool _isLoading = true;
   bool get isLoading => _isLoading;
 
-  setLoading(bool state) {
-    _isLoading = state;
+
+
+  bool _loadTagDetail = true;
+  bool get loadTagDetail => _loadTagDetail;
+  set loadTagDetail(bool val){
+    _loadTagDetail = val;
+    notifyListeners();
   }
 
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
@@ -383,6 +388,7 @@ class SearchNotifier with ChangeNotifier {
 
   initDetailHashtag() {
     _hashtagTab = HyppeType.HyppeVid;
+    _loadTagDetail = true;
   }
 
   initSearchAll() {
@@ -673,7 +679,7 @@ class SearchNotifier with ChangeNotifier {
       final lenghtDiary = _detailHashTag?.diary?.length ?? 0;
       final lenghtPic = _detailHashTag?.pict?.length ?? 0;
       if (reload) {
-        isLoading = true;
+        loadTagDetail = true;
         final _res = await _hitApiGetDetail(context, keys, TypeApiSearch.detailHashTag, 0, type: hyppe);
         if (_res != null) {
           _detailHashTag = _res;
@@ -700,7 +706,7 @@ class SearchNotifier with ChangeNotifier {
             _tagImageMain = url;
           }
         }
-        isLoading = false;
+        loadTagDetail = false;
       } else {
         final currentSkip = hyppe == HyppeType.HyppeVid
             ? lenghtVid
@@ -737,8 +743,8 @@ class SearchNotifier with ChangeNotifier {
         hasNext = false;
       }
     } catch (e) {
-      if (_isLoading) {
-        isLoading = false;
+      if (loadTagDetail) {
+        loadTagDetail = false;
       }
       if (_hasNext) {
         hasNext = false;
@@ -746,8 +752,8 @@ class SearchNotifier with ChangeNotifier {
 
       'Error getDetail: $e'.logger();
     } finally {
-      if (_isLoading) {
-        isLoading = false;
+      if (loadTagDetail) {
+        loadTagDetail = false;
       }
       if (_hasNext) {
         hasNext = false;
@@ -758,34 +764,39 @@ class SearchNotifier with ChangeNotifier {
   List<Widget> getGridHashtag(String hashtag) {
     Map<String, List<Widget>> map = {
       'HyppeVid': [
-        GridHashtagVid(),
-        if ((hashtagVid ?? []).length % limitSearch == 0)
+        const GridHashtagVid(),
+        if ((_detailHashTag?.vid ?? []).length % limitSearch == 0)
           SliverToBoxAdapter(
-            child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+            child: Container(
+                margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
       'HyppeDiary': [
-        GridHashtagDiary(),
-        if ((hashtagDiary ?? []).length % limitSearch == 0)
+        const GridHashtagDiary(),
+        if ((_detailHashTag?.diary ?? []).length % limitSearch == 0)
           SliverToBoxAdapter(
-            child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+            child: Container(
+                margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ],
       'HyppePic': [
-        GridHashtagPic(),
-        if ((hashtagPic ?? []).length % limitSearch == 0)
+        const GridHashtagPic(),
+        if ((_detailHashTag?.pict ?? []).length % limitSearch == 0)
           SliverToBoxAdapter(
-            child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+            child: Container(
+                margin: const EdgeInsets.only(bottom: 30), width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
           )
       ]
     };
     final key = System().getTitleHyppe(hashtagTab);
     return map[key] ??
         [
-          GridHashtagVid(),
+          const GridHashtagVid(),
           if ((hashtagVid ?? []).length % limitSearch == 0)
             SliverToBoxAdapter(
-              child: Container(width: double.infinity, height: 90, alignment: Alignment.center, child: const CustomLoading()),
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 30),
+                  width: double.infinity, height: 40, alignment: Alignment.center, child: const CustomLoading()),
             )
         ];
   }
