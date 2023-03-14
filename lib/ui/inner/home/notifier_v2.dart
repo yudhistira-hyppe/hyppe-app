@@ -82,6 +82,14 @@ class HomeNotifier with ChangeNotifier {
   SpeedInternet _internetSpeed = SpeedInternet.medium;
   SpeedInternet get internetSpeed => _internetSpeed;
 
+  int _tabIndex = 0;
+  int get tabIndex => _tabIndex;
+
+  set tabIndex(val) {
+    _tabIndex = val;
+    notifyListeners();
+  }
+
   var db = DatabaseHelper();
 
   set profileImage(String url) {

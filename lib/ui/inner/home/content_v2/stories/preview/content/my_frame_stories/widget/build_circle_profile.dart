@@ -29,31 +29,30 @@ class BuildCircleProfile extends StatelessWidget {
     return InkWell(
       // onTap: () => context.read<PreviewStoriesNotifier>().onTapHandler(context),
       onTap: () => context.read<PreviewStoriesNotifier>().navigateToMyStoryGroup(context, listStory ?? []),
-      child: Container(
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            StoryColorValidator(
-              featureType: FeatureType.other,
-              haveStory: listStory?.isNotEmpty ?? false,
-              child: CustomProfileImage(
-                cacheKey: imageUrlKey,
-                following: true,
-                imageUrl: imageUrl,
-                headers: headers,
-                width: SizeWidget.circleDiameterOutside,
-                height: SizeWidget.circleDiameterOutside,
-              ),
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          StoryColorValidator(
+            featureType: FeatureType.story,
+            haveStory: listStory?.isNotEmpty ?? false,
+            isMy: true,
+            child: CustomProfileImage(
+              cacheKey: imageUrlKey,
+              following: true,
+              imageUrl: imageUrl,
+              headers: headers,
+              width: SizeWidget.circleDiameterOutside,
+              height: SizeWidget.circleDiameterOutside,
             ),
-            Visibility(
-              visible: (listStory != null && (listStory?.isNotEmpty ?? false)) ? false : true,
-              child: const CustomIconWidget(
-                defaultColor: false,
-                iconData: '${AssetPath.vectorPath}add-story.svg',
-              ),
+          ),
+          Visibility(
+            visible: (listStory != null && (listStory?.isNotEmpty ?? false)) ? false : true,
+            child: const CustomIconWidget(
+              defaultColor: false,
+              iconData: '${AssetPath.vectorPath}add-story.svg',
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

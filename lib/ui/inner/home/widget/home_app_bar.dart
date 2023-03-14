@@ -16,12 +16,13 @@ class HomeAppBar extends StatelessWidget {
       backgroundColor: Colors.white,
       actions: const [
         // Doku(),
-        Profile(),
+        CustomIconWidget(defaultColor: false, color: kHyppeTextLightPrimary, iconData: '${AssetPath.vectorPath}message.svg'),
+        // Profile(),
         // AliPlayer(),
         sixteenPx,
       ],
       title: Text(
-        "Halo, Natalia!",
+        "Halo, Ilham!",
         style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700, color: kHyppeTextLightPrimary),
       ),
       // const CustomIconWidget(iconData: "${AssetPath.vectorPath}hyppe.svg"),
