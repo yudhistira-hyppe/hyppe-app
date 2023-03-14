@@ -31,9 +31,11 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
   @override
   void initState() {
     currentType = HyppeType.HyppeVid;
+    final notifier = context.read<SearchNotifier>();
+    notifier.initDetailInterest();
     _scrollController.addListener(() {
       if (_scrollController.offset >= _scrollController.position.maxScrollExtent) {
-        final notifier = context.read<SearchNotifier>();
+
         final key = widget.interest.id;
         final lenghtVid = notifier.interestContents[key]?.vid?.length ?? 0;
         final lenghtDiary = notifier.interestContents[key]?.diary?.length ?? 0;
@@ -66,7 +68,7 @@ class _InterestTabLayoutState extends State<InterestTabLayout> with AfterFirstLa
     ];
     return Consumer<SearchNotifier>(builder: (context, notifier, _) {
       final data = notifier.interestContents[widget.interest.id];
-      return !notifier.isLoading ? Column(
+      return !notifier.loadIntDetail ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: [

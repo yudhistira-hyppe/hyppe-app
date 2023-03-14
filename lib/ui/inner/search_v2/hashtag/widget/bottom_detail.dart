@@ -27,7 +27,7 @@ class _BottomDetailState extends State<BottomDetail> {
         final notifier = context.read<SearchNotifier>();
         final key = widget.hashtag.tag ?? ' ';
         final type = notifier.hashtagTab;
-        notifier.getDetailHashtag(context, key.replaceAll(' ', '') ?? 'tag',
+        notifier.getDetailHashtag(context, key.replaceAll(' ', ''),
             reload: false, hyppe: type);
       }
     });

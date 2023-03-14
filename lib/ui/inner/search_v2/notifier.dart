@@ -177,6 +177,17 @@ class SearchNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loadIntDetail = true;
+  bool get loadIntDetail => _loadIntDetail;
+  set loadIntDetail(bool val){
+    _loadIntDetail = val;
+    notifyListeners();
+  }
+
+  initDetailInterest(){
+    _loadIntDetail = true;
+  }
+
   ContentsDataQuery vidContentsQuery = ContentsDataQuery();
   ContentsDataQuery diaryContentsQuery = ContentsDataQuery();
   ContentsDataQuery picContentsQuery = ContentsDataQuery();
@@ -804,7 +815,7 @@ class SearchNotifier with ChangeNotifier {
   Future getDetail(BuildContext context, String keys, TypeApiSearch type, {reload = true, HyppeType? hyppe}) async {
     try {
       if (reload) {
-        isLoading = true;
+        loadIntDetail = true;
       } else {
         hasNext = true;
       }
@@ -899,7 +910,7 @@ class SearchNotifier with ChangeNotifier {
       'Error getDetail: $e'.logger();
     } finally {
       if (reload) {
-        isLoading = false;
+        loadIntDetail = false;
       } else {
         hasNext = true;
       }

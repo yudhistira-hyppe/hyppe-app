@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyppe/core/extension/utils_extentions.dart';
 import 'package:hyppe/ui/constant/widget/custom_loading.dart';
 import 'package:hyppe/ui/inner/search_v2/notifier.dart';
 import 'package:provider/provider.dart';
@@ -40,9 +41,17 @@ class _GridContentViewState extends State<GridContentView> {
                 final dataitem = widget.data[index];
                 String thumb = System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
                 if (widget.type == HyppeType.HyppePic) {
-                  thumb = (dataitem.isApsara ?? false) ? (dataitem.media?.imageInfo?[0].url ?? (dataitem.mediaThumbEndPoint ?? '')) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
+                  final imageInfo = dataitem.media?.imageInfo;
+                  if(imageInfo.isNotNullAndEmpty()){
+                    thumb = (dataitem.isApsara ?? false) ? (imageInfo?[0].url ?? (dataitem.mediaThumbEndPoint ?? '')) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
+                  }
+
                 } else {
-                  thumb = (dataitem.isApsara ?? false) ? (dataitem.media?.videoList?[0].coverURL ?? (dataitem.mediaThumbEndPoint ?? '')) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
+                  final imageInfo = dataitem.media?.videoList;
+                  if(imageInfo.isNotNullAndEmpty()){
+                    thumb = (dataitem.isApsara ?? false) ? (dataitem.media?.videoList?[0].coverURL ?? (dataitem.mediaThumbEndPoint ?? '')) : System().showUserPicture(dataitem.mediaThumbEndPoint) ?? '';
+                  }
+
                 }
                 // print('GridContentView URL Image: $thumb');
 
