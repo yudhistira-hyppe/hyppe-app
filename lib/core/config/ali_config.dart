@@ -13,15 +13,15 @@ class GlobalSettings {
 
   ///播放器名称
   static String mPlayerName = "";
-  static const String mStartBufferDuration="1000";// The buffer duration before playback. Unit= milliseconds.
-  static const String mHighBufferDuration="2000";// The duration of high buffer. Unit= milliseconds.
-  static const String mMaxBufferDuration="3000";// The maximum buffer duration. Unit= milliseconds.
+  static const String mStartBufferDuration="500";// The buffer duration before playback. Unit= milliseconds.
+  static const String mHighBufferDuration="10000";// The duration of high buffer. Unit= milliseconds.
+  static const String mMaxBufferDuration="15000";// The maximum buffer duration. Unit= milliseconds.
   static const String mMaxDelayTime= "10000";// The maximum latency of live streaming. Unit= milliseconds. You can specify the latency only for live streams.
-  static const String mNetworkTimeout= "10000";// The network timeout period. Unit= milliseconds.
+  static const String mNetworkTimeout= "5000";// The network timeout period. Unit= milliseconds.
   static const String mNetworkRetryCount="3";// The number of retires after a network timeout. Unit= milliseconds.
   static const String mMaxSizeMBController="20";
   static const String mMaxDurationSController="120";
-  static String mDirController="localCache";
+  static String mDirController="localCache/";
   static bool mEnableCacheConfig=true;
 }
 
