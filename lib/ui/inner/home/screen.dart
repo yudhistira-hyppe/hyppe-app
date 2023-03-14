@@ -135,107 +135,246 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware, AfterFirstLayo
           MoveToBackground.moveTaskToBack();
           return false;
         },
-        child: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
-              child: HomeAppBar(),
-            ),
-            body: RefreshIndicator(
-              key: _globalKey,
-              // physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-              strokeWidth: 2.0,
-              color: Colors.purple,
-              onRefresh: () => notifier.onRefresh(context, notifier.visibilty),
-              child: Column(
-                children: [
-                  ProcessUploadComponent(),
-                  HyppePreviewStories(),
-                  sixPx,
-                  Expanded(
-                    child: Container(
-                      color: kHyppeLightSurface,
-                      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                      child: Column(
-                        children: [
-                          Material(
-                            color: Colors.black,
-                            child: TabBar(
-                              controller: _tabController,
-                              indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  25.0,
+        child: Scaffold(
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(SizeWidget.appBarHome),
+            child: HomeAppBar(),
+          ),
+          body: DefaultTabController(
+            length: 3,
+            child: NestedScrollView(
+              headerSliverBuilder: (context, _) {
+                return [
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      const ProcessUploadComponent(),
+                      const HyppePreviewStories(),
+                      Material(
+                        color: Colors.black,
+                        child: TabBar(
+                          controller: _tabController,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              25.0,
+                            ),
+                            color: kHyppePrimary,
+                          ),
+                          labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                          labelColor: kHyppeLightButtonText,
+                          unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                          labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                          // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                          unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                          tabs: [
+                            ...List.generate(
+                              filterList.length,
+                              (index) => Padding(
+                                padding: EdgeInsets.all(9),
+                                child: Text(
+                                  filterList[index]['name'],
                                 ),
-                                color: kHyppePrimary,
                               ),
-                              labelPadding: const EdgeInsets.symmetric(vertical: 0),
-                              labelColor: kHyppeLightButtonText,
-                              unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
-                              labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                              // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
-                              unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
-                              tabs: [
-                                ...List.generate(
-                                  filterList.length,
-                                  (index) => Padding(
-                                    padding: EdgeInsets.all(9),
-                                    child: Text(
-                                      filterList[index]['name'],
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-                          Expanded(
-                            child: TabBarView(
-                              controller: _tabController,
-                              children: [
-                                // first tab bar view widget
-                                Container(
-                                    color: Colors.red,
-                                    child: ListView.builder(
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemCount: 20,
-                                      itemBuilder: (context, index) {
-                                        return Container(
-                                          width: 100,
-                                          height: 20,
-                                          color: Colors.blue,
-                                          margin: EdgeInsets.all(10),
-                                        );
-                                      },
-                                    )),
-                                Container(
-                                  color: Colors.red,
-                                  child: Center(
-                                    child: Text(
-                                      'Bike',
-                                    ),
-                                  ),
-                                ),
-                                // second tab bar viiew widget
-                                Container(
-                                  color: Colors.pink,
-                                  child: Center(
-                                    child: Text(
-                                      'Car',
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            // first tab bar view widget
+                            Container(
+                                color: Colors.red,
+                                child: ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: 20,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      width: 100,
+                                      height: 20,
+                                      color: Colors.blue,
+                                      margin: EdgeInsets.all(10),
+                                    );
+                                  },
+                                )),
+                            Container(
+                              color: Colors.red,
+                              child: Center(
+                                child: Text(
+                                  'Bike',
+                                ),
+                              ),
+                            ),
+                            // second tab bar viiew widget
+                            Container(
+                              color: Colors.pink,
+                              child: Center(
+                                child: Text(
+                                  'Car',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]),
                   ),
+
+                  // Expanded(
+                  //   child: Container(
+                  //     color: kHyppeLightSurface,
+                  //     padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                  //     child: Column(
+                  //       children: [
+                  //         Material(
+                  //           color: Colors.black,
+                  //           child: TabBar(
+                  //             controller: _tabController,
+                  //             indicator: BoxDecoration(
+                  //               borderRadius: BorderRadius.circular(
+                  //                 25.0,
+                  //               ),
+                  //               color: kHyppePrimary,
+                  //             ),
+                  //             labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                  //             labelColor: kHyppeLightButtonText,
+                  //             unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                  //             labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                  //             // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                  //             unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                  //             tabs: [
+                  //               ...List.generate(
+                  //                 filterList.length,
+                  //                 (index) => Padding(
+                  //                   padding: EdgeInsets.all(9),
+                  //                   child: Text(
+                  //                     filterList[index]['name'],
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //         Expanded(
+                  //           child: TabBarView(
+                  //             controller: _tabController,
+                  //             children: [
+                  //               // first tab bar view widget
+                  //               Container(
+                  //                   color: Colors.red,
+                  //                   child: ListView.builder(
+                  //                     physics: const NeverScrollableScrollPhysics(),
+                  //                     itemCount: 20,
+                  //                     itemBuilder: (context, index) {
+                  //                       return Container(
+                  //                         width: 100,
+                  //                         height: 20,
+                  //                         color: Colors.blue,
+                  //                         margin: EdgeInsets.all(10),
+                  //                       );
+                  //                     },
+                  //                   )),
+                  //               Container(
+                  //                 color: Colors.red,
+                  //                 child: Center(
+                  //                   child: Text(
+                  //                     'Bike',
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //               // second tab bar viiew widget
+                  //               Container(
+                  //                 color: Colors.pink,
+                  //                 child: Center(
+                  //                   child: Text(
+                  //                     'Car',
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
 
                   // FilterLanding(),
                   // HyppePreviewVid(),
                   // HyppePreviewDiary(),
                   // HyppePreviewPic(),
+                ];
+              },
+              body: Column(
+                children: [
+                  Material(
+                    color: Colors.black,
+                    child: TabBar(
+                      controller: _tabController,
+                      indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          25.0,
+                        ),
+                        color: kHyppePrimary,
+                      ),
+                      labelPadding: const EdgeInsets.symmetric(vertical: 0),
+                      labelColor: kHyppeLightButtonText,
+                      unselectedLabelColor: Theme.of(context).tabBarTheme.unselectedLabelColor,
+                      labelStyle: TextStyle(fontFamily: "Gotham", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                      // indicator: UnderlineTabIndicator(borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 2.0)),
+                      unselectedLabelStyle: TextStyle(fontFamily: "Roboto", fontWeight: FontWeight.w400, fontSize: 14 * SizeConfig.scaleDiagonal),
+                      tabs: [
+                        ...List.generate(
+                          filterList.length,
+                          (index) => Padding(
+                            padding: EdgeInsets.all(9),
+                            child: Text(
+                              filterList[index]['name'],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        // first tab bar view widget
+                        Container(
+                            color: Colors.red,
+                            child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: 20,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  width: 100,
+                                  height: 20,
+                                  color: Colors.blue,
+                                  margin: EdgeInsets.all(10),
+                                );
+                              },
+                            )),
+                        Container(
+                          color: Colors.red,
+                          child: Center(
+                            child: Text(
+                              'Bike',
+                            ),
+                          ),
+                        ),
+                        // second tab bar viiew widget
+                        Container(
+                          color: Colors.pink,
+                          child: Center(
+                            child: Text(
+                              'Car',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),

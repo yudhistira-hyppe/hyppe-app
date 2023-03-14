@@ -24,10 +24,10 @@ class UrlConstants {
 
   /// Production Base url
   // static const String productionBaseApi = "https://prod.hyppe.app";
-  static const String productionBaseApi = "https://prod.hyppe.app";
-  static const String productionUploadBaseApi = "https://upload.hyppe.app";
-  // static const String productionBaseApi = "https://s1.hyppe.cloud";
-  // static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
+  // static const String productionBaseApi = "https://prod.hyppe.app";
+  // static const String productionUploadBaseApi = "https://upload.hyppe.app";
+  static const String productionBaseApi = "https://s1.hyppe.cloud";
+  static const String productionUploadBaseApi = "https://s1.hyppe.cloud";
   // static const String productionBaseApi = "https://staging.hyppe.app";
   // static const String productionUploadBaseApi = "https://stagingupload.hyppe.app/";
 
